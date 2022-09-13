@@ -32,13 +32,83 @@ constexpr auto dumpMapping = false;
 constexpr auto allowRsqrt = true; // rsqrt can be way faster, but less accurate
 constexpr auto newtonRaphsonAfterRsqrt = true; // generate a newton raphson refinement after explicit calls to rsqrt()
 constexpr auto runUpate = true; // run update step. Useful to disable for benchmarking the move step.
-constexpr FP timestep = 0.0001f;
-constexpr FP epS2 = 0.01f;
+
+constexpr auto timestep = FP{0.0001};
+constexpr auto epS2 = FP{0.01};
+
+constexpr auto rngSeed = 42;
+constexpr auto referenceParticleIndex = 1338;
+constexpr auto maxPosDiff = FP{0.001};
 
 constexpr auto l1CacheSize = 32 * 1024;
 constexpr auto l2CacheSize = 512 * 1024;
 
 using namespace std::string_literals;
+
+struct Vec3
+{
+    FP x;
+    FP y;
+    FP z;
+
+    auto operator*=(FP s) -> Vec3&
+    {
+        x *= s;
+        y *= s;
+        z *= s;
+        return *this;
+    }
+
+    auto operator*=(Vec3 v) -> Vec3&
+    {
+        x *= v.x;
+        y *= v.y;
+        z *= v.z;
+        return *this;
+    }
+
+    auto operator+=(Vec3 v) -> Vec3&
+    {
+        x += v.x;
+        y += v.y;
+        z += v.z;
+        return *this;
+    }
+
+    auto operator-=(Vec3 v) -> Vec3&
+    {
+        x -= v.x;
+        y -= v.y;
+        z -= v.z;
+        return *this;
+    }
+
+    friend auto operator-(Vec3 a, Vec3 b) -> Vec3
+    {
+        return a -= b;
+    }
+
+    friend auto operator*(Vec3 a, FP s) -> Vec3
+    {
+        return a *= s;
+    }
+
+    friend auto operator*(Vec3 a, Vec3 b) -> Vec3
+    {
+        return a *= b;
+    }
+
+    friend auto operator<<(std::ostream& os, Vec3 p) -> std::ostream&
+    {
+        return os << fmt::format("{{{} {} {}}}", p.x, p.y, p.z);
+    }
+};
+
+auto printReferenceParticle(Vec3 position)
+{
+    std::cout << "reference pos: " << position << "\n";
+    return position;
+}
 
 namespace usellama
 {
@@ -102,7 +172,7 @@ namespace usellama
     }
 
     template<int Mapping, std::size_t AoSoALanes = 8 /*AVX2*/>
-    auto main(std::ostream& plotFile) -> int
+    auto main(std::ostream& plotFile) -> Vec3
     {
         auto mappingName = [](int m) -> std::string
         {
@@ -181,7 +251,7 @@ namespace usellama
         auto particles = llama::allocViewUninitialized(std::move(hmapping));
         watch.printAndReset("alloc");
 
-        std::default_random_engine engine;
+        std::default_random_engine engine{rngSeed};
         std::normal_distribution<FP> dist(FP{0}, FP{1});
         for(std::size_t i = 0; i < problemSize; ++i)
         {
@@ -217,68 +287,14 @@ namespace usellama
         if constexpr(trace)
             particles.mapping().printFieldHits(particles.storageBlobs);
 
-        return 0;
+        return printReferenceParticle(particles(referenceParticleIndex)(tag::Pos{}).load());
     }
 } // namespace usellama
 
 namespace manualAoS
 {
-    struct Simd
-    {
-        FP x;
-        FP y;
-        FP z;
-
-        auto operator*=(FP s) -> Simd&
-        {
-            x *= s;
-            y *= s;
-            z *= s;
-            return *this;
-        }
-
-        auto operator*=(Simd v) -> Simd&
-        {
-            x *= v.x;
-            y *= v.y;
-            z *= v.z;
-            return *this;
-        }
-
-        auto operator+=(Simd v) -> Simd&
-        {
-            x += v.x;
-            y += v.y;
-            z += v.z;
-            return *this;
-        }
-
-        auto operator-=(Simd v) -> Simd&
-        {
-            x -= v.x;
-            y -= v.y;
-            z -= v.z;
-            return *this;
-        }
-
-        friend auto operator-(Simd a, Simd b) -> Simd
-        {
-            return a -= b;
-        }
-
-        friend auto operator*(Simd a, FP s) -> Simd
-        {
-            return a *= s;
-        }
-
-        friend auto operator*(Simd a, Simd b) -> Simd
-        {
-            return a *= b;
-        }
-    };
-
-    using Pos = Simd;
-    using Vel = Simd;
+    using Pos = Vec3;
+    using Vel = Vec3;
 
     struct Particle
     {
@@ -318,7 +334,7 @@ namespace manualAoS
             particles[i].pos += particles[i].vel * timestep;
     }
 
-    auto main(std::ostream& plotFile) -> int
+    auto main(std::ostream& plotFile) -> Vec3
     {
         auto title = "AoS"s;
         std::cout << title << "\n";
@@ -327,7 +343,7 @@ namespace manualAoS
         std::vector<Particle> particles(problemSize);
         watch.printAndReset("alloc");
 
-        std::default_random_engine engine;
+        std::default_random_engine engine{rngSeed};
         std::normal_distribution<FP> dist(FP{0}, FP{1});
         for(auto& p : particles)
         {
@@ -355,7 +371,7 @@ namespace manualAoS
         }
         plotFile << std::quoted(title) << "\t" << sumUpdate / steps << '\t' << sumMove / steps << '\n';
 
-        return 0;
+        return printReferenceParticle(particles[referenceParticleIndex].pos);
     }
 } // namespace manualAoS
 
@@ -418,7 +434,7 @@ namespace manualSoA
         }
     }
 
-    auto main(std::ostream& plotFile) -> int
+    auto main(std::ostream& plotFile) -> Vec3
     {
         auto title = "SoA"s;
         std::cout << title << "\n";
@@ -434,7 +450,7 @@ namespace manualSoA
         Vector mass(problemSize);
         watch.printAndReset("alloc");
 
-        std::default_random_engine engine;
+        std::default_random_engine engine{rngSeed};
         std::normal_distribution<FP> dist(FP{0}, FP{1});
         for(std::size_t i = 0; i < problemSize; ++i)
         {
@@ -462,7 +478,8 @@ namespace manualSoA
         }
         plotFile << std::quoted(title) << "\t" << sumUpdate / steps << '\t' << sumMove / steps << '\n';
 
-        return 0;
+        return printReferenceParticle(
+            {posx[referenceParticleIndex], posy[referenceParticleIndex], posz[referenceParticleIndex]});
     }
 } // namespace manualSoA
 
@@ -598,7 +615,7 @@ namespace manualAoSoA
     }
 
     template<std::size_t Lanes>
-    auto main(std::ostream& plotFile, bool tiled) -> int
+    auto main(std::ostream& plotFile, bool tiled) -> Vec3
     {
         auto title = "AoSoA" + std::to_string(Lanes);
         if(tiled)
@@ -611,7 +628,7 @@ namespace manualAoSoA
         std::vector<ParticleBlock<Lanes>> particles(blocks);
         watch.printAndReset("alloc");
 
-        std::default_random_engine engine;
+        std::default_random_engine engine{rngSeed};
         std::normal_distribution<FP> dist(FP{0}, FP{1});
         for(std::size_t bi = 0; bi < blocks; ++bi)
         {
@@ -646,7 +663,9 @@ namespace manualAoSoA
         }
         plotFile << std::quoted(title) << "\t" << sumUpdate / steps << '\t' << sumMove / steps << '\n';
 
-        return 0;
+        const auto& refBlock = particles[referenceParticleIndex / Lanes];
+        const auto refLane = referenceParticleIndex % Lanes;
+        return printReferenceParticle({refBlock.pos.x[refLane], refBlock.pos.y[refLane], refBlock.pos.z[refLane]});
     }
 } // namespace manualAoSoA
 
@@ -817,7 +836,7 @@ namespace manualAoSoAManualAVX
         }
     }
 
-    auto main(std::ostream& plotFile, bool useUpdate1) -> int
+    auto main(std::ostream& plotFile, bool useUpdate1) -> Vec3
     {
         auto title = "AoSoA" + std::to_string(lanes) + " AVX2 " + (useUpdate1 ? "w1r8" : "w8r1"); // NOLINT
         std::cout << title << '\n';
@@ -826,7 +845,7 @@ namespace manualAoSoAManualAVX
         std::vector<ParticleBlock> particles(blocks);
         watch.printAndReset("alloc");
 
-        std::default_random_engine engine;
+        std::default_random_engine engine{rngSeed};
         std::normal_distribution<FP> dist(FP{0}, FP{1});
         for(std::size_t bi = 0; bi < blocks; ++bi)
         {
@@ -861,7 +880,9 @@ namespace manualAoSoAManualAVX
         }
         plotFile << std::quoted(title) << "\t" << sumUpdate / steps << '\t' << sumMove / steps << '\n';
 
-        return 0;
+        const auto& refBlock = particles[referenceParticleIndex / lanes];
+        const auto refLane = referenceParticleIndex % lanes;
+        return printReferenceParticle({refBlock.pos.x[refLane], refBlock.pos.y[refLane], refBlock.pos.z[refLane]});
     }
 } // namespace manualAoSoAManualAVX
 #endif
@@ -1088,7 +1109,7 @@ namespace manualAoSoASIMD
     }
 
     template<typename Simd>
-    auto main(std::ostream& plotFile, int threads, bool useUpdate1, bool tiled = false) -> int
+    auto main(std::ostream& plotFile, int threads, bool useUpdate1, bool tiled = false) -> Vec3
     {
         auto title = "AoSoA" + std::to_string(Simd::size) + " SIMD" + (useUpdate1 ? " w1r8" : " w8r1"); // NOLINT
         if(tiled)
@@ -1104,7 +1125,7 @@ namespace manualAoSoASIMD
         std::vector<ParticleBlock<Simd>> particles(blocks);
         watch.printAndReset("alloc");
 
-        std::default_random_engine engine;
+        std::default_random_engine engine{rngSeed};
         std::normal_distribution<FP> dist(FP{0}, FP{1});
         for(std::size_t bi = 0; bi < blocks; ++bi)
         {
@@ -1144,7 +1165,11 @@ namespace manualAoSoASIMD
         }
         plotFile << std::quoted(title) << "\t" << sumUpdate / steps << '\t' << sumMove / steps << '\n';
 
-        return 0;
+
+        const auto& refBlock = particles[referenceParticleIndex / Simd::size];
+        const auto refLane = referenceParticleIndex % Simd::size;
+        return printReferenceParticle(
+            {refBlock.pos.x.get(refLane), refBlock.pos.y.get(refLane), refBlock.pos.z.get(refLane)});
     }
 } // namespace manualAoSoASIMD
 
@@ -1220,7 +1245,7 @@ namespace manualAoSSIMD
     }
 
     template<typename Simd>
-    auto main(std::ostream& plotFile, int threads) -> int
+    auto main(std::ostream& plotFile, int threads) -> Vec3
     {
         auto title = "AoS SIMD"s;
         if(threads > 1)
@@ -1231,7 +1256,7 @@ namespace manualAoSSIMD
         std::vector<Particle> particles(problemSize);
         watch.printAndReset("alloc");
 
-        std::default_random_engine engine;
+        std::default_random_engine engine{rngSeed};
         std::normal_distribution<FP> dist(FP{0}, FP{1});
         for(auto& p : particles)
         {
@@ -1259,7 +1284,7 @@ namespace manualAoSSIMD
         }
         plotFile << std::quoted(title) << "\t" << sumUpdate / steps << '\t' << sumMove / steps << '\n';
 
-        return 0;
+        return printReferenceParticle(particles[referenceParticleIndex].pos);
     }
 } // namespace manualAoSSIMD
 
@@ -1318,7 +1343,7 @@ namespace manualSoASIMD
     }
 
     template<typename Simd>
-    auto main(std::ostream& plotFile, int threads) -> int
+    auto main(std::ostream& plotFile, int threads) -> Vec3
     {
         auto title = "SoA SIMD"s;
         if(threads > 1)
@@ -1336,7 +1361,7 @@ namespace manualSoASIMD
         Vector mass(problemSize);
         watch.printAndReset("alloc");
 
-        std::default_random_engine engine;
+        std::default_random_engine engine{rngSeed};
         std::normal_distribution<FP> dist(FP{0}, FP{1});
         for(std::size_t i = 0; i < problemSize; ++i)
         {
@@ -1372,10 +1397,34 @@ namespace manualSoASIMD
         }
         plotFile << std::quoted(title) << "\t" << sumUpdate / steps << '\t' << sumMove / steps << '\n';
 
-        return 0;
+        return printReferenceParticle(
+            {posx[referenceParticleIndex], posy[referenceParticleIndex], posz[referenceParticleIndex]});
     }
 } // namespace manualSoASIMD
 #endif
+
+auto arePositionsClose(const std::vector<Vec3>& finalPositions) -> bool
+{
+    Vec3 min = finalPositions.front();
+    Vec3 max = min;
+    for(const auto& p : finalPositions)
+    {
+        min.x = std::min(min.x, p.x);
+        min.y = std::min(min.y, p.y);
+        min.z = std::min(min.z, p.z);
+        max.x = std::max(max.x, p.x);
+        max.y = std::max(max.y, p.y);
+        max.z = std::max(max.z, p.z);
+    }
+    const auto diff = max - min;
+    std::cout << "Reference pos range: " << diff << '\n';
+    const auto wrongResults = diff.x > maxPosDiff || diff.y > maxPosDiff || diff.z > maxPosDiff;
+    if(wrongResults)
+        std::cerr << "WARNING: At least one run had substantially different results!\n";
+    else
+        std::cout << "All runs had similar results\n";
+    return !wrongResults;
+}
 
 auto main() -> int
 try
@@ -1433,7 +1482,7 @@ $data << EOD
     // SIMD versions updating 8 particles by 1 are also a bit faster than updating 1 particle by 8, so the latter are
     // also disabled.
 
-    int r = 0;
+    std::vector<Vec3> finalPositions;
     using namespace boost::mp11;
     mp_for_each<mp_iota_c<8>>(
         [&](auto i)
@@ -1441,22 +1490,23 @@ $data << EOD
             // only AoSoA (3) needs lanes
             using Lanes = std::
                 conditional_t<decltype(i)::value == 3, mp_list_c<std::size_t, 8, 16>, mp_list_c<std::size_t, 0>>;
-            mp_for_each<Lanes>([&, i](auto lanes)
-                               { r += usellama::main<decltype(i)::value, decltype(lanes)::value>(plotFile); });
+            mp_for_each<Lanes>(
+                [&, i](auto lanes)
+                { finalPositions.push_back(usellama::main<decltype(i)::value, decltype(lanes)::value>(plotFile)); });
         });
-    r += manualAoS::main(plotFile);
-    r += manualSoA::main(plotFile);
+    finalPositions.push_back(manualAoS::main(plotFile));
+    finalPositions.push_back(manualSoA::main(plotFile));
     mp_for_each<mp_list_c<std::size_t, 8, 16>>(
         [&](auto lanes)
         {
             // for (auto tiled : {false, true})
             //    r += manualAoSoA::main<decltype(lanes)::value>(plotFile, tiled);
-            r += manualAoSoA::main<decltype(lanes)::value>(plotFile, false);
+            finalPositions.push_back(manualAoSoA::main<decltype(lanes)::value>(plotFile, false));
         });
 #if defined(__AVX2__) && defined(__FMA__)
     // for (auto useUpdate1 : {false, true})
     //    r += manualAoSoA_manualAVX::main(plotFile, useUpdate1);
-    r += manualAoSoAManualAVX::main(plotFile, false);
+    finalPositions.push_back(manualAoSoAManualAVX::main(plotFile, false));
 #endif
 #ifdef HAVE_XSIMD
     for(int threads = 1; threads <= std::thread::hardware_concurrency(); threads *= 2)
@@ -1468,7 +1518,7 @@ $data << EOD
         //            continue;
         //        r += manualAoSoA_SIMD::main<Simd>(plotFile, threads, useUpdate1, tiled);
         //    }
-        r += manualAoSoASIMD::main<Simd>(plotFile, threads, false, false);
+        finalPositions.push_back(manualAoSoASIMD::main<Simd>(plotFile, threads, false, false));
     }
     for(int threads = 1; threads <= std::thread::hardware_concurrency(); threads *= 2)
     {
@@ -1479,18 +1529,20 @@ $data << EOD
         //                if constexpr(!std::is_void_v<Simd>)
         //                    r += manualAoS_SIMD::main<Simd>(plotFile, threads);
         //            });
-        r += manualAoSSIMD::main<Simd>(plotFile, threads);
+        finalPositions.push_back(manualAoSSIMD::main<Simd>(plotFile, threads));
     }
     for(int threads = 1; threads <= std::thread::hardware_concurrency(); threads *= 2)
-        r += manualSoASIMD::main<Simd>(plotFile, threads);
+        finalPositions.push_back(manualSoASIMD::main<Simd>(plotFile, threads));
 #endif
+
+    const auto ok = arePositionsClose(finalPositions);
 
     plotFile << R"(EOD
 plot $data using 2:xtic(1) ti col axis x1y1, "" using 3 ti col axis x1y2
 )";
     std::cout << "Plot with: ./nbody.sh\n";
 
-    return r;
+    return ok ? 0 : 1;
 }
 catch(const std::exception& e)
 {
