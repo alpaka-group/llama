@@ -195,6 +195,13 @@ namespace llama
             }
         };
 
+        template<typename ProxyReference, typename T>
+        LLAMA_FN_HOST_ACC_INLINE auto asTupleImpl(ProxyReference&& leaf, T)
+            -> std::enable_if_t<!isRecordRef<std::decay_t<ProxyReference>>, ProxyReference>
+        {
+            return leaf;
+        }
+
         template<typename TWithOptionalConst, typename T>
         LLAMA_FN_HOST_ACC_INLINE auto asTupleImpl(TWithOptionalConst& leaf, T) -> std::
             enable_if_t<!isRecordRef<std::decay_t<TWithOptionalConst>>, std::reference_wrapper<TWithOptionalConst>>
@@ -218,6 +225,13 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE auto asTupleImpl(RecordRef&& vd, Record<Fields...>)
         {
             return std::make_tuple(asTupleImpl(vd(GetFieldTag<Fields>{}), GetFieldType<Fields>{})...);
+        }
+
+        template<typename ProxyReference, typename T>
+        LLAMA_FN_HOST_ACC_INLINE auto asFlatTupleImpl(ProxyReference&& leaf, T)
+            -> std::enable_if_t<!isRecordRef<std::decay_t<ProxyReference>>, std::tuple<ProxyReference>>
+        {
+            return {std::move(leaf)};
         }
 
         template<typename TWithOptionalConst, typename T>
