@@ -800,9 +800,76 @@ TEST_CASE("RecordRef.load.constref")
     }
 }
 
+TEST_CASE("RecordRef.load.value.fromproxyref")
+{
+    auto view = llama::allocView(llama::mapping::BitPackedIntSoA<llama::ArrayExtents<int, 1>, ParticleInt>{});
+    auto&& record = view(0);
+    record = 1;
+
+    {
+        MyPos<int> pos = record(tag::Pos{}).load();
+        CHECK(pos.a == 1);
+        CHECK(pos.y == 1);
+    }
+    {
+        MyPos<int> pos = std::as_const(record)(tag::Pos{}).load();
+        CHECK(pos.a == 1);
+        CHECK(pos.y == 1);
+    }
+
+    {
+        MyStruct<int> d = record.load();
+        CHECK(d.pos.a == 1);
+        CHECK(d.pos.y == 1);
+        CHECK(d.vel.x == 1);
+        CHECK(d.vel.y == 1);
+        CHECK(d.vel.z == 1);
+        CHECK(d.weight == 1);
+    }
+    {
+        MyStruct<int> d = std::as_const(record).load();
+        CHECK(d.pos.a == 1);
+        CHECK(d.pos.y == 1);
+        CHECK(d.vel.x == 1);
+        CHECK(d.vel.y == 1);
+        CHECK(d.vel.z == 1);
+        CHECK(d.weight == 1);
+    }
+}
+
 TEST_CASE("RecordRef.store")
 {
     llama::One<ParticleInt> record;
+
+    record = 1;
+    {
+        MyPos<int> pos{2, 3};
+        record(tag::Pos{}).store(pos);
+        CHECK(record(tag::Pos{}, tag::A{}) == 2);
+        CHECK(record(tag::Pos{}, tag::Y{}) == 3);
+        CHECK(record(tag::Vel{}, tag::X{}) == 1);
+        CHECK(record(tag::Vel{}, tag::Y{}) == 1);
+        CHECK(record(tag::Vel{}, tag::Z{}) == 1);
+        CHECK(record(tag::Mass{}) == 1);
+    }
+
+    record = 1;
+    {
+        MyStruct<int> d{{2, 3}, {4, 5, 6}, 7};
+        record.store(d);
+        CHECK(record(tag::Pos{}, tag::A{}) == 2);
+        CHECK(record(tag::Pos{}, tag::Y{}) == 3);
+        CHECK(record(tag::Vel{}, tag::X{}) == 4);
+        CHECK(record(tag::Vel{}, tag::Y{}) == 5);
+        CHECK(record(tag::Vel{}, tag::Z{}) == 6);
+        CHECK(record(tag::Mass{}) == 7);
+    }
+}
+
+TEST_CASE("RecordRef.store.toproxyref")
+{
+    auto view = llama::allocView(llama::mapping::BitPackedIntSoA<llama::ArrayExtents<int, 1>, ParticleInt>{});
+    auto&& record = view(0);
 
     record = 1;
     {
@@ -877,6 +944,24 @@ TEST_CASE("RecordRef.loadAs.constref")
     }
     {
         auto pos = std::as_const(record)(tag::Pos{}).loadAs<MyPos<const int&>>();
+        CHECK(pos.a == 1);
+        CHECK(pos.y == 1);
+    }
+}
+
+TEST_CASE("RecordRef.loadAs.value.fromproxyref")
+{
+    auto view = llama::allocView(llama::mapping::BitPackedIntSoA<llama::ArrayExtents<int, 1>, ParticleInt>{});
+    auto&& record = view(0);
+    record = 1;
+
+    {
+        auto pos = record(tag::Pos{}).loadAs<MyPos<int>>();
+        CHECK(pos.a == 1);
+        CHECK(pos.y == 1);
+    }
+    {
+        auto pos = std::as_const(record)(tag::Pos{}).loadAs<MyPos<int>>();
         CHECK(pos.a == 1);
         CHECK(pos.y == 1);
     }
