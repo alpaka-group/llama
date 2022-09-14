@@ -191,12 +191,19 @@ namespace llama::mapping
     public:
         static constexpr std::size_t blobCount = boost::mp11::mp_size<FlatRecordDim<TRecordDim>>::value;
 
-        using Base::Base;
-
+        template<typename B = Bits, std::enable_if_t<isConstant<B>, int> = 0>
         LLAMA_FN_HOST_ACC_INLINE constexpr explicit BitPackedIntSoA(
-            TArrayExtents extents,
+            TArrayExtents extents = {},
             Bits bits = {},
             TRecordDim = {})
+            : Base(extents)
+            , VHBits{bits}
+        {
+            static_assert(VHBits::value() > 0);
+        }
+
+        template<typename B = Bits, std::enable_if_t<!isConstant<B>, int> = 0>
+        LLAMA_FN_HOST_ACC_INLINE constexpr explicit BitPackedIntSoA(TArrayExtents extents, Bits bits, TRecordDim = {})
             : Base(extents)
             , VHBits{bits}
         {
