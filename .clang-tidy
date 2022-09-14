@@ -1,12 +1,13 @@
 ---
-# -bugprone-forward-declaration-namespace # too many false positives in LLAMA
-# -cppcoreguidelines-macro-usage # too many macros flagged, which cannot be replaced by constexpr
-# -bugprone-exception-escape # bgruber is fine with exceptions escaping main we cannot add main as an exception
-# -readability-misleading-indentation # many false positives because of constexpr if
-# -readability-static-accessed-through-instance # flags threadIdx/blockIdx in CUDA code
-# -cert-err58-cpp # errors in Catch2
-# -fuchsia-statically-constructed-objects # too much noise with Catch2
-# -bugprone-easily-swappable-parameters # too noisy
+# bugprone-forward-declaration-namespace # too many false positives in LLAMA
+# cppcoreguidelines-macro-usage # too many macros flagged, which cannot be replaced by constexpr
+# bugprone-exception-escape # bgruber is fine with exceptions escaping main we cannot add main as an exception
+# readability-misleading-indentation # many false positives because of constexpr if
+# readability-static-accessed-through-instance # flags threadIdx/blockIdx in CUDA code
+# cert-err58-cpp # errors in Catch2
+# fuchsia-statically-constructed-objects # too much noise with Catch2
+# bugprone-easily-swappable-parameters # too noisy
+# altera-struct-pack-align # too noisy, flags e.g. all traits
 Checks: >
     *,
     -bugprone-exception-escape,
@@ -81,3 +82,4 @@ CheckOptions:
   - { key: readability-identifier-naming.UnionCase, value: CamelCase}
   - { key: readability-identifier-naming.ValueTemplateParameterCase, value: CamelCase}
   - { key: readability-identifier-naming.VariableCase, value: camelBack}
+  - { key: performance-for-range-copy.WarnOnAllAutoCopies, value: 1}
