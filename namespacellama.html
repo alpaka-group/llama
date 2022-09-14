@@ -514,6 +514,9 @@ Variables</h2></td></tr>
 <tr class="memitem:aae03df933faef61723569d4655563bbe"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , typename RecordCoord , bool Align = false&gt; </td></tr>
 <tr class="memitem:aae03df933faef61723569d4655563bbe"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#aae03df933faef61723569d4655563bbe">offsetOf</a> = <a class="el" href="namespacellama.html#a7b86f2441b1aae82532668e1a8377df2">flatOffsetOf</a>&lt;<a class="el" href="namespacellama.html#a1fddf1f638927edfb8da8e3c78da4e1c">FlatRecordDim</a>&lt;RecordDim&gt;, <a class="el" href="namespacellama.html#a6c3056b43b48f32a66160a6dd273662d">flatRecordCoord</a>&lt;RecordDim, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&gt;, Align&gt;</td></tr>
 <tr class="separator:aae03df933faef61723569d4655563bbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb3261387e3af25b2f65fb3725bacde1"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:aeb3261387e3af25b2f65fb3725bacde1"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#aeb3261387e3af25b2f65fb3725bacde1">isConstant</a> = <a class="el" href="structllama_1_1internal_1_1IsConstant.html">internal::IsConstant</a>&lt;T&gt;::value</td></tr>
+<tr class="separator:aeb3261387e3af25b2f65fb3725bacde1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a548294a2b7b4f2e76954d9cf9edcdec7"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a548294a2b7b4f2e76954d9cf9edcdec7"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a548294a2b7b4f2e76954d9cf9edcdec7">isRecordCoord</a> = false</td></tr>
 <tr class="separator:a548294a2b7b4f2e76954d9cf9edcdec7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1654,7 +1657,7 @@ template&lt;typename RecordRefFwd , typename Functor &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="RecordRef_8hpp_source.html#l00779">779</a> of file <a class="el" href="RecordRef_8hpp_source.html">RecordRef.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RecordRef_8hpp_source.html#l00803">803</a> of file <a class="el" href="RecordRef_8hpp_source.html">RecordRef.hpp</a>.</p>
 
 </div>
 </div>
@@ -2188,7 +2191,7 @@ template&lt;typename View , typename BoundRecordCoord , bool OwnView&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="RecordRef_8hpp_source.html#l00747">747</a> of file <a class="el" href="RecordRef_8hpp_source.html">RecordRef.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RecordRef_8hpp_source.html#l00771">771</a> of file <a class="el" href="RecordRef_8hpp_source.html">RecordRef.hpp</a>.</p>
 
 </div>
 </div>
@@ -2931,7 +2934,7 @@ template&lt;typename ViewA , typename BoundRecordDimA , bool OwnViewA, typename 
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="RecordRef_8hpp_source.html#l00730">730</a> of file <a class="el" href="RecordRef_8hpp_source.html">RecordRef.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RecordRef_8hpp_source.html#l00754">754</a> of file <a class="el" href="RecordRef_8hpp_source.html">RecordRef.hpp</a>.</p>
 
 </div>
 </div>
@@ -3610,6 +3613,32 @@ template&lt;typename Mapping , typename RecordCoord &gt; </div>
 
 </div>
 </div>
+<a id="aeb3261387e3af25b2f65fb3725bacde1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb3261387e3af25b2f65fb3725bacde1">&#9670;&nbsp;</a></span>isConstant</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool llama::isConstant = <a class="el" href="structllama_1_1internal_1_1IsConstant.html">internal::IsConstant</a>&lt;T&gt;::value</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00713">713</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+
+</div>
+</div>
 <a id="aecf6a2d8f8fd3cde95667fbf433e42d1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aecf6a2d8f8fd3cde95667fbf433e42d1">&#9670;&nbsp;</a></span>isOne</h2>
 
@@ -4089,7 +4118,7 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Tue Sep 6 2022 09:06:36 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Sep 14 2022 13:04:03 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

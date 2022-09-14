@@ -234,6 +234,10 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1MakePassSecond.html">llama::internal::MakePassSecond&lt; F &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1IsConstant.html">llama::internal::IsConstant&lt; T &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1IsConstant_3_01std_1_1integral__constant_3_01T_00_01V_01_4_01_4.html">llama::internal::IsConstant&lt; std::integral_constant&lt; T, V &gt; &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1BoxedValue.html">llama::internal::BoxedValue&lt; T, I &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1BoxedValue_3_01Constant_3_01V_01_4_00_01I_01_4.html">llama::internal::BoxedValue&lt; Constant&lt; V &gt;, I &gt;</a></td></tr>
@@ -423,6 +427,9 @@ Variables</h2></td></tr>
 <tr class="memitem:aae03df933faef61723569d4655563bbe"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , typename RecordCoord , bool Align = false&gt; </td></tr>
 <tr class="memitem:aae03df933faef61723569d4655563bbe"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#aae03df933faef61723569d4655563bbe">llama::offsetOf</a> = flatOffsetOf&lt;FlatRecordDim&lt;RecordDim&gt;, flatRecordCoord&lt;RecordDim, RecordCoord&gt;, Align&gt;</td></tr>
 <tr class="separator:aae03df933faef61723569d4655563bbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb3261387e3af25b2f65fb3725bacde1"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:aeb3261387e3af25b2f65fb3725bacde1"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#aeb3261387e3af25b2f65fb3725bacde1">llama::isConstant</a> = internal::IsConstant&lt;T&gt;::value</td></tr>
+<tr class="separator:aeb3261387e3af25b2f65fb3725bacde1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -430,7 +437,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="Core_8hpp.html">Core.hpp</a></li>
-    <li class="footer">Generated on Tue Sep 6 2022 09:06:36 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Sep 14 2022 13:04:03 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

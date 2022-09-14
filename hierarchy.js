@@ -55,6 +55,7 @@ var hierarchy =
     [ "false_type", null, [
       [ "llama::internal::IsBoundedArray< T >", "structllama_1_1internal_1_1IsBoundedArray.html", null ],
       [ "llama::internal::IsComputed< Mapping, RecordCoord, typename >", "structllama_1_1internal_1_1IsComputed.html", null ],
+      [ "llama::internal::IsConstant< T >", "structllama_1_1internal_1_1IsConstant.html", null ],
       [ "llama::internal::IsProxyReferenceImpl< R, typename >", "structllama_1_1internal_1_1IsProxyReferenceImpl.html", null ]
     ] ],
     [ "llama::Field< Tag, Type >", "structllama_1_1Field.html", null ],
@@ -201,6 +202,7 @@ var hierarchy =
     [ "llama::mapping::tree::TreeCoordElement< ChildIndex, ArrayIndexType >", "structllama_1_1mapping_1_1tree_1_1TreeCoordElement.html", null ],
     [ "true_type", null, [
       [ "llama::internal::IsBoundedArray< T[N]>", "structllama_1_1internal_1_1IsBoundedArray_3_01T_0fN_0e_4.html", null ],
+      [ "llama::internal::IsConstant< std::integral_constant< T, V > >", "structllama_1_1internal_1_1IsConstant_3_01std_1_1integral__constant_3_01T_00_01V_01_4_01_4.html", null ],
       [ "llama::internal::IsProxyReferenceImpl< R, std::void_t< typename R::value_type, decltype(static_cast< typename R::value_type >(std::declval< R & >())), decltype(std::declval< R & >()=std::declval< typename R::value_type >())> >", "structllama_1_1internal_1_1IsProxyReferenceImpl_3_01R_00_01std_1_1void__t_3_01typename_01R_1_1vaf29d5bd88afd76084d03518114f19340.html", null ]
     ] ],
     [ "llama::Tuple< Elements >", "structllama_1_1Tuple.html", null ],

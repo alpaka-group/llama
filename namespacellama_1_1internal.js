@@ -32,6 +32,8 @@ var namespacellama_1_1internal =
     [ "IsBoundedArray< T[N]>", "structllama_1_1internal_1_1IsBoundedArray_3_01T_0fN_0e_4.html", null ],
     [ "IsComputed", "structllama_1_1internal_1_1IsComputed.html", null ],
     [ "IsComputed< Mapping, RecordCoord, std::void_t< decltype(Mapping::isComputed(RecordCoord{}))> >", "structllama_1_1internal_1_1IsComputed_3_01Mapping_00_01RecordCoord_00_01std_1_1void__t_3_01declt31ec39d02aa75d5ea3308109fe018112.html", null ],
+    [ "IsConstant", "structllama_1_1internal_1_1IsConstant.html", null ],
+    [ "IsConstant< std::integral_constant< T, V > >", "structllama_1_1internal_1_1IsConstant_3_01std_1_1integral__constant_3_01T_00_01V_01_4_01_4.html", null ],
     [ "IsProxyReferenceImpl", "structllama_1_1internal_1_1IsProxyReferenceImpl.html", null ],
     [ "IsProxyReferenceImpl< R, std::void_t< typename R::value_type, decltype(static_cast< typename R::value_type >(std::declval< R & >())), decltype(std::declval< R & >()=std::declval< typename R::value_type >())> >", "structllama_1_1internal_1_1IsProxyReferenceImpl_3_01R_00_01std_1_1void__t_3_01typename_01R_1_1vaf29d5bd88afd76084d03518114f19340.html", null ],
     [ "LeafRecordCoordsImpl", "structllama_1_1internal_1_1LeafRecordCoordsImpl.html", null ],
