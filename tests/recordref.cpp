@@ -802,7 +802,8 @@ TEST_CASE("RecordRef.load.constref")
 
 TEST_CASE("RecordRef.load.value.fromproxyref")
 {
-    auto view = llama::allocView(llama::mapping::BitPackedIntSoA<llama::ArrayExtents<int, 1>, ParticleInt>{});
+    auto view = llama::allocView(
+        llama::mapping::BitPackedIntSoA<llama::ArrayExtents<int, 1>, ParticleInt, llama::Constant<14>>{});
     auto&& record = view(0);
     record = 1;
 
@@ -868,7 +869,8 @@ TEST_CASE("RecordRef.store")
 
 TEST_CASE("RecordRef.store.toproxyref")
 {
-    auto view = llama::allocView(llama::mapping::BitPackedIntSoA<llama::ArrayExtents<int, 1>, ParticleInt>{});
+    auto view = llama::allocView(
+        llama::mapping::BitPackedIntSoA<llama::ArrayExtents<int, 1>, ParticleInt, llama::Constant<14>>{});
     auto&& record = view(0);
 
     record = 1;
@@ -951,7 +953,8 @@ TEST_CASE("RecordRef.loadAs.constref")
 
 TEST_CASE("RecordRef.loadAs.value.fromproxyref")
 {
-    auto view = llama::allocView(llama::mapping::BitPackedIntSoA<llama::ArrayExtents<int, 1>, ParticleInt>{});
+    auto view = llama::allocView(
+        llama::mapping::BitPackedIntSoA<llama::ArrayExtents<int, 1>, ParticleInt, llama::Constant<14>>{});
     auto&& record = view(0);
     record = 1;
 
