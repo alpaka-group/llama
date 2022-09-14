@@ -1673,6 +1673,22 @@
 
 	    namespace internal
 	    {
+	        template<typename T>
+	        struct IsConstant : std::false_type
+	        {
+	        };
+
+	        template<typename T, T V>
+	        struct IsConstant<std::integral_constant<T, V>> : std::true_type
+	        {
+	        };
+	    } // namespace internal
+
+	    template<typename T>
+	    inline constexpr bool isConstant = internal::IsConstant<T>::value;
+
+	    namespace internal
+	    {
 	        /// Holds a value of type T. Is useful as a base class. Is specialized for llama::Constant to not store the
 	        /// value at runtime. \tparam T Type of value to store. \tparam I Is used to disambiguate multiple BoxedValue
 	        /// base classes.
@@ -4746,15 +4762,27 @@ namespace llama
 	            }
 	        };
 
-	        template<typename TWithOptionalConst, typename T>
-	        LLAMA_FN_HOST_ACC_INLINE auto asTupleImpl(TWithOptionalConst& leaf, T) -> std::
-	            enable_if_t<!isRecordRef<std::decay_t<TWithOptionalConst>>, std::reference_wrapper<TWithOptionalConst>>
+	        template<
+	            typename ProxyReference,
+	            typename T,
+	            std::enable_if_t<!isRecordRef<std::decay_t<ProxyReference>>, int> = 0>
+	        LLAMA_FN_HOST_ACC_INLINE auto asTupleImpl(ProxyReference&& leaf, T) -> ProxyReference
+	        {
+	            return leaf;
+	        }
+
+	        template<
+	            typename TWithOptionalConst,
+	            typename T,
+	            std::enable_if_t<!isRecordRef<std::decay_t<TWithOptionalConst>>, int> = 0>
+	        LLAMA_FN_HOST_ACC_INLINE auto asTupleImpl(TWithOptionalConst& leaf, T)
+	            -> std::reference_wrapper<TWithOptionalConst>
 	        {
 	            return leaf;
 	        }
 
 	        template<typename RecordRef, typename T, std::size_t N, std::size_t... Is>
-	        LLAMA_FN_HOST_ACC_INLINE auto asTupleImplArr(RecordRef&& vd, T (&&)[N], std::index_sequence<Is...>)
+	        LLAMA_FN_HOST_ACC_INLINE auto asTupleImplForArray(RecordRef&& vd, T (&&)[N], std::index_sequence<Is...>)
 	        {
 	            return std::make_tuple(asTupleImpl(vd(RecordCoord<Is>{}), T{})...);
 	        }
@@ -4762,7 +4790,7 @@ namespace llama
 	        template<typename RecordRef, typename T, std::size_t N>
 	        LLAMA_FN_HOST_ACC_INLINE auto asTupleImpl(RecordRef&& vd, T (&&a)[N])
 	        {
-	            return asTupleImplArr(std::forward<RecordRef>(vd), std::move(a), std::make_index_sequence<N>{});
+	            return asTupleImplForArray(std::forward<RecordRef>(vd), std::move(a), std::make_index_sequence<N>{});
 	        }
 
 	        template<typename RecordRef, typename... Fields>
@@ -4771,15 +4799,27 @@ namespace llama
 	            return std::make_tuple(asTupleImpl(vd(GetFieldTag<Fields>{}), GetFieldType<Fields>{})...);
 	        }
 
-	        template<typename TWithOptionalConst, typename T>
-	        LLAMA_FN_HOST_ACC_INLINE auto asFlatTupleImpl(TWithOptionalConst& leaf, T)
-	            -> std::enable_if_t<!isRecordRef<std::decay_t<TWithOptionalConst>>, std::tuple<TWithOptionalConst&>>
+	        template<
+	            typename ProxyReference,
+	            typename T,
+	            std::enable_if_t<!isRecordRef<std::decay_t<ProxyReference>>, int> = 0>
+	        LLAMA_FN_HOST_ACC_INLINE auto asFlatTupleImpl(ProxyReference&& leaf, T) -> std::tuple<ProxyReference>
+	        {
+	            static_assert(!std::is_reference_v<ProxyReference>);
+	            return {std::move(leaf)}; // NOLINT(bugprone-move-forwarding-reference)
+	        }
+
+	        template<
+	            typename TWithOptionalConst,
+	            typename T,
+	            std::enable_if_t<!isRecordRef<std::decay_t<TWithOptionalConst>>, int> = 0>
+	        LLAMA_FN_HOST_ACC_INLINE auto asFlatTupleImpl(TWithOptionalConst& leaf, T) -> std::tuple<TWithOptionalConst&>
 	        {
 	            return {leaf};
 	        }
 
 	        template<typename RecordRef, typename T, std::size_t N, std::size_t... Is>
-	        LLAMA_FN_HOST_ACC_INLINE auto asFlatTupleImplArr(RecordRef&& vd, T (&&)[N], std::index_sequence<Is...>)
+	        LLAMA_FN_HOST_ACC_INLINE auto asFlatTupleImplForArray(RecordRef&& vd, T (&&)[N], std::index_sequence<Is...>)
 	        {
 	            return std::tuple_cat(asFlatTupleImpl(vd(RecordCoord<Is>{}), T{})...);
 	        }
@@ -4787,7 +4827,7 @@ namespace llama
 	        template<typename RecordRef, typename T, std::size_t N>
 	        LLAMA_FN_HOST_ACC_INLINE auto asFlatTupleImpl(RecordRef&& vd, T (&&a)[N])
 	        {
-	            return asFlatTupleImplArr(std::forward<RecordRef>(vd), std::move(a), std::make_index_sequence<N>{});
+	            return asFlatTupleImplForArray(std::forward<RecordRef>(vd), std::move(a), std::make_index_sequence<N>{});
 	        }
 
 	        template<typename RecordRef, typename... Fields>
@@ -4839,7 +4879,7 @@ namespace llama
 	        LLAMA_FN_HOST_ACC_INLINE auto makeFromTuple(Tuple&& src, std::index_sequence<Is...>)
 	        {
 	            using std::get;
-	            return T{get<Is>(std::forward<Tuple>(src))...};
+	            return T{get<Is>(src)...}; // no forward of src, since we call get multiple times on it
 	        }
 
 	        template<typename T, typename SFINAE, typename... Args>
@@ -6995,12 +7035,19 @@ namespace llama::mapping
 	    public:
 	        static constexpr std::size_t blobCount = boost::mp11::mp_size<FlatRecordDim<TRecordDim>>::value;
 
-	        using Base::Base;
-
+	        template<typename B = Bits, std::enable_if_t<isConstant<B>, int> = 0>
 	        LLAMA_FN_HOST_ACC_INLINE constexpr explicit BitPackedIntSoA(
-	            TArrayExtents extents,
+	            TArrayExtents extents = {},
 	            Bits bits = {},
 	            TRecordDim = {})
+	            : Base(extents)
+	            , VHBits{bits}
+	        {
+	            static_assert(VHBits::value() > 0);
+	        }
+
+	        template<typename B = Bits, std::enable_if_t<!isConstant<B>, int> = 0>
+	        LLAMA_FN_HOST_ACC_INLINE constexpr explicit BitPackedIntSoA(TArrayExtents extents, Bits bits, TRecordDim = {})
 	            : Base(extents)
 	            , VHBits{bits}
 	        {
