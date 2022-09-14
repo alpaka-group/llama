@@ -698,6 +698,22 @@ namespace llama
 
     namespace internal
     {
+        template<typename T>
+        struct IsConstant : std::false_type
+        {
+        };
+
+        template<typename T, T V>
+        struct IsConstant<std::integral_constant<T, V>> : std::true_type
+        {
+        };
+    } // namespace internal
+
+    template<typename T>
+    inline constexpr bool isConstant = internal::IsConstant<T>::value;
+
+    namespace internal
+    {
         /// Holds a value of type T. Is useful as a base class. Is specialized for llama::Constant to not store the
         /// value at runtime. \tparam T Type of value to store. \tparam I Is used to disambiguate multiple BoxedValue
         /// base classes.

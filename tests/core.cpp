@@ -532,3 +532,11 @@ TEST_CASE("isProxyReference")
     STATIC_REQUIRE(llama::internal::IsProxyReferenceImpl<decltype(ref)>::value);
     STATIC_REQUIRE(llama::isProxyReference<decltype(ref)>);
 }
+
+TEST_CASE("isConstant")
+{
+    STATIC_REQUIRE(!llama::isConstant<int>);
+    STATIC_REQUIRE(llama::isConstant<std::true_type>);
+    STATIC_REQUIRE(llama::isConstant<std::integral_constant<int, 34>>);
+    STATIC_REQUIRE(llama::isConstant<llama::Constant<3u>>);
+}
