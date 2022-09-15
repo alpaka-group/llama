@@ -88,6 +88,17 @@
 			#    endif
 			#endif
 
+			#ifndef LLAMA_ACC
+			#    if defined(__NVCC__) || (defined(__clang__) && defined(__CUDA__))
+			#        define LLAMA_ACC __device__
+			#    elif defined(__GNUC__) || defined(__clang__) || defined(_MSC_VER) || defined(__INTEL_LLVM_COMPILER)
+			#        define LLAMA_ACC
+			#    else
+			#        define LLAMA_ACC
+			#        warning LLAMA_HOST_ACC is only defined empty for this compiler
+			#    endif
+			#endif
+
 			#ifndef LLAMA_HOST_ACC
 			#    if defined(__NVCC__) || (defined(__clang__) && defined(__CUDA__))
 			#        define LLAMA_HOST_ACC __host__ __device__
@@ -2560,7 +2571,7 @@ namespace llama
 	        }
 
 	        template<typename RecordDim, std::size_t... Coords>
-	        LLAMA_HOST_ACC inline constexpr auto recordCoordTagsStorage = []() constexpr
+	        LLAMA_ACC inline constexpr auto recordCoordTagsStorage = []() constexpr
 	        {
 	            using Tags = GetTags<RecordDim, RecordCoord<Coords...>>;
 
