@@ -1,5 +1,6 @@
 var macros_8hpp =
 [
+    [ "LLAMA_ACC", "macros_8hpp.html#acdb51ba3bd1bda9d71de13d3a092d50a", null ],
     [ "LLAMA_COPY", "macros_8hpp.html#a2c7addf59d59bed9110075644e115f97", null ],
     [ "LLAMA_DECLSPEC_EMPTY_BASES", "macros_8hpp.html#a54cf6c1e66eb82c07a01b945491e4916", null ],
     [ "LLAMA_FN_HOST_ACC_INLINE", "macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af", null ],

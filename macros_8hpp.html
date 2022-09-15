@@ -144,6 +144,8 @@ Macros</h2></td></tr>
 <tr class="separator:a4de57f00925e4094739efa778cc4fe05"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeedb6e6e72a46dc4496c0b684c14d5bd"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="macros_8hpp.html#aeedb6e6e72a46dc4496c0b684c14d5bd">LLAMA_UNROLL</a>(...)</td></tr>
 <tr class="separator:aeedb6e6e72a46dc4496c0b684c14d5bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acdb51ba3bd1bda9d71de13d3a092d50a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="macros_8hpp.html#acdb51ba3bd1bda9d71de13d3a092d50a">LLAMA_ACC</a></td></tr>
+<tr class="separator:acdb51ba3bd1bda9d71de13d3a092d50a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0df9a6bf4db1561110a18783a7276900"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="macros_8hpp.html#a0df9a6bf4db1561110a18783a7276900">LLAMA_HOST_ACC</a></td></tr>
 <tr class="separator:a0df9a6bf4db1561110a18783a7276900"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adad0b5fb27fb373cb41c47ed7ab419af"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a>&#160;&#160;&#160;<a class="el" href="macros_8hpp.html#a602fc531cfc17c6b8fadea678b7c937b">LLAMA_FORCE_INLINE</a> <a class="el" href="macros_8hpp.html#a0df9a6bf4db1561110a18783a7276900">LLAMA_HOST_ACC</a></td></tr>
@@ -172,6 +174,22 @@ Macros</h2></td></tr>
 <tr class="separator:a00cc5cd2c6d364291992fbd5bbc4771f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="acdb51ba3bd1bda9d71de13d3a092d50a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acdb51ba3bd1bda9d71de13d3a092d50a">&#9670;&nbsp;</a></span>LLAMA_ACC</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define LLAMA_ACC</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00076">76</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a2c7addf59d59bed9110075644e115f97"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2c7addf59d59bed9110075644e115f97">&#9670;&nbsp;</a></span>LLAMA_COPY</h2>
 
@@ -190,7 +208,7 @@ Macros</h2></td></tr>
 
 <p>Forces a copy of a value. This is useful to prevent ODR usage of constants when compiling for GPU targets. </p>
 
-<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00119">119</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00130">130</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
 
 </div>
 </div>
@@ -206,7 +224,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00125">125</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00136">136</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
 
 </div>
 </div>
@@ -222,7 +240,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00084">84</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00095">95</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
 
 </div>
 </div>
@@ -258,7 +276,7 @@ Macros</h2></td></tr>
 
 <p>Forces the compiler to recursively inline the call hiearchy started by the subsequent function call. </p>
 
-<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00115">115</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00126">126</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
 
 </div>
 </div>
@@ -275,7 +293,7 @@ Macros</h2></td></tr>
 </div><div class="memdoc">
 <p>Some offloading parallelization language extensions such a CUDA, OpenACC or OpenMP 4.5 need to specify whether a class, struct, function or method "resides" on the host, the accelerator (the offloading device) or both. LLAMA supports this with marking every function needed on an accelerator with <code>LLAMA_HOST_ACC</code>. </p>
 
-<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00079">79</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00090">90</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
 
 </div>
 </div>
@@ -314,7 +332,7 @@ Macros</h2></td></tr>
 
 <p>Gives strong indication to the compiler to inline the attributed lambda. </p>
 
-<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00101">101</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00112">112</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
 
 </div>
 </div>
@@ -334,7 +352,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00095">95</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00106">106</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
 
 </div>
 </div>
@@ -352,7 +370,7 @@ Macros</h2></td></tr>
 
 <p>Expands to likely if [[likely]] supported by the compiler. Use as [[LLAMA_LIKELY]]. </p>
 
-<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00132">132</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00143">143</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
 
 </div>
 </div>
@@ -390,7 +408,7 @@ Macros</h2></td></tr>
 
 <p>Suppresses nvcc warning: 'calling a <b>host</b> function from <b>host</b> <b>device</b> function.'. </p>
 
-<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00108">108</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00119">119</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
 
 </div>
 </div>
@@ -408,7 +426,7 @@ Macros</h2></td></tr>
 
 <p>Expands to unlikely if [[unlikely]] supported by the compiler. Use as [[LLAMA_UNLIKELY]]. </p>
 
-<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00139">139</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00150">150</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
 
 </div>
 </div>
@@ -440,7 +458,7 @@ Macros</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="macros_8hpp.html">macros.hpp</a></li>
-    <li class="footer">Generated on Wed Sep 14 2022 14:22:53 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Sep 15 2022 19:49:57 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
