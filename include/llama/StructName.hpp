@@ -268,7 +268,7 @@ namespace llama
         }
 
         template<typename RecordDim, std::size_t... Coords>
-        LLAMA_HOST_ACC inline constexpr auto recordCoordTagsStorage = []() constexpr
+        LLAMA_ACC inline constexpr auto recordCoordTagsStorage = []() constexpr
         {
             using Tags = GetTags<RecordDim, RecordCoord<Coords...>>;
 
