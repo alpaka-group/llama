@@ -13,13 +13,12 @@
 using FP = float;
 
 constexpr auto problemSize = 64 * 1024; ///< total number of particles
-constexpr auto sharedElementsPerBlock = 512;
 constexpr auto steps = 5; ///< number of steps to calculate
 constexpr auto allowRsqrt = true; // rsqrt can be way faster, but less accurate
 constexpr auto runUpate = true; // run update step. Useful to disable for benchmarking the move step.
 constexpr auto trace = false;
-constexpr FP timestep = 0.0001f;
 
+constexpr auto sharedElementsPerBlock = 512;
 constexpr auto threadsPerBlock = 256;
 constexpr auto aosoaLanes = 32; // coalesced memory access
 
@@ -27,7 +26,8 @@ constexpr auto aosoaLanes = 32; // coalesced memory access
 static_assert(problemSize % sharedElementsPerBlock == 0);
 static_assert(sharedElementsPerBlock % threadsPerBlock == 0);
 
-constexpr FP epS2 = 0.01;
+constexpr auto timestep = FP{0.0001};
+constexpr auto eps2 = FP{0.01};
 
 #if defined(__CUDA_ARCH__) && __CUDA_ARCH__ <= 600
 static_assert(!trace, "Since tracing is enabled, this example needs compute capability >= 60 for 64bit atomics");
@@ -47,25 +47,20 @@ namespace tag
     struct Mass{};
 } // namespace tag
 
+using Vec3 = llama::Record<
+    llama::Field<tag::X, FP>,
+    llama::Field<tag::Y, FP>,
+    llama::Field<tag::Z, FP>>;
 using Particle = llama::Record<
-    llama::Field<tag::Pos, llama::Record<
-        llama::Field<tag::X, FP>,
-        llama::Field<tag::Y, FP>,
-        llama::Field<tag::Z, FP>>>,
-    llama::Field<tag::Vel, llama::Record<
-        llama::Field<tag::X, FP>,
-        llama::Field<tag::Y, FP>,
-        llama::Field<tag::Z, FP>>>,
+    llama::Field<tag::Pos, Vec3>,
+    llama::Field<tag::Vel, Vec3>,
     llama::Field<tag::Mass, FP>
     // adding a padding element would nicely align a single Particle to 8 floats
     //, llama::Field<llama::NoName, FP>
 >;
 
 using ParticleJ = llama::Record<
-    llama::Field<tag::Pos, llama::Record<
-        llama::Field<tag::X, FP>,
-        llama::Field<tag::Y, FP>,
-        llama::Field<tag::Z, FP>>>,
+    llama::Field<tag::Pos, Vec3>,
     llama::Field<tag::Mass, FP>>;
 // clang-format on
 
@@ -73,15 +68,15 @@ using ParticleJ = llama::Record<
 using SharedMemoryParticle = ParticleJ;
 
 template<typename ParticleRefI, typename ParticleRefJ>
-__device__ void pPInteraction(ParticleRefI&& pi, ParticleRefJ pj)
+__device__ void pPInteraction(ParticleRefI& pi, ParticleRefJ pj)
 {
-    auto dist = pi(tag::Pos()) - pj(tag::Pos());
+    auto dist = pi(tag::Pos{}) - pj(tag::Pos{});
     dist *= dist;
-    const FP distSqr = epS2 + dist(tag::X()) + dist(tag::Y()) + dist(tag::Z());
+    const FP distSqr = eps2 + dist(tag::X{}) + dist(tag::Y{}) + dist(tag::Z{});
     const FP distSixth = distSqr * distSqr * distSqr;
     const FP invDistCube = allowRsqrt ? rsqrt(distSixth) : (1.0f / sqrt(distSixth));
-    const FP sts = pj(tag::Mass()) * invDistCube * +timestep;
-    pi(tag::Vel()) += dist * sts;
+    const FP sts = pj(tag::Mass{}) * invDistCube * +timestep;
+    pi(tag::Vel{}) += dist * sts;
 }
 
 template<int MappingSM, typename View>
@@ -119,12 +114,13 @@ __global__ void updateSM(View particles)
     llama::One<Particle> pi = particles(ti);
     for(int blockOffset = 0; blockOffset < problemSize; blockOffset += sharedElementsPerBlock)
     {
-        LLAMA_INDEPENDENT_DATA
-        for(int j = tbi; j < sharedElementsPerBlock; j += threadsPerBlock)
-            sharedView(j) = particles(blockOffset + j);
+#pragma unroll
+        for(int j = 0; j < sharedElementsPerBlock; j += threadsPerBlock)
+            sharedView(j) = particles(blockOffset + tbi + j);
         __syncthreads();
 
-        LLAMA_INDEPENDENT_DATA
+        // Sometimes nvcc takes a bad unrolling decision and you need to unroll yourself
+        // #pragma unroll 8
         for(int j = 0; j < sharedElementsPerBlock; ++j)
             pPInteraction(pi, sharedView(j));
         __syncthreads();
@@ -138,7 +134,6 @@ __global__ void update(View particles)
     const auto ti = threadIdx.x + blockIdx.x * blockDim.x;
 
     llama::One<Particle> pi = particles(ti);
-    LLAMA_INDEPENDENT_DATA
     for(int j = 0; j < problemSize; ++j)
         pPInteraction(pi, particles(j));
     particles(ti)(tag::Vel{}) = pi(tag::Vel{});
@@ -228,7 +223,7 @@ try
     watch.printAndReset("alloc");
 
     std::default_random_engine engine;
-    std::normal_distribution<FP> distribution(FP{0}, FP{1});
+    std::normal_distribution distribution(FP{0}, FP{1});
     for(int i = 0; i < problemSize; ++i)
     {
         llama::One<Particle> p;
@@ -331,7 +326,7 @@ namespace manual
         r.x = bj.x - bi.x;
         r.y = bj.y - bi.y;
         r.z = bj.z - bi.z;
-        FP distSqr = r.x * r.x + r.y * r.y + r.z * r.z + epS2;
+        FP distSqr = r.x * r.x + r.y * r.y + r.z * r.z + eps2;
         FP distSixth = distSqr * distSqr * distSqr;
         FP invDistCube = allowRsqrt ? rsqrt(distSixth) : (1.0f / sqrtf(distSixth));
         FP s = bj.w * invDistCube;

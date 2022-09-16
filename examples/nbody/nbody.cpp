@@ -34,7 +34,7 @@ constexpr auto newtonRaphsonAfterRsqrt = true; // generate a newton raphson refi
 constexpr auto runUpate = true; // run update step. Useful to disable for benchmarking the move step.
 
 constexpr auto timestep = FP{0.0001};
-constexpr auto epS2 = FP{0.01};
+constexpr auto eps2 = FP{0.01};
 
 constexpr auto rngSeed = 42;
 constexpr auto referenceParticleIndex = 1338;
@@ -169,7 +169,7 @@ namespace usellama
     {
         auto dist = pi(tag::Pos{}) - pj(tag::Pos{});
         dist *= dist;
-        const auto distSqr = epS2 + dist(tag::X{}) + dist(tag::Y{}) + dist(tag::Z{});
+        const auto distSqr = eps2 + dist(tag::X{}) + dist(tag::Y{}) + dist(tag::Z{});
         const auto distSixth = distSqr * distSqr * distSqr;
         const auto invDistCube = [&]
         {
@@ -399,7 +399,7 @@ namespace manualAoS
     {
         auto distance = pi.pos - pj.pos;
         distance *= distance;
-        const FP distSqr = epS2 + distance.x + distance.y + distance.z;
+        const FP distSqr = eps2 + distance.x + distance.y + distance.z;
         const FP distSixth = distSqr * distSqr * distSqr;
         const FP invDistCube = 1.0f / std::sqrt(distSixth);
         const FP sts = pj.mass * invDistCube * timestep;
@@ -487,7 +487,7 @@ namespace manualSoA
         xdistance *= xdistance;
         ydistance *= ydistance;
         zdistance *= zdistance;
-        const FP distSqr = epS2 + xdistance + ydistance + zdistance;
+        const FP distSqr = eps2 + xdistance + ydistance + zdistance;
         const FP distSixth = distSqr * distSqr * distSqr;
         const FP invDistCube = 1.0f / std::sqrt(distSixth);
         const FP sts = pjmass * invDistCube * timestep;
@@ -613,7 +613,7 @@ namespace manualAoSoA
         xdistance *= xdistance;
         ydistance *= ydistance;
         zdistance *= zdistance;
-        const FP distSqr = epS2 + xdistance + ydistance + zdistance;
+        const FP distSqr = eps2 + xdistance + ydistance + zdistance;
         const FP distSixth = distSqr * distSqr * distSqr;
         const FP invDistCube = 1.0f / std::sqrt(distSixth);
         const FP sts = pjmass * invDistCube * timestep;
@@ -787,7 +787,7 @@ namespace manualAoSoAManualAVX
     };
 
     constexpr auto blocks = problemSize / lanes;
-    const __m256 vEPS2 = _mm256_set1_ps(epS2); // NOLINT(cert-err58-cpp)
+    const __m256 vEPS2 = _mm256_set1_ps(eps2); // NOLINT(cert-err58-cpp)
     const __m256 vTIMESTEP = _mm256_set1_ps(timestep); // NOLINT(cert-err58-cpp)
 
     inline void pPInteraction(
@@ -1014,7 +1014,7 @@ namespace manualAoSoASIMD
         const Simd xdistanceSqr = xdistance * xdistance;
         const Simd ydistanceSqr = ydistance * ydistance;
         const Simd zdistanceSqr = zdistance * zdistance;
-        const Simd distSqr = epS2 + xdistanceSqr + ydistanceSqr + zdistanceSqr;
+        const Simd distSqr = eps2 + xdistanceSqr + ydistanceSqr + zdistanceSqr;
         const Simd distSixth = distSqr * distSqr * distSqr;
         const Simd invDistCube = [&]
         {
