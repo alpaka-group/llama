@@ -1,6 +1,7 @@
 cmake_minimum_required (VERSION 3.18.3)
 project(llama-alpaka-nbody CXX)
 
+find_package(fmt CONFIG REQUIRED)
 find_package(xsimd QUIET)
 if (NOT xsimd_FOUND)
 	message(WARNING "xsimd not found: alpaka n-body example is disabled")
@@ -12,7 +13,7 @@ endif()
 find_package(alpaka 0.9.0 REQUIRED)
 alpaka_add_executable(${PROJECT_NAME} nbody.cpp ../../common/Stopwatch.hpp)
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
-target_link_libraries(${PROJECT_NAME} PRIVATE llama::llama alpaka::alpaka xsimd)
+target_link_libraries(${PROJECT_NAME} PRIVATE llama::llama fmt::fmt alpaka::alpaka xsimd)
 
 if (MSVC)
 	target_compile_options(${PROJECT_NAME} PRIVATE /arch:AVX2 /fp:fast)

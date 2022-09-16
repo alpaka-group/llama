@@ -1,7 +1,9 @@
 #include "../../common/Stopwatch.hpp"
+#include "../../common/hostname.hpp"
 
 #include <alpaka/alpaka.hpp>
 #include <alpaka/example/ExampleDefaultAcc.hpp>
+#include <fmt/format.h>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -310,20 +312,24 @@ try
 
     std::ofstream plotFile{"nbody.sh"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
-    plotFile << R"(#!/usr/bin/gnuplot -p
+    plotFile << fmt::format(
+        R"(#!/usr/bin/gnuplot -p
+set title "nbody alpaka {}ki particles on {} on {}"
 set style data histograms
 set style fill solid
 set xtics rotate by 45 right
 set key out top center maxrows 3
 set yrange [0:*]
+set y2range [0:*]
+set ylabel "update runtime [s]"
+set y2label "move runtime [s]"
+set y2tics auto
 $data << EOD
-)";
+)",
+        problemSize / 1024,
+        alpaka::getAccName<alpaka::ExampleDefaultAcc<alpaka::DimInt<1>, int>>(),
+        common::hostname());
     plotFile << "\"\"\t\"update\"\t\"move\"\n";
-
-    // using Acc = alpaka::ExampleDefaultAcc;
-    // using Acc = alpaka::AccGpuCudaRt<Dim, Size>;
-    // using Acc = alpaka::AccCpuSerial<Dim, Size>;
-    // using Acc = alpaka::AccCpuOmp2Blocks<Dim, Size>;
 
     run<alpaka::ExampleDefaultAcc, AoS, AoS>(plotFile);
     run<alpaka::ExampleDefaultAcc, AoS, SoA>(plotFile);
@@ -336,7 +342,7 @@ $data << EOD
     run<alpaka::ExampleDefaultAcc, AoSoA, AoSoA>(plotFile);
 
     plotFile << R"(EOD
-plot $data using 2:xtic(1) ti col
+plot $data using 2:xtic(1) ti col axis x1y1, "" using 3 ti col axis x1y2
 )";
     std::cout << "Plot with: ./nbody.sh\n";
 
