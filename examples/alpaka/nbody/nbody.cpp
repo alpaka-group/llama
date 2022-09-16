@@ -295,6 +295,12 @@ void run(std::ostream& plotFile)
 auto main() -> int
 try
 {
+#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ <= 5
+// nvcc <= 11.5 chokes on `pis(tag::Pos{}, tag::X{})` inside `pPInteraction()`
+#    warning "alpaka nbody example disabled for nvcc <= 11.5, because the compiler segfaults"
+    return -1;
+#else
+
     std::cout << problemSize / 1000 << "k particles (" << problemSize * llama::sizeOf<Particle> / 1024 << "kiB)\n"
               << "Caching " << threadsPerBlock << " particles (" << threadsPerBlock * llama::sizeOf<Particle> / 1024
               << " kiB) in shared memory\n"
@@ -335,6 +341,7 @@ plot $data using 2:xtic(1) ti col
     std::cout << "Plot with: ./nbody.sh\n";
 
     return 0;
+#endif
 }
 catch(const std::exception& e)
 {
