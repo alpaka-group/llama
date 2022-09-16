@@ -28,6 +28,7 @@ var dir_1edeeca147c2d4fb57fec1b01c02fb14 =
     ] ],
     [ "RecordCoord.hpp", "RecordCoord_8hpp.html", "RecordCoord_8hpp" ],
     [ "RecordRef.hpp", "RecordRef_8hpp.html", "RecordRef_8hpp" ],
+    [ "Simd.hpp", "Simd_8hpp.html", "Simd_8hpp" ],
     [ "StructName.hpp", "StructName_8hpp.html", "StructName_8hpp" ],
     [ "Tuple.hpp", "Tuple_8hpp.html", "Tuple_8hpp" ],
     [ "Vector.hpp", "Vector_8hpp.html", [

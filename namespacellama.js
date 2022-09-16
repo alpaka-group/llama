@@ -26,6 +26,8 @@ var namespacellama =
     [ "RecordRef", "structllama_1_1RecordRef.html", "structllama_1_1RecordRef" ],
     [ "ScopedUpdate", "structllama_1_1ScopedUpdate.html", "structllama_1_1ScopedUpdate" ],
     [ "ScopedUpdate< Reference, std::enable_if_t< std::is_fundamental_v< typename internal::ValueOf< Reference >::type > > >", "structllama_1_1ScopedUpdate_3_01Reference_00_01std_1_1enable__if__t_3_01std_1_1is__fundamental__e14f71eb64730a69a1b74dea5c5f8b59.html", "structllama_1_1ScopedUpdate_3_01Reference_00_01std_1_1enable__if__t_3_01std_1_1is__fundamental__e14f71eb64730a69a1b74dea5c5f8b59" ],
+    [ "SimdTraits", "structllama_1_1SimdTraits.html", null ],
+    [ "SimdTraits< T, std::enable_if_t< std::is_arithmetic_v< T > > >", "structllama_1_1SimdTraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__arithmetic__v_3_01T_01_4_01_4_01_4.html", "structllama_1_1SimdTraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__arithmetic__v_3_01T_01_4_01_4_01_4" ],
     [ "Tuple", "structllama_1_1Tuple.html", null ],
     [ "Tuple< TFirstElement, RestElements... >", "structllama_1_1Tuple_3_01TFirstElement_00_01RestElements_8_8_8_01_4.html", "structllama_1_1Tuple_3_01TFirstElement_00_01RestElements_8_8_8_01_4" ],
     [ "Vector", "structllama_1_1Vector.html", "structllama_1_1Vector" ],

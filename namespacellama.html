@@ -158,6 +158,10 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1ScopedUpdate_3_01Reference_00_01std_1_1enable__if__t_3_01std_1_1is__fundamental__e14f71eb64730a69a1b74dea5c5f8b59.html">ScopedUpdate&lt; Reference, std::enable_if_t&lt; std::is_fundamental_v&lt; typename internal::ValueOf&lt; Reference &gt;::type &gt; &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1SimdTraits.html">SimdTraits</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1SimdTraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__arithmetic__v_3_01T_01_4_01_4_01_4.html">SimdTraits&lt; T, std::enable_if_t&lt; std::is_arithmetic_v&lt; T &gt; &gt; &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Tuple.html">Tuple</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Tuple_3_01TFirstElement_00_01RestElements_8_8_8_01_4.html">Tuple&lt; TFirstElement, RestElements... &gt;</a></td></tr>
@@ -243,6 +247,18 @@ Typedefs</h2></td></tr>
 <tr class="memitem:a25d8302ec14d00c68dd886d296a1373d"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a25d8302ec14d00c68dd886d296a1373d">PopFront</a> = <a class="el" href="namespacellama.html#ad95912a49a83091fde091a4e2d9a4118">RecordCoordFromList</a>&lt; boost::mp11::mp_pop_front&lt; typename <a class="el" href="structllama_1_1RecordCoord.html#a3d0e76f270b2cd29cb8c679457e80d69">RecordCoord::List</a> &gt; &gt;</td></tr>
 <tr class="memdesc:a25d8302ec14d00c68dd886d296a1373d"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a> without first coordinate component.  <a href="namespacellama.html#a25d8302ec14d00c68dd886d296a1373d">More...</a><br /></td></tr>
 <tr class="separator:a25d8302ec14d00c68dd886d296a1373d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5050ae091b407bcd3adabb734f2aba0"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , std::size_t N, template&lt; typename, auto &gt; typename MakeSizedSimd&gt; </td></tr>
+<tr class="memitem:ab5050ae091b407bcd3adabb734f2aba0"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ab5050ae091b407bcd3adabb734f2aba0">SimdizeN</a> = typename <a class="el" href="structllama_1_1internal_1_1SimdizeNImpl.html">internal::SimdizeNImpl</a>&lt; RecordDim, N, MakeSizedSimd &gt;::type</td></tr>
+<tr class="separator:ab5050ae091b407bcd3adabb734f2aba0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf54146d2fef06baf9d512e22793f41a"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , template&lt; typename &gt; typename MakeSimd&gt; </td></tr>
+<tr class="memitem:adf54146d2fef06baf9d512e22793f41a"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#adf54146d2fef06baf9d512e22793f41a">Simdize</a> = <a class="el" href="namespacellama.html#a825425dc4761ab3b27c3ec6d42876f32">TransformLeaves</a>&lt; RecordDim, MakeSimd &gt;</td></tr>
+<tr class="separator:adf54146d2fef06baf9d512e22793f41a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a145a8c9a7fd516bf596718949b7c4318"><td class="memTemplParams" colspan="2">template&lt;typename T , std::size_t N, template&lt; typename, auto &gt; typename MakeSizedSimd&gt; </td></tr>
+<tr class="memitem:a145a8c9a7fd516bf596718949b7c4318"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a145a8c9a7fd516bf596718949b7c4318">SimdN</a> = typename std::conditional_t&lt; <a class="el" href="namespacellama.html#a3b2aa8fd3e43e43b830bc4a71b180175">isRecord</a>&lt; T &gt;||<a class="el" href="structllama_1_1internal_1_1IsBoundedArray.html">internal::IsBoundedArray</a>&lt; T &gt;::value, std::conditional_t&lt; N==1, boost::mp11::mp_identity&lt; <a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a>&lt; T &gt; &gt;, boost::mp11::mp_identity&lt; <a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a>&lt; <a class="el" href="namespacellama.html#ab5050ae091b407bcd3adabb734f2aba0">SimdizeN</a>&lt; T, N, MakeSizedSimd &gt; &gt;&gt; &gt;, std::conditional_t&lt; N==1, boost::mp11::mp_identity&lt; T &gt;, boost::mp11::mp_identity&lt; <a class="el" href="namespacellama.html#ab5050ae091b407bcd3adabb734f2aba0">SimdizeN</a>&lt; T, N, MakeSizedSimd &gt; &gt;&gt; &gt;::type</td></tr>
+<tr class="separator:a145a8c9a7fd516bf596718949b7c4318"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab12da747c068e8576dec5182d398d378"><td class="memTemplParams" colspan="2">template&lt;typename T , template&lt; typename &gt; typename MakeSimd&gt; </td></tr>
+<tr class="memitem:ab12da747c068e8576dec5182d398d378"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a> = typename std::conditional_t&lt; <a class="el" href="namespacellama.html#a3b2aa8fd3e43e43b830bc4a71b180175">isRecord</a>&lt; T &gt;||<a class="el" href="structllama_1_1internal_1_1IsBoundedArray.html">internal::IsBoundedArray</a>&lt; T &gt;::value, boost::mp11::mp_identity&lt; <a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a>&lt; <a class="el" href="namespacellama.html#adf54146d2fef06baf9d512e22793f41a">Simdize</a>&lt; T, MakeSimd &gt; &gt;&gt;, boost::mp11::mp_identity&lt; <a class="el" href="namespacellama.html#adf54146d2fef06baf9d512e22793f41a">Simdize</a>&lt; T, MakeSimd &gt; &gt;&gt;::type</td></tr>
+<tr class="separator:ab12da747c068e8576dec5182d398d378"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace059168abe83f42c9493ad853abb746"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim &gt; </td></tr>
 <tr class="memitem:ace059168abe83f42c9493ad853abb746"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a> = <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a>&lt; decltype(<a class="el" href="namespacellama.html#a3750d27a7f8dd111fbe32dc769b44120">allocViewStack</a>&lt; 0, RecordDim &gt;()), <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt;&gt;, true &gt;</td></tr>
 <tr class="memdesc:ace059168abe83f42c9493ad853abb746"><td class="mdescLeft">&#160;</td><td class="mdescRight">A <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> that owns and holds a single value.  <a href="namespacellama.html#ace059168abe83f42c9493ad853abb746">More...</a><br /></td></tr>
@@ -374,6 +390,18 @@ Functions</h2></td></tr>
 <tr class="memitem:ad7dddd17106d2711c85b213e61fb9155"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:ad7dddd17106d2711c85b213e61fb9155"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ad7dddd17106d2711c85b213e61fb9155">ScopedUpdate</a> (T) -&gt; <a class="el" href="structllama_1_1ScopedUpdate.html">ScopedUpdate</a>&lt; typename <a class="el" href="structllama_1_1internal_1_1ReferenceTo.html">internal::ReferenceTo</a>&lt; std::remove_reference_t&lt; T &gt;&gt;::type &gt;</td></tr>
 <tr class="separator:ad7dddd17106d2711c85b213e61fb9155"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae867cbf8fae6d6980456b34a30e967ba"><td class="memTemplParams" colspan="2">template&lt;typename Simd , typename RecordRef &gt; </td></tr>
+<tr class="memitem:ae867cbf8fae6d6980456b34a30e967ba"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ae867cbf8fae6d6980456b34a30e967ba">loadSimd</a> (<a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a> &amp;simd, const <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> &amp;rr)</td></tr>
+<tr class="separator:ae867cbf8fae6d6980456b34a30e967ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7627ce0c4e06c8f8e4d57463f49f1951"><td class="memTemplParams" colspan="2">template&lt;typename RecordRef , typename Simd &gt; </td></tr>
+<tr class="memitem:a7627ce0c4e06c8f8e4d57463f49f1951"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a7627ce0c4e06c8f8e4d57463f49f1951">storeSimd</a> (<a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> &amp;&amp;rr, <a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a> simd)</td></tr>
+<tr class="separator:a7627ce0c4e06c8f8e4d57463f49f1951"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4451ec281eb037ebac7c08772ce0670f"><td class="memTemplParams" colspan="2">template&lt;std::size_t N, template&lt; typename, auto &gt; typename MakeSizedSimd, typename View , typename UnarySimdFunction &gt; </td></tr>
+<tr class="memitem:a4451ec281eb037ebac7c08772ce0670f"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a4451ec281eb037ebac7c08772ce0670f">simdForEachN</a> (<a class="el" href="structllama_1_1View.html">View</a> &amp;view, UnarySimdFunction f)</td></tr>
+<tr class="separator:a4451ec281eb037ebac7c08772ce0670f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acebdbc18176bbf81e01c2b268665a94c"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename &gt; typename MakeLargestSimd, template&lt; typename, auto &gt; typename MakeSizedSimd, typename View , typename UnarySimdFunction &gt; </td></tr>
+<tr class="memitem:acebdbc18176bbf81e01c2b268665a94c"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#acebdbc18176bbf81e01c2b268665a94c">simdForEach</a> (<a class="el" href="structllama_1_1View.html">View</a> &amp;view, UnarySimdFunction f)</td></tr>
+<tr class="separator:acebdbc18176bbf81e01c2b268665a94c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8def4cdbf850f818833a38d67e6ebf34"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a8def4cdbf850f818833a38d67e6ebf34"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a8def4cdbf850f818833a38d67e6ebf34">structName</a> (T={}) -&gt; std::string_view</td></tr>
 <tr class="separator:a8def4cdbf850f818833a38d67e6ebf34"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -537,6 +565,12 @@ Variables</h2></td></tr>
 <tr class="memitem:a88abd408b8ac8bd2456a8316a62a5928"><td class="memTemplParams" colspan="2">template&lt;typename View , typename BoundRecordCoord , bool OwnView&gt; </td></tr>
 <tr class="memitem:a88abd408b8ac8bd2456a8316a62a5928"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a88abd408b8ac8bd2456a8316a62a5928">isRecordRef&lt; RecordRef&lt; View, BoundRecordCoord, OwnView &gt; &gt;</a> = true</td></tr>
 <tr class="separator:a88abd408b8ac8bd2456a8316a62a5928"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85e41b88e239189c88b2d895bfc2691e"><td class="memTemplParams" colspan="2">template&lt;typename Simd , typename SFINAE  = void&gt; </td></tr>
+<tr class="memitem:a85e41b88e239189c88b2d895bfc2691e"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a85e41b88e239189c88b2d895bfc2691e">simdLanes</a> = <a class="el" href="structllama_1_1SimdTraits.html">SimdTraits</a>&lt;<a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a>&gt;::lanes</td></tr>
+<tr class="separator:a85e41b88e239189c88b2d895bfc2691e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc7db42de7d904c43120b17fcf180e0e"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , template&lt; typename &gt; typename MakeLargestSimd&gt; </td></tr>
+<tr class="memitem:afc7db42de7d904c43120b17fcf180e0e"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#afc7db42de7d904c43120b17fcf180e0e">simdLanesFor</a></td></tr>
+<tr class="separator:afc7db42de7d904c43120b17fcf180e0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a06d7068ee2176f6a3bbd750665ac5af0"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a06d7068ee2176f6a3bbd750665ac5af0"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a06d7068ee2176f6a3bbd750665ac5af0">qualifiedTypeName</a></td></tr>
 <tr class="separator:a06d7068ee2176f6a3bbd750665ac5af0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -912,6 +946,82 @@ template&lt;typename Expression , typename... Args&gt; </div>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="Meta_8hpp_source.html#l00088">88</a> of file <a class="el" href="Meta_8hpp_source.html">Meta.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ab12da747c068e8576dec5182d398d378"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab12da747c068e8576dec5182d398d378">&#9670;&nbsp;</a></span>Simd</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , template&lt; typename &gt; typename MakeSimd&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">llama::Simd</a> = typedef typename std::conditional_t&lt; <a class="el" href="namespacellama.html#a3b2aa8fd3e43e43b830bc4a71b180175">isRecord</a>&lt;T&gt; || <a class="el" href="structllama_1_1internal_1_1IsBoundedArray.html">internal::IsBoundedArray</a>&lt;T&gt;::value, boost::mp11::mp_identity&lt;<a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a>&lt;<a class="el" href="namespacellama.html#adf54146d2fef06baf9d512e22793f41a">Simdize</a>&lt;T, MakeSimd&gt; &gt;&gt;, boost::mp11::mp_identity&lt;<a class="el" href="namespacellama.html#adf54146d2fef06baf9d512e22793f41a">Simdize</a>&lt;T, MakeSimd&gt; &gt;&gt;::type</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Creates a SIMD version of the given type. Of T is a record dimension, creates a <a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a> where each field is a SIMD type of the original field type. </p>
+
+<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00129">129</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
+
+</div>
+</div>
+<a id="adf54146d2fef06baf9d512e22793f41a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf54146d2fef06baf9d512e22793f41a">&#9670;&nbsp;</a></span>Simdize</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename RecordDim , template&lt; typename &gt; typename MakeSimd&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacellama.html#adf54146d2fef06baf9d512e22793f41a">llama::Simdize</a> = typedef <a class="el" href="namespacellama.html#a825425dc4761ab3b27c3ec6d42876f32">TransformLeaves</a>&lt;RecordDim, MakeSimd&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Transforms the given record dimension into a SIMD version of it. Each leaf field type will be replaced by a SIMD vector, as determined by MakeSimd. </p>
+
+<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00085">85</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ab5050ae091b407bcd3adabb734f2aba0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab5050ae091b407bcd3adabb734f2aba0">&#9670;&nbsp;</a></span>SimdizeN</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename RecordDim , std::size_t N, template&lt; typename, auto &gt; typename MakeSizedSimd&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacellama.html#ab5050ae091b407bcd3adabb734f2aba0">llama::SimdizeN</a> = typedef typename <a class="el" href="structllama_1_1internal_1_1SimdizeNImpl.html">internal::SimdizeNImpl</a>&lt;RecordDim, N, MakeSizedSimd&gt;::type</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Transforms the given record dimension into a SIMD version of it. Each leaf field type will be replaced by a sized SIMD vector with length N, as determined by MakeSizedSimd. If N is 1, SimdizeN&lt;T, 1, ...&gt; is an alias for T. </p>
+
+<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00080">80</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a145a8c9a7fd516bf596718949b7c4318"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a145a8c9a7fd516bf596718949b7c4318">&#9670;&nbsp;</a></span>SimdN</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , std::size_t N, template&lt; typename, auto &gt; typename MakeSizedSimd&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacellama.html#a145a8c9a7fd516bf596718949b7c4318">llama::SimdN</a> = typedef typename std::conditional_t&lt; <a class="el" href="namespacellama.html#a3b2aa8fd3e43e43b830bc4a71b180175">isRecord</a>&lt;T&gt; || <a class="el" href="structllama_1_1internal_1_1IsBoundedArray.html">internal::IsBoundedArray</a>&lt;T&gt;::value, std::conditional_t&lt; N == 1, boost::mp11::mp_identity&lt;<a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a>&lt;T&gt; &gt;, boost::mp11::mp_identity&lt;<a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a>&lt;<a class="el" href="namespacellama.html#ab5050ae091b407bcd3adabb734f2aba0">SimdizeN</a>&lt;T, N, MakeSizedSimd&gt; &gt;&gt; &gt;, std::conditional_t&lt; N == 1, boost::mp11::mp_identity&lt;T&gt;, boost::mp11::mp_identity&lt;<a class="el" href="namespacellama.html#ab5050ae091b407bcd3adabb734f2aba0">SimdizeN</a>&lt;T, N, MakeSizedSimd&gt; &gt;&gt; &gt;::type</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Creates a SIMD version of the given type. Of T is a record dimension, creates a <a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a> where each field is a SIMD type of the original field type. The SIMD vectors have length N. If N is 1, an ordinary <a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a> of the record dimension T is created. If T is not a record dimension, a SIMD vector with value T and length N is created. If N is 1 (and T is not a record dimension), then T is produced. </p>
+
+<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00121">121</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
 
 </div>
 </div>
@@ -1657,7 +1767,7 @@ template&lt;typename RecordRefFwd , typename Functor &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="RecordRef_8hpp_source.html#l00803">803</a> of file <a class="el" href="RecordRef_8hpp_source.html">RecordRef.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RecordRef_8hpp_source.html#l00811">811</a> of file <a class="el" href="RecordRef_8hpp_source.html">RecordRef.hpp</a>.</p>
 
 </div>
 </div>
@@ -1814,6 +1924,47 @@ template&lt;std::size_t I, typename... Elements&gt; </div>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="Tuple_8hpp_source.html#l00116">116</a> of file <a class="el" href="Tuple_8hpp_source.html">Tuple.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ae867cbf8fae6d6980456b34a30e967ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae867cbf8fae6d6980456b34a30e967ba">&#9670;&nbsp;</a></span>loadSimd()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Simd , typename RecordRef &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void llama::loadSimd </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a> &amp;&#160;</td>
+          <td class="paramname"><em>simd</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> &amp;&#160;</td>
+          <td class="paramname"><em>rr</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Loads SIMD vectors of data starting from the given record reference to simd. Only field tags occurring in <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> are loaded. If Simd contains multiple fields of SIMD types, a SIMD vector will be fetched for each of the fields. The number of elements fetched per SIMD vector depends on the SIMD width of the vector. Simd is allowed to have different vector lengths per element. </p>
+
+<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00157">157</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
 
 </div>
 </div>
@@ -2191,7 +2342,7 @@ template&lt;typename View , typename BoundRecordCoord , bool OwnView&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="RecordRef_8hpp_source.html#l00771">771</a> of file <a class="el" href="RecordRef_8hpp_source.html">RecordRef.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RecordRef_8hpp_source.html#l00779">779</a> of file <a class="el" href="RecordRef_8hpp_source.html">RecordRef.hpp</a>.</p>
 
 </div>
 </div>
@@ -2864,6 +3015,111 @@ template&lt;typename Mapping , typename BlobType , typename NewBlobType  = std::
 
 </div>
 </div>
+<a id="acebdbc18176bbf81e01c2b268665a94c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acebdbc18176bbf81e01c2b268665a94c">&#9670;&nbsp;</a></span>simdForEach()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;template&lt; typename &gt; typename MakeLargestSimd, template&lt; typename, auto &gt; typename MakeSizedSimd, typename View , typename UnarySimdFunction &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void llama::simdForEach </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1View.html">View</a> &amp;&#160;</td>
+          <td class="paramname"><em>view</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">UnarySimdFunction&#160;</td>
+          <td class="paramname"><em>f</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00293">293</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a4451ec281eb037ebac7c08772ce0670f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4451ec281eb037ebac7c08772ce0670f">&#9670;&nbsp;</a></span>simdForEachN()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;std::size_t N, template&lt; typename, auto &gt; typename MakeSizedSimd, typename View , typename UnarySimdFunction &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void llama::simdForEachN </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1View.html">View</a> &amp;&#160;</td>
+          <td class="paramname"><em>view</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">UnarySimdFunction&#160;</td>
+          <td class="paramname"><em>f</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00255">255</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a7627ce0c4e06c8f8e4d57463f49f1951"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7627ce0c4e06c8f8e4d57463f49f1951">&#9670;&nbsp;</a></span>storeSimd()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename RecordRef , typename Simd &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void llama::storeSimd </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> &amp;&amp;&#160;</td>
+          <td class="paramname"><em>rr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a>&#160;</td>
+          <td class="paramname"><em>simd</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Stores SIMD vectors of element data from the given simd into memory starting at the provided record reference. Only field tags occurring in <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> are stored. If Simd contains multiple fields of SIMD types, a SIMD vector will be stored for each of the fields. The number of elements stored per SIMD vector depends on the SIMD width of the vector. Simd is allowed to have different vector lengths per element. </p>
+
+<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00210">210</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a8def4cdbf850f818833a38d67e6ebf34"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8def4cdbf850f818833a38d67e6ebf34">&#9670;&nbsp;</a></span>structName()</h2>
 
@@ -2934,7 +3190,7 @@ template&lt;typename ViewA , typename BoundRecordDimA , bool OwnViewA, typename 
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="RecordRef_8hpp_source.html#l00754">754</a> of file <a class="el" href="RecordRef_8hpp_source.html">RecordRef.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RecordRef_8hpp_source.html#l00762">762</a> of file <a class="el" href="RecordRef_8hpp_source.html">RecordRef.hpp</a>.</p>
 
 </div>
 </div>
@@ -4047,6 +4303,78 @@ template&lt;typename First , typename Second &gt; </div>
 
 </div>
 </div>
+<a id="a85e41b88e239189c88b2d895bfc2691e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a85e41b88e239189c88b2d895bfc2691e">&#9670;&nbsp;</a></span>simdLanes</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Simd , typename SFINAE  = void&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto llama::simdLanes = <a class="el" href="structllama_1_1SimdTraits.html">SimdTraits</a>&lt;<a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a>&gt;::lanes</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The number of SIMD simdLanes the given SIMD vector or <a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd&lt;T&gt;</a> has. If Simd is not a structural <a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a> or <a class="el" href="namespacellama.html#a145a8c9a7fd516bf596718949b7c4318">SimdN</a>, this is a shortcut for SimdTraits&lt;Simd&gt;::lanes. </p>
+
+<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00048">48</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
+
+</div>
+</div>
+<a id="afc7db42de7d904c43120b17fcf180e0e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc7db42de7d904c43120b17fcf180e0e">&#9670;&nbsp;</a></span>simdLanesFor</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename RecordDim , template&lt; typename &gt; typename MakeLargestSimd&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr std::size_t llama::simdLanesFor</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">= []</div>
+<div class="line">    {</div>
+<div class="line">        std::size_t <a class="code" href="namespacellama_1_1mapping.html#abde584824d91d31ec24b7c326632a3c3">maxLanes</a> = 0;</div>
+<div class="line">        boost::mp11::mp_for_each&lt;boost::mp11::mp_transform&lt;std::add_pointer_t, FlatRecordDim&lt;RecordDim&gt;&gt;&gt;(</div>
+<div class="line">            [&amp;](<span class="keyword">auto</span>* t)</div>
+<div class="line">            {</div>
+<div class="line">                <span class="keyword">using</span> T = std::remove_reference_t&lt;decltype(*t)&gt;;</div>
+<div class="line">                <a class="code" href="namespacellama_1_1mapping.html#abde584824d91d31ec24b7c326632a3c3">maxLanes</a> = std::max(<a class="code" href="namespacellama_1_1mapping.html#abde584824d91d31ec24b7c326632a3c3">maxLanes</a>, <a class="code" href="namespacellama.html#a85e41b88e239189c88b2d895bfc2691e">simdLanes</a>&lt;MakeLargestSimd&lt;T&gt;&gt;);</div>
+<div class="line">            });</div>
+<div class="line">        assert(<a class="code" href="namespacellama_1_1mapping.html#abde584824d91d31ec24b7c326632a3c3">maxLanes</a> &gt; 0);</div>
+<div class="line">        <span class="keywordflow">return</span> <a class="code" href="namespacellama_1_1mapping.html#abde584824d91d31ec24b7c326632a3c3">maxLanes</a>;</div>
+<div class="line">    }()</div>
+</div><!-- fragment --><p>Determines the number of simd lanes suitable to process all types occurring in the given record dimension. The algorithm ensures that even SIMD vectors for the smallest field type are filled completely and may thus require multiple SIMD vectors for some field types. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">RecordDim</td><td>The record dimension to simdize </td></tr>
+    <tr><td class="paramname">MakeLargestSimd</td><td>Type function creating the largest suitable SIMD type given a field type from the record dimension. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00094">94</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a2404e09083dc2c685bc283cd4ead0edc"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2404e09083dc2c685bc283cd4ead0edc">&#9670;&nbsp;</a></span>sizeOf</h2>
 
@@ -4109,16 +4437,18 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 </div>
 </div><!-- contents -->
 </div><!-- doc-content -->
+<div class="ttc" id="anamespacellama_1_1mapping_html_abde584824d91d31ec24b7c326632a3c3"><div class="ttname"><a href="namespacellama_1_1mapping.html#abde584824d91d31ec24b7c326632a3c3">llama::mapping::maxLanes</a></div><div class="ttdeci">constexpr std::size_t maxLanes</div><div class="ttdef"><b>Definition:</b> <a href="AoSoA_8hpp_source.html#l00014">AoSoA.hpp:14</a></div></div>
 <div class="ttc" id="anamespacellama_html_a6c3056b43b48f32a66160a6dd273662d"><div class="ttname"><a href="namespacellama.html#a6c3056b43b48f32a66160a6dd273662d">llama::flatRecordCoord</a></div><div class="ttdeci">constexpr std::size_t flatRecordCoord</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00396">Core.hpp:396</a></div></div>
 <div class="ttc" id="anamespacellama_html_a4a4fd33218cce7b2e592486d80f2ae90"><div class="ttname"><a href="namespacellama.html#a4a4fd33218cce7b2e592486d80f2ae90">llama::GetTags</a></div><div class="ttdeci">typename internal::GetTagsImpl&lt; RecordDim, RecordCoord &gt;::type GetTags</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00119">Core.hpp:119</a></div></div>
 <div class="ttc" id="anamespacellama_html_ae4381442d997f1a8d4ace841c2b4eff9"><div class="ttname"><a href="namespacellama.html#ae4381442d997f1a8d4ace841c2b4eff9">llama::GetFieldType</a></div><div class="ttdeci">boost::mp11::mp_second&lt; Field &gt; GetFieldType</div><div class="ttdoc">Get the type from a Field.</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00078">Core.hpp:78</a></div></div>
 <div class="ttc" id="anamespacellama_html_a1fddf1f638927edfb8da8e3c78da4e1c"><div class="ttname"><a href="namespacellama.html#a1fddf1f638927edfb8da8e3c78da4e1c">llama::FlatRecordDim</a></div><div class="ttdeci">typename internal::FlattenRecordDimImpl&lt; RecordDim &gt;::type FlatRecordDim</div><div class="ttdoc">Returns a flat type list containing all leaf field types of the given record dimension.</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00363">Core.hpp:363</a></div></div>
 <div class="ttc" id="anamespacellama_html_ac8f48517b46c35c1a511273f08d2abb3"><div class="ttname"><a href="namespacellama.html#ac8f48517b46c35c1a511273f08d2abb3">llama::flatSizeOf</a></div><div class="ttdeci">constexpr std::size_t flatSizeOf</div><div class="ttdoc">The size of a type list if its elements would be in a normal struct.</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00491">Core.hpp:491</a></div></div>
+<div class="ttc" id="anamespacellama_html_a85e41b88e239189c88b2d895bfc2691e"><div class="ttname"><a href="namespacellama.html#a85e41b88e239189c88b2d895bfc2691e">llama::simdLanes</a></div><div class="ttdeci">constexpr auto simdLanes</div><div class="ttdef"><b>Definition:</b> <a href="Simd_8hpp_source.html#l00048">Simd.hpp:48</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Thu Sep 15 2022 19:49:57 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Fri Sep 16 2022 20:03:33 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

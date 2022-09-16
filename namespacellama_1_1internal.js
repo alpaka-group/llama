@@ -1,6 +1,7 @@
 var namespacellama_1_1internal =
 [
     [ "Assign", "structllama_1_1internal_1_1Assign.html", "structllama_1_1internal_1_1Assign" ],
+    [ "BindMakeSizedSimd", "structllama_1_1internal_1_1BindMakeSizedSimd.html", "structllama_1_1internal_1_1BindMakeSizedSimd" ],
     [ "BoxedValue", "structllama_1_1internal_1_1BoxedValue.html", "structllama_1_1internal_1_1BoxedValue" ],
     [ "BoxedValue< Constant< V >, I >", "structllama_1_1internal_1_1BoxedValue_3_01Constant_3_01V_01_4_00_01I_01_4.html", "structllama_1_1internal_1_1BoxedValue_3_01Constant_3_01V_01_4_00_01I_01_4" ],
     [ "DivideAssign", "structllama_1_1internal_1_1DivideAssign.html", "structllama_1_1internal_1_1DivideAssign" ],
@@ -53,6 +54,9 @@ var namespacellama_1_1internal =
     [ "ReplacePlaceholdersImpl", "structllama_1_1internal_1_1ReplacePlaceholdersImpl.html", "structllama_1_1internal_1_1ReplacePlaceholdersImpl" ],
     [ "ReplacePlaceholdersImpl< boost::mp11::mp_arg< I >, Args... >", "structllama_1_1internal_1_1ReplacePlaceholdersImpl_3_01boost_1_1mp11_1_1mp__arg_3_01I_01_4_00_01Args_8_8_8_01_4.html", "structllama_1_1internal_1_1ReplacePlaceholdersImpl_3_01boost_1_1mp11_1_1mp__arg_3_01I_01_4_00_01Args_8_8_8_01_4" ],
     [ "ReplacePlaceholdersImpl< E< Ts... >, Args... >", "structllama_1_1internal_1_1ReplacePlaceholdersImpl_3_01E_3_01Ts_8_8_8_01_4_00_01Args_8_8_8_01_4.html", "structllama_1_1internal_1_1ReplacePlaceholdersImpl_3_01E_3_01Ts_8_8_8_01_4_00_01Args_8_8_8_01_4" ],
+    [ "SimdizeNImpl", "structllama_1_1internal_1_1SimdizeNImpl.html", "structllama_1_1internal_1_1SimdizeNImpl" ],
+    [ "SimdizeNImpl< RecordDim, 1, MakeSizedSimd >", "structllama_1_1internal_1_1SimdizeNImpl_3_01RecordDim_00_011_00_01MakeSizedSimd_01_4.html", "structllama_1_1internal_1_1SimdizeNImpl_3_01RecordDim_00_011_00_01MakeSizedSimd_01_4" ],
+    [ "SizeEqualTo", "structllama_1_1internal_1_1SizeEqualTo.html", "structllama_1_1internal_1_1SizeEqualTo" ],
     [ "TransformLeavesWithCoordImpl", "structllama_1_1internal_1_1TransformLeavesWithCoordImpl.html", "structllama_1_1internal_1_1TransformLeavesWithCoordImpl" ],
     [ "TransformLeavesWithCoordImpl< RecordCoord< Is... >, Child[N], TypeFunctor >", "structllama_1_1internal_1_1TransformLeavesWithCoordImpl_3_01RecordCoord_3_01Is_8_8_8_01_4_00_01C1fa9eea95bd347b217962f0d40f323c8.html", "structllama_1_1internal_1_1TransformLeavesWithCoordImpl_3_01RecordCoord_3_01Is_8_8_8_01_4_00_01C1fa9eea95bd347b217962f0d40f323c8" ],
     [ "TransformLeavesWithCoordImpl< RecordCoord< Is... >, Record< Fields... >, TypeFunctor >", "structllama_1_1internal_1_1TransformLeavesWithCoordImpl_3_01RecordCoord_3_01Is_8_8_8_01_4_00_01R42adaa4e9e950291b6a81a9b9f4ba005.html", "structllama_1_1internal_1_1TransformLeavesWithCoordImpl_3_01RecordCoord_3_01Is_8_8_8_01_4_00_01R42adaa4e9e950291b6a81a9b9f4ba005" ],
