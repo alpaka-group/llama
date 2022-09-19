@@ -160,21 +160,21 @@ Eventually, whatever SIMD type is built or used by the user,
 LLAMA needs to be able to query its lane count in a generic context.
 This is what :cpp:`llama::simdLanes` is for.
 
-+--------------------------------+------------------------------------+
-| :cpp:`T`                       | :cpp:`llama::simdLanes<T>`         |
-+--------------------------------+------------------------------------+
-| scalar                         | :cpp:`1`                           |
-+--------------------------------+------------------------------------+
-| :cpp:`llama::One<T>`           | :cpp:`1`                           |
-+--------------------------------+------------------------------------+
-| :cpp:`llama::SimdN<T, N, ...>` | :cpp:`N`                           |
-+--------------------------------+------------------------------------+
-| :cpp:`llama::Simd<T, ...>`     | :cpp:`llama::simdLanes<First<T>>`  |
-|                                | // if equal for all fields         |
-|                                | // otherwise: compile error        |
-+--------------------------------+------------------------------------+
-| otherwise                      | :cpp:`llama::SimdTraits<T>::lanes` |
-+--------------------------------+------------------------------------+
++------------------------------------+------------------------------------+
+| :cpp:`T`                           | :cpp:`llama::simdLanes<T>`         |
++------------------------------------+------------------------------------+
+| scalar (:cpp:`std::is_arithmetic`) | :cpp:`1`                           |
++------------------------------------+------------------------------------+
+| :cpp:`llama::One<T>`               | :cpp:`1`                           |
++------------------------------------+------------------------------------+
+| :cpp:`llama::SimdN<T, N, ...>`     | :cpp:`N`                           |
++------------------------------------+------------------------------------+
+| :cpp:`llama::Simd<T, ...>`         | :cpp:`llama::simdLanes<First<T>>`  |
+|                                    | // if equal for all fields         |
+|                                    | // otherwise: compile error        |
++------------------------------------+------------------------------------+
+| otherwise                          | :cpp:`llama::SimdTraits<T>::lanes` |
++------------------------------------+------------------------------------+
 
 Use :cpp:`llama::simdLanes` in generic code which needs to handle scalars,
 third-party SIMD vectors (via. :cpp:`llama::SimdTraits`, record references, :cpp:`llama::One` and LLAMA built SIMD types.
