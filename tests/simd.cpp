@@ -14,26 +14,23 @@
 
 namespace stdx = std::experimental;
 
-namespace llama
+template<typename T, typename Abi>
+struct llama::SimdTraits<stdx::simd<T, Abi>>
 {
-    template<typename T, typename Abi>
-    struct SimdTraits<stdx::simd<T, Abi>>
+    using value_type = T;
+
+    inline static constexpr std::size_t lanes = stdx::simd<T, Abi>::size();
+
+    static LLAMA_FORCE_INLINE auto loadUnaligned(const value_type* mem) -> stdx::simd<T, Abi>
     {
-        using value_type = T;
+        return {mem, stdx::element_aligned};
+    }
 
-        inline static constexpr std::size_t lanes = stdx::simd<T, Abi>::size();
-
-        static LLAMA_FORCE_INLINE auto loadUnaligned(const value_type* mem) -> stdx::simd<T, Abi>
-        {
-            return {mem, stdx::element_aligned};
-        }
-
-        static LLAMA_FORCE_INLINE void storeUnaligned(stdx::simd<T, Abi> simd, value_type* mem)
-        {
-            simd.copy_to(mem, stdx::element_aligned);
-        }
-    };
-} // namespace llama
+    static LLAMA_FORCE_INLINE void storeUnaligned(stdx::simd<T, Abi> simd, value_type* mem)
+    {
+        simd.copy_to(mem, stdx::element_aligned);
+    }
+};
 
 namespace
 {
