@@ -76,12 +76,27 @@ TEST_CASE("simd.Simdize.stdsimd")
                        llama::Field<tag::Y, stdx::native_simd<float>>>>);
 }
 
-TEST_CASE("simd.simdLanesFor.stdsimd")
+TEST_CASE("simd.simdLanesWithFullVectorsFor.stdsimd")
 {
-    STATIC_REQUIRE(llama::simdLanesFor<float, stdx::native_simd> == stdx::native_simd<float>::size());
-    STATIC_REQUIRE(llama::simdLanesFor<Vec2F, stdx::native_simd> == stdx::native_simd<float>::size());
-    STATIC_REQUIRE(llama::simdLanesFor<Vec3D, stdx::native_simd> == stdx::native_simd<double>::size());
-    STATIC_REQUIRE(llama::simdLanesFor<ParticleSimd, stdx::native_simd> == stdx::native_simd<uint8_t>::size());
+    STATIC_REQUIRE(llama::simdLanesWithFullVectorsFor<float, stdx::native_simd> == stdx::native_simd<float>::size());
+    STATIC_REQUIRE(llama::simdLanesWithFullVectorsFor<Vec2F, stdx::native_simd> == stdx::native_simd<float>::size());
+    STATIC_REQUIRE(llama::simdLanesWithFullVectorsFor<Vec3D, stdx::native_simd> == stdx::native_simd<double>::size());
+    STATIC_REQUIRE(
+        llama::simdLanesWithFullVectorsFor<ParticleSimd, stdx::native_simd> == stdx::native_simd<uint8_t>::size());
+}
+
+TEST_CASE("simd.simdLanesWithLeastRegistersFor.stdsimd")
+{
+    STATIC_REQUIRE(
+        llama::simdLanesWithLeastRegistersFor<float, stdx::native_simd> == stdx::native_simd<float>::size());
+    STATIC_REQUIRE(
+        llama::simdLanesWithLeastRegistersFor<Vec2F, stdx::native_simd> == stdx::native_simd<float>::size());
+    STATIC_REQUIRE(
+        llama::simdLanesWithLeastRegistersFor<Vec3D, stdx::native_simd> == stdx::native_simd<double>::size());
+    STATIC_REQUIRE(
+        llama::simdLanesWithLeastRegistersFor<
+            ParticleSimd,
+            stdx::native_simd> == stdx::native_simd<double>::size()); // 11 registers with 4 lanes used each
 }
 
 TEST_CASE("simd.SimdN.stdsimd")
@@ -141,18 +156,29 @@ TEST_CASE("simd.Simd.stdsimd")
 
 TEST_CASE("simd.simdLanes.stdsimd")
 {
+    STATIC_REQUIRE(llama::simdLanes<float> == 1);
+
+    STATIC_REQUIRE(llama::simdLanes<llama::One<ParticleSimd>> == 1);
+
     STATIC_REQUIRE(llama::simdLanes<stdx::native_simd<float>> == stdx::native_simd<float>::size());
     STATIC_REQUIRE(llama::simdLanes<stdx::fixed_size_simd<float, 4>> == 4);
-}
 
-TEST_CASE("simd.simdLanes.Simd")
-{
     STATIC_REQUIRE(llama::simdLanes<llama::Simd<float, stdx::native_simd>> == stdx::native_simd<float>::size());
     STATIC_REQUIRE(llama::simdLanes<llama::Simd<Vec2F, stdx::native_simd>> == stdx::native_simd<float>::size());
+
     STATIC_REQUIRE(llama::simdLanes<llama::SimdN<ParticleSimd, 8, stdx::fixed_size_simd>> == 8);
+    STATIC_REQUIRE(llama::simdLanes<llama::SimdN<ParticleSimd, 1, stdx::fixed_size_simd>> == 1);
 }
 
-TEST_CASE("simd.loadSimd.scalar.stdsimd")
+TEST_CASE("simd.loadSimd.scalar")
+{
+    float mem = 3.14f;
+    float s = 0;
+    llama::loadSimd(s, mem);
+    CHECK(s == mem);
+}
+
+TEST_CASE("simd.loadSimd.simd.stdsimd")
 {
     std::array<float, 4> a{};
     std::iota(begin(a), end(a), 1.0f);
@@ -213,7 +239,15 @@ TEST_CASE("simd.loadSimd.record.stdsimd")
         == SimdRange{stdx::fixed_size_simd<std::uint8_t, 4>{[](auto ic) -> std::uint8_t { return 10 + ic * 11; }}});
 }
 
-TEST_CASE("simd.storeSimd.scalar.stdsimd")
+TEST_CASE("simd.storeSimd.scalar")
+{
+    float mem = 0;
+    float s = 3.14f;
+    llama::storeSimd(mem, s);
+    CHECK(s == mem);
+}
+
+TEST_CASE("simd.storeSimd.simd.stdsimd")
 {
     stdx::fixed_size_simd<float, 4> s([](auto ic) -> float { return ic() + 1; });
 

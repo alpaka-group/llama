@@ -134,7 +134,7 @@ template<int ProblemSize, int Elems, int BlockSize, Mapping MappingSM>
 struct UpdateKernel
 {
     template<typename Acc, typename View>
-    LLAMA_FN_HOST_ACC_INLINE void operator()(const Acc& acc, View particles) const
+    ALPAKA_FN_HOST_ACC void operator()(const Acc& acc, View particles) const
     {
         auto sharedView = [&]
         {
@@ -188,7 +188,7 @@ template<int ProblemSize, int Elems>
 struct MoveKernel
 {
     template<typename Acc, typename View>
-    LLAMA_FN_HOST_ACC_INLINE void operator()(const Acc& acc, View particles) const
+    ALPAKA_FN_HOST_ACC void operator()(const Acc& acc, View particles) const
     {
         const auto ti = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc)[0];
         const auto i = ti * Elems;

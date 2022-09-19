@@ -47,6 +47,43 @@ namespace llama
     template<typename Simd, typename SFINAE = void>
     inline constexpr auto simdLanes = SimdTraits<Simd>::lanes;
 
+    /// Chooses the number of SIMD lanes for the given record dimension by mapping each field type to a SIMD type and
+    /// then reducing their sizes.
+    /// @tparam MakeSimd Type function creating a SIMD type given a field type from the record dimension.
+    /// @param reduce Binary reduction function to reduce the SIMD lanes.
+    template<typename RecordDim, template<typename> typename MakeSimd, typename BinaryReductionFunction>
+    constexpr auto chooseSimdLanes(BinaryReductionFunction reduce) -> std::size_t
+    {
+        using FRD = FlatRecordDim<RecordDim>;
+        std::size_t lanes = simdLanes<MakeSimd<boost::mp11::mp_first<FRD>>>;
+        boost::mp11::mp_for_each<boost::mp11::mp_transform<std::add_pointer_t, boost::mp11::mp_drop_c<FRD, 1>>>(
+            [&](auto* t)
+            {
+                using T = std::remove_reference_t<decltype(*t)>;
+                lanes = reduce(lanes, simdLanes<MakeSimd<T>>);
+            });
+        assert(lanes > 0);
+        return lanes;
+    }
+
+    /// Determines the number of simd lanes suitable to process all types occurring in the given record dimension. The
+    /// algorithm ensures that even SIMD vectors for the smallest field type are filled completely and may thus require
+    /// multiple SIMD vectors for some field types.
+    /// @tparam RecordDim The record dimension to simdize
+    /// @tparam MakeSimd Type function creating a SIMD type given a field type from the record dimension.
+    template<typename RecordDim, template<typename> typename MakeSimd>
+    inline constexpr std::size_t simdLanesWithFullVectorsFor
+        = chooseSimdLanes<RecordDim, MakeSimd>([](auto a, auto b) { return std::max(a, b); });
+
+    /// Determines the number of simd lanes suitable to process all types occurring in the given record dimension. The
+    /// algorithm ensures that the smallest number of SIMD registers is needed and may thus only partially fill
+    /// registers for some data types.
+    /// @tparam RecordDim The record dimension to simdize
+    /// @tparam MakeSimd Type function creating a SIMD type given a field type from the record dimension.
+    template<typename RecordDim, template<typename> typename MakeSimd>
+    inline constexpr std::size_t simdLanesWithLeastRegistersFor
+        = chooseSimdLanes<RecordDim, MakeSimd>([](auto a, auto b) { return std::min(a, b); });
+
     namespace internal
     {
         template<std::size_t N, template<typename, /* std::integral */ auto> typename MakeSizedSimd>
@@ -83,26 +120,6 @@ namespace llama
     /// SIMD vector, as determined by MakeSimd.
     template<typename RecordDim, template<typename> typename MakeSimd>
     using Simdize = TransformLeaves<RecordDim, MakeSimd>;
-
-    /// Determines the number of simd lanes suitable to process all types occurring in the given record dimension. The
-    /// algorithm ensures that even SIMD vectors for the smallest field type are filled completely and may thus require
-    /// multiple SIMD vectors for some field types.
-    /// @param RecordDim The record dimension to simdize
-    /// @param MakeLargestSimd Type function creating the largest suitable SIMD type given a field type from the record
-    /// dimension.
-    template<typename RecordDim, template<typename> typename MakeLargestSimd>
-    inline constexpr std::size_t simdLanesFor = []
-    {
-        std::size_t maxLanes = 0;
-        boost::mp11::mp_for_each<boost::mp11::mp_transform<std::add_pointer_t, FlatRecordDim<RecordDim>>>(
-            [&](auto* t)
-            {
-                using T = std::remove_reference_t<decltype(*t)>;
-                maxLanes = std::max(maxLanes, simdLanes<MakeLargestSimd<T>>);
-            });
-        assert(maxLanes > 0);
-        return maxLanes;
-    }();
 
     /// Creates a SIMD version of the given type. Of T is a record dimension, creates a \ref One where each field is a
     /// SIMD type of the original field type. The SIMD vectors have length N. If N is 1, an ordinary \ref One of the
@@ -153,13 +170,13 @@ namespace llama
     /// RecordRef are loaded. If Simd contains multiple fields of SIMD types, a SIMD vector will be fetched for each of
     /// the fields. The number of elements fetched per SIMD vector depends on the SIMD width of the vector. Simd is
     /// allowed to have different vector lengths per element.
-    template<typename Simd, typename RecordRef>
-    LLAMA_FN_HOST_ACC_INLINE void loadSimd(Simd& simd, const RecordRef& rr)
+    template<typename Simd, typename T>
+    LLAMA_FN_HOST_ACC_INLINE void loadSimd(Simd& simd, const T& ref)
     {
         // structured simd type and record reference
-        if constexpr(isRecordRef<Simd> && isRecordRef<RecordRef>)
+        if constexpr(isRecordRef<Simd> && isRecordRef<T>)
         {
-            using RecordDim = typename RecordRef::AccessibleRecordDim;
+            using RecordDim = typename T::AccessibleRecordDim;
             forEachLeafCoord<RecordDim>(
                 [&](auto rc) LLAMA_LAMBDA_INLINE
                 {
@@ -168,32 +185,32 @@ namespace llama
                     using Traits = SimdTraits<ElementSimd>;
 
                     // TODO(bgruber): can we generalize the logic whether we can load a simd from that mapping?
-                    if constexpr(mapping::isSoA<typename RecordRef::View::Mapping>)
-                        simd(rc) = Traits::loadUnaligned(&rr(rc)); // SIMD load
-                    // else if constexpr(mapping::isAoSoA<typename RecordRef::View::Mapping>)
+                    if constexpr(mapping::isSoA<typename T::View::Mapping>)
+                        simd(rc) = Traits::loadUnaligned(&ref(rc)); // SIMD load
+                    // else if constexpr(mapping::isAoSoA<typename T::View::Mapping>)
                     //{
                     //    // it turns out we do not need the specialization, because clang already fuses the scalar
                     //    loads
                     //    // into a vector load :D
-                    //    assert(rr.arrayDimsCoord()[0] % SIMD_WIDTH == 0);
-                    //    // if(rr.arrayDimsCoord()[0] % SIMD_WIDTH != 0)
+                    //    assert(ref.arrayDimsCoord()[0] % SIMD_WIDTH == 0);
+                    //    // if(ref.arrayDimsCoord()[0] % SIMD_WIDTH != 0)
                     //    //    __builtin_unreachable(); // this also helps nothing
-                    //    //__builtin_assume(rr.arrayDimsCoord()[0] % SIMD_WIDTH == 0);  // this also helps nothing
-                    //    simd(rc) = Traits::load_from(&rr(rc)); // SIMD load
+                    //    //__builtin_assume(ref.arrayDimsCoord()[0] % SIMD_WIDTH == 0);  // this also helps nothing
+                    //    simd(rc) = Traits::load_from(&ref(rc)); // SIMD load
                     //}
                     else
                     {
-                        auto b = ArrayIndexIterator{rr.view.mapping().extents(), rr.arrayIndex()};
+                        auto b = ArrayIndexIterator{ref.view.mapping().extents(), ref.arrayIndex()};
                         for(auto i = 0; i < Traits::lanes; i++)
                             reinterpret_cast<FieldType*>(&simd(rc))[i]
-                                = rr.view(*b++)(cat(typename RecordRef::BoundRecordCoord{}, rc)); // scalar loads
+                                = ref.view(*b++)(cat(typename T::BoundRecordCoord{}, rc)); // scalar loads
                     }
                 });
         }
         // unstructured simd and reference type
-        else if constexpr(!isRecordRef<Simd> && !isRecordRef<RecordRef>)
+        else if constexpr(!isRecordRef<Simd> && !isRecordRef<T>)
         {
-            simd = SimdTraits<Simd>::loadUnaligned(&rr);
+            simd = SimdTraits<Simd>::loadUnaligned(&ref);
         }
         else
         {
@@ -206,13 +223,13 @@ namespace llama
     /// Only field tags occurring in RecordRef are stored. If Simd contains multiple fields of SIMD types, a SIMD
     /// vector will be stored for each of the fields. The number of elements stored per SIMD vector depends on the
     /// SIMD width of the vector. Simd is allowed to have different vector lengths per element.
-    template<typename RecordRef, typename Simd>
-    LLAMA_FN_HOST_ACC_INLINE void storeSimd(RecordRef&& rr, Simd simd)
+    template<typename T, typename Simd>
+    LLAMA_FN_HOST_ACC_INLINE void storeSimd(T&& ref, Simd simd)
     {
         // structured Simd type and record reference
-        if constexpr(isRecordRef<Simd> && isRecordRef<RecordRef>)
+        if constexpr(isRecordRef<Simd> && isRecordRef<T>)
         {
-            using RecordDim = typename RecordRef::AccessibleRecordDim;
+            using RecordDim = typename T::AccessibleRecordDim;
             forEachLeafCoord<RecordDim>(
                 [&](auto rc) LLAMA_LAMBDA_INLINE
                 {
@@ -221,23 +238,23 @@ namespace llama
                     using Traits = SimdTraits<ElementSimd>;
 
                     // TODO(bgruber): can we generalize the logic whether we can store a simd to that mapping?
-                    if constexpr(mapping::isSoA<typename RecordRef::View::Mapping>)
-                        Traits::storeUnaligned(simd(rc), &rr(rc)); // SIMD store
+                    if constexpr(mapping::isSoA<typename T::View::Mapping>)
+                        Traits::storeUnaligned(simd(rc), &ref(rc)); // SIMD store
                     else
                     {
                         // TODO(bgruber): how does this generalize conceptually to 2D and higher dimensions? in which
                         // direction should we collect SIMD values?
-                        auto b = ArrayIndexIterator{rr.view.mapping().extents(), rr.arrayIndex()};
+                        auto b = ArrayIndexIterator{ref.view.mapping().extents(), ref.arrayIndex()};
                         for(auto i = 0; i < Traits::lanes; i++)
-                            rr.view (*b++)(cat(typename RecordRef::BoundRecordCoord{}, rc))
+                            ref.view (*b++)(cat(typename T::BoundRecordCoord{}, rc))
                                 = reinterpret_cast<FieldType*>(&simd(rc))[i]; // scalar store
                     }
                 });
         }
         // unstructured simd and reference type
-        else if constexpr(!isRecordRef<Simd> && !isRecordRef<RecordRef>)
+        else if constexpr(!isRecordRef<Simd> && !isRecordRef<T>)
         {
-            SimdTraits<Simd>::storeUnaligned(simd, &rr);
+            SimdTraits<Simd>::storeUnaligned(simd, &ref);
         }
         else
         {
@@ -285,14 +302,14 @@ namespace llama
 
     template<
         template<typename>
-        typename MakeLargestSimd,
+        typename MakeSimd,
         template<typename, /* std::integral */ auto>
         typename MakeSizedSimd,
         typename View,
         typename UnarySimdFunction>
     void simdForEach(View& view, UnarySimdFunction f)
     {
-        constexpr auto n = llama::simdLanesFor<typename View::RecordDim, MakeLargestSimd>;
+        constexpr auto n = llama::simdLanesWithFullVectorsFor<typename View::RecordDim, MakeSimd>;
         simdForEachN<n, MakeSizedSimd>(view, f);
     }
 } // namespace llama
