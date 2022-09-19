@@ -746,9 +746,9 @@ namespace llama
         // to find subsequent elements. This is not a great design for now and the SIMD load/store functions should
         // probably take iterators to records.
         template<typename Simd, typename RecordRef>
-        friend void loadSimd(Simd& simd, const RecordRef& rr);
+        friend void loadSimd(Simd& simd, const RecordRef& ref);
         template<typename RecordRef, typename Simd>
-        friend void storeSimd(RecordRef&& rr, Simd simd);
+        friend void storeSimd(RecordRef&& ref, Simd simd);
     };
 
     // swap for heterogeneous RecordRef

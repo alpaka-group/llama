@@ -208,7 +208,7 @@ namespace usellama
     template<typename View>
     void updateSimd(View& particles)
     {
-        constexpr auto width = llama::simdLanesFor<typename View::RecordDim, MakeBatch>;
+        constexpr auto width = llama::simdLanesWithFullVectorsFor<typename View::RecordDim, MakeBatch>;
         for(std::size_t i = 0; i < problemSize; i += width)
         {
             llama::SimdN<typename View::RecordDim, width, xsimd::make_sized_batch_t> pis;
@@ -222,12 +222,13 @@ namespace usellama
     template<typename View>
     void moveSimd(View& particles)
     {
-        constexpr auto width = llama::simdLanesFor<typename View::RecordDim, MakeBatch>;
+        using RecordDim = typename View::RecordDim;
+        constexpr auto width = llama::simdLanesWithFullVectorsFor<RecordDim, MakeBatch>;
         LLAMA_INDEPENDENT_DATA // TODO(bgruber): why is this needed
             for(std::size_t i = 0; i < problemSize; i += width)
         {
-            llama::SimdN<llama::GetType<typename View::RecordDim, tag::Pos>, width, xsimd::make_sized_batch_t> pos;
-            llama::SimdN<llama::GetType<typename View::RecordDim, tag::Vel>, width, xsimd::make_sized_batch_t> vel;
+            llama::SimdN<llama::GetType<RecordDim, tag::Pos>, width, xsimd::make_sized_batch_t> pos;
+            llama::SimdN<llama::GetType<RecordDim, tag::Vel>, width, xsimd::make_sized_batch_t> vel;
             llama::loadSimd(pos, particles(i)(tag::Pos{}));
             llama::loadSimd(vel, particles(i)(tag::Vel{}));
             llama::storeSimd(particles(i)(tag::Pos{}), pos + vel * timestep);

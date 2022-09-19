@@ -95,18 +95,26 @@ A good idea is to query your SIMD library for a suitable size:
 
     constexpr auto N = stdx::native_simd<T>::size();
 
-Alternatively, LLAMA provides the :cpp:`llama::simdLanesFor` construct to find a SIMD vector length for a given record dimension,
-ensuring that the vector length is large enough to even fill at least one SIMD vector of the smallest field types of the record dimension.
+Alternatively, LLAMA provides a few constructs to find a SIMD vector length for a given record dimension:
 
 .. code-block:: C++
 
-    constexpr auto N = llama::simdLanesFor<RecordDim, stdx::native_simd>;
+    constexpr auto N1 = llama::simdLanesWithFullVectorsFor<RecordDim, stdx::native_simd>;
+    constexpr auto N2 = llama::simdLanesWithLeastRegistersFor<RecordDim, stdx::native_simd>;
 
+:cpp:`llama::simdLanesWithFullVectorsFor` ensures that the vector length is large enough
+to even fully fill at least one SIMD vector of the smallest field types of the record dimension.
 So, if your record dimension contains e.g. :cpp:`double`, :cpp:`int` and :cpp:`uint16_t`,
 then LLAMA will choose a vector length were a :cpp:`stdx::native_simd<uint16_t>` is full.
 The SIMD vectors for :cpp:`double` and :cpp:`int` would then we larger then a full vector,
 so the chosen SIMD library needs to support SIMD vector lengths larger than the native length.
 E.g. the :cpp:`stdx::fixed_size_simd<T, N>` type allows :cpp:`N` to be larger than the native vector size.
+
+:cpp:`llama::simdLanesWithLeastRegistersFor` ensures that the smallest number of SIMD registers is needed
+and may thus only partially fill registers for some data types.
+So, given the same record dimension, LLAMA would only fill the SIMD vectors for the largest data type (:cpp:`double`).
+The other SIMD vectors would only be partially filled,
+so the chosen SIMD library needs to support SIMD vector lengths smaller than the native length.
 
 After choosing the SIMD vector length,
 we can allocate SIMD registers for :cpp:`N` elements of each record dimension field using :cpp:`llama::SimdN`:
@@ -123,9 +131,7 @@ as these cannot usually be compiled for GPU targets.
 Therefore, for an :cpp:`N` of 1, LLAMA will not use SIMD types:
 
 +-----------------------+-------------------------------------+
-+ SimdN<T, N>           | :cpp:`N`                            |
-+                       +---------------------+---------------+
-+                       | > 1                 | 1             |
++ SimdN<T, N>           | N > 1               | N == 1        |
 +----------+------------+---------------------+---------------+
 +          | record dim | :cpp:`One<Simd<T>>` | :cpp:`One<T>` |
 + :cpp:`T` +------------+---------------------+---------------+
@@ -150,7 +156,30 @@ to create SIMD versions of a given record dimension:
     using RecordDimSimdN = llama::SimdizeN<RecordDim, N, stdx::fixed_size_simd>;
     using RecordDimSimd  = llama::Simdize <RecordDim,    stdx::native_simd>;
 
-Loading and storing data between a SIMD vector and a llama view is done using :cpp:`loadSimd` and :cpp:`storeSimd`:
+Eventually, whatever SIMD type is built or used by the user,
+LLAMA needs to be able to query its lane count in a generic context.
+This is what :cpp:`llama::simdLanes` is for.
+
++--------------------------------+------------------------------------+
+| :cpp:`T`                       | :cpp:`llama::simdLanes<T>`         |
++--------------------------------+------------------------------------+
+| scalar                         | :cpp:`1`                           |
++--------------------------------+------------------------------------+
+| :cpp:`llama::One<T>`           | :cpp:`1`                           |
++--------------------------------+------------------------------------+
+| :cpp:`llama::SimdN<T, N, ...>` | :cpp:`N`                           |
++--------------------------------+------------------------------------+
+| :cpp:`llama::Simd<T, ...>`     | :cpp:`llama::simdLanes<First<T>>`  |
+|                                | // if equal for all fields         |
+|                                | // otherwise: compile error        |
++--------------------------------+------------------------------------+
+| otherwise                      | :cpp:`llama::SimdTraits<T>::lanes` |
++--------------------------------+------------------------------------+
+
+Use :cpp:`llama::simdLanes` in generic code which needs to handle scalars,
+third-party SIMD vectors (via. :cpp:`llama::SimdTraits`, record references, :cpp:`llama::One` and LLAMA built SIMD types.
+
+Loading and storing data between a SIMD vector and a llama view is done using :cpp:`llama::loadSimd` and :cpp:`llama::storeSimd`:
 
 .. code-block:: C++
 
