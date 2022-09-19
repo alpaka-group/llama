@@ -1,5 +1,7 @@
 var NAVTREEINDEX5 =
 {
+"structllama_1_1mapping_1_1tree_1_1internal_1_1WrapInNNodes.html":[2,0,1,2,1,1,6],
+"structllama_1_1mapping_1_1tree_1_1internal_1_1WrapInNNodes.html#a27f930dc18888ea0a1e5917b5eb47a62":[2,0,1,2,1,1,6,0],
 "structllama_1_1mapping_1_1tree_1_1internal_1_1WrapInNNodes_3_01Leaf_00_010_01_4.html":[2,0,1,2,1,1,7],
 "structllama_1_1mapping_1_1tree_1_1internal_1_1WrapInNNodes_3_01Leaf_00_010_01_4.html#a71cabb03bccb7713d6470d549b15a836":[2,0,1,2,1,1,7,0],
 "structstd_1_1tuple__element_3_01I_00_01const_01llama_1_1RecordRef_3_01View_00_01BoundRecordCoord_00_01OwnView_01_4_01_4.html":[2,0,2,0],

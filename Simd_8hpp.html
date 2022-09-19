@@ -182,16 +182,19 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ae867cbf8fae6d6980456b34a30e967ba"><td class="memTemplParams" colspan="2">template&lt;typename Simd , typename RecordRef &gt; </td></tr>
-<tr class="memitem:ae867cbf8fae6d6980456b34a30e967ba"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ae867cbf8fae6d6980456b34a30e967ba">llama::loadSimd</a> (Simd &amp;simd, const RecordRef &amp;rr)</td></tr>
-<tr class="separator:ae867cbf8fae6d6980456b34a30e967ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7627ce0c4e06c8f8e4d57463f49f1951"><td class="memTemplParams" colspan="2">template&lt;typename RecordRef , typename Simd &gt; </td></tr>
-<tr class="memitem:a7627ce0c4e06c8f8e4d57463f49f1951"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a7627ce0c4e06c8f8e4d57463f49f1951">llama::storeSimd</a> (RecordRef &amp;&amp;rr, Simd simd)</td></tr>
-<tr class="separator:a7627ce0c4e06c8f8e4d57463f49f1951"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb21e8bcb7c41613b7183a1beef1f600"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , template&lt; typename &gt; typename MakeSimd, typename BinaryReductionFunction &gt; </td></tr>
+<tr class="memitem:abb21e8bcb7c41613b7183a1beef1f600"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#abb21e8bcb7c41613b7183a1beef1f600">llama::chooseSimdLanes</a> (BinaryReductionFunction reduce) -&gt; std::size_t</td></tr>
+<tr class="separator:abb21e8bcb7c41613b7183a1beef1f600"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99fe9e7ce880f74526cec227cfb7c183"><td class="memTemplParams" colspan="2">template&lt;typename Simd , typename T &gt; </td></tr>
+<tr class="memitem:a99fe9e7ce880f74526cec227cfb7c183"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a99fe9e7ce880f74526cec227cfb7c183">llama::loadSimd</a> (Simd &amp;simd, const T &amp;ref)</td></tr>
+<tr class="separator:a99fe9e7ce880f74526cec227cfb7c183"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d741fc53504ebda9e1e5cc48057de14"><td class="memTemplParams" colspan="2">template&lt;typename T , typename Simd &gt; </td></tr>
+<tr class="memitem:a2d741fc53504ebda9e1e5cc48057de14"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a2d741fc53504ebda9e1e5cc48057de14">llama::storeSimd</a> (T &amp;&amp;ref, Simd simd)</td></tr>
+<tr class="separator:a2d741fc53504ebda9e1e5cc48057de14"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4451ec281eb037ebac7c08772ce0670f"><td class="memTemplParams" colspan="2">template&lt;std::size_t N, template&lt; typename, auto &gt; typename MakeSizedSimd, typename View , typename UnarySimdFunction &gt; </td></tr>
 <tr class="memitem:a4451ec281eb037ebac7c08772ce0670f"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a4451ec281eb037ebac7c08772ce0670f">llama::simdForEachN</a> (View &amp;view, UnarySimdFunction f)</td></tr>
 <tr class="separator:a4451ec281eb037ebac7c08772ce0670f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acebdbc18176bbf81e01c2b268665a94c"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename &gt; typename MakeLargestSimd, template&lt; typename, auto &gt; typename MakeSizedSimd, typename View , typename UnarySimdFunction &gt; </td></tr>
+<tr class="memitem:acebdbc18176bbf81e01c2b268665a94c"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename &gt; typename MakeSimd, template&lt; typename, auto &gt; typename MakeSizedSimd, typename View , typename UnarySimdFunction &gt; </td></tr>
 <tr class="memitem:acebdbc18176bbf81e01c2b268665a94c"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#acebdbc18176bbf81e01c2b268665a94c">llama::simdForEach</a> (View &amp;view, UnarySimdFunction f)</td></tr>
 <tr class="separator:acebdbc18176bbf81e01c2b268665a94c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -200,9 +203,12 @@ Variables</h2></td></tr>
 <tr class="memitem:a85e41b88e239189c88b2d895bfc2691e"><td class="memTemplParams" colspan="2">template&lt;typename Simd , typename SFINAE  = void&gt; </td></tr>
 <tr class="memitem:a85e41b88e239189c88b2d895bfc2691e"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a85e41b88e239189c88b2d895bfc2691e">llama::simdLanes</a> = SimdTraits&lt;Simd&gt;::lanes</td></tr>
 <tr class="separator:a85e41b88e239189c88b2d895bfc2691e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afc7db42de7d904c43120b17fcf180e0e"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , template&lt; typename &gt; typename MakeLargestSimd&gt; </td></tr>
-<tr class="memitem:afc7db42de7d904c43120b17fcf180e0e"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#afc7db42de7d904c43120b17fcf180e0e">llama::simdLanesFor</a></td></tr>
-<tr class="separator:afc7db42de7d904c43120b17fcf180e0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34f90853e28950fdd34ecf9696ae1f63"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , template&lt; typename &gt; typename MakeSimd&gt; </td></tr>
+<tr class="memitem:a34f90853e28950fdd34ecf9696ae1f63"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a34f90853e28950fdd34ecf9696ae1f63">llama::simdLanesWithFullVectorsFor</a> = chooseSimdLanes&lt;RecordDim, MakeSimd&gt;([](auto a, auto b) { return std::max(a, b); })</td></tr>
+<tr class="separator:a34f90853e28950fdd34ecf9696ae1f63"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac902aa26f43ee2c8cceeb580a1df0c50"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , template&lt; typename &gt; typename MakeSimd&gt; </td></tr>
+<tr class="memitem:ac902aa26f43ee2c8cceeb580a1df0c50"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ac902aa26f43ee2c8cceeb580a1df0c50">llama::simdLanesWithLeastRegistersFor</a> = chooseSimdLanes&lt;RecordDim, MakeSimd&gt;([](auto a, auto b) { return std::min(a, b); })</td></tr>
+<tr class="separator:ac902aa26f43ee2c8cceeb580a1df0c50"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -210,7 +216,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="Simd_8hpp.html">Simd.hpp</a></li>
-    <li class="footer">Generated on Fri Sep 16 2022 20:03:33 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Sep 19 2022 21:15:10 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

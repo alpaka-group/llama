@@ -36,7 +36,7 @@ var structllama_1_1RecordRef =
     [ "operator=", "structllama_1_1RecordRef.html#a2e05d072491116eca8afbe5251b79abf", null ],
     [ "operator=", "structllama_1_1RecordRef.html#a3f3bb1d6f14928ec1a5aac3cdbcd40f6", null ],
     [ "store", "structllama_1_1RecordRef.html#aca12c149f6cc3257adfcee9743aace4a", null ],
-    [ "loadSimd", "structllama_1_1RecordRef.html#a7981d2b22c0eea6d854e270d1899ded1", null ],
+    [ "loadSimd", "structllama_1_1RecordRef.html#a102b18375a13fc8273481e373153239e", null ],
     [ "operator!=", "structllama_1_1RecordRef.html#a3ce3df14aae118c00ac669cac09645db", null ],
     [ "operator!=", "structllama_1_1RecordRef.html#a29cafbc66f72dc1d0cdd50240dab09fd", null ],
     [ "operator%", "structllama_1_1RecordRef.html#a8a7f083b4a3f84e6adba206117bb5979", null ],
@@ -56,6 +56,6 @@ var structllama_1_1RecordRef =
     [ "operator>", "structllama_1_1RecordRef.html#a04302cfb043451c3932a1f787493ac1b", null ],
     [ "operator>=", "structllama_1_1RecordRef.html#a00162d3e10237d687c7130d695c6da4c", null ],
     [ "operator>=", "structllama_1_1RecordRef.html#a03d19131b5936cfe7e9e8ab2f80ddd69", null ],
-    [ "storeSimd", "structllama_1_1RecordRef.html#a35ef9bb6d8935f7f867362a6ec23206d", null ],
+    [ "storeSimd", "structllama_1_1RecordRef.html#ab4687d4e51f8e11f326bf3f51b8445db", null ],
     [ "swap", "structllama_1_1RecordRef.html#ae2d91aa2202932f93e1bf2f014ca7437", null ]
 ];
