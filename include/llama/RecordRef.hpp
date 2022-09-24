@@ -442,7 +442,7 @@ namespace llama
             else
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return this->view.accessor(arrayIndex(), AbsolutCoord{});
+                return this->view.access(arrayIndex(), AbsolutCoord{});
             }
         }
 
@@ -460,7 +460,7 @@ namespace llama
             else
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return this->view.accessor(arrayIndex(), AbsolutCoord{});
+                return this->view.access(arrayIndex(), AbsolutCoord{});
             }
         }
 
