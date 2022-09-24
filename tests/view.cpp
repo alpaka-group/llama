@@ -1,5 +1,6 @@
 #include "common.hpp"
 
+#include <atomic>
 #include <deque>
 
 // clang-format off
@@ -85,7 +86,7 @@ TEST_CASE("view.non-memory-owning")
     test(boost::mp11::mp_identity<const std::byte>{});
 }
 
-TEST_CASE("view.access")
+TEST_CASE("view.subscript")
 {
     using ArrayExtents = llama::ArrayExtentsDynamic<int, 2>;
     ArrayExtents extents{16, 16};
@@ -333,4 +334,93 @@ TEST_CASE("view.allocViewStack")
 
     auto v4 = llama::allocViewStack<4, Vec3I>();
     v4(llama::ArrayIndex{0, 0, 0, 0})(tag::X{}) = 42;
+}
+
+TEST_CASE("view.allocView.Default")
+{
+    auto mapping = llama::mapping::AoS{llama::ArrayExtents{3, 4}, Particle{}};
+    auto view = llama::allocView(mapping, llama::bloballoc::Vector{}, llama::accessor::Default{});
+    iotaFillView(view);
+    iotaCheckView(view);
+}
+
+TEST_CASE("view.allocView.ReadOnlyByValue")
+{
+    auto mapping = llama::mapping::AoS{llama::ArrayExtents{3, 4}, Vec3I{}};
+    auto view = llama::allocView(mapping, llama::bloballoc::Vector{}, llama::accessor::ReadOnlyByValue{});
+    STATIC_REQUIRE(std::is_same_v<decltype(view(1, 2)(tag::X{})), int>);
+}
+
+TEST_CASE("view.allocView.Const")
+{
+    auto mapping = llama::mapping::AoS{llama::ArrayExtents{3, 4}, Vec3I{}};
+    auto view = llama::allocView(mapping, llama::bloballoc::Vector{}, llama::accessor::Const{});
+    STATIC_REQUIRE(std::is_same_v<decltype(view(1, 2)(tag::X{})), const int&>);
+}
+
+#ifdef __cpp_lib_atomic_ref
+TEST_CASE("view.allocView.Atomic")
+{
+    auto mapping = llama::mapping::AoS{llama::ArrayExtents{3, 4}, Vec3I{}};
+    auto view = llama::allocView(mapping, llama::bloballoc::Vector{}, llama::accessor::Atomic{});
+    STATIC_REQUIRE(std::is_same_v<decltype(view(1, 2)(tag::X{})), std::atomic_ref<int>>);
+    iotaFillView(view);
+    iotaCheckView(view);
+}
+#endif
+
+TEST_CASE("view.withAccessor.Default.Vector")
+{
+    auto view
+        = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{16, 16}, Vec3I{}}, llama::bloballoc::Vector{});
+    auto* addr = &view(1, 2)(tag::X{});
+    auto view2 = llama::withAccessor<llama::accessor::Default>(view); // copies
+    auto* addr2 = &view2(1, 2)(tag::X{});
+    CHECK(addr != addr2);
+}
+
+TEST_CASE("view.withAccessor.Default.Vector.move")
+{
+    auto view
+        = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{16, 16}, Vec3I{}}, llama::bloballoc::Vector{});
+    auto* addr = &view(1, 2)(tag::X{});
+    auto view2 = llama::withAccessor<llama::accessor::Default>(std::move(view));
+    auto* addr2 = &view2(1, 2)(tag::X{});
+    CHECK(addr == addr2);
+}
+
+TEST_CASE("view.withAccessor.Default.SharedPtr")
+{
+    auto view
+        = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{16, 16}, Vec3I{}}, llama::bloballoc::SharedPtr{});
+    auto* addr = &view(1, 2)(tag::X{});
+    auto view2 = llama::withAccessor<llama::accessor::Default>(view); // copies shared pointers, but not memory chunks
+    auto* addr2 = &view2(1, 2)(tag::X{});
+    CHECK(addr == addr2);
+}
+
+TEMPLATE_TEST_CASE("view.withAccessor.shallowCopy.Default", "", llama::bloballoc::Vector, llama::bloballoc::SharedPtr)
+{
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{16, 16}, Particle{}}, TestType{});
+    auto view2 = llama::withAccessor<llama::accessor::Default>(llama::shallowCopy(view));
+    iotaFillView(view2);
+    iotaCheckView(view);
+}
+
+#ifdef __cpp_lib_atomic_ref
+TEMPLATE_TEST_CASE("view.withAccessor.shallowCopy.Atomic", "", llama::bloballoc::Vector, llama::bloballoc::SharedPtr)
+{
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{16, 16}, Particle{}}, TestType{});
+    auto view2 = llama::withAccessor<llama::accessor::Atomic>(llama::shallowCopy(view));
+    iotaFillView(view2);
+    iotaCheckView(view);
+}
+#endif
+
+TEMPLATE_TEST_CASE("view.withAccessor.shallowCopy.Restrict", "", llama::bloballoc::Vector, llama::bloballoc::SharedPtr)
+{
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{16, 16}, Particle{}}, TestType{});
+    auto view2 = llama::withAccessor<llama::accessor::Restrict>(llama::shallowCopy(view));
+    iotaFillView(view2);
+    iotaCheckView(view);
 }
