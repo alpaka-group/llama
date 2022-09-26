@@ -31,12 +31,12 @@ namespace llama
 
         inline static constexpr std::size_t lanes = 1;
 
-        static LLAMA_FORCE_INLINE auto loadUnaligned(const T* mem) -> T
+        static LLAMA_FN_HOST_ACC_INLINE auto loadUnaligned(const T* mem) -> T
         {
             return *mem;
         }
 
-        static LLAMA_FORCE_INLINE void storeUnaligned(T t, T* mem)
+        static LLAMA_FN_HOST_ACC_INLINE void storeUnaligned(T t, T* mem)
         {
             *mem = t;
         }
@@ -230,7 +230,7 @@ namespace llama
     /// vector will be stored for each of the fields. The number of elements stored per SIMD vector depends on the
     /// SIMD width of the vector. Simd is allowed to have different vector lengths per element.
     template<typename T, typename Simd>
-    LLAMA_FN_HOST_ACC_INLINE void storeSimd(T&& ref, Simd simd)
+    LLAMA_FN_HOST_ACC_INLINE void storeSimd(T&& ref, const Simd simd)
     {
         // structured Simd type and record reference
         if constexpr(isRecordRef<Simd> && isRecordRef<T>)
@@ -257,7 +257,7 @@ namespace llama
                         auto b = ArrayIndexIterator{ref.view.mapping().extents(), ref.arrayIndex()};
                         for(auto i = 0; i < Traits::lanes; i++)
                             ref.view (*b++)(cat(typename T::BoundRecordCoord{}, rc))
-                                = reinterpret_cast<FieldType*>(&simd(rc))[i]; // scalar store
+                                = reinterpret_cast<const FieldType*>(&simd(rc))[i]; // scalar store
                     }
                 });
         }
