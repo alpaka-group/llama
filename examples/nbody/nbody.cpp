@@ -212,10 +212,10 @@ namespace usellama
         for(std::size_t i = 0; i < problemSize; i += width)
         {
             llama::SimdN<typename View::RecordDim, width, xsimd::make_sized_batch_t> pis;
-            llama::loadSimd(pis, particles(i));
+            llama::loadSimd(particles(i), pis);
             for(std::size_t j = 0; j < problemSize; ++j)
                 pPInteraction(pis, particles(j));
-            llama::storeSimd(particles(i)(tag::Vel{}), pis(tag::Vel{}));
+            llama::storeSimd(pis(tag::Vel{}), particles(i)(tag::Vel{}));
         }
     }
 
@@ -229,9 +229,9 @@ namespace usellama
         {
             llama::SimdN<llama::GetType<RecordDim, tag::Pos>, width, xsimd::make_sized_batch_t> pos;
             llama::SimdN<llama::GetType<RecordDim, tag::Vel>, width, xsimd::make_sized_batch_t> vel;
-            llama::loadSimd(pos, particles(i)(tag::Pos{}));
-            llama::loadSimd(vel, particles(i)(tag::Vel{}));
-            llama::storeSimd(particles(i)(tag::Pos{}), pos + vel * timestep);
+            llama::loadSimd(particles(i)(tag::Pos{}), pos);
+            llama::loadSimd(particles(i)(tag::Vel{}), vel);
+            llama::storeSimd(pos + vel * timestep, particles(i)(tag::Pos{}));
         }
     }
 #endif

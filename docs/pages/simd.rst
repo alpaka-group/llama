@@ -183,8 +183,8 @@ Loading and storing data between a SIMD vector and a llama view is done using :c
 
 .. code-block:: C++
 
-    llama::loadSimd(s, view(i));
-    llama::storeSimd(view(i), s);
+    llama::loadSimd(view(i), s);
+    llama::storeSimd(s, view(i));
 
 Both functions take a :cpp:`llama::Simd` and a reference into a LLAMA view as arguments.
 Depending on the mapping of the view, different load/store instructions will be used.
@@ -197,8 +197,8 @@ ordinary navigation to sub records and arithmetic can be performed:
 .. code-block:: C++
 
     llama::SimdN<Vec3, N, stdx::fixed_size_simd> vel; // SIMD with N lanes holding 3 values
-    llama::loadSimd(vel, view(i)(Vel{}));
+    llama::loadSimd(view(i)(Vel{}), vel);
 
     s(Pos{}) += vel; // 3 SIMD adds performed between llama::Simd vel and sub-record llama::Simd of s
-    llama::storeSimd(view(i)(Pos{}), s(Pos{})); // store subpart of llama::Simd into view
+    llama::storeSimd(s(Pos{}), view(i)(Pos{})); // store subpart of llama::Simd into view
 
