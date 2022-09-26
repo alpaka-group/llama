@@ -186,7 +186,11 @@ namespace llama
 
                     // TODO(bgruber): can we generalize the logic whether we can load a simd from that mapping?
                     if constexpr(mapping::isSoA<typename T::View::Mapping>)
+                    {
+                        LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
                         simd(rc) = Traits::loadUnaligned(&ref(rc)); // SIMD load
+                        LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
+                    }
                     // else if constexpr(mapping::isAoSoA<typename T::View::Mapping>)
                     //{
                     //    // it turns out we do not need the specialization, because clang already fuses the scalar
@@ -210,7 +214,9 @@ namespace llama
         // unstructured simd and reference type
         else if constexpr(!isRecordRef<Simd> && !isRecordRef<T>)
         {
+            LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
             simd = SimdTraits<Simd>::loadUnaligned(&ref);
+            LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
         }
         else
         {
@@ -239,7 +245,11 @@ namespace llama
 
                     // TODO(bgruber): can we generalize the logic whether we can store a simd to that mapping?
                     if constexpr(mapping::isSoA<typename T::View::Mapping>)
+                    {
+                        LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
                         Traits::storeUnaligned(simd(rc), &ref(rc)); // SIMD store
+                        LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
+                    }
                     else
                     {
                         // TODO(bgruber): how does this generalize conceptually to 2D and higher dimensions? in which
@@ -254,7 +264,9 @@ namespace llama
         // unstructured simd and reference type
         else if constexpr(!isRecordRef<Simd> && !isRecordRef<T>)
         {
+            LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
             SimdTraits<Simd>::storeUnaligned(simd, &ref);
+            LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
         }
         else
         {
