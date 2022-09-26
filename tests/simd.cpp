@@ -189,6 +189,29 @@ TEST_CASE("simd.loadSimd.simd.stdsimd")
     CHECK(s[3] == 4.0f);
 }
 
+TEST_CASE("simd.loadSimd.record.scalar")
+{
+    using ArrayExtents = llama::ArrayExtentsDynamic<int, 1>;
+    const auto mapping = llama::mapping::SoA<ArrayExtents, ParticleSimd>(ArrayExtents{1});
+    auto view = llama::allocViewUninitialized(mapping);
+    iotaFillView(view);
+
+    llama::SimdN<ParticleSimd, 1, stdx::fixed_size_simd> p;
+    llama::loadSimd(p, view(0));
+
+    CHECK(p(tag::Pos{}, tag::X{}) == 0);
+    CHECK(p(tag::Pos{}, tag::Y{}) == 1);
+    CHECK(p(tag::Pos{}, tag::Z{}) == 2);
+    CHECK(p(tag::Mass{}) == 3);
+    CHECK(p(tag::Vel{}, tag::X{}) == 4);
+    CHECK(p(tag::Vel{}, tag::Y{}) == 5);
+    CHECK(p(tag::Vel{}, tag::Z{}) == 6);
+    CHECK(p(tag::Flags{}, llama::RecordCoord<0>{}) == 7);
+    CHECK(p(tag::Flags{}, llama::RecordCoord<1>{}) == 8);
+    CHECK(p(tag::Flags{}, llama::RecordCoord<2>{}) == 9);
+    CHECK(p(tag::Flags{}, llama::RecordCoord<3>{}) == 10);
+}
+
 TEST_CASE("simd.loadSimd.record.stdsimd")
 {
     using ArrayExtents = llama::ArrayExtentsDynamic<int, 1>;
@@ -255,6 +278,39 @@ TEST_CASE("simd.storeSimd.simd.stdsimd")
     CHECK(a[1] == 2.0f);
     CHECK(a[2] == 3.0f);
     CHECK(a[3] == 4.0f);
+}
+
+TEST_CASE("simd.storeSimd.record.scalar")
+{
+    using ArrayExtents = llama::ArrayExtentsDynamic<int, 1>;
+    const auto mapping = llama::mapping::SoA<ArrayExtents, ParticleSimd>(ArrayExtents{1});
+    auto view = llama::allocViewUninitialized(mapping);
+
+    llama::SimdN<ParticleSimd, 1, stdx::fixed_size_simd> p;
+    p(tag::Pos{}, tag::X{}) = 0;
+    p(tag::Pos{}, tag::Y{}) = 1;
+    p(tag::Pos{}, tag::Z{}) = 2;
+    p(tag::Mass{}) = 3;
+    p(tag::Vel{}, tag::X{}) = 4;
+    p(tag::Vel{}, tag::Y{}) = 5;
+    p(tag::Vel{}, tag::Z{}) = 6;
+    p(tag::Flags{}, llama::RecordCoord<0>{}) = 7;
+    p(tag::Flags{}, llama::RecordCoord<1>{}) = 8;
+    p(tag::Flags{}, llama::RecordCoord<2>{}) = 9;
+    p(tag::Flags{}, llama::RecordCoord<3>{}) = 10;
+    llama::storeSimd(view(0), p);
+
+    CHECK(view(0)(tag::Pos{}, tag::X{}) == 0);
+    CHECK(view(0)(tag::Pos{}, tag::Y{}) == 1);
+    CHECK(view(0)(tag::Pos{}, tag::Z{}) == 2);
+    CHECK(view(0)(tag::Mass{}) == 3);
+    CHECK(view(0)(tag::Vel{}, tag::X{}) == 4);
+    CHECK(view(0)(tag::Vel{}, tag::Y{}) == 5);
+    CHECK(view(0)(tag::Vel{}, tag::Z{}) == 6);
+    CHECK(view(0)(tag::Flags{}, llama::RecordCoord<0>{}) == 7);
+    CHECK(view(0)(tag::Flags{}, llama::RecordCoord<1>{}) == 8);
+    CHECK(view(0)(tag::Flags{}, llama::RecordCoord<2>{}) == 9);
+    CHECK(view(0)(tag::Flags{}, llama::RecordCoord<3>{}) == 10);
 }
 
 TEST_CASE("simd.storeSimd.record.stdsimd")
