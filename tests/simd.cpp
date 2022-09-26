@@ -171,7 +171,7 @@ TEST_CASE("simd.loadSimd.scalar")
 {
     float mem = 3.14f;
     float s = 0;
-    llama::loadSimd(s, mem);
+    llama::loadSimd(mem, s);
     CHECK(s == mem);
 }
 
@@ -181,7 +181,7 @@ TEST_CASE("simd.loadSimd.simd.stdsimd")
     std::iota(begin(a), end(a), 1.0f);
 
     stdx::fixed_size_simd<float, 4> s;
-    llama::loadSimd(s, a[0]);
+    llama::loadSimd(a[0], s);
 
     CHECK(s[0] == 1.0f);
     CHECK(s[1] == 2.0f);
@@ -197,7 +197,7 @@ TEST_CASE("simd.loadSimd.record.scalar")
     iotaFillView(view);
 
     llama::SimdN<ParticleSimd, 1, stdx::fixed_size_simd> p;
-    llama::loadSimd(p, view(0));
+    llama::loadSimd(view(0), p);
 
     CHECK(p(tag::Pos{}, tag::X{}) == 0);
     CHECK(p(tag::Pos{}, tag::Y{}) == 1);
@@ -220,7 +220,7 @@ TEST_CASE("simd.loadSimd.record.stdsimd")
     iotaFillView(view);
 
     llama::SimdN<ParticleSimd, 4, stdx::fixed_size_simd> p;
-    llama::loadSimd(p, view(0));
+    llama::loadSimd(view(0), p);
     CHECK(SimdRange{p(tag::Pos{}, tag::X{})} == SimdRange{stdx::fixed_size_simd<double, 4>{[](auto ic) {
               return 0.0 + ic * 11.0;
           }}});
@@ -263,7 +263,7 @@ TEST_CASE("simd.storeSimd.scalar")
 {
     float mem = 0;
     float s = 3.14f;
-    llama::storeSimd(mem, s);
+    llama::storeSimd(s, mem);
     CHECK(s == mem);
 }
 
@@ -272,7 +272,7 @@ TEST_CASE("simd.storeSimd.simd.stdsimd")
     stdx::fixed_size_simd<float, 4> s([](auto ic) -> float { return ic() + 1; });
 
     std::array<float, 4> a{};
-    llama::storeSimd(a[0], s);
+    llama::storeSimd(s, a[0]);
 
     CHECK(a[0] == 1.0f);
     CHECK(a[1] == 2.0f);
@@ -298,7 +298,7 @@ TEST_CASE("simd.storeSimd.record.scalar")
     p(tag::Flags{}, llama::RecordCoord<1>{}) = 8;
     p(tag::Flags{}, llama::RecordCoord<2>{}) = 9;
     p(tag::Flags{}, llama::RecordCoord<3>{}) = 10;
-    llama::storeSimd(view(0), p);
+    llama::storeSimd(p, view(0));
 
     CHECK(view(0)(tag::Pos{}, tag::X{}) == 0);
     CHECK(view(0)(tag::Pos{}, tag::Y{}) == 1);
@@ -328,7 +328,7 @@ TEST_CASE("simd.storeSimd.record.stdsimd")
     y[0] = 4, y[1] = 5, y[2] = 6;
     z[0] = 7, z[1] = 8, z[2] = 9;
     m[0] = 80, m[1] = 81, m[2] = 82;
-    llama::storeSimd(view(0), p);
+    llama::storeSimd(p, view(0));
 
     CHECK(view(0)(tag::Pos{}, tag::X{}) == 1);
     CHECK(view(1)(tag::Pos{}, tag::X{}) == 2);

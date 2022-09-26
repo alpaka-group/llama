@@ -174,7 +174,7 @@ struct UpdateKernel
         const auto tbi = alpaka::getIdx<alpaka::Block, alpaka::Threads>(acc)[0];
 
         auto pis = llama::SimdN<typename View::RecordDim, Elems, MakeSizedBatch>{};
-        llama::loadSimd(pis, particles(ti * Elems));
+        llama::loadSimd(particles(ti * Elems), pis);
 
         for(int blockOffset = 0; blockOffset < problemSize; blockOffset += sharedElementsPerBlock)
         {
@@ -187,7 +187,7 @@ struct UpdateKernel
                 pPInteraction(acc, pis, sharedView(j));
             alpaka::syncBlockThreads(acc);
         }
-        llama::storeSimd(particles(ti * Elems)(tag::Vel{}), pis(tag::Vel{}));
+        llama::storeSimd(pis(tag::Vel{}), particles(ti * Elems)(tag::Vel{}));
     }
 };
 
@@ -201,9 +201,9 @@ struct MoveKernel
         const auto i = ti * Elems;
         llama::SimdN<Vec3, Elems, MakeSizedBatch> pos;
         llama::SimdN<Vec3, Elems, MakeSizedBatch> vel;
-        llama::loadSimd(pos, particles(i)(tag::Pos{}));
-        llama::loadSimd(vel, particles(i)(tag::Vel{}));
-        llama::storeSimd(particles(i)(tag::Pos{}), pos + vel * +timestep);
+        llama::loadSimd(particles(i)(tag::Pos{}), pos);
+        llama::loadSimd(particles(i)(tag::Vel{}), vel);
+        llama::storeSimd(pos + vel * +timestep, particles(i)(tag::Pos{}));
     }
 };
 
