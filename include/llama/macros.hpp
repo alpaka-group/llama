@@ -112,11 +112,45 @@
 #    define LLAMA_LAMBDA_INLINE LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS()
 #endif
 
-/// Suppresses nvcc warning: 'calling a __host__ function from __host__ __device__ function.'
-#if defined(__NVCC__) && !defined(__clang__)
-#    define LLAMA_SUPPRESS_HOST_DEVICE_WARNING _Pragma("nv_exec_check_disable")
-#else
-#    define LLAMA_SUPPRESS_HOST_DEVICE_WARNING
+#ifndef LLAMA_SUPPRESS_HOST_DEVICE_WARNING
+#    if defined(__NVCC__) && !defined(__clang__)
+#        define LLAMA_SUPPRESS_HOST_DEVICE_WARNING _Pragma("nv_exec_check_disable")
+#    else
+/// Suppresses the nvcc warning: 'calling a __host__ function from __host__ __device__ function.'
+/// This macro can be applied to function declarations
+#        define LLAMA_SUPPRESS_HOST_DEVICE_WARNING
+#    endif
+#endif
+
+#ifndef LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
+#    ifdef __CUDACC__
+#        ifdef __NVCC_DIAG_PRAGMA_SUPPORT__
+#            define LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING                                                          \
+                _Pragma("nv_diag_suppress 20011") _Pragma("nv_diag_suppress 20014")
+#        else
+#            define LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING                                                          \
+                _Pragma("diag_suppress 20011") _Pragma("diag_suppress 20014")
+#        endif
+#    else
+/// Suppresses the nvcc warnings:
+/// 'calling a __host__ function from a __host__ __device__ function is not allowed' and
+/// 'calling a __host__ function("...") from a __host__ __device__ function("...") is not allowed'
+/// This macro can be applied before the concerned code block, which then needs to be ended with \ref
+/// LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING.
+#        define LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
+#    endif
+#endif
+#ifndef LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
+#    ifdef __CUDACC__
+#        ifdef __NVCC_DIAG_PRAGMA_SUPPORT__
+#            define LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING                                                            \
+                _Pragma("nv_diag_default 20011") _Pragma("nv_diag_default 20014")
+#        else
+#            define LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING _Pragma("diag_default 20011") _Pragma("diag_default 20014")
+#        endif
+#    else
+#        define LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
+#    endif
 #endif
 
 #if defined(_MSC_VER)
