@@ -108,8 +108,10 @@ namespace llama::mapping
             using StoredT = internal::ReplacedType<ReplacementMap, RecordCoord<RecordCoords...>, UserT>;
             using QualifiedStoredT = CopyConst<BlobArray, StoredT>;
             const auto [nr, offset] = Inner::template blobNrAndOffset<RecordCoords...>(ai);
+            LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
             return internal::ChangeTypeReference<UserT, QualifiedStoredT>{
                 reinterpret_cast<QualifiedStoredT&>(blobs[nr][offset])};
+            LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
         }
 
         template<std::size_t... RecordCoords>

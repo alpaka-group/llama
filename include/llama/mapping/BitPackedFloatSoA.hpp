@@ -252,6 +252,7 @@ namespace llama::mapping
 
             using QualifiedStoredIntegral = CopyConst<Blobs, StoredIntegral>;
             using DstType = GetType<TRecordDim, RecordCoord<RecordCoords...>>;
+            LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
             return internal::BitPackedFloatRef<DstType, QualifiedStoredIntegral*, VHExp, VHMan, size_type>{
                 reinterpret_cast<QualifiedStoredIntegral*>(&blobs[blob][0]),
                 bitOffset,
@@ -262,6 +263,7 @@ namespace llama::mapping
                 reinterpret_cast<QualifiedStoredIntegral*>(&blobs[blob][0] + blobSize(blob))
 #endif
             };
+            LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
         }
     };
 

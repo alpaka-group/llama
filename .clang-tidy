@@ -8,6 +8,7 @@
 # fuchsia-statically-constructed-objects # too much noise with Catch2
 # bugprone-easily-swappable-parameters # too noisy
 # altera-struct-pack-align # too noisy, flags e.g. all traits
+# google-runtime-int # too noisy
 Checks: >
     *,
     -bugprone-exception-escape,
@@ -29,6 +30,7 @@ Checks: >
     -fuchsia-trailing-return,
     -google-build-using-namespace,
     -google-readability-braces-around-statements,
+    -google-runtime-int,
     -google-runtime-references,
     -hicpp-avoid-c-arrays,
     -hicpp-braces-around-statements,

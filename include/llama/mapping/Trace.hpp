@@ -50,8 +50,9 @@ namespace llama::mapping
             using value_type = Value;
 
             template<typename RefFwd>
-            TraceReference(RefFwd&& r, AccessCounts<Count>* hits) : r(std::forward<RefFwd>(r))
-                                                                  , hits(hits)
+            LLAMA_FN_HOST_ACC_INLINE TraceReference(RefFwd&& r, AccessCounts<Count>* hits)
+                : r(std::forward<RefFwd>(r))
+                , hits(hits)
             {
                 static_assert(std::is_same_v<std::remove_reference_t<Ref>, std::remove_reference_t<RefFwd>>);
             }
@@ -161,12 +162,14 @@ namespace llama::mapping
             }
         }
 
+        LLAMA_SUPPRESS_HOST_DEVICE_WARNING
         template<typename Blobs>
         LLAMA_FN_HOST_ACC_INLINE auto fieldHits(const Blobs& blobs) const -> const FieldHitsArray&
         {
             return reinterpret_cast<const FieldHitsArray&>(*&blobs[blobCount - 1][0]);
         }
 
+        LLAMA_SUPPRESS_HOST_DEVICE_WARNING
         template<typename Blobs>
         LLAMA_FN_HOST_ACC_INLINE auto fieldHits(Blobs& blobs) const -> FieldHitsArray&
         {
@@ -181,37 +184,18 @@ namespace llama::mapping
 
         LLAMA_FN_HOST_ACC_INLINE void printFieldHits(const FieldHitsArray& hits) const
         {
-            constexpr auto columnWidth = 10;
 #ifdef __CUDA_ARCH__
-            if constexpr(MyCodeHandlesProxyReferences)
-                printf("%*s %*s %*s\n", columnWidth, "Field", columnWidth, "Reads", columnWidth, "Writes");
-            else
-                printf("%*s %*s\n", columnWidth, "Field", columnWidth, "Mlocs comp");
-            forEachLeafCoord<RecordDim>(
-                [&](auto rc)
-                {
-                    const size_type i = flatRecordCoord<RecordDim, decltype(rc)>;
-                    constexpr auto fieldName = recordCoordTags<RecordDim>(rc);
-                    char fieldNameZT[fieldName.size() + 1]{}; // nvcc does not handle the %*.*s parameter correctly
-                    llama::internal::constexprCopy(fieldName.begin(), fieldName.end(), fieldNameZT);
-                    if constexpr(MyCodeHandlesProxyReferences)
-                        printf(
-                            "%*.s %*lu %*lu\n",
-                            columnWidth,
-                            fieldNameZT,
-                            columnWidth,
-                            static_cast<unsigned long>(hits[i].reads),
-                            columnWidth,
-                            static_cast<unsigned long>(hits[i].writes));
-                    else
-                        printf(
-                            "%*.s %*lu %*lu\n",
-                            columnWidth,
-                            fieldNameZT,
-                            columnWidth,
-                            static_cast<unsigned long>(hits[i].memLocsComputed));
-                });
+            printFieldHitsDevice(hits);
 #else
+            printFieldHitsHost(hits);
+#endif
+        }
+
+    private:
+        static constexpr auto columnWidth = 10;
+
+        void printFieldHitsHost(const FieldHitsArray& hits) const
+        {
             if constexpr(MyCodeHandlesProxyReferences)
                 std::cout << std::left << std::setw(columnWidth) << "Field" << ' ' << std::right
                           << std::setw(columnWidth) << "Reads" << ' ' << std::right << std::setw(columnWidth)
@@ -232,10 +216,52 @@ namespace llama::mapping
                                   << std::right << std::setw(columnWidth) << hits[i].memLocsComputed << '\n';
                 });
             std::cout << std::internal;
-#endif
         }
 
-    private:
+        LLAMA_ACC void printFieldHitsDevice(const FieldHitsArray& hits) const
+        {
+            if constexpr(MyCodeHandlesProxyReferences)
+            {
+                // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg,hicpp-vararg)
+                printf("%*s %*s %*s\n", columnWidth, "Field", columnWidth, "Reads", columnWidth, "Writes");
+            }
+            else
+            {
+                // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg,hicpp-vararg)
+                printf("%*s %*s\n", columnWidth, "Field", columnWidth, "Mlocs comp");
+            }
+            forEachLeafCoord<RecordDim>(
+                [&](auto rc)
+                {
+                    const size_type i = flatRecordCoord<RecordDim, decltype(rc)>;
+                    constexpr auto fieldName = recordCoordTags<RecordDim>(rc);
+                    char fieldNameZT[fieldName.size() + 1]{}; // nvcc does not handle the %*.*s parameter correctly
+                    llama::internal::constexprCopy(fieldName.begin(), fieldName.end(), fieldNameZT);
+                    if constexpr(MyCodeHandlesProxyReferences)
+                    {
+                        // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg,hicpp-vararg)
+                        printf(
+                            "%*.s %*lu %*lu\n",
+                            columnWidth,
+                            fieldNameZT,
+                            columnWidth,
+                            static_cast<unsigned long>(hits[i].reads),
+                            columnWidth,
+                            static_cast<unsigned long>(hits[i].writes));
+                    }
+                    else
+                    {
+                        // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg,hicpp-vararg)
+                        printf(
+                            "%*.s %*lu %*lu\n",
+                            columnWidth,
+                            fieldNameZT,
+                            columnWidth,
+                            static_cast<unsigned long>(hits[i].memLocsComputed));
+                    }
+                });
+        }
+
         LLAMA_FN_HOST_ACC_INLINE auto inner() const -> const Mapping&
         {
             return static_cast<const Mapping&>(*this);

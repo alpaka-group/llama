@@ -29,7 +29,6 @@ namespace llama
         using AllocatorBlobType
             = decltype(std::declval<Allocator>()(std::integral_constant<std::size_t, alignOf<RecordDim>>{}, 0));
 
-        LLAMA_SUPPRESS_HOST_DEVICE_WARNING
         template<typename Allocator, typename Mapping, std::size_t... Is>
         LLAMA_FN_HOST_ACC_INLINE auto makeBlobArray(
             const Allocator& alloc,
@@ -38,8 +37,10 @@ namespace llama
             -> Array<AllocatorBlobType<Allocator, typename Mapping::RecordDim>, Mapping::blobCount>
         {
             [[maybe_unused]] constexpr auto alignment
-                = alignOf<typename Mapping::RecordDim>; // g++-12 warns that alignment is unsed
+                = alignOf<typename Mapping::RecordDim>; // g++-12 warns that alignment is unused
+            LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
             return {alloc(std::integral_constant<std::size_t, alignment>{}, mapping.blobSize(Is))...};
+            LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
         } // NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
     } // namespace internal
 
@@ -309,25 +310,10 @@ namespace llama
         {
             const auto [nr, offset] = mapping.blobNrAndOffset(ai, rc);
             using Type = GetType<typename Mapping::RecordDim, RecordCoord<Coords...>>;
-
-
-#ifdef __NVCC__
-            // suppress: calling a __host__ function from a __host__ __device__ function is not allowed
-            // suppress: calling a __host__ function("...") from a __host__ __device__ function("...") is not allowed
-#    pragma push
-#    ifdef __NVCC_DIAG_PRAGMA_SUPPORT__
-#        pragma nv_diag_suppress 20011
-#        pragma nv_diag_suppress 20014
-#    else
-#        pragma diag_suppress 20011
-#        pragma diag_suppress 20014
-#    endif
-#endif
+            LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
             return reinterpret_cast<CopyConst<std::remove_reference_t<decltype(blobs[nr][offset])>, Type>&>(
                 blobs[nr][offset]);
-#ifdef __NVCC__
-#    pragma pop
-#endif
+            LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
         }
     }
 
@@ -513,14 +499,12 @@ namespace llama
         template<typename TView, typename TBoundRecordCoord, bool OwnView>
         friend struct RecordRef;
 
-        LLAMA_SUPPRESS_HOST_DEVICE_WARNING
         template<std::size_t... Coords>
         LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayIndex ai, RecordCoord<Coords...> rc = {}) const -> decltype(auto)
         {
             return mapToMemory(mapping(), ai, rc, storageBlobs);
         }
 
-        LLAMA_SUPPRESS_HOST_DEVICE_WARNING
         template<std::size_t... Coords>
         LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayIndex ai, RecordCoord<Coords...> rc = {}) -> decltype(auto)
         {
@@ -557,7 +541,14 @@ namespace llama
     template<typename Mapping, typename BlobType, typename NewBlobType = std::byte*>
     LLAMA_FN_HOST_ACC_INLINE auto shallowCopy(View<Mapping, BlobType>& view)
     {
-        return transformBlobs(view, [](BlobType& blob) { return static_cast<NewBlobType>(&blob[0]); });
+        return transformBlobs(
+            view,
+            [](BlobType& blob)
+            {
+                LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
+                return static_cast<NewBlobType>(&blob[0]);
+                LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
+            });
     }
 
     template<typename View>
