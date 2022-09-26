@@ -17,7 +17,7 @@ constexpr auto sharedElementsPerBlock = 512;
 constexpr auto steps = 5; ///< number of steps to calculate
 constexpr auto allowRsqrt = true; // rsqrt can be way faster, but less accurate
 constexpr auto runUpate = true; // run update step. Useful to disable for benchmarking the move step.
-constexpr auto trace = true;
+constexpr auto trace = false;
 constexpr FP timestep = 0.0001f;
 
 constexpr auto threadsPerBlock = 256;
