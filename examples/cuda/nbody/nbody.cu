@@ -29,11 +29,10 @@ static_assert(sharedElementsPerBlock % threadsPerBlock == 0);
 
 constexpr FP epS2 = 0.01;
 
-#if __CUDA_ARCH__ >= 600
-using CountType = unsigned long long int;
-#else
-using CountType = unsigned;
+#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ <= 600
+static_assert(!trace, "Since tracing is enabled, this example needs compute capability >= 60 for 64bit atomics");
 #endif
+using CountType = unsigned long long int;
 
 using namespace std::literals;
 
@@ -210,6 +209,7 @@ try
                 llama::RecordCoord<1>,
                 llama::mapping::BindSoA<>::fn,
                 llama::mapping::BindSoA<>::fn,
+
                 true>{extents};
     }();
     auto tmapping = [&]
