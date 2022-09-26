@@ -10,7 +10,7 @@ var searchData=
   ['soa_1042',['SoA',['../namespacellama_1_1mapping.html#a736c25ae1b3ed1782a70989a8fc83a66',1,'llama::mapping']]],
   ['split_1043',['Split',['../structllama_1_1mapping_1_1Split.html#a788145e5f0f21141694604518a2c401d',1,'llama::mapping::Split::Split()=default'],['../structllama_1_1mapping_1_1Split.html#a9d15b2a33e1f01f9776dfa520ea88fb0',1,'llama::mapping::Split::Split(ArrayExtents extents)'],['../structllama_1_1mapping_1_1Split.html#a7399b8d8ef86cb6676c194233c6afa2e',1,'llama::mapping::Split::Split(Mapping1 mapping1, Mapping2 mapping2)'],['../structllama_1_1mapping_1_1Split.html#aa1a50809bf78aea843c3ac0e8b3526bc',1,'llama::mapping::Split::Split(std::tuple&lt; Args1... &gt; mappingArgs1, std::tuple&lt; Args2... &gt; mappingArgs2)']]],
   ['store_1044',['store',['../structllama_1_1RecordRef.html#aca12c149f6cc3257adfcee9743aace4a',1,'llama::RecordRef']]],
-  ['storesimd_1045',['storeSimd',['../namespacellama.html#a2d741fc53504ebda9e1e5cc48057de14',1,'llama']]],
+  ['storesimd_1045',['storeSimd',['../namespacellama.html#ad86abda3049fa5fcf6fe171e289bebd0',1,'llama']]],
   ['storeunaligned_1046',['storeUnaligned',['../structllama_1_1SimdTraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__arithmetic__v_3_01T_01_4_01_4_01_4.html#a67e2693738b7a12f3e262c534578afbe',1,'llama::SimdTraits&lt; T, std::enable_if_t&lt; std::is_arithmetic_v&lt; T &gt; &gt; &gt;']]],
   ['structname_1047',['structName',['../namespacellama.html#a8def4cdbf850f818833a38d67e6ebf34',1,'llama']]],
   ['sumchildrensmallerthan_1048',['sumChildrenSmallerThan',['../namespacellama_1_1mapping_1_1tree_1_1internal.html#ac64ac187e14ff4540b332b55e4fdc7f7',1,'llama::mapping::tree::internal']]],

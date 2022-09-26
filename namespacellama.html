@@ -396,9 +396,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a99fe9e7ce880f74526cec227cfb7c183"><td class="memTemplParams" colspan="2">template&lt;typename Simd , typename T &gt; </td></tr>
 <tr class="memitem:a99fe9e7ce880f74526cec227cfb7c183"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a99fe9e7ce880f74526cec227cfb7c183">loadSimd</a> (<a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a> &amp;simd, const T &amp;ref)</td></tr>
 <tr class="separator:a99fe9e7ce880f74526cec227cfb7c183"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2d741fc53504ebda9e1e5cc48057de14"><td class="memTemplParams" colspan="2">template&lt;typename T , typename Simd &gt; </td></tr>
-<tr class="memitem:a2d741fc53504ebda9e1e5cc48057de14"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a2d741fc53504ebda9e1e5cc48057de14">storeSimd</a> (T &amp;&amp;ref, <a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a> simd)</td></tr>
-<tr class="separator:a2d741fc53504ebda9e1e5cc48057de14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad86abda3049fa5fcf6fe171e289bebd0"><td class="memTemplParams" colspan="2">template&lt;typename T , typename Simd &gt; </td></tr>
+<tr class="memitem:ad86abda3049fa5fcf6fe171e289bebd0"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ad86abda3049fa5fcf6fe171e289bebd0">storeSimd</a> (T &amp;&amp;ref, const <a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a> simd)</td></tr>
+<tr class="separator:ad86abda3049fa5fcf6fe171e289bebd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4451ec281eb037ebac7c08772ce0670f"><td class="memTemplParams" colspan="2">template&lt;std::size_t N, template&lt; typename, auto &gt; typename MakeSizedSimd, typename View , typename UnarySimdFunction &gt; </td></tr>
 <tr class="memitem:a4451ec281eb037ebac7c08772ce0670f"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a4451ec281eb037ebac7c08772ce0670f">simdForEachN</a> (<a class="el" href="structllama_1_1View.html">View</a> &amp;view, UnarySimdFunction f)</td></tr>
 <tr class="separator:a4451ec281eb037ebac7c08772ce0670f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -3128,8 +3128,8 @@ template&lt;std::size_t N, template&lt; typename, auto &gt; typename MakeSizedSi
 
 </div>
 </div>
-<a id="a2d741fc53504ebda9e1e5cc48057de14"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2d741fc53504ebda9e1e5cc48057de14">&#9670;&nbsp;</a></span>storeSimd()</h2>
+<a id="ad86abda3049fa5fcf6fe171e289bebd0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad86abda3049fa5fcf6fe171e289bebd0">&#9670;&nbsp;</a></span>storeSimd()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3148,7 +3148,7 @@ template&lt;typename T , typename Simd &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a>&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a>&#160;</td>
           <td class="paramname"><em>simd</em>&#160;</td>
         </tr>
         <tr>
@@ -4516,7 +4516,7 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Mon Sep 26 2022 18:32:00 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Sep 26 2022 20:07:49 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
