@@ -1,5 +1,7 @@
 var NAVTREEINDEX5 =
 {
+"structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctors_3_01Tree_00_01Tuple_3_4_01_4.html#ad5e8fa63c5f66f3e36092968dfc4ec1c":[2,0,1,2,1,1,5,3],
+"structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctors_3_01Tree_00_01Tuple_3_4_01_4.html#afdc4cef52ddfac8c0466c5e5d6d0fdcd":[2,0,1,2,1,1,5,2],
 "structllama_1_1mapping_1_1tree_1_1internal_1_1WrapInNNodes.html":[2,0,1,2,1,1,6],
 "structllama_1_1mapping_1_1tree_1_1internal_1_1WrapInNNodes.html#a27f930dc18888ea0a1e5917b5eb47a62":[2,0,1,2,1,1,6,0],
 "structllama_1_1mapping_1_1tree_1_1internal_1_1WrapInNNodes_3_01Leaf_00_010_01_4.html":[2,0,1,2,1,1,7],

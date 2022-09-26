@@ -1,5 +1,7 @@
 var NAVTREEINDEX3 =
 {
+"structllama_1_1Vector.html#a937ddab02e937975cd8b0e097250d337":[2,0,1,30,29],
+"structllama_1_1Vector.html#a9438c49ab6897f544779b06f5a3d8c8c":[2,0,1,30,30],
 "structllama_1_1Vector.html#a9843ac4bcf20c49d604744274f5f3481":[2,0,1,30,44],
 "structllama_1_1Vector.html#a9cb6cd05cc9474af335517ef3889cfb4":[2,0,1,30,1],
 "structllama_1_1Vector.html#a9cfea0abb25178e787a1998cb24777b8":[2,0,1,30,35],
@@ -247,7 +249,5 @@ var NAVTREEINDEX3 =
 "structllama_1_1mapping_1_1BindAoSoA.html":[2,0,1,2,6],
 "structllama_1_1mapping_1_1BindAoSoA.html#abbda736bc6c623e67f865d812096909c":[2,0,1,2,6,0],
 "structllama_1_1mapping_1_1BindBitPackedFloatSoA.html":[2,0,1,2,7],
-"structllama_1_1mapping_1_1BindBitPackedFloatSoA.html#a1f980ad795b278fc0b3ea84c5a73e021":[2,0,1,2,7,0],
-"structllama_1_1mapping_1_1BindBitPackedIntSoA.html":[2,0,1,2,8],
-"structllama_1_1mapping_1_1BindBitPackedIntSoA.html#a5218c97a48031af81b8168f7a5c1c13c":[2,0,1,2,8,0]
+"structllama_1_1mapping_1_1BindBitPackedFloatSoA.html#a1f980ad795b278fc0b3ea84c5a73e021":[2,0,1,2,7,0]
 };
