@@ -5783,10 +5783,10 @@ namespace llama
 	        // FIXME(bgruber): the SIMD load/store functions need to navigate back from a record ref to the contained view
 	        // to find subsequent elements. This is not a great design for now and the SIMD load/store functions should
 	        // probably take iterators to records.
-	        template<typename Simd, typename RecordRef>
-	        friend void loadSimd(Simd& simd, const RecordRef& ref);
-	        template<typename RecordRef, typename Simd>
-	        friend void storeSimd(RecordRef&& ref, Simd simd);
+	        template<typename T, typename Simd>
+	        friend void loadSimd(const T& srcRef, Simd& dstSimd);
+	        template<typename Simd, typename T>
+	        friend void storeSimd(const Simd& srcSimd, T&& dstRef);
 	    };
 
 	    // swap for heterogeneous RecordRef
@@ -9257,14 +9257,14 @@ namespace llama::mapping
 	        return simdLanes<FirstFieldType>;
 	    }();
 
-	    /// Loads SIMD vectors of data starting from the given record reference to simd. Only field tags occurring in
+	    /// Loads SIMD vectors of data starting from the given record reference to dstSimd. Only field tags occurring in
 	    /// RecordRef are loaded. If Simd contains multiple fields of SIMD types, a SIMD vector will be fetched for each of
 	    /// the fields. The number of elements fetched per SIMD vector depends on the SIMD width of the vector. Simd is
 	    /// allowed to have different vector lengths per element.
-	    template<typename Simd, typename T>
-	    LLAMA_FN_HOST_ACC_INLINE void loadSimd(Simd& simd, const T& ref)
+	    template<typename T, typename Simd>
+	    LLAMA_FN_HOST_ACC_INLINE void loadSimd(const T& srcRef, Simd& dstSimd)
 	    {
-	        // structured simd type and record reference
+	        // structured dstSimd type and record reference
 	        if constexpr(isRecordRef<Simd> && isRecordRef<T>)
 	        {
 	            using RecordDim = typename T::AccessibleRecordDim;
@@ -9272,14 +9272,14 @@ namespace llama::mapping
 	                [&](auto rc) LLAMA_LAMBDA_INLINE
 	                {
 	                    using FieldType = GetType<RecordDim, decltype(rc)>;
-	                    using ElementSimd = std::decay_t<decltype(simd(rc))>;
+	                    using ElementSimd = std::decay_t<decltype(dstSimd(rc))>;
 	                    using Traits = SimdTraits<ElementSimd>;
 
-	                    // TODO(bgruber): can we generalize the logic whether we can load a simd from that mapping?
+	                    // TODO(bgruber): can we generalize the logic whether we can load a dstSimd from that mapping?
 	                    if constexpr(mapping::isSoA<typename T::View::Mapping>)
 	                    {
 	                        LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-	                        simd(rc) = Traits::loadUnaligned(&ref(rc)); // SIMD load
+	                        dstSimd(rc) = Traits::loadUnaligned(&srcRef(rc)); // SIMD load
 	                        LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
 	                    }
 	                    // else if constexpr(mapping::isAoSoA<typename T::View::Mapping>)
@@ -9287,26 +9287,26 @@ namespace llama::mapping
 	                    //    // it turns out we do not need the specialization, because clang already fuses the scalar
 	                    //    loads
 	                    //    // into a vector load :D
-	                    //    assert(ref.arrayDimsCoord()[0] % SIMD_WIDTH == 0);
-	                    //    // if(ref.arrayDimsCoord()[0] % SIMD_WIDTH != 0)
+	                    //    assert(srcRef.arrayDimsCoord()[0] % SIMD_WIDTH == 0);
+	                    //    // if(srcRef.arrayDimsCoord()[0] % SIMD_WIDTH != 0)
 	                    //    //    __builtin_unreachable(); // this also helps nothing
-	                    //    //__builtin_assume(ref.arrayDimsCoord()[0] % SIMD_WIDTH == 0);  // this also helps nothing
-	                    //    simd(rc) = Traits::load_from(&ref(rc)); // SIMD load
+	                    //    //__builtin_assume(srcRef.arrayDimsCoord()[0] % SIMD_WIDTH == 0);  // this also helps nothing
+	                    //    dstSimd(rc) = Traits::load_from(&srcRef(rc)); // SIMD load
 	                    //}
 	                    else
 	                    {
-	                        auto b = ArrayIndexIterator{ref.view.mapping().extents(), ref.arrayIndex()};
+	                        auto b = ArrayIndexIterator{srcRef.view.mapping().extents(), srcRef.arrayIndex()};
 	                        for(auto i = 0; i < Traits::lanes; i++)
-	                            reinterpret_cast<FieldType*>(&simd(rc))[i]
-	                                = ref.view(*b++)(cat(typename T::BoundRecordCoord{}, rc)); // scalar loads
+	                            reinterpret_cast<FieldType*>(&dstSimd(rc))[i]
+	                                = srcRef.view(*b++)(cat(typename T::BoundRecordCoord{}, rc)); // scalar loads
 	                    }
 	                });
 	        }
-	        // unstructured simd and reference type
+	        // unstructured dstSimd and reference type
 	        else if constexpr(!isRecordRef<Simd> && !isRecordRef<T>)
 	        {
 	            LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-	            simd = SimdTraits<Simd>::loadUnaligned(&ref);
+	            dstSimd = SimdTraits<Simd>::loadUnaligned(&srcRef);
 	            LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
 	        }
 	        else
@@ -9316,12 +9316,12 @@ namespace llama::mapping
 	        }
 	    }
 
-	    /// Stores SIMD vectors of element data from the given simd into memory starting at the provided record reference.
-	    /// Only field tags occurring in RecordRef are stored. If Simd contains multiple fields of SIMD types, a SIMD
-	    /// vector will be stored for each of the fields. The number of elements stored per SIMD vector depends on the
+	    /// Stores SIMD vectors of element data from the given srcSimd into memory starting at the provided record
+	    /// reference. Only field tags occurring in RecordRef are stored. If Simd contains multiple fields of SIMD types, a
+	    /// SIMD vector will be stored for each of the fields. The number of elements stored per SIMD vector depends on the
 	    /// SIMD width of the vector. Simd is allowed to have different vector lengths per element.
-	    template<typename T, typename Simd>
-	    LLAMA_FN_HOST_ACC_INLINE void storeSimd(T&& ref, const Simd simd)
+	    template<typename Simd, typename T>
+	    LLAMA_FN_HOST_ACC_INLINE void storeSimd(const Simd& srcSimd, T&& dstRef)
 	    {
 	        // structured Simd type and record reference
 	        if constexpr(isRecordRef<Simd> && isRecordRef<T>)
@@ -9331,32 +9331,32 @@ namespace llama::mapping
 	                [&](auto rc) LLAMA_LAMBDA_INLINE
 	                {
 	                    using FieldType = GetType<RecordDim, decltype(rc)>;
-	                    using ElementSimd = std::decay_t<decltype(simd(rc))>;
+	                    using ElementSimd = std::decay_t<decltype(srcSimd(rc))>;
 	                    using Traits = SimdTraits<ElementSimd>;
 
-	                    // TODO(bgruber): can we generalize the logic whether we can store a simd to that mapping?
+	                    // TODO(bgruber): can we generalize the logic whether we can store a srcSimd to that mapping?
 	                    if constexpr(mapping::isSoA<typename T::View::Mapping>)
 	                    {
 	                        LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-	                        Traits::storeUnaligned(simd(rc), &ref(rc)); // SIMD store
+	                        Traits::storeUnaligned(srcSimd(rc), &dstRef(rc)); // SIMD store
 	                        LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
 	                    }
 	                    else
 	                    {
 	                        // TODO(bgruber): how does this generalize conceptually to 2D and higher dimensions? in which
 	                        // direction should we collect SIMD values?
-	                        auto b = ArrayIndexIterator{ref.view.mapping().extents(), ref.arrayIndex()};
+	                        auto b = ArrayIndexIterator{dstRef.view.mapping().extents(), dstRef.arrayIndex()};
 	                        for(auto i = 0; i < Traits::lanes; i++)
-	                            ref.view (*b++)(cat(typename T::BoundRecordCoord{}, rc))
-	                                = reinterpret_cast<const FieldType*>(&simd(rc))[i]; // scalar store
+	                            dstRef.view (*b++)(cat(typename T::BoundRecordCoord{}, rc))
+	                                = reinterpret_cast<const FieldType*>(&srcSimd(rc))[i]; // scalar store
 	                    }
 	                });
 	        }
-	        // unstructured simd and reference type
+	        // unstructured srcSimd and reference type
 	        else if constexpr(!isRecordRef<Simd> && !isRecordRef<T>)
 	        {
 	            LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-	            SimdTraits<Simd>::storeUnaligned(simd, &ref);
+	            SimdTraits<Simd>::storeUnaligned(srcSimd, &dstRef);
 	            LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
 	        }
 	        else
@@ -9382,11 +9382,11 @@ namespace llama::mapping
 	        while(i + IndexType{N} <= total)
 	        {
 	            SimdN<typename View::RecordDim, N, MakeSizedSimd> simd;
-	            loadSimd(simd, *it);
+	            loadSimd(*it, simd);
 	            if constexpr(std::is_void_v<decltype(f(simd))>)
 	                f(simd);
 	            else
-	                storeSimd(*it, f(simd));
+	                storeSimd(f(simd), *it);
 	            i += IndexType{N};
 	            it += IndexType{N};
 	        }
