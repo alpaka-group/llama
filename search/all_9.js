@@ -46,7 +46,7 @@ var searchData=
   ['loadas_332',['loadAs',['../structllama_1_1RecordRef.html#a9bc0da67e993fb64667e84e9a4efd36c',1,'llama::RecordRef::loadAs() -&gt; TupleLike'],['../structllama_1_1RecordRef.html#abd56de3b1bc2549540a41e80f28bfcd7',1,'llama::RecordRef::loadAs() const -&gt; TupleLike']]],
   ['loader_333',['Loader',['../structllama_1_1RecordRef_1_1Loader.html',1,'llama::RecordRef']]],
   ['loaderconst_334',['LoaderConst',['../structllama_1_1RecordRef_1_1LoaderConst.html',1,'llama::RecordRef']]],
-  ['loadsimd_335',['loadSimd',['../structllama_1_1RecordRef.html#a102b18375a13fc8273481e373153239e',1,'llama::RecordRef::loadSimd()'],['../namespacellama.html#a99fe9e7ce880f74526cec227cfb7c183',1,'llama::loadSimd()']]],
+  ['loadsimd_335',['loadSimd',['../structllama_1_1RecordRef.html#a2f5fd27cf5d2c87ec1112ebe45d3c590',1,'llama::RecordRef::loadSimd()'],['../namespacellama.html#a6060f4836e56bda4689232f0d22fecf8',1,'llama::loadSimd()']]],
   ['loadunaligned_336',['loadUnaligned',['../structllama_1_1SimdTraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__arithmetic__v_3_01T_01_4_01_4_01_4.html#ab5a7f0f2dd7e52aa220aad5256a477c6',1,'llama::SimdTraits&lt; T, std::enable_if_t&lt; std::is_arithmetic_v&lt; T &gt; &gt; &gt;']]],
   ['mapping_337',['mapping',['../namespacellama_1_1mapping.html',1,'llama']]],
   ['tree_338',['tree',['../namespacellama_1_1mapping_1_1tree.html',1,'llama::mapping']]]

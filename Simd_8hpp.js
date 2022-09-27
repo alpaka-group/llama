@@ -11,10 +11,10 @@ var Simd_8hpp =
     [ "SimdizeN", "Simd_8hpp.html#ab5050ae091b407bcd3adabb734f2aba0", null ],
     [ "SimdN", "Simd_8hpp.html#a145a8c9a7fd516bf596718949b7c4318", null ],
     [ "chooseSimdLanes", "Simd_8hpp.html#abb21e8bcb7c41613b7183a1beef1f600", null ],
-    [ "loadSimd", "Simd_8hpp.html#a99fe9e7ce880f74526cec227cfb7c183", null ],
+    [ "loadSimd", "Simd_8hpp.html#a6060f4836e56bda4689232f0d22fecf8", null ],
     [ "simdForEach", "Simd_8hpp.html#acebdbc18176bbf81e01c2b268665a94c", null ],
     [ "simdForEachN", "Simd_8hpp.html#a4451ec281eb037ebac7c08772ce0670f", null ],
-    [ "storeSimd", "Simd_8hpp.html#ad86abda3049fa5fcf6fe171e289bebd0", null ],
+    [ "storeSimd", "Simd_8hpp.html#a85e63e02c425ced774c87dfc1e3dda3d", null ],
     [ "simdLanes", "Simd_8hpp.html#a85e41b88e239189c88b2d895bfc2691e", null ],
     [ "simdLanesWithFullVectorsFor", "Simd_8hpp.html#a34f90853e28950fdd34ecf9696ae1f63", null ],
     [ "simdLanesWithLeastRegistersFor", "Simd_8hpp.html#ac902aa26f43ee2c8cceeb580a1df0c50", null ]

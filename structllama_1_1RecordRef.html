@@ -258,12 +258,12 @@ Friends</h2></td></tr>
 <tr class="separator:a03d19131b5936cfe7e9e8ab2f80ddd69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae2d91aa2202932f93e1bf2f014ca7437"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1RecordRef.html#ae2d91aa2202932f93e1bf2f014ca7437">swap</a> (std::conditional_t&lt; OwnView, <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> &amp;, <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> &gt; a, std::conditional_t&lt; OwnView, <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> &amp;, <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> &gt; b) noexcept</td></tr>
 <tr class="separator:ae2d91aa2202932f93e1bf2f014ca7437"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a102b18375a13fc8273481e373153239e"><td class="memTemplParams" colspan="2">template&lt;typename Simd , typename RecordRef &gt; </td></tr>
-<tr class="memitem:a102b18375a13fc8273481e373153239e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1RecordRef.html#a102b18375a13fc8273481e373153239e">loadSimd</a> (<a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a> &amp;simd, const <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> &amp;ref)</td></tr>
-<tr class="separator:a102b18375a13fc8273481e373153239e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab4687d4e51f8e11f326bf3f51b8445db"><td class="memTemplParams" colspan="2">template&lt;typename RecordRef , typename Simd &gt; </td></tr>
-<tr class="memitem:ab4687d4e51f8e11f326bf3f51b8445db"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1RecordRef.html#ab4687d4e51f8e11f326bf3f51b8445db">storeSimd</a> (<a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> &amp;&amp;ref, <a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a> simd)</td></tr>
-<tr class="separator:ab4687d4e51f8e11f326bf3f51b8445db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f5fd27cf5d2c87ec1112ebe45d3c590"><td class="memTemplParams" colspan="2">template&lt;typename T , typename Simd &gt; </td></tr>
+<tr class="memitem:a2f5fd27cf5d2c87ec1112ebe45d3c590"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1RecordRef.html#a2f5fd27cf5d2c87ec1112ebe45d3c590">loadSimd</a> (const T &amp;srcRef, <a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a> &amp;dstSimd)</td></tr>
+<tr class="separator:a2f5fd27cf5d2c87ec1112ebe45d3c590"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d14ff37e407416a6b4591ba56534950"><td class="memTemplParams" colspan="2">template&lt;typename Simd , typename T &gt; </td></tr>
+<tr class="memitem:a8d14ff37e407416a6b4591ba56534950"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1RecordRef.html#a8d14ff37e407416a6b4591ba56534950">storeSimd</a> (const <a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a> &amp;srcSimd, T &amp;&amp;dstRef)</td></tr>
+<tr class="separator:a8d14ff37e407416a6b4591ba56534950"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename TView, typename TBoundRecordCoord, bool OwnView&gt;<br />
@@ -1313,15 +1313,15 @@ template&lt;typename TupleLike &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Friends And Related Function Documentation</h2>
-<a id="a102b18375a13fc8273481e373153239e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a102b18375a13fc8273481e373153239e">&#9670;&nbsp;</a></span>loadSimd</h2>
+<a id="a2f5fd27cf5d2c87ec1112ebe45d3c590"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f5fd27cf5d2c87ec1112ebe45d3c590">&#9670;&nbsp;</a></span>loadSimd</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename TView , typename TBoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
-template&lt;typename Simd , typename RecordRef &gt; </div>
+template&lt;typename T , typename Simd &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1329,14 +1329,14 @@ template&lt;typename Simd , typename RecordRef &gt; </div>
         <tr>
           <td class="memname">void loadSimd </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a> &amp;&#160;</td>
-          <td class="paramname"><em>simd</em>, </td>
+          <td class="paramtype">const T &amp;&#160;</td>
+          <td class="paramname"><em>srcRef</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a>&lt; TView, TBoundRecordCoord, OwnView &gt; &amp;&#160;</td>
-          <td class="paramname"><em>ref</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a> &amp;&#160;</td>
+          <td class="paramname"><em>dstSimd</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1350,6 +1350,9 @@ template&lt;typename Simd , typename RecordRef &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Loads SIMD vectors of data starting from the given record reference to dstSimd. Only field tags occurring in <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> are loaded. If Simd contains multiple fields of SIMD types, a SIMD vector will be fetched for each of the fields. The number of elements fetched per SIMD vector depends on the SIMD width of the vector. Simd is allowed to have different vector lengths per element. </p>
+
+<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00174">174</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
 
 </div>
 </div>
@@ -2163,15 +2166,15 @@ template&lt;typename T , typename  = std::enable_if_t&lt;!isRecordRef&lt;T&gt;&g
 
 </div>
 </div>
-<a id="ab4687d4e51f8e11f326bf3f51b8445db"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab4687d4e51f8e11f326bf3f51b8445db">&#9670;&nbsp;</a></span>storeSimd</h2>
+<a id="a8d14ff37e407416a6b4591ba56534950"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d14ff37e407416a6b4591ba56534950">&#9670;&nbsp;</a></span>storeSimd</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename TView , typename TBoundRecordCoord , bool OwnView&gt; </div>
 <div class="memtemplate">
-template&lt;typename RecordRef , typename Simd &gt; </div>
+template&lt;typename Simd , typename T &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -2179,14 +2182,14 @@ template&lt;typename RecordRef , typename Simd &gt; </div>
         <tr>
           <td class="memname">void storeSimd </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structllama_1_1RecordRef.html">RecordRef</a>&lt; TView, TBoundRecordCoord, OwnView &gt; &amp;&amp;&#160;</td>
-          <td class="paramname"><em>ref</em>, </td>
+          <td class="paramtype">const <a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a> &amp;&#160;</td>
+          <td class="paramname"><em>srcSimd</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a>&#160;</td>
-          <td class="paramname"><em>simd</em>&#160;</td>
+          <td class="paramtype">T &amp;&amp;&#160;</td>
+          <td class="paramname"><em>dstRef</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -2200,6 +2203,9 @@ template&lt;typename RecordRef , typename Simd &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Stores SIMD vectors of element data from the given srcSimd into memory starting at the provided record reference. Only field tags occurring in <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> are stored. If Simd contains multiple fields of SIMD types, a SIMD vector will be stored for each of the fields. The number of elements stored per SIMD vector depends on the SIMD width of the vector. Simd is allowed to have different vector lengths per element. </p>
+
+<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00233">233</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
 
 </div>
 </div>
@@ -2252,7 +2258,7 @@ template&lt;typename TView , typename TBoundRecordCoord , bool OwnView&gt; </div
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="structllama_1_1RecordRef.html">RecordRef</a></li>
-    <li class="footer">Generated on Mon Sep 26 2022 20:07:49 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Tue Sep 27 2022 17:52:32 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

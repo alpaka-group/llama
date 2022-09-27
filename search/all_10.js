@@ -37,7 +37,7 @@ var searchData=
   ['storedintegralfor_549',['StoredIntegralFor',['../namespacellama_1_1mapping_1_1internal.html#afecc58173e68c27346d37cac01c045f2',1,'llama::mapping::internal']]],
   ['storedparentview_550',['StoredParentView',['../structllama_1_1VirtualView.html#a21144d5af8d33763e98fe2e1849cf9cf',1,'llama::VirtualView']]],
   ['storedunsignedfor_551',['StoredUnsignedFor',['../namespacellama_1_1mapping_1_1internal.html#a2bd577e3648ac7819c4773138b256344',1,'llama::mapping::internal']]],
-  ['storesimd_552',['storeSimd',['../structllama_1_1RecordRef.html#ab4687d4e51f8e11f326bf3f51b8445db',1,'llama::RecordRef::storeSimd()'],['../namespacellama.html#ad86abda3049fa5fcf6fe171e289bebd0',1,'llama::storeSimd()']]],
+  ['storesimd_552',['storeSimd',['../structllama_1_1RecordRef.html#a8d14ff37e407416a6b4591ba56534950',1,'llama::RecordRef::storeSimd()'],['../namespacellama.html#a85e63e02c425ced774c87dfc1e3dda3d',1,'llama::storeSimd()']]],
   ['storeunaligned_553',['storeUnaligned',['../structllama_1_1SimdTraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__arithmetic__v_3_01T_01_4_01_4_01_4.html#a67e2693738b7a12f3e262c534578afbe',1,'llama::SimdTraits&lt; T, std::enable_if_t&lt; std::is_arithmetic_v&lt; T &gt; &gt; &gt;']]],
   ['structname_554',['structName',['../namespacellama.html#a8def4cdbf850f818833a38d67e6ebf34',1,'llama']]],
   ['structname_2ehpp_555',['StructName.hpp',['../StructName_8hpp.html',1,'']]],

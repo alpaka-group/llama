@@ -393,12 +393,12 @@ Functions</h2></td></tr>
 <tr class="memitem:abb21e8bcb7c41613b7183a1beef1f600"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , template&lt; typename &gt; typename MakeSimd, typename BinaryReductionFunction &gt; </td></tr>
 <tr class="memitem:abb21e8bcb7c41613b7183a1beef1f600"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#abb21e8bcb7c41613b7183a1beef1f600">chooseSimdLanes</a> (BinaryReductionFunction reduce) -&gt; std::size_t</td></tr>
 <tr class="separator:abb21e8bcb7c41613b7183a1beef1f600"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a99fe9e7ce880f74526cec227cfb7c183"><td class="memTemplParams" colspan="2">template&lt;typename Simd , typename T &gt; </td></tr>
-<tr class="memitem:a99fe9e7ce880f74526cec227cfb7c183"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a99fe9e7ce880f74526cec227cfb7c183">loadSimd</a> (<a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a> &amp;simd, const T &amp;ref)</td></tr>
-<tr class="separator:a99fe9e7ce880f74526cec227cfb7c183"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad86abda3049fa5fcf6fe171e289bebd0"><td class="memTemplParams" colspan="2">template&lt;typename T , typename Simd &gt; </td></tr>
-<tr class="memitem:ad86abda3049fa5fcf6fe171e289bebd0"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ad86abda3049fa5fcf6fe171e289bebd0">storeSimd</a> (T &amp;&amp;ref, const <a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a> simd)</td></tr>
-<tr class="separator:ad86abda3049fa5fcf6fe171e289bebd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6060f4836e56bda4689232f0d22fecf8"><td class="memTemplParams" colspan="2">template&lt;typename T , typename Simd &gt; </td></tr>
+<tr class="memitem:a6060f4836e56bda4689232f0d22fecf8"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a6060f4836e56bda4689232f0d22fecf8">loadSimd</a> (const T &amp;srcRef, <a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a> &amp;dstSimd)</td></tr>
+<tr class="separator:a6060f4836e56bda4689232f0d22fecf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85e63e02c425ced774c87dfc1e3dda3d"><td class="memTemplParams" colspan="2">template&lt;typename Simd , typename T &gt; </td></tr>
+<tr class="memitem:a85e63e02c425ced774c87dfc1e3dda3d"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a85e63e02c425ced774c87dfc1e3dda3d">storeSimd</a> (const <a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a> &amp;srcSimd, T &amp;&amp;dstRef)</td></tr>
+<tr class="separator:a85e63e02c425ced774c87dfc1e3dda3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4451ec281eb037ebac7c08772ce0670f"><td class="memTemplParams" colspan="2">template&lt;std::size_t N, template&lt; typename, auto &gt; typename MakeSizedSimd, typename View , typename UnarySimdFunction &gt; </td></tr>
 <tr class="memitem:a4451ec281eb037ebac7c08772ce0670f"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a4451ec281eb037ebac7c08772ce0670f">simdForEachN</a> (<a class="el" href="structllama_1_1View.html">View</a> &amp;view, UnarySimdFunction f)</td></tr>
 <tr class="separator:a4451ec281eb037ebac7c08772ce0670f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1976,13 +1976,13 @@ template&lt;std::size_t I, typename... Elements&gt; </div>
 
 </div>
 </div>
-<a id="a99fe9e7ce880f74526cec227cfb7c183"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a99fe9e7ce880f74526cec227cfb7c183">&#9670;&nbsp;</a></span>loadSimd()</h2>
+<a id="a6060f4836e56bda4689232f0d22fecf8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6060f4836e56bda4689232f0d22fecf8">&#9670;&nbsp;</a></span>loadSimd()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Simd , typename T &gt; </div>
+template&lt;typename T , typename Simd &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1990,14 +1990,14 @@ template&lt;typename Simd , typename T &gt; </div>
         <tr>
           <td class="memname">void llama::loadSimd </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a> &amp;&#160;</td>
-          <td class="paramname"><em>simd</em>, </td>
+          <td class="paramtype">const T &amp;&#160;</td>
+          <td class="paramname"><em>srcRef</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const T &amp;&#160;</td>
-          <td class="paramname"><em>ref</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a> &amp;&#160;</td>
+          <td class="paramname"><em>dstSimd</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -2011,7 +2011,7 @@ template&lt;typename Simd , typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Loads SIMD vectors of data starting from the given record reference to simd. Only field tags occurring in <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> are loaded. If Simd contains multiple fields of SIMD types, a SIMD vector will be fetched for each of the fields. The number of elements fetched per SIMD vector depends on the SIMD width of the vector. Simd is allowed to have different vector lengths per element. </p>
+<p>Loads SIMD vectors of data starting from the given record reference to dstSimd. Only field tags occurring in <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> are loaded. If Simd contains multiple fields of SIMD types, a SIMD vector will be fetched for each of the fields. The number of elements fetched per SIMD vector depends on the SIMD width of the vector. Simd is allowed to have different vector lengths per element. </p>
 
 <p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00174">174</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
 
@@ -3128,13 +3128,13 @@ template&lt;std::size_t N, template&lt; typename, auto &gt; typename MakeSizedSi
 
 </div>
 </div>
-<a id="ad86abda3049fa5fcf6fe171e289bebd0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad86abda3049fa5fcf6fe171e289bebd0">&#9670;&nbsp;</a></span>storeSimd()</h2>
+<a id="a85e63e02c425ced774c87dfc1e3dda3d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a85e63e02c425ced774c87dfc1e3dda3d">&#9670;&nbsp;</a></span>storeSimd()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T , typename Simd &gt; </div>
+template&lt;typename Simd , typename T &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -3142,14 +3142,14 @@ template&lt;typename T , typename Simd &gt; </div>
         <tr>
           <td class="memname">void llama::storeSimd </td>
           <td>(</td>
-          <td class="paramtype">T &amp;&amp;&#160;</td>
-          <td class="paramname"><em>ref</em>, </td>
+          <td class="paramtype">const <a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a> &amp;&#160;</td>
+          <td class="paramname"><em>srcSimd</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a>&#160;</td>
-          <td class="paramname"><em>simd</em>&#160;</td>
+          <td class="paramtype">T &amp;&amp;&#160;</td>
+          <td class="paramname"><em>dstRef</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -3163,7 +3163,7 @@ template&lt;typename T , typename Simd &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Stores SIMD vectors of element data from the given simd into memory starting at the provided record reference. Only field tags occurring in <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> are stored. If Simd contains multiple fields of SIMD types, a SIMD vector will be stored for each of the fields. The number of elements stored per SIMD vector depends on the SIMD width of the vector. Simd is allowed to have different vector lengths per element. </p>
+<p>Stores SIMD vectors of element data from the given srcSimd into memory starting at the provided record reference. Only field tags occurring in <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> are stored. If Simd contains multiple fields of SIMD types, a SIMD vector will be stored for each of the fields. The number of elements stored per SIMD vector depends on the SIMD width of the vector. Simd is allowed to have different vector lengths per element. </p>
 
 <p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00233">233</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
 
@@ -4516,7 +4516,7 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Mon Sep 26 2022 20:07:49 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Tue Sep 27 2022 17:52:32 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
