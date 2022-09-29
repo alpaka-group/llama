@@ -6,6 +6,7 @@
 #    include "ArrayIndexRange.hpp"
 #    include "Core.hpp"
 #    include "StructName.hpp"
+#    include "View.hpp"
 
 #    include <boost/functional/hash.hpp>
 #    include <fmt/format.h>
