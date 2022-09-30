@@ -12,8 +12,7 @@ concurrency:
 env:
   THREADS: 4
   CONFIG: RelWithDebInfo
-  ALPAKA_BRANCH: 0.9.0
-  VCPKG_INSTALL: "vcpkg install fmt tinyobjloader boost-mp11 boost-atomic boost-smart-ptr boost-functional boost-container catch2; until vcpkg install --head xsimd; do echo 'Retrying'; done"
+  VCPKG_INSTALL: "vcpkg install alpaka fmt tinyobjloader boost-mp11 boost-atomic boost-smart-ptr boost-functional boost-container catch2; until vcpkg install --head xsimd; do echo 'Retrying'; done"
 
 jobs:
   clang-format:
@@ -38,13 +37,6 @@ jobs:
     - name: vcpkg install dependencies
       run: |
         eval $VCPKG_INSTALL
-    - name: install alpaka
-      run: |
-        git clone --branch $ALPAKA_BRANCH --depth 1 https://github.com/alpaka-group/alpaka.git
-        mkdir alpaka/build
-        cd alpaka/build
-        cmake .. -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
-        sudo cmake --install .
     - name: cmake
       run: |
         mkdir build
@@ -232,14 +224,6 @@ jobs:
         if: matrix.cuda_url
         run: |
           sudo sh cuda_installer.run --silent --toolkit --override
-      - name: install alpaka
-        run: |
-          if [ ${{ matrix.install_oneapi }} ]; then source /opt/intel/oneapi/setvars.sh; fi
-          git clone --branch $ALPAKA_BRANCH --depth 1 https://github.com/alpaka-group/alpaka.git
-          mkdir alpaka/build
-          cd alpaka/build
-          cmake .. -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
-          sudo cmake --install .
       - name: cmake
         run: |
           if [ ${{ matrix.install_oneapi }} ]; then source /opt/intel/oneapi/setvars.sh; fi
@@ -299,13 +283,6 @@ jobs:
     - name: vcpkg install dependencies
       run: |
         eval $VCPKG_INSTALL
-    - name: install alpaka
-      run: |
-        git clone --branch $ALPAKA_BRANCH --depth 1 https://github.com/alpaka-group/alpaka.git
-        mkdir alpaka/build
-        cd alpaka/build
-        cmake .. -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
-        cmake --install . --config $CONFIG
     - name: cmake
       run: |
         mkdir build
@@ -339,13 +316,6 @@ jobs:
       - name: vcpkg install dependencies
         run: |
           eval $VCPKG_INSTALL
-      - name: install alpaka
-        run: |
-          git clone --branch $ALPAKA_BRANCH --depth 1 https://github.com/alpaka-group/alpaka.git
-          mkdir alpaka/build
-          cd alpaka/build
-          cmake .. -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
-          sudo cmake --build . --target install
       - name: cmake
         run: |
           mkdir build
