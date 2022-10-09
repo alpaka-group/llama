@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <string_view>
+#include <vector>
 
 namespace
 {
@@ -33,6 +34,60 @@ namespace
             particles(i)(tag::Pos{}) += particles(i)(tag::Vel{}) * timestep;
     }
 
+    template<typename View>
+    auto blockHitsSpan(View view, int i)
+    {
+        const auto* p = view.mapping().blockHits(i, view.storageBlobs);
+        const auto size = view.mapping().blockHitsSize(i);
+        return std::vector(p, p + size);
+    }
+} // namespace
+
+TEST_CASE("Heatmap.simple")
+{
+    auto mapping = llama::mapping::AlignedAoS<llama::ArrayExtents<std::size_t, 2>, Vec3I>{};
+    auto view = llama::allocViewUninitialized(
+        llama::mapping::Heatmap<decltype(mapping)>{mapping}); // we rely on the vector allocator's zero initialization
+    auto& hmap = view.mapping();
+
+    CHECK(hmap.blobCount == 2);
+    CHECK(hmap.blobSize(0) == 2 * sizeof(int) * 3);
+    CHECK(hmap.blobSize(1) == 2 * sizeof(int) * 3 * sizeof(std::size_t));
+
+    view(0)(tag::Y{}) = 42;
+    view(1)(tag::X{}) = 43;
+
+    CHECK(blockHitsSpan(view, 0) == std::vector<std::size_t>{0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0,
+                                                             1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0});
+
+    std::stringstream ss;
+    hmap.writeGnuplotDataFile(view.storageBlobs, ss, 24);
+    CHECK(ss.str() == "0 0 0 0 1 1 1 1 0 0 0 0 1 1 1 1 0 0 0 0 0 0 0 0\n\n");
+}
+
+TEST_CASE("Heatmap.perInt")
+{
+    auto mapping = llama::mapping::AlignedAoS<llama::ArrayExtents<std::size_t, 2>, Vec3I>{};
+    auto view = llama::allocViewUninitialized(llama::mapping::Heatmap<decltype(mapping), sizeof(int)>{
+        mapping}); // we rely on the vector allocator's zero initialization
+    auto& hmap = view.mapping();
+
+    CHECK(hmap.blobCount == 2);
+    CHECK(hmap.blobSize(0) == 2 * sizeof(int) * 3);
+    CHECK(hmap.blobSize(1) == 2 * sizeof(int) * 3 * sizeof(std::size_t) / sizeof(int));
+
+    view(0)(tag::Y{}) = 42;
+    view(1)(tag::X{}) = 43;
+
+    CHECK(blockHitsSpan(view, 0) == std::vector<std::size_t>{0, 1, 0, 1, 0, 0});
+
+    std::stringstream ss;
+    hmap.writeGnuplotDataFile(view.storageBlobs, ss, 6);
+    CHECK(ss.str() == "0 1 0 1 0 0\n\n");
+}
+
+namespace
+{
     extern std::string_view heatmapAlignedAoS;
     extern std::string_view heatmapSingleBlobSoA;
 } // namespace
@@ -41,12 +96,14 @@ TEST_CASE("Heatmap.nbody")
 {
     auto run = [&](const std::string& name, std::string_view expectedScript, auto mapping)
     {
-        auto particles = llama::allocView(llama::mapping::Heatmap{mapping});
+        auto particles = llama::allocView(
+            llama::mapping::Heatmap{mapping}); // we rely on the vector allocator's zero initialization
         updateAndMove(particles);
+        std::ofstream{"plot_heatmap.sh"} << particles.mapping().gnuplotScript;
         std::stringstream ss;
-        ss << particles.mapping().toGnuplotScript();
+        particles.mapping().writeGnuplotDataFile(particles.storageBlobs, ss);
         const auto script = ss.str();
-        std::ofstream{"Heatmap." + name + ".sh"} << script;
+        std::ofstream{"heatmap." + name + ".dat"} << script;
         CHECK(script == expectedScript);
     };
     run("AlignedAoS",
@@ -80,30 +137,31 @@ TEMPLATE_LIST_TEST_CASE("Trace.nbody.mem_locs_computed", "", SizeTypes)
 {
     auto run = [&](auto mapping)
     {
-        auto particles = llama::allocView(llama::mapping::Trace<decltype(mapping), TestType, false>{mapping});
+        auto particles = llama::allocView(
+            llama::mapping::Trace<decltype(mapping), TestType, false>{mapping}); // view initialization also writes!
         updateAndMove(particles);
         auto& hits = particles.mapping().fieldHits(particles.storageBlobs);
         CHECK(hits.size() == 7);
-        CHECK(hits[0].memLocsComputed == 10300);
-        CHECK(hits[1].memLocsComputed == 10300);
-        CHECK(hits[2].memLocsComputed == 10300);
-        CHECK(hits[3].memLocsComputed == 300);
-        CHECK(hits[4].memLocsComputed == 300);
-        CHECK(hits[5].memLocsComputed == 300);
-        CHECK(hits[6].memLocsComputed == 10200);
+        CHECK(hits[0].memLocsComputed == 10400);
+        CHECK(hits[1].memLocsComputed == 10400);
+        CHECK(hits[2].memLocsComputed == 10400);
+        CHECK(hits[3].memLocsComputed == 400);
+        CHECK(hits[4].memLocsComputed == 400);
+        CHECK(hits[5].memLocsComputed == 400);
+        CHECK(hits[6].memLocsComputed == 10300);
 
         std::stringstream buffer;
         std::streambuf* old = std::cout.rdbuf(buffer.rdbuf());
         particles.mapping().printFieldHits(particles.storageBlobs);
         std::cout.rdbuf(old);
         CHECK(buffer.str() == R"(Field      Mlocs comp
-Pos.X           10300
-Pos.Y           10300
-Pos.Z           10300
-Vel.X             300
-Vel.Y             300
-Vel.Z             300
-Mass            10200
+Pos.X           10400
+Pos.Y           10400
+Pos.Z           10400
+Vel.X             400
+Vel.Y             400
+Vel.Z             400
+Mass            10300
 )");
     };
     run(llama::mapping::AlignedAoS<llama::ArrayExtents<std::size_t, n>, ParticleHeatmap>{});
@@ -114,7 +172,8 @@ TEMPLATE_LIST_TEST_CASE("Trace.nbody.reads_writes", "", SizeTypes)
 {
     auto run = [&](auto mapping)
     {
-        auto particles = llama::allocView(llama::mapping::Trace<decltype(mapping), TestType>{mapping});
+        auto particles = llama::allocView(
+            llama::mapping::Trace<decltype(mapping), TestType>{mapping}); // view initialization also writes!
         updateAndMove(particles);
         auto& hits = particles.mapping().fieldHits(particles.storageBlobs);
         CHECK(hits.size() == 7);
@@ -125,26 +184,26 @@ TEMPLATE_LIST_TEST_CASE("Trace.nbody.reads_writes", "", SizeTypes)
         CHECK(hits[4].reads == 200);
         CHECK(hits[5].reads == 200);
         CHECK(hits[6].reads == 10100);
-        CHECK(hits[0].writes == 200);
-        CHECK(hits[1].writes == 200);
-        CHECK(hits[2].writes == 200);
-        CHECK(hits[3].writes == 100);
-        CHECK(hits[4].writes == 100);
-        CHECK(hits[5].writes == 100);
-        CHECK(hits[6].writes == 100);
+        CHECK(hits[0].writes == 300);
+        CHECK(hits[1].writes == 300);
+        CHECK(hits[2].writes == 300);
+        CHECK(hits[3].writes == 200);
+        CHECK(hits[4].writes == 200);
+        CHECK(hits[5].writes == 200);
+        CHECK(hits[6].writes == 200);
 
         std::stringstream buffer;
         std::streambuf* old = std::cout.rdbuf(buffer.rdbuf());
         particles.mapping().printFieldHits(particles.storageBlobs);
         std::cout.rdbuf(old);
         CHECK(buffer.str() == R"(Field           Reads     Writes
-Pos.X           10200        200
-Pos.Y           10200        200
-Pos.Z           10200        200
-Vel.X             200        100
-Vel.Y             200        100
-Vel.Z             200        100
-Mass            10100        100
+Pos.X           10200        300
+Pos.Y           10200        300
+Pos.Z           10200        300
+Vel.X             200        200
+Vel.Y             200        200
+Vel.Z             200        200
+Mass            10100        200
 )");
     };
     run(llama::mapping::AlignedAoS<llama::ArrayExtents<std::size_t, n>, ParticleHeatmap>{});
@@ -172,9 +231,8 @@ TEST_CASE("Trace.assign_ref_to_ref")
 namespace
 {
     // note: string literal is broken into 2, because MSVC limits string literals to 16k chars
-    std::string_view heatmapAlignedAoS = R"(#!/usr/bin/gnuplot -p
-$data << EOD
-104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 103 103 103 103 0 0 0 0 104 104 104 104 104 104 104 104
+    std::string_view heatmapAlignedAoS
+        = R"(104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 103 103 103 103 0 0 0 0 104 104 104 104 104 104 104 104
 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 103 103 103 103 0 0 0 0 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104
 104 104 104 104 104 104 104 104 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 103 103 103 103 0 0 0 0 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104
 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 103 103 103 103 0 0 0 0 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 4 4 4 4 4 4 4 4
@@ -216,7 +274,7 @@ $data << EOD
 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 103 103 103 103 0 0 0 0 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4
 4 4 4 4 4 4 4 4 103 103 103 103 0 0 0 0 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4
 103 103 103 103 0 0 0 0 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 103 103 103 103 0 0 0 0)"
-                                         R"(
+          R"(
 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 103 103 103 103 0 0 0 0 104 104 104 104 104 104 104 104
 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 103 103 103 103 0 0 0 0 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104
 104 104 104 104 104 104 104 104 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 103 103 103 103 0 0 0 0 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104
@@ -263,20 +321,10 @@ $data << EOD
 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 103 103 103 103 0 0 0 0 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104
 104 104 104 104 104 104 104 104 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 103 103 103 103 0 0 0 0 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104
 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 103 103 103 103 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
-EOD
-set view map
-set xtics format ""
-set x2tics autofreq 8
-set yrange [] reverse
-set link x2; set link y2
-set ylabel "Cacheline"
-set x2label "Byte"
-plot $data matrix with image pixels axes x2y1
 )";
 
-    std::string_view heatmapSingleBlobSoA = R"(#!/usr/bin/gnuplot -p
-$data << EOD
-104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104
+    std::string_view heatmapSingleBlobSoA
+        = R"(104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104
 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104
 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104
 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104
@@ -314,7 +362,7 @@ $data << EOD
 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104
 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104
 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 104 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4)"
-                                            R"(
+          R"(
 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4
 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4
 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4
@@ -359,14 +407,5 @@ $data << EOD
 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103
 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103
 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 103 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
-EOD
-set view map
-set xtics format ""
-set x2tics autofreq 8
-set yrange [] reverse
-set link x2; set link y2
-set ylabel "Cacheline"
-set x2label "Byte"
-plot $data matrix with image pixels axes x2y1
 )";
 } // namespace

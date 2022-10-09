@@ -5,7 +5,11 @@
 
 #include "../Core.hpp"
 
+#include <atomic>
 #include <climits>
+#ifndef __cpp_lib_atomic_ref
+#    include <boost/atomic/atomic_ref.hpp>
+#endif
 
 namespace llama::mapping
 {
@@ -227,4 +231,21 @@ namespace llama::mapping
     /// Flattens and sorts the record dimension by the alignment of its fields to minimize padding.
     template<typename RecordDim>
     using FlattenRecordDimMinimizePadding = FlattenRecordDimIncreasingAlignment<RecordDim>;
+
+    namespace internal
+    {
+        template<typename CountType>
+        LLAMA_FN_HOST_ACC_INLINE void atomicInc(CountType& i)
+        {
+#ifdef __CUDA_ARCH__
+            // if you get an error here that there is no overload of atomicAdd, your CMAKE_CUDA_ARCHITECTURE might be
+            // too low or you need to use a smaller CountType for the Trace or Heatmap mapping.
+            atomicAdd(&i, CountType{1});
+#elif defined(__cpp_lib_atomic_ref)
+            ++std::atomic_ref<CountType>{i};
+#else
+            ++boost::atomic_ref<CountType>{i};
+#endif
+        }
+    } // namespace internal
 } // namespace llama::mapping
