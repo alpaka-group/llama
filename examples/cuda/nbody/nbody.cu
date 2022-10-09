@@ -17,6 +17,7 @@ constexpr auto steps = 5; ///< number of steps to calculate
 constexpr auto allowRsqrt = true; // rsqrt can be way faster, but less accurate
 constexpr auto runUpate = true; // run update step. Useful to disable for benchmarking the move step.
 constexpr auto trace = false;
+constexpr auto heatmap = false;
 
 constexpr auto sharedElementsPerBlock = 512;
 constexpr auto threadsPerBlock = 256;
@@ -26,11 +27,15 @@ constexpr auto aosoaLanes = 32; // coalesced memory access
 static_assert(problemSize % sharedElementsPerBlock == 0);
 static_assert(sharedElementsPerBlock % threadsPerBlock == 0);
 
+static_assert(!trace || !heatmap, "Cannot turn on Trace and Heatmap at the same time");
+
 constexpr auto timestep = FP{0.0001};
 constexpr auto eps2 = FP{0.01};
 
-#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ <= 600
-static_assert(!trace, "Since tracing is enabled, this example needs compute capability >= 60 for 64bit atomics");
+#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ < 600
+static_assert(
+    !trace && !heatmap,
+    "Since tracing/heatmap is enabled, this example needs compute capability >= 60 for 64bit atomics");
 #endif
 using CountType = unsigned long long int;
 
@@ -211,6 +216,8 @@ try
     {
         if constexpr(trace)
             return llama::mapping::Trace<std::decay_t<decltype(mapping)>, CountType>{mapping};
+        else if constexpr(heatmap)
+            return llama::mapping::Heatmap<std::decay_t<decltype(mapping)>, 1, CountType>{mapping};
         else
             return mapping;
     }();
@@ -257,13 +264,19 @@ try
     };
 
     start();
-    const auto blobs = hostView.storageBlobs.size();
+    const auto blobs = hostView.storageBlobs.size() / (heatmap ? 2 : 1); // exclude heatmap blobs
     for(std::size_t i = 0; i < blobs; i++)
         checkError(cudaMemcpy(
             &accView.storageBlobs[i][0],
             &hostView.storageBlobs[i][0],
             hostView.mapping().blobSize(i),
             cudaMemcpyHostToDevice));
+    if constexpr(heatmap)
+    {
+        auto& hmap = accView.mapping();
+        for(std::size_t i = 0; i < blobs; i++)
+            cudaMemsetAsync(hmap.blockHits(i, accView.storageBlobs), 0, hmap.blockHitsSize(i) * sizeof(CountType));
+    }
     std::cout << "copy H->D " << stop() << " s\n";
 
     const auto blocks = problemSize / threadsPerBlock;
@@ -293,7 +306,7 @@ try
     plotFile << std::quoted(title) << "\t" << sumUpdate / steps << '\t' << sumMove / steps << '\n';
 
     start();
-    for(std::size_t i = 0; i < blobs; i++)
+    for(std::size_t i = 0; i < hostView.storageBlobs.size(); i++)
         checkError(cudaMemcpy(
             &hostView.storageBlobs[i][0],
             &accView.storageBlobs[i][0],
@@ -302,7 +315,20 @@ try
     std::cout << "copy D->H " << stop() << " s\n";
 
     if constexpr(trace)
+    {
         hostView.mapping().printFieldHits(hostView.storageBlobs);
+    }
+    else if constexpr(heatmap)
+    {
+        auto titleCopy = title;
+        for(char& c : titleCopy)
+            if(c == ' ')
+                c = '_';
+        std::ofstream{"plot_heatmap.sh"} << hostView.mapping().gnuplotScript;
+        hostView.mapping().writeGnuplotDataFile(
+            hostView.storageBlobs,
+            std::ofstream{"cuda_nbody_heatmap_" + titleCopy + ".dat"});
+    }
 
     checkError(cudaEventDestroy(startEvent));
     checkError(cudaEventDestroy(stopEvent));

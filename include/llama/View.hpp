@@ -75,7 +75,8 @@ namespace llama
     template<typename Mapping, typename RecordCoord>
     inline constexpr bool isComputed = internal::IsComputed<Mapping, RecordCoord>::value;
 
-    /// Runs the constructor of all fields reachable through the given view. Computed fields are not constructed.
+    /// Runs the constructor of all fields reachable through the given view. Computed fields are constructed if they
+    /// return l-value references. If the mapping is a computed
     template<typename Mapping, typename BlobType>
     LLAMA_FN_HOST_ACC_INLINE void constructFields(View<Mapping, BlobType>& view)
     {
@@ -86,16 +87,36 @@ namespace llama
             [&]([[maybe_unused]] typename View::ArrayIndex ai)
             {
                 if constexpr(isRecord<RecordDim> || internal::IsBoundedArray<RecordDim>::value)
+                {
                     forEachLeafCoord<RecordDim>(
                         [&](auto rc)
                         {
-                            // TODO(bgruber): we could initialize computed fields if we can write to those. We could
-                            // test if the returned value can be cast to a T& and then attempt to write.
-                            if constexpr(!isComputed<Mapping, decltype(rc)>)
-                                new(&view(ai)(rc)) GetType<RecordDim, decltype(rc)>;
+                            using FieldType = GetType<RecordDim, decltype(rc)>;
+                            using RefType = decltype(view(ai)(rc));
+                            // this handles physical and computed mappings
+                            if constexpr(std::is_lvalue_reference_v<RefType>)
+                            {
+                                new(&view(ai)(rc)) FieldType;
+                            }
+                            else if constexpr(isProxyReference<RefType>)
+                            {
+                                view(ai)(rc) = FieldType{};
+                            }
                         });
-                else if constexpr(!isComputed<Mapping, RecordCoord<>>)
-                    new(&view(ai)) RecordDim;
+                }
+                else
+                {
+                    // this handles physical and computed mappings
+                    using RefType = decltype(view(ai));
+                    if constexpr(std::is_lvalue_reference_v<RefType>)
+                    {
+                        new(&view(ai)) RecordDim;
+                    }
+                    else if constexpr(isProxyReference<RefType>)
+                    {
+                        view(ai) = RecordDim{};
+                    }
+                }
             });
     }
 

@@ -27,7 +27,7 @@ TEMPLATE_LIST_TEST_CASE("mapping.concepts", "", SizeTypes)
 
     using Inner = llama::mapping::AlignedAoS<llama::ArrayExtentsDynamic<TestType, 2>, Particle>;
     STATIC_REQUIRE(llama::FullyComputedMapping<llama::mapping::Trace<Inner>>);
-    STATIC_REQUIRE(llama::PhysicalMapping<llama::mapping::Heatmap<Inner>>);
+    STATIC_REQUIRE(llama::FullyComputedMapping<llama::mapping::Heatmap<Inner>>);
 
 #    ifndef __NVCOMPILER
     STATIC_REQUIRE(
