@@ -3,6 +3,7 @@
 #include "Core.hpp"
 #include "RecordRef.hpp"
 #include "macros.hpp"
+#include "mapping/AoS.hpp"
 #include "mapping/SoA.hpp"
 
 #include <type_traits>
@@ -166,6 +167,98 @@ namespace llama
         return simdLanes<FirstFieldType>;
     }();
 
+    namespace internal
+    {
+        template<typename T, typename Simd, typename RecordCoord>
+        LLAMA_FN_HOST_ACC_INLINE void loadSimdRecord(const T& srcRef, Simd& dstSimd, RecordCoord rc)
+        {
+            using RecordDim = typename T::AccessibleRecordDim;
+            using FieldType = GetType<RecordDim, decltype(rc)>;
+            using ElementSimd = std::decay_t<decltype(dstSimd(rc))>;
+            using Traits = SimdTraits<ElementSimd>;
+
+            // TODO(bgruber): can we generalize the logic whether we can load a dstSimd from that mapping?
+            using Mapping = typename T::View::Mapping;
+            if constexpr(mapping::isSoA<Mapping>)
+            {
+                LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
+                dstSimd(rc) = Traits::loadUnaligned(&srcRef(rc)); // SIMD load
+                LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
+            }
+            // else if constexpr(mapping::isAoSoA<typename T::View::Mapping>)
+            //{
+            //    // it turns out we do not need the specialization, because clang already fuses the scalar
+            //    loads
+            //    // into a vector load :D
+            //    assert(srcRef.arrayDimsCoord()[0] % SIMD_WIDTH == 0);
+            //    // if(srcRef.arrayDimsCoord()[0] % SIMD_WIDTH != 0)
+            //    //    __builtin_unreachable(); // this also helps nothing
+            //    //__builtin_assume(srcRef.arrayDimsCoord()[0] % SIMD_WIDTH == 0);  // this also helps nothing
+            //    dstSimd(rc) = Traits::load_from(&srcRef(rc)); // SIMD load
+            //}
+            else if constexpr(mapping::isAoS<Mapping>)
+            {
+                static_assert(mapping::isAoS<Mapping>);
+                constexpr static auto srcStride
+                    = flatSizeOf<typename Mapping::Flattener::FlatRecordDim, Mapping::alignAndPad>;
+                const auto* srcBaseAddr = reinterpret_cast<const std::byte*>(&srcRef(rc));
+                ElementSimd elemSimd; // g++-12 really needs the intermediate elemSimd and memcpy
+                for(auto i = 0; i < Traits::lanes; i++)
+                    reinterpret_cast<FieldType*>(&elemSimd)[i]
+                        = *reinterpret_cast<const FieldType*>(srcBaseAddr + i * srcStride);
+                std::memcpy(&dstSimd(rc), &elemSimd, sizeof(elemSimd));
+            }
+            else
+            {
+                auto b = ArrayIndexIterator{srcRef.view.mapping().extents(), srcRef.arrayIndex()};
+                ElementSimd elemSimd; // g++-12 really needs the intermediate elemSimd and memcpy
+                for(auto i = 0; i < Traits::lanes; i++)
+                    reinterpret_cast<FieldType*>(&elemSimd)[i]
+                        = srcRef.view(*b++)(cat(typename T::BoundRecordCoord{}, rc)); // scalar loads
+                std::memcpy(&dstSimd(rc), &elemSimd, sizeof(elemSimd));
+            }
+        }
+
+        template<typename Simd, typename TFwd, typename RecordCoord>
+        LLAMA_FN_HOST_ACC_INLINE void storeSimdRecord(const Simd& srcSimd, TFwd&& dstRef, RecordCoord rc)
+        {
+            using T = std::remove_reference_t<TFwd>;
+            using RecordDim = typename T::AccessibleRecordDim;
+            using FieldType = GetType<RecordDim, decltype(rc)>;
+            using ElementSimd = std::decay_t<decltype(srcSimd(rc))>;
+            using Traits = SimdTraits<ElementSimd>;
+
+            // TODO(bgruber): can we generalize the logic whether we can store a srcSimd to that mapping?
+            using Mapping = typename std::remove_reference_t<T>::View::Mapping;
+            if constexpr(mapping::isSoA<Mapping>)
+            {
+                LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
+                Traits::storeUnaligned(srcSimd(rc), &dstRef(rc)); // SIMD store
+                LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
+            }
+            else if constexpr(mapping::isAoS<Mapping>)
+            {
+                constexpr static auto stride
+                    = flatSizeOf<typename Mapping::Flattener::FlatRecordDim, Mapping::alignAndPad>;
+                auto* dstBaseAddr = reinterpret_cast<std::byte*>(&dstRef(rc));
+                const ElementSimd elemSimd = srcSimd(rc);
+                for(auto i = 0; i < Traits::lanes; i++)
+                    *reinterpret_cast<FieldType*>(dstBaseAddr + i * stride)
+                        = reinterpret_cast<const FieldType*>(&elemSimd)[i];
+            }
+            else
+            {
+                // TODO(bgruber): how does this generalize conceptually to 2D and higher dimensions? in which
+                // direction should we collect SIMD values?
+                const ElementSimd elemSimd = srcSimd(rc);
+                auto b = ArrayIndexIterator{dstRef.view.mapping().extents(), dstRef.arrayIndex()};
+                for(auto i = 0; i < Traits::lanes; i++)
+                    dstRef.view (*b++)(cat(typename T::BoundRecordCoord{}, rc))
+                        = reinterpret_cast<const FieldType*>(&elemSimd)[i]; // scalar store
+            }
+        }
+    } // namespace internal
+
     /// Loads SIMD vectors of data starting from the given record reference to dstSimd. Only field tags occurring in
     /// RecordRef are loaded. If Simd contains multiple fields of SIMD types, a SIMD vector will be fetched for each of
     /// the fields. The number of elements fetched per SIMD vector depends on the SIMD width of the vector. Simd is
@@ -176,40 +269,8 @@ namespace llama
         // structured dstSimd type and record reference
         if constexpr(isRecordRef<Simd> && isRecordRef<T>)
         {
-            using RecordDim = typename T::AccessibleRecordDim;
-            forEachLeafCoord<RecordDim>(
-                [&](auto rc) LLAMA_LAMBDA_INLINE
-                {
-                    using FieldType = GetType<RecordDim, decltype(rc)>;
-                    using ElementSimd = std::decay_t<decltype(dstSimd(rc))>;
-                    using Traits = SimdTraits<ElementSimd>;
-
-                    // TODO(bgruber): can we generalize the logic whether we can load a dstSimd from that mapping?
-                    if constexpr(mapping::isSoA<typename T::View::Mapping>)
-                    {
-                        LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-                        dstSimd(rc) = Traits::loadUnaligned(&srcRef(rc)); // SIMD load
-                        LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
-                    }
-                    // else if constexpr(mapping::isAoSoA<typename T::View::Mapping>)
-                    //{
-                    //    // it turns out we do not need the specialization, because clang already fuses the scalar
-                    //    loads
-                    //    // into a vector load :D
-                    //    assert(srcRef.arrayDimsCoord()[0] % SIMD_WIDTH == 0);
-                    //    // if(srcRef.arrayDimsCoord()[0] % SIMD_WIDTH != 0)
-                    //    //    __builtin_unreachable(); // this also helps nothing
-                    //    //__builtin_assume(srcRef.arrayDimsCoord()[0] % SIMD_WIDTH == 0);  // this also helps nothing
-                    //    dstSimd(rc) = Traits::load_from(&srcRef(rc)); // SIMD load
-                    //}
-                    else
-                    {
-                        auto b = ArrayIndexIterator{srcRef.view.mapping().extents(), srcRef.arrayIndex()};
-                        for(auto i = 0; i < Traits::lanes; i++)
-                            reinterpret_cast<FieldType*>(&dstSimd(rc))[i]
-                                = srcRef.view(*b++)(cat(typename T::BoundRecordCoord{}, rc)); // scalar loads
-                    }
-                });
+            forEachLeafCoord<typename T::AccessibleRecordDim>([&](auto rc) LLAMA_LAMBDA_INLINE
+                                                              { internal::loadSimdRecord(srcRef, dstSimd, rc); });
         }
         // unstructured dstSimd and reference type
         else if constexpr(!isRecordRef<Simd> && !isRecordRef<T>)
@@ -235,31 +296,8 @@ namespace llama
         // structured Simd type and record reference
         if constexpr(isRecordRef<Simd> && isRecordRef<T>)
         {
-            using RecordDim = typename T::AccessibleRecordDim;
-            forEachLeafCoord<RecordDim>(
-                [&](auto rc) LLAMA_LAMBDA_INLINE
-                {
-                    using FieldType = GetType<RecordDim, decltype(rc)>;
-                    using ElementSimd = std::decay_t<decltype(srcSimd(rc))>;
-                    using Traits = SimdTraits<ElementSimd>;
-
-                    // TODO(bgruber): can we generalize the logic whether we can store a srcSimd to that mapping?
-                    if constexpr(mapping::isSoA<typename T::View::Mapping>)
-                    {
-                        LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-                        Traits::storeUnaligned(srcSimd(rc), &dstRef(rc)); // SIMD store
-                        LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
-                    }
-                    else
-                    {
-                        // TODO(bgruber): how does this generalize conceptually to 2D and higher dimensions? in which
-                        // direction should we collect SIMD values?
-                        auto b = ArrayIndexIterator{dstRef.view.mapping().extents(), dstRef.arrayIndex()};
-                        for(auto i = 0; i < Traits::lanes; i++)
-                            dstRef.view (*b++)(cat(typename T::BoundRecordCoord{}, rc))
-                                = reinterpret_cast<const FieldType*>(&srcSimd(rc))[i]; // scalar store
-                    }
-                });
+            forEachLeafCoord<typename T::AccessibleRecordDim>([&](auto rc) LLAMA_LAMBDA_INLINE
+                                                              { internal::storeSimdRecord(srcSimd, dstRef, rc); });
         }
         // unstructured srcSimd and reference type
         else if constexpr(!isRecordRef<Simd> && !isRecordRef<T>)
