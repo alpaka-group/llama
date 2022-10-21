@@ -528,7 +528,7 @@ namespace manualSoA
 
     auto main(std::ostream& plotFile) -> Vec3
     {
-        auto title = "SoA"s;
+        auto title = "SoA MB"s;
         std::cout << title << "\n";
         Stopwatch watch;
 
@@ -1437,7 +1437,7 @@ namespace manualSoASIMD
     template<typename Simd>
     auto main(std::ostream& plotFile, int threads) -> Vec3
     {
-        auto title = "SoA SIMD"s;
+        auto title = "SoA MB SIMD"s;
         if(threads > 1)
             title += " " + std::to_string(threads) + "Thrds";
         std::cout << title << '\n';
