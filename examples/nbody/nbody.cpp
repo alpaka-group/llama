@@ -29,7 +29,8 @@ constexpr auto steps = 5;
 constexpr auto trace = false;
 constexpr auto heatmap = false;
 constexpr auto dumpMapping = false;
-constexpr auto allowRsqrt = true; // rsqrt can be way faster, but less accurate
+constexpr auto allowRsqrt
+    = true; // rsqrt can be way faster, but less accurate (use false for benchmarks and rely on -ffast-math)
 constexpr auto newtonRaphsonAfterRsqrt = true; // generate a newton raphson refinement after explicit calls to rsqrt()
 constexpr auto runUpate = true; // run update step. Useful to disable for benchmarking the move step.
 
@@ -158,9 +159,15 @@ namespace usellama
 
     namespace stdext
     {
+        // workaround until rsqrt lands in C++
         LLAMA_FN_HOST_ACC_INLINE auto rsqrt(FP f) -> FP
         {
-            return 1.0f / std::sqrt(f);
+            // WARNING: g++-12 cannot auto-vectorize across the following intrinsic. LLAMA SoA will NOT auto-vectorize.
+            // return _mm_cvtss_f32(_mm_rsqrt_ss(_mm_set_ss(f)));
+
+            // WARNING: GCC and clang will generate a Newton-Raphson step for the following code, which is inconsistent
+            // with other rsqrt implementations.
+            return FP{1} / std::sqrt(f);
         }
     } // namespace stdext
 
@@ -197,7 +204,7 @@ namespace usellama
                 using xsimd::sqrt;
 #endif
                 using std::sqrt;
-                return 1.0f / sqrt(distSixth);
+                return FP{1} / sqrt(distSixth);
             }
         }();
         const auto sts = (pj(tag::Mass{}) * timestep) * invDistCube;
@@ -1024,8 +1031,8 @@ namespace manualAoSoASIMD
                 if constexpr(newtonRaphsonAfterRsqrt)
                 {
                     // from: http://stackoverflow.com/q/14752399/556899
-                    const Simd three = 3.0f;
-                    const Simd half = 0.5f;
+                    const Simd three = FP{3};
+                    const Simd half = FP{0.5};
                     const Simd muls = distSixth * r * r;
                     return (half * r) * (three - muls);
                 }
@@ -1033,7 +1040,9 @@ namespace manualAoSoASIMD
                     return r;
             }
             else
-                return 1.0f / xsimd::sqrt(distSixth);
+            {
+                return FP{1} / xsimd::sqrt(distSixth);
+            }
         }();
         const Simd sts = pjmass * invDistCube * timestep;
         pivelx = xdistanceSqr * sts + pivelx;
