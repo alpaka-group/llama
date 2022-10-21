@@ -205,13 +205,13 @@ namespace usellama
     }
 
 #ifdef HAVE_XSIMD
-    template<typename View>
+    template<int Width, typename View>
     void updateSimd(View& particles)
     {
-        constexpr auto width = llama::simdLanesWithFullVectorsFor<typename View::RecordDim, MakeBatch>;
-        for(std::size_t i = 0; i < problemSize; i += width)
+        for(std::size_t i = 0; i < problemSize; i += Width)
         {
-            llama::SimdN<typename View::RecordDim, width, xsimd::make_sized_batch_t> pis;
+            using RecordDim = typename View::RecordDim;
+            llama::SimdN<RecordDim, Width, xsimd::make_sized_batch_t> pis;
             llama::loadSimd(particles(i), pis);
             for(std::size_t j = 0; j < problemSize; ++j)
                 pPInteraction(pis, particles(j));
@@ -219,16 +219,15 @@ namespace usellama
         }
     }
 
-    template<typename View>
+    template<int Width, typename View>
     void moveSimd(View& particles)
     {
-        using RecordDim = typename View::RecordDim;
-        constexpr auto width = llama::simdLanesWithFullVectorsFor<RecordDim, MakeBatch>;
         LLAMA_INDEPENDENT_DATA // TODO(bgruber): why is this needed
-            for(std::size_t i = 0; i < problemSize; i += width)
+            for(std::size_t i = 0; i < problemSize; i += Width)
         {
-            llama::SimdN<llama::GetType<RecordDim, tag::Pos>, width, xsimd::make_sized_batch_t> pos;
-            llama::SimdN<llama::GetType<RecordDim, tag::Vel>, width, xsimd::make_sized_batch_t> vel;
+            using RecordDim = typename View::RecordDim;
+            llama::SimdN<llama::GetType<RecordDim, tag::Pos>, Width, xsimd::make_sized_batch_t> pos;
+            llama::SimdN<llama::GetType<RecordDim, tag::Vel>, Width, xsimd::make_sized_batch_t> vel;
             llama::loadSimd(particles(i)(tag::Pos{}), pos);
             llama::loadSimd(particles(i)(tag::Vel{}), vel);
             llama::storeSimd(pos + vel * timestep, particles(i)(tag::Pos{}));
@@ -358,16 +357,17 @@ namespace usellama
         double sumMove = 0;
         for(std::size_t s = 0; s < steps; ++s)
         {
+            constexpr auto width = llama::simdLanesWithFullVectorsFor<Particle, MakeBatch>;
             if constexpr(runUpate)
             {
                 if constexpr(UseSimd)
-                    updateSimd(particles);
+                    updateSimd<width>(particles);
                 else
                     update(particles);
                 sumUpdate += watch.printAndReset("update", '\t');
             }
             if constexpr(UseSimd)
-                moveSimd(particles);
+                moveSimd<width>(particles);
             else
                 move(particles);
             sumMove += watch.printAndReset("move");
