@@ -32,6 +32,11 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
 	set_property(CACHE CMAKE_BUILD_TYPE PROPERTY VALUE "Release")
 endif()
 
+if (MSVC)
+	# FIXME(bgruber): alpaka uses M_PI, so we need to make it available on MSVC. This may be fixed in alpaka 1.0.0.
+	target_compile_definitions(llama INTERFACE _USE_MATH_DEFINES)
+endif()
+
 # tests
 option(BUILD_TESTING "" OFF)
 include(CTest)
