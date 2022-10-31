@@ -321,7 +321,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: brew install dependencies
         run: |
-          brew install libomp
+          brew reinstall libomp
       - name: vcpkg install dependencies
         run: |
           eval $VCPKG_INSTALL
