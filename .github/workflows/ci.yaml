@@ -322,8 +322,14 @@ jobs:
       - name: brew install dependencies
         run: |
           brew reinstall libomp
+      - name: install vcpkg
+        uses: lukka/run-vcpkg@v10
+        with:
+          runVcpkgInstall: true
+          vcpkgGitCommitId: 94ce0dab56f4d8ba6bd631ba59ed682b02d45c46
       - name: vcpkg install dependencies
         run: |
+          alias vcpkg="$VCPKG_ROOT/vcpkg"
           eval $VCPKG_INSTALL
       - name: install alpaka
         run: |
