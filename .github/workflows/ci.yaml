@@ -306,13 +306,12 @@ jobs:
         include:
           - os: macos-11
           - os: macos-12
-    env:
-      CXX: clang++
     steps:
       - uses: actions/checkout@v2
       - name: brew install dependencies
         run: |
-          brew install libomp
+          brew install llvm libomp
+          echo "CXX is here: $(brew --prefix llvm)/bin/clang++"
       - name: vcpkg install dependencies
         run: |
           eval $VCPKG_INSTALL
@@ -320,6 +319,7 @@ jobs:
         run: |
           mkdir build
           cd build
+          export CXX="$(brew --prefix llvm)/bin/clang++"
           cmake .. -DBUILD_TESTING=ON \
                    -DLLAMA_BUILD_EXAMPLES=ON \
                    -DCMAKE_BUILD_TYPE=$CONFIG \
