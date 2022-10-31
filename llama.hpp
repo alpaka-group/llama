@@ -2515,7 +2515,7 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>>
 		        typename M::RecordDim;
 		        { m.extents() } -> std::same_as<typename M::ArrayExtents>;
 		        { +M::blobCount } -> std::same_as<std::size_t>;
-		        Array<int, M::blobCount>{}; // validates constexpr-ness
+		        std::integral_constant<std::size_t, M::blobCount>{}; // validates constexpr-ness
 		        { m.blobSize(typename M::ArrayExtents::value_type{}) } -> std::same_as<typename M::ArrayExtents::value_type>;
 		    };
 
