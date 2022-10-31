@@ -108,7 +108,7 @@ $(document).ready(function(){initNavTree('Concepts_8hpp_source.html',''); initRe
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <span class="keyword">typename</span> M::RecordDim;</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        { m.extents() } -&gt; std::same_as&lt;typename M::ArrayExtents&gt;;</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        { +M::blobCount } -&gt; std::same_as&lt;std::size_t&gt;;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        Array&lt;int, M::blobCount&gt;{}; <span class="comment">// validates constexpr-ness</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        std::integral_constant&lt;std::size_t, M::blobCount&gt;{}; <span class="comment">// validates constexpr-ness</span></div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        { m.blobSize(<span class="keyword">typename</span> M::ArrayExtents::value_type{}) } -&gt; std::same_as&lt;typename M::ArrayExtents::value_type&gt;;</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    };</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
@@ -232,7 +232,7 @@ $(document).ready(function(){initNavTree('Concepts_8hpp_source.html',''); initRe
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="Concepts_8hpp.html">Concepts.hpp</a></li>
-    <li class="footer">Generated on Mon Oct 31 2022 15:40:37 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Oct 31 2022 16:41:18 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
