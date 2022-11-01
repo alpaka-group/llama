@@ -48,6 +48,18 @@ We gave a talk on LLAMA at CERN's Compute Accelerator Forum on 2021-05-12.
 The video recording (starting at 40:00) and slides are available here:
 https://indico.cern.ch/event/975010/.
 
+Supported compilers
+-------------------
+
+LLAMA tries to stay close to recent developments in C++ and so requires fairly up-to-date compilers.
+The following compilers are supported by LLAMA and tested as part of our CI:
+
+
+| Linux                                                                                                                     | Windows             | MacOS                      |
+|---------------------------------------------------------------------------------------------------------------------------|---------------------|----------------------------|
+| GNU g++ 9 - 12 </br> LLVM clang++ 10 - 15 </br> Intel icpx (latest) </br> Nvidia nvc++ 22.9 </br> Nvidia nvcc 11.2 - 11.8 | Visual Studio 2022  | clang++ (latest from brew) |
+
+
 Single header
 -------------
 
