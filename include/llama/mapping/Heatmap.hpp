@@ -26,13 +26,12 @@ namespace llama::mapping
         using size_type = typename Mapping::ArrayExtents::value_type;
 
     public:
-        using Mapping::extents;
         using typename Mapping::ArrayExtents;
         using typename Mapping::ArrayIndex;
         using typename Mapping::RecordDim;
 
         // We duplicate every blob of the inner mapping with a shadow blob, where we count the accesses
-        inline static constexpr auto blobCount = Mapping::blobCount * 2;
+        inline static constexpr std::size_t blobCount = Mapping::blobCount * 2;
 
         constexpr Heatmap() = default;
 
@@ -45,6 +44,16 @@ namespace llama::mapping
         LLAMA_FN_HOST_ACC_INLINE explicit Heatmap(Args&&... innerArgs) : Mapping(std::forward<Args>(innerArgs)...)
         {
         }
+
+#if defined(__cpp_lib_concepts) && defined(__NVCOMPILER)
+        // nvc++ fails to find extents() from the base class when trying to satisfy the Mapping concept
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto extents() const -> typename Mapping::ArrayExtents
+        {
+            return static_cast<const Mapping&>(*this).extents();
+        }
+#else
+        using Mapping::extents;
+#endif
 
         LLAMA_FN_HOST_ACC_INLINE
         constexpr auto blobSize(size_type blobIndex) const -> size_type
