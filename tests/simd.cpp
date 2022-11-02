@@ -364,6 +364,7 @@ TEST_CASE("simd.simdForEachN.stdsimd")
             view,
             [](auto simd)
             {
+                using std::sqrt;
                 simd(tag::Y{}) = sqrt(simd(tag::X{}));
                 return simd; // TODO(bgruber): tag::X{} is redundantly stored
             });
@@ -393,6 +394,7 @@ TEST_CASE("simd.simdForEach.stdsimd")
             view,
             [](auto simd)
             {
+                using std::sqrt;
                 simd(tag::Y{}) = sqrt(simd(tag::X{}));
                 return simd; // TODO(bgruber): tag::X{} is redundantly stored
             });
