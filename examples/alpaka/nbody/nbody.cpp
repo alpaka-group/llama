@@ -143,7 +143,7 @@ struct UpdateKernel
         {
             // if there is only 1 shared element per block, use just a variable (in registers) instead of shared memory
             if constexpr(sharedElementsPerBlock == 1)
-                return llama::allocViewStack<View::ArrayExtents::rank, typename View::RecordDim>();
+                return llama::allocViewStackUninitialized<View::ArrayExtents::rank, typename View::RecordDim>();
             else
             {
                 constexpr auto sharedMapping = []

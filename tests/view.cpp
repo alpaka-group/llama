@@ -322,3 +322,15 @@ TEMPLATE_TEST_CASE("view.shallowCopy", "", llama::bloballoc::Vector, llama::blob
     auto copyOfCopy = llama::shallowCopy(copy);
     checkCopy(view, copyOfCopy);
 }
+
+TEST_CASE("view.allocViewStack")
+{
+    auto v0 = llama::allocViewStack<0, Vec3I>();
+    v0(llama::ArrayIndex<int, 0>{})(tag::X{}) = 42;
+
+    auto v1 = llama::allocViewStack<1, Vec3I>();
+    v1(llama::ArrayIndex{0})(tag::X{}) = 42;
+
+    auto v4 = llama::allocViewStack<4, Vec3I>();
+    v4(llama::ArrayIndex{0, 0, 0, 0})(tag::X{}) = 42;
+}
