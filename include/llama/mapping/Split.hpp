@@ -75,7 +75,7 @@ namespace llama::mapping
     } // namespace internal
 
     /// Mapping which splits off a part of the record dimension and maps it differently then the rest.
-    /// \tparam RecordCoordForMapping1 A \ref RecordCoord or a list of RecordCoords selecting the part of the record
+    /// \tparam TRecordCoordForMapping1 A \ref RecordCoord or a list of RecordCoords selecting the part of the record
     /// dimension to be mapped differently.
     /// \tparam MappingTemplate1 The mapping used for the selected part of the record dimension.
     /// \tparam MappingTemplate2 The mapping used for the not selected part of the record dimension.
@@ -83,7 +83,7 @@ namespace llama::mapping
     template<
         typename TArrayExtents,
         typename TRecordDim,
-        typename RecordCoordForMapping1,
+        typename TRecordCoordForMapping1,
         template<typename...>
         typename MappingTemplate1,
         template<typename...>
@@ -95,6 +95,7 @@ namespace llama::mapping
         using ArrayIndex = typename ArrayExtents::Index;
         using RecordDim = TRecordDim;
 
+        using RecordCoordForMapping1 = TRecordCoordForMapping1;
         using RecordDimPartitions = typename internal::PartionedRecordDim<RecordDim, RecordCoordForMapping1>::type;
         using RecordDim1 = boost::mp11::mp_first<RecordDimPartitions>;
         using RecordDim2 = boost::mp11::mp_second<RecordDimPartitions>;

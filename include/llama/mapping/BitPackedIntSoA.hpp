@@ -163,15 +163,15 @@ namespace llama::mapping
     /// \tparam Bits If Bits is llama::Constant<N>, the compile-time N specifies the number of bits to use. If Bits is
     /// an integral type T, the number of bits is specified at runtime, passed to the constructor and stored as type T.
     /// Must not be zero.
-    /// \tparam LinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and how
-    /// big the linear domain gets.
-    /// \tparam StoredIntegral Integral type used as storage of reduced precision integers.
+    /// \tparam TLinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
+    /// how big the linear domain gets. \tparam TStoredIntegral Integral type used as storage of reduced precision
+    /// integers.
     template<
         typename TArrayExtents,
         typename TRecordDim,
-        typename Bits = unsigned,
-        typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
-        typename StoredIntegral = internal::StoredUnsignedFor<TRecordDim>>
+        typename Bits = typename TArrayExtents::value_type,
+        typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
+        typename TStoredIntegral = internal::StoredUnsignedFor<TRecordDim>>
     struct BitPackedIntSoA
         : MappingBase<TArrayExtents, TRecordDim>
         , private llama::internal::BoxedValue<Bits>
@@ -189,7 +189,15 @@ namespace llama::mapping
             "All record dimension field types must be integral");
 
     public:
+        using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
+        using StoredIntegral = TStoredIntegral;
         static constexpr std::size_t blobCount = boost::mp11::mp_size<FlatRecordDim<TRecordDim>>::value;
+
+        LLAMA_FN_HOST_ACC_INLINE
+        constexpr auto bits() const -> size_type
+        {
+            return static_cast<size_type>(VHBits::value());
+        }
 
         template<typename B = Bits, std::enable_if_t<isConstant<B>, int> = 0>
         LLAMA_FN_HOST_ACC_INLINE constexpr explicit BitPackedIntSoA(
@@ -207,15 +215,14 @@ namespace llama::mapping
             : Base(extents)
             , VHBits{bits}
         {
-            assert(VHBits::value() > 0);
+            assert(this->bits() > 0);
         }
 
         LLAMA_FN_HOST_ACC_INLINE
         constexpr auto blobSize(size_type /*blobIndex*/) const -> size_type
         {
             constexpr auto bitsPerStoredIntegral = static_cast<size_type>(sizeof(StoredIntegral) * CHAR_BIT);
-            const auto bitsNeeded
-                = LinearizeArrayDimsFunctor{}.size(Base::extents()) * static_cast<size_type>(VHBits::value());
+            const auto bitsNeeded = LinearizeArrayDimsFunctor{}.size(Base::extents()) * VHBits::value();
             return roundUpToMultiple(bitsNeeded, bitsPerStoredIntegral) / CHAR_BIT;
         }
 
@@ -232,8 +239,7 @@ namespace llama::mapping
             Blobs& blobs) const
         {
             constexpr auto blob = flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>;
-            const auto bitOffset
-                = LinearizeArrayDimsFunctor{}(ai, Base::extents()) * static_cast<size_type>(VHBits::value());
+            const auto bitOffset = LinearizeArrayDimsFunctor{}(ai, Base::extents()) * VHBits::value();
 
             using QualifiedStoredIntegral = CopyConst<Blobs, StoredIntegral>;
             using DstType = GetType<TRecordDim, RecordCoord<RecordCoords...>>;

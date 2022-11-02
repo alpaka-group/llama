@@ -14,18 +14,21 @@ namespace llama::mapping
     /// @tparam Mapping The type of the inner mapping.
     /// @tparam Granularity The granularity in bytes on which to could accesses. A value of 1 counts every byte.
     /// individually. A value of e.g. 64, counts accesses per 64 byte block.
-    /// @tparam CountType Data type used to count the number of accesses. Atomic increments must be supported for this
+    /// @tparam TCountType Data type used to count the number of accesses. Atomic increments must be supported for this
     /// type.
     template<
         typename Mapping,
         typename Mapping::ArrayExtents::value_type Granularity = 1,
-        typename CountType = std::size_t>
+        typename TCountType = std::size_t>
     struct Heatmap : private Mapping
     {
     private:
         using size_type = typename Mapping::ArrayExtents::value_type;
 
     public:
+        using Inner = Mapping;
+        inline static constexpr std::size_t granularity = Granularity;
+        using CountType = TCountType;
         using typename Mapping::ArrayExtents;
         using typename Mapping::ArrayIndex;
         using typename Mapping::RecordDim;

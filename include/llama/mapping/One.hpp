@@ -27,6 +27,8 @@ namespace llama::mapping
         using size_type = typename Base::size_type;
 
     public:
+        inline static constexpr bool alignAndPad = AlignAndPad;
+        using Flattener = FlattenRecordDim<TRecordDim>;
         static constexpr std::size_t blobCount = 1;
 
         using Base::Base;
@@ -50,9 +52,6 @@ namespace llama::mapping
                 = static_cast<size_type>(flatOffsetOf<typename Flattener::FlatRecordDim, flatFieldIndex, AlignAndPad>);
             return {size_type{0}, offset};
         }
-
-    private:
-        using Flattener = FlattenRecordDim<TRecordDim>;
     };
 
     /// One mapping preserving the alignment of the field types by inserting padding.

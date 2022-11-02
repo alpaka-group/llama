@@ -18,6 +18,7 @@ TEST_CASE("mapping.BitPackedIntSoA.Constant.SInts")
     // 16 elements * 4 fields = 64 integers, iota produces [0;63], which fits int8_t and into 7 bits
     auto view = llama::allocView(
         llama::mapping::BitPackedIntSoA<llama::ArrayExtentsDynamic<std::size_t, 1>, SInts, llama::Constant<7>>{{16}});
+    CHECK(view.mapping().bits() == 7);
     iotaFillView(view);
     iotaCheckView(view);
 }
@@ -27,6 +28,7 @@ TEST_CASE("mapping.BitPackedIntSoA.Value.SInts")
     // 16 elements * 4 fields = 64 integers, iota produces [0;63], which fits int8_t and into 7 bits
     auto view = llama::allocView(
         llama::mapping::BitPackedIntSoA<llama::ArrayExtentsDynamic<std::size_t, 1>, SInts>{{16}, 7});
+    CHECK(view.mapping().bits() == 7);
     iotaFillView(view);
     iotaCheckView(view);
 }
@@ -36,6 +38,7 @@ TEST_CASE("mapping.BitPackedIntSoA.Constant.UInts")
     // 32 elements * 4 fields = 128 integers, iota produces [0;127], which fits uint8_t and into 7 bits
     auto view = llama::allocView(
         llama::mapping::BitPackedIntSoA<llama::ArrayExtentsDynamic<std::size_t, 1>, UInts, llama::Constant<7>>{{32}});
+    CHECK(view.mapping().bits() == 7);
     iotaFillView(view);
     iotaCheckView(view);
 }
@@ -45,6 +48,7 @@ TEST_CASE("mapping.BitPackedIntSoA.Value.UInts")
     // 32 elements * 4 fields = 128 integers, iota produces [0;127], which fits uint8_t and into 7 bits
     auto view = llama::allocView(
         llama::mapping::BitPackedIntSoA<llama::ArrayExtentsDynamic<std::size_t, 1>, UInts>{{32}, 7});
+    CHECK(view.mapping().bits() == 7);
     iotaFillView(view);
     iotaCheckView(view);
 }
@@ -195,6 +199,5 @@ TEST_CASE("mapping.BitPackedIntSoA.Size")
     STATIC_REQUIRE(std::is_empty_v<
                    llama::mapping::BitPackedIntSoA<llama::ArrayExtents<std::size_t, 16>, SInts, llama::Constant<7>>>);
     STATIC_REQUIRE(
-        sizeof(llama::mapping::BitPackedIntSoA<llama::ArrayExtents<std::size_t, 16>, SInts>{{}, 7})
-        == sizeof(unsigned));
+        sizeof(llama::mapping::BitPackedIntSoA<llama::ArrayExtents<unsigned, 16>, SInts>{{}, 7}) == sizeof(unsigned));
 }
