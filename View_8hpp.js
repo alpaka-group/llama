@@ -11,6 +11,7 @@ var View_8hpp =
     [ "One", "View_8hpp.html#ace059168abe83f42c9493ad853abb746", null ],
     [ "allocView", "View_8hpp.html#a99567a2429e7d7b3155116a8e81d4059", null ],
     [ "allocViewStack", "View_8hpp.html#a3750d27a7f8dd111fbe32dc769b44120", null ],
+    [ "allocViewStackUninitialized", "View_8hpp.html#a6b8a4632ab312dc849343500487296ab", null ],
     [ "allocViewUninitialized", "View_8hpp.html#a41836d1bd1b74b791e3ee54319e67c59", null ],
     [ "constructFields", "View_8hpp.html#a0294f7d0aa47fdf5f11075cc8d92d0f8", null ],
     [ "makeBlobArray", "View_8hpp.html#a36b0736740116d5e9fff6172f5b202af", null ],

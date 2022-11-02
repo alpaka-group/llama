@@ -85,7 +85,6 @@ $(document).ready(function(){initNavTree('Trace_8hpp.html',''); initResizable();
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
-<a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">Trace.hpp File Reference</div>  </div>
@@ -93,11 +92,9 @@ $(document).ready(function(){initNavTree('Trace_8hpp.html',''); initResizable();
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="StructName_8hpp_source.html">../StructName.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="Common_8hpp_source.html">Common.hpp</a>&quot;</code><br />
-<code>#include &lt;atomic&gt;</code><br />
 <code>#include &lt;cstdio&gt;</code><br />
 <code>#include &lt;iomanip&gt;</code><br />
 <code>#include &lt;iostream&gt;</code><br />
-<code>#include &lt;boost/atomic/atomic_ref.hpp&gt;</code><br />
 </div><div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Include dependency graph for Trace.hpp:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -105,29 +102,29 @@ $(document).ready(function(){initNavTree('Trace_8hpp.html',''); initResizable();
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="Trace_8hpp__incl.png" border="0" usemap="#_2home_2runner_2work_2llama_2llama_2include_2llama_2mapping_2Trace_8hpp" alt=""/></div>
 <map name="_2home_2runner_2work_2llama_2llama_2include_2llama_2mapping_2Trace_8hpp" id="_2home_2runner_2work_2llama_2llama_2include_2llama_2mapping_2Trace_8hpp">
-<area shape="rect" title=" " alt="" coords="499,5,715,61"/>
-<area shape="rect" href="StructName_8hpp.html" title=" " alt="" coords="361,117,499,143"/>
-<area shape="rect" title=" " alt="" coords="506,273,586,300"/>
-<area shape="rect" href="Common_8hpp.html" title=" " alt="" coords="227,117,337,143"/>
-<area shape="rect" title=" " alt="" coords="574,117,641,143"/>
-<area shape="rect" title=" " alt="" coords="665,117,726,143"/>
-<area shape="rect" title=" " alt="" coords="750,117,825,143"/>
-<area shape="rect" title=" " alt="" coords="849,109,1005,151"/>
-<area shape="rect" href="Core_8hpp.html" title=" " alt="" coords="269,199,349,225"/>
-<area shape="rect" title=" " alt="" coords="381,199,479,225"/>
-<area shape="rect" href="ArrayExtents_8hpp.html" title=" " alt="" coords="347,273,481,300"/>
-<area shape="rect" href="Meta_8hpp.html" title=" " alt="" coords="27,348,110,375"/>
-<area shape="rect" title=" " alt="" coords="265,348,357,375"/>
-<area shape="rect" href="RecordCoord_8hpp.html" title=" " alt="" coords="138,273,271,300"/>
-<area shape="rect" title=" " alt="" coords="55,273,114,300"/>
-<area shape="rect" href="Array_8hpp.html" title=" " alt="" coords="465,348,547,375"/>
-<area shape="rect" title=" " alt="" coords="382,348,441,375"/>
-<area shape="rect" href="macros_8hpp.html" title=" " alt="" coords="406,423,505,449"/>
-<area shape="rect" title=" " alt="" coords="247,423,323,449"/>
-<area shape="rect" title=" " alt="" coords="529,423,584,449"/>
-<area shape="rect" title=" " alt="" coords="5,423,132,449"/>
-<area shape="rect" title=" " alt="" coords="134,348,190,375"/>
-<area shape="rect" title=" " alt="" coords="178,199,245,225"/>
+<area shape="rect" title=" " alt="" coords="509,5,725,61"/>
+<area shape="rect" href="StructName_8hpp.html" title=" " alt="" coords="441,109,580,136"/>
+<area shape="rect" title=" " alt="" coords="605,273,685,300"/>
+<area shape="rect" href="Common_8hpp.html" title=" " alt="" coords="211,109,320,136"/>
+<area shape="rect" title=" " alt="" coords="655,109,716,136"/>
+<area shape="rect" title=" " alt="" coords="740,109,815,136"/>
+<area shape="rect" href="Core_8hpp.html" title=" " alt="" coords="368,191,448,218"/>
+<area shape="rect" title=" " alt="" coords="473,191,570,218"/>
+<area shape="rect" href="ArrayExtents_8hpp.html" title=" " alt="" coords="446,273,581,300"/>
+<area shape="rect" href="Meta_8hpp.html" title=" " alt="" coords="127,348,209,375"/>
+<area shape="rect" title=" " alt="" coords="365,348,457,375"/>
+<area shape="rect" href="RecordCoord_8hpp.html" title=" " alt="" coords="237,273,371,300"/>
+<area shape="rect" title=" " alt="" coords="155,273,213,300"/>
+<area shape="rect" href="Array_8hpp.html" title=" " alt="" coords="564,348,647,375"/>
+<area shape="rect" title=" " alt="" coords="481,348,540,375"/>
+<area shape="rect" href="macros_8hpp.html" title=" " alt="" coords="505,423,604,449"/>
+<area shape="rect" title=" " alt="" coords="346,423,422,449"/>
+<area shape="rect" title=" " alt="" coords="629,423,683,449"/>
+<area shape="rect" title=" " alt="" coords="105,423,231,449"/>
+<area shape="rect" title=" " alt="" coords="233,348,289,375"/>
+<area shape="rect" title=" " alt="" coords="5,191,72,218"/>
+<area shape="rect" title=" " alt="" coords="96,191,163,218"/>
+<area shape="rect" title=" " alt="" coords="187,184,343,225"/>
 </map>
 </div>
 </div>
@@ -151,12 +148,6 @@ Namespaces</h2></td></tr>
 <tr class="memitem:namespacellama_1_1mapping_1_1internal"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html">llama::mapping::internal</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
-Functions</h2></td></tr>
-<tr class="memitem:ace4293b90c407582ad96f531c05c19b5"><td class="memTemplParams" colspan="2">template&lt;typename CountType &gt; </td></tr>
-<tr class="memitem:ace4293b90c407582ad96f531c05c19b5"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#ace4293b90c407582ad96f531c05c19b5">llama::mapping::internal::atomicInc</a> (CountType &amp;i)</td></tr>
-<tr class="separator:ace4293b90c407582ad96f531c05c19b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:a033ccad2b2e578270aeaa7e96e066d57"><td class="memTemplParams" colspan="2">template&lt;typename Mapping &gt; </td></tr>
@@ -172,7 +163,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc.html">mapping</a></li><li class="navelem"><a class="el" href="Trace_8hpp.html">Trace.hpp</a></li>
-    <li class="footer">Generated on Tue Nov 1 2022 18:12:17 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Nov 2 2022 16:32:03 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

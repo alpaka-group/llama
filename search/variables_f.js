@@ -1,11 +1,11 @@
 var searchData=
 [
-  ['simdlanes_1172',['simdLanes',['../namespacellama.html#a85e41b88e239189c88b2d895bfc2691e',1,'llama']]],
-  ['simdlaneswithfullvectorsfor_1173',['simdLanesWithFullVectorsFor',['../namespacellama.html#a34f90853e28950fdd34ecf9696ae1f63',1,'llama']]],
-  ['simdlaneswithleastregistersfor_1174',['simdLanesWithLeastRegistersFor',['../namespacellama.html#ac902aa26f43ee2c8cceeb580a1df0c50',1,'llama']]],
-  ['size_1175',['size',['../structllama_1_1RecordCoord.html#a3710d7a4f643b8b004809005a7d81f44',1,'llama::RecordCoord::size()'],['../structllama_1_1RecordCoord_3_4.html#a88c46f2ba080197e2c49a2e4066b841a',1,'llama::RecordCoord&lt;&gt;::size()']]],
-  ['sizeof_1176',['sizeOf',['../namespacellama.html#a2404e09083dc2c685bc283cd4ead0edc',1,'llama']]],
-  ['sizeof_3c_20record_3c_20fields_2e_2e_2e_20_3e_2c_20align_2c_20includetailpadding_20_3e_1177',['sizeOf&lt; Record&lt; Fields... &gt;, Align, IncludeTailPadding &gt;',['../namespacellama.html#a585d55cd3a51152ec452bc1f2d49a3ec',1,'llama']]],
-  ['storageblobs_1178',['storageBlobs',['../structllama_1_1View.html#a176b21d204881a89dc8488e62fcb8dd6',1,'llama::View']]],
-  ['structnamestorage_1179',['structNameStorage',['../namespacellama_1_1internal.html#a32808c34947a5a5be5e1f677a50e64e4',1,'llama::internal']]]
+  ['rank_1172',['rank',['../structllama_1_1ArrayIndex.html#a09d5dffbdde28ac87fc8ef1f20340593',1,'llama::ArrayIndex::rank()'],['../structllama_1_1ArrayExtents.html#aa368d8287fad34884c1ccfdb01d527dc',1,'llama::ArrayExtents::rank()'],['../structllama_1_1ArrayExtents_3_01T_01_4.html#a4c0c9b1ef4553bf85aec1033ffe9ffba',1,'llama::ArrayExtents&lt; T &gt;::rank()'],['../structllama_1_1ArrayIndexIterator.html#a3eb86c873b8b0e82f711d9b2bf43ca43',1,'llama::ArrayIndexIterator::rank()']]],
+  ['rankdynamic_1173',['rankDynamic',['../structllama_1_1ArrayExtents.html#a7a3c0f899a9568d7399c4be97824ba82',1,'llama::ArrayExtents::rankDynamic()'],['../structllama_1_1ArrayExtents_3_01T_01_4.html#aa049fba3ae38f86c381b4014477d39ac',1,'llama::ArrayExtents&lt; T &gt;::rankDynamic()']]],
+  ['rankstatic_1174',['rankStatic',['../structllama_1_1ArrayExtents.html#a61bf37584da582be077d5858b220a909',1,'llama::ArrayExtents::rankStatic()'],['../structllama_1_1ArrayExtents_3_01T_01_4.html#a1db071f3aa8e955a109f7c4a8238e969',1,'llama::ArrayExtents&lt; T &gt;::rankStatic()']]],
+  ['reads_1175',['reads',['../structllama_1_1mapping_1_1AccessCounts.html#a6ba565a36cc065f5c7a2bbaf8057d72a',1,'llama::mapping::AccessCounts']]],
+  ['recordcoordcommonprefixisbigger_1176',['recordCoordCommonPrefixIsBigger',['../namespacellama.html#a8660330eb77e8654033787e86b8da6ed',1,'llama']]],
+  ['recordcoordcommonprefixissame_1177',['recordCoordCommonPrefixIsSame',['../namespacellama.html#a50289a09b368b8f1c333e3d6feb49398',1,'llama']]],
+  ['recordcoordtagsstorage_1178',['recordCoordTagsStorage',['../namespacellama_1_1internal.html#aadb89628e7b37c78df955928a1934c00',1,'llama::internal']]],
+  ['resulttree_1179',['resultTree',['../structllama_1_1mapping_1_1tree_1_1Mapping.html#a05de6e64a1ae1d70c6ee6dd7e8387636',1,'llama::mapping::tree::Mapping']]]
 ];

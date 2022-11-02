@@ -125,7 +125,7 @@ var hierarchy =
     [ "llama::mapping::internal::MakeReplacer< ReplacementMap >", "structllama_1_1mapping_1_1internal_1_1MakeReplacer.html", null ],
     [ "llama::mapping::internal::MakeUnsigned< bool >", "structllama_1_1mapping_1_1internal_1_1MakeUnsigned_3_01bool_01_4.html", null ],
     [ "Mapping", null, [
-      [ "llama::mapping::Heatmap< Mapping, CountType >", "structllama_1_1mapping_1_1Heatmap.html", null ],
+      [ "llama::mapping::Heatmap< Mapping, Granularity, CountType >", "structllama_1_1mapping_1_1Heatmap.html", null ],
       [ "llama::mapping::Trace< Mapping, CountType, MyCodeHandlesProxyReferences >", "structllama_1_1mapping_1_1Trace.html", null ]
     ] ],
     [ "llama::mapping::tree::internal::MergeFunctors< Tree, TreeOperationList >", "structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctors.html", null ],
@@ -235,8 +235,8 @@ var hierarchy =
     [ "llama::internal::ValueOf< T & >", "structllama_1_1internal_1_1ValueOf_3_01T_01_6_01_4.html", null ],
     [ "llama::internal::ValueOf< T, std::enable_if_t< isProxyReference< T > > >", "structllama_1_1internal_1_1ValueOf_3_01T_00_01std_1_1enable__if__t_3_01isProxyReference_3_01T_01_4_01_4_01_4.html", null ],
     [ "llama::internal::ValueOf< T, std::enable_if_t< isRecordRef< T > > >", "structllama_1_1internal_1_1ValueOf_3_01T_00_01std_1_1enable__if__t_3_01isRecordRef_3_01T_01_4_01_4_01_4.html", null ],
-    [ "llama::bloballoc::Vector", "structllama_1_1bloballoc_1_1Vector.html", null ],
     [ "llama::Vector< Mapping >", "structllama_1_1Vector.html", null ],
+    [ "llama::bloballoc::Vector", "structllama_1_1bloballoc_1_1Vector.html", null ],
     [ "VHBits", null, [
       [ "llama::mapping::internal::BitPackedIntRef< Integral, StoredIntegralPointer, VHBits, SizeType >", "structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html", null ]
     ] ],

@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['offset_1158',['offset',['../structllama_1_1NrAndOffset.html#a3ce7816ca78ecdb2a130aa886c0e9965',1,'llama::NrAndOffset::offset()'],['../structllama_1_1VirtualView.html#a7825e5f6ad172ba5d52faca5615e9869',1,'llama::VirtualView::offset()']]],
-  ['offsetof_1159',['offsetOf',['../namespacellama.html#aae03df933faef61723569d4655563bbe',1,'llama']]],
-  ['one_1160',['one',['../namespacellama_1_1mapping_1_1tree.html#afbd4ba87d1acf92e1418324f097a68c8',1,'llama::mapping::tree']]],
-  ['operation_1161',['operation',['../structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctors_3_01Tree_00_01Tuple_3_01Operations_8_8_8_01_4_01_4.html#a414a8d97cea69b25adb091fd077cd9aa',1,'llama::mapping::tree::internal::MergeFunctors&lt; Tree, Tuple&lt; Operations... &gt; &gt;']]]
+  ['newvalue_1163',['newValue',['../structllama_1_1mapping_1_1tree_1_1functor_1_1internal_1_1ChangeNodeChildsRuntimeFunctor.html#a7f3c95fa9bb2bb5cf45f3a2724bd935d',1,'llama::mapping::tree::functor::internal::ChangeNodeChildsRuntimeFunctor']]],
+  ['next_1164',['next',['../structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctors_3_01Tree_00_01Tuple_3_01Operations_8_8_8_01_4_01_4.html#a40fdcecf96015a971cc4ed140f3212a0',1,'llama::mapping::tree::internal::MergeFunctors&lt; Tree, Tuple&lt; Operations... &gt; &gt;']]],
+  ['nr_1165',['nr',['../structllama_1_1NrAndOffset.html#a27b2a6cf76158f1f5cffd3fb1995da82',1,'llama::NrAndOffset']]]
 ];

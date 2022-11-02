@@ -85,13 +85,16 @@ $(document).ready(function(){initNavTree('Common_8hpp.html',''); initResizable()
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
-<a href="#typedef-members">Typedefs</a>  </div>
+<a href="#typedef-members">Typedefs</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">Common.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="Core_8hpp_source.html">../Core.hpp</a>&quot;</code><br />
+<code>#include &lt;atomic&gt;</code><br />
 <code>#include &lt;climits&gt;</code><br />
+<code>#include &lt;boost/atomic/atomic_ref.hpp&gt;</code><br />
 </div><div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Include dependency graph for Common.hpp:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -99,22 +102,24 @@ $(document).ready(function(){initNavTree('Common_8hpp.html',''); initResizable()
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="Common_8hpp__incl.png" border="0" usemap="#_2home_2runner_2work_2llama_2llama_2include_2llama_2mapping_2Common_8hpp" alt=""/></div>
 <map name="_2home_2runner_2work_2llama_2llama_2include_2llama_2mapping_2Common_8hpp" id="_2home_2runner_2work_2llama_2llama_2include_2llama_2mapping_2Common_8hpp">
-<area shape="rect" title=" " alt="" coords="403,5,619,61"/>
-<area shape="rect" href="Core_8hpp.html" title=" " alt="" coords="413,109,505,136"/>
-<area shape="rect" title=" " alt="" coords="529,109,596,136"/>
-<area shape="rect" href="ArrayExtents_8hpp.html" title=" " alt="" coords="130,184,265,211"/>
-<area shape="rect" href="Meta_8hpp.html" title=" " alt="" coords="421,259,504,285"/>
-<area shape="rect" title=" " alt="" coords="254,259,346,285"/>
-<area shape="rect" href="RecordCoord_8hpp.html" title=" " alt="" coords="340,184,473,211"/>
-<area shape="rect" title=" " alt="" coords="548,184,628,211"/>
-<area shape="rect" title=" " alt="" coords="652,184,711,211"/>
-<area shape="rect" href="Array_8hpp.html" title=" " alt="" coords="64,259,147,285"/>
-<area shape="rect" title=" " alt="" coords="171,259,229,285"/>
-<area shape="rect" href="macros_8hpp.html" title=" " alt="" coords="5,333,104,360"/>
-<area shape="rect" title=" " alt="" coords="254,333,330,360"/>
-<area shape="rect" title=" " alt="" coords="129,333,183,360"/>
-<area shape="rect" title=" " alt="" coords="399,333,526,360"/>
-<area shape="rect" title=" " alt="" coords="528,259,584,285"/>
+<area shape="rect" title=" " alt="" coords="500,5,716,61"/>
+<area shape="rect" href="Core_8hpp.html" title=" " alt="" coords="413,117,505,143"/>
+<area shape="rect" title=" " alt="" coords="529,117,596,143"/>
+<area shape="rect" title=" " alt="" coords="620,117,687,143"/>
+<area shape="rect" title=" " alt="" coords="711,109,867,151"/>
+<area shape="rect" href="ArrayExtents_8hpp.html" title=" " alt="" coords="130,199,265,225"/>
+<area shape="rect" href="Meta_8hpp.html" title=" " alt="" coords="421,273,504,300"/>
+<area shape="rect" title=" " alt="" coords="254,273,346,300"/>
+<area shape="rect" href="RecordCoord_8hpp.html" title=" " alt="" coords="340,199,473,225"/>
+<area shape="rect" title=" " alt="" coords="548,199,628,225"/>
+<area shape="rect" title=" " alt="" coords="652,199,711,225"/>
+<area shape="rect" href="Array_8hpp.html" title=" " alt="" coords="64,273,147,300"/>
+<area shape="rect" title=" " alt="" coords="171,273,229,300"/>
+<area shape="rect" href="macros_8hpp.html" title=" " alt="" coords="5,348,104,375"/>
+<area shape="rect" title=" " alt="" coords="254,348,330,375"/>
+<area shape="rect" title=" " alt="" coords="129,348,183,375"/>
+<area shape="rect" title=" " alt="" coords="399,348,526,375"/>
+<area shape="rect" title=" " alt="" coords="528,273,584,300"/>
 </map>
 </div>
 </div><div class="textblock"><div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
@@ -194,6 +199,12 @@ Typedefs</h2></td></tr>
 <tr class="memitem:a65287f3ded6e419e868b0e2819777206"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a65287f3ded6e419e868b0e2819777206">llama::mapping::FlattenRecordDimMinimizePadding</a> = FlattenRecordDimIncreasingAlignment&lt; RecordDim &gt;</td></tr>
 <tr class="memdesc:a65287f3ded6e419e868b0e2819777206"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flattens and sorts the record dimension by the alignment of its fields to minimize padding.  <a href="namespacellama_1_1mapping.html#a65287f3ded6e419e868b0e2819777206">More...</a><br /></td></tr>
 <tr class="separator:a65287f3ded6e419e868b0e2819777206"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:ace4293b90c407582ad96f531c05c19b5"><td class="memTemplParams" colspan="2">template&lt;typename CountType &gt; </td></tr>
+<tr class="memitem:ace4293b90c407582ad96f531c05c19b5"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#ace4293b90c407582ad96f531c05c19b5">llama::mapping::internal::atomicInc</a> (CountType &amp;i)</td></tr>
+<tr class="separator:ace4293b90c407582ad96f531c05c19b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -201,7 +212,7 @@ Typedefs</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc.html">mapping</a></li><li class="navelem"><a class="el" href="Common_8hpp.html">Common.hpp</a></li>
-    <li class="footer">Generated on Tue Nov 1 2022 18:12:17 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Nov 2 2022 16:32:03 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

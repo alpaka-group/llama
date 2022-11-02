@@ -1,19 +1,21 @@
 <map id="/home/runner/work/llama/llama/include/llama/mapping/SoA.hpp" name="/home/runner/work/llama/llama/include/llama/mapping/SoA.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="385,5,601,61"/>
-<area shape="rect" id="node2" href="$Common_8hpp.html" title=" " alt="" coords="308,109,417,136"/>
-<area shape="rect" id="node11" title=" " alt="" coords="568,333,627,360"/>
-<area shape="rect" id="node3" href="$Core_8hpp.html" title=" " alt="" coords="317,184,409,211"/>
-<area shape="rect" id="node17" title=" " alt="" coords="225,184,292,211"/>
-<area shape="rect" id="node4" href="$ArrayExtents_8hpp.html" title=" " alt="" coords="401,259,535,285"/>
-<area shape="rect" id="node9" href="$Meta_8hpp.html" title=" " alt="" coords="451,333,533,360"/>
-<area shape="rect" id="node12" title=" " alt="" coords="211,333,303,360"/>
-<area shape="rect" id="node13" href="$RecordCoord_8hpp.html" title=" " alt="" coords="5,259,139,285"/>
-<area shape="rect" id="node15" title=" " alt="" coords="163,259,243,285"/>
-<area shape="rect" id="node16" title=" " alt="" coords="267,259,325,285"/>
-<area shape="rect" id="node5" href="$Array_8hpp.html" title=" " alt="" coords="328,333,411,360"/>
-<area shape="rect" id="node6" href="$macros_8hpp.html" title=" " alt="" coords="320,408,419,435"/>
-<area shape="rect" id="node7" title=" " alt="" coords="98,408,174,435"/>
-<area shape="rect" id="node8" title=" " alt="" coords="241,408,295,435"/>
-<area shape="rect" id="node10" title=" " alt="" coords="443,408,570,435"/>
-<area shape="rect" id="node14" title=" " alt="" coords="109,333,165,360"/>
+<area shape="rect" id="node1" title=" " alt="" coords="67,5,283,61"/>
+<area shape="rect" id="node2" href="$Common_8hpp.html" title=" " alt="" coords="285,109,395,136"/>
+<area shape="rect" id="node11" title=" " alt="" coords="5,348,64,375"/>
+<area shape="rect" id="node3" href="$Core_8hpp.html" title=" " alt="" coords="294,191,386,218"/>
+<area shape="rect" id="node17" title=" " alt="" coords="411,191,477,218"/>
+<area shape="rect" id="node18" title=" " alt="" coords="501,191,568,218"/>
+<area shape="rect" id="node19" title=" " alt="" coords="114,184,270,225"/>
+<area shape="rect" id="node4" href="$ArrayExtents_8hpp.html" title=" " alt="" coords="47,273,182,300"/>
+<area shape="rect" id="node9" href="$Meta_8hpp.html" title=" " alt="" coords="469,348,552,375"/>
+<area shape="rect" id="node12" title=" " alt="" coords="302,348,394,375"/>
+<area shape="rect" id="node13" href="$RecordCoord_8hpp.html" title=" " alt="" coords="444,273,577,300"/>
+<area shape="rect" id="node15" title=" " alt="" coords="207,273,287,300"/>
+<area shape="rect" id="node16" title=" " alt="" coords="311,273,369,300"/>
+<area shape="rect" id="node5" href="$Array_8hpp.html" title=" " alt="" coords="93,348,176,375"/>
+<area shape="rect" id="node6" href="$macros_8hpp.html" title=" " alt="" coords="35,423,133,449"/>
+<area shape="rect" id="node7" title=" " alt="" coords="307,423,383,449"/>
+<area shape="rect" id="node8" title=" " alt="" coords="158,423,213,449"/>
+<area shape="rect" id="node10" title=" " alt="" coords="447,423,574,449"/>
+<area shape="rect" id="node14" title=" " alt="" coords="576,348,632,375"/>
 </map>
