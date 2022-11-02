@@ -29,12 +29,14 @@ namespace llama::mapping
     {
     private:
         using Base = MappingBase<TArrayExtents, TRecordDim>;
-        using Flattener = FlattenRecordDimSingleBlob<TRecordDim>;
         using size_type = typename TArrayExtents::value_type;
 
     public:
+        inline static constexpr bool separateBuffers = SeparateBuffers;
+        inline static constexpr bool alignSubArrays = AlignSubArrays;
         using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
-        static constexpr std::size_t blobCount
+        using Flattener = FlattenRecordDimSingleBlob<TRecordDim>;
+        inline static constexpr std::size_t blobCount
             = SeparateBuffers ? boost::mp11::mp_size<FlatRecordDim<TRecordDim>>::value : 1;
 
         using Base::Base;

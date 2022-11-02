@@ -65,24 +65,23 @@ namespace llama::mapping
 
     /// Mapping that changes the type in the record domain for a different one in storage. Conversions happen during
     /// load and store.
-    /// /tparam ReplacementMap A type list of binary type lists (a map) specifiying which type or the type at a \ref
+    /// @tparam TReplacementMap A type list of binary type lists (a map) specifiying which type or the type at a \ref
     /// RecordCoord (map key) to replace by which other type (mapped value).
     template<
         typename TArrayExtents,
         typename TRecordDim,
         template<typename, typename>
         typename InnerMapping,
-        typename ReplacementMap>
+        typename TReplacementMap>
     struct ChangeType
-        : private InnerMapping<TArrayExtents, internal::ReplaceTypesInRecordDim<TRecordDim, ReplacementMap>>
+        : private InnerMapping<TArrayExtents, internal::ReplaceTypesInRecordDim<TRecordDim, TReplacementMap>>
     {
-        using Inner = InnerMapping<TArrayExtents, internal::ReplaceTypesInRecordDim<TRecordDim, ReplacementMap>>;
-
+        using Inner = InnerMapping<TArrayExtents, internal::ReplaceTypesInRecordDim<TRecordDim, TReplacementMap>>;
+        using ReplacementMap = TReplacementMap;
         using ArrayExtents = typename Inner::ArrayExtents;
         using ArrayIndex = typename Inner::ArrayIndex;
         using RecordDim = TRecordDim; // hide Inner::RecordDim
         using Inner::blobCount;
-
         using Inner::blobSize;
         using Inner::extents;
         using Inner::Inner;

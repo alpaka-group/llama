@@ -72,11 +72,11 @@ namespace llama::mapping
 
     /// Forwards all calls to the inner mapping. Traces all accesses made through this mapping and allows printing a
     /// summary.
-    /// /tparam Mapping The type of the inner mapping.
-    /// /tparam CountType The type used for counting the number of accesses.
-    /// /tparam MyCodeHandlesProxyReferences If false, Trace will avoid proxy references but can then only count
+    /// @tparam Mapping The type of the inner mapping.
+    /// @tparam TCountType The type used for counting the number of accesses.
+    /// @tparam MyCodeHandlesProxyReferences If false, Trace will avoid proxy references but can then only count
     /// the number of address computations
-    template<typename Mapping, typename CountType = std::size_t, bool MyCodeHandlesProxyReferences = true>
+    template<typename Mapping, typename TCountType = std::size_t, bool MyCodeHandlesProxyReferences = true>
     struct Trace : Mapping
     {
     private:
@@ -84,6 +84,8 @@ namespace llama::mapping
 
     public:
         using RecordDim = typename Mapping::RecordDim;
+        using CountType = TCountType;
+        inline static constexpr bool myCodeHandlesProxyReferences = MyCodeHandlesProxyReferences;
         using FieldHitsArray = Array<AccessCounts<CountType>, flatFieldCount<RecordDim>>;
 
         inline static constexpr auto blobCount = Mapping::blobCount + 1;

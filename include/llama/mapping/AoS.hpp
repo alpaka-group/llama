@@ -25,12 +25,13 @@ namespace llama::mapping
     {
     private:
         using Base = MappingBase<TArrayExtents, TRecordDim>;
-        using Flattener = FlattenRecordDim<TRecordDim>;
         using size_type = typename Base::size_type;
 
     public:
+        inline static constexpr bool alignAndPad = AlignAndPad;
         using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
-        static constexpr std::size_t blobCount = 1;
+        using Flattener = FlattenRecordDim<TRecordDim>;
+        inline static constexpr std::size_t blobCount = 1;
 
         using Base::Base;
 
