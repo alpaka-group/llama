@@ -27,19 +27,22 @@ TEMPLATE_LIST_TEST_CASE("mapping.concepts", "", SizeTypes)
 
     using Inner = llama::mapping::AlignedAoS<llama::ArrayExtentsDynamic<TestType, 2>, Particle>;
     STATIC_REQUIRE(llama::FullyComputedMapping<llama::mapping::Trace<Inner>>);
+#    ifndef _MSC_VER
     STATIC_REQUIRE(llama::FullyComputedMapping<llama::mapping::Heatmap<Inner>>);
+#    endif
 
-#    ifndef __NVCOMPILER
     STATIC_REQUIRE(
         llama::FullyComputedMapping<llama::mapping::Null<llama::ArrayExtentsDynamic<TestType, 2>, Particle>>);
+#    ifndef __NVCOMPILER
     STATIC_REQUIRE(llama::FullyComputedMapping<
                    llama::mapping::
                        Bytesplit<llama::ArrayExtentsDynamic<TestType, 2>, Particle, llama::mapping::BindAoS<>::fn>>);
+#    endif
     STATIC_REQUIRE(
         llama::FullyComputedMapping<llama::mapping::BitPackedIntSoA<llama::ArrayExtentsDynamic<TestType, 2>, Vec3I>>);
     STATIC_REQUIRE(llama::FullyComputedMapping<
                    llama::mapping::BitPackedFloatSoA<llama::ArrayExtentsDynamic<TestType, 2>, Vec3D>>);
-
+#    ifndef __NVCOMPILER
     STATIC_REQUIRE(llama::PartiallyComputedMapping<llama::mapping::ChangeType<
                        llama::ArrayExtentsDynamic<TestType, 2>,
                        Particle,
