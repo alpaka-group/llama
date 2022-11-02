@@ -2528,12 +2528,12 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>>
 		    struct MakeIsPhysical
 		    {
 		        template<typename RC>
-		        using type = boost::mp11::mp_bool<PhysicalField<M, RC>>;
+		        using fn = boost::mp11::mp_bool<PhysicalField<M, RC>>;
 		    };
 
 		    template<typename M>
 		    inline constexpr bool allFieldsArePhysical
-		        = boost::mp11::mp_all_of<LeafRecordCoords<typename M::RecordDim>, MakeIsPhysical<M>::template type>::value;
+		        = boost::mp11::mp_all_of<LeafRecordCoords<typename M::RecordDim>, MakeIsPhysical<M>::template fn>::value;
 
 		    template <typename M>
 		    concept PhysicalMapping = Mapping<M> && allFieldsArePhysical<M>;
@@ -2560,12 +2560,12 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>>
 		    struct MakeIsComputed
 		    {
 		        template<typename RC>
-		        using type = boost::mp11::mp_bool<ComputedField<M, RC>>;
+		        using fn = boost::mp11::mp_bool<ComputedField<M, RC>>;
 		    };
 
 		    template<typename M>
 		    inline constexpr bool allFieldsAreComputed
-		        = boost::mp11::mp_all_of<LeafRecordCoords<typename M::RecordDim>, MakeIsComputed<M>::template type>::value;
+		        = boost::mp11::mp_all_of<LeafRecordCoords<typename M::RecordDim>, MakeIsComputed<M>::template fn>::value;
 
 		    template <typename M>
 		    concept FullyComputedMapping = Mapping<M> && allFieldsAreComputed<M>;
@@ -2573,8 +2573,8 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>>
 		    template<
 		        typename M,
 		        typename LeafCoords = LeafRecordCoords<typename M::RecordDim>,
-		        std::size_t PhysicalCount = boost::mp11::mp_count_if<LeafCoords, MakeIsPhysical<M>::template type>::value,
-		        std::size_t ComputedCount = boost::mp11::mp_count_if<LeafCoords, MakeIsComputed<M>::template type>::value>
+		        std::size_t PhysicalCount = boost::mp11::mp_count_if<LeafCoords, MakeIsPhysical<M>::template fn>::value,
+		        std::size_t ComputedCount = boost::mp11::mp_count_if<LeafCoords, MakeIsComputed<M>::template fn>::value>
 		    inline constexpr bool allFieldsArePhysicalOrComputed
 		        = (PhysicalCount + ComputedCount) >= boost::mp11::mp_size<LeafCoords>::value&& PhysicalCount > 0
 		        && ComputedCount > 0; // == instead of >= would be better, but it's not easy to count correctly,
@@ -2806,7 +2806,11 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>>
 		// #pragma once
 		// #include "../Core.hpp"    // amalgamate: file already expanded
 
+		#include <atomic>
 		#include <climits>
+		#ifndef __cpp_lib_atomic_ref
+		#    include <boost/atomic/atomic_ref.hpp>
+		#endif
 
 		namespace llama::mapping
 		{
@@ -3028,6 +3032,23 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>>
 		    /// Flattens and sorts the record dimension by the alignment of its fields to minimize padding.
 		    template<typename RecordDim>
 		    using FlattenRecordDimMinimizePadding = FlattenRecordDimIncreasingAlignment<RecordDim>;
+
+		    namespace internal
+		    {
+		        template<typename CountType>
+		        LLAMA_FN_HOST_ACC_INLINE void atomicInc(CountType& i)
+		        {
+		#ifdef __CUDA_ARCH__
+		            // if you get an error here that there is no overload of atomicAdd, your CMAKE_CUDA_ARCHITECTURE might be
+		            // too low or you need to use a smaller CountType for the Trace or Heatmap mapping.
+		            atomicAdd(&i, CountType{1});
+		#elif defined(__cpp_lib_atomic_ref)
+		            ++std::atomic_ref<CountType>{i};
+		#else
+		            ++boost::atomic_ref<CountType>{i};
+		#endif
+		        }
+		    } // namespace internal
 		} // namespace llama::mapping
 		// ==
 		// == ./mapping/Common.hpp ==
@@ -3182,7 +3203,39 @@ namespace llama
     template<typename Mapping, typename RecordCoord>
     inline constexpr bool isComputed = internal::IsComputed<Mapping, RecordCoord>::value;
 
-    /// Runs the constructor of all fields reachable through the given view. Computed fields are not constructed.
+#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ <= 4
+    namespace internal
+    {
+        template<typename View>
+        struct NvccWorkaroundLambda
+        {
+            using RecordDim = typename View::RecordDim;
+            using ArrayIndex = typename View::ArrayIndex;
+
+            template<typename RecordCoord>
+            void operator()(RecordCoord rc) const
+            {
+                using FieldType = GetType<RecordDim, decltype(rc)>;
+                using RefType = decltype(view(ai)(rc));
+                // this handles physical and computed mappings
+                if constexpr(std::is_lvalue_reference_v<RefType>)
+                {
+                    new(&view(ai)(rc)) FieldType;
+                }
+                else if constexpr(isProxyReference<RefType>)
+                {
+                    view(ai)(rc) = FieldType{};
+                }
+            }
+
+            View& view;
+            ArrayIndex ai;
+        };
+    } // namespace internal
+#endif
+
+    /// Runs the constructor of all fields reachable through the given view. Computed fields are constructed if they
+    /// return l-value references. If the mapping is a computed
     template<typename Mapping, typename BlobType>
     LLAMA_FN_HOST_ACC_INLINE void constructFields(View<Mapping, BlobType>& view)
     {
@@ -3193,16 +3246,41 @@ namespace llama
             [&]([[maybe_unused]] typename View::ArrayIndex ai)
             {
                 if constexpr(isRecord<RecordDim> || internal::IsBoundedArray<RecordDim>::value)
+                {
                     forEachLeafCoord<RecordDim>(
+#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ <= 4
+                        internal::NvccWorkaroundLambda<View>{view, ai}
+#else
                         [&](auto rc)
                         {
-                            // TODO(bgruber): we could initialize computed fields if we can write to those. We could
-                            // test if the returned value can be cast to a T& and then attempt to write.
-                            if constexpr(!isComputed<Mapping, decltype(rc)>)
-                                new(&view(ai)(rc)) GetType<RecordDim, decltype(rc)>;
-                        });
-                else if constexpr(!isComputed<Mapping, RecordCoord<>>)
-                    new(&view(ai)) RecordDim;
+                            using FieldType = GetType<RecordDim, decltype(rc)>;
+                            using RefType = decltype(view(ai)(rc));
+                            // this handles physical and computed mappings
+                            if constexpr(std::is_lvalue_reference_v<RefType>)
+                            {
+                                new(&view(ai)(rc)) FieldType;
+                            }
+                            else if constexpr(isProxyReference<RefType>)
+                            {
+                                view(ai)(rc) = FieldType{};
+                            }
+                        }
+#endif
+                    );
+                }
+                else
+                {
+                    // this handles physical and computed mappings
+                    using RefType = decltype(view(ai));
+                    if constexpr(std::is_lvalue_reference_v<RefType>)
+                    {
+                        new(&view(ai)) RecordDim;
+                    }
+                    else if constexpr(isProxyReference<RefType>)
+                    {
+                        view(ai) = RecordDim{};
+                    }
+                }
             });
     }
 
@@ -3224,13 +3302,22 @@ namespace llama
         return view;
     }
 
+    /// Same as \ref allocViewStack but does not run field constructors.
+    template<std::size_t Dim, typename RecordDim>
+    LLAMA_FN_HOST_ACC_INLINE auto allocViewStackUninitialized() -> decltype(auto)
+    {
+        constexpr auto mapping = mapping::MinAlignedOne<ArrayExtentsNCube<int, Dim, 1>, RecordDim>{};
+        return allocViewUninitialized(mapping, bloballoc::Stack<mapping.blobSize(0)>{});
+    }
+
     /// Allocates a \ref View holding a single record backed by stack memory (\ref bloballoc::Stack).
     /// \tparam Dim Dimension of the \ref ArrayExtents of the \ref View.
     template<std::size_t Dim, typename RecordDim>
     LLAMA_FN_HOST_ACC_INLINE auto allocViewStack() -> decltype(auto)
     {
-        constexpr auto mapping = mapping::MinAlignedOne<ArrayExtentsNCube<int, Dim, 1>, RecordDim>{};
-        return allocView(mapping, bloballoc::Stack<mapping.blobSize(0)>{});
+        auto view = allocViewStackUninitialized<Dim, RecordDim>();
+        constructFields(view);
+        return view;
     }
 
     template<typename View, typename BoundRecordCoord = RecordCoord<>, bool OwnView = false>
@@ -7248,74 +7335,155 @@ namespace llama::mapping
 // #include "Common.hpp"    // amalgamate: file already expanded
 
 // #include <array>    // amalgamate: file already included
-#include <atomic>
+// #include <atomic>    // amalgamate: file already included
 #include <sstream>
 // #include <vector>    // amalgamate: file already included
 
 namespace llama::mapping
 {
-    /// Forwards all calls to the inner mapping. Counts all accesses made to all bytes, allowing to extract a heatmap.
-    /// \tparam Mapping The type of the inner mapping.
-    template<typename Mapping, typename CountType = std::size_t>
-    struct Heatmap : Mapping
+    /// Forwards all calls to the inner mapping. Counts all accesses made to blocks inside the blobs, allowing to
+    /// extract a heatmap.
+    /// @tparam Mapping The type of the inner mapping.
+    /// @tparam Granularity The granularity in bytes on which to could accesses. A value of 1 counts every byte.
+    /// individually. A value of e.g. 64, counts accesses per 64 byte block.
+    /// @tparam CountType Data type used to count the number of accesses. Atomic increments must be supported for this
+    /// type.
+    template<
+        typename Mapping,
+        typename Mapping::ArrayExtents::value_type Granularity = 1,
+        typename CountType = std::size_t>
+    struct Heatmap : private Mapping
     {
+    private:
+        using size_type = typename Mapping::ArrayExtents::value_type;
+
+    public:
+        using typename Mapping::ArrayExtents;
+        using typename Mapping::ArrayIndex;
+        using typename Mapping::RecordDim;
+
+        // We duplicate every blob of the inner mapping with a shadow blob, where we count the accesses
+        inline static constexpr std::size_t blobCount = Mapping::blobCount * 2;
+
         constexpr Heatmap() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        explicit Heatmap(Mapping mapping) : Mapping(mapping)
+        explicit Heatmap(Mapping mapping) : Mapping(std::move(mapping))
         {
-            for(std::size_t i = 0; i < Mapping::blobCount; i++)
-                byteHits[i] = std::vector<std::atomic<CountType>>(Mapping::blobSize(i));
         }
 
-        Heatmap(const Heatmap&) = delete;
-        auto operator=(const Heatmap&) -> Heatmap& = delete;
+        template<typename... Args>
+        LLAMA_FN_HOST_ACC_INLINE explicit Heatmap(Args&&... innerArgs) : Mapping(std::forward<Args>(innerArgs)...)
+        {
+        }
 
-        Heatmap(Heatmap&&) noexcept = default;
-        auto operator=(Heatmap&&) noexcept -> Heatmap& = default;
+#if defined(__cpp_lib_concepts) && defined(__NVCOMPILER)
+        // nvc++ fails to find extents() from the base class when trying to satisfy the Mapping concept
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto extents() const -> typename Mapping::ArrayExtents
+        {
+            return static_cast<const Mapping&>(*this).extents();
+        }
+#else
+        using Mapping::extents;
+#endif
 
-        ~Heatmap() = default;
+        LLAMA_FN_HOST_ACC_INLINE
+        constexpr auto blobSize(size_type blobIndex) const -> size_type
+        {
+            if(blobIndex < size_type{Mapping::blobCount})
+                return Mapping::blobSize(blobIndex);
+            return blockHitsSize(blobIndex) * sizeof(CountType);
+        }
 
         template<std::size_t... RecordCoords>
-        LLAMA_FN_HOST_ACC_INLINE auto blobNrAndOffset(
-            typename Mapping::ArrayIndex ai,
-            RecordCoord<RecordCoords...> rc = {}) const -> NrAndOffset<typename Mapping::ArrayExtents::value_type>
+        static constexpr auto isComputed(RecordCoord<RecordCoords...>)
         {
-            const auto nao = Mapping::blobNrAndOffset(ai, rc);
-            using Type = GetType<typename Mapping::RecordDim, RecordCoord<RecordCoords...>>;
-            for(std::size_t i = 0; i < sizeof(Type); i++)
-                ++byteHits[nao.nr][nao.offset + i];
-            return nao;
+            return true;
         }
 
-        auto toGnuplotScript(std::size_t wrapAfterBytes = 64) const -> std::string
+        template<std::size_t... RecordCoords, typename Blobs>
+        LLAMA_FN_HOST_ACC_INLINE auto compute(
+            typename Mapping::ArrayIndex ai,
+            RecordCoord<RecordCoords...> rc,
+            Blobs& blobs) const -> decltype(auto)
         {
-            std::stringstream f;
-            f << "#!/usr/bin/gnuplot -p\n$data << EOD\n";
+            static_assert(
+                !std::is_const_v<Blobs>,
+                "Cannot access (even just reading) data through Heatmap from const blobs/view, since we need to write "
+                "the access counts");
+
+            const auto [nr, offset] = Mapping::blobNrAndOffset(ai, rc);
+            using Type = GetType<typename Mapping::RecordDim, RecordCoord<RecordCoords...>>;
+
+            auto* hits = blockHits(nr, blobs);
+            for(size_type i = 0; i < divCeil(size_type{sizeof(Type)}, Granularity); i++)
+                internal::atomicInc(hits[offset / Granularity + i]);
+
+            LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
+            return reinterpret_cast<CopyConst<std::remove_reference_t<decltype(blobs[nr][offset])>, Type>&>(
+                blobs[nr][offset]);
+            LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
+        }
+
+        // Returns the size of the block hits buffer for blob forBlobI in block counts.
+        LLAMA_FN_HOST_ACC_INLINE auto blockHitsSize(size_type forBlobI) const -> size_type
+        {
+            return divCeil(Mapping::blobSize(forBlobI), Granularity);
+        }
+        LLAMA_SUPPRESS_HOST_DEVICE_WARNING
+
+        template<typename Blobs>
+        LLAMA_FN_HOST_ACC_INLINE auto blockHits(size_type forBlobI, const Blobs& blobs) const -> const CountType*
+        {
+            return reinterpret_cast<const CountType*>(&blobs[size_type{Mapping::blobCount} + forBlobI][0]);
+        }
+
+        LLAMA_SUPPRESS_HOST_DEVICE_WARNING
+        template<typename Blobs>
+        LLAMA_FN_HOST_ACC_INLINE auto blockHits(size_type forBlobI, Blobs& blobs) const -> CountType*
+        {
+            return reinterpret_cast<CountType*>(&blobs[size_type{Mapping::blobCount} + forBlobI][0]);
+        }
+
+        /// Writes a data file suitable for gnuplot containing the heatmap data. You can use the script provided by
+        /// \ref gnuplotScript to plot this data file.
+        /// @param blobs The blobs of the view containing this mapping
+        /// @param os The stream to write the data to. Should be some form of std::ostream.
+        template<typename Blobs, typename OStream>
+        void writeGnuplotDataFile(const Blobs& blobs, OStream&& os, std::size_t wrapAfterBlocks = 64) const
+        {
             for(std::size_t i = 0; i < Mapping::blobCount; i++)
             {
-                std::size_t byteCount = 0;
-                for(const auto& hits : byteHits[i])
-                    f << hits << ((++byteCount % wrapAfterBytes == 0) ? '\n' : ' ');
-                while(byteCount++ % wrapAfterBytes != 0)
-                    f << "0 ";
-                f << '\n';
+                auto* bh = blockHits(i, blobs);
+                std::size_t blockCount = 0;
+                for(size_type j = 0; j < blockHitsSize(i); j++)
+                    os << bh[j] << ((++blockCount % wrapAfterBlocks == 0) ? '\n' : ' ');
+                while(blockCount++ % wrapAfterBlocks != 0)
+                    os << "0 ";
+                os << '\n';
             }
-            f << R"(EOD
-set view map
-set xtics format ""
-set x2tics autofreq 8
-set yrange [] reverse
-set link x2; set link y2
-set ylabel "Cacheline"
-set x2label "Byte"
-plot $data matrix with image pixels axes x2y1
-)";
-            return f.str();
         }
 
-        mutable std::array<std::vector<std::atomic<CountType>>, Mapping::blobCount> byteHits;
+        /// An example script for plotting the heatmap data using gnuplot.
+        static constexpr std::string_view gnuplotScript = R"(#!/bin/bash
+gnuplot -p <<EOF
+set view map
+set xtics format ""
+set x2tics autofreq 32
+set ytics autofreq 1024
+set yrange [] reverse
+set link x2; set link y2
+set x2label "Byte"
+plot '${1:-plot.dat}' matrix with image pixels axes x2y1
+EOF
+)";
     };
+
+    template<typename Mapping>
+    inline constexpr bool isHeatmap = false;
+
+    template<typename Mapping, typename Mapping::ArrayExtents::value_type Granularity, typename CountType>
+    inline constexpr bool isHeatmap<Heatmap<Mapping, Granularity, CountType>> = true;
 } // namespace llama::mapping
 // ==
 // == ./mapping/Heatmap.hpp ==
@@ -8845,34 +9013,12 @@ namespace llama::mapping
 // #include "../StructName.hpp"    // amalgamate: file already expanded
 // #include "Common.hpp"    // amalgamate: file already expanded
 
-// #include <atomic>    // amalgamate: file already included
 #include <cstdio>
 #include <iomanip>
 // #include <iostream>    // amalgamate: file already included
 
-#ifndef __cpp_lib_atomic_ref
-#    include <boost/atomic/atomic_ref.hpp>
-#endif
-
 namespace llama::mapping
 {
-    namespace internal
-    {
-        template<typename CountType>
-        LLAMA_FN_HOST_ACC_INLINE void atomicInc(CountType& i)
-        {
-#ifdef __CUDA_ARCH__
-            // if you get an error here that there is no overload of atomicAdd, your CMAKE_CUDA_ARCHITECTURE might be
-            // too low or you need to use a smaller CountType for the Trace mapping.
-            atomicAdd(&i, CountType{1});
-#elif defined(__cpp_lib_atomic_ref)
-            ++std::atomic_ref<CountType>{i};
-#else
-            ++boost::atomic_ref<CountType>{i};
-#endif
-        }
-    } // namespace internal
-
     template<typename CountType>
     struct AccessCounts
     {
