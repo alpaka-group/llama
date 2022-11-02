@@ -75,6 +75,37 @@ namespace llama
     template<typename Mapping, typename RecordCoord>
     inline constexpr bool isComputed = internal::IsComputed<Mapping, RecordCoord>::value;
 
+#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ <= 4
+    namespace internal
+    {
+        template<typename View>
+        struct NvccWorkaroundLambda
+        {
+            using RecordDim = typename View::RecordDim;
+            using ArrayIndex = typename View::ArrayIndex;
+
+            template<typename RecordCoord>
+            void operator()(RecordCoord rc) const
+            {
+                using FieldType = GetType<RecordDim, decltype(rc)>;
+                using RefType = decltype(view(ai)(rc));
+                // this handles physical and computed mappings
+                if constexpr(std::is_lvalue_reference_v<RefType>)
+                {
+                    new(&view(ai)(rc)) FieldType;
+                }
+                else if constexpr(isProxyReference<RefType>)
+                {
+                    view(ai)(rc) = FieldType{};
+                }
+            }
+
+            View& view;
+            ArrayIndex ai;
+        };
+    } // namespace internal
+#endif
+
     /// Runs the constructor of all fields reachable through the given view. Computed fields are constructed if they
     /// return l-value references. If the mapping is a computed
     template<typename Mapping, typename BlobType>
@@ -89,6 +120,9 @@ namespace llama
                 if constexpr(isRecord<RecordDim> || internal::IsBoundedArray<RecordDim>::value)
                 {
                     forEachLeafCoord<RecordDim>(
+#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ <= 4
+                        internal::NvccWorkaroundLambda<View>{view, ai}
+#else
                         [&](auto rc)
                         {
                             using FieldType = GetType<RecordDim, decltype(rc)>;
@@ -102,7 +136,9 @@ namespace llama
                             {
                                 view(ai)(rc) = FieldType{};
                             }
-                        });
+                        }
+#endif
+                    );
                 }
                 else
                 {
