@@ -3076,6 +3076,8 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>>
 	        using size_type = typename Base::size_type;
 
 	    public:
+	        inline static constexpr bool alignAndPad = AlignAndPad;
+	        using Flattener = FlattenRecordDim<TRecordDim>;
 	        static constexpr std::size_t blobCount = 1;
 
 	        using Base::Base;
@@ -3099,9 +3101,6 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>>
 	                = static_cast<size_type>(flatOffsetOf<typename Flattener::FlatRecordDim, flatFieldIndex, AlignAndPad>);
 	            return {size_type{0}, offset};
 	        }
-
-	    private:
-	        using Flattener = FlattenRecordDim<TRecordDim>;
 	    };
 
 	    /// One mapping preserving the alignment of the field types by inserting padding.
@@ -5713,12 +5712,13 @@ namespace llama
 	    {
 	    private:
 	        using Base = MappingBase<TArrayExtents, TRecordDim>;
-	        using Flattener = FlattenRecordDim<TRecordDim>;
 	        using size_type = typename Base::size_type;
 
 	    public:
+	        inline static constexpr bool lanes = Lanes;
 	        using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
-	        static constexpr std::size_t blobCount = 1;
+	        using Flattener = FlattenRecordDim<TRecordDim>;
+	        inline static constexpr std::size_t blobCount = 1;
 
 	        using Base::Base;
 
@@ -5802,12 +5802,14 @@ namespace llama
 	    {
 	    private:
 	        using Base = MappingBase<TArrayExtents, TRecordDim>;
-	        using Flattener = FlattenRecordDimSingleBlob<TRecordDim>;
 	        using size_type = typename TArrayExtents::value_type;
 
 	    public:
+	        inline static constexpr bool separateBuffers = SeparateBuffers;
+	        inline static constexpr bool alignSubArrays = AlignSubArrays;
 	        using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
-	        static constexpr std::size_t blobCount
+	        using Flattener = FlattenRecordDimSingleBlob<TRecordDim>;
+	        inline static constexpr std::size_t blobCount
 	            = SeparateBuffers ? boost::mp11::mp_size<FlatRecordDim<TRecordDim>>::value : 1;
 
 	        using Base::Base;
@@ -7246,24 +7248,23 @@ namespace llama::mapping
 
     /// Mapping that changes the type in the record domain for a different one in storage. Conversions happen during
     /// load and store.
-    /// /tparam ReplacementMap A type list of binary type lists (a map) specifiying which type or the type at a \ref
+    /// @tparam TReplacementMap A type list of binary type lists (a map) specifiying which type or the type at a \ref
     /// RecordCoord (map key) to replace by which other type (mapped value).
     template<
         typename TArrayExtents,
         typename TRecordDim,
         template<typename, typename>
         typename InnerMapping,
-        typename ReplacementMap>
+        typename TReplacementMap>
     struct ChangeType
-        : private InnerMapping<TArrayExtents, internal::ReplaceTypesInRecordDim<TRecordDim, ReplacementMap>>
+        : private InnerMapping<TArrayExtents, internal::ReplaceTypesInRecordDim<TRecordDim, TReplacementMap>>
     {
-        using Inner = InnerMapping<TArrayExtents, internal::ReplaceTypesInRecordDim<TRecordDim, ReplacementMap>>;
-
+        using Inner = InnerMapping<TArrayExtents, internal::ReplaceTypesInRecordDim<TRecordDim, TReplacementMap>>;
+        using ReplacementMap = TReplacementMap;
         using ArrayExtents = typename Inner::ArrayExtents;
         using ArrayIndex = typename Inner::ArrayIndex;
         using RecordDim = TRecordDim; // hide Inner::RecordDim
         using Inner::blobCount;
-
         using Inner::blobSize;
         using Inner::extents;
         using Inner::Inner;
@@ -7346,18 +7347,21 @@ namespace llama::mapping
     /// @tparam Mapping The type of the inner mapping.
     /// @tparam Granularity The granularity in bytes on which to could accesses. A value of 1 counts every byte.
     /// individually. A value of e.g. 64, counts accesses per 64 byte block.
-    /// @tparam CountType Data type used to count the number of accesses. Atomic increments must be supported for this
+    /// @tparam TCountType Data type used to count the number of accesses. Atomic increments must be supported for this
     /// type.
     template<
         typename Mapping,
         typename Mapping::ArrayExtents::value_type Granularity = 1,
-        typename CountType = std::size_t>
+        typename TCountType = std::size_t>
     struct Heatmap : private Mapping
     {
     private:
         using size_type = typename Mapping::ArrayExtents::value_type;
 
     public:
+        using Inner = Mapping;
+        inline static constexpr std::size_t granularity = Granularity;
+        using CountType = TCountType;
         using typename Mapping::ArrayExtents;
         using typename Mapping::ArrayIndex;
         using typename Mapping::RecordDim;
@@ -7656,15 +7660,15 @@ namespace llama::mapping
     /// \tparam Bits If Bits is llama::Constant<N>, the compile-time N specifies the number of bits to use. If Bits is
     /// an integral type T, the number of bits is specified at runtime, passed to the constructor and stored as type T.
     /// Must not be zero.
-    /// \tparam LinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and how
-    /// big the linear domain gets.
-    /// \tparam StoredIntegral Integral type used as storage of reduced precision integers.
+    /// \tparam TLinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
+    /// how big the linear domain gets. \tparam TStoredIntegral Integral type used as storage of reduced precision
+    /// integers.
     template<
         typename TArrayExtents,
         typename TRecordDim,
-        typename Bits = unsigned,
-        typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
-        typename StoredIntegral = internal::StoredUnsignedFor<TRecordDim>>
+        typename Bits = typename TArrayExtents::value_type,
+        typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
+        typename TStoredIntegral = internal::StoredUnsignedFor<TRecordDim>>
     struct BitPackedIntSoA
         : MappingBase<TArrayExtents, TRecordDim>
         , private llama::internal::BoxedValue<Bits>
@@ -7682,7 +7686,15 @@ namespace llama::mapping
             "All record dimension field types must be integral");
 
     public:
+        using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
+        using StoredIntegral = TStoredIntegral;
         static constexpr std::size_t blobCount = boost::mp11::mp_size<FlatRecordDim<TRecordDim>>::value;
+
+        LLAMA_FN_HOST_ACC_INLINE
+        constexpr auto bits() const -> size_type
+        {
+            return static_cast<size_type>(VHBits::value());
+        }
 
         template<typename B = Bits, std::enable_if_t<isConstant<B>, int> = 0>
         LLAMA_FN_HOST_ACC_INLINE constexpr explicit BitPackedIntSoA(
@@ -7700,15 +7712,14 @@ namespace llama::mapping
             : Base(extents)
             , VHBits{bits}
         {
-            assert(VHBits::value() > 0);
+            assert(this->bits() > 0);
         }
 
         LLAMA_FN_HOST_ACC_INLINE
         constexpr auto blobSize(size_type /*blobIndex*/) const -> size_type
         {
             constexpr auto bitsPerStoredIntegral = static_cast<size_type>(sizeof(StoredIntegral) * CHAR_BIT);
-            const auto bitsNeeded
-                = LinearizeArrayDimsFunctor{}.size(Base::extents()) * static_cast<size_type>(VHBits::value());
+            const auto bitsNeeded = LinearizeArrayDimsFunctor{}.size(Base::extents()) * VHBits::value();
             return roundUpToMultiple(bitsNeeded, bitsPerStoredIntegral) / CHAR_BIT;
         }
 
@@ -7725,8 +7736,7 @@ namespace llama::mapping
             Blobs& blobs) const
         {
             constexpr auto blob = flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>;
-            const auto bitOffset
-                = LinearizeArrayDimsFunctor{}(ai, Base::extents()) * static_cast<size_type>(VHBits::value());
+            const auto bitOffset = LinearizeArrayDimsFunctor{}(ai, Base::extents()) * VHBits::value();
 
             using QualifiedStoredIntegral = CopyConst<Blobs, StoredIntegral>;
             using DstType = GetType<TRecordDim, RecordCoord<RecordCoords...>>;
@@ -8625,12 +8635,13 @@ namespace llama::mapping
     {
     private:
         using Base = MappingBase<TArrayExtents, TRecordDim>;
-        using Flattener = FlattenRecordDim<TRecordDim>;
         using size_type = typename Base::size_type;
 
     public:
+        inline static constexpr bool alignAndPad = AlignAndPad;
         using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
-        static constexpr std::size_t blobCount = 1;
+        using Flattener = FlattenRecordDim<TRecordDim>;
+        inline static constexpr std::size_t blobCount = 1;
 
         using Base::Base;
 
@@ -8895,16 +8906,16 @@ namespace llama::mapping
     /// use to store the exponent. If ExponentBits is llama::Value<T>, the number of bits is specified at runtime,
     /// passed to the constructor and stored as type T. Must not be zero.
     /// \tparam MantissaBits Like ExponentBits but for the mantissa bits. May be zero.
-    /// \tparam LinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and how
-    /// big the linear domain gets.
-    /// \tparam StoredIntegral Integral type used as storage of reduced precision floating-point values.
+    /// \tparam TLinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
+    /// how big the linear domain gets.
+    /// \tparam TStoredIntegral Integral type used as storage of reduced precision floating-point values.
     template<
         typename TArrayExtents,
         typename TRecordDim,
-        typename ExponentBits = unsigned,
-        typename MantissaBits = unsigned,
-        typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
-        typename StoredIntegral = internal::StoredIntegralFor<TRecordDim>>
+        typename ExponentBits = typename TArrayExtents::value_type,
+        typename MantissaBits = ExponentBits,
+        typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
+        typename TStoredIntegral = internal::StoredIntegralFor<TRecordDim>>
     struct LLAMA_DECLSPEC_EMPTY_BASES BitPackedFloatSoA
         : MappingBase<TArrayExtents, TRecordDim>
         , llama::internal::BoxedValue<ExponentBits, 0>
@@ -8917,7 +8928,21 @@ namespace llama::mapping
         using size_type = typename TArrayExtents::value_type;
 
     public:
+        using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
+        using StoredIntegral = TStoredIntegral;
         static constexpr std::size_t blobCount = boost::mp11::mp_size<FlatRecordDim<TRecordDim>>::value;
+
+        LLAMA_FN_HOST_ACC_INLINE
+        constexpr auto exponentBits() const -> size_type
+        {
+            return static_cast<size_type>(VHExp::value());
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE
+        constexpr auto mantissaBits() const -> size_type
+        {
+            return static_cast<size_type>(VHMan::value());
+        }
 
         LLAMA_FN_HOST_ACC_INLINE
         constexpr explicit BitPackedFloatSoA(
@@ -8929,15 +8954,15 @@ namespace llama::mapping
             , VHExp{exponentBits}
             , VHMan{mantissaBits}
         {
-            assert(VHExp::value() > 0);
+            assert(this->exponentBits() > 0);
         }
 
         LLAMA_FN_HOST_ACC_INLINE
         constexpr auto blobSize(size_type /*blobIndex*/) const -> size_type
         {
             constexpr auto bitsPerStoredIntegral = static_cast<size_type>(sizeof(StoredIntegral) * CHAR_BIT);
-            const auto bitsNeeded = LinearizeArrayDimsFunctor{}.size(Base::extents())
-                * (static_cast<size_type>(VHExp::value()) + static_cast<size_type>(VHMan::value()) + 1);
+            const auto bitsNeeded
+                = LinearizeArrayDimsFunctor{}.size(Base::extents()) * (exponentBits() + mantissaBits() + 1);
             return roundUpToMultiple(bitsNeeded, bitsPerStoredIntegral) / CHAR_BIT;
         }
 
@@ -8954,8 +8979,8 @@ namespace llama::mapping
             Blobs& blobs) const
         {
             constexpr auto blob = llama::flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>;
-            const auto bitOffset = LinearizeArrayDimsFunctor{}(ai, Base::extents())
-                * (static_cast<size_type>(VHExp::value()) + static_cast<size_type>(VHMan::value()) + 1);
+            const auto bitOffset
+                = LinearizeArrayDimsFunctor{}(ai, Base::extents()) * (exponentBits() + mantissaBits() + 1);
 
             using QualifiedStoredIntegral = CopyConst<Blobs, StoredIntegral>;
             using DstType = GetType<TRecordDim, RecordCoord<RecordCoords...>>;
@@ -8978,7 +9003,7 @@ namespace llama::mapping
     /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
     template<
         typename ExponentBits = unsigned,
-        typename MantissaBits = unsigned,
+        typename MantissaBits = ExponentBits,
         typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
         typename StoredIntegral = void>
     struct BindBitPackedFloatSoA
@@ -9082,11 +9107,11 @@ namespace llama::mapping
 
     /// Forwards all calls to the inner mapping. Traces all accesses made through this mapping and allows printing a
     /// summary.
-    /// /tparam Mapping The type of the inner mapping.
-    /// /tparam CountType The type used for counting the number of accesses.
-    /// /tparam MyCodeHandlesProxyReferences If false, Trace will avoid proxy references but can then only count
+    /// @tparam Mapping The type of the inner mapping.
+    /// @tparam TCountType The type used for counting the number of accesses.
+    /// @tparam MyCodeHandlesProxyReferences If false, Trace will avoid proxy references but can then only count
     /// the number of address computations
-    template<typename Mapping, typename CountType = std::size_t, bool MyCodeHandlesProxyReferences = true>
+    template<typename Mapping, typename TCountType = std::size_t, bool MyCodeHandlesProxyReferences = true>
     struct Trace : Mapping
     {
     private:
@@ -9094,6 +9119,8 @@ namespace llama::mapping
 
     public:
         using RecordDim = typename Mapping::RecordDim;
+        using CountType = TCountType;
+        inline static constexpr bool myCodeHandlesProxyReferences = MyCodeHandlesProxyReferences;
         using FieldHitsArray = Array<AccessCounts<CountType>, flatFieldCount<RecordDim>>;
 
         inline static constexpr auto blobCount = Mapping::blobCount + 1;
@@ -9471,7 +9498,7 @@ namespace llama::mapping
     } // namespace internal
 
     /// Mapping which splits off a part of the record dimension and maps it differently then the rest.
-    /// \tparam RecordCoordForMapping1 A \ref RecordCoord or a list of RecordCoords selecting the part of the record
+    /// \tparam TRecordCoordForMapping1 A \ref RecordCoord or a list of RecordCoords selecting the part of the record
     /// dimension to be mapped differently.
     /// \tparam MappingTemplate1 The mapping used for the selected part of the record dimension.
     /// \tparam MappingTemplate2 The mapping used for the not selected part of the record dimension.
@@ -9479,7 +9506,7 @@ namespace llama::mapping
     template<
         typename TArrayExtents,
         typename TRecordDim,
-        typename RecordCoordForMapping1,
+        typename TRecordCoordForMapping1,
         template<typename...>
         typename MappingTemplate1,
         template<typename...>
@@ -9491,6 +9518,7 @@ namespace llama::mapping
         using ArrayIndex = typename ArrayExtents::Index;
         using RecordDim = TRecordDim;
 
+        using RecordCoordForMapping1 = TRecordCoordForMapping1;
         using RecordDimPartitions = typename internal::PartionedRecordDim<RecordDim, RecordCoordForMapping1>::type;
         using RecordDim1 = boost::mp11::mp_first<RecordDimPartitions>;
         using RecordDim2 = boost::mp11::mp_second<RecordDimPartitions>;
