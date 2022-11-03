@@ -24,6 +24,14 @@ jobs:
         exclude: './thirdparty'
         extensions: 'cpp,hpp,h,cu'
         clangFormatVersion: 14
+        inplace: True
+    - uses: EndBug/add-and-commit@v4
+      with:
+        author_name: Third Party
+        author_email: llama@hzdr.de
+        message: 'Run clang-format'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   clang-tidy:
     runs-on: ubuntu-22.04
