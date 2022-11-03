@@ -86,11 +86,14 @@ $(document).ready(function(){initNavTree('functions_l.html',''); initResizable()
 
 <h3><a id="index_l"></a>- l -</h3><ul>
 <li>lanes
-: <a class="el" href="structllama_1_1SimdTraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__arithmetic__v_3_01T_01_4_01_4_01_4.html#a3bb036cdf786ba6944bd0b26321597b5">llama::SimdTraits&lt; T, std::enable_if_t&lt; std::is_arithmetic_v&lt; T &gt; &gt; &gt;</a>
+: <a class="el" href="structllama_1_1mapping_1_1AoSoA.html#a444a496d447e55a50a315f6145781658">llama::mapping::AoSoA&lt; TArrayExtents, TRecordDim, Lanes, TLinearizeArrayDimsFunctor, FlattenRecordDim &gt;</a>
+, <a class="el" href="structllama_1_1SimdTraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__arithmetic__v_3_01T_01_4_01_4_01_4.html#a3bb036cdf786ba6944bd0b26321597b5">llama::SimdTraits&lt; T, std::enable_if_t&lt; std::is_arithmetic_v&lt; T &gt; &gt; &gt;</a>
 </li>
 <li>LinearizeArrayDimsFunctor
 : <a class="el" href="structllama_1_1mapping_1_1AoS.html#a70a29b7e8daa8b58da7b4237b099ce48">llama::mapping::AoS&lt; TArrayExtents, TRecordDim, AlignAndPad, TLinearizeArrayDimsFunctor, FlattenRecordDim &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1AoSoA.html#ab32fce1dffdac3cddc3895784c3e53fb">llama::mapping::AoSoA&lt; TArrayExtents, TRecordDim, Lanes, TLinearizeArrayDimsFunctor, FlattenRecordDim &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html#a287217c94c182935a74a35938562f356">llama::mapping::BitPackedFloatSoA&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, TLinearizeArrayDimsFunctor, TStoredIntegral &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1BitPackedIntSoA.html#a6dd4b1235c71863b4b79fa1b1172327c">llama::mapping::BitPackedIntSoA&lt; TArrayExtents, TRecordDim, Bits, TLinearizeArrayDimsFunctor, TStoredIntegral &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1SoA.html#a5f59c50938d2aaa41ebb3e16c7d666cd">llama::mapping::SoA&lt; TArrayExtents, TRecordDim, SeparateBuffers, AlignSubArrays, TLinearizeArrayDimsFunctor, FlattenRecordDimSingleBlob &gt;</a>
 </li>
 <li>List
@@ -98,7 +101,7 @@ $(document).ready(function(){initNavTree('functions_l.html',''); initResizable()
 , <a class="el" href="structllama_1_1RecordCoord_3_4.html#af136f6c5e5834f593c30a4b8370054c3">llama::RecordCoord&lt;&gt;</a>
 </li>
 <li>load()
-: <a class="el" href="structllama_1_1RecordRef.html#aff7f72b957384a550cb2fee9c303b23b">llama::RecordRef&lt; TView, TBoundRecordCoord, OwnView &gt;</a>
+: <a class="el" href="structllama_1_1RecordRef.html#a77847e3b3e62b78dd42938b079e5e4c7">llama::RecordRef&lt; TView, TBoundRecordCoord, OwnView &gt;</a>
 </li>
 <li>loadAs()
 : <a class="el" href="structllama_1_1RecordRef.html#abd56de3b1bc2549540a41e80f28bfcd7">llama::RecordRef&lt; TView, TBoundRecordCoord, OwnView &gt;</a>
@@ -115,7 +118,7 @@ $(document).ready(function(){initNavTree('functions_l.html',''); initResizable()
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Thu Nov 3 2022 12:23:08 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Nov 3 2022 14:27:13 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

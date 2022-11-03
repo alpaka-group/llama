@@ -122,6 +122,8 @@ $(document).ready(function(){initNavTree('structllama_1_1mapping_1_1AoS.html',''
 Public Types</h2></td></tr>
 <tr class="memitem:a70a29b7e8daa8b58da7b4237b099ce48"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1AoS.html#a70a29b7e8daa8b58da7b4237b099ce48">LinearizeArrayDimsFunctor</a> = TLinearizeArrayDimsFunctor</td></tr>
 <tr class="separator:a70a29b7e8daa8b58da7b4237b099ce48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae298efaeee052502eba7e700ca179651"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1AoS.html#ae298efaeee052502eba7e700ca179651">Flattener</a> = FlattenRecordDim&lt; TRecordDim &gt;</td></tr>
+<tr class="separator:ae298efaeee052502eba7e700ca179651"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_types_structllama_1_1mapping_1_1MappingBase"><td colspan="2" onclick="javascript:toggleInherit('pub_types_structllama_1_1mapping_1_1MappingBase')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="structllama_1_1mapping_1_1MappingBase.html">llama::mapping::MappingBase&lt; TArrayExtents, TRecordDim &gt;</a></td></tr>
 <tr class="memitem:ab0dff4b5449fbc61e63ef6c8ae427c70 inherit pub_types_structllama_1_1mapping_1_1MappingBase"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1MappingBase.html#ab0dff4b5449fbc61e63ef6c8ae427c70">ArrayExtents</a> = TArrayExtents</td></tr>
 <tr class="separator:ab0dff4b5449fbc61e63ef6c8ae427c70 inherit pub_types_structllama_1_1mapping_1_1MappingBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -149,6 +151,8 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
+<tr class="memitem:a9d419d0ac70d92199e222232845435c9"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1AoS.html#a9d419d0ac70d92199e222232845435c9">alignAndPad</a> = AlignAndPad</td></tr>
+<tr class="separator:a9d419d0ac70d92199e222232845435c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a96203bebd47e0eafddb44070772f9271"><td class="memItemLeft" align="right" valign="top">static constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1AoS.html#a96203bebd47e0eafddb44070772f9271">blobCount</a> = 1</td></tr>
 <tr class="separator:a96203bebd47e0eafddb44070772f9271"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -167,6 +171,24 @@ struct llama::mapping::AoS&lt; TArrayExtents, TRecordDim, AlignAndPad, TLineariz
 
 <p class="definition">Definition at line <a class="el" href="AoS_8hpp_source.html#l00024">24</a> of file <a class="el" href="AoS_8hpp_source.html">AoS.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="ae298efaeee052502eba7e700ca179651"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae298efaeee052502eba7e700ca179651">&#9670;&nbsp;</a></span>Flattener</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename TArrayExtents , typename TRecordDim , bool AlignAndPad = true, typename TLinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDim = FlattenRecordDimInOrder&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1AoS.html">llama::mapping::AoS</a>&lt; TArrayExtents, TRecordDim, AlignAndPad, TLinearizeArrayDimsFunctor, FlattenRecordDim &gt;::<a class="el" href="structllama_1_1mapping_1_1AoS.html#ae298efaeee052502eba7e700ca179651">Flattener</a> =  FlattenRecordDim&lt;TRecordDim&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="AoS_8hpp_source.html#l00033">33</a> of file <a class="el" href="AoS_8hpp_source.html">AoS.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a70a29b7e8daa8b58da7b4237b099ce48"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a70a29b7e8daa8b58da7b4237b099ce48">&#9670;&nbsp;</a></span>LinearizeArrayDimsFunctor</h2>
 
@@ -225,7 +247,7 @@ template&lt;std::size_t... RecordCoords&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="AoS_8hpp_source.html#l00044">44</a> of file <a class="el" href="AoS_8hpp_source.html">AoS.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AoS_8hpp_source.html#l00045">45</a> of file <a class="el" href="AoS_8hpp_source.html">AoS.hpp</a>.</p>
 
 </div>
 </div>
@@ -256,11 +278,37 @@ template&lt;typename TArrayExtents , typename TRecordDim , bool AlignAndPad = tr
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="AoS_8hpp_source.html#l00037">37</a> of file <a class="el" href="AoS_8hpp_source.html">AoS.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AoS_8hpp_source.html#l00038">38</a> of file <a class="el" href="AoS_8hpp_source.html">AoS.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a9d419d0ac70d92199e222232845435c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9d419d0ac70d92199e222232845435c9">&#9670;&nbsp;</a></span>alignAndPad</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename TArrayExtents , typename TRecordDim , bool AlignAndPad = true, typename TLinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDim = FlattenRecordDimInOrder&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool <a class="el" href="structllama_1_1mapping_1_1AoS.html">llama::mapping::AoS</a>&lt; TArrayExtents, TRecordDim, AlignAndPad, TLinearizeArrayDimsFunctor, FlattenRecordDim &gt;::alignAndPad = AlignAndPad</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="AoS_8hpp_source.html#l00031">31</a> of file <a class="el" href="AoS_8hpp_source.html">AoS.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a96203bebd47e0eafddb44070772f9271"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a96203bebd47e0eafddb44070772f9271">&#9670;&nbsp;</a></span>blobCount</h2>
 
@@ -278,12 +326,12 @@ template&lt;typename TArrayExtents , typename TRecordDim , bool AlignAndPad = tr
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="AoS_8hpp_source.html#l00033">33</a> of file <a class="el" href="AoS_8hpp_source.html">AoS.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AoS_8hpp_source.html#l00034">34</a> of file <a class="el" href="AoS_8hpp_source.html">AoS.hpp</a>.</p>
 
 </div>
 </div>
@@ -296,7 +344,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , bool AlignAndPad = tr
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1AoS.html">AoS</a></li>
-    <li class="footer">Generated on Thu Nov 3 2022 12:23:08 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Nov 3 2022 14:27:13 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

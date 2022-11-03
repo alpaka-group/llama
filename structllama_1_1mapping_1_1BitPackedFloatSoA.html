@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Low-Level Abstraction of Memory Access: llama::mapping::BitPackedFloatSoA&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, LinearizeArrayDimsFunctor, StoredIntegral &gt; Struct Template Reference</title>
+<title>Low-Level Abstraction of Memory Access: llama::mapping::BitPackedFloatSoA&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, TLinearizeArrayDimsFunctor, TStoredIntegral &gt; Struct Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -83,89 +83,52 @@ $(document).ready(function(){initNavTree('structllama_1_1mapping_1_1BitPackedFlo
 
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="structllama_1_1mapping_1_1BitPackedFloatSoA-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">llama::mapping::BitPackedFloatSoA&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, LinearizeArrayDimsFunctor, StoredIntegral &gt; Struct Template Reference</div>  </div>
+<div class="title">llama::mapping::BitPackedFloatSoA&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, TLinearizeArrayDimsFunctor, TStoredIntegral &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
 <p><code>#include &lt;<a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>&gt;</code></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for llama::mapping::BitPackedFloatSoA&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, LinearizeArrayDimsFunctor, StoredIntegral &gt;:</div>
+  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for llama::mapping::BitPackedFloatSoA&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, TLinearizeArrayDimsFunctor, TStoredIntegral &gt;:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="structllama_1_1mapping_1_1BitPackedFloatSoA__inherit__graph.png" border="0" usemap="#llama_1_1mapping_1_1BitPackedFloatSoA_3_01TArrayExtents_00_01TRecordDim_00_01ExponentBits_00_01MantissaBits_00_01LinearizeArrayDimsFunctor_00_01StoredIntegral_01_4_inherit__map" alt="Inheritance graph"/></div>
-<map name="llama_1_1mapping_1_1BitPackedFloatSoA_3_01TArrayExtents_00_01TRecordDim_00_01ExponentBits_00_01MantissaBits_00_01LinearizeArrayDimsFunctor_00_01StoredIntegral_01_4_inherit__map" id="llama_1_1mapping_1_1BitPackedFloatSoA_3_01TArrayExtents_00_01TRecordDim_00_01ExponentBits_00_01MantissaBits_00_01LinearizeArrayDimsFunctor_00_01StoredIntegral_01_4_inherit__map">
-<area shape="rect" title=" " alt="" coords="445,49,744,134"/>
+<div class="center"><img src="structllama_1_1mapping_1_1BitPackedFloatSoA__inherit__graph.png" border="0" usemap="#llama_1_1mapping_1_1BitPackedFloatSoA_3_01TArrayExtents_00_01TRecordDim_00_01ExponentBits_00_01MantissaBits_00_01TLinearizeArrayDimsFunctor_00_01TStoredIntegral_01_4_inherit__map" alt="Inheritance graph"/></div>
+<map name="llama_1_1mapping_1_1BitPackedFloatSoA_3_01TArrayExtents_00_01TRecordDim_00_01ExponentBits_00_01MantissaBits_00_01TLinearizeArrayDimsFunctor_00_01TStoredIntegral_01_4_inherit__map" id="llama_1_1mapping_1_1BitPackedFloatSoA_3_01TArrayExtents_00_01TRecordDim_00_01ExponentBits_00_01MantissaBits_00_01TLinearizeArrayDimsFunctor_00_01TStoredIntegral_01_4_inherit__map">
+<area shape="rect" title=" " alt="" coords="445,57,700,142"/>
 <area shape="rect" href="structllama_1_1mapping_1_1MappingBase.html" title=" " alt="" coords="167,5,397,47"/>
 <area shape="rect" title=" " alt="" coords="5,13,119,39"/>
-<area shape="rect" href="structllama_1_1internal_1_1BoxedValue.html" title=" " alt="" coords="181,71,383,112"/>
-<area shape="rect" href="structllama_1_1internal_1_1BoxedValue.html" title=" " alt="" coords="181,136,383,177"/>
+<area shape="rect" href="structllama_1_1internal_1_1BoxedValue.html" title=" " alt="" coords="181,71,383,127"/>
+<area shape="rect" href="structllama_1_1internal_1_1BoxedValue.html" title=" " alt="" coords="181,151,383,207"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Collaboration diagram for llama::mapping::BitPackedFloatSoA&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, LinearizeArrayDimsFunctor, StoredIntegral &gt;:</div>
+  <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Collaboration diagram for llama::mapping::BitPackedFloatSoA&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, TLinearizeArrayDimsFunctor, TStoredIntegral &gt;:</div>
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="structllama_1_1mapping_1_1BitPackedFloatSoA__coll__graph.png" border="0" usemap="#llama_1_1mapping_1_1BitPackedFloatSoA_3_01TArrayExtents_00_01TRecordDim_00_01ExponentBits_00_01MantissaBits_00_01LinearizeArrayDimsFunctor_00_01StoredIntegral_01_4_coll__map" alt="Collaboration graph"/></div>
-<map name="llama_1_1mapping_1_1BitPackedFloatSoA_3_01TArrayExtents_00_01TRecordDim_00_01ExponentBits_00_01MantissaBits_00_01LinearizeArrayDimsFunctor_00_01StoredIntegral_01_4_coll__map" id="llama_1_1mapping_1_1BitPackedFloatSoA_3_01TArrayExtents_00_01TRecordDim_00_01ExponentBits_00_01MantissaBits_00_01LinearizeArrayDimsFunctor_00_01StoredIntegral_01_4_coll__map">
-<area shape="rect" title=" " alt="" coords="445,49,744,134"/>
+<div class="center"><img src="structllama_1_1mapping_1_1BitPackedFloatSoA__coll__graph.png" border="0" usemap="#llama_1_1mapping_1_1BitPackedFloatSoA_3_01TArrayExtents_00_01TRecordDim_00_01ExponentBits_00_01MantissaBits_00_01TLinearizeArrayDimsFunctor_00_01TStoredIntegral_01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="llama_1_1mapping_1_1BitPackedFloatSoA_3_01TArrayExtents_00_01TRecordDim_00_01ExponentBits_00_01MantissaBits_00_01TLinearizeArrayDimsFunctor_00_01TStoredIntegral_01_4_coll__map" id="llama_1_1mapping_1_1BitPackedFloatSoA_3_01TArrayExtents_00_01TRecordDim_00_01ExponentBits_00_01MantissaBits_00_01TLinearizeArrayDimsFunctor_00_01TStoredIntegral_01_4_coll__map">
+<area shape="rect" title=" " alt="" coords="445,57,700,142"/>
 <area shape="rect" href="structllama_1_1mapping_1_1MappingBase.html" title=" " alt="" coords="167,5,397,47"/>
 <area shape="rect" title=" " alt="" coords="5,13,119,39"/>
-<area shape="rect" href="structllama_1_1internal_1_1BoxedValue.html" title=" " alt="" coords="181,71,383,112"/>
-<area shape="rect" href="structllama_1_1internal_1_1BoxedValue.html" title=" " alt="" coords="181,136,383,177"/>
+<area shape="rect" href="structllama_1_1internal_1_1BoxedValue.html" title=" " alt="" coords="181,71,383,127"/>
+<area shape="rect" href="structllama_1_1internal_1_1BoxedValue.html" title=" " alt="" coords="181,151,383,207"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
-Public Member Functions</h2></td></tr>
-<tr class="memitem:ae61d17ec65edcb1dddd2e0ffb1327b0e"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html#ae61d17ec65edcb1dddd2e0ffb1327b0e">BitPackedFloatSoA</a> (TArrayExtents <a class="el" href="structllama_1_1mapping_1_1MappingBase.html#ae552d836a8b07ae87ee2ab6280646051">extents</a>={}, ExponentBits exponentBits={}, MantissaBits mantissaBits={}, TRecordDim={})</td></tr>
-<tr class="separator:ae61d17ec65edcb1dddd2e0ffb1327b0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7dadcfeec6547f7498e36e5efd00be0c"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html#a7dadcfeec6547f7498e36e5efd00be0c">blobSize</a> (size_type) const -&gt; size_type</td></tr>
-<tr class="separator:a7dadcfeec6547f7498e36e5efd00be0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ff2fddf0e4b54dfdee99f5597f8c19c"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RecordCoords, typename Blobs &gt; </td></tr>
-<tr class="memitem:a3ff2fddf0e4b54dfdee99f5597f8c19c"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html#a3ff2fddf0e4b54dfdee99f5597f8c19c">compute</a> (typename <a class="el" href="structllama_1_1mapping_1_1MappingBase.html#a9e8dbadc1023c973d1d8a10a773e4786">Base::ArrayIndex</a> ai, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt;, Blobs &amp;blobs) const</td></tr>
-<tr class="separator:a3ff2fddf0e4b54dfdee99f5597f8c19c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_structllama_1_1mapping_1_1MappingBase"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_structllama_1_1mapping_1_1MappingBase')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="structllama_1_1mapping_1_1MappingBase.html">llama::mapping::MappingBase&lt; TArrayExtents, TRecordDim &gt;</a></td></tr>
-<tr class="memitem:a3ca09f04e20b05688fa3ca89c5224fde inherit pub_methods_structllama_1_1mapping_1_1MappingBase"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1MappingBase.html#a3ca09f04e20b05688fa3ca89c5224fde">MappingBase</a> ()=default</td></tr>
-<tr class="separator:a3ca09f04e20b05688fa3ca89c5224fde inherit pub_methods_structllama_1_1mapping_1_1MappingBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adc783715f8bed6b56073c1ad4db068e4 inherit pub_methods_structllama_1_1mapping_1_1MappingBase"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1MappingBase.html#adc783715f8bed6b56073c1ad4db068e4">MappingBase</a> (<a class="el" href="structllama_1_1mapping_1_1MappingBase.html#ab0dff4b5449fbc61e63ef6c8ae427c70">ArrayExtents</a> <a class="el" href="structllama_1_1mapping_1_1MappingBase.html#ae552d836a8b07ae87ee2ab6280646051">extents</a>, <a class="el" href="structllama_1_1mapping_1_1MappingBase.html#a230ce8319dfa063ac4692dcd4034c462">RecordDim</a>={})</td></tr>
-<tr class="separator:adc783715f8bed6b56073c1ad4db068e4 inherit pub_methods_structllama_1_1mapping_1_1MappingBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae552d836a8b07ae87ee2ab6280646051 inherit pub_methods_structllama_1_1mapping_1_1MappingBase"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1MappingBase.html#ae552d836a8b07ae87ee2ab6280646051">extents</a> () const -&gt; <a class="el" href="structllama_1_1mapping_1_1MappingBase.html#ab0dff4b5449fbc61e63ef6c8ae427c70">ArrayExtents</a></td></tr>
-<tr class="separator:ae552d836a8b07ae87ee2ab6280646051 inherit pub_methods_structllama_1_1mapping_1_1MappingBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_structllama_1_1internal_1_1BoxedValue"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_structllama_1_1internal_1_1BoxedValue')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="structllama_1_1internal_1_1BoxedValue.html">llama::internal::BoxedValue&lt; unsigned, 0 &gt;</a></td></tr>
-<tr class="memitem:ac6549d3a6ee2ef2af3238c711fadab58 inherit pub_methods_structllama_1_1internal_1_1BoxedValue"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1BoxedValue.html#ac6549d3a6ee2ef2af3238c711fadab58">BoxedValue</a> ()=default</td></tr>
-<tr class="separator:ac6549d3a6ee2ef2af3238c711fadab58 inherit pub_methods_structllama_1_1internal_1_1BoxedValue"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9221d8f114d4b7c993ebfa564f830920 inherit pub_methods_structllama_1_1internal_1_1BoxedValue"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1BoxedValue.html#a9221d8f114d4b7c993ebfa564f830920">BoxedValue</a> (unsigned <a class="el" href="structllama_1_1internal_1_1BoxedValue.html#a7a292b38343b52e1f26ced153584637f">value</a>)</td></tr>
-<tr class="separator:a9221d8f114d4b7c993ebfa564f830920 inherit pub_methods_structllama_1_1internal_1_1BoxedValue"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7a292b38343b52e1f26ced153584637f inherit pub_methods_structllama_1_1internal_1_1BoxedValue"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1BoxedValue.html#a7a292b38343b52e1f26ced153584637f">value</a> () const</td></tr>
-<tr class="separator:a7a292b38343b52e1f26ced153584637f inherit pub_methods_structllama_1_1internal_1_1BoxedValue"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_structllama_1_1internal_1_1BoxedValue"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_structllama_1_1internal_1_1BoxedValue')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="structllama_1_1internal_1_1BoxedValue.html">llama::internal::BoxedValue&lt; unsigned, 1 &gt;</a></td></tr>
-<tr class="memitem:ac6549d3a6ee2ef2af3238c711fadab58 inherit pub_methods_structllama_1_1internal_1_1BoxedValue"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1BoxedValue.html#ac6549d3a6ee2ef2af3238c711fadab58">BoxedValue</a> ()=default</td></tr>
-<tr class="separator:ac6549d3a6ee2ef2af3238c711fadab58 inherit pub_methods_structllama_1_1internal_1_1BoxedValue"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9221d8f114d4b7c993ebfa564f830920 inherit pub_methods_structllama_1_1internal_1_1BoxedValue"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1BoxedValue.html#a9221d8f114d4b7c993ebfa564f830920">BoxedValue</a> (unsigned <a class="el" href="structllama_1_1internal_1_1BoxedValue.html#a7a292b38343b52e1f26ced153584637f">value</a>)</td></tr>
-<tr class="separator:a9221d8f114d4b7c993ebfa564f830920 inherit pub_methods_structllama_1_1internal_1_1BoxedValue"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7a292b38343b52e1f26ced153584637f inherit pub_methods_structllama_1_1internal_1_1BoxedValue"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1BoxedValue.html#a7a292b38343b52e1f26ced153584637f">value</a> () const</td></tr>
-<tr class="separator:a7a292b38343b52e1f26ced153584637f inherit pub_methods_structllama_1_1internal_1_1BoxedValue"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
-Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a1f5a774c3c58d3214004e1dd93b72125"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RecordCoords&gt; </td></tr>
-<tr class="memitem:a1f5a774c3c58d3214004e1dd93b72125"><td class="memTemplItemLeft" align="right" valign="top">static constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html#a1f5a774c3c58d3214004e1dd93b72125">isComputed</a> (<a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt;)</td></tr>
-<tr class="separator:a1f5a774c3c58d3214004e1dd93b72125"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
-Static Public Attributes</h2></td></tr>
-<tr class="memitem:aff5e7b38c255c6be58f6d54b3457144a"><td class="memItemLeft" align="right" valign="top">static constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html#aff5e7b38c255c6be58f6d54b3457144a">blobCount</a> = boost::mp11::mp_size&lt;<a class="el" href="namespacellama.html#a1fddf1f638927edfb8da8e3c78da4e1c">FlatRecordDim</a>&lt;TRecordDim&gt;&gt;::<a class="el" href="structllama_1_1internal_1_1BoxedValue.html#a7a292b38343b52e1f26ced153584637f">value</a></td></tr>
-<tr class="separator:aff5e7b38c255c6be58f6d54b3457144a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a287217c94c182935a74a35938562f356"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html#a287217c94c182935a74a35938562f356">LinearizeArrayDimsFunctor</a> = TLinearizeArrayDimsFunctor</td></tr>
+<tr class="separator:a287217c94c182935a74a35938562f356"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40ec26f818571b55853d5ee8071a96af"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html#a40ec26f818571b55853d5ee8071a96af">StoredIntegral</a> = TStoredIntegral</td></tr>
+<tr class="separator:a40ec26f818571b55853d5ee8071a96af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_types_structllama_1_1mapping_1_1MappingBase"><td colspan="2" onclick="javascript:toggleInherit('pub_types_structllama_1_1mapping_1_1MappingBase')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="structllama_1_1mapping_1_1MappingBase.html">llama::mapping::MappingBase&lt; TArrayExtents, TRecordDim &gt;</a></td></tr>
 <tr class="memitem:ab0dff4b5449fbc61e63ef6c8ae427c70 inherit pub_types_structllama_1_1mapping_1_1MappingBase"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1MappingBase.html#ab0dff4b5449fbc61e63ef6c8ae427c70">ArrayExtents</a> = TArrayExtents</td></tr>
 <tr class="separator:ab0dff4b5449fbc61e63ef6c8ae427c70 inherit pub_types_structllama_1_1mapping_1_1MappingBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -175,36 +138,119 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:a230ce8319dfa063ac4692dcd4034c462 inherit pub_types_structllama_1_1mapping_1_1MappingBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5ce2266ed39400609731093894761df9 inherit pub_types_structllama_1_1mapping_1_1MappingBase"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1MappingBase.html#a5ce2266ed39400609731093894761df9">size_type</a> = typename <a class="el" href="structllama_1_1ArrayExtents.html#a26ddad4db80efe93143b86c766b9a69f">ArrayExtents::value_type</a></td></tr>
 <tr class="separator:a5ce2266ed39400609731093894761df9 inherit pub_types_structllama_1_1mapping_1_1MappingBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:ab059aeed667aef84f8e4a9d9350e3ece"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html#ab059aeed667aef84f8e4a9d9350e3ece">exponentBits</a> () const -&gt; size_type</td></tr>
+<tr class="separator:ab059aeed667aef84f8e4a9d9350e3ece"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ef0c5b54db6058d1d511c3707366db1"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html#a5ef0c5b54db6058d1d511c3707366db1">mantissaBits</a> () const -&gt; size_type</td></tr>
+<tr class="separator:a5ef0c5b54db6058d1d511c3707366db1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6f4a29a4c065d2421c909bff75a54ba"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html#ac6f4a29a4c065d2421c909bff75a54ba">BitPackedFloatSoA</a> (TArrayExtents <a class="el" href="structllama_1_1mapping_1_1MappingBase.html#ae552d836a8b07ae87ee2ab6280646051">extents</a>={}, ExponentBits <a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html#ab059aeed667aef84f8e4a9d9350e3ece">exponentBits</a>={}, MantissaBits <a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html#a5ef0c5b54db6058d1d511c3707366db1">mantissaBits</a>={}, TRecordDim={})</td></tr>
+<tr class="separator:ac6f4a29a4c065d2421c909bff75a54ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43507af9a55fb27e42815e876c81806e"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html#a43507af9a55fb27e42815e876c81806e">blobSize</a> (size_type) const -&gt; size_type</td></tr>
+<tr class="separator:a43507af9a55fb27e42815e876c81806e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22d334da8901652950df4555471b1f41"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RecordCoords, typename Blobs &gt; </td></tr>
+<tr class="memitem:a22d334da8901652950df4555471b1f41"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html#a22d334da8901652950df4555471b1f41">compute</a> (typename <a class="el" href="structllama_1_1mapping_1_1MappingBase.html#a9e8dbadc1023c973d1d8a10a773e4786">Base::ArrayIndex</a> ai, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt;, Blobs &amp;blobs) const</td></tr>
+<tr class="separator:a22d334da8901652950df4555471b1f41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_structllama_1_1mapping_1_1MappingBase"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_structllama_1_1mapping_1_1MappingBase')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="structllama_1_1mapping_1_1MappingBase.html">llama::mapping::MappingBase&lt; TArrayExtents, TRecordDim &gt;</a></td></tr>
+<tr class="memitem:a3ca09f04e20b05688fa3ca89c5224fde inherit pub_methods_structllama_1_1mapping_1_1MappingBase"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1MappingBase.html#a3ca09f04e20b05688fa3ca89c5224fde">MappingBase</a> ()=default</td></tr>
+<tr class="separator:a3ca09f04e20b05688fa3ca89c5224fde inherit pub_methods_structllama_1_1mapping_1_1MappingBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc783715f8bed6b56073c1ad4db068e4 inherit pub_methods_structllama_1_1mapping_1_1MappingBase"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1MappingBase.html#adc783715f8bed6b56073c1ad4db068e4">MappingBase</a> (<a class="el" href="structllama_1_1mapping_1_1MappingBase.html#ab0dff4b5449fbc61e63ef6c8ae427c70">ArrayExtents</a> <a class="el" href="structllama_1_1mapping_1_1MappingBase.html#ae552d836a8b07ae87ee2ab6280646051">extents</a>, <a class="el" href="structllama_1_1mapping_1_1MappingBase.html#a230ce8319dfa063ac4692dcd4034c462">RecordDim</a>={})</td></tr>
+<tr class="separator:adc783715f8bed6b56073c1ad4db068e4 inherit pub_methods_structllama_1_1mapping_1_1MappingBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae552d836a8b07ae87ee2ab6280646051 inherit pub_methods_structllama_1_1mapping_1_1MappingBase"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1MappingBase.html#ae552d836a8b07ae87ee2ab6280646051">extents</a> () const -&gt; <a class="el" href="structllama_1_1mapping_1_1MappingBase.html#ab0dff4b5449fbc61e63ef6c8ae427c70">ArrayExtents</a></td></tr>
+<tr class="separator:ae552d836a8b07ae87ee2ab6280646051 inherit pub_methods_structllama_1_1mapping_1_1MappingBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_structllama_1_1internal_1_1BoxedValue"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_structllama_1_1internal_1_1BoxedValue')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="structllama_1_1internal_1_1BoxedValue.html">llama::internal::BoxedValue&lt; typename TArrayExtents::value_type, 0 &gt;</a></td></tr>
+<tr class="memitem:ac6549d3a6ee2ef2af3238c711fadab58 inherit pub_methods_structllama_1_1internal_1_1BoxedValue"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1BoxedValue.html#ac6549d3a6ee2ef2af3238c711fadab58">BoxedValue</a> ()=default</td></tr>
+<tr class="separator:ac6549d3a6ee2ef2af3238c711fadab58 inherit pub_methods_structllama_1_1internal_1_1BoxedValue"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9221d8f114d4b7c993ebfa564f830920 inherit pub_methods_structllama_1_1internal_1_1BoxedValue"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1BoxedValue.html#a9221d8f114d4b7c993ebfa564f830920">BoxedValue</a> (typename TArrayExtents::value_type <a class="el" href="structllama_1_1internal_1_1BoxedValue.html#a7a292b38343b52e1f26ced153584637f">value</a>)</td></tr>
+<tr class="separator:a9221d8f114d4b7c993ebfa564f830920 inherit pub_methods_structllama_1_1internal_1_1BoxedValue"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a292b38343b52e1f26ced153584637f inherit pub_methods_structllama_1_1internal_1_1BoxedValue"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1BoxedValue.html#a7a292b38343b52e1f26ced153584637f">value</a> () const</td></tr>
+<tr class="separator:a7a292b38343b52e1f26ced153584637f inherit pub_methods_structllama_1_1internal_1_1BoxedValue"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_structllama_1_1internal_1_1BoxedValue"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_structllama_1_1internal_1_1BoxedValue')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="structllama_1_1internal_1_1BoxedValue.html">llama::internal::BoxedValue&lt; typename TArrayExtents::value_type, 1 &gt;</a></td></tr>
+<tr class="memitem:ac6549d3a6ee2ef2af3238c711fadab58 inherit pub_methods_structllama_1_1internal_1_1BoxedValue"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1BoxedValue.html#ac6549d3a6ee2ef2af3238c711fadab58">BoxedValue</a> ()=default</td></tr>
+<tr class="separator:ac6549d3a6ee2ef2af3238c711fadab58 inherit pub_methods_structllama_1_1internal_1_1BoxedValue"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9221d8f114d4b7c993ebfa564f830920 inherit pub_methods_structllama_1_1internal_1_1BoxedValue"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1BoxedValue.html#a9221d8f114d4b7c993ebfa564f830920">BoxedValue</a> (typename TArrayExtents::value_type <a class="el" href="structllama_1_1internal_1_1BoxedValue.html#a7a292b38343b52e1f26ced153584637f">value</a>)</td></tr>
+<tr class="separator:a9221d8f114d4b7c993ebfa564f830920 inherit pub_methods_structllama_1_1internal_1_1BoxedValue"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a292b38343b52e1f26ced153584637f inherit pub_methods_structllama_1_1internal_1_1BoxedValue"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1internal_1_1BoxedValue.html#a7a292b38343b52e1f26ced153584637f">value</a> () const</td></tr>
+<tr class="separator:a7a292b38343b52e1f26ced153584637f inherit pub_methods_structllama_1_1internal_1_1BoxedValue"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a32e5639842185851662308806c3f3844"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RecordCoords&gt; </td></tr>
+<tr class="memitem:a32e5639842185851662308806c3f3844"><td class="memTemplItemLeft" align="right" valign="top">static constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html#a32e5639842185851662308806c3f3844">isComputed</a> (<a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt;)</td></tr>
+<tr class="separator:a32e5639842185851662308806c3f3844"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:a73d8e4e5c438ddc779e2ec28eed45fef"><td class="memItemLeft" align="right" valign="top">static constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html#a73d8e4e5c438ddc779e2ec28eed45fef">blobCount</a> = boost::mp11::mp_size&lt;<a class="el" href="namespacellama.html#a1fddf1f638927edfb8da8e3c78da4e1c">FlatRecordDim</a>&lt;TRecordDim&gt;&gt;::<a class="el" href="structllama_1_1internal_1_1BoxedValue.html#a7a292b38343b52e1f26ced153584637f">value</a></td></tr>
+<tr class="separator:a73d8e4e5c438ddc779e2ec28eed45fef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename TArrayExtents, typename TRecordDim, typename ExponentBits = unsigned, typename MantissaBits = unsigned, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp, typename StoredIntegral = internal::StoredIntegralFor&lt;TRecordDim&gt;&gt;<br />
-struct llama::mapping::BitPackedFloatSoA&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, LinearizeArrayDimsFunctor, StoredIntegral &gt;</h3>
+<div class="textblock"><h3>template&lt;typename TArrayExtents, typename TRecordDim, typename ExponentBits = typename TArrayExtents::value_type, typename MantissaBits = ExponentBits, typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp, typename TStoredIntegral = internal::StoredIntegralFor&lt;TRecordDim&gt;&gt;<br />
+struct llama::mapping::BitPackedFloatSoA&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, TLinearizeArrayDimsFunctor, TStoredIntegral &gt;</h3>
 
 <p>Struct of array mapping using bit packing to reduce size/precision of floating-point data types. The bit layout is [1 sign bit, exponentBits bits from the exponent, mantissaBits bits from the mantissa]+ and tries to follow IEEE 754. Infinity and NAN are supported. If the packed exponent bits are not big enough to hold a number, it will be set to infinity (preserving the sign). If your record dimension contains non-floating-point types, split them off using the <a class="el" href="structllama_1_1mapping_1_1Split.html">Split</a> mapping first. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">ExponentBits</td><td>If ExponentBits is <a class="el" href="namespacellama.html#a0af0304a902bcb5c5c90377ad751033a" title="Used as template argument to specify a constant/compile-time value.">llama::Constant&lt;N&gt;</a>, the compile-time N specifies the number of bits to use to store the exponent. If ExponentBits is llama::Value&lt;T&gt;, the number of bits is specified at runtime, passed to the constructor and stored as type T. Must not be zero. </td></tr>
     <tr><td class="paramname">MantissaBits</td><td>Like ExponentBits but for the mantissa bits. May be zero. </td></tr>
-    <tr><td class="paramname">LinearizeArrayDimsFunctor</td><td>Defines how the array dimensions should be mapped into linear numbers and how big the linear domain gets. </td></tr>
-    <tr><td class="paramname">StoredIntegral</td><td>Integral type used as storage of reduced precision floating-point values. </td></tr>
+    <tr><td class="paramname">TLinearizeArrayDimsFunctor</td><td>Defines how the array dimensions should be mapped into linear numbers and how big the linear domain gets. </td></tr>
+    <tr><td class="paramname">TStoredIntegral</td><td>Integral type used as storage of reduced precision floating-point values. </td></tr>
   </table>
   </dd>
 </dl>
 
 <p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00201">201</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ae61d17ec65edcb1dddd2e0ffb1327b0e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae61d17ec65edcb1dddd2e0ffb1327b0e">&#9670;&nbsp;</a></span>BitPackedFloatSoA()</h2>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="a287217c94c182935a74a35938562f356"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a287217c94c182935a74a35938562f356">&#9670;&nbsp;</a></span>LinearizeArrayDimsFunctor</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TArrayExtents , typename TRecordDim , typename ExponentBits  = unsigned, typename MantissaBits  = unsigned, typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, typename StoredIntegral  = internal::StoredIntegralFor&lt;TRecordDim&gt;&gt; </div>
+template&lt;typename TArrayExtents , typename TRecordDim , typename ExponentBits  = typename TArrayExtents::value_type, typename MantissaBits  = ExponentBits, typename TLinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, typename TStoredIntegral  = internal::StoredIntegralFor&lt;TRecordDim&gt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html">llama::mapping::BitPackedFloatSoA</a>&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, TLinearizeArrayDimsFunctor, TStoredIntegral &gt;::<a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html#a287217c94c182935a74a35938562f356">LinearizeArrayDimsFunctor</a> =  TLinearizeArrayDimsFunctor</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00213">213</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a40ec26f818571b55853d5ee8071a96af"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40ec26f818571b55853d5ee8071a96af">&#9670;&nbsp;</a></span>StoredIntegral</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename TArrayExtents , typename TRecordDim , typename ExponentBits  = typename TArrayExtents::value_type, typename MantissaBits  = ExponentBits, typename TLinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, typename TStoredIntegral  = internal::StoredIntegralFor&lt;TRecordDim&gt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html">llama::mapping::BitPackedFloatSoA</a>&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, TLinearizeArrayDimsFunctor, TStoredIntegral &gt;::<a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html#a40ec26f818571b55853d5ee8071a96af">StoredIntegral</a> =  TStoredIntegral</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00214">214</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ac6f4a29a4c065d2421c909bff75a54ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6f4a29a4c065d2421c909bff75a54ba">&#9670;&nbsp;</a></span>BitPackedFloatSoA()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename TArrayExtents , typename TRecordDim , typename ExponentBits  = typename TArrayExtents::value_type, typename MantissaBits  = ExponentBits, typename TLinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, typename TStoredIntegral  = internal::StoredIntegralFor&lt;TRecordDim&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr <a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html">llama::mapping::BitPackedFloatSoA</a>&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, LinearizeArrayDimsFunctor, StoredIntegral &gt;::<a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html">BitPackedFloatSoA</a> </td>
+          <td class="memname">constexpr <a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html">llama::mapping::BitPackedFloatSoA</a>&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, TLinearizeArrayDimsFunctor, TStoredIntegral &gt;::<a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html">BitPackedFloatSoA</a> </td>
           <td>(</td>
           <td class="paramtype">TArrayExtents&#160;</td>
           <td class="paramname"><em>extents</em> = <code>{}</code>, </td>
@@ -240,24 +286,24 @@ template&lt;typename TArrayExtents , typename TRecordDim , typename ExponentBits
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00216">216</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00230">230</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a7dadcfeec6547f7498e36e5efd00be0c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7dadcfeec6547f7498e36e5efd00be0c">&#9670;&nbsp;</a></span>blobSize()</h2>
+<a id="a43507af9a55fb27e42815e876c81806e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a43507af9a55fb27e42815e876c81806e">&#9670;&nbsp;</a></span>blobSize()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TArrayExtents , typename TRecordDim , typename ExponentBits  = unsigned, typename MantissaBits  = unsigned, typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, typename StoredIntegral  = internal::StoredIntegralFor&lt;TRecordDim&gt;&gt; </div>
+template&lt;typename TArrayExtents , typename TRecordDim , typename ExponentBits  = typename TArrayExtents::value_type, typename MantissaBits  = ExponentBits, typename TLinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, typename TStoredIntegral  = internal::StoredIntegralFor&lt;TRecordDim&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr auto <a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html">llama::mapping::BitPackedFloatSoA</a>&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, LinearizeArrayDimsFunctor, StoredIntegral &gt;::blobSize </td>
+          <td class="memname">constexpr auto <a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html">llama::mapping::BitPackedFloatSoA</a>&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, TLinearizeArrayDimsFunctor, TStoredIntegral &gt;::blobSize </td>
           <td>(</td>
           <td class="paramtype">size_type&#160;</td>
           <td class="paramname"></td><td>)</td>
@@ -272,17 +318,17 @@ template&lt;typename TArrayExtents , typename TRecordDim , typename ExponentBits
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00229">229</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00243">243</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a3ff2fddf0e4b54dfdee99f5597f8c19c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3ff2fddf0e4b54dfdee99f5597f8c19c">&#9670;&nbsp;</a></span>compute()</h2>
+<a id="a22d334da8901652950df4555471b1f41"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22d334da8901652950df4555471b1f41">&#9670;&nbsp;</a></span>compute()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TArrayExtents , typename TRecordDim , typename ExponentBits  = unsigned, typename MantissaBits  = unsigned, typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, typename StoredIntegral  = internal::StoredIntegralFor&lt;TRecordDim&gt;&gt; </div>
+template&lt;typename TArrayExtents , typename TRecordDim , typename ExponentBits  = typename TArrayExtents::value_type, typename MantissaBits  = ExponentBits, typename TLinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, typename TStoredIntegral  = internal::StoredIntegralFor&lt;TRecordDim&gt;&gt; </div>
 <div class="memtemplate">
 template&lt;std::size_t... RecordCoords, typename Blobs &gt; </div>
 <table class="mlabels">
@@ -290,7 +336,7 @@ template&lt;std::size_t... RecordCoords, typename Blobs &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr auto <a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html">llama::mapping::BitPackedFloatSoA</a>&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, LinearizeArrayDimsFunctor, StoredIntegral &gt;::compute </td>
+          <td class="memname">constexpr auto <a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html">llama::mapping::BitPackedFloatSoA</a>&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, TLinearizeArrayDimsFunctor, TStoredIntegral &gt;::compute </td>
           <td>(</td>
           <td class="paramtype">typename <a class="el" href="structllama_1_1mapping_1_1MappingBase.html#a9e8dbadc1023c973d1d8a10a773e4786">Base::ArrayIndex</a>&#160;</td>
           <td class="paramname"><em>ai</em>, </td>
@@ -320,17 +366,47 @@ template&lt;std::size_t... RecordCoords, typename Blobs &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00244">244</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00258">258</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a1f5a774c3c58d3214004e1dd93b72125"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1f5a774c3c58d3214004e1dd93b72125">&#9670;&nbsp;</a></span>isComputed()</h2>
+<a id="ab059aeed667aef84f8e4a9d9350e3ece"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab059aeed667aef84f8e4a9d9350e3ece">&#9670;&nbsp;</a></span>exponentBits()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TArrayExtents , typename TRecordDim , typename ExponentBits  = unsigned, typename MantissaBits  = unsigned, typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, typename StoredIntegral  = internal::StoredIntegralFor&lt;TRecordDim&gt;&gt; </div>
+template&lt;typename TArrayExtents , typename TRecordDim , typename ExponentBits  = typename TArrayExtents::value_type, typename MantissaBits  = ExponentBits, typename TLinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, typename TStoredIntegral  = internal::StoredIntegralFor&lt;TRecordDim&gt;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto <a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html">llama::mapping::BitPackedFloatSoA</a>&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, TLinearizeArrayDimsFunctor, TStoredIntegral &gt;::exponentBits </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const -&gt; size_type
+        </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00218">218</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a32e5639842185851662308806c3f3844"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32e5639842185851662308806c3f3844">&#9670;&nbsp;</a></span>isComputed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename TArrayExtents , typename TRecordDim , typename ExponentBits  = typename TArrayExtents::value_type, typename MantissaBits  = ExponentBits, typename TLinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, typename TStoredIntegral  = internal::StoredIntegralFor&lt;TRecordDim&gt;&gt; </div>
 <div class="memtemplate">
 template&lt;std::size_t... RecordCoords&gt; </div>
 <table class="mlabels">
@@ -338,7 +414,7 @@ template&lt;std::size_t... RecordCoords&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static constexpr auto <a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html">llama::mapping::BitPackedFloatSoA</a>&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, LinearizeArrayDimsFunctor, StoredIntegral &gt;::isComputed </td>
+          <td class="memname">static constexpr auto <a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html">llama::mapping::BitPackedFloatSoA</a>&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, TLinearizeArrayDimsFunctor, TStoredIntegral &gt;::isComputed </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt;&#160;</td>
           <td class="paramname"></td><td>)</td>
@@ -352,24 +428,54 @@ template&lt;std::size_t... RecordCoords&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00238">238</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00252">252</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
 
 </div>
 </div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="aff5e7b38c255c6be58f6d54b3457144a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aff5e7b38c255c6be58f6d54b3457144a">&#9670;&nbsp;</a></span>blobCount</h2>
+<a id="a5ef0c5b54db6058d1d511c3707366db1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ef0c5b54db6058d1d511c3707366db1">&#9670;&nbsp;</a></span>mantissaBits()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TArrayExtents , typename TRecordDim , typename ExponentBits  = unsigned, typename MantissaBits  = unsigned, typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, typename StoredIntegral  = internal::StoredIntegralFor&lt;TRecordDim&gt;&gt; </div>
+template&lt;typename TArrayExtents , typename TRecordDim , typename ExponentBits  = typename TArrayExtents::value_type, typename MantissaBits  = ExponentBits, typename TLinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, typename TStoredIntegral  = internal::StoredIntegralFor&lt;TRecordDim&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr std::size_t <a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html">llama::mapping::BitPackedFloatSoA</a>&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, LinearizeArrayDimsFunctor, StoredIntegral &gt;::blobCount = boost::mp11::mp_size&lt;<a class="el" href="namespacellama.html#a1fddf1f638927edfb8da8e3c78da4e1c">FlatRecordDim</a>&lt;TRecordDim&gt;&gt;::<a class="el" href="structllama_1_1internal_1_1BoxedValue.html#a7a292b38343b52e1f26ced153584637f">value</a></td>
+          <td class="memname">constexpr auto <a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html">llama::mapping::BitPackedFloatSoA</a>&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, TLinearizeArrayDimsFunctor, TStoredIntegral &gt;::mantissaBits </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const -&gt; size_type
+        </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00224">224</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a73d8e4e5c438ddc779e2ec28eed45fef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73d8e4e5c438ddc779e2ec28eed45fef">&#9670;&nbsp;</a></span>blobCount</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename TArrayExtents , typename TRecordDim , typename ExponentBits  = typename TArrayExtents::value_type, typename MantissaBits  = ExponentBits, typename TLinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, typename TStoredIntegral  = internal::StoredIntegralFor&lt;TRecordDim&gt;&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr std::size_t <a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html">llama::mapping::BitPackedFloatSoA</a>&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, TLinearizeArrayDimsFunctor, TStoredIntegral &gt;::blobCount = boost::mp11::mp_size&lt;<a class="el" href="namespacellama.html#a1fddf1f638927edfb8da8e3c78da4e1c">FlatRecordDim</a>&lt;TRecordDim&gt;&gt;::<a class="el" href="structllama_1_1internal_1_1BoxedValue.html#a7a292b38343b52e1f26ced153584637f">value</a></td>
         </tr>
       </table>
   </td>
@@ -379,7 +485,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , typename ExponentBits
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00213">213</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00215">215</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -392,7 +498,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , typename ExponentBits
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html">BitPackedFloatSoA</a></li>
-    <li class="footer">Generated on Thu Nov 3 2022 12:23:08 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Nov 3 2022 14:27:13 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

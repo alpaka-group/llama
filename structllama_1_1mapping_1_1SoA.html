@@ -122,6 +122,8 @@ $(document).ready(function(){initNavTree('structllama_1_1mapping_1_1SoA.html',''
 Public Types</h2></td></tr>
 <tr class="memitem:a5f59c50938d2aaa41ebb3e16c7d666cd"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1SoA.html#a5f59c50938d2aaa41ebb3e16c7d666cd">LinearizeArrayDimsFunctor</a> = TLinearizeArrayDimsFunctor</td></tr>
 <tr class="separator:a5f59c50938d2aaa41ebb3e16c7d666cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac9f35dfe06b58c02b9f477e48f2a934"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1SoA.html#aac9f35dfe06b58c02b9f477e48f2a934">Flattener</a> = FlattenRecordDimSingleBlob&lt; TRecordDim &gt;</td></tr>
+<tr class="separator:aac9f35dfe06b58c02b9f477e48f2a934"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_types_structllama_1_1mapping_1_1MappingBase"><td colspan="2" onclick="javascript:toggleInherit('pub_types_structllama_1_1mapping_1_1MappingBase')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="structllama_1_1mapping_1_1MappingBase.html">llama::mapping::MappingBase&lt; TArrayExtents, TRecordDim &gt;</a></td></tr>
 <tr class="memitem:ab0dff4b5449fbc61e63ef6c8ae427c70 inherit pub_types_structllama_1_1mapping_1_1MappingBase"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1MappingBase.html#ab0dff4b5449fbc61e63ef6c8ae427c70">ArrayExtents</a> = TArrayExtents</td></tr>
 <tr class="separator:ab0dff4b5449fbc61e63ef6c8ae427c70 inherit pub_types_structllama_1_1mapping_1_1MappingBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -149,6 +151,10 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
+<tr class="memitem:adda91103d268e3beb28a3e628a490f3c"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1SoA.html#adda91103d268e3beb28a3e628a490f3c">separateBuffers</a> = SeparateBuffers</td></tr>
+<tr class="separator:adda91103d268e3beb28a3e628a490f3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1fb0421308dee0e708f9e449bea1f085"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1SoA.html#a1fb0421308dee0e708f9e449bea1f085">alignSubArrays</a> = AlignSubArrays</td></tr>
+<tr class="separator:a1fb0421308dee0e708f9e449bea1f085"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29bcd5c978c73befd6cbb9dd75b7836f"><td class="memItemLeft" align="right" valign="top">static constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1SoA.html#a29bcd5c978c73befd6cbb9dd75b7836f">blobCount</a> = SeparateBuffers ? boost::mp11::mp_size&lt;<a class="el" href="namespacellama.html#a1fddf1f638927edfb8da8e3c78da4e1c">FlatRecordDim</a>&lt;TRecordDim&gt;&gt;::value : 1</td></tr>
 <tr class="separator:a29bcd5c978c73befd6cbb9dd75b7836f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -168,6 +174,24 @@ struct llama::mapping::SoA&lt; TArrayExtents, TRecordDim, SeparateBuffers, Align
 
 <p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00028">28</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="aac9f35dfe06b58c02b9f477e48f2a934"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac9f35dfe06b58c02b9f477e48f2a934">&#9670;&nbsp;</a></span>Flattener</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename TArrayExtents , typename TRecordDim , bool SeparateBuffers = true, bool AlignSubArrays = false, typename TLinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDimSingleBlob = FlattenRecordDimInOrder&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1SoA.html">llama::mapping::SoA</a>&lt; TArrayExtents, TRecordDim, SeparateBuffers, AlignSubArrays, TLinearizeArrayDimsFunctor, FlattenRecordDimSingleBlob &gt;::<a class="el" href="structllama_1_1mapping_1_1SoA.html#aac9f35dfe06b58c02b9f477e48f2a934">Flattener</a> =  FlattenRecordDimSingleBlob&lt;TRecordDim&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00038">38</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a5f59c50938d2aaa41ebb3e16c7d666cd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5f59c50938d2aaa41ebb3e16c7d666cd">&#9670;&nbsp;</a></span>LinearizeArrayDimsFunctor</h2>
 
@@ -182,7 +206,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , bool SeparateBuffers 
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00036">36</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00037">37</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -226,7 +250,7 @@ template&lt;std::size_t... RecordCoords&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00080">80</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00082">82</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -257,11 +281,37 @@ template&lt;typename TArrayExtents , typename TRecordDim , bool SeparateBuffers 
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00043">43</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00045">45</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a1fb0421308dee0e708f9e449bea1f085"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1fb0421308dee0e708f9e449bea1f085">&#9670;&nbsp;</a></span>alignSubArrays</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename TArrayExtents , typename TRecordDim , bool SeparateBuffers = true, bool AlignSubArrays = false, typename TLinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDimSingleBlob = FlattenRecordDimInOrder&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool <a class="el" href="structllama_1_1mapping_1_1SoA.html">llama::mapping::SoA</a>&lt; TArrayExtents, TRecordDim, SeparateBuffers, AlignSubArrays, TLinearizeArrayDimsFunctor, FlattenRecordDimSingleBlob &gt;::alignSubArrays = AlignSubArrays</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00036">36</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a29bcd5c978c73befd6cbb9dd75b7836f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a29bcd5c978c73befd6cbb9dd75b7836f">&#9670;&nbsp;</a></span>blobCount</h2>
 
@@ -279,12 +329,38 @@ template&lt;typename TArrayExtents , typename TRecordDim , bool SeparateBuffers 
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00038">38</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00040">40</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
+
+</div>
+</div>
+<a id="adda91103d268e3beb28a3e628a490f3c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adda91103d268e3beb28a3e628a490f3c">&#9670;&nbsp;</a></span>separateBuffers</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename TArrayExtents , typename TRecordDim , bool SeparateBuffers = true, bool AlignSubArrays = false, typename TLinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDimSingleBlob = FlattenRecordDimInOrder&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool <a class="el" href="structllama_1_1mapping_1_1SoA.html">llama::mapping::SoA</a>&lt; TArrayExtents, TRecordDim, SeparateBuffers, AlignSubArrays, TLinearizeArrayDimsFunctor, FlattenRecordDimSingleBlob &gt;::separateBuffers = SeparateBuffers</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00035">35</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -297,7 +373,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , bool SeparateBuffers 
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1SoA.html">SoA</a></li>
-    <li class="footer">Generated on Thu Nov 3 2022 12:23:08 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Nov 3 2022 14:27:13 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

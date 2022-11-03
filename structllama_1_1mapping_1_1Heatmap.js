@@ -1,15 +1,18 @@
 var structllama_1_1mapping_1_1Heatmap =
 [
-    [ "Heatmap", "structllama_1_1mapping_1_1Heatmap.html#a2bc6478eacec20df4dea85bcaf46fe3a", null ],
-    [ "Heatmap", "structllama_1_1mapping_1_1Heatmap.html#afb8d04b6baf928b05567062715c9cb42", null ],
-    [ "Heatmap", "structllama_1_1mapping_1_1Heatmap.html#ac874927c3f6dff04d8a50d3848c2dfd0", null ],
-    [ "blobSize", "structllama_1_1mapping_1_1Heatmap.html#a5d7fa75c78d870ca7468cfb6e07db5d7", null ],
-    [ "blockHits", "structllama_1_1mapping_1_1Heatmap.html#a49146464038b1e7aabb7555c94997cff", null ],
-    [ "blockHits", "structllama_1_1mapping_1_1Heatmap.html#ac4aaaf3ea56ddcd85d177aa2c6452da9", null ],
-    [ "blockHitsSize", "structllama_1_1mapping_1_1Heatmap.html#ae055cf2cbe3861ee82b715d89135f7cb", null ],
-    [ "compute", "structllama_1_1mapping_1_1Heatmap.html#ac13108d684c8069fa7d0e0c16c878616", null ],
-    [ "isComputed", "structllama_1_1mapping_1_1Heatmap.html#abb5cd05f9cc471d3e3068661638784c7", null ],
-    [ "writeGnuplotDataFile", "structllama_1_1mapping_1_1Heatmap.html#a4059e0fb5de03b5de0b382410a282908", null ],
-    [ "blobCount", "structllama_1_1mapping_1_1Heatmap.html#ac44811e9018fd6eb40300ca5ccbda674", null ],
-    [ "gnuplotScript", "structllama_1_1mapping_1_1Heatmap.html#af4d3dc303d0aa437624916679c1cd367", null ]
+    [ "CountType", "structllama_1_1mapping_1_1Heatmap.html#af6a30d2930a1dbdb549142ab6a5218de", null ],
+    [ "Inner", "structllama_1_1mapping_1_1Heatmap.html#af33773e38b72e7d43561b1dbffcd1052", null ],
+    [ "Heatmap", "structllama_1_1mapping_1_1Heatmap.html#a3d374b0e9ffbc6ce8617ca2419b01a92", null ],
+    [ "Heatmap", "structllama_1_1mapping_1_1Heatmap.html#a4086c43804ed0bffd1f484a9142ef0a6", null ],
+    [ "Heatmap", "structllama_1_1mapping_1_1Heatmap.html#ac2c647634026cb6ea41aa8f9a4b06062", null ],
+    [ "blobSize", "structllama_1_1mapping_1_1Heatmap.html#a83e17842d5dc74dcffeccdf1c74d9a56", null ],
+    [ "blockHits", "structllama_1_1mapping_1_1Heatmap.html#a2f98a642116da1f5d8b732ea0aceba1e", null ],
+    [ "blockHits", "structllama_1_1mapping_1_1Heatmap.html#aab0257d17e1b8a591f4079fcd25999c4", null ],
+    [ "blockHitsSize", "structllama_1_1mapping_1_1Heatmap.html#ad850ca6b2aa4a7c5bca927c89a94fdb4", null ],
+    [ "compute", "structllama_1_1mapping_1_1Heatmap.html#a801b2fc29f6a7d8a5da7fcce594227f0", null ],
+    [ "isComputed", "structllama_1_1mapping_1_1Heatmap.html#ac0367a8b8a7b5edb75411364e8b1e7de", null ],
+    [ "writeGnuplotDataFile", "structllama_1_1mapping_1_1Heatmap.html#ac79972c05db9647a1e8476b8c122aa8a", null ],
+    [ "blobCount", "structllama_1_1mapping_1_1Heatmap.html#aa37d9b62224479d411cab7dc3a862133", null ],
+    [ "gnuplotScript", "structllama_1_1mapping_1_1Heatmap.html#a99a17f227f0eda38cde672383f19b733", null ],
+    [ "granularity", "structllama_1_1mapping_1_1Heatmap.html#a0ed006df2279a44a51949de4885f25e3", null ]
 ];

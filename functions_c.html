@@ -119,14 +119,14 @@ $(document).ready(function(){initNavTree('functions_c.html',''); initResizable()
 : <a class="el" href="structllama_1_1Vector.html#a88964c400aac2c24acb8840d4dbc3893">llama::Vector&lt; Mapping &gt;</a>
 </li>
 <li>compute()
-: <a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html#a3ff2fddf0e4b54dfdee99f5597f8c19c">llama::mapping::BitPackedFloatSoA&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, LinearizeArrayDimsFunctor, StoredIntegral &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1BitPackedIntSoA.html#aa728458a2902bb59c9777f5b1ac4dce6">llama::mapping::BitPackedIntSoA&lt; TArrayExtents, TRecordDim, Bits, LinearizeArrayDimsFunctor, StoredIntegral &gt;</a>
+: <a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html#a22d334da8901652950df4555471b1f41">llama::mapping::BitPackedFloatSoA&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, TLinearizeArrayDimsFunctor, TStoredIntegral &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1BitPackedIntSoA.html#aeee0b923a1c495791c66c1e64a109f3f">llama::mapping::BitPackedIntSoA&lt; TArrayExtents, TRecordDim, Bits, TLinearizeArrayDimsFunctor, TStoredIntegral &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1Bytesplit.html#acea52b775d27aea28f2331ecdc6ee6ae">llama::mapping::Bytesplit&lt; TArrayExtents, TRecordDim, InnerMapping &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1ChangeType.html#a22132e6a827b16ffd6a7c90091b5350d">llama::mapping::ChangeType&lt; TArrayExtents, TRecordDim, InnerMapping, ReplacementMap &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1Heatmap.html#ac13108d684c8069fa7d0e0c16c878616">llama::mapping::Heatmap&lt; Mapping, Granularity, CountType &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1ChangeType.html#a8ef704a7dc93ce3a3e7627e3ad566003">llama::mapping::ChangeType&lt; TArrayExtents, TRecordDim, InnerMapping, TReplacementMap &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1Heatmap.html#a801b2fc29f6a7d8a5da7fcce594227f0">llama::mapping::Heatmap&lt; Mapping, Granularity, TCountType &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1Null.html#a184defdf2c28b9f95768982f290237b7">llama::mapping::Null&lt; TArrayExtents, TRecordDim &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1Split.html#a2f00ee0850d3148819e96671b3d1ec28">llama::mapping::Split&lt; TArrayExtents, TRecordDim, RecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1Trace.html#a8ee4c40dc3420283ef15ae0de916fc5b">llama::mapping::Trace&lt; Mapping, CountType, MyCodeHandlesProxyReferences &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1Split.html#a83e860ca537e5daa705ac3160edb1b1b">llama::mapping::Split&lt; TArrayExtents, TRecordDim, TRecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1Trace.html#ab10e84b0807819670c21d3c15e8c953c">llama::mapping::Trace&lt; Mapping, TCountType, MyCodeHandlesProxyReferences &gt;</a>
 </li>
 <li>const_iterator
 : <a class="el" href="structllama_1_1View.html#abaa80e8f8f7a383710675ea8d46cef13">llama::View&lt; TMapping, BlobType &gt;</a>
@@ -134,6 +134,10 @@ $(document).ready(function(){initNavTree('functions_c.html',''); initResizable()
 <li>count
 : <a class="el" href="structllama_1_1mapping_1_1tree_1_1Leaf.html#a8f026ec65877a5458ae92eb95678ca0f">llama::mapping::tree::Leaf&lt; TIdentifier, TType, CountType &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1tree_1_1Node.html#aeb71ef45f26bd67ef74651c298ecb62f">llama::mapping::tree::Node&lt; TIdentifier, TChildrenTuple, CountType &gt;</a>
+</li>
+<li>CountType
+: <a class="el" href="structllama_1_1mapping_1_1Heatmap.html#af6a30d2930a1dbdb549142ab6a5218de">llama::mapping::Heatmap&lt; Mapping, Granularity, TCountType &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1Trace.html#a86343561c50392c151e40e93cbf45ec7">llama::mapping::Trace&lt; Mapping, TCountType, MyCodeHandlesProxyReferences &gt;</a>
 </li>
 <li>createChildren()
 : <a class="el" href="structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeElement_3_01Tag_00_01ChildType_0fCount_0e_00_01CountType_01_4.html#ae551ba2c29a3b074c6ec0f646d826350">llama::mapping::tree::internal::CreateTreeElement&lt; Tag, ChildType[Count], CountType &gt;</a>
@@ -144,7 +148,7 @@ $(document).ready(function(){initNavTree('functions_c.html',''); initResizable()
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Thu Nov 3 2022 12:23:08 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Nov 3 2022 14:27:13 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
