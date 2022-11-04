@@ -18,14 +18,14 @@ jobs:
   clang-format:
     runs-on: ubuntu-22.04
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: DoozyX/clang-format-lint-action@v0.14
       with:
         exclude: './thirdparty'
         extensions: 'cpp,hpp,h,cu'
         clangFormatVersion: 14
         inplace: True
-    - uses: EndBug/add-and-commit@v4
+    - uses: EndBug/add-and-commit@v9
       with:
         author_name: Third Party
         author_email: llama@hzdr.de
@@ -38,7 +38,7 @@ jobs:
     env:
       CXX: clang++-14
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: install clang-14
       run: |
         sudo apt install clang-14 libomp-14-dev clang-tidy-14
@@ -69,7 +69,7 @@ jobs:
     env:
       CXX: g++
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 2
     - name: install lcov
@@ -108,7 +108,7 @@ jobs:
   amalgamation:
     runs-on: ubuntu-22.04
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: create-single-header.sh
       run: |
         ./tools/create-single-header.sh
@@ -188,7 +188,7 @@ jobs:
             install_extra: nvhpc-22-9
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: add ubuntu toolchain repo
         if: matrix.add_toolchain_ppa
         run: |
@@ -287,7 +287,7 @@ jobs:
         shell: bash
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: vcpkg install dependencies
       run: |
         eval $VCPKG_INSTALL
@@ -315,7 +315,7 @@ jobs:
           - os: macos-11
           - os: macos-12
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: brew install dependencies
         run: |
           brew install llvm libomp
