@@ -34,6 +34,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   clang-tidy:
+    needs: clang-format
     runs-on: ubuntu-22.04
     env:
       CXX: clang++-14
@@ -65,6 +66,7 @@ jobs:
         run-clang-tidy-14 -header-filter='(tests|include/llama|examples)' -extra-arg=--no-cuda-version-check -extra-arg=-nocudalib -extra-arg=-Wno-unused-command-line-argument '^(?!.*'$PWD').*$'
 
   coverage:
+    needs: clang-format
     runs-on: ubuntu-22.04
     env:
       CXX: g++
@@ -106,6 +108,7 @@ jobs:
         verbose: true
 
   amalgamation:
+    needs: clang-format
     runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v2
@@ -120,6 +123,7 @@ jobs:
         if-no-files-found: error
 
   build-ubuntu:
+    needs: clang-format
     runs-on: ${{ matrix.os || 'ubuntu-22.04' }}
     env:
       CXX: ${{ matrix.cxx }}
@@ -272,6 +276,7 @@ jobs:
           build/tests
 
   build-windows:
+    needs: clang-format
     runs-on: ${{ matrix.runs-on }}
     env:
       VCPKG_DEFAULT_TRIPLET: x64-windows
@@ -306,6 +311,7 @@ jobs:
         build/$CONFIG/tests
 
   build-macos:
+    needs: clang-format
     runs-on: ${{ matrix.os }}
     name: build-${{ matrix.os }}
     strategy:
