@@ -331,6 +331,15 @@ Functions</h2></td></tr>
 <tr class="memitem:a0f1653ed919838d951dd7753b22cac7e"><td class="memTemplParams" colspan="2">template&lt;typename T , typename Tuple , std::size_t... Is&gt; </td></tr>
 <tr class="memitem:a0f1653ed919838d951dd7753b22cac7e"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a0f1653ed919838d951dd7753b22cac7e">makeFromTuple</a> (<a class="el" href="structllama_1_1Tuple.html">Tuple</a> &amp;&amp;src, std::index_sequence&lt; Is... &gt;)</td></tr>
 <tr class="separator:a0f1653ed919838d951dd7753b22cac7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6cc3ab81fd3ee9d9fa0579a062e14dcb"><td class="memTemplParams" colspan="2">template&lt;typename T , typename Simd , typename RecordCoord &gt; </td></tr>
+<tr class="memitem:a6cc3ab81fd3ee9d9fa0579a062e14dcb"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a6cc3ab81fd3ee9d9fa0579a062e14dcb">loadSimdRecord</a> (const T &amp;srcRef, <a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a> &amp;dstSimd, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a> rc)</td></tr>
+<tr class="separator:a6cc3ab81fd3ee9d9fa0579a062e14dcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39d130ecf8dc32be0c10f142df6a0d42"><td class="memTemplParams" colspan="2">template&lt;typename Simd , typename T , typename RecordCoord &gt; </td></tr>
+<tr class="memitem:a39d130ecf8dc32be0c10f142df6a0d42"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a39d130ecf8dc32be0c10f142df6a0d42">storeSimdRecord</a> (const <a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a> &amp;srcSimd, T &amp;&amp;dstRef, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a> rc)</td></tr>
+<tr class="separator:a39d130ecf8dc32be0c10f142df6a0d42"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a383757e5ef0435ab24cc8570e355912f"><td class="memTemplParams" colspan="2">template&lt;typename Simd , typename TFwd , typename RecordCoord &gt; </td></tr>
+<tr class="memitem:a383757e5ef0435ab24cc8570e355912f"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a383757e5ef0435ab24cc8570e355912f">storeSimdRecord</a> (const <a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a> &amp;srcSimd, TFwd &amp;&amp;dstRef, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a> rc)</td></tr>
+<tr class="separator:a383757e5ef0435ab24cc8570e355912f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a22e2af564cf52bab9f8d55c97aacd872"><td class="memTemplParams" colspan="2">template&lt;typename In , typename Out &gt; </td></tr>
 <tr class="memitem:a22e2af564cf52bab9f8d55c97aacd872"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a22e2af564cf52bab9f8d55c97aacd872">constexprCopy</a> (In f, In l, Out d) -&gt; Out</td></tr>
 <tr class="separator:a22e2af564cf52bab9f8d55c97aacd872"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1352,6 +1361,52 @@ template&lt;typename TypeList &gt; </div>
 
 </div>
 </div>
+<a id="a6cc3ab81fd3ee9d9fa0579a062e14dcb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6cc3ab81fd3ee9d9fa0579a062e14dcb">&#9670;&nbsp;</a></span>loadSimdRecord()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , typename Simd , typename RecordCoord &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void llama::internal::loadSimdRecord </td>
+          <td>(</td>
+          <td class="paramtype">const T &amp;&#160;</td>
+          <td class="paramname"><em>srcRef</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a> &amp;&#160;</td>
+          <td class="paramname"><em>dstSimd</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&#160;</td>
+          <td class="paramname"><em>rc</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00173">173</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
+
+</div>
+</div>
 <a id="aa53f8a0b5fadc80cbc91b1b8a1d7633c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa53f8a0b5fadc80cbc91b1b8a1d7633c">&#9670;&nbsp;</a></span>makeArrayExtents()</h2>
 
@@ -2050,6 +2105,96 @@ template&lt;typename TypeList , bool Align, bool IncludeTailPadding&gt; </div>
 
 </div>
 </div>
+<a id="a39d130ecf8dc32be0c10f142df6a0d42"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39d130ecf8dc32be0c10f142df6a0d42">&#9670;&nbsp;</a></span>storeSimdRecord() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Simd , typename T , typename RecordCoord &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void llama::internal::storeSimdRecord </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a> &amp;&#160;</td>
+          <td class="paramname"><em>srcSimd</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T &amp;&amp;&#160;</td>
+          <td class="paramname"><em>dstRef</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&#160;</td>
+          <td class="paramname"><em>rc</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a383757e5ef0435ab24cc8570e355912f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a383757e5ef0435ab24cc8570e355912f">&#9670;&nbsp;</a></span>storeSimdRecord() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Simd , typename TFwd , typename RecordCoord &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void llama::internal::storeSimdRecord </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a> &amp;&#160;</td>
+          <td class="paramname"><em>srcSimd</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">TFwd &amp;&amp;&#160;</td>
+          <td class="paramname"><em>dstRef</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&#160;</td>
+          <td class="paramname"><em>rc</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00223">223</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a8e5f24405a86c68d880af50c757603db"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8e5f24405a86c68d880af50c757603db">&#9670;&nbsp;</a></span>tupleCatImpl()</h2>
 
@@ -2574,7 +2719,7 @@ template&lt;typename T &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1internal.html">internal</a></li>
-    <li class="footer">Generated on Fri Nov 4 2022 16:24:41 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Sun Nov 6 2022 00:02:14 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

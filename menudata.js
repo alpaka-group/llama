@@ -166,7 +166,7 @@ var menudata={children:[
 {text:"t",url:"functions_type.html#index_t"},
 {text:"v",url:"functions_type.html#index_v"}]},
 {text:"Related Functions",url:"functions_rela.html",children:[
-{text:"l",url:"functions_rela.html#index_l"},
+{text:"i",url:"functions_rela.html#index_i"},
 {text:"o",url:"functions_rela.html#index_o"},
 {text:"r",url:"functions_rela.html#index_r"},
 {text:"s",url:"functions_rela.html#index_s"}]}]}]},

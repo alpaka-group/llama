@@ -62,5 +62,7 @@ var searchData=
   ['isview_297',['isView',['../namespacellama.html#a2c3ef24f7ab0d71912a5f7e71cf24130',1,'llama']]],
   ['isview_3c_20view_3c_20mapping_2c_20blobtype_20_3e_20_3e_298',['isView&lt; View&lt; Mapping, BlobType &gt; &gt;',['../namespacellama.html#aa593eb5186353ddcb3dba09d59cbe0e9',1,'llama']]],
   ['iterator_299',['Iterator',['../structllama_1_1Iterator.html',1,'llama::Iterator&lt; View &gt;'],['../structllama_1_1Vector.html#a7cb2da4cdee69566d96d906796ac96ff',1,'llama::Vector::iterator()'],['../structllama_1_1View.html#a47384b6a68647023bcca2232d7887bb0',1,'llama::View::iterator()'],['../structllama_1_1Iterator.html#afa877e06adc28f4c7bb7644b2aa77d67',1,'llama::Iterator::Iterator()=default'],['../structllama_1_1Iterator.html#a87ca77106e3bf02e1ddf3124fd00a5de',1,'llama::Iterator::Iterator(ArrayIndexIterator arrayIndex, View *view)']]],
-  ['iterator_5fcategory_300',['iterator_category',['../structllama_1_1ArrayIndexIterator.html#ac149b9191555df8d9cd3c8b08b6f22ab',1,'llama::ArrayIndexIterator::iterator_category()'],['../structllama_1_1Iterator.html#a9e213325f5a69c320be804d24e0b1ccd',1,'llama::Iterator::iterator_category()']]]
+  ['iterator_5fcategory_300',['iterator_category',['../structllama_1_1ArrayIndexIterator.html#ac149b9191555df8d9cd3c8b08b6f22ab',1,'llama::ArrayIndexIterator::iterator_category()'],['../structllama_1_1Iterator.html#a9e213325f5a69c320be804d24e0b1ccd',1,'llama::Iterator::iterator_category()']]],
+  ['loadsimdrecord_301',['loadSimdRecord',['../structllama_1_1RecordRef.html#a4db77e1b7709685c7eb45c7f6c86fb48',1,'llama::RecordRef']]],
+  ['storesimdrecord_302',['storeSimdRecord',['../structllama_1_1RecordRef.html#ab919c94e030e63d8d3220fe055280c5f',1,'llama::RecordRef']]]
 ];
