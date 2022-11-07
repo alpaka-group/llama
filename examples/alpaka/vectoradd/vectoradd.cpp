@@ -61,6 +61,13 @@ struct AddKernel
 auto main() -> int
 try
 {
+#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ >= 3 && __CUDACC_VER_MINOR__ < 4
+// nvcc 11.3 fails to generate the template signature for llama::View, if it has a forward declaration with a default
+// argument (which we need for the default accessor)
+#    warning "alpaka nbody example disabled for nvcc 11.3, because it generates invalid C++ code for the host compiler"
+    return -1;
+#else
+
     // ALPAKA
     using Dim = alpaka::DimInt<1>;
     using Size = std::size_t;
@@ -160,6 +167,7 @@ try
     chrono.printAndReset("Copy D->H");
 
     return 0;
+#endif
 }
 catch(const std::exception& e)
 {
