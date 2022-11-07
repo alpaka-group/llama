@@ -317,7 +317,6 @@ try
 #    warning "alpaka nbody example disabled for nvcc <= 11.5, because the compiler segfaults"
     return -1;
 #else
-
     std::cout << problemSize / 1000 << "k particles (" << problemSize * llama::sizeOf<Particle> / 1024 << "kiB)\n"
               << "Caching " << threadsPerBlock << " particles (" << threadsPerBlock * llama::sizeOf<Particle> / 1024
               << " kiB) in shared memory\n"
