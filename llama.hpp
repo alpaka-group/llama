@@ -1269,6 +1269,76 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>>
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 // #pragma once
+	// ============================================================================
+	// == ./Accessors.hpp ==
+	// ==
+	// #pragma once
+	// #include "macros.hpp"    // amalgamate: file already expanded
+
+	#include <atomic>
+
+	namespace llama::accessor
+	{
+	    /// Default accessor. Passes through the given reference.
+	    struct Default
+	    {
+	        template<typename Reference>
+	        LLAMA_FN_HOST_ACC_INLINE auto operator()(Reference&& r) const -> Reference
+	        {
+	            return std::forward<Reference>(r);
+	        }
+	    };
+
+	    /// Allows only read access and returns values instead of references to memory.
+	    struct ReadOnlyByValue
+	    {
+	        template<typename Reference>
+	        LLAMA_FN_HOST_ACC_INLINE auto operator()(Reference&& r) const
+	        {
+	            using ValueType = std::decay_t<Reference>;
+	            if constexpr(isProxyReference<ValueType>)
+	                return static_cast<typename ValueType::value_type>(r);
+	            else
+	                return ValueType{r};
+	        }
+	    };
+
+	    /// Allows only read access by qualifying the references to memory with const. Only works on l-value references.
+	    struct Const
+	    {
+	        template<typename T>
+	        LLAMA_FN_HOST_ACC_INLINE auto operator()(T& r) const -> const T&
+	        {
+	            return r;
+	        }
+	    };
+
+	    /// Qualifies references to memory with __restrict. Only works on l-value references.
+	    struct Restrict
+	    {
+	        template<typename T>
+	        LLAMA_FN_HOST_ACC_INLINE auto operator()(T& r) const -> T& __restrict
+	        {
+	            return r;
+	        }
+	    };
+
+	#ifdef __cpp_lib_atomic_ref
+	    /// Accessor wrapping a reference into a std::atomic_ref. Can only wrap l-value references.
+	    struct Atomic
+	    {
+	        template<typename T>
+	        LLAMA_FN_HOST_ACC_INLINE auto operator()(T& r) const -> std::atomic_ref<T>
+	        {
+	            return std::atomic_ref<T>{r};
+	        }
+	    };
+	#endif
+	} // namespace llama::accessor
+	// ==
+	// == ./Accessors.hpp ==
+	// ============================================================================
+
 // #include "Array.hpp"    // amalgamate: file already expanded
 	// ============================================================================
 	// == ./ArrayIndexRange.hpp ==
@@ -2806,7 +2876,7 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>>
 		// #pragma once
 		// #include "../Core.hpp"    // amalgamate: file already expanded
 
-		#include <atomic>
+		// #include <atomic>    // amalgamate: file already included
 		#include <climits>
 		#ifndef __cpp_lib_atomic_ref
 		#    include <boost/atomic/atomic_ref.hpp>
@@ -3144,9 +3214,9 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>>
 namespace llama
 {
 #ifdef __cpp_lib_concepts
-    template<typename TMapping, Blob BlobType>
+    template<typename TMapping, Blob BlobType, typename TAccessor>
 #else
-    template<typename TMapping, typename BlobType>
+    template<typename TMapping, typename BlobType, typename TAccessor>
 #endif
     struct View;
 
@@ -3173,12 +3243,14 @@ namespace llama
 
     /// Same as \ref allocView but does not run field constructors.
 #ifdef __cpp_lib_concepts
-    template<typename Mapping, BlobAllocator Allocator = bloballoc::Vector>
+    template<typename Mapping, BlobAllocator Allocator = bloballoc::Vector, typename Accessor = accessor::Default>
 #else
-    template<typename Mapping, typename Allocator = bloballoc::Vector>
+    template<typename Mapping, typename Allocator = bloballoc::Vector, typename Accessor = accessor::Default>
 #endif
-    LLAMA_FN_HOST_ACC_INLINE auto allocViewUninitialized(Mapping mapping = {}, const Allocator& alloc = {})
-        -> View<Mapping, internal::AllocatorBlobType<Allocator, typename Mapping::RecordDim>>
+    LLAMA_FN_HOST_ACC_INLINE auto allocViewUninitialized(
+        Mapping mapping = {},
+        const Allocator& alloc = {},
+        Accessor = {}) -> View<Mapping, internal::AllocatorBlobType<Allocator, typename Mapping::RecordDim>, Accessor>
     {
         auto blobs = internal::makeBlobArray(alloc, mapping, std::make_index_sequence<Mapping::blobCount>{});
         return {std::move(mapping), std::move(blobs)};
@@ -3235,10 +3307,10 @@ namespace llama
 
     /// Runs the constructor of all fields reachable through the given view. Computed fields are constructed if they
     /// return l-value references. If the mapping is a computed
-    template<typename Mapping, typename BlobType>
-    LLAMA_FN_HOST_ACC_INLINE void constructFields(View<Mapping, BlobType>& view)
+    template<typename Mapping, typename BlobType, typename Accessor>
+    LLAMA_FN_HOST_ACC_INLINE void constructFields(View<Mapping, BlobType, Accessor>& view)
     {
-        using View = View<Mapping, BlobType>;
+        using View = View<Mapping, BlobType, Accessor>;
         using RecordDim = typename View::RecordDim;
         forEachADCoord(
             view.mapping().extents(),
@@ -3255,13 +3327,15 @@ namespace llama
                             using FieldType = GetType<RecordDim, decltype(rc)>;
                             using RefType = decltype(view(ai)(rc));
                             // this handles physical and computed mappings
-                            if constexpr(std::is_lvalue_reference_v<RefType>)
-                            {
-                                new(&view(ai)(rc)) FieldType;
-                            }
-                            else if constexpr(isProxyReference<RefType>)
+                            if constexpr(isProxyReference<RefType>)
                             {
                                 view(ai)(rc) = FieldType{};
+                            }
+                            else if constexpr(
+                                std::is_lvalue_reference_v<
+                                    RefType> && !std::is_const_v<std::remove_reference_t<RefType>>)
+                            {
+                                new(&view(ai)(rc)) FieldType;
                             }
                         }
 #endif
@@ -3271,13 +3345,14 @@ namespace llama
                 {
                     // this handles physical and computed mappings
                     using RefType = decltype(view(ai));
-                    if constexpr(std::is_lvalue_reference_v<RefType>)
-                    {
-                        new(&view(ai)) RecordDim;
-                    }
-                    else if constexpr(isProxyReference<RefType>)
+                    if constexpr(isProxyReference<RefType>)
                     {
                         view(ai) = RecordDim{};
+                    }
+                    else if constexpr(
+                        std::is_lvalue_reference_v<RefType> && !std::is_const_v<std::remove_reference_t<RefType>>)
+                    {
+                        new(&view(ai)) RecordDim;
                     }
                 }
             });
@@ -3289,14 +3364,14 @@ namespace llama
     /// The constructors are run for all fields by calling \ref constructFields. This function is the preferred way to
     /// create a \ref View. See also \ref allocViewUninitialized.
 #ifdef __cpp_lib_concepts
-    template<typename Mapping, BlobAllocator Allocator = bloballoc::Vector>
+    template<typename Mapping, BlobAllocator Allocator = bloballoc::Vector, typename Accessor = accessor::Default>
 #else
-    template<typename Mapping, typename Allocator = bloballoc::Vector>
+    template<typename Mapping, typename Allocator = bloballoc::Vector, typename Accessor = accessor::Default>
 #endif
-    LLAMA_FN_HOST_ACC_INLINE auto allocView(Mapping mapping = {}, const Allocator& alloc = {})
-        -> View<Mapping, internal::AllocatorBlobType<Allocator, typename Mapping::RecordDim>>
+    LLAMA_FN_HOST_ACC_INLINE auto allocView(Mapping mapping = {}, const Allocator& alloc = {}, Accessor accessor = {})
+        -> View<Mapping, internal::AllocatorBlobType<Allocator, typename Mapping::RecordDim>, Accessor>
     {
-        auto view = allocViewUninitialized(std::move(mapping), alloc);
+        auto view = allocViewUninitialized(std::move(mapping), alloc, accessor);
         constructFields(view);
         return view;
     }
@@ -3514,22 +3589,26 @@ namespace llama
     /// view should be created using \ref allocView.
     /// \tparam TMapping The mapping used by the view to map accesses into memory.
     /// \tparam BlobType The storage type used by the view holding memory.
+    /// \tparam TAccessor The accessor to use when an access is made through this view.
 #ifdef __cpp_lib_concepts
-    template<typename TMapping, Blob BlobType>
+    template<typename TMapping, Blob BlobType, typename TAccessor = accessor::Default>
 #else
-    template<typename TMapping, typename BlobType>
+    template<typename TMapping, typename BlobType, typename TAccessor = accessor::Default>
 #endif
     struct LLAMA_DECLSPEC_EMPTY_BASES View
         : private TMapping
+        , private TAccessor
 #if CAN_USE_RANGES
         , std::ranges::view_base
 #endif
     {
         static_assert(!std::is_const_v<TMapping>);
+        static_assert(std::is_empty_v<TAccessor>, "Stateful accessors are not implemented");
         using Mapping = TMapping;
         using ArrayExtents = typename Mapping::ArrayExtents;
         using ArrayIndex = typename Mapping::ArrayIndex;
         using RecordDim = typename Mapping::RecordDim;
+        using Accessor = TAccessor;
         using iterator = Iterator<View>;
         using const_iterator = Iterator<const View>;
         using size_type = typename ArrayExtents::value_type;
@@ -3564,6 +3643,16 @@ namespace llama
             return static_cast<const Mapping&>(*this);
         }
 
+        LLAMA_FN_HOST_ACC_INLINE auto accessor() -> Accessor&
+        {
+            return static_cast<Accessor&>(*this);
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE auto accessor() const -> const Accessor&
+        {
+            return static_cast<const Accessor&>(*this);
+        }
+
 #if !(defined(_MSC_VER) && defined(__NVCC__))
         template<typename V>
         auto operator()(llama::ArrayIndex<V, ArrayIndex::rank>) const
@@ -3583,7 +3672,7 @@ namespace llama
             else
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return accessor(ai, RecordCoord<>{});
+                return access(ai, RecordCoord<>{});
             }
         }
 
@@ -3597,7 +3686,7 @@ namespace llama
             else
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
-                return accessor(ai, RecordCoord<>{});
+                return access(ai, RecordCoord<>{});
             }
         }
 
@@ -3693,23 +3782,23 @@ namespace llama
         friend struct RecordRef;
 
         template<std::size_t... Coords>
-        LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayIndex ai, RecordCoord<Coords...> rc = {}) const -> decltype(auto)
+        LLAMA_FN_HOST_ACC_INLINE auto access(ArrayIndex ai, RecordCoord<Coords...> rc = {}) const -> decltype(auto)
         {
-            return mapToMemory(mapping(), ai, rc, storageBlobs);
+            return accessor()(mapToMemory(mapping(), ai, rc, storageBlobs));
         }
 
         template<std::size_t... Coords>
-        LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayIndex ai, RecordCoord<Coords...> rc = {}) -> decltype(auto)
+        LLAMA_FN_HOST_ACC_INLINE auto access(ArrayIndex ai, RecordCoord<Coords...> rc = {}) -> decltype(auto)
         {
-            return mapToMemory(mapping(), ai, rc, storageBlobs);
+            return accessor()(mapToMemory(mapping(), ai, rc, storageBlobs));
         }
     };
 
     namespace internal
     {
-        template<typename Mapping, typename BlobType, typename TransformBlobFunc, std::size_t... Is>
+        template<typename Mapping, typename BlobType, typename Accessor, typename TransformBlobFunc, std::size_t... Is>
         LLAMA_FN_HOST_ACC_INLINE auto makeTransformedBlobArray(
-            View<Mapping, BlobType>& view,
+            View<Mapping, BlobType, Accessor>& view,
             const TransformBlobFunc& transformBlob,
             std::integer_sequence<std::size_t, Is...>)
         {
@@ -3719,10 +3808,12 @@ namespace llama
 
     /// Applies the given transformation to the blobs of a view and creates a new view with the transformed blobs and
     /// the same mapping as the old view.
-    template<typename Mapping, typename BlobType, typename TransformBlobFunc>
-    LLAMA_FN_HOST_ACC_INLINE auto transformBlobs(View<Mapping, BlobType>& view, const TransformBlobFunc& transformBlob)
+    template<typename Mapping, typename BlobType, typename Accessor, typename TransformBlobFunc>
+    LLAMA_FN_HOST_ACC_INLINE auto transformBlobs(
+        View<Mapping, BlobType, Accessor>& view,
+        const TransformBlobFunc& transformBlob)
     {
-        constexpr auto blobCount = View<Mapping, BlobType>::Mapping::blobCount;
+        constexpr auto blobCount = View<Mapping, BlobType, Accessor>::Mapping::blobCount;
         return View{
             view.mapping(),
             internal::makeTransformedBlobArray(view, transformBlob, std::make_index_sequence<blobCount>{})};
@@ -3731,8 +3822,8 @@ namespace llama
     /// Creates a shallow copy of a view. This copy must not outlive the view, since it references its blob array.
     /// \tparam NewBlobType The blob type of the shallow copy. Must be a non owning pointer like type.
     /// \return A new view with the same mapping as view, where each blob refers to the blob in view.
-    template<typename Mapping, typename BlobType, typename NewBlobType = std::byte*>
-    LLAMA_FN_HOST_ACC_INLINE auto shallowCopy(View<Mapping, BlobType>& view)
+    template<typename Mapping, typename BlobType, typename Accessor, typename NewBlobType = std::byte*>
+    LLAMA_FN_HOST_ACC_INLINE auto shallowCopy(View<Mapping, BlobType, Accessor>& view)
     {
         return transformBlobs(
             view,
@@ -3744,11 +3835,20 @@ namespace llama
             });
     }
 
+    // Creates a new view from an existing view with the given accessor.
+    // \param view A view which's mapping and blobs are copied into a new view with the different accessor. If you no
+    // longer need the old view, consider moving it into the argument of this function.
+    template<typename NewAccessor, typename Mapping, typename BlobType, typename OldAccessor>
+    LLAMA_FN_HOST_ACC_INLINE auto withAccessor(View<Mapping, BlobType, OldAccessor> view)
+    {
+        return View<Mapping, BlobType, NewAccessor>{std::move(view.mapping()), std::move(view.storageBlobs)};
+    }
+
     template<typename View>
     inline constexpr auto isView = false;
 
-    template<typename Mapping, typename BlobType>
-    inline constexpr auto isView<View<Mapping, BlobType>> = true;
+    template<typename Mapping, typename BlobType, typename Accessor>
+    inline constexpr auto isView<View<Mapping, BlobType, Accessor>> = true;
 
     /// Like a \ref View, but array indices are shifted.
     /// @tparam TStoredParentView Type of the underlying view. May be cv qualified and/or a reference type.
@@ -3769,18 +3869,6 @@ namespace llama
             : parentView(std::forward<StoredParentViewFwd>(parentView))
             , offset(offset)
         {
-        }
-
-        template<std::size_t... Coords>
-        LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayIndex ai) const -> const auto&
-        {
-            return parentView.template accessor<Coords...>(ArrayIndex{ai + offset});
-        }
-
-        template<std::size_t... Coords>
-        LLAMA_FN_HOST_ACC_INLINE auto accessor(ArrayIndex ai) -> auto&
-        {
-            return parentView.template accessor<Coords...>(ArrayIndex{ai + offset});
         }
 
         /// Same as \ref View::operator()(ArrayIndex), but shifted by the offset of this \ref VirtualView.
@@ -3825,18 +3913,16 @@ namespace llama
                 ArrayIndex{ArrayIndex{static_cast<typename ArrayIndex::value_type>(indices)...} + offset});
         }
 
-        template<std::size_t... Coord>
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(RecordCoord<Coord...> = {}) const -> decltype(auto)
+        template<std::size_t... Coords>
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(RecordCoord<Coords...> rc = {}) const -> decltype(auto)
         {
-            LLAMA_FORCE_INLINE_RECURSIVE
-            return accessor<Coord...>(ArrayIndex{});
+            return parentView(ArrayIndex{} + offset, rc);
         }
 
-        template<std::size_t... Coord>
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(RecordCoord<Coord...> = {}) -> decltype(auto)
+        template<std::size_t... Coords>
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(RecordCoord<Coords...> rc = {}) -> decltype(auto)
         {
-            LLAMA_FORCE_INLINE_RECURSIVE
-            return accessor<Coord...>(ArrayIndex{});
+            return parentView(ArrayIndex{} + offset, rc);
         }
 
         StoredParentView parentView;
@@ -4780,7 +4866,7 @@ namespace llama
 	            else
 	            {
 	                LLAMA_FORCE_INLINE_RECURSIVE
-	                return this->view.accessor(arrayIndex(), AbsolutCoord{});
+	                return this->view.access(arrayIndex(), AbsolutCoord{});
 	            }
 	        }
 
@@ -4798,7 +4884,7 @@ namespace llama
 	            else
 	            {
 	                LLAMA_FORCE_INLINE_RECURSIVE
-	                return this->view.accessor(arrayIndex(), AbsolutCoord{});
+	                return this->view.access(arrayIndex(), AbsolutCoord{});
 	            }
 	        }
 
