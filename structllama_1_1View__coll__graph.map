@@ -1,4 +1,4 @@
-<map id="llama::View&lt; TMapping, BlobType &gt;" name="llama::View&lt; TMapping, BlobType &gt;">
+<map id="llama::View&lt; TMapping, BlobType, TAccessor &gt;" name="llama::View&lt; TMapping, BlobType, TAccessor &gt;">
 <area shape="rect" id="node1" title=" " alt="" coords="5,109,188,151"/>
 <area shape="rect" id="node2" href="$structllama_1_1Array.html" title=" " alt="" coords="7,5,187,47"/>
 </map>

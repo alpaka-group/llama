@@ -1,5 +1,6 @@
 var namespacellama =
 [
+    [ "accessor", "namespacellama_1_1accessor.html", "namespacellama_1_1accessor" ],
     [ "bloballoc", "namespacellama_1_1bloballoc.html", "namespacellama_1_1bloballoc" ],
     [ "internal", "namespacellama_1_1internal.html", "namespacellama_1_1internal" ],
     [ "mapping", "namespacellama_1_1mapping.html", "namespacellama_1_1mapping" ],

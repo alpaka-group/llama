@@ -43,6 +43,7 @@ var hierarchy =
       [ "llama::mapping::BitPackedFloatSoA< TArrayExtents, TRecordDim, ExponentBits, MantissaBits, TLinearizeArrayDimsFunctor, TStoredIntegral >", "structllama_1_1mapping_1_1BitPackedFloatSoA.html", null ]
     ] ],
     [ "llama::mapping::tree::functor::internal::ChangeNodeChildsRuntimeFunctor", "structllama_1_1mapping_1_1tree_1_1functor_1_1internal_1_1ChangeNodeChildsRuntimeFunctor.html", null ],
+    [ "llama::accessor::Const", "structllama_1_1accessor_1_1Const.html", null ],
     [ "llama::Copy< SrcMapping, DstMapping, SFINAE >", "structllama_1_1Copy.html", null ],
     [ "llama::Copy< Mapping, Mapping >", "structllama_1_1Copy_3_01Mapping_00_01Mapping_01_4.html", null ],
     [ "llama::Copy< mapping::AoSoA< ArrayExtents, RecordDim, LanesSrc, LinearizeArrayDims >, mapping::AoSoA< ArrayExtents, RecordDim, LanesDst, LinearizeArrayDims >, std::enable_if_t< LanesSrc !=LanesDst > >", "structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayExtents_00_01RecordDim_00_01LanesSrc_00_01Line6dc3fb3fdb46e2d3a2a87dd652990741.html", null ],
@@ -51,6 +52,7 @@ var hierarchy =
     [ "llama::mapping::tree::internal::CreateTreeElement< Tag, RecordDim, CountType >", "structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeElement.html", null ],
     [ "llama::mapping::tree::internal::CreateTreeElement< Tag, ChildType[Count], CountType >", "structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeElement_3_01Tag_00_01ChildType_0fCount_0e_00_01CountType_01_4.html", null ],
     [ "llama::mapping::tree::internal::CreateTreeElement< Tag, Record< Fields... >, CountType >", "structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeElement_3_01Tag_00_01Record_3_01Fields_8_8_8_01_4_00_01CountType_01_4.html", null ],
+    [ "llama::accessor::Default", "structllama_1_1accessor_1_1Default.html", null ],
     [ "llama::internal::DivideAssign", "structllama_1_1internal_1_1DivideAssign.html", null ],
     [ "llama::internal::Dyn", "structllama_1_1internal_1_1Dyn.html", null ],
     [ "false_type", null, [
@@ -171,6 +173,7 @@ var hierarchy =
     [ "llama::ProxyRefOpMixin< TraceReference< Value, Ref, Count >, Value >", "structllama_1_1ProxyRefOpMixin.html", [
       [ "llama::mapping::internal::TraceReference< Value, Ref, Count >", "structllama_1_1mapping_1_1internal_1_1TraceReference.html", null ]
     ] ],
+    [ "llama::accessor::ReadOnlyByValue", "structllama_1_1accessor_1_1ReadOnlyByValue.html", null ],
     [ "llama::bloballoc::AlignedAllocator< T, Alignment >::rebind< T2 >", "structllama_1_1bloballoc_1_1AlignedAllocator_1_1rebind.html", null ],
     [ "llama::Record< Fields >", "structllama_1_1Record.html", null ],
     [ "llama::RecordCoord< Coords >", "structllama_1_1RecordCoord.html", null ],
@@ -182,6 +185,7 @@ var hierarchy =
     [ "llama::internal::ReplacePlaceholdersImpl< E, Args >", "structllama_1_1internal_1_1ReplacePlaceholdersImpl.html", null ],
     [ "llama::internal::ReplacePlaceholdersImpl< boost::mp11::mp_arg< I >, Args... >", "structllama_1_1internal_1_1ReplacePlaceholdersImpl_3_01boost_1_1mp11_1_1mp__arg_3_01I_01_4_00_01Args_8_8_8_01_4.html", null ],
     [ "llama::internal::ReplacePlaceholdersImpl< E< Ts... >, Args... >", "structllama_1_1internal_1_1ReplacePlaceholdersImpl_3_01E_3_01Ts_8_8_8_01_4_00_01Args_8_8_8_01_4.html", null ],
+    [ "llama::accessor::Restrict", "structllama_1_1accessor_1_1Restrict.html", null ],
     [ "llama::bloballoc::SharedPtr", "structllama_1_1bloballoc_1_1SharedPtr.html", null ],
     [ "llama::internal::SimdizeNImpl< RecordDim, N, MakeSizedSimd >", "structllama_1_1internal_1_1SimdizeNImpl.html", null ],
     [ "llama::internal::SimdizeNImpl< RecordDim, 1, MakeSizedSimd >", "structllama_1_1internal_1_1SimdizeNImpl_3_01RecordDim_00_011_00_01MakeSizedSimd_01_4.html", null ],
@@ -235,8 +239,8 @@ var hierarchy =
     [ "llama::internal::ValueOf< T & >", "structllama_1_1internal_1_1ValueOf_3_01T_01_6_01_4.html", null ],
     [ "llama::internal::ValueOf< T, std::enable_if_t< isProxyReference< T > > >", "structllama_1_1internal_1_1ValueOf_3_01T_00_01std_1_1enable__if__t_3_01isProxyReference_3_01T_01_4_01_4_01_4.html", null ],
     [ "llama::internal::ValueOf< T, std::enable_if_t< isRecordRef< T > > >", "structllama_1_1internal_1_1ValueOf_3_01T_00_01std_1_1enable__if__t_3_01isRecordRef_3_01T_01_4_01_4_01_4.html", null ],
-    [ "llama::Vector< Mapping >", "structllama_1_1Vector.html", null ],
     [ "llama::bloballoc::Vector", "structllama_1_1bloballoc_1_1Vector.html", null ],
+    [ "llama::Vector< Mapping >", "structllama_1_1Vector.html", null ],
     [ "VHBits", null, [
       [ "llama::mapping::internal::BitPackedIntRef< Integral, StoredIntegralPointer, VHBits, SizeType >", "structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html", null ]
     ] ],
@@ -246,7 +250,7 @@ var hierarchy =
     [ "VHMan", null, [
       [ "llama::mapping::internal::BitPackedFloatRef< Float, StoredIntegralPointer, VHExp, VHMan, SizeType >", "structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html", null ]
     ] ],
-    [ "llama::View< TMapping, BlobType >", "structllama_1_1View.html", null ],
+    [ "llama::View< TMapping, BlobType, TAccessor >", "structllama_1_1View.html", null ],
     [ "llama::VirtualView< TStoredParentView >", "structllama_1_1VirtualView.html", null ],
     [ "llama::mapping::tree::internal::WrapInNNodes< Leaf, Count >", "structllama_1_1mapping_1_1tree_1_1internal_1_1WrapInNNodes.html", null ],
     [ "llama::mapping::tree::internal::WrapInNNodes< Leaf, 0 >", "structllama_1_1mapping_1_1tree_1_1internal_1_1WrapInNNodes_3_01Leaf_00_010_01_4.html", null ]

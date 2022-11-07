@@ -162,7 +162,7 @@ Static Public Attributes</h2></td></tr>
 <div class="textblock"><h3>template&lt;typename TArrayExtents, typename TRecordDim, bool SeparateBuffers = true, bool AlignSubArrays = false, typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDimSingleBlob = FlattenRecordDimInOrder&gt;<br />
 struct llama::mapping::SoA&lt; TArrayExtents, TRecordDim, SeparateBuffers, AlignSubArrays, TLinearizeArrayDimsFunctor, FlattenRecordDimSingleBlob &gt;</h3>
 
-<p>Struct of array mapping. Used to create a <a class="el" href="structllama_1_1View.html">View</a> via <a class="el" href="namespacellama.html#a99567a2429e7d7b3155116a8e81d4059">allocView</a>. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
+<p>Struct of array mapping. Used to create a <a class="el" href="structllama_1_1View.html">View</a> via <a class="el" href="namespacellama.html#a8e5d70e7cec0c305424ed3890c4cedc6">allocView</a>. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">SeparateBuffers</td><td>If true, every element of the record dimension is mapped to its own buffer. </td></tr>
     <tr><td class="paramname">AlignSubArrays</td><td>Only relevant when SeparateBuffers == false. If true, aligns the sub arrays created within the single blob by inserting padding. </td></tr>
@@ -373,7 +373,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , bool SeparateBuffers 
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1SoA.html">SoA</a></li>
-    <li class="footer">Generated on Sun Nov 6 2022 00:02:14 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Nov 7 2022 17:09:20 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
