@@ -42,7 +42,7 @@ namespace llama::mapping
         using size_type = typename Base::size_type;
 
     public:
-        inline static constexpr bool lanes = Lanes;
+        inline static constexpr typename TArrayExtents::value_type lanes = Lanes;
         using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
         using Flattener = FlattenRecordDim<TRecordDim>;
         inline static constexpr std::size_t blobCount = 1;
