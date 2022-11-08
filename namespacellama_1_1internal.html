@@ -374,9 +374,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a36b0736740116d5e9fff6172f5b202af"><td class="memTemplParams" colspan="2">template&lt;typename Allocator , typename Mapping , std::size_t... Is&gt; </td></tr>
 <tr class="memitem:a36b0736740116d5e9fff6172f5b202af"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a36b0736740116d5e9fff6172f5b202af">makeBlobArray</a> (const Allocator &amp;alloc, const Mapping &amp;mapping, std::integer_sequence&lt; std::size_t, Is... &gt;) -&gt; <a class="el" href="structllama_1_1Array.html">Array</a>&lt; <a class="el" href="namespacellama_1_1internal.html#a6b703634fd8ad7364cf42588add461bc">AllocatorBlobType</a>&lt; Allocator, typename Mapping::RecordDim &gt;, Mapping::blobCount &gt;</td></tr>
 <tr class="separator:a36b0736740116d5e9fff6172f5b202af"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a62a1a6ba324305a30a8e2de676e5bec5"><td class="memTemplParams" colspan="2">template&lt;typename Mapping , typename BlobType , typename Accessor , typename TransformBlobFunc , std::size_t... Is&gt; </td></tr>
-<tr class="memitem:a62a1a6ba324305a30a8e2de676e5bec5"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a62a1a6ba324305a30a8e2de676e5bec5">makeTransformedBlobArray</a> (<a class="el" href="structllama_1_1View.html">View</a>&lt; Mapping, BlobType, Accessor &gt; &amp;view, const TransformBlobFunc &amp;transformBlob, std::integer_sequence&lt; std::size_t, Is... &gt;)</td></tr>
-<tr class="separator:a62a1a6ba324305a30a8e2de676e5bec5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac918dee3b9de15beb006a38d668788df"><td class="memTemplParams" colspan="2">template&lt;typename Blobs , typename TransformBlobFunc , std::size_t... Is&gt; </td></tr>
+<tr class="memitem:ac918dee3b9de15beb006a38d668788df"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#ac918dee3b9de15beb006a38d668788df">makeTransformedBlobArray</a> (Blobs &amp;storageBlobs, const TransformBlobFunc &amp;transformBlob, std::integer_sequence&lt; std::size_t, Is... &gt;)</td></tr>
+<tr class="separator:ac918dee3b9de15beb006a38d668788df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -1524,13 +1524,13 @@ template&lt;typename T , typename Tuple , std::size_t... Is&gt; </div>
 
 </div>
 </div>
-<a id="a62a1a6ba324305a30a8e2de676e5bec5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a62a1a6ba324305a30a8e2de676e5bec5">&#9670;&nbsp;</a></span>makeTransformedBlobArray()</h2>
+<a id="ac918dee3b9de15beb006a38d668788df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac918dee3b9de15beb006a38d668788df">&#9670;&nbsp;</a></span>makeTransformedBlobArray()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Mapping , typename BlobType , typename Accessor , typename TransformBlobFunc , std::size_t... Is&gt; </div>
+template&lt;typename Blobs , typename TransformBlobFunc , std::size_t... Is&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1538,8 +1538,8 @@ template&lt;typename Mapping , typename BlobType , typename Accessor , typename 
         <tr>
           <td class="memname">auto llama::internal::makeTransformedBlobArray </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structllama_1_1View.html">View</a>&lt; Mapping, BlobType, Accessor &gt; &amp;&#160;</td>
-          <td class="paramname"><em>view</em>, </td>
+          <td class="paramtype">Blobs &amp;&#160;</td>
+          <td class="paramname"><em>storageBlobs</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -1566,7 +1566,7 @@ template&lt;typename Mapping , typename BlobType , typename Accessor , typename 
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00604">604</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00611">611</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -2719,7 +2719,7 @@ template&lt;typename T &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1internal.html">internal</a></li>
-    <li class="footer">Generated on Mon Nov 7 2022 17:09:20 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Tue Nov 8 2022 16:45:14 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

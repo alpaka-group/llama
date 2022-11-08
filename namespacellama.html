@@ -346,13 +346,14 @@ Functions</h2></td></tr>
 <tr class="memitem:a28ad5ce29085756570effc3b27378a5c"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , typename Functor , typename... Tags&gt; </td></tr>
 <tr class="memitem:a28ad5ce29085756570effc3b27378a5c"><td class="memTemplItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a28ad5ce29085756570effc3b27378a5c">forEachLeafCoord</a> (Functor &amp;&amp;functor, Tags...)</td></tr>
 <tr class="separator:a28ad5ce29085756570effc3b27378a5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a516c8260631ec1b61a52f0e56dc58ac7"><td class="memTemplParams" colspan="2">template&lt;typename Integral &gt; </td></tr>
+<tr class="memitem:a516c8260631ec1b61a52f0e56dc58ac7"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a516c8260631ec1b61a52f0e56dc58ac7">divCeil</a> (Integral a, Integral b) -&gt; Integral</td></tr>
+<tr class="memdesc:a516c8260631ec1b61a52f0e56dc58ac7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the ceiling of a / b.  <a href="namespacellama.html#a516c8260631ec1b61a52f0e56dc58ac7">More...</a><br /></td></tr>
+<tr class="separator:a516c8260631ec1b61a52f0e56dc58ac7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab9c5c0a1ca0698a8871689b9924736ac"><td class="memTemplParams" colspan="2">template&lt;typename Integral &gt; </td></tr>
 <tr class="memitem:ab9c5c0a1ca0698a8871689b9924736ac"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ab9c5c0a1ca0698a8871689b9924736ac">roundUpToMultiple</a> (Integral n, Integral mult) -&gt; Integral</td></tr>
 <tr class="memdesc:ab9c5c0a1ca0698a8871689b9924736ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the integral n rounded up to be a multiple of mult.  <a href="namespacellama.html#ab9c5c0a1ca0698a8871689b9924736ac">More...</a><br /></td></tr>
 <tr class="separator:ab9c5c0a1ca0698a8871689b9924736ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a516c8260631ec1b61a52f0e56dc58ac7"><td class="memTemplParams" colspan="2">template&lt;typename Integral &gt; </td></tr>
-<tr class="memitem:a516c8260631ec1b61a52f0e56dc58ac7"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a516c8260631ec1b61a52f0e56dc58ac7">divCeil</a> (Integral a, Integral b) -&gt; Integral</td></tr>
-<tr class="separator:a516c8260631ec1b61a52f0e56dc58ac7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a32bf07b53ebc403eee401038fc95b591"><td class="memTemplParams" colspan="2">template&lt;std::size_t PieceLength, typename Mapping &gt; </td></tr>
 <tr class="memitem:a32bf07b53ebc403eee401038fc95b591"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a32bf07b53ebc403eee401038fc95b591">mapsPiecewiseContiguous</a> (const Mapping &amp;m) -&gt; bool</td></tr>
 <tr class="separator:a32bf07b53ebc403eee401038fc95b591"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -466,12 +467,12 @@ Functions</h2></td></tr>
 <tr class="memitem:ac1445fa67728a9433fbd8b68f195fbe4"><td class="memTemplParams" colspan="2">template&lt;typename Mapping , std::size_t... Coords, typename Blobs &gt; </td></tr>
 <tr class="memitem:ac1445fa67728a9433fbd8b68f195fbe4"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ac1445fa67728a9433fbd8b68f195fbe4">mapToMemory</a> (Mapping &amp;mapping, typename Mapping::ArrayIndex ai, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coords... &gt; rc, Blobs &amp;blobs) -&gt; decltype(auto)</td></tr>
 <tr class="separator:ac1445fa67728a9433fbd8b68f195fbe4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5bec2e885d8fe6da3e3393333f321e84"><td class="memTemplParams" colspan="2">template&lt;typename Mapping , typename BlobType , typename Accessor , typename TransformBlobFunc &gt; </td></tr>
-<tr class="memitem:a5bec2e885d8fe6da3e3393333f321e84"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a5bec2e885d8fe6da3e3393333f321e84">transformBlobs</a> (<a class="el" href="structllama_1_1View.html">View</a>&lt; Mapping, BlobType, Accessor &gt; &amp;view, const TransformBlobFunc &amp;transformBlob)</td></tr>
-<tr class="separator:a5bec2e885d8fe6da3e3393333f321e84"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae818bd943f8bf52f928b6a4e1703a5c3"><td class="memTemplParams" colspan="2">template&lt;typename Mapping , typename BlobType , typename Accessor , typename NewBlobType  = std::byte*&gt; </td></tr>
-<tr class="memitem:ae818bd943f8bf52f928b6a4e1703a5c3"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ae818bd943f8bf52f928b6a4e1703a5c3">shallowCopy</a> (<a class="el" href="structllama_1_1View.html">View</a>&lt; Mapping, BlobType, Accessor &gt; &amp;view)</td></tr>
-<tr class="separator:ae818bd943f8bf52f928b6a4e1703a5c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a887c0f2f25b3a4e104c73178fa12c92c"><td class="memTemplParams" colspan="2">template&lt;typename View , typename TransformBlobFunc , typename  = std::enable_if_t&lt;isView&lt;std::decay_t&lt;View&gt;&gt;&gt;&gt; </td></tr>
+<tr class="memitem:a887c0f2f25b3a4e104c73178fa12c92c"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a887c0f2f25b3a4e104c73178fa12c92c">transformBlobs</a> (<a class="el" href="structllama_1_1View.html">View</a> &amp;view, const TransformBlobFunc &amp;transformBlob)</td></tr>
+<tr class="separator:a887c0f2f25b3a4e104c73178fa12c92c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae800146eabadd222999acf6020391b75"><td class="memTemplParams" colspan="2">template&lt;typename View , typename NewBlobType  = CopyConst&lt;View, std::byte&gt;*, typename  = std::enable_if_t&lt;isView&lt;std::decay_t&lt;View&gt;&gt;&gt;&gt; </td></tr>
+<tr class="memitem:ae800146eabadd222999acf6020391b75"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ae800146eabadd222999acf6020391b75">shallowCopy</a> (<a class="el" href="structllama_1_1View.html">View</a> &amp;view)</td></tr>
+<tr class="separator:ae800146eabadd222999acf6020391b75"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e08773be1716c8fdc949c9db202c20f"><td class="memTemplParams" colspan="2">template&lt;typename NewAccessor , typename Mapping , typename BlobType , typename OldAccessor &gt; </td></tr>
 <tr class="memitem:a6e08773be1716c8fdc949c9db202c20f"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a6e08773be1716c8fdc949c9db202c20f">withAccessor</a> (<a class="el" href="structllama_1_1View.html">View</a>&lt; Mapping, BlobType, OldAccessor &gt; view)</td></tr>
 <tr class="separator:a6e08773be1716c8fdc949c9db202c20f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1649,7 +1650,9 @@ template&lt;typename Integral &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00453">453</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p>Returns the ceiling of a / b. </p>
+
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00446">446</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -3054,7 +3057,7 @@ template&lt;typename Integral &gt; </div>
 
 <p>Returns the integral n rounded up to be a multiple of mult. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00446">446</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00453">453</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -3078,13 +3081,13 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="ae818bd943f8bf52f928b6a4e1703a5c3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae818bd943f8bf52f928b6a4e1703a5c3">&#9670;&nbsp;</a></span>shallowCopy()</h2>
+<a id="ae800146eabadd222999acf6020391b75"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae800146eabadd222999acf6020391b75">&#9670;&nbsp;</a></span>shallowCopy()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Mapping , typename BlobType , typename Accessor , typename NewBlobType  = std::byte*&gt; </div>
+template&lt;typename View , typename NewBlobType  = CopyConst&lt;View, std::byte&gt;*, typename  = std::enable_if_t&lt;isView&lt;std::decay_t&lt;View&gt;&gt;&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -3092,7 +3095,7 @@ template&lt;typename Mapping , typename BlobType , typename Accessor , typename 
         <tr>
           <td class="memname">auto llama::shallowCopy </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structllama_1_1View.html">View</a>&lt; Mapping, BlobType, Accessor &gt; &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1View.html">View</a> &amp;&#160;</td>
           <td class="paramname"><em>view</em></td><td>)</td>
           <td></td>
         </tr>
@@ -3111,7 +3114,7 @@ template&lt;typename Mapping , typename BlobType , typename Accessor , typename 
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A new view with the same mapping as view, where each blob refers to the blob in view. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00630">630</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00643">643</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -3294,13 +3297,13 @@ template&lt;typename ViewA , typename BoundRecordDimA , bool OwnViewA, typename 
 
 </div>
 </div>
-<a id="a5bec2e885d8fe6da3e3393333f321e84"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5bec2e885d8fe6da3e3393333f321e84">&#9670;&nbsp;</a></span>transformBlobs()</h2>
+<a id="a887c0f2f25b3a4e104c73178fa12c92c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a887c0f2f25b3a4e104c73178fa12c92c">&#9670;&nbsp;</a></span>transformBlobs()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Mapping , typename BlobType , typename Accessor , typename TransformBlobFunc &gt; </div>
+template&lt;typename View , typename TransformBlobFunc , typename  = std::enable_if_t&lt;isView&lt;std::decay_t&lt;View&gt;&gt;&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -3308,7 +3311,7 @@ template&lt;typename Mapping , typename BlobType , typename Accessor , typename 
         <tr>
           <td class="memname">auto llama::transformBlobs </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structllama_1_1View.html">View</a>&lt; Mapping, BlobType, Accessor &gt; &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1View.html">View</a> &amp;&#160;</td>
           <td class="paramname"><em>view</em>, </td>
         </tr>
         <tr>
@@ -3329,9 +3332,9 @@ template&lt;typename Mapping , typename BlobType , typename Accessor , typename 
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Applies the given transformation to the blobs of a view and creates a new view with the transformed blobs and the same mapping as the old view. </p>
+<p>Applies the given transformation to the blobs of a view and creates a new view with the transformed blobs and the same mapping and accessor as the old view. </p>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00616">616</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00623">623</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -3535,7 +3538,7 @@ template&lt;typename NewAccessor , typename Mapping , typename BlobType , typena
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00646">646</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00662">662</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -4283,7 +4286,7 @@ template&lt;typename View &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00652">652</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00603">603</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -4309,7 +4312,7 @@ template&lt;typename Mapping , typename BlobType , typename Accessor &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00655">655</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00606">606</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -4597,7 +4600,7 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Mon Nov 7 2022 17:09:20 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Tue Nov 8 2022 16:45:14 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

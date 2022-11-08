@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Low-Level Abstraction of Memory Access: llama::View&lt; TMapping, BlobType, TAccessor &gt; Struct Template Reference</title>
+<title>Low-Level Abstraction of Memory Access: llama::View&lt; TMapping, TBlobType, TAccessor &gt; Struct Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -89,18 +89,18 @@ $(document).ready(function(){initNavTree('structllama_1_1View.html',''); initRes
 <a href="#friends">Friends</a> &#124;
 <a href="structllama_1_1View-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">llama::View&lt; TMapping, BlobType, TAccessor &gt; Struct Template Reference</div>  </div>
+<div class="title">llama::View&lt; TMapping, TBlobType, TAccessor &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
 <p><code>#include &lt;<a class="el" href="View_8hpp_source.html">View.hpp</a>&gt;</code></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for llama::View&lt; TMapping, BlobType, TAccessor &gt;:</div>
+  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for llama::View&lt; TMapping, TBlobType, TAccessor &gt;:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="structllama_1_1View__coll__graph.png" border="0" usemap="#llama_1_1View_3_01TMapping_00_01BlobType_00_01TAccessor_01_4_coll__map" alt="Collaboration graph"/></div>
-<map name="llama_1_1View_3_01TMapping_00_01BlobType_00_01TAccessor_01_4_coll__map" id="llama_1_1View_3_01TMapping_00_01BlobType_00_01TAccessor_01_4_coll__map">
+<div class="center"><img src="structllama_1_1View__coll__graph.png" border="0" usemap="#llama_1_1View_3_01TMapping_00_01TBlobType_00_01TAccessor_01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="llama_1_1View_3_01TMapping_00_01TBlobType_00_01TAccessor_01_4_coll__map" id="llama_1_1View_3_01TMapping_00_01TBlobType_00_01TAccessor_01_4_coll__map">
 <area shape="rect" title=" " alt="" coords="5,109,188,151"/>
 <area shape="rect" href="structllama_1_1Array.html" title=" " alt="" coords="7,5,187,47"/>
 </map>
@@ -108,77 +108,79 @@ $(document).ready(function(){initNavTree('structllama_1_1View.html',''); initRes
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a0baad12bcefcca04300273a063991c3e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a0baad12bcefcca04300273a063991c3e">Mapping</a> = TMapping</td></tr>
-<tr class="separator:a0baad12bcefcca04300273a063991c3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3a72a40f5f85066a6e6e1bd931e2d8a9"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a3a72a40f5f85066a6e6e1bd931e2d8a9">ArrayExtents</a> = typename Mapping::ArrayExtents</td></tr>
-<tr class="separator:a3a72a40f5f85066a6e6e1bd931e2d8a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af47d4cc81b409e8e5cadcbf9b6952847"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#af47d4cc81b409e8e5cadcbf9b6952847">ArrayIndex</a> = typename Mapping::ArrayIndex</td></tr>
-<tr class="separator:af47d4cc81b409e8e5cadcbf9b6952847"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a945b4a6d5a4ed05ef7f6a28a1bb6f327"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a945b4a6d5a4ed05ef7f6a28a1bb6f327">RecordDim</a> = typename Mapping::RecordDim</td></tr>
-<tr class="separator:a945b4a6d5a4ed05ef7f6a28a1bb6f327"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2e0a3b8c8b46fa71082bbf52c91a5790"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a2e0a3b8c8b46fa71082bbf52c91a5790">Accessor</a> = TAccessor</td></tr>
-<tr class="separator:a2e0a3b8c8b46fa71082bbf52c91a5790"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb29d82e7b20a0dbe19da85eace8c61d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#acb29d82e7b20a0dbe19da85eace8c61d">iterator</a> = <a class="el" href="structllama_1_1Iterator.html">Iterator</a>&lt; <a class="el" href="structllama_1_1View.html">View</a> &gt;</td></tr>
-<tr class="separator:acb29d82e7b20a0dbe19da85eace8c61d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adff63178d395952c63b4d2a905854d1c"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#adff63178d395952c63b4d2a905854d1c">const_iterator</a> = <a class="el" href="structllama_1_1Iterator.html">Iterator</a>&lt; const <a class="el" href="structllama_1_1View.html">View</a> &gt;</td></tr>
-<tr class="separator:adff63178d395952c63b4d2a905854d1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a22e41499532a4841b9841cc73f1a55cf"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a22e41499532a4841b9841cc73f1a55cf">size_type</a> = typename <a class="el" href="structllama_1_1ArrayExtents.html#a26ddad4db80efe93143b86c766b9a69f">ArrayExtents::value_type</a></td></tr>
-<tr class="separator:a22e41499532a4841b9841cc73f1a55cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab78c51e95a88b07395d0311107f31ba3"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#ab78c51e95a88b07395d0311107f31ba3">Mapping</a> = TMapping</td></tr>
+<tr class="separator:ab78c51e95a88b07395d0311107f31ba3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3fbca466d7e6fdfd1ed0e368a224f8c4"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a3fbca466d7e6fdfd1ed0e368a224f8c4">BlobType</a> = TBlobType</td></tr>
+<tr class="separator:a3fbca466d7e6fdfd1ed0e368a224f8c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1fadf5a169e81c3171929c6fd53d2313"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a1fadf5a169e81c3171929c6fd53d2313">ArrayExtents</a> = typename Mapping::ArrayExtents</td></tr>
+<tr class="separator:a1fadf5a169e81c3171929c6fd53d2313"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5a48c9b55ae1eb5872d7fb3f664d902"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#af5a48c9b55ae1eb5872d7fb3f664d902">ArrayIndex</a> = typename Mapping::ArrayIndex</td></tr>
+<tr class="separator:af5a48c9b55ae1eb5872d7fb3f664d902"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e311e171359b386b0e86b16738d1d8d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a0e311e171359b386b0e86b16738d1d8d">RecordDim</a> = typename Mapping::RecordDim</td></tr>
+<tr class="separator:a0e311e171359b386b0e86b16738d1d8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7ca80e1aa62ebe6ca0df8532bda9efc"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#ac7ca80e1aa62ebe6ca0df8532bda9efc">Accessor</a> = TAccessor</td></tr>
+<tr class="separator:ac7ca80e1aa62ebe6ca0df8532bda9efc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe36abe814e4a701c181c5fd06b6b9b0"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#abe36abe814e4a701c181c5fd06b6b9b0">iterator</a> = <a class="el" href="structllama_1_1Iterator.html">Iterator</a>&lt; <a class="el" href="structllama_1_1View.html">View</a> &gt;</td></tr>
+<tr class="separator:abe36abe814e4a701c181c5fd06b6b9b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a97c3f6fda42ae88399100512db446234"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a97c3f6fda42ae88399100512db446234">const_iterator</a> = <a class="el" href="structllama_1_1Iterator.html">Iterator</a>&lt; const <a class="el" href="structllama_1_1View.html">View</a> &gt;</td></tr>
+<tr class="separator:a97c3f6fda42ae88399100512db446234"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1485c39735f15874051e1863874847e1"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a1485c39735f15874051e1863874847e1">size_type</a> = typename <a class="el" href="structllama_1_1ArrayExtents.html#a26ddad4db80efe93143b86c766b9a69f">ArrayExtents::value_type</a></td></tr>
+<tr class="separator:a1485c39735f15874051e1863874847e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a74fc3868e9291c13259534a8a3d48bed"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a74fc3868e9291c13259534a8a3d48bed">View</a> ()=default</td></tr>
-<tr class="memdesc:a74fc3868e9291c13259534a8a3d48bed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs default initialization of the blob array.  <a href="structllama_1_1View.html#a74fc3868e9291c13259534a8a3d48bed">More...</a><br /></td></tr>
-<tr class="separator:a74fc3868e9291c13259534a8a3d48bed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1a109de48db3d31e174deee9b99af4d6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a1a109de48db3d31e174deee9b99af4d6">View</a> (<a class="el" href="structllama_1_1View.html#a0baad12bcefcca04300273a063991c3e">Mapping</a> <a class="el" href="structllama_1_1View.html#a0b44d252f5307c1dcf2a1f8018b7ef93">mapping</a>, <a class="el" href="structllama_1_1Array.html">Array</a>&lt; BlobType, Mapping::blobCount &gt; <a class="el" href="structllama_1_1View.html#add8c448739f3da7660d28b11f9ab1abe">storageBlobs</a>)</td></tr>
-<tr class="separator:a1a109de48db3d31e174deee9b99af4d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0b44d252f5307c1dcf2a1f8018b7ef93"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a0b44d252f5307c1dcf2a1f8018b7ef93">mapping</a> () -&gt; <a class="el" href="structllama_1_1View.html#a0baad12bcefcca04300273a063991c3e">Mapping</a> &amp;</td></tr>
-<tr class="separator:a0b44d252f5307c1dcf2a1f8018b7ef93"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5a194c76bb2b79d2b06902cd3ffa4ce8"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a5a194c76bb2b79d2b06902cd3ffa4ce8">mapping</a> () const -&gt; const <a class="el" href="structllama_1_1View.html#a0baad12bcefcca04300273a063991c3e">Mapping</a> &amp;</td></tr>
-<tr class="separator:a5a194c76bb2b79d2b06902cd3ffa4ce8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a207076711052d2ef92d3f1b04b7b7b88"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a207076711052d2ef92d3f1b04b7b7b88">accessor</a> () -&gt; <a class="el" href="structllama_1_1View.html#a2e0a3b8c8b46fa71082bbf52c91a5790">Accessor</a> &amp;</td></tr>
-<tr class="separator:a207076711052d2ef92d3f1b04b7b7b88"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aee2dccd7b420e35088d8adf90fbdbcef"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#aee2dccd7b420e35088d8adf90fbdbcef">accessor</a> () const -&gt; const <a class="el" href="structllama_1_1View.html#a2e0a3b8c8b46fa71082bbf52c91a5790">Accessor</a> &amp;</td></tr>
-<tr class="separator:aee2dccd7b420e35088d8adf90fbdbcef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad26c39a6917628694703fb8843c5059a"><td class="memTemplParams" colspan="2">template&lt;typename V &gt; </td></tr>
-<tr class="memitem:ad26c39a6917628694703fb8843c5059a"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#ad26c39a6917628694703fb8843c5059a">operator()</a> (<a class="el" href="structllama_1_1ArrayIndex.html">llama::ArrayIndex</a>&lt; V, <a class="el" href="structllama_1_1ArrayIndex.html#a09d5dffbdde28ac87fc8ef1f20340593">ArrayIndex::rank</a> &gt;) const</td></tr>
-<tr class="separator:ad26c39a6917628694703fb8843c5059a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ada057d5f77296c2d3f5c67c2e706dd3f"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#ada057d5f77296c2d3f5c67c2e706dd3f">operator()</a> (<a class="el" href="structllama_1_1View.html#af47d4cc81b409e8e5cadcbf9b6952847">ArrayIndex</a> ai) const -&gt; decltype(auto)</td></tr>
-<tr class="memdesc:ada057d5f77296c2d3f5c67c2e706dd3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> at the given <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a> index.  <a href="structllama_1_1View.html#ada057d5f77296c2d3f5c67c2e706dd3f">More...</a><br /></td></tr>
-<tr class="separator:ada057d5f77296c2d3f5c67c2e706dd3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a64a726e496e7d70bfdf0381bb7e7a5d4"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a64a726e496e7d70bfdf0381bb7e7a5d4">operator()</a> (<a class="el" href="structllama_1_1View.html#af47d4cc81b409e8e5cadcbf9b6952847">ArrayIndex</a> ai) -&gt; decltype(auto)</td></tr>
-<tr class="separator:a64a726e496e7d70bfdf0381bb7e7a5d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaf38dd6f9c93d80e6000563c0b590d2f"><td class="memTemplParams" colspan="2">template&lt;typename... Indices, std::enable_if_t&lt; std::conjunction_v&lt; std::is_convertible&lt; Indices, size_type &gt;... &gt;, int &gt;  = 0&gt; </td></tr>
-<tr class="memitem:aaf38dd6f9c93d80e6000563c0b590d2f"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#aaf38dd6f9c93d80e6000563c0b590d2f">operator()</a> (Indices... indices) const -&gt; decltype(auto)</td></tr>
-<tr class="separator:aaf38dd6f9c93d80e6000563c0b590d2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aefe54e97e4b8c1fd1649a4aa9beb8e2e"><td class="memTemplParams" colspan="2">template&lt;typename... Indices, std::enable_if_t&lt; std::conjunction_v&lt; std::is_convertible&lt; Indices, size_type &gt;... &gt;, int &gt;  = 0&gt; </td></tr>
-<tr class="memitem:aefe54e97e4b8c1fd1649a4aa9beb8e2e"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#aefe54e97e4b8c1fd1649a4aa9beb8e2e">operator()</a> (Indices... indices) -&gt; decltype(auto)</td></tr>
-<tr class="separator:aefe54e97e4b8c1fd1649a4aa9beb8e2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a174a05453195289049c6101243a57fcb"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a174a05453195289049c6101243a57fcb">operator[]</a> (<a class="el" href="structllama_1_1View.html#af47d4cc81b409e8e5cadcbf9b6952847">ArrayIndex</a> ai) const -&gt; decltype(auto)</td></tr>
-<tr class="separator:a174a05453195289049c6101243a57fcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab8473889d00556826eb6932d35f0d7f6"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#ab8473889d00556826eb6932d35f0d7f6">operator[]</a> (<a class="el" href="structllama_1_1View.html#af47d4cc81b409e8e5cadcbf9b6952847">ArrayIndex</a> ai) -&gt; decltype(auto)</td></tr>
-<tr class="separator:ab8473889d00556826eb6932d35f0d7f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a10c3e43baa27e88a38d541a6f8355fc0"><td class="memTemplParams" colspan="2">template&lt;typename V &gt; </td></tr>
-<tr class="memitem:a10c3e43baa27e88a38d541a6f8355fc0"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a10c3e43baa27e88a38d541a6f8355fc0">operator[]</a> (<a class="el" href="structllama_1_1ArrayIndex.html">llama::ArrayIndex</a>&lt; V, <a class="el" href="structllama_1_1ArrayIndex.html#a09d5dffbdde28ac87fc8ef1f20340593">ArrayIndex::rank</a> &gt;) const</td></tr>
-<tr class="separator:a10c3e43baa27e88a38d541a6f8355fc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7b5fd4cb3929d2742823e97c3e0c07cf"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a7b5fd4cb3929d2742823e97c3e0c07cf">operator[]</a> (<a class="el" href="structllama_1_1View.html#a22e41499532a4841b9841cc73f1a55cf">size_type</a> index) const -&gt; decltype(auto)</td></tr>
-<tr class="memdesc:a7b5fd4cb3929d2742823e97c3e0c07cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> at the 1D <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a> index constructed from the passed index.  <a href="structllama_1_1View.html#a7b5fd4cb3929d2742823e97c3e0c07cf">More...</a><br /></td></tr>
-<tr class="separator:a7b5fd4cb3929d2742823e97c3e0c07cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af8e9a74d65f3d5360991d157dd946146"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#af8e9a74d65f3d5360991d157dd946146">operator[]</a> (<a class="el" href="structllama_1_1View.html#a22e41499532a4841b9841cc73f1a55cf">size_type</a> index) -&gt; decltype(auto)</td></tr>
-<tr class="separator:af8e9a74d65f3d5360991d157dd946146"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4cad1a47c5eb39c4ccc21e44c6a64089"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a4cad1a47c5eb39c4ccc21e44c6a64089">begin</a> () -&gt; <a class="el" href="structllama_1_1View.html#acb29d82e7b20a0dbe19da85eace8c61d">iterator</a></td></tr>
-<tr class="separator:a4cad1a47c5eb39c4ccc21e44c6a64089"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0ff8a5183eee93435777a57b966df0e1"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a0ff8a5183eee93435777a57b966df0e1">begin</a> () const -&gt; <a class="el" href="structllama_1_1View.html#adff63178d395952c63b4d2a905854d1c">const_iterator</a></td></tr>
-<tr class="separator:a0ff8a5183eee93435777a57b966df0e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5f6cf5722cfb436b3765e6f02708475e"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a5f6cf5722cfb436b3765e6f02708475e">end</a> () -&gt; <a class="el" href="structllama_1_1View.html#acb29d82e7b20a0dbe19da85eace8c61d">iterator</a></td></tr>
-<tr class="separator:a5f6cf5722cfb436b3765e6f02708475e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abae104af254dac570a0766742fc65a1d"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#abae104af254dac570a0766742fc65a1d">end</a> () const -&gt; <a class="el" href="structllama_1_1View.html#adff63178d395952c63b4d2a905854d1c">const_iterator</a></td></tr>
-<tr class="separator:abae104af254dac570a0766742fc65a1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa827a9b348f8608d209b74065c33fea9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#aa827a9b348f8608d209b74065c33fea9">View</a> ()=default</td></tr>
+<tr class="memdesc:aa827a9b348f8608d209b74065c33fea9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs default initialization of the blob array.  <a href="structllama_1_1View.html#aa827a9b348f8608d209b74065c33fea9">More...</a><br /></td></tr>
+<tr class="separator:aa827a9b348f8608d209b74065c33fea9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0a991f33d29706635619c974d413273"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#ab0a991f33d29706635619c974d413273">View</a> (<a class="el" href="structllama_1_1View.html#ab78c51e95a88b07395d0311107f31ba3">Mapping</a> <a class="el" href="structllama_1_1View.html#a02995d9561c50196f5efae24031c0af6">mapping</a>, <a class="el" href="structllama_1_1Array.html">Array</a>&lt; <a class="el" href="structllama_1_1View.html#a3fbca466d7e6fdfd1ed0e368a224f8c4">BlobType</a>, Mapping::blobCount &gt; <a class="el" href="structllama_1_1View.html#ad7f3890ac6ad4ded0c0327f120e62953">storageBlobs</a>)</td></tr>
+<tr class="separator:ab0a991f33d29706635619c974d413273"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02995d9561c50196f5efae24031c0af6"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a02995d9561c50196f5efae24031c0af6">mapping</a> () -&gt; <a class="el" href="structllama_1_1View.html#ab78c51e95a88b07395d0311107f31ba3">Mapping</a> &amp;</td></tr>
+<tr class="separator:a02995d9561c50196f5efae24031c0af6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a181eaaaf491f3ccf599503410cdbe42e"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a181eaaaf491f3ccf599503410cdbe42e">mapping</a> () const -&gt; const <a class="el" href="structllama_1_1View.html#ab78c51e95a88b07395d0311107f31ba3">Mapping</a> &amp;</td></tr>
+<tr class="separator:a181eaaaf491f3ccf599503410cdbe42e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a97b7ae30e104e9b9aa3701b4958b4a4e"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a97b7ae30e104e9b9aa3701b4958b4a4e">accessor</a> () -&gt; <a class="el" href="structllama_1_1View.html#ac7ca80e1aa62ebe6ca0df8532bda9efc">Accessor</a> &amp;</td></tr>
+<tr class="separator:a97b7ae30e104e9b9aa3701b4958b4a4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91123eb8b6a1081bee3ec06a6457b64c"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a91123eb8b6a1081bee3ec06a6457b64c">accessor</a> () const -&gt; const <a class="el" href="structllama_1_1View.html#ac7ca80e1aa62ebe6ca0df8532bda9efc">Accessor</a> &amp;</td></tr>
+<tr class="separator:a91123eb8b6a1081bee3ec06a6457b64c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb97975804a31ebbddc3c53d4fbacdd5"><td class="memTemplParams" colspan="2">template&lt;typename V &gt; </td></tr>
+<tr class="memitem:aeb97975804a31ebbddc3c53d4fbacdd5"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#aeb97975804a31ebbddc3c53d4fbacdd5">operator()</a> (<a class="el" href="structllama_1_1ArrayIndex.html">llama::ArrayIndex</a>&lt; V, <a class="el" href="structllama_1_1ArrayIndex.html#a09d5dffbdde28ac87fc8ef1f20340593">ArrayIndex::rank</a> &gt;) const</td></tr>
+<tr class="separator:aeb97975804a31ebbddc3c53d4fbacdd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c3249eb32762c1e26a0a568091483ed"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a7c3249eb32762c1e26a0a568091483ed">operator()</a> (<a class="el" href="structllama_1_1View.html#af5a48c9b55ae1eb5872d7fb3f664d902">ArrayIndex</a> ai) const -&gt; decltype(auto)</td></tr>
+<tr class="memdesc:a7c3249eb32762c1e26a0a568091483ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> at the given <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a> index.  <a href="structllama_1_1View.html#a7c3249eb32762c1e26a0a568091483ed">More...</a><br /></td></tr>
+<tr class="separator:a7c3249eb32762c1e26a0a568091483ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a821703da22b47469141cd8b65f96a1ec"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a821703da22b47469141cd8b65f96a1ec">operator()</a> (<a class="el" href="structllama_1_1View.html#af5a48c9b55ae1eb5872d7fb3f664d902">ArrayIndex</a> ai) -&gt; decltype(auto)</td></tr>
+<tr class="separator:a821703da22b47469141cd8b65f96a1ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99b9fd989744030d2b082b830ae4beb4"><td class="memTemplParams" colspan="2">template&lt;typename... Indices, std::enable_if_t&lt; std::conjunction_v&lt; std::is_convertible&lt; Indices, size_type &gt;... &gt;, int &gt;  = 0&gt; </td></tr>
+<tr class="memitem:a99b9fd989744030d2b082b830ae4beb4"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a99b9fd989744030d2b082b830ae4beb4">operator()</a> (Indices... indices) const -&gt; decltype(auto)</td></tr>
+<tr class="separator:a99b9fd989744030d2b082b830ae4beb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62688dca2ffbedad30e219e2aa7d5400"><td class="memTemplParams" colspan="2">template&lt;typename... Indices, std::enable_if_t&lt; std::conjunction_v&lt; std::is_convertible&lt; Indices, size_type &gt;... &gt;, int &gt;  = 0&gt; </td></tr>
+<tr class="memitem:a62688dca2ffbedad30e219e2aa7d5400"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a62688dca2ffbedad30e219e2aa7d5400">operator()</a> (Indices... indices) -&gt; decltype(auto)</td></tr>
+<tr class="separator:a62688dca2ffbedad30e219e2aa7d5400"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a13b76bc25289fb7376b9dbfe9afc0cec"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a13b76bc25289fb7376b9dbfe9afc0cec">operator[]</a> (<a class="el" href="structllama_1_1View.html#af5a48c9b55ae1eb5872d7fb3f664d902">ArrayIndex</a> ai) const -&gt; decltype(auto)</td></tr>
+<tr class="separator:a13b76bc25289fb7376b9dbfe9afc0cec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a526da546f43015bdd691572260cb7a90"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a526da546f43015bdd691572260cb7a90">operator[]</a> (<a class="el" href="structllama_1_1View.html#af5a48c9b55ae1eb5872d7fb3f664d902">ArrayIndex</a> ai) -&gt; decltype(auto)</td></tr>
+<tr class="separator:a526da546f43015bdd691572260cb7a90"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b2e47c3ed82390f8a988f9cd8451a08"><td class="memTemplParams" colspan="2">template&lt;typename V &gt; </td></tr>
+<tr class="memitem:a5b2e47c3ed82390f8a988f9cd8451a08"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a5b2e47c3ed82390f8a988f9cd8451a08">operator[]</a> (<a class="el" href="structllama_1_1ArrayIndex.html">llama::ArrayIndex</a>&lt; V, <a class="el" href="structllama_1_1ArrayIndex.html#a09d5dffbdde28ac87fc8ef1f20340593">ArrayIndex::rank</a> &gt;) const</td></tr>
+<tr class="separator:a5b2e47c3ed82390f8a988f9cd8451a08"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeaa37e0e681119833521a96c20228ccb"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#aeaa37e0e681119833521a96c20228ccb">operator[]</a> (<a class="el" href="structllama_1_1View.html#a1485c39735f15874051e1863874847e1">size_type</a> index) const -&gt; decltype(auto)</td></tr>
+<tr class="memdesc:aeaa37e0e681119833521a96c20228ccb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> at the 1D <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a> index constructed from the passed index.  <a href="structllama_1_1View.html#aeaa37e0e681119833521a96c20228ccb">More...</a><br /></td></tr>
+<tr class="separator:aeaa37e0e681119833521a96c20228ccb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb1c44d96c698a0f6ca8f288e9f28914"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#acb1c44d96c698a0f6ca8f288e9f28914">operator[]</a> (<a class="el" href="structllama_1_1View.html#a1485c39735f15874051e1863874847e1">size_type</a> index) -&gt; decltype(auto)</td></tr>
+<tr class="separator:acb1c44d96c698a0f6ca8f288e9f28914"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ef11158b3423bb2a9e4251680ccc435"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a5ef11158b3423bb2a9e4251680ccc435">begin</a> () -&gt; <a class="el" href="structllama_1_1View.html#abe36abe814e4a701c181c5fd06b6b9b0">iterator</a></td></tr>
+<tr class="separator:a5ef11158b3423bb2a9e4251680ccc435"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c8ae804350dd9aeb9d85f8db110b6d1"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a6c8ae804350dd9aeb9d85f8db110b6d1">begin</a> () const -&gt; <a class="el" href="structllama_1_1View.html#a97c3f6fda42ae88399100512db446234">const_iterator</a></td></tr>
+<tr class="separator:a6c8ae804350dd9aeb9d85f8db110b6d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60ea916b74c979d658774792e9490d40"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a60ea916b74c979d658774792e9490d40">end</a> () -&gt; <a class="el" href="structllama_1_1View.html#abe36abe814e4a701c181c5fd06b6b9b0">iterator</a></td></tr>
+<tr class="separator:a60ea916b74c979d658774792e9490d40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a949eeed1494299bb8cbc39260ab9331d"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a949eeed1494299bb8cbc39260ab9331d">end</a> () const -&gt; <a class="el" href="structllama_1_1View.html#a97c3f6fda42ae88399100512db446234">const_iterator</a></td></tr>
+<tr class="separator:a949eeed1494299bb8cbc39260ab9331d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:add8c448739f3da7660d28b11f9ab1abe"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structllama_1_1Array.html">Array</a>&lt; BlobType, Mapping::blobCount &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#add8c448739f3da7660d28b11f9ab1abe">storageBlobs</a></td></tr>
-<tr class="separator:add8c448739f3da7660d28b11f9ab1abe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7f3890ac6ad4ded0c0327f120e62953"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structllama_1_1Array.html">Array</a>&lt; <a class="el" href="structllama_1_1View.html#a3fbca466d7e6fdfd1ed0e368a224f8c4">BlobType</a>, Mapping::blobCount &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#ad7f3890ac6ad4ded0c0327f120e62953">storageBlobs</a></td></tr>
+<tr class="separator:ad7f3890ac6ad4ded0c0327f120e62953"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -187,13 +189,13 @@ Friends</h2></td></tr>
 <tr class="separator:ac9e9cf8bf6a130ba0fb6dcfd0be19709"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename TMapping, typename BlobType, typename TAccessor = accessor::Default&gt;<br />
-struct llama::View&lt; TMapping, BlobType, TAccessor &gt;</h3>
+<div class="textblock"><h3>template&lt;typename TMapping, typename TBlobType, typename TAccessor = accessor::Default&gt;<br />
+struct llama::View&lt; TMapping, TBlobType, TAccessor &gt;</h3>
 
 <p>Central LLAMA class holding memory for storage and giving access to values stored there defined by a mapping. A view should be created using <a class="el" href="namespacellama.html#a8e5d70e7cec0c305424ed3890c4cedc6">allocView</a>. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">TMapping</td><td>The mapping used by the view to map accesses into memory. </td></tr>
-    <tr><td class="paramname">BlobType</td><td>The storage type used by the view holding memory. </td></tr>
+    <tr><td class="paramname">TBlobType</td><td>The storage type used by the view holding memory. </td></tr>
     <tr><td class="paramname">TAccessor</td><td>The accessor to use when an access is made through this view. </td></tr>
   </table>
   </dd>
@@ -201,88 +203,16 @@ struct llama::View&lt; TMapping, BlobType, TAccessor &gt;</h3>
 
 <p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00025">25</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="a2e0a3b8c8b46fa71082bbf52c91a5790"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2e0a3b8c8b46fa71082bbf52c91a5790">&#9670;&nbsp;</a></span>Accessor</h2>
+<a id="ac7ca80e1aa62ebe6ca0df8532bda9efc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7ca80e1aa62ebe6ca0df8532bda9efc">&#9670;&nbsp;</a></span>Accessor</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TMapping , typename BlobType , typename TAccessor  = accessor::Default&gt; </div>
+template&lt;typename TMapping , typename TBlobType , typename TAccessor  = accessor::Default&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, BlobType, TAccessor &gt;::<a class="el" href="structllama_1_1View.html#a2e0a3b8c8b46fa71082bbf52c91a5790">Accessor</a> =  TAccessor</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00415">415</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a3a72a40f5f85066a6e6e1bd931e2d8a9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3a72a40f5f85066a6e6e1bd931e2d8a9">&#9670;&nbsp;</a></span>ArrayExtents</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename TMapping , typename BlobType , typename TAccessor  = accessor::Default&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, BlobType, TAccessor &gt;::<a class="el" href="structllama_1_1View.html#a3a72a40f5f85066a6e6e1bd931e2d8a9">ArrayExtents</a> =  typename Mapping::ArrayExtents</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00412">412</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
-
-</div>
-</div>
-<a id="af47d4cc81b409e8e5cadcbf9b6952847"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af47d4cc81b409e8e5cadcbf9b6952847">&#9670;&nbsp;</a></span>ArrayIndex</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename TMapping , typename BlobType , typename TAccessor  = accessor::Default&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, BlobType, TAccessor &gt;::<a class="el" href="structllama_1_1View.html#af47d4cc81b409e8e5cadcbf9b6952847">ArrayIndex</a> =  typename Mapping::ArrayIndex</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00413">413</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
-
-</div>
-</div>
-<a id="adff63178d395952c63b4d2a905854d1c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adff63178d395952c63b4d2a905854d1c">&#9670;&nbsp;</a></span>const_iterator</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename TMapping , typename BlobType , typename TAccessor  = accessor::Default&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, BlobType, TAccessor &gt;::<a class="el" href="structllama_1_1View.html#adff63178d395952c63b4d2a905854d1c">const_iterator</a> =  <a class="el" href="structllama_1_1Iterator.html">Iterator</a>&lt;const <a class="el" href="structllama_1_1View.html">View</a>&gt;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00417">417</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
-
-</div>
-</div>
-<a id="acb29d82e7b20a0dbe19da85eace8c61d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acb29d82e7b20a0dbe19da85eace8c61d">&#9670;&nbsp;</a></span>iterator</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename TMapping , typename BlobType , typename TAccessor  = accessor::Default&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, BlobType, TAccessor &gt;::<a class="el" href="structllama_1_1View.html#acb29d82e7b20a0dbe19da85eace8c61d">iterator</a> =  <a class="el" href="structllama_1_1Iterator.html">Iterator</a>&lt;<a class="el" href="structllama_1_1View.html">View</a>&gt;</td>
+          <td class="memname">using <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, TBlobType, TAccessor &gt;::<a class="el" href="structllama_1_1View.html#ac7ca80e1aa62ebe6ca0df8532bda9efc">Accessor</a> =  TAccessor</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -291,34 +221,34 @@ template&lt;typename TMapping , typename BlobType , typename TAccessor  = access
 
 </div>
 </div>
-<a id="a0baad12bcefcca04300273a063991c3e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0baad12bcefcca04300273a063991c3e">&#9670;&nbsp;</a></span>Mapping</h2>
+<a id="a1fadf5a169e81c3171929c6fd53d2313"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1fadf5a169e81c3171929c6fd53d2313">&#9670;&nbsp;</a></span>ArrayExtents</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TMapping , typename BlobType , typename TAccessor  = accessor::Default&gt; </div>
+template&lt;typename TMapping , typename TBlobType , typename TAccessor  = accessor::Default&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, BlobType, TAccessor &gt;::<a class="el" href="structllama_1_1View.html#a0baad12bcefcca04300273a063991c3e">Mapping</a> =  TMapping</td>
+          <td class="memname">using <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, TBlobType, TAccessor &gt;::<a class="el" href="structllama_1_1View.html#a1fadf5a169e81c3171929c6fd53d2313">ArrayExtents</a> =  typename Mapping::ArrayExtents</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00411">411</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00413">413</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a945b4a6d5a4ed05ef7f6a28a1bb6f327"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a945b4a6d5a4ed05ef7f6a28a1bb6f327">&#9670;&nbsp;</a></span>RecordDim</h2>
+<a id="af5a48c9b55ae1eb5872d7fb3f664d902"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5a48c9b55ae1eb5872d7fb3f664d902">&#9670;&nbsp;</a></span>ArrayIndex</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TMapping , typename BlobType , typename TAccessor  = accessor::Default&gt; </div>
+template&lt;typename TMapping , typename TBlobType , typename TAccessor  = accessor::Default&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, BlobType, TAccessor &gt;::<a class="el" href="structllama_1_1View.html#a945b4a6d5a4ed05ef7f6a28a1bb6f327">RecordDim</a> =  typename Mapping::RecordDim</td>
+          <td class="memname">using <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, TBlobType, TAccessor &gt;::<a class="el" href="structllama_1_1View.html#af5a48c9b55ae1eb5872d7fb3f664d902">ArrayIndex</a> =  typename Mapping::ArrayIndex</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -327,16 +257,34 @@ template&lt;typename TMapping , typename BlobType , typename TAccessor  = access
 
 </div>
 </div>
-<a id="a22e41499532a4841b9841cc73f1a55cf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a22e41499532a4841b9841cc73f1a55cf">&#9670;&nbsp;</a></span>size_type</h2>
+<a id="a3fbca466d7e6fdfd1ed0e368a224f8c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3fbca466d7e6fdfd1ed0e368a224f8c4">&#9670;&nbsp;</a></span>BlobType</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TMapping , typename BlobType , typename TAccessor  = accessor::Default&gt; </div>
+template&lt;typename TMapping , typename TBlobType , typename TAccessor  = accessor::Default&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, BlobType, TAccessor &gt;::<a class="el" href="structllama_1_1View.html#a22e41499532a4841b9841cc73f1a55cf">size_type</a> =  typename <a class="el" href="structllama_1_1ArrayExtents.html#a26ddad4db80efe93143b86c766b9a69f">ArrayExtents::value_type</a></td>
+          <td class="memname">using <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, TBlobType, TAccessor &gt;::<a class="el" href="structllama_1_1View.html#a3fbca466d7e6fdfd1ed0e368a224f8c4">BlobType</a> =  TBlobType</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00412">412</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a97c3f6fda42ae88399100512db446234"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a97c3f6fda42ae88399100512db446234">&#9670;&nbsp;</a></span>const_iterator</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename TMapping , typename TBlobType , typename TAccessor  = accessor::Default&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, TBlobType, TAccessor &gt;::<a class="el" href="structllama_1_1View.html#a97c3f6fda42ae88399100512db446234">const_iterator</a> =  <a class="el" href="structllama_1_1Iterator.html">Iterator</a>&lt;const <a class="el" href="structllama_1_1View.html">View</a>&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -345,20 +293,92 @@ template&lt;typename TMapping , typename BlobType , typename TAccessor  = access
 
 </div>
 </div>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a74fc3868e9291c13259534a8a3d48bed"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a74fc3868e9291c13259534a8a3d48bed">&#9670;&nbsp;</a></span>View() <span class="overload">[1/2]</span></h2>
+<a id="abe36abe814e4a701c181c5fd06b6b9b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe36abe814e4a701c181c5fd06b6b9b0">&#9670;&nbsp;</a></span>iterator</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TMapping , typename BlobType , typename TAccessor  = accessor::Default&gt; </div>
+template&lt;typename TMapping , typename TBlobType , typename TAccessor  = accessor::Default&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, TBlobType, TAccessor &gt;::<a class="el" href="structllama_1_1View.html#abe36abe814e4a701c181c5fd06b6b9b0">iterator</a> =  <a class="el" href="structllama_1_1Iterator.html">Iterator</a>&lt;<a class="el" href="structllama_1_1View.html">View</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00417">417</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ab78c51e95a88b07395d0311107f31ba3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab78c51e95a88b07395d0311107f31ba3">&#9670;&nbsp;</a></span>Mapping</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename TMapping , typename TBlobType , typename TAccessor  = accessor::Default&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, TBlobType, TAccessor &gt;::<a class="el" href="structllama_1_1View.html#ab78c51e95a88b07395d0311107f31ba3">Mapping</a> =  TMapping</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00411">411</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a0e311e171359b386b0e86b16738d1d8d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e311e171359b386b0e86b16738d1d8d">&#9670;&nbsp;</a></span>RecordDim</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename TMapping , typename TBlobType , typename TAccessor  = accessor::Default&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, TBlobType, TAccessor &gt;::<a class="el" href="structllama_1_1View.html#a0e311e171359b386b0e86b16738d1d8d">RecordDim</a> =  typename Mapping::RecordDim</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00415">415</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a1485c39735f15874051e1863874847e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1485c39735f15874051e1863874847e1">&#9670;&nbsp;</a></span>size_type</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename TMapping , typename TBlobType , typename TAccessor  = accessor::Default&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, TBlobType, TAccessor &gt;::<a class="el" href="structllama_1_1View.html#a1485c39735f15874051e1863874847e1">size_type</a> =  typename <a class="el" href="structllama_1_1ArrayExtents.html#a26ddad4db80efe93143b86c766b9a69f">ArrayExtents::value_type</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00419">419</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="aa827a9b348f8608d209b74065c33fea9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa827a9b348f8608d209b74065c33fea9">&#9670;&nbsp;</a></span>View() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename TMapping , typename TBlobType , typename TAccessor  = accessor::Default&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, BlobType, TAccessor &gt;::<a class="el" href="structllama_1_1View.html">View</a> </td>
+          <td class="memname"><a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, TBlobType, TAccessor &gt;::<a class="el" href="structllama_1_1View.html">View</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -375,27 +395,27 @@ template&lt;typename TMapping , typename BlobType , typename TAccessor  = access
 
 </div>
 </div>
-<a id="a1a109de48db3d31e174deee9b99af4d6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1a109de48db3d31e174deee9b99af4d6">&#9670;&nbsp;</a></span>View() <span class="overload">[2/2]</span></h2>
+<a id="ab0a991f33d29706635619c974d413273"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0a991f33d29706635619c974d413273">&#9670;&nbsp;</a></span>View() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TMapping , typename BlobType , typename TAccessor  = accessor::Default&gt; </div>
+template&lt;typename TMapping , typename TBlobType , typename TAccessor  = accessor::Default&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, BlobType, TAccessor &gt;::<a class="el" href="structllama_1_1View.html">View</a> </td>
+          <td class="memname"><a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, TBlobType, TAccessor &gt;::<a class="el" href="structllama_1_1View.html">View</a> </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structllama_1_1View.html#a0baad12bcefcca04300273a063991c3e">Mapping</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1View.html#ab78c51e95a88b07395d0311107f31ba3">Mapping</a>&#160;</td>
           <td class="paramname"><em>mapping</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="structllama_1_1Array.html">Array</a>&lt; BlobType, Mapping::blobCount &gt;&#160;</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1Array.html">Array</a>&lt; <a class="el" href="structllama_1_1View.html#a3fbca466d7e6fdfd1ed0e368a224f8c4">BlobType</a>, Mapping::blobCount &gt;&#160;</td>
           <td class="paramname"><em>storageBlobs</em>&#160;</td>
         </tr>
         <tr>
@@ -411,27 +431,27 @@ template&lt;typename TMapping , typename BlobType , typename TAccessor  = access
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00434">434</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00435">435</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a207076711052d2ef92d3f1b04b7b7b88"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a207076711052d2ef92d3f1b04b7b7b88">&#9670;&nbsp;</a></span>accessor() <span class="overload">[1/2]</span></h2>
+<a id="a97b7ae30e104e9b9aa3701b4958b4a4e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a97b7ae30e104e9b9aa3701b4958b4a4e">&#9670;&nbsp;</a></span>accessor() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TMapping , typename BlobType , typename TAccessor  = accessor::Default&gt; </div>
+template&lt;typename TMapping , typename TBlobType , typename TAccessor  = accessor::Default&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, BlobType, TAccessor &gt;::accessor </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, TBlobType, TAccessor &gt;::accessor </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> -&gt; <a class="el" href="structllama_1_1View.html#a2e0a3b8c8b46fa71082bbf52c91a5790">Accessor</a>&amp;
+          <td> -&gt; <a class="el" href="structllama_1_1View.html#ac7ca80e1aa62ebe6ca0df8532bda9efc">Accessor</a>&amp;
         </td>
         </tr>
       </table>
@@ -442,26 +462,26 @@ template&lt;typename TMapping , typename BlobType , typename TAccessor  = access
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00450">450</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00451">451</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
-<a id="aee2dccd7b420e35088d8adf90fbdbcef"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aee2dccd7b420e35088d8adf90fbdbcef">&#9670;&nbsp;</a></span>accessor() <span class="overload">[2/2]</span></h2>
+<a id="a91123eb8b6a1081bee3ec06a6457b64c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a91123eb8b6a1081bee3ec06a6457b64c">&#9670;&nbsp;</a></span>accessor() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TMapping , typename BlobType , typename TAccessor  = accessor::Default&gt; </div>
+template&lt;typename TMapping , typename TBlobType , typename TAccessor  = accessor::Default&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, BlobType, TAccessor &gt;::accessor </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, TBlobType, TAccessor &gt;::accessor </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const -&gt; const <a class="el" href="structllama_1_1View.html#a2e0a3b8c8b46fa71082bbf52c91a5790">Accessor</a>&amp;
+          <td> const -&gt; const <a class="el" href="structllama_1_1View.html#ac7ca80e1aa62ebe6ca0df8532bda9efc">Accessor</a>&amp;
         </td>
         </tr>
       </table>
@@ -472,26 +492,26 @@ template&lt;typename TMapping , typename BlobType , typename TAccessor  = access
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00455">455</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00456">456</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a4cad1a47c5eb39c4ccc21e44c6a64089"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4cad1a47c5eb39c4ccc21e44c6a64089">&#9670;&nbsp;</a></span>begin() <span class="overload">[1/2]</span></h2>
+<a id="a5ef11158b3423bb2a9e4251680ccc435"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ef11158b3423bb2a9e4251680ccc435">&#9670;&nbsp;</a></span>begin() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TMapping , typename BlobType , typename TAccessor  = accessor::Default&gt; </div>
+template&lt;typename TMapping , typename TBlobType , typename TAccessor  = accessor::Default&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, BlobType, TAccessor &gt;::begin </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, TBlobType, TAccessor &gt;::begin </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> -&gt; <a class="el" href="structllama_1_1View.html#acb29d82e7b20a0dbe19da85eace8c61d">iterator</a>
+          <td> -&gt; <a class="el" href="structllama_1_1View.html#abe36abe814e4a701c181c5fd06b6b9b0">iterator</a>
         </td>
         </tr>
       </table>
@@ -502,26 +522,26 @@ template&lt;typename TMapping , typename BlobType , typename TAccessor  = access
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00559">559</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00560">560</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a0ff8a5183eee93435777a57b966df0e1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0ff8a5183eee93435777a57b966df0e1">&#9670;&nbsp;</a></span>begin() <span class="overload">[2/2]</span></h2>
+<a id="a6c8ae804350dd9aeb9d85f8db110b6d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c8ae804350dd9aeb9d85f8db110b6d1">&#9670;&nbsp;</a></span>begin() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TMapping , typename BlobType , typename TAccessor  = accessor::Default&gt; </div>
+template&lt;typename TMapping , typename TBlobType , typename TAccessor  = accessor::Default&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, BlobType, TAccessor &gt;::begin </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, TBlobType, TAccessor &gt;::begin </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const -&gt; <a class="el" href="structllama_1_1View.html#adff63178d395952c63b4d2a905854d1c">const_iterator</a>
+          <td> const -&gt; <a class="el" href="structllama_1_1View.html#a97c3f6fda42ae88399100512db446234">const_iterator</a>
         </td>
         </tr>
       </table>
@@ -532,26 +552,26 @@ template&lt;typename TMapping , typename BlobType , typename TAccessor  = access
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00565">565</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00566">566</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a5f6cf5722cfb436b3765e6f02708475e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5f6cf5722cfb436b3765e6f02708475e">&#9670;&nbsp;</a></span>end() <span class="overload">[1/2]</span></h2>
+<a id="a60ea916b74c979d658774792e9490d40"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a60ea916b74c979d658774792e9490d40">&#9670;&nbsp;</a></span>end() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TMapping , typename BlobType , typename TAccessor  = accessor::Default&gt; </div>
+template&lt;typename TMapping , typename TBlobType , typename TAccessor  = accessor::Default&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, BlobType, TAccessor &gt;::end </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, TBlobType, TAccessor &gt;::end </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> -&gt; <a class="el" href="structllama_1_1View.html#acb29d82e7b20a0dbe19da85eace8c61d">iterator</a>
+          <td> -&gt; <a class="el" href="structllama_1_1View.html#abe36abe814e4a701c181c5fd06b6b9b0">iterator</a>
         </td>
         </tr>
       </table>
@@ -562,26 +582,26 @@ template&lt;typename TMapping , typename BlobType , typename TAccessor  = access
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00571">571</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00572">572</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
-<a id="abae104af254dac570a0766742fc65a1d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abae104af254dac570a0766742fc65a1d">&#9670;&nbsp;</a></span>end() <span class="overload">[2/2]</span></h2>
+<a id="a949eeed1494299bb8cbc39260ab9331d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a949eeed1494299bb8cbc39260ab9331d">&#9670;&nbsp;</a></span>end() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TMapping , typename BlobType , typename TAccessor  = accessor::Default&gt; </div>
+template&lt;typename TMapping , typename TBlobType , typename TAccessor  = accessor::Default&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, BlobType, TAccessor &gt;::end </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, TBlobType, TAccessor &gt;::end </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const -&gt; <a class="el" href="structllama_1_1View.html#adff63178d395952c63b4d2a905854d1c">const_iterator</a>
+          <td> const -&gt; <a class="el" href="structllama_1_1View.html#a97c3f6fda42ae88399100512db446234">const_iterator</a>
         </td>
         </tr>
       </table>
@@ -592,26 +612,26 @@ template&lt;typename TMapping , typename BlobType , typename TAccessor  = access
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00577">577</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00578">578</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a0b44d252f5307c1dcf2a1f8018b7ef93"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0b44d252f5307c1dcf2a1f8018b7ef93">&#9670;&nbsp;</a></span>mapping() <span class="overload">[1/2]</span></h2>
+<a id="a02995d9561c50196f5efae24031c0af6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a02995d9561c50196f5efae24031c0af6">&#9670;&nbsp;</a></span>mapping() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TMapping , typename BlobType , typename TAccessor  = accessor::Default&gt; </div>
+template&lt;typename TMapping , typename TBlobType , typename TAccessor  = accessor::Default&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, BlobType, TAccessor &gt;::mapping </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, TBlobType, TAccessor &gt;::mapping </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> -&gt; <a class="el" href="structllama_1_1View.html#a0baad12bcefcca04300273a063991c3e">Mapping</a>&amp;
+          <td> -&gt; <a class="el" href="structllama_1_1View.html#ab78c51e95a88b07395d0311107f31ba3">Mapping</a>&amp;
         </td>
         </tr>
       </table>
@@ -622,26 +642,26 @@ template&lt;typename TMapping , typename BlobType , typename TAccessor  = access
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00440">440</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00441">441</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a5a194c76bb2b79d2b06902cd3ffa4ce8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5a194c76bb2b79d2b06902cd3ffa4ce8">&#9670;&nbsp;</a></span>mapping() <span class="overload">[2/2]</span></h2>
+<a id="a181eaaaf491f3ccf599503410cdbe42e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a181eaaaf491f3ccf599503410cdbe42e">&#9670;&nbsp;</a></span>mapping() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TMapping , typename BlobType , typename TAccessor  = accessor::Default&gt; </div>
+template&lt;typename TMapping , typename TBlobType , typename TAccessor  = accessor::Default&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, BlobType, TAccessor &gt;::mapping </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, TBlobType, TAccessor &gt;::mapping </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const -&gt; const <a class="el" href="structllama_1_1View.html#a0baad12bcefcca04300273a063991c3e">Mapping</a>&amp;
+          <td> const -&gt; const <a class="el" href="structllama_1_1View.html#ab78c51e95a88b07395d0311107f31ba3">Mapping</a>&amp;
         </td>
         </tr>
       </table>
@@ -652,25 +672,25 @@ template&lt;typename TMapping , typename BlobType , typename TAccessor  = access
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00445">445</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00446">446</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a64a726e496e7d70bfdf0381bb7e7a5d4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a64a726e496e7d70bfdf0381bb7e7a5d4">&#9670;&nbsp;</a></span>operator()() <span class="overload">[1/5]</span></h2>
+<a id="a821703da22b47469141cd8b65f96a1ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a821703da22b47469141cd8b65f96a1ec">&#9670;&nbsp;</a></span>operator()() <span class="overload">[1/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TMapping , typename BlobType , typename TAccessor  = accessor::Default&gt; </div>
+template&lt;typename TMapping , typename TBlobType , typename TAccessor  = accessor::Default&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, BlobType, TAccessor &gt;::operator() </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, TBlobType, TAccessor &gt;::operator() </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structllama_1_1View.html#af47d4cc81b409e8e5cadcbf9b6952847">ArrayIndex</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1View.html#af5a48c9b55ae1eb5872d7fb3f664d902">ArrayIndex</a>&#160;</td>
           <td class="paramname"><em>ai</em></td><td>)</td>
           <td> -&gt; decltype(auto)
         </td>
@@ -683,25 +703,25 @@ template&lt;typename TMapping , typename BlobType , typename TAccessor  = access
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00483">483</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00484">484</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
-<a id="ada057d5f77296c2d3f5c67c2e706dd3f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ada057d5f77296c2d3f5c67c2e706dd3f">&#9670;&nbsp;</a></span>operator()() <span class="overload">[2/5]</span></h2>
+<a id="a7c3249eb32762c1e26a0a568091483ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c3249eb32762c1e26a0a568091483ed">&#9670;&nbsp;</a></span>operator()() <span class="overload">[2/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TMapping , typename BlobType , typename TAccessor  = accessor::Default&gt; </div>
+template&lt;typename TMapping , typename TBlobType , typename TAccessor  = accessor::Default&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, BlobType, TAccessor &gt;::operator() </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, TBlobType, TAccessor &gt;::operator() </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structllama_1_1View.html#af47d4cc81b409e8e5cadcbf9b6952847">ArrayIndex</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1View.html#af5a48c9b55ae1eb5872d7fb3f664d902">ArrayIndex</a>&#160;</td>
           <td class="paramname"><em>ai</em></td><td>)</td>
           <td> const -&gt; decltype(auto)
         </td>
@@ -716,17 +736,17 @@ template&lt;typename TMapping , typename BlobType , typename TAccessor  = access
 
 <p>Retrieves the <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> at the given <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a> index. </p>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00469">469</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00470">470</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
-<a id="aefe54e97e4b8c1fd1649a4aa9beb8e2e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aefe54e97e4b8c1fd1649a4aa9beb8e2e">&#9670;&nbsp;</a></span>operator()() <span class="overload">[3/5]</span></h2>
+<a id="a62688dca2ffbedad30e219e2aa7d5400"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a62688dca2ffbedad30e219e2aa7d5400">&#9670;&nbsp;</a></span>operator()() <span class="overload">[3/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TMapping , typename BlobType , typename TAccessor  = accessor::Default&gt; </div>
+template&lt;typename TMapping , typename TBlobType , typename TAccessor  = accessor::Default&gt; </div>
 <div class="memtemplate">
 template&lt;typename... Indices, std::enable_if_t&lt; std::conjunction_v&lt; std::is_convertible&lt; Indices, size_type &gt;... &gt;, int &gt;  = 0&gt; </div>
 <table class="mlabels">
@@ -734,7 +754,7 @@ template&lt;typename... Indices, std::enable_if_t&lt; std::conjunction_v&lt; std
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, BlobType, TAccessor &gt;::operator() </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, TBlobType, TAccessor &gt;::operator() </td>
           <td>(</td>
           <td class="paramtype">Indices...&#160;</td>
           <td class="paramname"><em>indices</em></td><td>)</td>
@@ -749,17 +769,17 @@ template&lt;typename... Indices, std::enable_if_t&lt; std::conjunction_v&lt; std
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00514">514</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00515">515</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
-<a id="aaf38dd6f9c93d80e6000563c0b590d2f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaf38dd6f9c93d80e6000563c0b590d2f">&#9670;&nbsp;</a></span>operator()() <span class="overload">[4/5]</span></h2>
+<a id="a99b9fd989744030d2b082b830ae4beb4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a99b9fd989744030d2b082b830ae4beb4">&#9670;&nbsp;</a></span>operator()() <span class="overload">[4/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TMapping , typename BlobType , typename TAccessor  = accessor::Default&gt; </div>
+template&lt;typename TMapping , typename TBlobType , typename TAccessor  = accessor::Default&gt; </div>
 <div class="memtemplate">
 template&lt;typename... Indices, std::enable_if_t&lt; std::conjunction_v&lt; std::is_convertible&lt; Indices, size_type &gt;... &gt;, int &gt;  = 0&gt; </div>
 <table class="mlabels">
@@ -767,7 +787,7 @@ template&lt;typename... Indices, std::enable_if_t&lt; std::conjunction_v&lt; std
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, BlobType, TAccessor &gt;::operator() </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, TBlobType, TAccessor &gt;::operator() </td>
           <td>(</td>
           <td class="paramtype">Indices...&#160;</td>
           <td class="paramname"><em>indices</em></td><td>)</td>
@@ -783,17 +803,17 @@ template&lt;typename... Indices, std::enable_if_t&lt; std::conjunction_v&lt; std
 </div><div class="memdoc">
 <p>Retrieves the <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> at the <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a> index constructed from the passed component indices. </p>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00502">502</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00503">503</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
-<a id="ad26c39a6917628694703fb8843c5059a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad26c39a6917628694703fb8843c5059a">&#9670;&nbsp;</a></span>operator()() <span class="overload">[5/5]</span></h2>
+<a id="aeb97975804a31ebbddc3c53d4fbacdd5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb97975804a31ebbddc3c53d4fbacdd5">&#9670;&nbsp;</a></span>operator()() <span class="overload">[5/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TMapping , typename BlobType , typename TAccessor  = accessor::Default&gt; </div>
+template&lt;typename TMapping , typename TBlobType , typename TAccessor  = accessor::Default&gt; </div>
 <div class="memtemplate">
 template&lt;typename V &gt; </div>
 <table class="mlabels">
@@ -801,7 +821,7 @@ template&lt;typename V &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, BlobType, TAccessor &gt;::operator() </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, TBlobType, TAccessor &gt;::operator() </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structllama_1_1ArrayIndex.html">llama::ArrayIndex</a>&lt; V, <a class="el" href="structllama_1_1ArrayIndex.html#a09d5dffbdde28ac87fc8ef1f20340593">ArrayIndex::rank</a> &gt;&#160;</td>
           <td class="paramname"></td><td>)</td>
@@ -815,25 +835,25 @@ template&lt;typename V &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00462">462</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00463">463</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
-<a id="ab8473889d00556826eb6932d35f0d7f6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab8473889d00556826eb6932d35f0d7f6">&#9670;&nbsp;</a></span>operator[]() <span class="overload">[1/5]</span></h2>
+<a id="a526da546f43015bdd691572260cb7a90"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a526da546f43015bdd691572260cb7a90">&#9670;&nbsp;</a></span>operator[]() <span class="overload">[1/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TMapping , typename BlobType , typename TAccessor  = accessor::Default&gt; </div>
+template&lt;typename TMapping , typename TBlobType , typename TAccessor  = accessor::Default&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, BlobType, TAccessor &gt;::operator[] </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, TBlobType, TAccessor &gt;::operator[] </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structllama_1_1View.html#af47d4cc81b409e8e5cadcbf9b6952847">ArrayIndex</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1View.html#af5a48c9b55ae1eb5872d7fb3f664d902">ArrayIndex</a>&#160;</td>
           <td class="paramname"><em>ai</em></td><td>)</td>
           <td> -&gt; decltype(auto)
         </td>
@@ -846,25 +866,25 @@ template&lt;typename TMapping , typename BlobType , typename TAccessor  = access
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00531">531</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00532">532</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a174a05453195289049c6101243a57fcb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a174a05453195289049c6101243a57fcb">&#9670;&nbsp;</a></span>operator[]() <span class="overload">[2/5]</span></h2>
+<a id="a13b76bc25289fb7376b9dbfe9afc0cec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a13b76bc25289fb7376b9dbfe9afc0cec">&#9670;&nbsp;</a></span>operator[]() <span class="overload">[2/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TMapping , typename BlobType , typename TAccessor  = accessor::Default&gt; </div>
+template&lt;typename TMapping , typename TBlobType , typename TAccessor  = accessor::Default&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, BlobType, TAccessor &gt;::operator[] </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, TBlobType, TAccessor &gt;::operator[] </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structllama_1_1View.html#af47d4cc81b409e8e5cadcbf9b6952847">ArrayIndex</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1View.html#af5a48c9b55ae1eb5872d7fb3f664d902">ArrayIndex</a>&#160;</td>
           <td class="paramname"><em>ai</em></td><td>)</td>
           <td> const -&gt; decltype(auto)
         </td>
@@ -878,17 +898,17 @@ template&lt;typename TMapping , typename BlobType , typename TAccessor  = access
 </div><div class="memdoc">
 <p>Retrieves the <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> at the <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a> index constructed from the passed component indices. </p>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00525">525</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00526">526</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a10c3e43baa27e88a38d541a6f8355fc0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a10c3e43baa27e88a38d541a6f8355fc0">&#9670;&nbsp;</a></span>operator[]() <span class="overload">[3/5]</span></h2>
+<a id="a5b2e47c3ed82390f8a988f9cd8451a08"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b2e47c3ed82390f8a988f9cd8451a08">&#9670;&nbsp;</a></span>operator[]() <span class="overload">[3/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TMapping , typename BlobType , typename TAccessor  = accessor::Default&gt; </div>
+template&lt;typename TMapping , typename TBlobType , typename TAccessor  = accessor::Default&gt; </div>
 <div class="memtemplate">
 template&lt;typename V &gt; </div>
 <table class="mlabels">
@@ -896,7 +916,7 @@ template&lt;typename V &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, BlobType, TAccessor &gt;::operator[] </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, TBlobType, TAccessor &gt;::operator[] </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structllama_1_1ArrayIndex.html">llama::ArrayIndex</a>&lt; V, <a class="el" href="structllama_1_1ArrayIndex.html#a09d5dffbdde28ac87fc8ef1f20340593">ArrayIndex::rank</a> &gt;&#160;</td>
           <td class="paramname"></td><td>)</td>
@@ -910,25 +930,25 @@ template&lt;typename V &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00539">539</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00540">540</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
-<a id="af8e9a74d65f3d5360991d157dd946146"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af8e9a74d65f3d5360991d157dd946146">&#9670;&nbsp;</a></span>operator[]() <span class="overload">[4/5]</span></h2>
+<a id="acb1c44d96c698a0f6ca8f288e9f28914"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb1c44d96c698a0f6ca8f288e9f28914">&#9670;&nbsp;</a></span>operator[]() <span class="overload">[4/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TMapping , typename BlobType , typename TAccessor  = accessor::Default&gt; </div>
+template&lt;typename TMapping , typename TBlobType , typename TAccessor  = accessor::Default&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, BlobType, TAccessor &gt;::operator[] </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, TBlobType, TAccessor &gt;::operator[] </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structllama_1_1View.html#a22e41499532a4841b9841cc73f1a55cf">size_type</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1View.html#a1485c39735f15874051e1863874847e1">size_type</a>&#160;</td>
           <td class="paramname"><em>index</em></td><td>)</td>
           <td> -&gt; decltype(auto)
         </td>
@@ -941,25 +961,25 @@ template&lt;typename TMapping , typename BlobType , typename TAccessor  = access
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00552">552</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00553">553</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a7b5fd4cb3929d2742823e97c3e0c07cf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7b5fd4cb3929d2742823e97c3e0c07cf">&#9670;&nbsp;</a></span>operator[]() <span class="overload">[5/5]</span></h2>
+<a id="aeaa37e0e681119833521a96c20228ccb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeaa37e0e681119833521a96c20228ccb">&#9670;&nbsp;</a></span>operator[]() <span class="overload">[5/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TMapping , typename BlobType , typename TAccessor  = accessor::Default&gt; </div>
+template&lt;typename TMapping , typename TBlobType , typename TAccessor  = accessor::Default&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, BlobType, TAccessor &gt;::operator[] </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, TBlobType, TAccessor &gt;::operator[] </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structllama_1_1View.html#a22e41499532a4841b9841cc73f1a55cf">size_type</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1View.html#a1485c39735f15874051e1863874847e1">size_type</a>&#160;</td>
           <td class="paramname"><em>index</em></td><td>)</td>
           <td> const -&gt; decltype(auto)
         </td>
@@ -974,7 +994,7 @@ template&lt;typename TMapping , typename BlobType , typename TAccessor  = access
 
 <p>Retrieves the <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> at the 1D <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a> index constructed from the passed index. </p>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00546">546</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00547">547</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -985,7 +1005,7 @@ template&lt;typename TMapping , typename BlobType , typename TAccessor  = access
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TMapping , typename BlobType , typename TAccessor  = accessor::Default&gt; </div>
+template&lt;typename TMapping , typename TBlobType , typename TAccessor  = accessor::Default&gt; </div>
 <div class="memtemplate">
 template&lt;typename TView , typename TBoundRecordCoord , bool OwnView&gt; </div>
 <table class="mlabels">
@@ -1003,26 +1023,26 @@ template&lt;typename TView , typename TBoundRecordCoord , bool OwnView&gt; </div
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00586">586</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00587">587</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="add8c448739f3da7660d28b11f9ab1abe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#add8c448739f3da7660d28b11f9ab1abe">&#9670;&nbsp;</a></span>storageBlobs</h2>
+<a id="ad7f3890ac6ad4ded0c0327f120e62953"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad7f3890ac6ad4ded0c0327f120e62953">&#9670;&nbsp;</a></span>storageBlobs</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TMapping , typename BlobType , typename TAccessor  = accessor::Default&gt; </div>
+template&lt;typename TMapping , typename TBlobType , typename TAccessor  = accessor::Default&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structllama_1_1Array.html">Array</a>&lt;BlobType, Mapping::blobCount&gt; <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, BlobType, TAccessor &gt;::storageBlobs</td>
+          <td class="memname"><a class="el" href="structllama_1_1Array.html">Array</a>&lt;<a class="el" href="structllama_1_1View.html#a3fbca466d7e6fdfd1ed0e368a224f8c4">BlobType</a>, Mapping::blobCount&gt; <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, TBlobType, TAccessor &gt;::storageBlobs</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00582">582</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00583">583</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -1035,7 +1055,7 @@ template&lt;typename TMapping , typename BlobType , typename TAccessor  = access
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="structllama_1_1View.html">View</a></li>
-    <li class="footer">Generated on Mon Nov 7 2022 17:09:20 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Tue Nov 8 2022 16:45:14 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

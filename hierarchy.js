@@ -250,7 +250,7 @@ var hierarchy =
     [ "VHMan", null, [
       [ "llama::mapping::internal::BitPackedFloatRef< Float, StoredIntegralPointer, VHExp, VHMan, SizeType >", "structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html", null ]
     ] ],
-    [ "llama::View< TMapping, BlobType, TAccessor >", "structllama_1_1View.html", null ],
+    [ "llama::View< TMapping, TBlobType, TAccessor >", "structllama_1_1View.html", null ],
     [ "llama::VirtualView< TStoredParentView >", "structllama_1_1VirtualView.html", null ],
     [ "llama::mapping::tree::internal::WrapInNNodes< Leaf, Count >", "structllama_1_1mapping_1_1tree_1_1internal_1_1WrapInNNodes.html", null ],
     [ "llama::mapping::tree::internal::WrapInNNodes< Leaf, 0 >", "structllama_1_1mapping_1_1tree_1_1internal_1_1WrapInNNodes_3_01Leaf_00_010_01_4.html", null ]
