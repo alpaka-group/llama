@@ -64,6 +64,7 @@
 #include "mapping/Heatmap.hpp"
 #include "mapping/Null.hpp"
 #include "mapping/One.hpp"
+#include "mapping/Projection.hpp"
 #include "mapping/SoA.hpp"
 #include "mapping/Split.hpp"
 #include "mapping/Trace.hpp"
