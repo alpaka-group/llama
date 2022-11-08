@@ -392,12 +392,12 @@ namespace llama
     /// Central LLAMA class holding memory for storage and giving access to values stored there defined by a mapping. A
     /// view should be created using \ref allocView.
     /// \tparam TMapping The mapping used by the view to map accesses into memory.
-    /// \tparam BlobType The storage type used by the view holding memory.
+    /// \tparam TBlobType The storage type used by the view holding memory.
     /// \tparam TAccessor The accessor to use when an access is made through this view.
 #ifdef __cpp_lib_concepts
-    template<typename TMapping, Blob BlobType, typename TAccessor = accessor::Default>
+    template<typename TMapping, Blob TBlobType, typename TAccessor = accessor::Default>
 #else
-    template<typename TMapping, typename BlobType, typename TAccessor = accessor::Default>
+    template<typename TMapping, typename TBlobType, typename TAccessor = accessor::Default>
 #endif
     struct LLAMA_DECLSPEC_EMPTY_BASES View
         : private TMapping
@@ -409,6 +409,7 @@ namespace llama
         static_assert(!std::is_const_v<TMapping>);
         static_assert(std::is_empty_v<TAccessor>, "Stateful accessors are not implemented");
         using Mapping = TMapping;
+        using BlobType = TBlobType;
         using ArrayExtents = typename Mapping::ArrayExtents;
         using ArrayIndex = typename Mapping::ArrayIndex;
         using RecordDim = typename Mapping::RecordDim;
@@ -598,45 +599,60 @@ namespace llama
         }
     };
 
+    template<typename View>
+    inline constexpr auto isView = false;
+
+    template<typename Mapping, typename BlobType, typename Accessor>
+    inline constexpr auto isView<View<Mapping, BlobType, Accessor>> = true;
+
     namespace internal
     {
-        template<typename Mapping, typename BlobType, typename Accessor, typename TransformBlobFunc, std::size_t... Is>
+        template<typename Blobs, typename TransformBlobFunc, std::size_t... Is>
         LLAMA_FN_HOST_ACC_INLINE auto makeTransformedBlobArray(
-            View<Mapping, BlobType, Accessor>& view,
+            Blobs& storageBlobs,
             const TransformBlobFunc& transformBlob,
             std::integer_sequence<std::size_t, Is...>)
         {
-            return llama::Array{transformBlob(view.storageBlobs[Is])...};
+            return llama::Array{transformBlob(storageBlobs[Is])...};
         }
     } // namespace internal
 
     /// Applies the given transformation to the blobs of a view and creates a new view with the transformed blobs and
-    /// the same mapping as the old view.
-    template<typename Mapping, typename BlobType, typename Accessor, typename TransformBlobFunc>
-    LLAMA_FN_HOST_ACC_INLINE auto transformBlobs(
-        View<Mapping, BlobType, Accessor>& view,
-        const TransformBlobFunc& transformBlob)
+    /// the same mapping and accessor as the old view.
+    template<typename View, typename TransformBlobFunc, typename = std::enable_if_t<isView<std::decay_t<View>>>>
+    LLAMA_FN_HOST_ACC_INLINE auto transformBlobs(View& view, const TransformBlobFunc& transformBlob)
     {
-        constexpr auto blobCount = View<Mapping, BlobType, Accessor>::Mapping::blobCount;
-        return View{
+        constexpr auto blobCount = std::decay_t<View>::Mapping::blobCount;
+        auto blobs = internal::makeTransformedBlobArray(
+            view.storageBlobs,
+            transformBlob,
+            std::make_index_sequence<blobCount>{});
+        return llama::View<typename View::Mapping, typename decltype(blobs)::value_type, typename View::Accessor>{
             view.mapping(),
-            internal::makeTransformedBlobArray(view, transformBlob, std::make_index_sequence<blobCount>{})};
+            std::move(blobs)/*,
+            view.accessor()*/};
     }
 
     /// Creates a shallow copy of a view. This copy must not outlive the view, since it references its blob array.
     /// \tparam NewBlobType The blob type of the shallow copy. Must be a non owning pointer like type.
     /// \return A new view with the same mapping as view, where each blob refers to the blob in view.
-    template<typename Mapping, typename BlobType, typename Accessor, typename NewBlobType = std::byte*>
-    LLAMA_FN_HOST_ACC_INLINE auto shallowCopy(View<Mapping, BlobType, Accessor>& view)
+    template<
+        typename View,
+        typename NewBlobType = CopyConst<View, std::byte>*,
+        typename = std::enable_if_t<isView<std::decay_t<View>>>>
+    LLAMA_FN_HOST_ACC_INLINE auto shallowCopy(View& view)
     {
-        return transformBlobs(
-            view,
-            [](BlobType& blob)
-            {
-                LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-                return static_cast<NewBlobType>(&blob[0]);
-                LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
-            });
+        if constexpr(std::is_same_v<typename std::decay_t<View>::BlobType, NewBlobType>)
+            return view;
+        else
+            return transformBlobs(
+                view,
+                [](auto& blob)
+                {
+                    LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
+                    return static_cast<NewBlobType>(&blob[0]);
+                    LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
+                });
     }
 
     // Creates a new view from an existing view with the given accessor.
@@ -647,12 +663,6 @@ namespace llama
     {
         return View<Mapping, BlobType, NewAccessor>{std::move(view.mapping()), std::move(view.storageBlobs)};
     }
-
-    template<typename View>
-    inline constexpr auto isView = false;
-
-    template<typename Mapping, typename BlobType, typename Accessor>
-    inline constexpr auto isView<View<Mapping, BlobType, Accessor>> = true;
 
     /// Like a \ref View, but array indices are shifted.
     /// @tparam TStoredParentView Type of the underlying view. May be cv qualified and/or a reference type.
