@@ -441,18 +441,18 @@ namespace llama
     template<typename... Fields>
     inline constexpr std::size_t alignOf<Record<Fields...>> = flatAlignOf<FlatRecordDim<Record<Fields...>>>;
 
-    /// Returns the integral n rounded up to be a multiple of mult.
-    template<typename Integral>
-    [[nodiscard]] LLAMA_FN_HOST_ACC_INLINE constexpr auto roundUpToMultiple(Integral n, Integral mult) -> Integral
-    {
-        return (n + mult - 1) / mult * mult;
-    }
-
-    // Returns the ceiling of a / b.
+    /// Returns the ceiling of a / b.
     template<typename Integral>
     [[nodiscard]] LLAMA_FN_HOST_ACC_INLINE constexpr auto divCeil(Integral a, Integral b) -> Integral
     {
         return (a + b - 1) / b;
+    }
+
+    /// Returns the integral n rounded up to be a multiple of mult.
+    template<typename Integral>
+    [[nodiscard]] LLAMA_FN_HOST_ACC_INLINE constexpr auto roundUpToMultiple(Integral n, Integral mult) -> Integral
+    {
+        return divCeil(n, mult) * mult;
     }
 
     namespace internal
