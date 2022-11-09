@@ -60,6 +60,7 @@
 #include "mapping/BitPackedFloatSoA.hpp"
 #include "mapping/BitPackedIntSoA.hpp"
 #include "mapping/Bytesplit.hpp"
+#include "mapping/Byteswap.hpp"
 #include "mapping/ChangeType.hpp"
 #include "mapping/Heatmap.hpp"
 #include "mapping/Null.hpp"
