@@ -15,7 +15,7 @@ namespace llama::mapping
         template<typename T>
         LLAMA_FN_HOST_ACC_INLINE auto byteswap(T t) -> T
         {
-            llama::Array<std::byte, sizeof(T)> arr;
+            llama::Array<std::byte, sizeof(T)> arr{};
             std::memcpy(&arr, &t, sizeof(T));
 
             for(std::size_t i = 0; i < sizeof(T) / 2; i++)
