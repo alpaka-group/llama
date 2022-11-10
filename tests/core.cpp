@@ -421,6 +421,21 @@ TEST_CASE("CopyConst")
     STATIC_REQUIRE(std::is_same_v<llama::CopyConst<const int, const float>, const float>);
 }
 
+TEST_CASE("qualifiedTypeName")
+{
+    CHECK(llama::qualifiedTypeName<int> == "int");
+    CHECK(llama::qualifiedTypeName<tag::A> == "tag::A");
+    CHECK(llama::qualifiedTypeName<tag::Normal> == "tag::Normal");
+    CHECK(llama::qualifiedTypeName<unsigned int> == "unsigned int");
+    CHECK(llama::qualifiedTypeName<std::remove_const<int>> == "std::remove_const<int>");
+    CHECK(
+        llama::qualifiedTypeName<std::remove_const<std::add_const<
+            std::common_type<int, char>>>> == "std::remove_const<std::add_const<std::common_type<int,char>>>");
+    CHECK(
+        llama::qualifiedTypeName<
+            Vec3D> == "llama::Record<llama::Field<tag::X,double>,llama::Field<tag::Y,double>,llama::Field<tag::Z,double>>");
+}
+
 TEST_CASE("structName")
 {
     CHECK(llama::structName<int>() == "int");
