@@ -33,7 +33,11 @@ namespace llama::mapping
         template<typename T>
         struct ByteswapProjection
         {
-            LLAMA_FN_HOST_ACC_INLINE static auto load(T v) -> T
+            // bad fromat
+            LLAMA_FN_HOST_ACC_INLINE 
+                static
+                auto
+                load(T v) -> T
             {
                 return byteswap(v);
             }
