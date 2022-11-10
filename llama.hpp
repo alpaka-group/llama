@@ -7434,122 +7434,261 @@ namespace llama
 // #pragma once
 // #include "../ProxyRefOpMixin.hpp"    // amalgamate: file already expanded
 // #include "Common.hpp"    // amalgamate: file already expanded
+	// ============================================================================
+	// == ./mapping/Projection.hpp ==
+	// ==
+	// SPDX-License-Identifier: GPL-3.0-or-later
+
+	// #pragma once
+	// #include "../ProxyRefOpMixin.hpp"    // amalgamate: file already expanded
+	// #include "../View.hpp"    // amalgamate: file already expanded
+	// #include "Common.hpp"    // amalgamate: file already expanded
+
+	namespace llama::mapping
+	{
+	    namespace internal
+	    {
+	        template<typename F>
+	        struct UnaryFunctionTraits
+	        {
+	            static_assert(sizeof(F) == 0, "F is not an unary function");
+	        };
+
+	        template<typename Arg, typename Ret>
+	        struct UnaryFunctionTraits<Ret (*)(Arg)>
+	        {
+	            using ArgumentType = Arg;
+	            using ReturnType = Ret;
+	        };
+
+	        template<typename ProjectionMap, typename Coord, typename RecordDimType>
+	        auto projectionOrVoidImpl()
+	        {
+	            using namespace boost::mp11;
+	            if constexpr(mp_map_contains<ProjectionMap, Coord>::value)
+	                return mp_identity<mp_second<mp_map_find<ProjectionMap, Coord>>>{};
+	            else if constexpr(mp_map_contains<ProjectionMap, RecordDimType>::value)
+	                return mp_identity<mp_second<mp_map_find<ProjectionMap, RecordDimType>>>{};
+	            else
+	                return mp_identity<void>{};
+	        }
+
+	        template<typename ProjectionMap, typename Coord, typename RecordDimType>
+	        using ProjectionOrVoid = typename decltype(projectionOrVoidImpl<ProjectionMap, Coord, RecordDimType>())::type;
+
+	        template<typename ProjectionMap>
+	        struct MakeReplacerProj
+	        {
+	            template<typename Coord, typename RecordDimType>
+	            static auto replacedTypeProj()
+	            {
+	                using Projection = ProjectionOrVoid<ProjectionMap, Coord, RecordDimType>;
+	                if constexpr(std::is_void_v<Projection>)
+	                    return boost::mp11::mp_identity<RecordDimType>{};
+	                else
+	                {
+	                    using LoadFunc = UnaryFunctionTraits<decltype(&Projection::load)>;
+	                    using StoreFunc = UnaryFunctionTraits<decltype(&Projection::store)>;
+
+	                    static_assert(std::is_same_v<typename LoadFunc::ReturnType, RecordDimType>);
+	                    static_assert(std::is_same_v<typename StoreFunc::ArgumentType, RecordDimType>);
+	                    static_assert(std::is_same_v<typename LoadFunc::ArgumentType, typename StoreFunc::ReturnType>);
+
+	                    return boost::mp11::mp_identity<typename StoreFunc::ReturnType>{};
+	                }
+	            }
+
+	            template<typename Coord, typename RecordDimType>
+	            using fn = typename decltype(replacedTypeProj<Coord, RecordDimType>())::type;
+	        };
+
+	        template<typename RecordDim, typename ProjectionMap>
+	        using ReplaceTypesByProjectionResults
+	            = TransformLeavesWithCoord<RecordDim, MakeReplacerProj<ProjectionMap>::template fn>;
+
+	        template<typename Reference, typename Projection>
+	        struct ProjectionReference
+	            : ProxyRefOpMixin<
+	                  ProjectionReference<Reference, Projection>,
+	                  decltype(Projection::load(std::declval<Reference>()))>
+	        {
+	        private:
+	            Reference storageRef;
+
+	        public:
+	            using value_type = decltype(Projection::load(std::declval<Reference>()));
+
+	            LLAMA_FN_HOST_ACC_INLINE constexpr explicit ProjectionReference(Reference storageRef)
+	                : storageRef{storageRef}
+	            {
+	            }
+
+	            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
+	            LLAMA_FN_HOST_ACC_INLINE constexpr operator value_type() const
+	            {
+	                return Projection::load(storageRef);
+	            }
+
+	            LLAMA_FN_HOST_ACC_INLINE constexpr auto operator=(value_type v) -> ProjectionReference&
+	            {
+	                storageRef = Projection::store(v);
+	                return *this;
+	            }
+	        };
+	    } // namespace internal
+
+	    /// Mapping that projects types in the record domain to different types. Projections are executed during load and
+	    /// store.
+	    /// @tparam TProjectionMap A type list of binary type lists (a map) specifing a projection (map value) for a type
+	    /// or the type at a \ref RecordCoord (map key). A projection is a type with two functions:
+	    /// struct Proj {
+	    ///   static auto load(auto&& fromMem);
+	    ///   static auto store(auto&& toMem);
+	    /// };
+	    template<
+	        typename TArrayExtents,
+	        typename TRecordDim,
+	        template<typename, typename>
+	        typename InnerMapping,
+	        typename TProjectionMap>
+	    struct Projection
+	        : private InnerMapping<TArrayExtents, internal::ReplaceTypesByProjectionResults<TRecordDim, TProjectionMap>>
+	    {
+	        using Inner
+	            = InnerMapping<TArrayExtents, internal::ReplaceTypesByProjectionResults<TRecordDim, TProjectionMap>>;
+	        using ProjectionMap = TProjectionMap;
+	        using ArrayExtents = typename Inner::ArrayExtents;
+	        using ArrayIndex = typename Inner::ArrayIndex;
+	        using RecordDim = TRecordDim; // hide Inner::RecordDim
+	        using Inner::blobCount;
+	        using Inner::blobSize;
+	        using Inner::extents;
+	        using Inner::Inner;
+
+	        template<typename RecordCoord>
+	        LLAMA_FN_HOST_ACC_INLINE static constexpr auto isComputed(RecordCoord) -> bool
+	        {
+	            return !std::is_void_v<
+	                internal::ProjectionOrVoid<ProjectionMap, RecordCoord, GetType<RecordDim, RecordCoord>>>;
+	        }
+
+	        template<std::size_t... RecordCoords, typename BlobArray>
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto compute(
+	            typename Inner::ArrayIndex ai,
+	            RecordCoord<RecordCoords...> rc,
+	            BlobArray& blobs) const
+	        {
+	            static_assert(isComputed(rc));
+	            using RecordDimType = GetType<RecordDim, RecordCoord<RecordCoords...>>;
+	            using Reference = decltype(mapToMemory(static_cast<const Inner&>(*this), ai, rc, blobs));
+	            using Projection = internal::ProjectionOrVoid<ProjectionMap, RecordCoord<RecordCoords...>, RecordDimType>;
+	            static_assert(!std::is_void_v<Projection>);
+	            Reference r = mapToMemory(static_cast<const Inner&>(*this), ai, rc, blobs);
+
+	            LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
+	            return internal::ProjectionReference<Reference, Projection>{r};
+	            LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
+	        }
+
+	        template<std::size_t... RecordCoords>
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayIndex ai, RecordCoord<RecordCoords...> rc = {})
+	            const -> NrAndOffset<typename ArrayExtents::value_type>
+	        {
+	            static_assert(!isComputed(rc));
+	            return Inner::blobNrAndOffset(ai, rc);
+	        }
+	    };
+
+	    /// Binds parameters to a \ref Projection mapping except for array and record dimension, producing a quoted
+	    /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
+	    template<template<typename, typename> typename InnerMapping, typename ProjectionMap>
+	    struct BindProjection
+	    {
+	        template<typename ArrayExtents, typename RecordDim>
+	        using fn = Projection<ArrayExtents, RecordDim, InnerMapping, ProjectionMap>;
+	    };
+
+	    template<typename Mapping>
+	    inline constexpr bool isProjection = false;
+
+	    template<
+	        typename TArrayExtents,
+	        typename TRecordDim,
+	        template<typename, typename>
+	        typename InnerMapping,
+	        typename ReplacementMap>
+	    inline constexpr bool isProjection<Projection<TArrayExtents, TRecordDim, InnerMapping, ReplacementMap>> = true;
+	} // namespace llama::mapping
+	// ==
+	// == ./mapping/Projection.hpp ==
+	// ============================================================================
+
 
 namespace llama::mapping
 {
     namespace internal
     {
-        template<typename ReplacementMap, typename Coord, typename UserT>
-        auto replacedType()
+        template<typename UserT, typename StoredT>
+        struct ChangeTypeProjection
         {
-            using namespace boost::mp11;
-            if constexpr(mp_map_contains<ReplacementMap, Coord>::value)
-                return mp_identity<mp_second<mp_map_find<ReplacementMap, Coord>>>{};
-            else if constexpr(mp_map_contains<ReplacementMap, UserT>::value)
-                return mp_identity<mp_second<mp_map_find<ReplacementMap, UserT>>>{};
-            else
-                return mp_identity<UserT>{};
-        }
+            static auto load(StoredT v) -> UserT
+            {
+                return static_cast<UserT>(v); // we could allow stronger casts here
+            }
 
-        template<typename ReplacementMap, typename Coord, typename UserT>
-        using ReplacedType = typename decltype(replacedType<ReplacementMap, Coord, UserT>())::type;
+            static auto store(UserT v) -> StoredT
+            {
+                return static_cast<StoredT>(v); // we could allow stronger casts here
+            }
+        };
 
-        template<typename ReplacementMap>
-        struct MakeReplacer
+        template<typename RecordDim>
+        struct MakeProjectionPair
         {
-            template<typename Coord, typename UserT>
-            using type = ReplacedType<ReplacementMap, Coord, UserT>;
+            template<typename Key>
+            static auto recordDimType()
+            {
+                if constexpr(isRecordCoord<Key>)
+                    return boost::mp11::mp_identity<GetType<RecordDim, Key>>{};
+                else
+                    return boost::mp11::mp_identity<Key>{};
+            }
+
+            template<
+                typename Pair,
+                typename Key = boost::mp11::mp_first<Pair>,
+                typename StoredT = boost::mp11::mp_second<Pair>>
+            using fn = boost::mp11::
+                mp_list<Key, ChangeTypeProjection<typename decltype(recordDimType<Key>())::type, StoredT>>;
         };
 
         template<typename RecordDim, typename ReplacementMap>
-        using ReplaceTypesInRecordDim
-            = TransformLeavesWithCoord<RecordDim, MakeReplacer<ReplacementMap>::template type>;
-
-        template<typename UserT, typename StoredT>
-        struct ChangeTypeReference : ProxyRefOpMixin<ChangeTypeReference<UserT, StoredT>, UserT>
-        {
-        private:
-            StoredT& storageRef;
-
-        public:
-            using value_type = UserT;
-
-            LLAMA_FN_HOST_ACC_INLINE constexpr explicit ChangeTypeReference(StoredT& storageRef)
-                : storageRef{storageRef}
-            {
-            }
-
-            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
-            LLAMA_FN_HOST_ACC_INLINE constexpr operator UserT() const
-            {
-                return static_cast<UserT>(storageRef); // we could allow stronger casts here
-            }
-
-            LLAMA_FN_HOST_ACC_INLINE constexpr auto operator=(UserT v) -> ChangeTypeReference&
-            {
-                storageRef = static_cast<StoredT>(v); // we could allow stronger casts here
-                return *this;
-            }
-        };
+        using MakeProjectionMap
+            = boost::mp11::mp_transform<MakeProjectionPair<RecordDim>::template fn, ReplacementMap>;
     } // namespace internal
 
     /// Mapping that changes the type in the record domain for a different one in storage. Conversions happen during
     /// load and store.
-    /// @tparam TReplacementMap A type list of binary type lists (a map) specifiying which type or the type at a \ref
+    /// @tparam ReplacementMap A type list of binary type lists (a map) specifiying which type or the type at a \ref
     /// RecordCoord (map key) to replace by which other type (mapped value).
     template<
-        typename TArrayExtents,
-        typename TRecordDim,
+        typename ArrayExtents,
+        typename RecordDim,
         template<typename, typename>
         typename InnerMapping,
-        typename TReplacementMap>
+        typename ReplacementMap>
     struct ChangeType
-        : private InnerMapping<TArrayExtents, internal::ReplaceTypesInRecordDim<TRecordDim, TReplacementMap>>
+        : Projection<ArrayExtents, RecordDim, InnerMapping, internal::MakeProjectionMap<RecordDim, ReplacementMap>>
     {
-        using Inner = InnerMapping<TArrayExtents, internal::ReplaceTypesInRecordDim<TRecordDim, TReplacementMap>>;
-        using ReplacementMap = TReplacementMap;
-        using ArrayExtents = typename Inner::ArrayExtents;
-        using ArrayIndex = typename Inner::ArrayIndex;
-        using RecordDim = TRecordDim; // hide Inner::RecordDim
-        using Inner::blobCount;
-        using Inner::blobSize;
-        using Inner::extents;
-        using Inner::Inner;
+    private:
+        using Base = Projection<
+            ArrayExtents,
+            RecordDim,
+            InnerMapping,
+            internal::MakeProjectionMap<RecordDim, ReplacementMap>>;
 
-        template<typename RecordCoord>
-        LLAMA_FN_HOST_ACC_INLINE static constexpr auto isComputed(RecordCoord)
-        {
-            using UserT = GetType<RecordDim, RecordCoord>;
-            return boost::mp11::mp_map_contains<ReplacementMap, RecordCoord>::value
-                || boost::mp11::mp_map_contains<ReplacementMap, UserT>::value;
-        }
-
-        // using Inner::blobNrAndOffset; // for all non-computed fields
-
-        template<std::size_t... RecordCoords, typename BlobArray>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto compute(
-            typename Inner::ArrayIndex ai,
-            RecordCoord<RecordCoords...> rc,
-            BlobArray& blobs) const
-        {
-            static_assert(isComputed(rc));
-            using UserT = GetType<RecordDim, RecordCoord<RecordCoords...>>;
-            using StoredT = internal::ReplacedType<ReplacementMap, RecordCoord<RecordCoords...>, UserT>;
-            using QualifiedStoredT = CopyConst<BlobArray, StoredT>;
-            const auto [nr, offset] = Inner::template blobNrAndOffset<RecordCoords...>(ai);
-            LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-            return internal::ChangeTypeReference<UserT, QualifiedStoredT>{
-                reinterpret_cast<QualifiedStoredT&>(blobs[nr][offset])};
-            LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
-        }
-
-        template<std::size_t... RecordCoords>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayIndex ai, RecordCoord<RecordCoords...> rc = {})
-            const -> NrAndOffset<typename ArrayExtents::value_type>
-        {
-            static_assert(!isComputed(rc));
-            return Inner::blobNrAndOffset(ai, rc);
-        }
+    public:
+        using Base::Base;
     };
 
     /// Binds parameters to a \ref ChangeType mapping except for array and record dimension, producing a quoted
@@ -9809,6 +9948,92 @@ namespace llama::mapping
 // ============================================================================
 
 // ============================================================================
+// == ./mapping/Byteswap.hpp ==
+// ==
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+// #pragma once
+// #include "../Core.hpp"    // amalgamate: file already expanded
+// #include "../ProxyRefOpMixin.hpp"    // amalgamate: file already expanded
+// #include "Common.hpp"    // amalgamate: file already expanded
+// #include "Projection.hpp"    // amalgamate: file already expanded
+
+namespace llama::mapping
+{
+    namespace internal
+    {
+        // TODO(bgruber): replace by std::byteswap in C++23
+        template<typename T>
+        LLAMA_FN_HOST_ACC_INLINE auto byteswap(T t) -> T
+        {
+            llama::Array<std::byte, sizeof(T)> arr;
+            std::memcpy(&arr, &t, sizeof(T));
+
+            for(std::size_t i = 0; i < sizeof(T) / 2; i++)
+            {
+                const auto a = arr[i];
+                const auto b = arr[sizeof(T) - 1 - i];
+                arr[i] = b;
+                arr[sizeof(T) - 1 - i] = a;
+            }
+
+            std::memcpy(&t, &arr, sizeof(T));
+            return t;
+        }
+
+        template<typename T>
+        struct ByteswapProjection
+        {
+            LLAMA_FN_HOST_ACC_INLINE static auto load(T v) -> T
+            {
+                return byteswap(v);
+            }
+
+            LLAMA_FN_HOST_ACC_INLINE static auto store(T v) -> T
+            {
+                return byteswap(v);
+            }
+        };
+
+        template<typename T>
+        using MakeByteswapProjectionPair = boost::mp11::mp_list<T, ByteswapProjection<T>>;
+
+        template<typename RecordDim>
+        using MakeByteswapProjectionMap
+            = boost::mp11::mp_transform<MakeByteswapProjectionPair, boost::mp11::mp_unique<FlatRecordDim<RecordDim>>>;
+    } // namespace internal
+
+    /// Mapping that swaps the byte order of all values when loading/storing.
+    template<typename ArrayExtents, typename RecordDim, template<typename, typename> typename InnerMapping>
+    struct Byteswap : Projection<ArrayExtents, RecordDim, InnerMapping, internal::MakeByteswapProjectionMap<RecordDim>>
+    {
+    private:
+        using Base = Projection<ArrayExtents, RecordDim, InnerMapping, internal::MakeByteswapProjectionMap<RecordDim>>;
+
+    public:
+        using Base::Base;
+    };
+
+    /// Binds parameters to a \ref ChangeType mapping except for array and record dimension, producing a quoted
+    /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
+    template<template<typename, typename> typename InnerMapping>
+    struct BindByteswap
+    {
+        template<typename ArrayExtents, typename RecordDim>
+        using fn = Byteswap<ArrayExtents, RecordDim, InnerMapping>;
+    };
+
+    template<typename Mapping>
+    inline constexpr bool isByteswap = false;
+
+    template<typename TArrayExtents, typename TRecordDim, template<typename, typename> typename InnerMapping>
+    inline constexpr bool isByteswap<Byteswap<TArrayExtents, TRecordDim, InnerMapping>> = true;
+} // namespace llama::mapping
+// ==
+// == ./mapping/Byteswap.hpp ==
+// ============================================================================
+
+// ============================================================================
 // == ./llama.hpp ==
 // ==
 // Copyright 2018 Alexander Matthes
@@ -9872,10 +10097,12 @@ namespace llama::mapping
 // #include "mapping/BitPackedFloatSoA.hpp"    // amalgamate: file already expanded
 // #include "mapping/BitPackedIntSoA.hpp"    // amalgamate: file already expanded
 // #include "mapping/Bytesplit.hpp"    // amalgamate: file already expanded
+// #include "mapping/Byteswap.hpp"    // amalgamate: file already expanded
 // #include "mapping/ChangeType.hpp"    // amalgamate: file already expanded
 // #include "mapping/Heatmap.hpp"    // amalgamate: file already expanded
 // #include "mapping/Null.hpp"    // amalgamate: file already expanded
 // #include "mapping/One.hpp"    // amalgamate: file already expanded
+// #include "mapping/Projection.hpp"    // amalgamate: file already expanded
 // #include "mapping/SoA.hpp"    // amalgamate: file already expanded
 // #include "mapping/Split.hpp"    // amalgamate: file already expanded
 // #include "mapping/Trace.hpp"    // amalgamate: file already expanded
