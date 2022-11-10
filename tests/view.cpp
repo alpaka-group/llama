@@ -430,3 +430,38 @@ TEMPLATE_TEST_CASE("view.withAccessor.shallowCopy.Restrict", "", llama::bloballo
     iotaFillView(view2);
     iotaCheckView(view);
 }
+
+namespace
+{
+    struct OffsetFloatAccessor
+    {
+        float offset;
+
+        template<typename T>
+        auto operator()(T& ref) -> decltype(auto)
+        {
+            if constexpr(std::is_same_v<T, float>)
+                return ref + offset;
+            else
+                return ref;
+        }
+    };
+} // namespace
+
+TEST_CASE("view.withAccessor.OffsetFloatAccessor")
+{
+    auto view
+        = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{4}, Particle{}}, llama::bloballoc::SharedPtr{});
+    view(0)(tag::Pos{})(tag::X{}) = 2.0;
+    view(0)(tag::Mass{}) = 2.0f;
+
+    auto view2 = llama::withAccessor(view, OffsetFloatAccessor{3});
+
+    CHECK(view2(0)(tag::Pos{})(tag::X{}) == 2.0);
+    CHECK(view2(0)(tag::Mass{}) == 5.0f);
+
+    view2.accessor().offset = 10;
+
+    CHECK(view2(0)(tag::Pos{})(tag::X{}) == 2.0);
+    CHECK(view2(0)(tag::Mass{}) == 12.0f);
+}
