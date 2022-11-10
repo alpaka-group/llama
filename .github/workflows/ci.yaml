@@ -31,7 +31,7 @@ jobs:
         author_email: llama@hzdr.de
         message: 'Run clang-format'
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.clang-format }}
 
   clang-tidy:
     needs: clang-format
