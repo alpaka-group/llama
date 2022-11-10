@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['heatmap_740',['Heatmap',['../structllama_1_1mapping_1_1Heatmap.html',1,'llama::mapping']]]
+  ['heatmap_768',['Heatmap',['../structllama_1_1mapping_1_1Heatmap.html',1,'llama::mapping']]]
 ];

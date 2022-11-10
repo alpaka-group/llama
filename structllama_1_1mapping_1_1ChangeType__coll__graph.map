@@ -1,4 +1,5 @@
-<map id="llama::mapping::ChangeType&lt; TArrayExtents, TRecordDim, InnerMapping, TReplacementMap &gt;" name="llama::mapping::ChangeType&lt; TArrayExtents, TRecordDim, InnerMapping, TReplacementMap &gt;">
-<area shape="rect" id="node1" title=" " alt="" coords="357,5,617,61"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,309,61"/>
+<map id="llama::mapping::ChangeType&lt; ArrayExtents, RecordDim, InnerMapping, ReplacementMap &gt;" name="llama::mapping::ChangeType&lt; ArrayExtents, RecordDim, InnerMapping, ReplacementMap &gt;">
+<area shape="rect" id="node1" title=" " alt="" coords="795,13,1047,69"/>
+<area shape="rect" id="node2" href="$structllama_1_1mapping_1_1Projection.html" title=" " alt="" coords="457,5,747,76"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,5,409,76"/>
 </map>

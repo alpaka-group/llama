@@ -118,9 +118,13 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BindBytesplit.html">BindBytesplit</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BindByteswap.html">BindByteswap</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BindChangeType.html">BindChangeType</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BindOne.html">BindOne</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BindProjection.html">BindProjection</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BindSoA.html">BindSoA</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -131,6 +135,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BitPackedIntSoA.html">BitPackedIntSoA</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Bytesplit.html">Bytesplit</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Byteswap.html">Byteswap</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mapping that swaps the byte order of all values when loading/storing.  <a href="structllama_1_1mapping_1_1Byteswap.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1ChangeType.html">ChangeType</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -153,6 +160,8 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Null.html">Null</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1One.html">One</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Projection.html">Projection</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1SoA.html">SoA</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -247,6 +256,12 @@ Variables</h2></td></tr>
 <tr class="memitem:a660e6891f37e1339cf157ea1fe8f4b86"><td class="memTemplParams" colspan="2">template&lt;typename TArrayExtents , typename TRecordDim , template&lt; typename, typename &gt; typename InnerMapping&gt; </td></tr>
 <tr class="memitem:a660e6891f37e1339cf157ea1fe8f4b86"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a660e6891f37e1339cf157ea1fe8f4b86">isBytesplit&lt; Bytesplit&lt; TArrayExtents, TRecordDim, InnerMapping &gt; &gt;</a> = true</td></tr>
 <tr class="separator:a660e6891f37e1339cf157ea1fe8f4b86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3bf715d9af3ff57725630f67437007b"><td class="memTemplParams" colspan="2">template&lt;typename Mapping &gt; </td></tr>
+<tr class="memitem:af3bf715d9af3ff57725630f67437007b"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#af3bf715d9af3ff57725630f67437007b">isByteswap</a> = false</td></tr>
+<tr class="separator:af3bf715d9af3ff57725630f67437007b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad837c290cbaeffaa4a30ebb4c24c29a"><td class="memTemplParams" colspan="2">template&lt;typename TArrayExtents , typename TRecordDim , template&lt; typename, typename &gt; typename InnerMapping&gt; </td></tr>
+<tr class="memitem:aad837c290cbaeffaa4a30ebb4c24c29a"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#aad837c290cbaeffaa4a30ebb4c24c29a">isByteswap&lt; Byteswap&lt; TArrayExtents, TRecordDim, InnerMapping &gt; &gt;</a> = true</td></tr>
+<tr class="separator:aad837c290cbaeffaa4a30ebb4c24c29a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac5ba972c9e6a90a0294dbb91aa8e774f"><td class="memTemplParams" colspan="2">template&lt;typename Mapping &gt; </td></tr>
 <tr class="memitem:ac5ba972c9e6a90a0294dbb91aa8e774f"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#ac5ba972c9e6a90a0294dbb91aa8e774f">isChangeType</a> = false</td></tr>
 <tr class="separator:ac5ba972c9e6a90a0294dbb91aa8e774f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -271,6 +286,12 @@ Variables</h2></td></tr>
 <tr class="memitem:a3efc7ad7e0eb7cd89e537b070e60178c"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim , bool AlignAndPad, template&lt; typename &gt; typename FlattenRecordDim&gt; </td></tr>
 <tr class="memitem:a3efc7ad7e0eb7cd89e537b070e60178c"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a3efc7ad7e0eb7cd89e537b070e60178c">isOne&lt; One&lt; ArrayExtents, RecordDim, AlignAndPad, FlattenRecordDim &gt; &gt;</a> = true</td></tr>
 <tr class="separator:a3efc7ad7e0eb7cd89e537b070e60178c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c53c4de0dcccd8f0334b24fde6f0a68"><td class="memTemplParams" colspan="2">template&lt;typename Mapping &gt; </td></tr>
+<tr class="memitem:a7c53c4de0dcccd8f0334b24fde6f0a68"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a7c53c4de0dcccd8f0334b24fde6f0a68">isProjection</a> = false</td></tr>
+<tr class="separator:a7c53c4de0dcccd8f0334b24fde6f0a68"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a256603f940c0e5cadda24280055fb150"><td class="memTemplParams" colspan="2">template&lt;typename TArrayExtents , typename TRecordDim , template&lt; typename, typename &gt; typename InnerMapping, typename ReplacementMap &gt; </td></tr>
+<tr class="memitem:a256603f940c0e5cadda24280055fb150"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a256603f940c0e5cadda24280055fb150">isProjection&lt; Projection&lt; TArrayExtents, TRecordDim, InnerMapping, ReplacementMap &gt; &gt;</a> = true</td></tr>
+<tr class="separator:a256603f940c0e5cadda24280055fb150"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a131edc0148d778b3ebe27f58df87ffc1"><td class="memTemplParams" colspan="2">template&lt;typename Mapping &gt; </td></tr>
 <tr class="memitem:a131edc0148d778b3ebe27f58df87ffc1"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a131edc0148d778b3ebe27f58df87ffc1">isSoA</a> = false</td></tr>
 <tr class="separator:a131edc0148d778b3ebe27f58df87ffc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -844,6 +865,58 @@ template&lt;typename TArrayExtents , typename TRecordDim , template&lt; typename
 
 </div>
 </div>
+<a id="af3bf715d9af3ff57725630f67437007b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3bf715d9af3ff57725630f67437007b">&#9670;&nbsp;</a></span>isByteswap</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Mapping &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool llama::mapping::isByteswap = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Byteswap_8hpp_source.html#l00076">76</a> of file <a class="el" href="Byteswap_8hpp_source.html">Byteswap.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aad837c290cbaeffaa4a30ebb4c24c29a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad837c290cbaeffaa4a30ebb4c24c29a">&#9670;&nbsp;</a></span>isByteswap&lt; Byteswap&lt; TArrayExtents, TRecordDim, InnerMapping &gt; &gt;</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename TArrayExtents , typename TRecordDim , template&lt; typename, typename &gt; typename InnerMapping&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool <a class="el" href="namespacellama_1_1mapping.html#af3bf715d9af3ff57725630f67437007b">llama::mapping::isByteswap</a>&lt; <a class="el" href="structllama_1_1mapping_1_1Byteswap.html">Byteswap</a>&lt; TArrayExtents, TRecordDim, InnerMapping &gt; &gt; = true</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Byteswap_8hpp_source.html#l00079">79</a> of file <a class="el" href="Byteswap_8hpp_source.html">Byteswap.hpp</a>.</p>
+
+</div>
+</div>
 <a id="ac5ba972c9e6a90a0294dbb91aa8e774f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac5ba972c9e6a90a0294dbb91aa8e774f">&#9670;&nbsp;</a></span>isChangeType</h2>
 
@@ -866,7 +939,7 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ChangeType_8hpp_source.html#l00135">135</a> of file <a class="el" href="ChangeType_8hpp_source.html">ChangeType.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ChangeType_8hpp_source.html#l00086">86</a> of file <a class="el" href="ChangeType_8hpp_source.html">ChangeType.hpp</a>.</p>
 
 </div>
 </div>
@@ -892,7 +965,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , template&lt; typename
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ChangeType_8hpp_source.html#l00143">143</a> of file <a class="el" href="ChangeType_8hpp_source.html">ChangeType.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ChangeType_8hpp_source.html#l00094">94</a> of file <a class="el" href="ChangeType_8hpp_source.html">ChangeType.hpp</a>.</p>
 
 </div>
 </div>
@@ -1049,6 +1122,58 @@ template&lt;typename ArrayExtents , typename RecordDim , bool AlignAndPad, templ
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="One_8hpp_source.html#l00086">86</a> of file <a class="el" href="One_8hpp_source.html">One.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a7c53c4de0dcccd8f0334b24fde6f0a68"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c53c4de0dcccd8f0334b24fde6f0a68">&#9670;&nbsp;</a></span>isProjection</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Mapping &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool llama::mapping::isProjection = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Projection_8hpp_source.html#l00174">174</a> of file <a class="el" href="Projection_8hpp_source.html">Projection.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a256603f940c0e5cadda24280055fb150"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a256603f940c0e5cadda24280055fb150">&#9670;&nbsp;</a></span>isProjection&lt; Projection&lt; TArrayExtents, TRecordDim, InnerMapping, ReplacementMap &gt; &gt;</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename TArrayExtents , typename TRecordDim , template&lt; typename, typename &gt; typename InnerMapping, typename ReplacementMap &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool <a class="el" href="namespacellama_1_1mapping.html#a7c53c4de0dcccd8f0334b24fde6f0a68">llama::mapping::isProjection</a>&lt; <a class="el" href="structllama_1_1mapping_1_1Projection.html">Projection</a>&lt; TArrayExtents, TRecordDim, InnerMapping, ReplacementMap &gt; &gt; = true</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Projection_8hpp_source.html#l00182">182</a> of file <a class="el" href="Projection_8hpp_source.html">Projection.hpp</a>.</p>
 
 </div>
 </div>
@@ -1254,7 +1379,7 @@ template&lt;typename RecordDim , std::size_t VectorRegisterBits&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li>
-    <li class="footer">Generated on Tue Nov 8 2022 16:45:14 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Thu Nov 10 2022 01:04:40 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
