@@ -121,13 +121,14 @@ namespace llama::mapping
         /// @param blobs The blobs of the view containing this mapping
         /// @param os The stream to write the data to. Should be some form of std::ostream.
         template<typename Blobs, typename OStream>
-        void writeGnuplotDataFile(const Blobs& blobs, OStream&& os, std::size_t wrapAfterBlocks = 64) const
+        void writeGnuplotDataFileAscii(const Blobs& blobs, OStream&& os, std::size_t wrapAfterBlocks = 64) const
         {
             for(std::size_t i = 0; i < Mapping::blobCount; i++)
             {
                 auto* bh = blockHits(i, blobs);
                 std::size_t blockCount = 0;
-                for(size_type j = 0; j < blockHitsSize(i); j++)
+                const auto size = blockHitsSize(i);
+                for(size_type j = 0; j < size; j++)
                     os << bh[j] << ((++blockCount % wrapAfterBlocks == 0) ? '\n' : ' ');
                 while(blockCount++ % wrapAfterBlocks != 0)
                     os << "0 ";
@@ -135,17 +136,53 @@ namespace llama::mapping
             }
         }
 
-        /// An example script for plotting the heatmap data using gnuplot.
-        static constexpr std::string_view gnuplotScript = R"(#!/bin/bash
+        template<typename Blobs, typename OStream>
+        void writeGnuplotDataFileBinary(const Blobs& blobs, OStream&& os, std::size_t afterBlobRoundUpTo = 64) const
+        {
+            for(std::size_t i = 0; i < Mapping::blobCount; i++)
+            {
+                auto* bh = blockHits(i, blobs);
+                const auto size = blockHitsSize(i);
+                os.write(reinterpret_cast<const char*>(bh), size * sizeof(CountType));
+
+                // round up before starting next blob
+                CountType zero = 0;
+                for(size_type j = size; j < roundUpToMultiple(size, afterBlobRoundUpTo); j++)
+                    os.write(reinterpret_cast<const char*>(&zero), sizeof(CountType));
+            }
+        }
+
+        /// An example script for plotting the ASCII heatmap data using gnuplot.
+        static constexpr std::string_view gnuplotScriptAscii = R"(#!/bin/bash
 gnuplot -p <<EOF
-set view map
+file = '${1:-plot.bin}'
+
 set xtics format ""
 set x2tics autofreq 32
-set ytics autofreq 1024
+set ytics autofreq 32
 set yrange [] reverse
 set link x2; set link y2
 set x2label "Byte"
-plot '${1:-plot.dat}' matrix with image pixels axes x2y1
+plot file matrix with image pixels axes x2y1
+EOF
+)";
+
+        /// An example script for plotting the binary heatmap data using gnuplot.
+        static constexpr std::string_view gnuplotScriptBinary = R"(#!/bin/bash
+gnuplot -p <<EOF
+file = '${1:-plot.bin}'
+row = '${2:-64}'
+format = '${3:-%uint64}'
+
+counts = system('stat -c "%s" ${1:-plot.bin}')/8
+
+set xtics format ""
+set x2tics autofreq 32
+set ytics autofreq 32
+set yrange [] reverse
+set link x2; set link y2
+set x2label "Byte"
+plot file binary array=(row,counts/row) format=format with image pixels axes x2y1
 EOF
 )";
     };
