@@ -668,6 +668,24 @@ namespace llama
             std::move(newAccessor)};
     }
 
+    // Creates a new view from an existing view with the given mapping.
+    // \param view A view which's accessor and blobs are copied into a new view with the different mapping. If you no
+    // longer need the old view, consider moving it into the argument of this function.
+    template<typename NewMapping, typename Mapping, typename BlobType, typename Accessor>
+    LLAMA_FN_HOST_ACC_INLINE auto withMapping(View<Mapping, BlobType, Accessor> view, NewMapping newMapping = {})
+    {
+        static_assert(Mapping::blobCount == NewMapping::blobCount);
+        for(std::size_t i = 0; i < Mapping::blobCount; i++)
+        {
+            assert(view.mapping().blobSize(i) == newMapping.blobSize(i));
+        }
+
+        return View<NewMapping, BlobType, Accessor>{
+            std::move(newMapping),
+            std::move(view.storageBlobs),
+            std::move(view.accessor())};
+    }
+
     /// Like a \ref View, but array indices are shifted.
     /// @tparam TStoredParentView Type of the underlying view. May be cv qualified and/or a reference type.
     template<typename TStoredParentView>

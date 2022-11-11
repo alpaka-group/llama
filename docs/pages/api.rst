@@ -108,6 +108,9 @@ Views
 .. doxygenfunction:: transformBlobs
 .. doxygenfunction:: shallowCopy
 
+.. doxygenfunction:: withMapping
+.. doxygenfunction:: withAccessor
+
 .. _label-api-bloballocators:
 
 Blob allocators
@@ -166,8 +169,6 @@ Acessors
 .. doxygenstruct:: llama::accessor::Const
 .. doxygenstruct:: llama::accessor::Restrict
 .. doxygenstruct:: llama::accessor::Atomic
-
-.. doxygenfunction:: withAccessor
 
 RecordDim flattener
 ^^^^^^^^^^^^^^^^^^^

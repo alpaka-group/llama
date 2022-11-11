@@ -65,6 +65,7 @@
 #include "mapping/Heatmap.hpp"
 #include "mapping/Null.hpp"
 #include "mapping/One.hpp"
+#include "mapping/PermuteArrayIndex.hpp"
 #include "mapping/Projection.hpp"
 #include "mapping/SoA.hpp"
 #include "mapping/Split.hpp"
