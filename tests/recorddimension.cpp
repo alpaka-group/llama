@@ -303,4 +303,18 @@ TEST_CASE("recorddim.record_with_arrays")
     view(0u)(A3{}, 1_RC, 0_RC);
     view(0u)(A3{}, 1_RC, 1_RC);
 }
+
+TEST_CASE("recorddim.recurring_tags")
+{
+    using RecordDim = llama::Record<
+        llama::Field<tag::X, float>,
+        llama::Field<tag::Y, llama::Record<llama::Field<tag::X, float>>>,
+        llama::Field<tag::Z, llama::Record<llama::Field<tag::X, llama::Record<llama::Field<tag::X, float>>>>>>;
+
+
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{1}, RecordDim{}});
+    view(0)(tag::X{}) = 42;
+    view(0)(tag::Y{}, tag::X{}) = 42;
+    view(0)(tag::Z{}, tag::X{}, tag::X{}) = 42;
+}
 #endif
