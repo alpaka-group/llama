@@ -68,6 +68,31 @@ These record coordinates are zero-based, nested indices reflecting the nested tu
 Notice that the :cpp:`operator()` is invoked twice in the last example and that an intermediate object is needed for this to work.
 This object is a :cpp:`llama::RecordRef`.
 
+
+Accessors
+---------
+
+An Accessor is a callable that a view invokes on the mapped memory reference returned from a mapping.
+Accessors can be specified when a view is created or changed later.
+
+.. code-block:: C++
+
+    auto view  = llama::allocView(mapping, llama::bloballoc::Vector{},
+                     llama::accessor::Default{});
+    auto view2 = llama::withAccessor(view,
+                     llama::accessor::Const{}); // view2 is a copy!
+
+Switching an accessor changes the type of a view, so a new object needs to be created as a copy of the old one.
+To prevent the blobs to be copied, either use a corresponding blob allocator,
+or shallow copy the view before changing its accessor.
+
+.. code-block:: C++
+
+    auto view3 = llama::withAccessor(std::move(view),
+                     llama::accessor::Const{}); // view3 contains blobs of view now
+    auto view4 = llama::withAccessor(llama::shallowCopy(view3),
+                     llama::accessor::Const{}); // view4 shares blobs with view3
+
 .. _label-virtualview:
 
 VirtualView
