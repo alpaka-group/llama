@@ -447,10 +447,10 @@ Functions</h2></td></tr>
 <tr class="memitem:af3a49de4920182eda8ca9cf2bf57d0f9"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#af3a49de4920182eda8ca9cf2bf57d0f9">popFront</a> (const <a class="el" href="structllama_1_1Tuple.html">Tuple</a>&lt; Elements... &gt; &amp;tuple)</td></tr>
 <tr class="memdesc:af3a49de4920182eda8ca9cf2bf57d0f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a copy of the tuple without the first element.  <a href="namespacellama.html#af3a49de4920182eda8ca9cf2bf57d0f9">More...</a><br /></td></tr>
 <tr class="separator:af3a49de4920182eda8ca9cf2bf57d0f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9993a93fec9853212ebddb38005be635"><td class="memTemplParams" colspan="2">template&lt;typename Mapping , typename Allocator  = bloballoc::Vector, typename Accessor  = accessor::Default&gt; </td></tr>
-<tr class="memitem:a9993a93fec9853212ebddb38005be635"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a9993a93fec9853212ebddb38005be635">allocViewUninitialized</a> (Mapping mapping={}, const Allocator &amp;alloc={}, Accessor={}) -&gt; <a class="el" href="structllama_1_1View.html">View</a>&lt; Mapping, <a class="el" href="namespacellama_1_1internal.html#a6b703634fd8ad7364cf42588add461bc">internal::AllocatorBlobType</a>&lt; Allocator, typename Mapping::RecordDim &gt;, Accessor &gt;</td></tr>
-<tr class="memdesc:a9993a93fec9853212ebddb38005be635"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as <a class="el" href="namespacellama.html#a8e5d70e7cec0c305424ed3890c4cedc6">allocView</a> but does not run field constructors.  <a href="namespacellama.html#a9993a93fec9853212ebddb38005be635">More...</a><br /></td></tr>
-<tr class="separator:a9993a93fec9853212ebddb38005be635"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67f91e79d969f654c770e0d6863a7593"><td class="memTemplParams" colspan="2">template&lt;typename Mapping , typename Allocator  = bloballoc::Vector, typename Accessor  = accessor::Default&gt; </td></tr>
+<tr class="memitem:a67f91e79d969f654c770e0d6863a7593"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a67f91e79d969f654c770e0d6863a7593">allocViewUninitialized</a> (Mapping mapping={}, const Allocator &amp;alloc={}, Accessor accessor={}) -&gt; <a class="el" href="structllama_1_1View.html">View</a>&lt; Mapping, <a class="el" href="namespacellama_1_1internal.html#a6b703634fd8ad7364cf42588add461bc">internal::AllocatorBlobType</a>&lt; Allocator, typename Mapping::RecordDim &gt;, Accessor &gt;</td></tr>
+<tr class="memdesc:a67f91e79d969f654c770e0d6863a7593"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as <a class="el" href="namespacellama.html#a8e5d70e7cec0c305424ed3890c4cedc6">allocView</a> but does not run field constructors.  <a href="namespacellama.html#a67f91e79d969f654c770e0d6863a7593">More...</a><br /></td></tr>
+<tr class="separator:a67f91e79d969f654c770e0d6863a7593"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af4c8d962f80ddc030f99b08479ecb083"><td class="memTemplParams" colspan="2">template&lt;typename Mapping , typename BlobType , typename Accessor &gt; </td></tr>
 <tr class="memitem:af4c8d962f80ddc030f99b08479ecb083"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#af4c8d962f80ddc030f99b08479ecb083">constructFields</a> (<a class="el" href="structllama_1_1View.html">View</a>&lt; Mapping, BlobType, Accessor &gt; &amp;view)</td></tr>
 <tr class="separator:af4c8d962f80ddc030f99b08479ecb083"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -473,9 +473,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ae800146eabadd222999acf6020391b75"><td class="memTemplParams" colspan="2">template&lt;typename View , typename NewBlobType  = CopyConst&lt;View, std::byte&gt;*, typename  = std::enable_if_t&lt;isView&lt;std::decay_t&lt;View&gt;&gt;&gt;&gt; </td></tr>
 <tr class="memitem:ae800146eabadd222999acf6020391b75"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ae800146eabadd222999acf6020391b75">shallowCopy</a> (<a class="el" href="structllama_1_1View.html">View</a> &amp;view)</td></tr>
 <tr class="separator:ae800146eabadd222999acf6020391b75"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e08773be1716c8fdc949c9db202c20f"><td class="memTemplParams" colspan="2">template&lt;typename NewAccessor , typename Mapping , typename BlobType , typename OldAccessor &gt; </td></tr>
-<tr class="memitem:a6e08773be1716c8fdc949c9db202c20f"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a6e08773be1716c8fdc949c9db202c20f">withAccessor</a> (<a class="el" href="structllama_1_1View.html">View</a>&lt; Mapping, BlobType, OldAccessor &gt; view)</td></tr>
-<tr class="separator:a6e08773be1716c8fdc949c9db202c20f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ce30d8d3b31c0aae29c78915aa20221"><td class="memTemplParams" colspan="2">template&lt;typename NewAccessor , typename Mapping , typename BlobType , typename OldAccessor &gt; </td></tr>
+<tr class="memitem:a7ce30d8d3b31c0aae29c78915aa20221"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a7ce30d8d3b31c0aae29c78915aa20221">withAccessor</a> (<a class="el" href="structllama_1_1View.html">View</a>&lt; Mapping, BlobType, OldAccessor &gt; view, NewAccessor newAccessor={})</td></tr>
+<tr class="separator:a7ce30d8d3b31c0aae29c78915aa20221"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a416bef7f5a6a9e2cecf4f9b090c9d4ed"><td class="memTemplParams" colspan="2">template&lt;typename TStoredParentView &gt; </td></tr>
 <tr class="memitem:a416bef7f5a6a9e2cecf4f9b090c9d4ed"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a416bef7f5a6a9e2cecf4f9b090c9d4ed">VirtualView</a> (TStoredParentView &amp;&amp;, typename std::remove_reference_t&lt; TStoredParentView &gt;::Mapping::ArrayIndex) -&gt; <a class="el" href="structllama_1_1VirtualView.html">VirtualView</a>&lt; TStoredParentView &gt;</td></tr>
 <tr class="separator:a416bef7f5a6a9e2cecf4f9b090c9d4ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -902,7 +902,7 @@ template&lt;typename RecordDim &gt; </div>
 
 <p>A <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> that owns and holds a single value. </p>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00206">206</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00207">207</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -1121,9 +1121,9 @@ template&lt;typename Mapping , typename Allocator  = bloballoc::Vector, typename
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Creates a view based on the given mapping, e.g. AoS or :SoA. For allocating the view's underlying memory, the specified allocator callable is used (or the default one, which is <a class="el" href="structllama_1_1bloballoc_1_1Vector.html">bloballoc::Vector</a>). The allocator callable is called with the alignment and size of bytes to allocate for each blob of the mapping. The constructors are run for all fields by calling <a class="el" href="namespacellama.html#af4c8d962f80ddc030f99b08479ecb083">constructFields</a>. This function is the preferred way to create a <a class="el" href="structllama_1_1View.html">View</a>. See also <a class="el" href="namespacellama.html#a9993a93fec9853212ebddb38005be635">allocViewUninitialized</a>. </p>
+<p>Creates a view based on the given mapping, e.g. AoS or :SoA. For allocating the view's underlying memory, the specified allocator callable is used (or the default one, which is <a class="el" href="structllama_1_1bloballoc_1_1Vector.html">bloballoc::Vector</a>). The allocator callable is called with the alignment and size of bytes to allocate for each blob of the mapping. The constructors are run for all fields by calling <a class="el" href="namespacellama.html#af4c8d962f80ddc030f99b08479ecb083">constructFields</a>. This function is the preferred way to create a <a class="el" href="structllama_1_1View.html">View</a>. See also <a class="el" href="namespacellama.html#a67f91e79d969f654c770e0d6863a7593">allocViewUninitialized</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00175">175</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00176">176</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -1159,7 +1159,7 @@ template&lt;std::size_t Dim, typename RecordDim &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00194">194</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00195">195</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -1191,12 +1191,12 @@ template&lt;std::size_t Dim, typename RecordDim &gt; </div>
 
 <p>Same as <a class="el" href="namespacellama.html#a3750d27a7f8dd111fbe32dc769b44120">allocViewStack</a> but does not run field constructors. </p>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00185">185</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00186">186</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a9993a93fec9853212ebddb38005be635"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9993a93fec9853212ebddb38005be635">&#9670;&nbsp;</a></span>allocViewUninitialized()</h2>
+<a id="a67f91e79d969f654c770e0d6863a7593"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a67f91e79d969f654c770e0d6863a7593">&#9670;&nbsp;</a></span>allocViewUninitialized()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1222,7 +1222,7 @@ template&lt;typename Mapping , typename Allocator  = bloballoc::Vector, typename
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">Accessor&#160;</td>
-          <td class="paramname"> = <code>{}</code>&#160;</td>
+          <td class="paramname"><em>accessor</em> = <code>{}</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1526,7 +1526,7 @@ template&lt;typename Mapping , typename BlobType , typename Accessor &gt; </div>
 </div><div class="memdoc">
 <p>Runs the constructor of all fields reachable through the given view. Computed fields are constructed if they return l-value references. If the mapping is a computed </p>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00115">115</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00116">116</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -2153,7 +2153,7 @@ template&lt;typename Mapping , std::size_t... Coords, typename Blobs &gt; </div>
 </div><div class="memdoc">
 <p>Using a mapping, maps the given array index and record coordinate to a memory reference onto the given blobs. </p><dl class="section return"><dt>Returns</dt><dd>Either an l-value reference if the record coord maps to a physical field or a proxy reference if mapped to a computed field. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00373">373</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00374">374</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -3114,7 +3114,7 @@ template&lt;typename View , typename NewBlobType  = CopyConst&lt;View, std::byte
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A new view with the same mapping as view, where each blob refers to the blob in view. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00643">643</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00644">644</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -3334,7 +3334,7 @@ template&lt;typename View , typename TransformBlobFunc , typename  = std::enable
 </div><div class="memdoc">
 <p>Applies the given transformation to the blobs of a view and creates a new view with the transformed blobs and the same mapping and accessor as the old view. </p>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00623">623</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00624">624</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -3512,8 +3512,8 @@ template&lt;typename TStoredParentView &gt; </div>
 
 </div>
 </div>
-<a id="a6e08773be1716c8fdc949c9db202c20f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6e08773be1716c8fdc949c9db202c20f">&#9670;&nbsp;</a></span>withAccessor()</h2>
+<a id="a7ce30d8d3b31c0aae29c78915aa20221"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ce30d8d3b31c0aae29c78915aa20221">&#9670;&nbsp;</a></span>withAccessor()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3527,8 +3527,18 @@ template&lt;typename NewAccessor , typename Mapping , typename BlobType , typena
           <td class="memname">auto llama::withAccessor </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structllama_1_1View.html">View</a>&lt; Mapping, BlobType, OldAccessor &gt;&#160;</td>
-          <td class="paramname"><em>view</em></td><td>)</td>
+          <td class="paramname"><em>view</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">NewAccessor&#160;</td>
+          <td class="paramname"><em>newAccessor</em> = <code>{}</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -3538,7 +3548,7 @@ template&lt;typename NewAccessor , typename Mapping , typename BlobType , typena
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00662">662</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00663">663</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -3998,7 +4008,7 @@ template&lt;typename Mapping , typename RecordCoord &gt; </div>
 
 <p>Returns true if the field accessed via the given mapping and record coordinate is a computed value. </p>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00079">79</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00080">80</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -4052,7 +4062,7 @@ template&lt;typename T &gt; </div>
 
 <p>Is true, if T is an instance of <a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00210">210</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00211">211</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -4078,7 +4088,7 @@ template&lt;typename View , typename BoundRecordCoord &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00213">213</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00214">214</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -4286,7 +4296,7 @@ template&lt;typename View &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00603">603</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00604">604</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -4312,7 +4322,7 @@ template&lt;typename Mapping , typename BlobType , typename Accessor &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00606">606</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00607">607</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -4600,7 +4610,7 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Thu Nov 10 2022 23:56:24 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Fri Nov 11 2022 01:40:44 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -132,8 +132,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa827a9b348f8608d209b74065c33fea9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#aa827a9b348f8608d209b74065c33fea9">View</a> ()=default</td></tr>
 <tr class="memdesc:aa827a9b348f8608d209b74065c33fea9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs default initialization of the blob array.  <a href="structllama_1_1View.html#aa827a9b348f8608d209b74065c33fea9">More...</a><br /></td></tr>
 <tr class="separator:aa827a9b348f8608d209b74065c33fea9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab0a991f33d29706635619c974d413273"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#ab0a991f33d29706635619c974d413273">View</a> (<a class="el" href="structllama_1_1View.html#ab78c51e95a88b07395d0311107f31ba3">Mapping</a> <a class="el" href="structllama_1_1View.html#a02995d9561c50196f5efae24031c0af6">mapping</a>, <a class="el" href="structllama_1_1Array.html">Array</a>&lt; <a class="el" href="structllama_1_1View.html#a3fbca466d7e6fdfd1ed0e368a224f8c4">BlobType</a>, Mapping::blobCount &gt; <a class="el" href="structllama_1_1View.html#ad7f3890ac6ad4ded0c0327f120e62953">storageBlobs</a>)</td></tr>
-<tr class="separator:ab0a991f33d29706635619c974d413273"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5f8771a67e8c1f7f3fd6cf7378118f1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#ad5f8771a67e8c1f7f3fd6cf7378118f1">View</a> (<a class="el" href="structllama_1_1View.html#ab78c51e95a88b07395d0311107f31ba3">Mapping</a> <a class="el" href="structllama_1_1View.html#a02995d9561c50196f5efae24031c0af6">mapping</a>, <a class="el" href="structllama_1_1Array.html">Array</a>&lt; <a class="el" href="structllama_1_1View.html#a3fbca466d7e6fdfd1ed0e368a224f8c4">BlobType</a>, Mapping::blobCount &gt; <a class="el" href="structllama_1_1View.html#ad7f3890ac6ad4ded0c0327f120e62953">storageBlobs</a>, <a class="el" href="structllama_1_1View.html#ac7ca80e1aa62ebe6ca0df8532bda9efc">Accessor</a> <a class="el" href="structllama_1_1View.html#a97b7ae30e104e9b9aa3701b4958b4a4e">accessor</a>={})</td></tr>
+<tr class="separator:ad5f8771a67e8c1f7f3fd6cf7378118f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a02995d9561c50196f5efae24031c0af6"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a02995d9561c50196f5efae24031c0af6">mapping</a> () -&gt; <a class="el" href="structllama_1_1View.html#ab78c51e95a88b07395d0311107f31ba3">Mapping</a> &amp;</td></tr>
 <tr class="separator:a02995d9561c50196f5efae24031c0af6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a181eaaaf491f3ccf599503410cdbe42e"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a181eaaaf491f3ccf599503410cdbe42e">mapping</a> () const -&gt; const <a class="el" href="structllama_1_1View.html#ab78c51e95a88b07395d0311107f31ba3">Mapping</a> &amp;</td></tr>
@@ -395,8 +395,8 @@ template&lt;typename TMapping , typename TBlobType , typename TAccessor  = acces
 
 </div>
 </div>
-<a id="ab0a991f33d29706635619c974d413273"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab0a991f33d29706635619c974d413273">&#9670;&nbsp;</a></span>View() <span class="overload">[2/2]</span></h2>
+<a id="ad5f8771a67e8c1f7f3fd6cf7378118f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad5f8771a67e8c1f7f3fd6cf7378118f1">&#9670;&nbsp;</a></span>View() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -416,7 +416,13 @@ template&lt;typename TMapping , typename TBlobType , typename TAccessor  = acces
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="structllama_1_1Array.html">Array</a>&lt; <a class="el" href="structllama_1_1View.html#a3fbca466d7e6fdfd1ed0e368a224f8c4">BlobType</a>, Mapping::blobCount &gt;&#160;</td>
-          <td class="paramname"><em>storageBlobs</em>&#160;</td>
+          <td class="paramname"><em>storageBlobs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structllama_1_1View.html#ac7ca80e1aa62ebe6ca0df8532bda9efc">Accessor</a>&#160;</td>
+          <td class="paramname"><em>accessor</em> = <code>{}</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -462,7 +468,7 @@ template&lt;typename TMapping , typename TBlobType , typename TAccessor  = acces
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00451">451</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00452">452</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -492,7 +498,7 @@ template&lt;typename TMapping , typename TBlobType , typename TAccessor  = acces
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00456">456</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00457">457</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -522,7 +528,7 @@ template&lt;typename TMapping , typename TBlobType , typename TAccessor  = acces
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00560">560</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00561">561</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -552,7 +558,7 @@ template&lt;typename TMapping , typename TBlobType , typename TAccessor  = acces
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00566">566</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00567">567</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -582,7 +588,7 @@ template&lt;typename TMapping , typename TBlobType , typename TAccessor  = acces
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00572">572</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00573">573</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -612,7 +618,7 @@ template&lt;typename TMapping , typename TBlobType , typename TAccessor  = acces
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00578">578</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00579">579</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -642,7 +648,7 @@ template&lt;typename TMapping , typename TBlobType , typename TAccessor  = acces
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00441">441</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00442">442</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -672,7 +678,7 @@ template&lt;typename TMapping , typename TBlobType , typename TAccessor  = acces
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00446">446</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00447">447</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -703,7 +709,7 @@ template&lt;typename TMapping , typename TBlobType , typename TAccessor  = acces
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00484">484</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00485">485</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -736,7 +742,7 @@ template&lt;typename TMapping , typename TBlobType , typename TAccessor  = acces
 
 <p>Retrieves the <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> at the given <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a> index. </p>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00470">470</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00471">471</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -769,7 +775,7 @@ template&lt;typename... Indices, std::enable_if_t&lt; std::conjunction_v&lt; std
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00515">515</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00516">516</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -803,7 +809,7 @@ template&lt;typename... Indices, std::enable_if_t&lt; std::conjunction_v&lt; std
 </div><div class="memdoc">
 <p>Retrieves the <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> at the <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a> index constructed from the passed component indices. </p>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00503">503</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00504">504</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -835,7 +841,7 @@ template&lt;typename V &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00463">463</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00464">464</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -866,7 +872,7 @@ template&lt;typename TMapping , typename TBlobType , typename TAccessor  = acces
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00532">532</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00533">533</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -898,7 +904,7 @@ template&lt;typename TMapping , typename TBlobType , typename TAccessor  = acces
 </div><div class="memdoc">
 <p>Retrieves the <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> at the <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a> index constructed from the passed component indices. </p>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00526">526</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00527">527</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -930,7 +936,7 @@ template&lt;typename V &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00540">540</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00541">541</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -961,7 +967,7 @@ template&lt;typename TMapping , typename TBlobType , typename TAccessor  = acces
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00553">553</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00554">554</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -994,7 +1000,7 @@ template&lt;typename TMapping , typename TBlobType , typename TAccessor  = acces
 
 <p>Retrieves the <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> at the 1D <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a> index constructed from the passed index. </p>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00547">547</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00548">548</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -1023,7 +1029,7 @@ template&lt;typename TView , typename TBoundRecordCoord , bool OwnView&gt; </div
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00587">587</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00588">588</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -1042,7 +1048,7 @@ template&lt;typename TMapping , typename TBlobType , typename TAccessor  = acces
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00583">583</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00584">584</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -1055,7 +1061,7 @@ template&lt;typename TMapping , typename TBlobType , typename TAccessor  = acces
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="structllama_1_1View.html">View</a></li>
-    <li class="footer">Generated on Thu Nov 10 2022 23:56:24 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Fri Nov 11 2022 01:40:44 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
