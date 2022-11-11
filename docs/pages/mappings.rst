@@ -360,6 +360,21 @@ This mappings require the C++ implementation to use `IEEE 754 <https://en.wikipe
             mapping{exponentBits, mantissaBits, extents}; // use 1+4+7 bits for each floating-point in RecordDim
 
 
+PermuteArrayIndex
+-----------------
+
+The PermuteArrayIndex mapping is a meta mapping that wraps over an inner mapping.
+It permutes the array indices before passing the index information to the inner mapping.
+
+.. code-block:: C++
+
+    using InnerMapping = ...;
+
+    llama::mapping::PermuteArrayIndex<InnerMapping, 2, 0, 1> mapping{extents};
+    auto view = llama::allocView(mapping);
+    view(1, 2, 3); // will pass {3, 1, 2} to inner mapping
+
+
 .. _label-tree-mapping:
 
 Tree (deprecated)
