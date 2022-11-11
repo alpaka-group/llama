@@ -94,8 +94,8 @@ Record coordinates
 .. doxygenvariable:: llama::recordCoordCommonPrefixIsBigger
 .. doxygenvariable:: llama::recordCoordCommonPrefixIsSame
 
-View creation
--------------
+Views
+-----
 
 .. _label-api-allocView:
 .. doxygenfunction:: llama::allocView
@@ -104,6 +104,9 @@ View creation
 .. doxygenfunction:: llama::allocViewStack
 .. doxygentypedef:: llama::One
 .. doxygenfunction:: llama::copyRecord
+
+.. doxygenfunction:: transformBlobs
+.. doxygenfunction:: shallowCopy
 
 .. _label-api-bloballocators:
 
@@ -120,33 +123,51 @@ Blob allocators
 Mappings
 --------
 
-.. doxygentypedef:: llama::mapping::AlignedAoS
-.. doxygentypedef:: llama::mapping::PackedAoS
 .. doxygenstruct:: llama::mapping::AoS
    :members:
+.. doxygentypedef:: llama::mapping::AlignedAoS
+.. doxygentypedef:: llama::mapping::MinAlignedAoS
+.. doxygentypedef:: llama::mapping::PackedAoS
 .. doxygentypedef:: llama::mapping::SingleBlobSoA
 .. doxygentypedef:: llama::mapping::MultiBlobSoA
-.. doxygenstruct:: llama::mapping::SoA
-   :members:
-.. doxygenstruct:: llama::mapping::One
-   :members:
 .. doxygenstruct:: llama::mapping::AoSoA
    :members:
 .. doxygenvariable:: llama::mapping::maxLanes
-.. doxygenstruct:: llama::mapping::Split
-   :members:
-.. doxygenstruct:: llama::mapping::Trace
-   :members:
-.. doxygenstruct:: llama::mapping::Heatmap
-   :members:
-.. doxygenstruct:: llama::mapping::Bytesplit
-   :members:
-.. doxygenstruct:: llama::mapping::ChangeType
-   :members:
 .. doxygenstruct:: llama::mapping::BitPackedIntSoA
    :members:
 .. doxygenstruct:: llama::mapping::BitPackedFloatSoA
    :members:
+.. doxygenstruct:: llama::mapping::Bytesplit
+   :members:
+.. doxygenstruct:: llama::mapping::Byteswap
+   :members:
+.. doxygenstruct:: llama::mapping::ChangeType
+   :members:
+.. doxygenstruct:: llama::mapping::Heatmap
+   :members:
+.. doxygenstruct:: llama::mapping::Null
+   :members:
+.. doxygenstruct:: llama::mapping::One
+   :members:
+.. doxygenstruct:: llama::mapping::Projection
+   :members:
+.. doxygenstruct:: llama::mapping::SoA
+   :members:
+.. doxygenstruct:: llama::mapping::Split
+   :members:
+.. doxygenstruct:: llama::mapping::Trace
+   :members:
+
+Acessors
+^^^^^^^^
+
+.. doxygenstruct:: llama::accessor::Default
+.. doxygenstruct:: llama::accessor::ReadOnlyByValue
+.. doxygenstruct:: llama::accessor::Const
+.. doxygenstruct:: llama::accessor::Restrict
+.. doxygenstruct:: llama::accessor::Atomic
+
+.. doxygenfunction:: withAccessor
 
 RecordDim flattener
 ^^^^^^^^^^^^^^^^^^^
