@@ -228,9 +228,9 @@ but not how often the program reads/writes to those locations.
     ...
     mapping.printFieldHits(); // print report with number of computed memory locations
 
+
 Null
 ----
-
 
 The Null mappings is a fully computed mapping that maps all elements to nothing.
 Writing data through a reference obtained from the Null mapping discards the value.
@@ -250,8 +250,25 @@ It transforms the record dimension by replacing each field type by a byte array 
 
 .. code-block:: C++
 
+    template <typename RecordDim, typename ArrayExtents>
     using InnerMapping = ...;
+
     llama::mapping::Bytesplit<ArrayExtents, RecordDim, InnerMapping>
+            mapping{extents};
+
+
+Byteswap
+---------
+
+The Byteswap mapping is a computed meta mapping that wraps over an inner mapping.
+It swaps the bytes of all values when reading/writing.
+
+.. code-block:: C++
+
+    template <typename RecordDim, typename ArrayExtents>
+    using InnerMapping = ...;
+
+    llama::mapping::Byteswap<ArrayExtents, RecordDim, InnerMapping>
             mapping{extents};
 
 
@@ -263,7 +280,9 @@ and mapping the adapted record dimension with a further mapping.
 
 .. code-block:: C++
 
+    template <typename RecordDim, typename ArrayExtents>
     using InnerMapping = ...;
+
     using ReplacementMap = mp_list<
         mp_list<int, short>,
         mp_list<double, float>
@@ -274,6 +293,40 @@ and mapping the adapted record dimension with a further mapping.
 In this example, all fields of type :cpp:`int` in the record dimension will be stored as :cpp:`short`,
 and all fields of type :cpp:`double` will be stored as :cpp:`float`.
 Conversion between the data types is done on loading and storing through a proxy reference returned from the mapping.
+
+
+Projection
+----------
+
+The Projection mapping is a computed meta mapping that allows to apply a function on load/store from/two selected fields in the record dimension.
+These functions are allowed to change the data type of fields in the record dimension.
+The modified record dimension is then mapped with a further mapping.
+
+.. code-block:: C++
+
+    template <typename RecordDim, typename ArrayExtents>
+    using InnerMapping = ...;
+
+    struct Sqrt {
+        static auto load(float v) -> double {
+            return std::sqrt(v);
+        }
+
+        static auto store(double d) -> float {
+            return static_cast<float>(d * d);
+        }
+    };
+
+    using ReplacementMap = mp_list<
+        mp_list<double, Sqrt>,
+        mp_list<RecordCoord<0, 1>, Sqrt>
+    >;
+    llama::mapping::ChangeType<ArrayExtents, RecordDim, InnerMapping, ReplacementMap>
+            mapping{extents};
+
+In this example, all fields of type :cpp:`double`, and the field at coordinate RecordCoord<0, 1>, in the record dimension will store the product with itself as :cpp:`float`.
+The load/store functions are called on loading and storing through a proxy reference returned from the mapping.
+
 
 BitPackedIntSoA
 ---------------
