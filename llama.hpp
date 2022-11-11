@@ -3250,10 +3250,11 @@ namespace llama
     LLAMA_FN_HOST_ACC_INLINE auto allocViewUninitialized(
         Mapping mapping = {},
         const Allocator& alloc = {},
-        Accessor = {}) -> View<Mapping, internal::AllocatorBlobType<Allocator, typename Mapping::RecordDim>, Accessor>
+        Accessor accessor = {})
+        -> View<Mapping, internal::AllocatorBlobType<Allocator, typename Mapping::RecordDim>, Accessor>
     {
         auto blobs = internal::makeBlobArray(alloc, mapping, std::make_index_sequence<Mapping::blobCount>{});
-        return {std::move(mapping), std::move(blobs)};
+        return {std::move(mapping), std::move(blobs), std::move(accessor)};
     }
 
     namespace internal
@@ -3603,7 +3604,6 @@ namespace llama
 #endif
     {
         static_assert(!std::is_const_v<TMapping>);
-        static_assert(std::is_empty_v<TAccessor>, "Stateful accessors are not implemented");
         using Mapping = TMapping;
         using BlobType = TBlobType;
         using ArrayExtents = typename Mapping::ArrayExtents;
@@ -3628,8 +3628,9 @@ namespace llama
         View() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        View(Mapping mapping, Array<BlobType, Mapping::blobCount> storageBlobs)
+        View(Mapping mapping, Array<BlobType, Mapping::blobCount> storageBlobs, Accessor accessor = {})
             : Mapping(std::move(mapping))
+            , Accessor(std::move(accessor))
             , storageBlobs(std::move(storageBlobs))
         {
         }
@@ -3825,8 +3826,8 @@ namespace llama
             std::make_index_sequence<blobCount>{});
         return llama::View<typename View::Mapping, typename decltype(blobs)::value_type, typename View::Accessor>{
             view.mapping(),
-            std::move(blobs)/*,
-            view.accessor()*/};
+            std::move(blobs),
+            view.accessor()};
     }
 
     /// Creates a shallow copy of a view. This copy must not outlive the view, since it references its blob array.
@@ -3855,9 +3856,12 @@ namespace llama
     // \param view A view which's mapping and blobs are copied into a new view with the different accessor. If you no
     // longer need the old view, consider moving it into the argument of this function.
     template<typename NewAccessor, typename Mapping, typename BlobType, typename OldAccessor>
-    LLAMA_FN_HOST_ACC_INLINE auto withAccessor(View<Mapping, BlobType, OldAccessor> view)
+    LLAMA_FN_HOST_ACC_INLINE auto withAccessor(View<Mapping, BlobType, OldAccessor> view, NewAccessor newAccessor = {})
     {
-        return View<Mapping, BlobType, NewAccessor>{std::move(view.mapping()), std::move(view.storageBlobs)};
+        return View<Mapping, BlobType, NewAccessor>{
+            std::move(view.mapping()),
+            std::move(view.storageBlobs),
+            std::move(newAccessor)};
     }
 
     /// Like a \ref View, but array indices are shifted.
