@@ -1,5 +1,7 @@
 var NAVTREEINDEX5 =
 {
+"structllama_1_1mapping_1_1internal_1_1PartionedRecordDim.html#a486051aac95e0cf8f9ad00fca4ea1273":[2,0,1,3,0,14,0],
+"structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html":[2,0,1,3,0,15],
 "structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html#a798a2670d572e44a72ea01cf5fb0698a":[2,0,1,3,0,15,5],
 "structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html#a7b1689236c1ae5b422bd586b56059914":[2,0,1,3,0,15,2],
 "structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html#aa0a824402a1e259326fbeb52e9545776":[2,0,1,3,0,15,3],

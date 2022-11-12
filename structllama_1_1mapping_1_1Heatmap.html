@@ -112,7 +112,7 @@ $(document).ready(function(){initNavTree('structllama_1_1mapping_1_1Heatmap.html
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="structllama_1_1mapping_1_1Heatmap__coll__graph.png" border="0" usemap="#llama_1_1mapping_1_1Heatmap_3_01Mapping_00_01Granularity_00_01TCountType_01_4_coll__map" alt="Collaboration graph"/></div>
 <map name="llama_1_1mapping_1_1Heatmap_3_01Mapping_00_01Granularity_00_01TCountType_01_4_coll__map" id="llama_1_1mapping_1_1Heatmap_3_01Mapping_00_01Granularity_00_01TCountType_01_4_coll__map">
-<area shape="rect" title=" " alt="" coords="5,185,197,241"/>
+<area shape="rect" title=" " alt="" coords="5,200,197,256"/>
 <area shape="rect" title=" " alt="" coords="41,96,119,123"/>
 <area shape="rect" title="STL class." alt="" coords="144,96,269,123"/>
 <area shape="rect" title="STL class." alt="" coords="123,5,290,47"/>
@@ -148,9 +148,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2f98a642116da1f5d8b732ea0aceba1e"><td class="memTemplParams" colspan="2">template&lt;typename Blobs &gt; </td></tr>
 <tr class="memitem:a2f98a642116da1f5d8b732ea0aceba1e"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Heatmap.html#a2f98a642116da1f5d8b732ea0aceba1e">blockHits</a> (size_type forBlobI, Blobs &amp;blobs) const -&gt; <a class="el" href="structllama_1_1mapping_1_1Heatmap.html#af6a30d2930a1dbdb549142ab6a5218de">CountType</a> *</td></tr>
 <tr class="separator:a2f98a642116da1f5d8b732ea0aceba1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac79972c05db9647a1e8476b8c122aa8a"><td class="memTemplParams" colspan="2">template&lt;typename Blobs , typename OStream &gt; </td></tr>
-<tr class="memitem:ac79972c05db9647a1e8476b8c122aa8a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Heatmap.html#ac79972c05db9647a1e8476b8c122aa8a">writeGnuplotDataFile</a> (const Blobs &amp;blobs, OStream &amp;&amp;os, std::size_t wrapAfterBlocks=64) const</td></tr>
-<tr class="separator:ac79972c05db9647a1e8476b8c122aa8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36979bf44114bf3a2d86aac37c2e1a7e"><td class="memTemplParams" colspan="2">template&lt;typename Blobs , typename OStream &gt; </td></tr>
+<tr class="memitem:a36979bf44114bf3a2d86aac37c2e1a7e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Heatmap.html#a36979bf44114bf3a2d86aac37c2e1a7e">writeGnuplotDataFileAscii</a> (const Blobs &amp;blobs, OStream &amp;&amp;os, std::size_t wrapAfterBlocks=64) const</td></tr>
+<tr class="separator:a36979bf44114bf3a2d86aac37c2e1a7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa18073a202fc4034069651a0c1338b64"><td class="memTemplParams" colspan="2">template&lt;typename Blobs , typename OStream &gt; </td></tr>
+<tr class="memitem:aa18073a202fc4034069651a0c1338b64"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Heatmap.html#aa18073a202fc4034069651a0c1338b64">writeGnuplotDataFileBinary</a> (const Blobs &amp;blobs, OStream &amp;&amp;os, std::size_t afterBlobRoundUpTo=64) const</td></tr>
+<tr class="separator:aa18073a202fc4034069651a0c1338b64"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -164,9 +167,12 @@ Static Public Attributes</h2></td></tr>
 <tr class="separator:a0ed006df2279a44a51949de4885f25e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa37d9b62224479d411cab7dc3a862133"><td class="memItemLeft" align="right" valign="top">static constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Heatmap.html#aa37d9b62224479d411cab7dc3a862133">blobCount</a> = Mapping::blobCount * 2</td></tr>
 <tr class="separator:aa37d9b62224479d411cab7dc3a862133"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a99a17f227f0eda38cde672383f19b733"><td class="memItemLeft" align="right" valign="top">static constexpr std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Heatmap.html#a99a17f227f0eda38cde672383f19b733">gnuplotScript</a></td></tr>
-<tr class="memdesc:a99a17f227f0eda38cde672383f19b733"><td class="mdescLeft">&#160;</td><td class="mdescRight">An example script for plotting the heatmap data using gnuplot.  <a href="structllama_1_1mapping_1_1Heatmap.html#a99a17f227f0eda38cde672383f19b733">More...</a><br /></td></tr>
-<tr class="separator:a99a17f227f0eda38cde672383f19b733"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a732b6e767007550c1acf855fdb7f958b"><td class="memItemLeft" align="right" valign="top">static constexpr std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Heatmap.html#a732b6e767007550c1acf855fdb7f958b">gnuplotScriptAscii</a></td></tr>
+<tr class="memdesc:a732b6e767007550c1acf855fdb7f958b"><td class="mdescLeft">&#160;</td><td class="mdescRight">An example script for plotting the ASCII heatmap data using gnuplot.  <a href="structllama_1_1mapping_1_1Heatmap.html#a732b6e767007550c1acf855fdb7f958b">More...</a><br /></td></tr>
+<tr class="separator:a732b6e767007550c1acf855fdb7f958b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af46157df5d2bec1171ee6990943796df"><td class="memItemLeft" align="right" valign="top">static constexpr std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Heatmap.html#af46157df5d2bec1171ee6990943796df">gnuplotScriptBinary</a></td></tr>
+<tr class="memdesc:af46157df5d2bec1171ee6990943796df"><td class="mdescLeft">&#160;</td><td class="mdescRight">An example script for plotting the binary heatmap data using gnuplot.  <a href="structllama_1_1mapping_1_1Heatmap.html#af46157df5d2bec1171ee6990943796df">More...</a><br /></td></tr>
+<tr class="separator:af46157df5d2bec1171ee6990943796df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename Mapping, typename Mapping::ArrayExtents::value_type Granularity = 1, typename TCountType = std::size_t&gt;<br />
@@ -539,8 +545,8 @@ template&lt;std::size_t... RecordCoords&gt; </div>
 
 </div>
 </div>
-<a id="ac79972c05db9647a1e8476b8c122aa8a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac79972c05db9647a1e8476b8c122aa8a">&#9670;&nbsp;</a></span>writeGnuplotDataFile()</h2>
+<a id="a36979bf44114bf3a2d86aac37c2e1a7e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a36979bf44114bf3a2d86aac37c2e1a7e">&#9670;&nbsp;</a></span>writeGnuplotDataFileAscii()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -553,7 +559,7 @@ template&lt;typename Blobs , typename OStream &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="structllama_1_1mapping_1_1Heatmap.html">llama::mapping::Heatmap</a>&lt; Mapping, Granularity, TCountType &gt;::writeGnuplotDataFile </td>
+          <td class="memname">void <a class="el" href="structllama_1_1mapping_1_1Heatmap.html">llama::mapping::Heatmap</a>&lt; Mapping, Granularity, TCountType &gt;::writeGnuplotDataFileAscii </td>
           <td>(</td>
           <td class="paramtype">const Blobs &amp;&#160;</td>
           <td class="paramname"><em>blobs</em>, </td>
@@ -582,7 +588,7 @@ template&lt;typename Blobs , typename OStream &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Writes a data file suitable for gnuplot containing the heatmap data. You can use the script provided by <a class="el" href="structllama_1_1mapping_1_1Heatmap.html#a99a17f227f0eda38cde672383f19b733">gnuplotScript</a> to plot this data file. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Writes a data file suitable for gnuplot containing the heatmap data. You can use the script provided by gnuplotScript to plot this data file. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">blobs</td><td>The blobs of the view containing this mapping </td></tr>
     <tr><td class="paramname">os</td><td>The stream to write the data to. Should be some form of std::ostream. </td></tr>
@@ -591,6 +597,54 @@ template&lt;typename Blobs , typename OStream &gt; </div>
 </dl>
 
 <p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00124">124</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aa18073a202fc4034069651a0c1338b64"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa18073a202fc4034069651a0c1338b64">&#9670;&nbsp;</a></span>writeGnuplotDataFileBinary()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Mapping , typename Mapping::ArrayExtents::value_type Granularity = 1, typename TCountType  = std::size_t&gt; </div>
+<div class="memtemplate">
+template&lt;typename Blobs , typename OStream &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="structllama_1_1mapping_1_1Heatmap.html">llama::mapping::Heatmap</a>&lt; Mapping, Granularity, TCountType &gt;::writeGnuplotDataFileBinary </td>
+          <td>(</td>
+          <td class="paramtype">const Blobs &amp;&#160;</td>
+          <td class="paramname"><em>blobs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">OStream &amp;&amp;&#160;</td>
+          <td class="paramname"><em>os</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>afterBlobRoundUpTo</em> = <code>64</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00140">140</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
 
 </div>
 </div>
@@ -621,8 +675,8 @@ template&lt;typename Mapping , typename Mapping::ArrayExtents::value_type Granul
 
 </div>
 </div>
-<a id="a99a17f227f0eda38cde672383f19b733"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a99a17f227f0eda38cde672383f19b733">&#9670;&nbsp;</a></span>gnuplotScript</h2>
+<a id="a732b6e767007550c1acf855fdb7f958b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a732b6e767007550c1acf855fdb7f958b">&#9670;&nbsp;</a></span>gnuplotScriptAscii</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -633,7 +687,7 @@ template&lt;typename Mapping , typename Mapping::ArrayExtents::value_type Granul
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr std::string_view <a class="el" href="structllama_1_1mapping_1_1Heatmap.html">llama::mapping::Heatmap</a>&lt; Mapping, Granularity, TCountType &gt;::gnuplotScript</td>
+          <td class="memname">constexpr std::string_view <a class="el" href="structllama_1_1mapping_1_1Heatmap.html">llama::mapping::Heatmap</a>&lt; Mapping, Granularity, TCountType &gt;::gnuplotScriptAscii</td>
         </tr>
       </table>
   </td>
@@ -644,20 +698,66 @@ template&lt;typename Mapping , typename Mapping::ArrayExtents::value_type Granul
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">= R<span class="stringliteral">&quot;(#!/bin/bash</span></div>
 <div class="line"><span class="stringliteral">gnuplot -p &lt;&lt;EOF</span></div>
-<div class="line"><span class="stringliteral">set view map</span></div>
+<div class="line"><span class="stringliteral">file = &#39;${1:-plot.bin}&#39;</span></div>
+<div class="line"><span class="stringliteral"></span> </div>
 <div class="line"><span class="stringliteral">set xtics format &quot;&quot;</span></div>
 <div class="line"><span class="stringliteral">set x2tics autofreq 32</span></div>
-<div class="line"><span class="stringliteral">set ytics autofreq 1024</span></div>
+<div class="line"><span class="stringliteral">set ytics autofreq 32</span></div>
 <div class="line"><span class="stringliteral">set yrange [] reverse</span></div>
 <div class="line"><span class="stringliteral">set link x2; set link y2</span></div>
 <div class="line"><span class="stringliteral">set x2label &quot;Byte&quot;</span></div>
-<div class="line"><span class="stringliteral">plot &#39;${1:-plot.dat}&#39; matrix with image pixels axes x2y1</span></div>
+<div class="line"><span class="stringliteral">plot file matrix with image pixels axes x2y1</span></div>
 <div class="line"><span class="stringliteral">EOF</span></div>
 <div class="line"><span class="stringliteral">)&quot;</span></div>
 </div><!-- fragment -->
-<p>An example script for plotting the heatmap data using gnuplot. </p>
+<p>An example script for plotting the ASCII heatmap data using gnuplot. </p>
 
-<p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00139">139</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00156">156</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
+
+</div>
+</div>
+<a id="af46157df5d2bec1171ee6990943796df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af46157df5d2bec1171ee6990943796df">&#9670;&nbsp;</a></span>gnuplotScriptBinary</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Mapping , typename Mapping::ArrayExtents::value_type Granularity = 1, typename TCountType  = std::size_t&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr std::string_view <a class="el" href="structllama_1_1mapping_1_1Heatmap.html">llama::mapping::Heatmap</a>&lt; Mapping, Granularity, TCountType &gt;::gnuplotScriptBinary</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">= R<span class="stringliteral">&quot;(#!/bin/bash</span></div>
+<div class="line"><span class="stringliteral">gnuplot -p &lt;&lt;EOF</span></div>
+<div class="line"><span class="stringliteral">file = &#39;${1:-plot.bin}&#39;</span></div>
+<div class="line"><span class="stringliteral">row = &#39;${2:-64}&#39;</span></div>
+<div class="line"><span class="stringliteral">format = &#39;${3:-%uint64}&#39;</span></div>
+<div class="line"><span class="stringliteral"></span> </div>
+<div class="line"><span class="stringliteral">counts = system(&#39;stat -c &quot;%s&quot; ${1:-plot.bin}&#39;)/8</span></div>
+<div class="line"><span class="stringliteral"></span> </div>
+<div class="line"><span class="stringliteral">set xtics format &quot;&quot;</span></div>
+<div class="line"><span class="stringliteral">set x2tics autofreq 32</span></div>
+<div class="line"><span class="stringliteral">set ytics autofreq 32</span></div>
+<div class="line"><span class="stringliteral">set yrange [] reverse</span></div>
+<div class="line"><span class="stringliteral">set link x2; set link y2</span></div>
+<div class="line"><span class="stringliteral">set x2label &quot;Byte&quot;</span></div>
+<div class="line"><span class="stringliteral">plot file binary array=(row,counts/row) format=format with image pixels axes x2y1</span></div>
+<div class="line"><span class="stringliteral">EOF</span></div>
+<div class="line"><span class="stringliteral">)&quot;</span></div>
+</div><!-- fragment -->
+<p>An example script for plotting the binary heatmap data using gnuplot. </p>
+
+<p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00171">171</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
 
 </div>
 </div>
@@ -696,7 +796,7 @@ template&lt;typename Mapping , typename Mapping::ArrayExtents::value_type Granul
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1Heatmap.html">Heatmap</a></li>
-    <li class="footer">Generated on Sat Nov 12 2022 19:46:54 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Sat Nov 12 2022 19:59:49 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

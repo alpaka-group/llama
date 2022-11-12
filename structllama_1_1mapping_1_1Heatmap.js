@@ -11,8 +11,10 @@ var structllama_1_1mapping_1_1Heatmap =
     [ "blockHitsSize", "structllama_1_1mapping_1_1Heatmap.html#ad850ca6b2aa4a7c5bca927c89a94fdb4", null ],
     [ "compute", "structllama_1_1mapping_1_1Heatmap.html#a801b2fc29f6a7d8a5da7fcce594227f0", null ],
     [ "isComputed", "structllama_1_1mapping_1_1Heatmap.html#ac0367a8b8a7b5edb75411364e8b1e7de", null ],
-    [ "writeGnuplotDataFile", "structllama_1_1mapping_1_1Heatmap.html#ac79972c05db9647a1e8476b8c122aa8a", null ],
+    [ "writeGnuplotDataFileAscii", "structllama_1_1mapping_1_1Heatmap.html#a36979bf44114bf3a2d86aac37c2e1a7e", null ],
+    [ "writeGnuplotDataFileBinary", "structllama_1_1mapping_1_1Heatmap.html#aa18073a202fc4034069651a0c1338b64", null ],
     [ "blobCount", "structllama_1_1mapping_1_1Heatmap.html#aa37d9b62224479d411cab7dc3a862133", null ],
-    [ "gnuplotScript", "structllama_1_1mapping_1_1Heatmap.html#a99a17f227f0eda38cde672383f19b733", null ],
+    [ "gnuplotScriptAscii", "structllama_1_1mapping_1_1Heatmap.html#a732b6e767007550c1acf855fdb7f958b", null ],
+    [ "gnuplotScriptBinary", "structllama_1_1mapping_1_1Heatmap.html#af46157df5d2bec1171ee6990943796df", null ],
     [ "granularity", "structllama_1_1mapping_1_1Heatmap.html#a0ed006df2279a44a51949de4885f25e3", null ]
 ];

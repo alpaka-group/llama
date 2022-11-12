@@ -29,6 +29,7 @@ var searchData=
   ['gettypeimpl_3c_20childtype_5bn_5d_2c_20recordcoord_3c_20headcoord_2c_20tailcoords_2e_2e_2e_20_3e_20_3e_236',['GetTypeImpl&lt; ChildType[N], RecordCoord&lt; HeadCoord, TailCoords... &gt; &gt;',['../structllama_1_1internal_1_1GetTypeImpl_3_01ChildType_0fN_0e_00_01RecordCoord_3_01HeadCoord_00_01TailCoords_8_8_8_01_4_01_4.html',1,'llama::internal']]],
   ['gettypeimpl_3c_20record_3c_20children_2e_2e_2e_20_3e_2c_20recordcoord_3c_20headcoord_2c_20tailcoords_2e_2e_2e_20_3e_20_3e_237',['GetTypeImpl&lt; Record&lt; Children... &gt;, RecordCoord&lt; HeadCoord, TailCoords... &gt; &gt;',['../structllama_1_1internal_1_1GetTypeImpl_3_01Record_3_01Children_8_8_8_01_4_00_01RecordCoord_3_01Hd335281b58bf9419f48b7fc65f5657ab.html',1,'llama::internal']]],
   ['gettypeimpl_3c_20t_2c_20recordcoord_3c_3e_20_3e_238',['GetTypeImpl&lt; T, RecordCoord&lt;&gt; &gt;',['../structllama_1_1internal_1_1GetTypeImpl_3_01T_00_01RecordCoord_3_4_01_4.html',1,'llama::internal']]],
-  ['gnuplotscript_239',['gnuplotScript',['../structllama_1_1mapping_1_1Heatmap.html#a99a17f227f0eda38cde672383f19b733',1,'llama::mapping::Heatmap']]],
-  ['granularity_240',['granularity',['../structllama_1_1mapping_1_1Heatmap.html#a0ed006df2279a44a51949de4885f25e3',1,'llama::mapping::Heatmap']]]
+  ['gnuplotscriptascii_239',['gnuplotScriptAscii',['../structllama_1_1mapping_1_1Heatmap.html#a732b6e767007550c1acf855fdb7f958b',1,'llama::mapping::Heatmap']]],
+  ['gnuplotscriptbinary_240',['gnuplotScriptBinary',['../structllama_1_1mapping_1_1Heatmap.html#af46157df5d2bec1171ee6990943796df',1,'llama::mapping::Heatmap']]],
+  ['granularity_241',['granularity',['../structllama_1_1mapping_1_1Heatmap.html#a0ed006df2279a44a51949de4885f25e3',1,'llama::mapping::Heatmap']]]
 ];

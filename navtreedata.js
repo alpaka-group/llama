@@ -62,7 +62,7 @@ var NAVTREEINDEX =
 "structllama_1_1Array.html#a0727f971737ae7e3d6517d126c0e9d4a",
 "structllama_1_1Tuple_3_01TFirstElement_00_01RestElements_8_8_8_01_4.html#a326d166eb2415c0a6b4671a7a1331c3b",
 "structllama_1_1internal_1_1TransformLeavesWithCoordImpl_3_01RecordCoord_3_01Is_8_8_8_01_4_00_01C1fa9eea95bd347b217962f0d40f323c8.html#a9cc8ef5254e9cf2f921bc5465c849f12",
-"structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html#a798a2670d572e44a72ea01cf5fb0698a"
+"structllama_1_1mapping_1_1internal_1_1PartionedRecordDim.html#a486051aac95e0cf8f9ad00fca4ea1273"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
