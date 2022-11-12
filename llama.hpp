@@ -3864,6 +3864,24 @@ namespace llama
             std::move(newAccessor)};
     }
 
+    // Creates a new view from an existing view with the given mapping.
+    // \param view A view which's accessor and blobs are copied into a new view with the different mapping. If you no
+    // longer need the old view, consider moving it into the argument of this function.
+    template<typename NewMapping, typename Mapping, typename BlobType, typename Accessor>
+    LLAMA_FN_HOST_ACC_INLINE auto withMapping(View<Mapping, BlobType, Accessor> view, NewMapping newMapping = {})
+    {
+        static_assert(Mapping::blobCount == NewMapping::blobCount);
+        for(std::size_t i = 0; i < Mapping::blobCount; i++)
+        {
+            assert(view.mapping().blobSize(i) == newMapping.blobSize(i));
+        }
+
+        return View<NewMapping, BlobType, Accessor>{
+            std::move(newMapping),
+            std::move(view.storageBlobs),
+            std::move(view.accessor())};
+    }
+
     /// Like a \ref View, but array indices are shifted.
     /// @tparam TStoredParentView Type of the underlying view. May be cv qualified and/or a reference type.
     template<typename TStoredParentView>
@@ -7431,6 +7449,64 @@ namespace llama
 // ============================================================================
 
 // ============================================================================
+// == ./mapping/PermuteArrayIndex.hpp ==
+// ==
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+// #pragma once
+// #include "Common.hpp"    // amalgamate: file already expanded
+
+namespace llama::mapping
+{
+    /// Meta mapping permuting the array indices before forwarding to another mapping. The array extents are not
+    /// changed.
+    /// @tparam Permutation The pack of integrals describing the permutation of the array indices. The inner mapping
+    /// will be called with an ArrayIndex{ai[Permutation]...}.
+    template<typename Mapping, std::size_t... Permutation>
+    struct PermuteArrayIndex : Mapping
+    {
+    private:
+        using size_type = typename Mapping::ArrayExtents::value_type;
+
+    public:
+        using Inner = Mapping;
+
+        using Inner::Inner;
+        using ArrayIndex = typename Inner::ArrayIndex;
+
+        static_assert(
+            sizeof...(Permutation) == ArrayIndex::rank,
+            "The number of integral arguments to PermuteArrayIndex must be the same as ArrayExtents::rank");
+
+        template<std::size_t... RCs>
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(ArrayIndex ai, RecordCoord<RCs...> rc = {}) const
+            -> NrAndOffset<size_type>
+        {
+            return Inner::blobNrAndOffset(ArrayIndex{ai[Permutation]...}, rc);
+        }
+
+        template<std::size_t... RCs, typename Blobs>
+        LLAMA_FN_HOST_ACC_INLINE auto compute(ArrayIndex ai, RecordCoord<RCs...> rc, Blobs& blobs) const
+            -> decltype(auto)
+        {
+            return Inner::compute(ArrayIndex{ai[Permutation]...}, rc, blobs);
+        }
+    };
+
+    template<typename Mapping>
+    PermuteArrayIndex(Mapping) -> PermuteArrayIndex<Mapping>;
+
+    template<typename Mapping>
+    inline constexpr bool isPermuteArrayIndex = false;
+
+    template<typename Mapping, std::size_t... Permutation>
+    inline constexpr bool isPermuteArrayIndex<PermuteArrayIndex<Mapping, Permutation...>> = true;
+} // namespace llama::mapping
+// ==
+// == ./mapping/PermuteArrayIndex.hpp ==
+// ============================================================================
+
+// ============================================================================
 // == ./mapping/ChangeType.hpp ==
 // ==
 // SPDX-License-Identifier: GPL-3.0-or-later
@@ -10106,6 +10182,7 @@ namespace llama::mapping
 // #include "mapping/Heatmap.hpp"    // amalgamate: file already expanded
 // #include "mapping/Null.hpp"    // amalgamate: file already expanded
 // #include "mapping/One.hpp"    // amalgamate: file already expanded
+// #include "mapping/PermuteArrayIndex.hpp"    // amalgamate: file already expanded
 // #include "mapping/Projection.hpp"    // amalgamate: file already expanded
 // #include "mapping/SoA.hpp"    // amalgamate: file already expanded
 // #include "mapping/Split.hpp"    // amalgamate: file already expanded
