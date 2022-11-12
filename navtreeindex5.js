@@ -1,5 +1,16 @@
 var NAVTREEINDEX5 =
 {
+"structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html#a798a2670d572e44a72ea01cf5fb0698a":[2,0,1,3,0,15,5],
+"structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html#a7b1689236c1ae5b422bd586b56059914":[2,0,1,3,0,15,2],
+"structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html#aa0a824402a1e259326fbeb52e9545776":[2,0,1,3,0,15,3],
+"structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html#ac3328efa4293b945075081b601b22b56":[2,0,1,3,0,15,1],
+"structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html#acd986c335569566cea48f6c1ff697d1d":[2,0,1,3,0,15,0],
+"structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html#af901d14f4c982ea08477ef47b03c1791":[2,0,1,3,0,15,4],
+"structllama_1_1mapping_1_1internal_1_1ProjectionReference.html":[2,0,1,3,0,16],
+"structllama_1_1mapping_1_1internal_1_1ProjectionReference.html#a0a4505a1f445bc68b240c0332395840a":[2,0,1,3,0,16,1],
+"structllama_1_1mapping_1_1internal_1_1ProjectionReference.html#a1f6cd477412a83bb1e02412fee99f51e":[2,0,1,3,0,16,3],
+"structllama_1_1mapping_1_1internal_1_1ProjectionReference.html#a763b0a94596745a761c4e97034a20728":[2,0,1,3,0,16,0],
+"structllama_1_1mapping_1_1internal_1_1ProjectionReference.html#ad4cffefe1c8bdf53977b935f58d6430b":[2,0,1,3,0,16,2],
 "structllama_1_1mapping_1_1internal_1_1TraceReference.html":[2,0,1,3,0,17],
 "structllama_1_1mapping_1_1internal_1_1TraceReference.html#a2cba0668335cc8f19a055c7e27a8d342":[2,0,1,3,0,17,8],
 "structllama_1_1mapping_1_1internal_1_1TraceReference.html#a35d387d4c4080e408676c346e4452e39":[2,0,1,3,0,17,1],

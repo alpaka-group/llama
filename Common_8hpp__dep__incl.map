@@ -1,5 +1,5 @@
 <map id="/home/runner/work/llama/llama/include/llama/mapping/Common.hpp" name="/home/runner/work/llama/llama/include/llama/mapping/Common.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="809,5,1025,61"/>
+<area shape="rect" id="node1" title=" " alt="" coords="835,5,1051,61"/>
 <area shape="rect" id="node2" href="$One_8hpp.html" title=" " alt="" coords="540,109,756,165"/>
 <area shape="rect" id="node6" href="$Projection_8hpp.html" title=" " alt="" coords="137,317,353,373"/>
 <area shape="rect" id="node7" href="$Byteswap_8hpp.html" title=" " alt="" coords="5,421,221,477"/>
@@ -12,8 +12,9 @@
 <area shape="rect" id="node17" href="$BitPackedFloatSoA_8hpp.html" title=" " alt="" coords="1477,213,1693,269"/>
 <area shape="rect" id="node18" href="$Bytesplit_8hpp.html" title=" " alt="" coords="1271,109,1487,165"/>
 <area shape="rect" id="node19" href="$Heatmap_8hpp.html" title=" " alt="" coords="1511,109,1727,165"/>
-<area shape="rect" id="node20" href="$Trace_8hpp.html" title=" " alt="" coords="1751,109,1967,165"/>
-<area shape="rect" id="node21" href="$Mapping_8hpp.html" title=" " alt="" coords="1991,109,2207,165"/>
+<area shape="rect" id="node20" href="$PermuteArrayIndex_8hpp.html" title=" " alt="" coords="1751,109,1967,165"/>
+<area shape="rect" id="node21" href="$Trace_8hpp.html" title=" " alt="" coords="1991,109,2207,165"/>
+<area shape="rect" id="node22" href="$Mapping_8hpp.html" title=" " alt="" coords="2231,109,2447,165"/>
 <area shape="rect" id="node3" href="$View_8hpp.html" title=" " alt="" coords="515,221,733,262"/>
 <area shape="rect" id="node4" href="$Copy_8hpp.html" title=" " alt="" coords="996,325,1215,366"/>
 <area shape="rect" id="node10" href="$RecordRef_8hpp.html" title=" " alt="" coords="719,325,972,366"/>

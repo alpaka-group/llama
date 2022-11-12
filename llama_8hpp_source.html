@@ -135,19 +135,20 @@ $(document).ready(function(){initNavTree('llama_8hpp_source.html',''); initResiz
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Heatmap_8hpp.html">mapping/Heatmap.hpp</a>&quot;</span></div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Null_8hpp.html">mapping/Null.hpp</a>&quot;</span></div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="One_8hpp.html">mapping/One.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Projection_8hpp.html">mapping/Projection.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="SoA_8hpp.html">mapping/SoA.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Split_8hpp.html">mapping/Split.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Trace_8hpp.html">mapping/Trace.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Mapping_8hpp.html">mapping/tree/Mapping.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="preprocessor">#if defined(__CUDACC__) || defined(__NVCOMPILER)</span></div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="preprocessor">#    ifdef __NVCC_DIAG_PRAGMA_SUPPORT__</span></div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="preprocessor">#        pragma nv_diag_default 940</span></div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="preprocessor">#    else</span></div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="preprocessor">#        pragma diag_default 940</span></div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="preprocessor">#    endif</span></div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="PermuteArrayIndex_8hpp.html">mapping/PermuteArrayIndex.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Projection_8hpp.html">mapping/Projection.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="SoA_8hpp.html">mapping/SoA.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Split_8hpp.html">mapping/Split.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Trace_8hpp.html">mapping/Trace.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Mapping_8hpp.html">mapping/tree/Mapping.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="preprocessor">#if defined(__CUDACC__) || defined(__NVCOMPILER)</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="preprocessor">#    ifdef __NVCC_DIAG_PRAGMA_SUPPORT__</span></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="preprocessor">#        pragma nv_diag_default 940</span></div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="preprocessor">#    else</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="preprocessor">#        pragma diag_default 940</span></div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="preprocessor">#    endif</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aSoA_8hpp_html"><div class="ttname"><a href="SoA_8hpp.html">SoA.hpp</a></div></div>
@@ -175,6 +176,7 @@ $(document).ready(function(){initNavTree('llama_8hpp_source.html',''); initResiz
 <div class="ttc" id="aProxyRefOpMixin_8hpp_html"><div class="ttname"><a href="ProxyRefOpMixin_8hpp.html">ProxyRefOpMixin.hpp</a></div></div>
 <div class="ttc" id="aCore_8hpp_html"><div class="ttname"><a href="Core_8hpp.html">Core.hpp</a></div></div>
 <div class="ttc" id="aAoS_8hpp_html"><div class="ttname"><a href="AoS_8hpp.html">AoS.hpp</a></div></div>
+<div class="ttc" id="aPermuteArrayIndex_8hpp_html"><div class="ttname"><a href="PermuteArrayIndex_8hpp.html">PermuteArrayIndex.hpp</a></div></div>
 <div class="ttc" id="aHeatmap_8hpp_html"><div class="ttname"><a href="Heatmap_8hpp.html">Heatmap.hpp</a></div></div>
 <div class="ttc" id="aBlobAllocators_8hpp_html"><div class="ttname"><a href="BlobAllocators_8hpp.html">BlobAllocators.hpp</a></div></div>
 <div class="ttc" id="aVector_8hpp_html"><div class="ttname"><a href="Vector_8hpp.html">Vector.hpp</a></div></div>
@@ -184,7 +186,7 @@ $(document).ready(function(){initNavTree('llama_8hpp_source.html',''); initResiz
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="llama_8hpp.html">llama.hpp</a></li>
-    <li class="footer">Generated on Fri Nov 11 2022 03:05:36 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Sat Nov 12 2022 19:46:53 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

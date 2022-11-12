@@ -476,6 +476,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a7ce30d8d3b31c0aae29c78915aa20221"><td class="memTemplParams" colspan="2">template&lt;typename NewAccessor , typename Mapping , typename BlobType , typename OldAccessor &gt; </td></tr>
 <tr class="memitem:a7ce30d8d3b31c0aae29c78915aa20221"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a7ce30d8d3b31c0aae29c78915aa20221">withAccessor</a> (<a class="el" href="structllama_1_1View.html">View</a>&lt; Mapping, BlobType, OldAccessor &gt; view, NewAccessor newAccessor={})</td></tr>
 <tr class="separator:a7ce30d8d3b31c0aae29c78915aa20221"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad72593353a457dae8a55d0fb5279144a"><td class="memTemplParams" colspan="2">template&lt;typename NewMapping , typename Mapping , typename BlobType , typename Accessor &gt; </td></tr>
+<tr class="memitem:ad72593353a457dae8a55d0fb5279144a"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ad72593353a457dae8a55d0fb5279144a">withMapping</a> (<a class="el" href="structllama_1_1View.html">View</a>&lt; Mapping, BlobType, Accessor &gt; view, NewMapping newMapping={})</td></tr>
+<tr class="separator:ad72593353a457dae8a55d0fb5279144a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a416bef7f5a6a9e2cecf4f9b090c9d4ed"><td class="memTemplParams" colspan="2">template&lt;typename TStoredParentView &gt; </td></tr>
 <tr class="memitem:a416bef7f5a6a9e2cecf4f9b090c9d4ed"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a416bef7f5a6a9e2cecf4f9b090c9d4ed">VirtualView</a> (TStoredParentView &amp;&amp;, typename std::remove_reference_t&lt; TStoredParentView &gt;::Mapping::ArrayIndex) -&gt; <a class="el" href="structllama_1_1VirtualView.html">VirtualView</a>&lt; TStoredParentView &gt;</td></tr>
 <tr class="separator:a416bef7f5a6a9e2cecf4f9b090c9d4ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -3552,6 +3555,46 @@ template&lt;typename NewAccessor , typename Mapping , typename BlobType , typena
 
 </div>
 </div>
+<a id="ad72593353a457dae8a55d0fb5279144a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad72593353a457dae8a55d0fb5279144a">&#9670;&nbsp;</a></span>withMapping()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename NewMapping , typename Mapping , typename BlobType , typename Accessor &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto llama::withMapping </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1View.html">View</a>&lt; Mapping, BlobType, Accessor &gt;&#160;</td>
+          <td class="paramname"><em>view</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">NewMapping&#160;</td>
+          <td class="paramname"><em>newMapping</em> = <code>{}</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00675">675</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+
+</div>
+</div>
 <h2 class="groupheader">Variable Documentation</h2>
 <a id="af54c80b077fb3d417466c83d0d005907"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af54c80b077fb3d417466c83d0d005907">&#9670;&nbsp;</a></span>alignOf</h2>
@@ -4610,7 +4653,7 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Fri Nov 11 2022 03:05:37 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Sat Nov 12 2022 19:46:53 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

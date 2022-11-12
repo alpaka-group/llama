@@ -161,6 +161,8 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1One.html">One</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1PermuteArrayIndex.html">PermuteArrayIndex</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Projection.html">Projection</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1SoA.html">SoA</a></td></tr>
@@ -217,6 +219,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a965fada1523c268aed9e3588ebf57d7c"><td class="memTemplParams" colspan="2">template&lt;typename TArrayExtents , typename TRecordDim &gt; </td></tr>
 <tr class="memitem:a965fada1523c268aed9e3588ebf57d7c"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a965fada1523c268aed9e3588ebf57d7c">AoS</a> (TArrayExtents, TRecordDim) -&gt; <a class="el" href="structllama_1_1mapping_1_1AoS.html">AoS</a>&lt; TArrayExtents, TRecordDim &gt;</td></tr>
 <tr class="separator:a965fada1523c268aed9e3588ebf57d7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e1802187cbd0a28b0ff2f2d016f474b"><td class="memTemplParams" colspan="2">template&lt;typename Mapping &gt; </td></tr>
+<tr class="memitem:a7e1802187cbd0a28b0ff2f2d016f474b"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a7e1802187cbd0a28b0ff2f2d016f474b">PermuteArrayIndex</a> (Mapping) -&gt; <a class="el" href="structllama_1_1mapping_1_1PermuteArrayIndex.html">PermuteArrayIndex</a>&lt; Mapping &gt;</td></tr>
+<tr class="separator:a7e1802187cbd0a28b0ff2f2d016f474b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a736c25ae1b3ed1782a70989a8fc83a66"><td class="memTemplParams" colspan="2">template&lt;typename TArrayExtents , typename TRecordDim &gt; </td></tr>
 <tr class="memitem:a736c25ae1b3ed1782a70989a8fc83a66"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a736c25ae1b3ed1782a70989a8fc83a66">SoA</a> (TArrayExtents, TRecordDim) -&gt; <a class="el" href="structllama_1_1mapping_1_1SoA.html">SoA</a>&lt; TArrayExtents, TRecordDim &gt;</td></tr>
 <tr class="separator:a736c25ae1b3ed1782a70989a8fc83a66"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -286,6 +291,12 @@ Variables</h2></td></tr>
 <tr class="memitem:a3efc7ad7e0eb7cd89e537b070e60178c"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim , bool AlignAndPad, template&lt; typename &gt; typename FlattenRecordDim&gt; </td></tr>
 <tr class="memitem:a3efc7ad7e0eb7cd89e537b070e60178c"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a3efc7ad7e0eb7cd89e537b070e60178c">isOne&lt; One&lt; ArrayExtents, RecordDim, AlignAndPad, FlattenRecordDim &gt; &gt;</a> = true</td></tr>
 <tr class="separator:a3efc7ad7e0eb7cd89e537b070e60178c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b6f974b9d6c835a460f747435633822"><td class="memTemplParams" colspan="2">template&lt;typename Mapping &gt; </td></tr>
+<tr class="memitem:a8b6f974b9d6c835a460f747435633822"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a8b6f974b9d6c835a460f747435633822">isPermuteArrayIndex</a> = false</td></tr>
+<tr class="separator:a8b6f974b9d6c835a460f747435633822"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20979d81de36d3cf4b8e445f158dbb42"><td class="memTemplParams" colspan="2">template&lt;typename Mapping , std::size_t... Permutation&gt; </td></tr>
+<tr class="memitem:a20979d81de36d3cf4b8e445f158dbb42"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a20979d81de36d3cf4b8e445f158dbb42">isPermuteArrayIndex&lt; PermuteArrayIndex&lt; Mapping, Permutation... &gt; &gt;</a> = true</td></tr>
+<tr class="separator:a20979d81de36d3cf4b8e445f158dbb42"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7c53c4de0dcccd8f0334b24fde6f0a68"><td class="memTemplParams" colspan="2">template&lt;typename Mapping &gt; </td></tr>
 <tr class="memitem:a7c53c4de0dcccd8f0334b24fde6f0a68"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a7c53c4de0dcccd8f0334b24fde6f0a68">isProjection</a> = false</td></tr>
 <tr class="separator:a7c53c4de0dcccd8f0334b24fde6f0a68"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -568,6 +579,26 @@ template&lt;typename TArrayExtents , typename TRecordDim &gt; </div>
           <td></td>
           <td>)</td>
           <td></td><td> -&gt;  <a class="el" href="structllama_1_1mapping_1_1AoS.html">AoS</a>&lt; TArrayExtents, TRecordDim &gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7e1802187cbd0a28b0ff2f2d016f474b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7e1802187cbd0a28b0ff2f2d016f474b">&#9670;&nbsp;</a></span>PermuteArrayIndex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Mapping &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structllama_1_1mapping_1_1PermuteArrayIndex.html">llama::mapping::PermuteArrayIndex</a> </td>
+          <td>(</td>
+          <td class="paramtype">Mapping&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> -&gt;  <a class="el" href="structllama_1_1mapping_1_1PermuteArrayIndex.html">PermuteArrayIndex</a>&lt; Mapping &gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1125,6 +1156,58 @@ template&lt;typename ArrayExtents , typename RecordDim , bool AlignAndPad, templ
 
 </div>
 </div>
+<a id="a8b6f974b9d6c835a460f747435633822"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b6f974b9d6c835a460f747435633822">&#9670;&nbsp;</a></span>isPermuteArrayIndex</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Mapping &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool llama::mapping::isPermuteArrayIndex = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="PermuteArrayIndex_8hpp_source.html#l00048">48</a> of file <a class="el" href="PermuteArrayIndex_8hpp_source.html">PermuteArrayIndex.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a20979d81de36d3cf4b8e445f158dbb42"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20979d81de36d3cf4b8e445f158dbb42">&#9670;&nbsp;</a></span>isPermuteArrayIndex&lt; PermuteArrayIndex&lt; Mapping, Permutation... &gt; &gt;</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Mapping , std::size_t... Permutation&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool <a class="el" href="namespacellama_1_1mapping.html#a8b6f974b9d6c835a460f747435633822">llama::mapping::isPermuteArrayIndex</a>&lt; <a class="el" href="structllama_1_1mapping_1_1PermuteArrayIndex.html">PermuteArrayIndex</a>&lt; Mapping, Permutation... &gt; &gt; = true</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="PermuteArrayIndex_8hpp_source.html#l00051">51</a> of file <a class="el" href="PermuteArrayIndex_8hpp_source.html">PermuteArrayIndex.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a7c53c4de0dcccd8f0334b24fde6f0a68"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7c53c4de0dcccd8f0334b24fde6f0a68">&#9670;&nbsp;</a></span>isProjection</h2>
 
@@ -1379,7 +1462,7 @@ template&lt;typename RecordDim , std::size_t VectorRegisterBits&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li>
-    <li class="footer">Generated on Fri Nov 11 2022 03:05:37 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Sat Nov 12 2022 19:46:53 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

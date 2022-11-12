@@ -12,6 +12,7 @@ var dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc =
     [ "Heatmap.hpp", "Heatmap_8hpp.html", "Heatmap_8hpp" ],
     [ "Null.hpp", "Null_8hpp.html", "Null_8hpp" ],
     [ "One.hpp", "One_8hpp.html", "One_8hpp" ],
+    [ "PermuteArrayIndex.hpp", "PermuteArrayIndex_8hpp.html", "PermuteArrayIndex_8hpp" ],
     [ "Projection.hpp", "Projection_8hpp.html", "Projection_8hpp" ],
     [ "SoA.hpp", "SoA_8hpp.html", "SoA_8hpp" ],
     [ "Split.hpp", "Split_8hpp.html", "Split_8hpp" ],

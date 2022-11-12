@@ -21,6 +21,7 @@ var View_8hpp =
     [ "transformBlobs", "View_8hpp.html#a887c0f2f25b3a4e104c73178fa12c92c", null ],
     [ "VirtualView", "View_8hpp.html#a416bef7f5a6a9e2cecf4f9b090c9d4ed", null ],
     [ "withAccessor", "View_8hpp.html#a7ce30d8d3b31c0aae29c78915aa20221", null ],
+    [ "withMapping", "View_8hpp.html#ad72593353a457dae8a55d0fb5279144a", null ],
     [ "isComputed", "View_8hpp.html#a9676a3903b134df116791bcae533d6c6", null ],
     [ "isOne", "View_8hpp.html#aecf6a2d8f8fd3cde95667fbf433e42d1", null ],
     [ "isOne< RecordRef< View, BoundRecordCoord, true > >", "View_8hpp.html#a44aec444f97e67c053400d58fae4126b", null ],

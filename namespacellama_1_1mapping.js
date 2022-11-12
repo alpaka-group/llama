@@ -30,6 +30,7 @@ var namespacellama_1_1mapping =
     [ "MappingBase", "structllama_1_1mapping_1_1MappingBase.html", "structllama_1_1mapping_1_1MappingBase" ],
     [ "Null", "structllama_1_1mapping_1_1Null.html", "structllama_1_1mapping_1_1Null" ],
     [ "One", "structllama_1_1mapping_1_1One.html", "structllama_1_1mapping_1_1One" ],
+    [ "PermuteArrayIndex", "structllama_1_1mapping_1_1PermuteArrayIndex.html", "structllama_1_1mapping_1_1PermuteArrayIndex" ],
     [ "Projection", "structllama_1_1mapping_1_1Projection.html", "structllama_1_1mapping_1_1Projection" ],
     [ "SoA", "structllama_1_1mapping_1_1SoA.html", "structllama_1_1mapping_1_1SoA" ],
     [ "Split", "structllama_1_1mapping_1_1Split.html", "structllama_1_1mapping_1_1Split" ],
