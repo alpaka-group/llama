@@ -88,12 +88,16 @@ namespace llama::mapping
             // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
             LLAMA_FN_HOST_ACC_INLINE constexpr operator value_type() const
             {
+                LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
                 return Projection::load(storageRef);
+                LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
             }
 
             LLAMA_FN_HOST_ACC_INLINE constexpr auto operator=(value_type v) -> ProjectionReference&
             {
+                LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
                 storageRef = Projection::store(v);
+                LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
                 return *this;
             }
         };
