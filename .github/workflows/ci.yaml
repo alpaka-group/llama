@@ -12,7 +12,7 @@ concurrency:
 env:
   THREADS: 4
   CONFIG: RelWithDebInfo
-  VCPKG_INSTALL: "vcpkg install alpaka fmt tinyobjloader boost-mp11 boost-atomic boost-smart-ptr boost-functional boost-container boost-iostreams catch2; until vcpkg install --head xsimd; do echo 'Retrying'; done"
+  VCPKG_INSTALL: "vcpkg install alpaka fmt tinyobjloader boost-mp11 boost-atomic boost-smart-ptr boost-functional boost-container boost-iostreams[core] catch2; until vcpkg install --head xsimd; do echo 'Retrying'; done"
 
 jobs:
   clang-format:
