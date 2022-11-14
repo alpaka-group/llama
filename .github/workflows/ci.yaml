@@ -37,12 +37,16 @@ jobs:
     needs: clang-format
     runs-on: ubuntu-22.04
     env:
-      CXX: clang++-14
+      CXX: clang++-15
     steps:
     - uses: actions/checkout@v3
-    - name: install clang-14
+    - name: add LLVM apt repo
       run: |
-        sudo apt install clang-14 libomp-14-dev clang-tidy-14
+        wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
+        sudo add-apt-repository 'deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-15 main'
+    - name: install clang-15
+      run: |
+        sudo apt install clang-15 libomp-15-dev clang-tidy-15
     - name: vcpkg install dependencies
       run: |
         eval $VCPKG_INSTALL
@@ -63,7 +67,7 @@ jobs:
       run: |
         cd build
         sed -i 's/\(-forward-unknown-to-host-compiler\|--generate-code=arch=[^ ]\+\|--expt-extended-lambda\|--extended-lambda\|--expt-relaxed-constexpr\|--use_fast_math\)//g' compile_commands.json # remove NVCC specific flags which clang cannot handle
-        run-clang-tidy-14 -header-filter='(tests|include/llama|examples)' -extra-arg=--no-cuda-version-check -extra-arg=-nocudalib -extra-arg=-Wno-unused-command-line-argument '^(?!.*'$PWD').*$'
+        run-clang-tidy-15 -j $THREADS -header-filter='(tests|include/llama|examples)' -extra-arg=--no-cuda-version-check -extra-arg=-nocudalib -extra-arg=-Wno-unused-command-line-argument '^(?!.*'$PWD').*$'
 
   coverage:
     needs: clang-format
