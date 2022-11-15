@@ -1273,6 +1273,1070 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>>
 	// == ./Accessors.hpp ==
 	// ==
 	// #pragma once
+		// ============================================================================
+		// == ./Concepts.hpp ==
+		// ==
+		// #pragma once
+		// #include "Array.hpp"    // amalgamate: file already expanded
+			// ============================================================================
+			// == ./Core.hpp ==
+			// ==
+			// Copyright 2018 Alexander Matthes
+			// SPDX-License-Identifier: GPL-3.0-or-later
+
+			// #pragma once
+			// #include "ArrayExtents.hpp"    // amalgamate: file already expanded
+			// #include "Meta.hpp"    // amalgamate: file already expanded
+				// ============================================================================
+				// == ./RecordCoord.hpp ==
+				// ==
+				// Copyright 2018 Alexander Matthes
+				// SPDX-License-Identifier: GPL-3.0-or-later
+
+				// #pragma once
+				// #include "Meta.hpp"    // amalgamate: file already expanded
+
+				#include <array>
+				// #include <ostream>    // amalgamate: file already included
+				// #include <type_traits>    // amalgamate: file already included
+
+				namespace llama
+				{
+				    /// Represents a coordinate for a record inside the record dimension tree.
+				    /// \tparam Coords... the compile time coordinate.
+				    template<std::size_t... Coords>
+				    struct RecordCoord
+				    {
+				        /// The list of integral coordinates as `boost::mp11::mp_list`.
+				        using List = boost::mp11::mp_list_c<std::size_t, Coords...>;
+
+				        static constexpr std::size_t front = boost::mp11::mp_front<List>::value;
+				        static constexpr std::size_t back = boost::mp11::mp_back<List>::value;
+				        static constexpr std::size_t size = sizeof...(Coords);
+				    };
+
+				    template<>
+				    struct RecordCoord<>
+				    {
+				        using List = boost::mp11::mp_list_c<std::size_t>;
+
+				        static constexpr std::size_t size = 0;
+				    };
+
+				    template<std::size_t... CoordsA, std::size_t... CoordsB>
+				    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator==(RecordCoord<CoordsA...>, RecordCoord<CoordsB...>)
+				    {
+				        return false;
+				    }
+
+				    template<std::size_t... Coords>
+				    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator==(RecordCoord<Coords...>, RecordCoord<Coords...>)
+				    {
+				        return true;
+				    }
+
+				    template<std::size_t... CoordsA, std::size_t... CoordsB>
+				    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator!=(RecordCoord<CoordsA...> a, RecordCoord<CoordsB...> b)
+				    {
+				        return !(a == b);
+				    }
+
+				    template<typename T>
+				    inline constexpr bool isRecordCoord = false;
+
+				    template<std::size_t... Coords>
+				    inline constexpr bool isRecordCoord<RecordCoord<Coords...>> = true;
+
+				    template<std::size_t... RCs>
+				    auto operator<<(std::ostream& os, RecordCoord<RCs...>) -> std::ostream&
+				    {
+				        os << "RecordCoord<";
+				        bool first = true;
+				        for(auto rc : std::array<std::size_t, sizeof...(RCs)>{RCs...})
+				        {
+				            if(first)
+				                first = false;
+				            else
+				                os << ", ";
+				            os << rc;
+				        }
+				        os << ">";
+				        return os;
+				    }
+
+				    inline namespace literals
+				    {
+				        /// Literal operator for converting a numeric literal into a \ref RecordCoord.
+				        template<char... Digits>
+				        constexpr auto operator"" _RC()
+				        {
+				            constexpr auto coord = []() constexpr
+				            {
+				                char digits[] = {(Digits - 48)...};
+				                std::size_t acc = 0;
+				                std ::size_t powerOf10 = 1;
+				                for(int i = sizeof...(Digits) - 1; i >= 0; i--)
+				                {
+				                    acc += digits[i] * powerOf10;
+				                    powerOf10 *= 10;
+				                }
+				                return acc;
+				            }
+				            ();
+				            return RecordCoord<coord>{};
+				        }
+				    } // namespace literals
+
+				    /// Converts a type list of integral constants into a \ref RecordCoord.
+				    template<typename L>
+				    using RecordCoordFromList = internal::mp_unwrap_values_into<L, RecordCoord>;
+
+				    /// Concatenate a set of \ref RecordCoord%s.
+				    template<typename... RecordCoords>
+				    using Cat = RecordCoordFromList<boost::mp11::mp_append<typename RecordCoords::List...>>;
+
+				    /// Concatenate a set of \ref RecordCoord%s instances.
+				    template<typename... RecordCoords>
+				    constexpr auto cat(RecordCoords...)
+				    {
+				        return Cat<RecordCoords...>{};
+				    }
+
+				    /// RecordCoord without first coordinate component.
+				    template<typename RecordCoord>
+				    using PopFront = RecordCoordFromList<boost::mp11::mp_pop_front<typename RecordCoord::List>>;
+
+				    namespace internal
+				    {
+				        template<std::size_t... Coords1, std::size_t... Coords2>
+				        constexpr auto recordCoordCommonPrefixIsBiggerImpl(RecordCoord<Coords1...>, RecordCoord<Coords2...>) -> bool
+				        {
+				            // CTAD does not work if Coords1/2 is an empty pack
+				            std::array<std::size_t, sizeof...(Coords1)> a1{Coords1...};
+				            std::array<std::size_t, sizeof...(Coords2)> a2{Coords2...};
+				            for(std::size_t i = 0; i < std::min(a1.size(), a2.size()); i++)
+				            {
+				                if(a1[i] > a2[i])
+				                    return true;
+				                if(a1[i] < a2[i])
+				                    return false;
+				            }
+				            return false;
+				        };
+				    } // namespace internal
+
+				    /// Checks wether the first RecordCoord is bigger than the second.
+				    template<typename First, typename Second>
+				    inline constexpr auto recordCoordCommonPrefixIsBigger
+				        = internal::recordCoordCommonPrefixIsBiggerImpl(First{}, Second{});
+
+				    namespace internal
+				    {
+				        template<std::size_t... Coords1, std::size_t... Coords2>
+				        constexpr auto recordCoordCommonPrefixIsSameImpl(RecordCoord<Coords1...>, RecordCoord<Coords2...>) -> bool
+				        {
+				            // CTAD does not work if Coords1/2 is an empty pack
+				            std::array<std::size_t, sizeof...(Coords1)> a1{Coords1...};
+				            std::array<std::size_t, sizeof...(Coords2)> a2{Coords2...};
+				            for(std::size_t i = 0; i < std::min(a1.size(), a2.size()); i++)
+				                if(a1[i] != a2[i])
+				                    return false;
+				            return true;
+				        };
+				    } // namespace internal
+
+				    /// Checks whether two \ref RecordCoord%s are the same or one is the prefix of the other.
+				    template<typename First, typename Second>
+				    inline constexpr auto recordCoordCommonPrefixIsSame
+				        = internal::recordCoordCommonPrefixIsSameImpl(First{}, Second{});
+				} // namespace llama
+				// ==
+				// == ./RecordCoord.hpp ==
+				// ============================================================================
+
+
+			#include <iostream>
+			#include <string>
+			// #include <type_traits>    // amalgamate: file already included
+
+			namespace llama
+			{
+			    /// Anonymous naming for a \ref Field.
+			    struct NoName
+			    {
+			    };
+
+			    /// A type list of \ref Field%s which may be used to define a record dimension.
+			    template<typename... Fields>
+			    struct Record
+			    {
+			    };
+
+			    /// @brief Tells whether the given type is allowed as a field type in LLAMA. Such types need to be trivially
+			    /// constructible and trivially destructible.
+			    template<typename T>
+			    inline constexpr bool isAllowedFieldType = std::is_trivially_destructible_v<T>;
+
+			    /// Record dimension tree node which may either be a leaf or refer to a child tree presented as another \ref
+			    /// Record.
+			    /// \tparam Tag Name of the node. May be any type (struct, class).
+			    /// \tparam Type Type of the node. May be one of three cases. 1. another sub tree consisting of a nested \ref
+			    /// Record. 2. an array of static size of any type, in which case a Record with as many \ref Field as the array
+			    /// size is created, named \ref RecordCoord specialized on consecutive numbers I. 3. A scalar type different from
+			    /// \ref Record, making this node a leaf of this type.
+			    template<typename Tag, typename Type>
+			    struct Field
+			    {
+			        static_assert(isAllowedFieldType<Type>, "This field's type is not allowed");
+			    };
+
+			    template<typename T>
+			    struct NrAndOffset
+			    {
+			        T nr;
+			        T offset;
+
+			        friend auto operator<<(std::ostream& os, const NrAndOffset& value) -> std::ostream&
+			        {
+			            return os << "NrAndOffset{" << value.nr << ", " << value.offset << "}";
+			        }
+			    };
+
+			    template<typename Int>
+			    NrAndOffset(Int, Int) -> NrAndOffset<Int>;
+
+			    template<typename TA, typename TB>
+			    auto operator==(const NrAndOffset<TA>& a, const NrAndOffset<TB>& b) -> bool
+			    {
+			        return a.nr == b.nr && a.offset == b.offset;
+			    }
+
+			    template<typename TA, typename TB>
+			    auto operator!=(const NrAndOffset<TA>& a, const NrAndOffset<TB>& b) -> bool
+			    {
+			        return !(a == b);
+			    }
+
+			    /// Get the tag from a \ref Field.
+			    template<typename Field>
+			    using GetFieldTag = boost::mp11::mp_first<Field>;
+
+			    /// Get the type from a \ref Field.
+			    template<typename Field>
+			    using GetFieldType = boost::mp11::mp_second<Field>;
+
+			    template<typename T>
+			    inline constexpr auto isRecord = false;
+
+			    template<typename... Fields>
+			    inline constexpr auto isRecord<Record<Fields...>> = true;
+
+			    namespace internal
+			    {
+			        template<typename RecordDim, typename RecordCoord>
+			        struct GetTagsImpl;
+
+			        template<typename... Fields, std::size_t FirstCoord, std::size_t... Coords>
+			        struct GetTagsImpl<Record<Fields...>, RecordCoord<FirstCoord, Coords...>>
+			        {
+			            using Field = boost::mp11::mp_at_c<boost::mp11::mp_list<Fields...>, FirstCoord>;
+			            using ChildTag = GetFieldTag<Field>;
+			            using ChildType = GetFieldType<Field>;
+			            using type
+			                = boost::mp11::mp_push_front<typename GetTagsImpl<ChildType, RecordCoord<Coords...>>::type, ChildTag>;
+			        };
+
+			        template<typename ChildType, std::size_t Count, std::size_t FirstCoord, std::size_t... Coords>
+			        struct GetTagsImpl<ChildType[Count], RecordCoord<FirstCoord, Coords...>>
+			        {
+			            using ChildTag = RecordCoord<FirstCoord>;
+			            using type
+			                = boost::mp11::mp_push_front<typename GetTagsImpl<ChildType, RecordCoord<Coords...>>::type, ChildTag>;
+			        };
+
+			        template<typename T>
+			        struct GetTagsImpl<T, RecordCoord<>>
+			        {
+			            using type = boost::mp11::mp_list<>;
+			        };
+			    } // namespace internal
+
+			    /// Get the tags of all \ref Field%s from the root of the record dimension tree until to the node identified by
+			    /// \ref RecordCoord.
+			    template<typename RecordDim, typename RecordCoord>
+			    using GetTags = typename internal::GetTagsImpl<RecordDim, RecordCoord>::type;
+
+			    namespace internal
+			    {
+			        template<typename RecordDim, typename RecordCoord>
+			        struct GetTagImpl
+			        {
+			            using type = boost::mp11::mp_back<GetTags<RecordDim, RecordCoord>>;
+			        };
+
+			        template<typename RecordDim>
+			        struct GetTagImpl<RecordDim, RecordCoord<>>
+			        {
+			            using type = NoName;
+			        };
+			    } // namespace internal
+
+			    /// Get the tag of the \ref Field at a \ref RecordCoord inside the record dimension tree.
+			    template<typename RecordDim, typename RecordCoord>
+			    using GetTag = typename internal::GetTagImpl<RecordDim, RecordCoord>::type;
+
+			    /// Is true if, starting at two coordinates in two record dimensions, all subsequent nodes in the record dimension
+			    /// tree have the same tag.
+			    /// \tparam RecordDimA First record dimension.
+			    /// \tparam LocalA \ref RecordCoord based on StartA along which the tags are compared.
+			    /// \tparam RecordDimB second record dimension.
+			    /// \tparam LocalB \ref RecordCoord based on StartB along which the tags are compared.
+			    template<typename RecordDimA, typename LocalA, typename RecordDimB, typename LocalB>
+			    inline constexpr auto hasSameTags = []() constexpr
+			    {
+			        if constexpr(LocalA::size != LocalB::size)
+			            return false;
+			        else if constexpr(LocalA::size == 0 && LocalB::size == 0)
+			            return true;
+			        else
+			            return std::is_same_v<GetTags<RecordDimA, LocalA>, GetTags<RecordDimB, LocalB>>;
+			    }
+			    ();
+
+			    namespace internal
+			    {
+			        template<typename FieldList, typename Tag>
+			        struct FindFieldByTag
+			        {
+			            template<typename Field>
+			            using HasTag = std::is_same<GetFieldTag<Field>, Tag>;
+
+			            static constexpr auto value = boost::mp11::mp_find_if<FieldList, HasTag>::value;
+			        };
+
+			        template<typename RecordDim, typename RecordCoord, typename... Tags>
+			        struct GetCoordFromTagsImpl
+			        {
+			            static_assert(boost::mp11::mp_size<RecordDim>::value != 0, "Tag combination is not valid");
+			        };
+
+			        template<typename... Fields, std::size_t... ResultCoords, typename FirstTag, typename... Tags>
+			        struct GetCoordFromTagsImpl<Record<Fields...>, RecordCoord<ResultCoords...>, FirstTag, Tags...>
+			        {
+			            static constexpr auto tagIndex = FindFieldByTag<boost::mp11::mp_list<Fields...>, FirstTag>::value;
+			            static_assert(
+			                tagIndex < sizeof...(Fields),
+			                "FirstTag was not found inside this Record. Does your record dimension contain the tag you access "
+			                "with?");
+
+			            using ChildType = GetFieldType<boost::mp11::mp_at_c<Record<Fields...>, tagIndex>>;
+
+			            using type =
+			                typename GetCoordFromTagsImpl<ChildType, RecordCoord<ResultCoords..., tagIndex>, Tags...>::type;
+			        };
+
+			        template<
+			            typename ChildType,
+			            std::size_t Count,
+			            std::size_t... ResultCoords,
+			            typename FirstTag,
+			            typename... Tags>
+			        struct GetCoordFromTagsImpl<ChildType[Count], RecordCoord<ResultCoords...>, FirstTag, Tags...>
+			        {
+			            static_assert(isRecordCoord<FirstTag>, "Please use a RecordCoord<I> to index into static arrays");
+			            static_assert(FirstTag::size == 1, "Expected RecordCoord with 1 coordinate");
+			            static_assert(FirstTag::front < Count, "Index out of bounds");
+
+			            using type =
+			                typename GetCoordFromTagsImpl<ChildType, RecordCoord<ResultCoords..., FirstTag::front>, Tags...>::type;
+			        };
+
+			        template<typename RecordDim, typename RecordCoord>
+			        struct GetCoordFromTagsImpl<RecordDim, RecordCoord>
+			        {
+			            using type = RecordCoord;
+			        };
+
+			        // unpack a list of tags
+			        template<typename... Fields, typename... Tags>
+			        struct GetCoordFromTagsImpl<Record<Fields...>, RecordCoord<>, boost::mp11::mp_list<Tags...>>
+			            : GetCoordFromTagsImpl<Record<Fields...>, RecordCoord<>, Tags...>
+			        {
+			        };
+			        template<typename ChildType, std::size_t Count, typename... Tags>
+			        struct GetCoordFromTagsImpl<ChildType[Count], RecordCoord<>, boost::mp11::mp_list<Tags...>>
+			            : GetCoordFromTagsImpl<ChildType[Count], RecordCoord<>, Tags...>
+			        {
+			        };
+			    } // namespace internal
+
+			    /// Converts a series of tags, or a list of tags, navigating down a record dimension into a \ref RecordCoord.
+			    template<typename RecordDim, typename... Tags>
+			    using GetCoordFromTags = typename internal::GetCoordFromTagsImpl<RecordDim, RecordCoord<>, Tags...>::type;
+
+			    namespace internal
+			    {
+			        template<typename RecordDim, typename... RecordCoordOrTags>
+			        struct GetTypeImpl
+			        {
+			            using type = typename GetTypeImpl<RecordDim, GetCoordFromTags<RecordDim, RecordCoordOrTags...>>::type;
+			        };
+
+			        template<typename... Children, std::size_t HeadCoord, std::size_t... TailCoords>
+			        struct GetTypeImpl<Record<Children...>, RecordCoord<HeadCoord, TailCoords...>>
+			        {
+			            using ChildType = GetFieldType<boost::mp11::mp_at_c<Record<Children...>, HeadCoord>>;
+			            using type = typename GetTypeImpl<ChildType, RecordCoord<TailCoords...>>::type;
+			        };
+
+			        template<typename ChildType, std::size_t N, std::size_t HeadCoord, std::size_t... TailCoords>
+			        struct GetTypeImpl<ChildType[N], RecordCoord<HeadCoord, TailCoords...>>
+			        {
+			            using type = typename GetTypeImpl<ChildType, RecordCoord<TailCoords...>>::type;
+			        };
+
+			        template<typename T>
+			        struct GetTypeImpl<T, RecordCoord<>>
+			        {
+			            static_assert(isAllowedFieldType<T>);
+			            using type = T;
+			        };
+			    } // namespace internal
+
+			    /// Returns the type of a node in a record dimension tree identified by a given \ref RecordCoord or a series of
+			    /// tags.
+			    template<typename RecordDim, typename... RecordCoordOrTags>
+			    using GetType = typename internal::GetTypeImpl<RecordDim, RecordCoordOrTags...>::type;
+
+			    namespace internal
+			    {
+			        template<typename RecordDim, typename RecordCoord>
+			        struct LeafRecordCoordsImpl;
+
+			        template<typename T, std::size_t... RCs>
+			        struct LeafRecordCoordsImpl<T, RecordCoord<RCs...>>
+			        {
+			            using type = boost::mp11::mp_list<RecordCoord<RCs...>>;
+			        };
+
+			        template<typename... Fields, std::size_t... RCs>
+			        struct LeafRecordCoordsImpl<Record<Fields...>, RecordCoord<RCs...>>
+			        {
+			            template<std::size_t... Is>
+			            static auto help(std::index_sequence<Is...>)
+			            {
+			                return boost::mp11::mp_append<
+			                    typename LeafRecordCoordsImpl<GetFieldType<Fields>, RecordCoord<RCs..., Is>>::type...>{};
+			            }
+			            using type = decltype(help(std::make_index_sequence<sizeof...(Fields)>{}));
+			        };
+
+			        template<typename Child, std::size_t N, std::size_t... RCs>
+			        struct LeafRecordCoordsImpl<Child[N], RecordCoord<RCs...>>
+			        {
+			            template<std::size_t... Is>
+			            static auto help(std::index_sequence<Is...>)
+			            {
+			                return boost::mp11::mp_append<
+			                    typename LeafRecordCoordsImpl<Child, RecordCoord<RCs..., Is>>::type...>{};
+			            }
+			            using type = decltype(help(std::make_index_sequence<N>{}));
+			        };
+			    } // namespace internal
+
+			    /// Returns a flat type list containing all record coordinates to all leaves of the given record dimension.
+			    template<typename RecordDim>
+			    using LeafRecordCoords = typename internal::LeafRecordCoordsImpl<RecordDim, RecordCoord<>>::type;
+
+			    namespace internal
+			    {
+			        // adapted from boost::mp11, but with LLAMA_FN_HOST_ACC_INLINE
+			        template<template<typename...> typename L, typename... T, typename F>
+			        LLAMA_FN_HOST_ACC_INLINE constexpr void mpForEachInlined(L<T...>, F&& f)
+			        {
+			            using A = int[sizeof...(T)];
+			            (void) A{((void) f(T{}), 0)...};
+			        }
+			    } // namespace internal
+
+			    /// Iterates over the record dimension tree and calls a functor on each element.
+			    /// \param functor Functor to execute at each element of. Needs to have `operator()` with a template parameter for
+			    /// the \ref RecordCoord in the record dimension tree.
+			    /// \param baseCoord \ref RecordCoord at which the iteration should be started. The functor is called on elements
+			    /// beneath this coordinate.
+			    template<typename RecordDim, typename Functor, std::size_t... Coords>
+			    LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeafCoord(Functor&& functor, RecordCoord<Coords...> baseCoord)
+			    {
+			        LLAMA_FORCE_INLINE_RECURSIVE
+			        internal::mpForEachInlined(
+			            LeafRecordCoords<GetType<RecordDim, RecordCoord<Coords...>>>{},
+			            [&](auto innerCoord) LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(constexpr)
+			            { std::forward<Functor>(functor)(cat(baseCoord, innerCoord)); });
+			    }
+
+			    /// Iterates over the record dimension tree and calls a functor on each element.
+			    /// \param functor Functor to execute at each element of. Needs to have `operator()` with a template parameter for
+			    /// the \ref RecordCoord in the record dimension tree.
+			    /// \param baseTags Tags used to define where the iteration should be started. The functor is called on elements
+			    /// beneath this coordinate.
+			    template<typename RecordDim, typename Functor, typename... Tags>
+			    LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeafCoord(Functor&& functor, Tags... /*baseTags*/)
+			    {
+			        LLAMA_FORCE_INLINE_RECURSIVE
+			        forEachLeafCoord<RecordDim>(std::forward<Functor>(functor), GetCoordFromTags<RecordDim, Tags...>{});
+			    }
+
+			    namespace internal
+			    {
+			        template<typename T>
+			        struct FlattenRecordDimImpl
+			        {
+			            using type = boost::mp11::mp_list<T>;
+			        };
+
+			        template<typename... Fields>
+			        struct FlattenRecordDimImpl<Record<Fields...>>
+			        {
+			            using type = boost::mp11::mp_append<typename FlattenRecordDimImpl<GetFieldType<Fields>>::type...>;
+			        };
+			        template<typename Child, std::size_t N>
+			        struct FlattenRecordDimImpl<Child[N]>
+			        {
+			            using type = boost::mp11::mp_repeat_c<typename FlattenRecordDimImpl<Child>::type, N>;
+			        };
+			    } // namespace internal
+
+			    /// Returns a flat type list containing all leaf field types of the given record dimension.
+			    template<typename RecordDim>
+			    using FlatRecordDim = typename internal::FlattenRecordDimImpl<RecordDim>::type;
+
+			    /// The total number of fields in the recursively expanded record dimension.
+			    template<typename RecordDim>
+			    inline constexpr std::size_t flatFieldCount = 1;
+
+			    template<typename... Children>
+			    inline constexpr std::size_t flatFieldCount<
+			        Record<Children...>> = (flatFieldCount<GetFieldType<Children>> + ... + 0);
+
+			    template<typename Child, std::size_t N>
+			    inline constexpr std::size_t flatFieldCount<Child[N]> = flatFieldCount<Child>* N;
+
+			    namespace internal
+			    {
+			        template<std::size_t I, typename RecordDim>
+			        inline constexpr std::size_t flatFieldCountBefore = 0;
+
+			        template<typename... Children>
+			        inline constexpr std::size_t flatFieldCountBefore<0, Record<Children...>> = 0;
+
+			        // recursive formulation to benefit from template instantiation memoization
+			        // this massively improves compilation time when this template is instantiated with a lot of different I
+			        template<std::size_t I, typename... Children>
+			        inline constexpr std::size_t flatFieldCountBefore<
+			            I,
+			            Record<
+			                Children...>> = flatFieldCountBefore<I - 1, Record<Children...>> + flatFieldCount<GetFieldType<boost::mp11::mp_at_c<Record<Children...>, I - 1>>>;
+			    } // namespace internal
+
+			    /// The equivalent zero based index into a flat record dimension (\ref FlatRecordDim) of the given hierarchical
+			    /// record coordinate.
+			    template<typename RecordDim, typename RecordCoord>
+			    inline constexpr std::size_t flatRecordCoord = 0;
+
+			    template<typename T>
+			    inline constexpr std::size_t flatRecordCoord<T, RecordCoord<>> = 0;
+
+			    template<typename... Children, std::size_t I, std::size_t... Is>
+			    inline constexpr std::size_t flatRecordCoord<
+			        Record<Children...>,
+			        RecordCoord<
+			            I,
+			            Is...>> = internal::
+			                          flatFieldCountBefore<
+			                              I,
+			                              Record<
+			                                  Children...>> + flatRecordCoord<GetFieldType<boost::mp11::mp_at_c<Record<Children...>, I>>, RecordCoord<Is...>>;
+
+			    template<typename Child, std::size_t N, std::size_t I, std::size_t... Is>
+			    inline constexpr std::size_t flatRecordCoord<Child[N], RecordCoord<I, Is...>> = flatFieldCount<Child>* I
+			        + flatRecordCoord<Child, RecordCoord<Is...>>;
+
+			    namespace internal
+			    {
+			        template<typename TypeList>
+			        constexpr auto flatAlignOfImpl()
+			        {
+			            using namespace boost::mp11;
+
+			            std::size_t maxAlign = 0;
+			            mp_for_each<mp_transform<mp_identity, TypeList>>([&](auto e) constexpr {
+			                using T = typename decltype(e)::type;
+			                maxAlign = std::max(maxAlign, alignof(T));
+			            });
+			            return maxAlign;
+			        }
+			    } // namespace internal
+
+			    /// The alignment of a type list if its elements would be in a normal struct.
+			    template<typename TypeList>
+			    inline constexpr std::size_t flatAlignOf = internal::flatAlignOfImpl<TypeList>();
+
+			    /// The alignment of a type T.
+			    template<typename T>
+			    inline constexpr std::size_t alignOf = alignof(T);
+
+			    /// The alignment of a record dimension if its fields would be in a normal struct.
+			    template<typename... Fields>
+			    inline constexpr std::size_t alignOf<Record<Fields...>> = flatAlignOf<FlatRecordDim<Record<Fields...>>>;
+
+			    /// Returns the ceiling of a / b.
+			    template<typename Integral>
+			    [[nodiscard]] LLAMA_FN_HOST_ACC_INLINE constexpr auto divCeil(Integral a, Integral b) -> Integral
+			    {
+			        return (a + b - 1) / b;
+			    }
+
+			    /// Returns the integral n rounded up to be a multiple of mult.
+			    template<typename Integral>
+			    [[nodiscard]] LLAMA_FN_HOST_ACC_INLINE constexpr auto roundUpToMultiple(Integral n, Integral mult) -> Integral
+			    {
+			        return divCeil(n, mult) * mult;
+			    }
+
+			    namespace internal
+			    {
+			        template<typename TypeList, bool Align, bool IncludeTailPadding>
+			        constexpr auto sizeOfImpl() -> std::size_t
+			        {
+			            using namespace boost::mp11;
+
+			            std::size_t size = 0;
+			            std::size_t maxAlign = 0;
+			            mp_for_each<mp_transform<mp_identity, TypeList>>([&](auto e) constexpr {
+			                using T = typename decltype(e)::type;
+			                if constexpr(Align)
+			                {
+			                    size = roundUpToMultiple(size, alignof(T));
+			                    maxAlign = std::max(maxAlign, alignof(T));
+			                }
+			                // NOLINTNEXTLINE(readability-misleading-indentation)
+			                size += sizeof(T);
+			            });
+
+			            // final padding, so next struct can start right away
+			            if constexpr(Align && IncludeTailPadding)
+			                size = roundUpToMultiple(size, maxAlign); // TODO(bgruber): we could use flatAlignOf<TypeList> here, at
+			                                                          // the cost of more template instantiations
+			            return size;
+			        }
+
+			        template<typename TypeList, std::size_t I, bool Align>
+			        constexpr auto offsetOfImplWorkaround() -> std::size_t;
+			    } // namespace internal
+
+			    /// The size of a type list if its elements would be in a normal struct.
+			    template<typename TypeList, bool Align, bool IncludeTailPadding = true>
+			    inline constexpr std::size_t flatSizeOf = internal::sizeOfImpl<TypeList, Align, IncludeTailPadding>();
+
+			    /// The size of a type T.
+			    template<typename T, bool Align = false, bool IncludeTailPadding = true>
+			    inline constexpr std::size_t sizeOf = sizeof(T);
+
+			    /// The size of a record dimension if its fields would be in a normal struct.
+			    template<typename... Fields, bool Align, bool IncludeTailPadding>
+			    inline constexpr std::size_t sizeOf<Record<Fields...>, Align, IncludeTailPadding> = flatSizeOf<
+			        FlatRecordDim<Record<Fields...>>,
+			        Align,
+			        IncludeTailPadding>;
+
+			    /// The byte offset of an element in a type list ifs elements would be in a normal struct.
+			    template<typename TypeList, std::size_t I, bool Align>
+			    inline constexpr std::size_t flatOffsetOf = internal::offsetOfImplWorkaround<TypeList, I, Align>();
+
+			    namespace internal
+			    {
+			        // unfortunately, we cannot inline this function as an IILE, as MSVC complains:
+			        // fatal error C1202: recursive type or function dependency context too complex
+			        template<typename TypeList, std::size_t I, bool Align>
+			        constexpr auto offsetOfImplWorkaround() -> std::size_t
+			        {
+			            if constexpr(I == 0)
+			                return 0;
+			            else
+			            {
+			                std::size_t offset
+			                    = flatOffsetOf<TypeList, I - 1, Align> + sizeof(boost::mp11::mp_at_c<TypeList, I - 1>);
+			                if constexpr(Align)
+			                    offset = roundUpToMultiple(offset, alignof(boost::mp11::mp_at_c<TypeList, I>));
+			                return offset;
+			            }
+			        }
+			    } // namespace internal
+
+			    /// The byte offset of an element in a record dimension if it would be a normal struct.
+			    /// \tparam RecordDim Record dimension tree.
+			    /// \tparam RecordCoord Record coordinate of an element inrecord dimension tree.
+			    template<typename RecordDim, typename RecordCoord, bool Align = false>
+			    inline constexpr std::size_t offsetOf
+			        = flatOffsetOf<FlatRecordDim<RecordDim>, flatRecordCoord<RecordDim, RecordCoord>, Align>;
+
+			    namespace internal
+			    {
+			        // Such a class is also known as arraw_proxy: https://quuxplusone.github.io/blog/2019/02/06/arrow-proxy/
+			        template<typename T>
+			        struct IndirectValue
+			        {
+			            T value;
+
+			            LLAMA_FN_HOST_ACC_INLINE auto operator->() -> T*
+			            {
+			                return &value;
+			            }
+
+			            LLAMA_FN_HOST_ACC_INLINE auto operator->() const -> const T*
+			            {
+			                return &value;
+			            }
+			        };
+
+			        // TODO(bgruber): replace in C++20
+			        template<class T>
+			        struct IsBoundedArray : std::false_type
+			        {
+			        };
+
+			        template<class T, std::size_t N>
+			        struct IsBoundedArray<T[N]> : std::true_type
+			        {
+			        };
+			    } // namespace internal
+
+			    namespace internal
+			    {
+			        template<typename Coord, typename T, template<typename, typename> typename TypeFunctor>
+			        struct TransformLeavesWithCoordImpl
+			        {
+			            using type = TypeFunctor<Coord, T>;
+			        };
+
+			        template<std::size_t... Is, typename... Fields, template<typename, typename> typename TypeFunctor>
+			        struct TransformLeavesWithCoordImpl<RecordCoord<Is...>, Record<Fields...>, TypeFunctor>
+			        {
+			            template<std::size_t... Js>
+			            static auto f(std::index_sequence<Js...>)
+			            {
+			                return Record<Field<
+			                    GetFieldTag<Fields>,
+			                    typename TransformLeavesWithCoordImpl<RecordCoord<Is..., Js>, GetFieldType<Fields>, TypeFunctor>::
+			                        type>...>{};
+			            }
+
+			            using type = decltype(f(std::index_sequence_for<Fields...>{}));
+			        };
+			        template<std::size_t... Is, typename Child, std::size_t N, template<typename, typename> typename TypeFunctor>
+			        struct TransformLeavesWithCoordImpl<RecordCoord<Is...>, Child[N], TypeFunctor>
+			        {
+			            template<std::size_t... Js>
+			            static void f(std::index_sequence<Js...>)
+			            {
+			                static_assert(
+			                    boost::mp11::mp_same<
+			                        typename TransformLeavesWithCoordImpl<RecordCoord<Is..., Js>, Child, TypeFunctor>::type...>::
+			                        value,
+			                    "Leave transformations beneath an array node must return the same type");
+			            }
+			            using dummy = decltype(f(std::make_index_sequence<N>{}));
+
+			            using type = typename TransformLeavesWithCoordImpl<RecordCoord<Is..., 0>, Child, TypeFunctor>::type[N];
+			        };
+
+			        template<template<typename> typename F>
+			        struct MakePassSecond
+			        {
+			            template<typename A, typename B>
+			            using fn = F<B>;
+			        };
+			    } // namespace internal
+
+			    /// Creates a new record dimension where each new leaf field's type is the result of applying FieldTypeFunctor to
+			    /// the original leaf's \ref RecordCoord and field's type.
+			    template<typename RecordDim, template<typename, typename> typename FieldTypeFunctor>
+			    using TransformLeavesWithCoord =
+			        typename internal::TransformLeavesWithCoordImpl<RecordCoord<>, RecordDim, FieldTypeFunctor>::type;
+
+			    /// Creates a new record dimension where each new leaf field's type is the result of applying FieldTypeFunctor to
+			    /// the original leaf field's type.
+			    template<typename RecordDim, template<typename> typename FieldTypeFunctor>
+			    using TransformLeaves
+			        = TransformLeavesWithCoord<RecordDim, internal::MakePassSecond<FieldTypeFunctor>::template fn>;
+
+			    namespace internal
+			    {
+			        // TODO(bgruber): we might implement this better by expanding a record dim into a list of tag lists and then
+			        // computing a real set union of the two tag list lists
+
+			        template<typename A, typename B>
+			        auto mergeRecordDimsImpl(boost::mp11::mp_identity<A> a, boost::mp11::mp_identity<B>)
+			        {
+			            static_assert(std::is_same_v<A, B>, "Cannot merge record and non-record or fields with different types");
+			            return a;
+			        }
+
+			        template<typename A, std::size_t NA, typename B, std::size_t NB>
+			        auto mergeRecordDimsImpl(
+			            [[maybe_unused]] boost::mp11::mp_identity<A[NA]> a,
+			            [[maybe_unused]] boost::mp11::mp_identity<B[NB]> b)
+			        {
+			            static_assert(std::is_same_v<A, B>, "Cannot merge arrays of different type");
+			            if constexpr(NA < NB)
+			                return b;
+			            else
+			                return a;
+			        }
+
+			        template<typename... FieldsA>
+			        auto mergeRecordDimsImpl(boost::mp11::mp_identity<Record<FieldsA...>> a, boost::mp11::mp_identity<Record<>>)
+			        {
+			            return a;
+			        }
+
+			        template<
+			            typename... FieldsA,
+			            typename FieldB,
+			            typename... FieldsB,
+			            auto Pos = FindFieldByTag<Record<FieldsA...>, GetFieldTag<FieldB>>::value>
+			        auto mergeRecordDimsImpl(
+			            boost::mp11::mp_identity<Record<FieldsA...>>,
+			            boost::mp11::mp_identity<Record<FieldB, FieldsB...>>)
+			        {
+			            using namespace boost::mp11;
+			            if constexpr(Pos == sizeof...(FieldsA))
+			            {
+			                return mergeRecordDimsImpl(
+			                    mp_identity<Record<FieldsA..., FieldB>>{},
+			                    mp_identity<Record<FieldsB...>>{});
+			            }
+			            else
+			            {
+			                using OldFieldA = mp_at_c<Record<FieldsA...>, Pos>;
+			                using NewFieldA = Field<
+			                    GetFieldTag<OldFieldA>,
+			                    typename decltype(mergeRecordDimsImpl(
+			                        mp_identity<GetFieldType<OldFieldA>>{},
+			                        mp_identity<GetFieldType<FieldB>>{}))::type>;
+			                using NewRecordA = mp_replace_at_c<Record<FieldsA...>, Pos, NewFieldA>;
+			                return mergeRecordDimsImpl(mp_identity<NewRecordA>{}, mp_identity<Record<FieldsB...>>{});
+			            }
+			        }
+			    } // namespace internal
+
+			    /// Creates a merged record dimension, where duplicated, nested fields are unified.
+			    template<typename RecordDimA, typename RecordDimB>
+			    using MergedRecordDims = typename decltype(internal::mergeRecordDimsImpl(
+			        boost::mp11::mp_identity<RecordDimA>{},
+			        boost::mp11::mp_identity<RecordDimB>{}))::type;
+
+			    /// Alias for ToT, adding `const` if FromT is const qualified.
+			    template<typename FromT, typename ToT>
+			    using CopyConst = std::conditional_t<std::is_const_v<FromT>, const ToT, ToT>;
+
+			    /// Used as template argument to specify a constant/compile-time value.
+			    template<auto V>
+			    using Constant = std::integral_constant<decltype(V), V>;
+
+			    namespace internal
+			    {
+			        template<typename T>
+			        struct IsConstant : std::false_type
+			        {
+			        };
+
+			        template<typename T, T V>
+			        struct IsConstant<std::integral_constant<T, V>> : std::true_type
+			        {
+			        };
+			    } // namespace internal
+
+			    template<typename T>
+			    inline constexpr bool isConstant = internal::IsConstant<T>::value;
+
+			    namespace internal
+			    {
+			        /// Holds a value of type T. Is useful as a base class. Is specialized for llama::Constant to not store the
+			        /// value at runtime. \tparam T Type of value to store. \tparam I Is used to disambiguate multiple BoxedValue
+			        /// base classes.
+			        template<typename T, int I = 0>
+			        struct BoxedValue
+			        {
+			            BoxedValue() = default;
+
+			            // we don't make this ctor explicit so a Value appearing in a ctor list can just be created by passing a T
+			            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
+			            LLAMA_FN_HOST_ACC_INLINE BoxedValue(T value) : val(value)
+			            {
+			            }
+
+			            LLAMA_FN_HOST_ACC_INLINE constexpr auto value() const
+			            {
+			                return val;
+			            }
+
+			        private:
+			            T val = {};
+			        };
+
+			        template<auto V, int I>
+			        struct BoxedValue<Constant<V>, I>
+			        {
+			            BoxedValue() = default;
+
+			            // we don't make this ctor explicit so a Value appearing in a ctor list can just be created by passing a T
+			            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
+			            LLAMA_FN_HOST_ACC_INLINE BoxedValue(Constant<V>)
+			            {
+			            }
+
+			            LLAMA_FN_HOST_ACC_INLINE static constexpr auto value()
+			            {
+			                return V;
+			            }
+			        };
+			    } // namespace internal
+			} // namespace llama
+			// ==
+			// == ./Core.hpp ==
+			// ============================================================================
+
+		// #include "RecordCoord.hpp"    // amalgamate: file already expanded
+
+		// #include <type_traits>    // amalgamate: file already included
+
+		#if __has_include(<concepts>)
+		#    include <concepts>
+		#endif
+		namespace llama
+		{
+		#ifdef __cpp_lib_concepts
+		    // clang-format off
+		    template <typename M>
+		    concept Mapping = requires(M m) {
+		        typename M::ArrayExtents;
+		        typename M::ArrayIndex;
+		        typename M::RecordDim;
+		        { m.extents() } -> std::same_as<typename M::ArrayExtents>;
+		        { +M::blobCount } -> std::same_as<std::size_t>;
+		        std::integral_constant<std::size_t, M::blobCount>{}; // validates constexpr-ness
+		        { m.blobSize(typename M::ArrayExtents::value_type{}) } -> std::same_as<typename M::ArrayExtents::value_type>;
+		    };
+
+		    template <typename M, typename RC>
+		    concept PhysicalField = requires(M m, typename M::ArrayIndex ai) {
+		        { m.blobNrAndOffset(ai, RC{}) } -> std::same_as<NrAndOffset<typename M::ArrayExtents::value_type>>;
+		    };
+
+		    template<typename M>
+		    struct MakeIsPhysical
+		    {
+		        template<typename RC>
+		        using fn = boost::mp11::mp_bool<PhysicalField<M, RC>>;
+		    };
+
+		    template<typename M>
+		    inline constexpr bool allFieldsArePhysical
+		        = boost::mp11::mp_all_of<LeafRecordCoords<typename M::RecordDim>, MakeIsPhysical<M>::template fn>::value;
+
+		    template <typename M>
+		    concept PhysicalMapping = Mapping<M> && allFieldsArePhysical<M>;
+
+		    template <typename R>
+		    concept LValueReference = std::is_lvalue_reference_v<R>;
+
+		    template <typename R>
+		    concept ProxyReference = requires(R r) {
+		        typename R::value_type;
+		        { static_cast<typename R::value_type>(r) } -> std::same_as<typename R::value_type>;
+		        { r = std::declval<typename R::value_type>() } -> std::same_as<R&>;
+		    };
+
+		    template <typename R>
+		    concept AnyReference = LValueReference<R> || ProxyReference<R>;
+
+		    template <typename M, typename RC>
+		    concept ComputedField = M::isComputed(RC{}) && requires(M m, typename M::ArrayIndex ai, Array<Array<std::byte, 1>, 1> blobs) {
+		        { m.compute(ai, RC{}, blobs) } -> AnyReference;
+		    };
+
+		    template<typename M>
+		    struct MakeIsComputed
+		    {
+		        template<typename RC>
+		        using fn = boost::mp11::mp_bool<ComputedField<M, RC>>;
+		    };
+
+		    template<typename M>
+		    inline constexpr bool allFieldsAreComputed
+		        = boost::mp11::mp_all_of<LeafRecordCoords<typename M::RecordDim>, MakeIsComputed<M>::template fn>::value;
+
+		    template <typename M>
+		    concept FullyComputedMapping = Mapping<M> && allFieldsAreComputed<M>;
+
+		    template<
+		        typename M,
+		        typename LeafCoords = LeafRecordCoords<typename M::RecordDim>,
+		        std::size_t PhysicalCount = boost::mp11::mp_count_if<LeafCoords, MakeIsPhysical<M>::template fn>::value,
+		        std::size_t ComputedCount = boost::mp11::mp_count_if<LeafCoords, MakeIsComputed<M>::template fn>::value>
+		    inline constexpr bool allFieldsArePhysicalOrComputed
+		        = (PhysicalCount + ComputedCount) >= boost::mp11::mp_size<LeafCoords>::value&& PhysicalCount > 0
+		        && ComputedCount > 0; // == instead of >= would be better, but it's not easy to count correctly,
+		                              // because we cannot check whether the call to blobNrOrOffset()
+		                              // or compute() is actually valid
+
+		    template <typename M>
+		    concept PartiallyComputedMapping = Mapping<M> && allFieldsArePhysicalOrComputed<M>;
+
+		    template<typename B>
+		    concept Blob = requires(B b, std::size_t i) {
+		        // according to http://eel.is/c++draft/intro.object#3 only std::byte and unsigned char can provide storage for
+		        // other types
+		        std::is_same_v<decltype(b[i]), std::byte&> || std::is_same_v<decltype(b[i]), unsigned char&>;
+		    };
+
+		    template <typename BA>
+		    concept BlobAllocator = requires(BA ba, std::integral_constant<std::size_t, 16> alignment, std::size_t size) {
+		        { ba(alignment, size) } -> Blob;
+		    };
+		        // clang-format on
+		#endif
+
+		    namespace internal
+		    {
+		        template<typename R, typename = void>
+		        struct IsProxyReferenceImpl : std::false_type
+		        {
+		        };
+
+		        template<typename R>
+		        struct IsProxyReferenceImpl<
+		            R,
+		            std::void_t<
+		                typename R::value_type,
+		                decltype(static_cast<typename R::value_type>(std::declval<R&>())),
+		                decltype(std::declval<R&>() = std::declval<typename R::value_type>())>> : std::true_type
+		        {
+		        };
+		    } // namespace internal
+
+		    template<typename R>
+		#ifdef __cpp_lib_concepts
+		    inline constexpr bool isProxyReference = ProxyReference<R>;
+		#else
+		    inline constexpr bool isProxyReference = internal::IsProxyReferenceImpl<R>::value;
+		#endif
+		} // namespace llama
+		// ==
+		// == ./Concepts.hpp ==
+		// ============================================================================
+
 	// #include "macros.hpp"    // amalgamate: file already expanded
 
 	#include <atomic>
@@ -1345,935 +2409,7 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>>
 	// ==
 	// #pragma once
 	// #include "ArrayExtents.hpp"    // amalgamate: file already expanded
-		// ============================================================================
-		// == ./Core.hpp ==
-		// ==
-		// Copyright 2018 Alexander Matthes
-		// SPDX-License-Identifier: GPL-3.0-or-later
-
-		// #pragma once
-		// #include "ArrayExtents.hpp"    // amalgamate: file already expanded
-		// #include "Meta.hpp"    // amalgamate: file already expanded
-			// ============================================================================
-			// == ./RecordCoord.hpp ==
-			// ==
-			// Copyright 2018 Alexander Matthes
-			// SPDX-License-Identifier: GPL-3.0-or-later
-
-			// #pragma once
-			// #include "Meta.hpp"    // amalgamate: file already expanded
-
-			#include <array>
-			// #include <ostream>    // amalgamate: file already included
-			// #include <type_traits>    // amalgamate: file already included
-
-			namespace llama
-			{
-			    /// Represents a coordinate for a record inside the record dimension tree.
-			    /// \tparam Coords... the compile time coordinate.
-			    template<std::size_t... Coords>
-			    struct RecordCoord
-			    {
-			        /// The list of integral coordinates as `boost::mp11::mp_list`.
-			        using List = boost::mp11::mp_list_c<std::size_t, Coords...>;
-
-			        static constexpr std::size_t front = boost::mp11::mp_front<List>::value;
-			        static constexpr std::size_t back = boost::mp11::mp_back<List>::value;
-			        static constexpr std::size_t size = sizeof...(Coords);
-			    };
-
-			    template<>
-			    struct RecordCoord<>
-			    {
-			        using List = boost::mp11::mp_list_c<std::size_t>;
-
-			        static constexpr std::size_t size = 0;
-			    };
-
-			    template<std::size_t... CoordsA, std::size_t... CoordsB>
-			    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator==(RecordCoord<CoordsA...>, RecordCoord<CoordsB...>)
-			    {
-			        return false;
-			    }
-
-			    template<std::size_t... Coords>
-			    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator==(RecordCoord<Coords...>, RecordCoord<Coords...>)
-			    {
-			        return true;
-			    }
-
-			    template<std::size_t... CoordsA, std::size_t... CoordsB>
-			    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator!=(RecordCoord<CoordsA...> a, RecordCoord<CoordsB...> b)
-			    {
-			        return !(a == b);
-			    }
-
-			    template<typename T>
-			    inline constexpr bool isRecordCoord = false;
-
-			    template<std::size_t... Coords>
-			    inline constexpr bool isRecordCoord<RecordCoord<Coords...>> = true;
-
-			    template<std::size_t... RCs>
-			    auto operator<<(std::ostream& os, RecordCoord<RCs...>) -> std::ostream&
-			    {
-			        os << "RecordCoord<";
-			        bool first = true;
-			        for(auto rc : std::array<std::size_t, sizeof...(RCs)>{RCs...})
-			        {
-			            if(first)
-			                first = false;
-			            else
-			                os << ", ";
-			            os << rc;
-			        }
-			        os << ">";
-			        return os;
-			    }
-
-			    inline namespace literals
-			    {
-			        /// Literal operator for converting a numeric literal into a \ref RecordCoord.
-			        template<char... Digits>
-			        constexpr auto operator"" _RC()
-			        {
-			            constexpr auto coord = []() constexpr
-			            {
-			                char digits[] = {(Digits - 48)...};
-			                std::size_t acc = 0;
-			                std ::size_t powerOf10 = 1;
-			                for(int i = sizeof...(Digits) - 1; i >= 0; i--)
-			                {
-			                    acc += digits[i] * powerOf10;
-			                    powerOf10 *= 10;
-			                }
-			                return acc;
-			            }
-			            ();
-			            return RecordCoord<coord>{};
-			        }
-			    } // namespace literals
-
-			    /// Converts a type list of integral constants into a \ref RecordCoord.
-			    template<typename L>
-			    using RecordCoordFromList = internal::mp_unwrap_values_into<L, RecordCoord>;
-
-			    /// Concatenate a set of \ref RecordCoord%s.
-			    template<typename... RecordCoords>
-			    using Cat = RecordCoordFromList<boost::mp11::mp_append<typename RecordCoords::List...>>;
-
-			    /// Concatenate a set of \ref RecordCoord%s instances.
-			    template<typename... RecordCoords>
-			    constexpr auto cat(RecordCoords...)
-			    {
-			        return Cat<RecordCoords...>{};
-			    }
-
-			    /// RecordCoord without first coordinate component.
-			    template<typename RecordCoord>
-			    using PopFront = RecordCoordFromList<boost::mp11::mp_pop_front<typename RecordCoord::List>>;
-
-			    namespace internal
-			    {
-			        template<std::size_t... Coords1, std::size_t... Coords2>
-			        constexpr auto recordCoordCommonPrefixIsBiggerImpl(RecordCoord<Coords1...>, RecordCoord<Coords2...>) -> bool
-			        {
-			            // CTAD does not work if Coords1/2 is an empty pack
-			            std::array<std::size_t, sizeof...(Coords1)> a1{Coords1...};
-			            std::array<std::size_t, sizeof...(Coords2)> a2{Coords2...};
-			            for(std::size_t i = 0; i < std::min(a1.size(), a2.size()); i++)
-			            {
-			                if(a1[i] > a2[i])
-			                    return true;
-			                if(a1[i] < a2[i])
-			                    return false;
-			            }
-			            return false;
-			        };
-			    } // namespace internal
-
-			    /// Checks wether the first RecordCoord is bigger than the second.
-			    template<typename First, typename Second>
-			    inline constexpr auto recordCoordCommonPrefixIsBigger
-			        = internal::recordCoordCommonPrefixIsBiggerImpl(First{}, Second{});
-
-			    namespace internal
-			    {
-			        template<std::size_t... Coords1, std::size_t... Coords2>
-			        constexpr auto recordCoordCommonPrefixIsSameImpl(RecordCoord<Coords1...>, RecordCoord<Coords2...>) -> bool
-			        {
-			            // CTAD does not work if Coords1/2 is an empty pack
-			            std::array<std::size_t, sizeof...(Coords1)> a1{Coords1...};
-			            std::array<std::size_t, sizeof...(Coords2)> a2{Coords2...};
-			            for(std::size_t i = 0; i < std::min(a1.size(), a2.size()); i++)
-			                if(a1[i] != a2[i])
-			                    return false;
-			            return true;
-			        };
-			    } // namespace internal
-
-			    /// Checks whether two \ref RecordCoord%s are the same or one is the prefix of the other.
-			    template<typename First, typename Second>
-			    inline constexpr auto recordCoordCommonPrefixIsSame
-			        = internal::recordCoordCommonPrefixIsSameImpl(First{}, Second{});
-			} // namespace llama
-			// ==
-			// == ./RecordCoord.hpp ==
-			// ============================================================================
-
-
-		#include <iostream>
-		#include <string>
-		// #include <type_traits>    // amalgamate: file already included
-
-		namespace llama
-		{
-		    /// Anonymous naming for a \ref Field.
-		    struct NoName
-		    {
-		    };
-
-		    /// A type list of \ref Field%s which may be used to define a record dimension.
-		    template<typename... Fields>
-		    struct Record
-		    {
-		    };
-
-		    /// @brief Tells whether the given type is allowed as a field type in LLAMA. Such types need to be trivially
-		    /// constructible and trivially destructible.
-		    template<typename T>
-		    inline constexpr bool isAllowedFieldType = std::is_trivially_destructible_v<T>;
-
-		    /// Record dimension tree node which may either be a leaf or refer to a child tree presented as another \ref
-		    /// Record.
-		    /// \tparam Tag Name of the node. May be any type (struct, class).
-		    /// \tparam Type Type of the node. May be one of three cases. 1. another sub tree consisting of a nested \ref
-		    /// Record. 2. an array of static size of any type, in which case a Record with as many \ref Field as the array
-		    /// size is created, named \ref RecordCoord specialized on consecutive numbers I. 3. A scalar type different from
-		    /// \ref Record, making this node a leaf of this type.
-		    template<typename Tag, typename Type>
-		    struct Field
-		    {
-		        static_assert(isAllowedFieldType<Type>, "This field's type is not allowed");
-		    };
-
-		    template<typename T>
-		    struct NrAndOffset
-		    {
-		        T nr;
-		        T offset;
-
-		        friend auto operator<<(std::ostream& os, const NrAndOffset& value) -> std::ostream&
-		        {
-		            return os << "NrAndOffset{" << value.nr << ", " << value.offset << "}";
-		        }
-		    };
-
-		    template<typename Int>
-		    NrAndOffset(Int, Int) -> NrAndOffset<Int>;
-
-		    template<typename TA, typename TB>
-		    auto operator==(const NrAndOffset<TA>& a, const NrAndOffset<TB>& b) -> bool
-		    {
-		        return a.nr == b.nr && a.offset == b.offset;
-		    }
-
-		    template<typename TA, typename TB>
-		    auto operator!=(const NrAndOffset<TA>& a, const NrAndOffset<TB>& b) -> bool
-		    {
-		        return !(a == b);
-		    }
-
-		    /// Get the tag from a \ref Field.
-		    template<typename Field>
-		    using GetFieldTag = boost::mp11::mp_first<Field>;
-
-		    /// Get the type from a \ref Field.
-		    template<typename Field>
-		    using GetFieldType = boost::mp11::mp_second<Field>;
-
-		    template<typename T>
-		    inline constexpr auto isRecord = false;
-
-		    template<typename... Fields>
-		    inline constexpr auto isRecord<Record<Fields...>> = true;
-
-		    namespace internal
-		    {
-		        template<typename RecordDim, typename RecordCoord>
-		        struct GetTagsImpl;
-
-		        template<typename... Fields, std::size_t FirstCoord, std::size_t... Coords>
-		        struct GetTagsImpl<Record<Fields...>, RecordCoord<FirstCoord, Coords...>>
-		        {
-		            using Field = boost::mp11::mp_at_c<boost::mp11::mp_list<Fields...>, FirstCoord>;
-		            using ChildTag = GetFieldTag<Field>;
-		            using ChildType = GetFieldType<Field>;
-		            using type
-		                = boost::mp11::mp_push_front<typename GetTagsImpl<ChildType, RecordCoord<Coords...>>::type, ChildTag>;
-		        };
-
-		        template<typename ChildType, std::size_t Count, std::size_t FirstCoord, std::size_t... Coords>
-		        struct GetTagsImpl<ChildType[Count], RecordCoord<FirstCoord, Coords...>>
-		        {
-		            using ChildTag = RecordCoord<FirstCoord>;
-		            using type
-		                = boost::mp11::mp_push_front<typename GetTagsImpl<ChildType, RecordCoord<Coords...>>::type, ChildTag>;
-		        };
-
-		        template<typename T>
-		        struct GetTagsImpl<T, RecordCoord<>>
-		        {
-		            using type = boost::mp11::mp_list<>;
-		        };
-		    } // namespace internal
-
-		    /// Get the tags of all \ref Field%s from the root of the record dimension tree until to the node identified by
-		    /// \ref RecordCoord.
-		    template<typename RecordDim, typename RecordCoord>
-		    using GetTags = typename internal::GetTagsImpl<RecordDim, RecordCoord>::type;
-
-		    namespace internal
-		    {
-		        template<typename RecordDim, typename RecordCoord>
-		        struct GetTagImpl
-		        {
-		            using type = boost::mp11::mp_back<GetTags<RecordDim, RecordCoord>>;
-		        };
-
-		        template<typename RecordDim>
-		        struct GetTagImpl<RecordDim, RecordCoord<>>
-		        {
-		            using type = NoName;
-		        };
-		    } // namespace internal
-
-		    /// Get the tag of the \ref Field at a \ref RecordCoord inside the record dimension tree.
-		    template<typename RecordDim, typename RecordCoord>
-		    using GetTag = typename internal::GetTagImpl<RecordDim, RecordCoord>::type;
-
-		    /// Is true if, starting at two coordinates in two record dimensions, all subsequent nodes in the record dimension
-		    /// tree have the same tag.
-		    /// \tparam RecordDimA First record dimension.
-		    /// \tparam LocalA \ref RecordCoord based on StartA along which the tags are compared.
-		    /// \tparam RecordDimB second record dimension.
-		    /// \tparam LocalB \ref RecordCoord based on StartB along which the tags are compared.
-		    template<typename RecordDimA, typename LocalA, typename RecordDimB, typename LocalB>
-		    inline constexpr auto hasSameTags = []() constexpr
-		    {
-		        if constexpr(LocalA::size != LocalB::size)
-		            return false;
-		        else if constexpr(LocalA::size == 0 && LocalB::size == 0)
-		            return true;
-		        else
-		            return std::is_same_v<GetTags<RecordDimA, LocalA>, GetTags<RecordDimB, LocalB>>;
-		    }
-		    ();
-
-		    namespace internal
-		    {
-		        template<typename FieldList, typename Tag>
-		        struct FindFieldByTag
-		        {
-		            template<typename Field>
-		            using HasTag = std::is_same<GetFieldTag<Field>, Tag>;
-
-		            static constexpr auto value = boost::mp11::mp_find_if<FieldList, HasTag>::value;
-		        };
-
-		        template<typename RecordDim, typename RecordCoord, typename... Tags>
-		        struct GetCoordFromTagsImpl
-		        {
-		            static_assert(boost::mp11::mp_size<RecordDim>::value != 0, "Tag combination is not valid");
-		        };
-
-		        template<typename... Fields, std::size_t... ResultCoords, typename FirstTag, typename... Tags>
-		        struct GetCoordFromTagsImpl<Record<Fields...>, RecordCoord<ResultCoords...>, FirstTag, Tags...>
-		        {
-		            static constexpr auto tagIndex = FindFieldByTag<boost::mp11::mp_list<Fields...>, FirstTag>::value;
-		            static_assert(
-		                tagIndex < sizeof...(Fields),
-		                "FirstTag was not found inside this Record. Does your record dimension contain the tag you access "
-		                "with?");
-
-		            using ChildType = GetFieldType<boost::mp11::mp_at_c<Record<Fields...>, tagIndex>>;
-
-		            using type =
-		                typename GetCoordFromTagsImpl<ChildType, RecordCoord<ResultCoords..., tagIndex>, Tags...>::type;
-		        };
-
-		        template<
-		            typename ChildType,
-		            std::size_t Count,
-		            std::size_t... ResultCoords,
-		            typename FirstTag,
-		            typename... Tags>
-		        struct GetCoordFromTagsImpl<ChildType[Count], RecordCoord<ResultCoords...>, FirstTag, Tags...>
-		        {
-		            static_assert(isRecordCoord<FirstTag>, "Please use a RecordCoord<I> to index into static arrays");
-		            static_assert(FirstTag::size == 1, "Expected RecordCoord with 1 coordinate");
-		            static_assert(FirstTag::front < Count, "Index out of bounds");
-
-		            using type =
-		                typename GetCoordFromTagsImpl<ChildType, RecordCoord<ResultCoords..., FirstTag::front>, Tags...>::type;
-		        };
-
-		        template<typename RecordDim, typename RecordCoord>
-		        struct GetCoordFromTagsImpl<RecordDim, RecordCoord>
-		        {
-		            using type = RecordCoord;
-		        };
-
-		        // unpack a list of tags
-		        template<typename... Fields, typename... Tags>
-		        struct GetCoordFromTagsImpl<Record<Fields...>, RecordCoord<>, boost::mp11::mp_list<Tags...>>
-		            : GetCoordFromTagsImpl<Record<Fields...>, RecordCoord<>, Tags...>
-		        {
-		        };
-		        template<typename ChildType, std::size_t Count, typename... Tags>
-		        struct GetCoordFromTagsImpl<ChildType[Count], RecordCoord<>, boost::mp11::mp_list<Tags...>>
-		            : GetCoordFromTagsImpl<ChildType[Count], RecordCoord<>, Tags...>
-		        {
-		        };
-		    } // namespace internal
-
-		    /// Converts a series of tags, or a list of tags, navigating down a record dimension into a \ref RecordCoord.
-		    template<typename RecordDim, typename... Tags>
-		    using GetCoordFromTags = typename internal::GetCoordFromTagsImpl<RecordDim, RecordCoord<>, Tags...>::type;
-
-		    namespace internal
-		    {
-		        template<typename RecordDim, typename... RecordCoordOrTags>
-		        struct GetTypeImpl
-		        {
-		            using type = typename GetTypeImpl<RecordDim, GetCoordFromTags<RecordDim, RecordCoordOrTags...>>::type;
-		        };
-
-		        template<typename... Children, std::size_t HeadCoord, std::size_t... TailCoords>
-		        struct GetTypeImpl<Record<Children...>, RecordCoord<HeadCoord, TailCoords...>>
-		        {
-		            using ChildType = GetFieldType<boost::mp11::mp_at_c<Record<Children...>, HeadCoord>>;
-		            using type = typename GetTypeImpl<ChildType, RecordCoord<TailCoords...>>::type;
-		        };
-
-		        template<typename ChildType, std::size_t N, std::size_t HeadCoord, std::size_t... TailCoords>
-		        struct GetTypeImpl<ChildType[N], RecordCoord<HeadCoord, TailCoords...>>
-		        {
-		            using type = typename GetTypeImpl<ChildType, RecordCoord<TailCoords...>>::type;
-		        };
-
-		        template<typename T>
-		        struct GetTypeImpl<T, RecordCoord<>>
-		        {
-		            static_assert(isAllowedFieldType<T>);
-		            using type = T;
-		        };
-		    } // namespace internal
-
-		    /// Returns the type of a node in a record dimension tree identified by a given \ref RecordCoord or a series of
-		    /// tags.
-		    template<typename RecordDim, typename... RecordCoordOrTags>
-		    using GetType = typename internal::GetTypeImpl<RecordDim, RecordCoordOrTags...>::type;
-
-		    namespace internal
-		    {
-		        template<typename RecordDim, typename RecordCoord>
-		        struct LeafRecordCoordsImpl;
-
-		        template<typename T, std::size_t... RCs>
-		        struct LeafRecordCoordsImpl<T, RecordCoord<RCs...>>
-		        {
-		            using type = boost::mp11::mp_list<RecordCoord<RCs...>>;
-		        };
-
-		        template<typename... Fields, std::size_t... RCs>
-		        struct LeafRecordCoordsImpl<Record<Fields...>, RecordCoord<RCs...>>
-		        {
-		            template<std::size_t... Is>
-		            static auto help(std::index_sequence<Is...>)
-		            {
-		                return boost::mp11::mp_append<
-		                    typename LeafRecordCoordsImpl<GetFieldType<Fields>, RecordCoord<RCs..., Is>>::type...>{};
-		            }
-		            using type = decltype(help(std::make_index_sequence<sizeof...(Fields)>{}));
-		        };
-
-		        template<typename Child, std::size_t N, std::size_t... RCs>
-		        struct LeafRecordCoordsImpl<Child[N], RecordCoord<RCs...>>
-		        {
-		            template<std::size_t... Is>
-		            static auto help(std::index_sequence<Is...>)
-		            {
-		                return boost::mp11::mp_append<
-		                    typename LeafRecordCoordsImpl<Child, RecordCoord<RCs..., Is>>::type...>{};
-		            }
-		            using type = decltype(help(std::make_index_sequence<N>{}));
-		        };
-		    } // namespace internal
-
-		    /// Returns a flat type list containing all record coordinates to all leaves of the given record dimension.
-		    template<typename RecordDim>
-		    using LeafRecordCoords = typename internal::LeafRecordCoordsImpl<RecordDim, RecordCoord<>>::type;
-
-		    namespace internal
-		    {
-		        // adapted from boost::mp11, but with LLAMA_FN_HOST_ACC_INLINE
-		        template<template<typename...> typename L, typename... T, typename F>
-		        LLAMA_FN_HOST_ACC_INLINE constexpr void mpForEachInlined(L<T...>, F&& f)
-		        {
-		            using A = int[sizeof...(T)];
-		            (void) A{((void) f(T{}), 0)...};
-		        }
-		    } // namespace internal
-
-		    /// Iterates over the record dimension tree and calls a functor on each element.
-		    /// \param functor Functor to execute at each element of. Needs to have `operator()` with a template parameter for
-		    /// the \ref RecordCoord in the record dimension tree.
-		    /// \param baseCoord \ref RecordCoord at which the iteration should be started. The functor is called on elements
-		    /// beneath this coordinate.
-		    template<typename RecordDim, typename Functor, std::size_t... Coords>
-		    LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeafCoord(Functor&& functor, RecordCoord<Coords...> baseCoord)
-		    {
-		        LLAMA_FORCE_INLINE_RECURSIVE
-		        internal::mpForEachInlined(
-		            LeafRecordCoords<GetType<RecordDim, RecordCoord<Coords...>>>{},
-		            [&](auto innerCoord) LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(constexpr)
-		            { std::forward<Functor>(functor)(cat(baseCoord, innerCoord)); });
-		    }
-
-		    /// Iterates over the record dimension tree and calls a functor on each element.
-		    /// \param functor Functor to execute at each element of. Needs to have `operator()` with a template parameter for
-		    /// the \ref RecordCoord in the record dimension tree.
-		    /// \param baseTags Tags used to define where the iteration should be started. The functor is called on elements
-		    /// beneath this coordinate.
-		    template<typename RecordDim, typename Functor, typename... Tags>
-		    LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeafCoord(Functor&& functor, Tags... /*baseTags*/)
-		    {
-		        LLAMA_FORCE_INLINE_RECURSIVE
-		        forEachLeafCoord<RecordDim>(std::forward<Functor>(functor), GetCoordFromTags<RecordDim, Tags...>{});
-		    }
-
-		    namespace internal
-		    {
-		        template<typename T>
-		        struct FlattenRecordDimImpl
-		        {
-		            using type = boost::mp11::mp_list<T>;
-		        };
-
-		        template<typename... Fields>
-		        struct FlattenRecordDimImpl<Record<Fields...>>
-		        {
-		            using type = boost::mp11::mp_append<typename FlattenRecordDimImpl<GetFieldType<Fields>>::type...>;
-		        };
-		        template<typename Child, std::size_t N>
-		        struct FlattenRecordDimImpl<Child[N]>
-		        {
-		            using type = boost::mp11::mp_repeat_c<typename FlattenRecordDimImpl<Child>::type, N>;
-		        };
-		    } // namespace internal
-
-		    /// Returns a flat type list containing all leaf field types of the given record dimension.
-		    template<typename RecordDim>
-		    using FlatRecordDim = typename internal::FlattenRecordDimImpl<RecordDim>::type;
-
-		    /// The total number of fields in the recursively expanded record dimension.
-		    template<typename RecordDim>
-		    inline constexpr std::size_t flatFieldCount = 1;
-
-		    template<typename... Children>
-		    inline constexpr std::size_t flatFieldCount<
-		        Record<Children...>> = (flatFieldCount<GetFieldType<Children>> + ... + 0);
-
-		    template<typename Child, std::size_t N>
-		    inline constexpr std::size_t flatFieldCount<Child[N]> = flatFieldCount<Child>* N;
-
-		    namespace internal
-		    {
-		        template<std::size_t I, typename RecordDim>
-		        inline constexpr std::size_t flatFieldCountBefore = 0;
-
-		        template<typename... Children>
-		        inline constexpr std::size_t flatFieldCountBefore<0, Record<Children...>> = 0;
-
-		        // recursive formulation to benefit from template instantiation memoization
-		        // this massively improves compilation time when this template is instantiated with a lot of different I
-		        template<std::size_t I, typename... Children>
-		        inline constexpr std::size_t flatFieldCountBefore<
-		            I,
-		            Record<
-		                Children...>> = flatFieldCountBefore<I - 1, Record<Children...>> + flatFieldCount<GetFieldType<boost::mp11::mp_at_c<Record<Children...>, I - 1>>>;
-		    } // namespace internal
-
-		    /// The equivalent zero based index into a flat record dimension (\ref FlatRecordDim) of the given hierarchical
-		    /// record coordinate.
-		    template<typename RecordDim, typename RecordCoord>
-		    inline constexpr std::size_t flatRecordCoord = 0;
-
-		    template<typename T>
-		    inline constexpr std::size_t flatRecordCoord<T, RecordCoord<>> = 0;
-
-		    template<typename... Children, std::size_t I, std::size_t... Is>
-		    inline constexpr std::size_t flatRecordCoord<
-		        Record<Children...>,
-		        RecordCoord<
-		            I,
-		            Is...>> = internal::
-		                          flatFieldCountBefore<
-		                              I,
-		                              Record<
-		                                  Children...>> + flatRecordCoord<GetFieldType<boost::mp11::mp_at_c<Record<Children...>, I>>, RecordCoord<Is...>>;
-
-		    template<typename Child, std::size_t N, std::size_t I, std::size_t... Is>
-		    inline constexpr std::size_t flatRecordCoord<Child[N], RecordCoord<I, Is...>> = flatFieldCount<Child>* I
-		        + flatRecordCoord<Child, RecordCoord<Is...>>;
-
-		    namespace internal
-		    {
-		        template<typename TypeList>
-		        constexpr auto flatAlignOfImpl()
-		        {
-		            using namespace boost::mp11;
-
-		            std::size_t maxAlign = 0;
-		            mp_for_each<mp_transform<mp_identity, TypeList>>([&](auto e) constexpr {
-		                using T = typename decltype(e)::type;
-		                maxAlign = std::max(maxAlign, alignof(T));
-		            });
-		            return maxAlign;
-		        }
-		    } // namespace internal
-
-		    /// The alignment of a type list if its elements would be in a normal struct.
-		    template<typename TypeList>
-		    inline constexpr std::size_t flatAlignOf = internal::flatAlignOfImpl<TypeList>();
-
-		    /// The alignment of a type T.
-		    template<typename T>
-		    inline constexpr std::size_t alignOf = alignof(T);
-
-		    /// The alignment of a record dimension if its fields would be in a normal struct.
-		    template<typename... Fields>
-		    inline constexpr std::size_t alignOf<Record<Fields...>> = flatAlignOf<FlatRecordDim<Record<Fields...>>>;
-
-		    /// Returns the ceiling of a / b.
-		    template<typename Integral>
-		    [[nodiscard]] LLAMA_FN_HOST_ACC_INLINE constexpr auto divCeil(Integral a, Integral b) -> Integral
-		    {
-		        return (a + b - 1) / b;
-		    }
-
-		    /// Returns the integral n rounded up to be a multiple of mult.
-		    template<typename Integral>
-		    [[nodiscard]] LLAMA_FN_HOST_ACC_INLINE constexpr auto roundUpToMultiple(Integral n, Integral mult) -> Integral
-		    {
-		        return divCeil(n, mult) * mult;
-		    }
-
-		    namespace internal
-		    {
-		        template<typename TypeList, bool Align, bool IncludeTailPadding>
-		        constexpr auto sizeOfImpl() -> std::size_t
-		        {
-		            using namespace boost::mp11;
-
-		            std::size_t size = 0;
-		            std::size_t maxAlign = 0;
-		            mp_for_each<mp_transform<mp_identity, TypeList>>([&](auto e) constexpr {
-		                using T = typename decltype(e)::type;
-		                if constexpr(Align)
-		                {
-		                    size = roundUpToMultiple(size, alignof(T));
-		                    maxAlign = std::max(maxAlign, alignof(T));
-		                }
-		                // NOLINTNEXTLINE(readability-misleading-indentation)
-		                size += sizeof(T);
-		            });
-
-		            // final padding, so next struct can start right away
-		            if constexpr(Align && IncludeTailPadding)
-		                size = roundUpToMultiple(size, maxAlign); // TODO(bgruber): we could use flatAlignOf<TypeList> here, at
-		                                                          // the cost of more template instantiations
-		            return size;
-		        }
-
-		        template<typename TypeList, std::size_t I, bool Align>
-		        constexpr auto offsetOfImplWorkaround() -> std::size_t;
-		    } // namespace internal
-
-		    /// The size of a type list if its elements would be in a normal struct.
-		    template<typename TypeList, bool Align, bool IncludeTailPadding = true>
-		    inline constexpr std::size_t flatSizeOf = internal::sizeOfImpl<TypeList, Align, IncludeTailPadding>();
-
-		    /// The size of a type T.
-		    template<typename T, bool Align = false, bool IncludeTailPadding = true>
-		    inline constexpr std::size_t sizeOf = sizeof(T);
-
-		    /// The size of a record dimension if its fields would be in a normal struct.
-		    template<typename... Fields, bool Align, bool IncludeTailPadding>
-		    inline constexpr std::size_t sizeOf<Record<Fields...>, Align, IncludeTailPadding> = flatSizeOf<
-		        FlatRecordDim<Record<Fields...>>,
-		        Align,
-		        IncludeTailPadding>;
-
-		    /// The byte offset of an element in a type list ifs elements would be in a normal struct.
-		    template<typename TypeList, std::size_t I, bool Align>
-		    inline constexpr std::size_t flatOffsetOf = internal::offsetOfImplWorkaround<TypeList, I, Align>();
-
-		    namespace internal
-		    {
-		        // unfortunately, we cannot inline this function as an IILE, as MSVC complains:
-		        // fatal error C1202: recursive type or function dependency context too complex
-		        template<typename TypeList, std::size_t I, bool Align>
-		        constexpr auto offsetOfImplWorkaround() -> std::size_t
-		        {
-		            if constexpr(I == 0)
-		                return 0;
-		            else
-		            {
-		                std::size_t offset
-		                    = flatOffsetOf<TypeList, I - 1, Align> + sizeof(boost::mp11::mp_at_c<TypeList, I - 1>);
-		                if constexpr(Align)
-		                    offset = roundUpToMultiple(offset, alignof(boost::mp11::mp_at_c<TypeList, I>));
-		                return offset;
-		            }
-		        }
-		    } // namespace internal
-
-		    /// The byte offset of an element in a record dimension if it would be a normal struct.
-		    /// \tparam RecordDim Record dimension tree.
-		    /// \tparam RecordCoord Record coordinate of an element inrecord dimension tree.
-		    template<typename RecordDim, typename RecordCoord, bool Align = false>
-		    inline constexpr std::size_t offsetOf
-		        = flatOffsetOf<FlatRecordDim<RecordDim>, flatRecordCoord<RecordDim, RecordCoord>, Align>;
-
-		    namespace internal
-		    {
-		        // Such a class is also known as arraw_proxy: https://quuxplusone.github.io/blog/2019/02/06/arrow-proxy/
-		        template<typename T>
-		        struct IndirectValue
-		        {
-		            T value;
-
-		            LLAMA_FN_HOST_ACC_INLINE auto operator->() -> T*
-		            {
-		                return &value;
-		            }
-
-		            LLAMA_FN_HOST_ACC_INLINE auto operator->() const -> const T*
-		            {
-		                return &value;
-		            }
-		        };
-
-		        // TODO(bgruber): replace in C++20
-		        template<class T>
-		        struct IsBoundedArray : std::false_type
-		        {
-		        };
-
-		        template<class T, std::size_t N>
-		        struct IsBoundedArray<T[N]> : std::true_type
-		        {
-		        };
-		    } // namespace internal
-
-		    namespace internal
-		    {
-		        template<typename Coord, typename T, template<typename, typename> typename TypeFunctor>
-		        struct TransformLeavesWithCoordImpl
-		        {
-		            using type = TypeFunctor<Coord, T>;
-		        };
-
-		        template<std::size_t... Is, typename... Fields, template<typename, typename> typename TypeFunctor>
-		        struct TransformLeavesWithCoordImpl<RecordCoord<Is...>, Record<Fields...>, TypeFunctor>
-		        {
-		            template<std::size_t... Js>
-		            static auto f(std::index_sequence<Js...>)
-		            {
-		                return Record<Field<
-		                    GetFieldTag<Fields>,
-		                    typename TransformLeavesWithCoordImpl<RecordCoord<Is..., Js>, GetFieldType<Fields>, TypeFunctor>::
-		                        type>...>{};
-		            }
-
-		            using type = decltype(f(std::index_sequence_for<Fields...>{}));
-		        };
-		        template<std::size_t... Is, typename Child, std::size_t N, template<typename, typename> typename TypeFunctor>
-		        struct TransformLeavesWithCoordImpl<RecordCoord<Is...>, Child[N], TypeFunctor>
-		        {
-		            template<std::size_t... Js>
-		            static void f(std::index_sequence<Js...>)
-		            {
-		                static_assert(
-		                    boost::mp11::mp_same<
-		                        typename TransformLeavesWithCoordImpl<RecordCoord<Is..., Js>, Child, TypeFunctor>::type...>::
-		                        value,
-		                    "Leave transformations beneath an array node must return the same type");
-		            }
-		            using dummy = decltype(f(std::make_index_sequence<N>{}));
-
-		            using type = typename TransformLeavesWithCoordImpl<RecordCoord<Is..., 0>, Child, TypeFunctor>::type[N];
-		        };
-
-		        template<template<typename> typename F>
-		        struct MakePassSecond
-		        {
-		            template<typename A, typename B>
-		            using fn = F<B>;
-		        };
-		    } // namespace internal
-
-		    /// Creates a new record dimension where each new leaf field's type is the result of applying FieldTypeFunctor to
-		    /// the original leaf's \ref RecordCoord and field's type.
-		    template<typename RecordDim, template<typename, typename> typename FieldTypeFunctor>
-		    using TransformLeavesWithCoord =
-		        typename internal::TransformLeavesWithCoordImpl<RecordCoord<>, RecordDim, FieldTypeFunctor>::type;
-
-		    /// Creates a new record dimension where each new leaf field's type is the result of applying FieldTypeFunctor to
-		    /// the original leaf field's type.
-		    template<typename RecordDim, template<typename> typename FieldTypeFunctor>
-		    using TransformLeaves
-		        = TransformLeavesWithCoord<RecordDim, internal::MakePassSecond<FieldTypeFunctor>::template fn>;
-
-		    namespace internal
-		    {
-		        // TODO(bgruber): we might implement this better by expanding a record dim into a list of tag lists and then
-		        // computing a real set union of the two tag list lists
-
-		        template<typename A, typename B>
-		        auto mergeRecordDimsImpl(boost::mp11::mp_identity<A> a, boost::mp11::mp_identity<B>)
-		        {
-		            static_assert(std::is_same_v<A, B>, "Cannot merge record and non-record or fields with different types");
-		            return a;
-		        }
-
-		        template<typename A, std::size_t NA, typename B, std::size_t NB>
-		        auto mergeRecordDimsImpl(
-		            [[maybe_unused]] boost::mp11::mp_identity<A[NA]> a,
-		            [[maybe_unused]] boost::mp11::mp_identity<B[NB]> b)
-		        {
-		            static_assert(std::is_same_v<A, B>, "Cannot merge arrays of different type");
-		            if constexpr(NA < NB)
-		                return b;
-		            else
-		                return a;
-		        }
-
-		        template<typename... FieldsA>
-		        auto mergeRecordDimsImpl(boost::mp11::mp_identity<Record<FieldsA...>> a, boost::mp11::mp_identity<Record<>>)
-		        {
-		            return a;
-		        }
-
-		        template<
-		            typename... FieldsA,
-		            typename FieldB,
-		            typename... FieldsB,
-		            auto Pos = FindFieldByTag<Record<FieldsA...>, GetFieldTag<FieldB>>::value>
-		        auto mergeRecordDimsImpl(
-		            boost::mp11::mp_identity<Record<FieldsA...>>,
-		            boost::mp11::mp_identity<Record<FieldB, FieldsB...>>)
-		        {
-		            using namespace boost::mp11;
-		            if constexpr(Pos == sizeof...(FieldsA))
-		            {
-		                return mergeRecordDimsImpl(
-		                    mp_identity<Record<FieldsA..., FieldB>>{},
-		                    mp_identity<Record<FieldsB...>>{});
-		            }
-		            else
-		            {
-		                using OldFieldA = mp_at_c<Record<FieldsA...>, Pos>;
-		                using NewFieldA = Field<
-		                    GetFieldTag<OldFieldA>,
-		                    typename decltype(mergeRecordDimsImpl(
-		                        mp_identity<GetFieldType<OldFieldA>>{},
-		                        mp_identity<GetFieldType<FieldB>>{}))::type>;
-		                using NewRecordA = mp_replace_at_c<Record<FieldsA...>, Pos, NewFieldA>;
-		                return mergeRecordDimsImpl(mp_identity<NewRecordA>{}, mp_identity<Record<FieldsB...>>{});
-		            }
-		        }
-		    } // namespace internal
-
-		    /// Creates a merged record dimension, where duplicated, nested fields are unified.
-		    template<typename RecordDimA, typename RecordDimB>
-		    using MergedRecordDims = typename decltype(internal::mergeRecordDimsImpl(
-		        boost::mp11::mp_identity<RecordDimA>{},
-		        boost::mp11::mp_identity<RecordDimB>{}))::type;
-
-		    /// Alias for ToT, adding `const` if FromT is const qualified.
-		    template<typename FromT, typename ToT>
-		    using CopyConst = std::conditional_t<std::is_const_v<FromT>, const ToT, ToT>;
-
-		    /// Used as template argument to specify a constant/compile-time value.
-		    template<auto V>
-		    using Constant = std::integral_constant<decltype(V), V>;
-
-		    namespace internal
-		    {
-		        template<typename T>
-		        struct IsConstant : std::false_type
-		        {
-		        };
-
-		        template<typename T, T V>
-		        struct IsConstant<std::integral_constant<T, V>> : std::true_type
-		        {
-		        };
-		    } // namespace internal
-
-		    template<typename T>
-		    inline constexpr bool isConstant = internal::IsConstant<T>::value;
-
-		    namespace internal
-		    {
-		        /// Holds a value of type T. Is useful as a base class. Is specialized for llama::Constant to not store the
-		        /// value at runtime. \tparam T Type of value to store. \tparam I Is used to disambiguate multiple BoxedValue
-		        /// base classes.
-		        template<typename T, int I = 0>
-		        struct BoxedValue
-		        {
-		            BoxedValue() = default;
-
-		            // we don't make this ctor explicit so a Value appearing in a ctor list can just be created by passing a T
-		            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
-		            LLAMA_FN_HOST_ACC_INLINE BoxedValue(T value) : val(value)
-		            {
-		            }
-
-		            LLAMA_FN_HOST_ACC_INLINE constexpr auto value() const
-		            {
-		                return val;
-		            }
-
-		        private:
-		            T val = {};
-		        };
-
-		        template<auto V, int I>
-		        struct BoxedValue<Constant<V>, I>
-		        {
-		            BoxedValue() = default;
-
-		            // we don't make this ctor explicit so a Value appearing in a ctor list can just be created by passing a T
-		            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
-		            LLAMA_FN_HOST_ACC_INLINE BoxedValue(Constant<V>)
-		            {
-		            }
-
-		            LLAMA_FN_HOST_ACC_INLINE static constexpr auto value()
-		            {
-		                return V;
-		            }
-		        };
-		    } // namespace internal
-		} // namespace llama
-		// ==
-		// == ./Core.hpp ==
-		// ============================================================================
-
+	// #include "Core.hpp"    // amalgamate: file already expanded
 		// ============================================================================
 		// == ./HasRanges.hpp ==
 		// ==
@@ -2561,142 +2697,7 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>>
 
 	// #pragma once
 	// #include "Array.hpp"    // amalgamate: file already expanded
-		// ============================================================================
-		// == ./Concepts.hpp ==
-		// ==
-		// #pragma once
-		// #include "Array.hpp"    // amalgamate: file already expanded
-		// #include "Core.hpp"    // amalgamate: file already expanded
-		// #include "RecordCoord.hpp"    // amalgamate: file already expanded
-
-		// #include <type_traits>    // amalgamate: file already included
-
-		#if __has_include(<concepts>)
-		#    include <concepts>
-		#endif
-		namespace llama
-		{
-		#ifdef __cpp_lib_concepts
-		    // clang-format off
-		    template <typename M>
-		    concept Mapping = requires(M m) {
-		        typename M::ArrayExtents;
-		        typename M::ArrayIndex;
-		        typename M::RecordDim;
-		        { m.extents() } -> std::same_as<typename M::ArrayExtents>;
-		        { +M::blobCount } -> std::same_as<std::size_t>;
-		        std::integral_constant<std::size_t, M::blobCount>{}; // validates constexpr-ness
-		        { m.blobSize(typename M::ArrayExtents::value_type{}) } -> std::same_as<typename M::ArrayExtents::value_type>;
-		    };
-
-		    template <typename M, typename RC>
-		    concept PhysicalField = requires(M m, typename M::ArrayIndex ai) {
-		        { m.blobNrAndOffset(ai, RC{}) } -> std::same_as<NrAndOffset<typename M::ArrayExtents::value_type>>;
-		    };
-
-		    template<typename M>
-		    struct MakeIsPhysical
-		    {
-		        template<typename RC>
-		        using fn = boost::mp11::mp_bool<PhysicalField<M, RC>>;
-		    };
-
-		    template<typename M>
-		    inline constexpr bool allFieldsArePhysical
-		        = boost::mp11::mp_all_of<LeafRecordCoords<typename M::RecordDim>, MakeIsPhysical<M>::template fn>::value;
-
-		    template <typename M>
-		    concept PhysicalMapping = Mapping<M> && allFieldsArePhysical<M>;
-
-		    template <typename R>
-		    concept LValueReference = std::is_lvalue_reference_v<R>;
-
-		    template <typename R>
-		    concept ProxyReference = requires(R r) {
-		        typename R::value_type;
-		        { static_cast<typename R::value_type>(r) } -> std::same_as<typename R::value_type>;
-		        { r = std::declval<typename R::value_type>() } -> std::same_as<R&>;
-		    };
-
-		    template <typename R>
-		    concept AnyReference = LValueReference<R> || ProxyReference<R>;
-
-		    template <typename M, typename RC>
-		    concept ComputedField = M::isComputed(RC{}) && requires(M m, typename M::ArrayIndex ai, Array<Array<std::byte, 1>, 1> blobs) {
-		        { m.compute(ai, RC{}, blobs) } -> AnyReference;
-		    };
-
-		    template<typename M>
-		    struct MakeIsComputed
-		    {
-		        template<typename RC>
-		        using fn = boost::mp11::mp_bool<ComputedField<M, RC>>;
-		    };
-
-		    template<typename M>
-		    inline constexpr bool allFieldsAreComputed
-		        = boost::mp11::mp_all_of<LeafRecordCoords<typename M::RecordDim>, MakeIsComputed<M>::template fn>::value;
-
-		    template <typename M>
-		    concept FullyComputedMapping = Mapping<M> && allFieldsAreComputed<M>;
-
-		    template<
-		        typename M,
-		        typename LeafCoords = LeafRecordCoords<typename M::RecordDim>,
-		        std::size_t PhysicalCount = boost::mp11::mp_count_if<LeafCoords, MakeIsPhysical<M>::template fn>::value,
-		        std::size_t ComputedCount = boost::mp11::mp_count_if<LeafCoords, MakeIsComputed<M>::template fn>::value>
-		    inline constexpr bool allFieldsArePhysicalOrComputed
-		        = (PhysicalCount + ComputedCount) >= boost::mp11::mp_size<LeafCoords>::value&& PhysicalCount > 0
-		        && ComputedCount > 0; // == instead of >= would be better, but it's not easy to count correctly,
-		                              // because we cannot check whether the call to blobNrOrOffset()
-		                              // or compute() is actually valid
-
-		    template <typename M>
-		    concept PartiallyComputedMapping = Mapping<M> && allFieldsArePhysicalOrComputed<M>;
-
-		    template<typename B>
-		    concept Blob = requires(B b, std::size_t i) {
-		        // according to http://eel.is/c++draft/intro.object#3 only std::byte and unsigned char can provide storage for
-		        // other types
-		        std::is_same_v<decltype(b[i]), std::byte&> || std::is_same_v<decltype(b[i]), unsigned char&>;
-		    };
-
-		    template <typename BA>
-		    concept BlobAllocator = requires(BA ba, std::integral_constant<std::size_t, 16> alignment, std::size_t size) {
-		        { ba(alignment, size) } -> Blob;
-		    };
-		        // clang-format on
-		#endif
-
-		    namespace internal
-		    {
-		        template<typename R, typename = void>
-		        struct IsProxyReferenceImpl : std::false_type
-		        {
-		        };
-
-		        template<typename R>
-		        struct IsProxyReferenceImpl<
-		            R,
-		            std::void_t<
-		                typename R::value_type,
-		                decltype(static_cast<typename R::value_type>(std::declval<R&>())),
-		                decltype(std::declval<R&>() = std::declval<typename R::value_type>())>> : std::true_type
-		        {
-		        };
-		    } // namespace internal
-
-		    template<typename R>
-		#ifdef __cpp_lib_concepts
-		    inline constexpr bool isProxyReference = ProxyReference<R>;
-		#else
-		    inline constexpr bool isProxyReference = internal::IsProxyReferenceImpl<R>::value;
-		#endif
-		} // namespace llama
-		// ==
-		// == ./Concepts.hpp ==
-		// ============================================================================
-
+	// #include "Concepts.hpp"    // amalgamate: file already expanded
 	// #include "macros.hpp"    // amalgamate: file already expanded
 
 	#include <cstddef>
