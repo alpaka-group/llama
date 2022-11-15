@@ -787,7 +787,7 @@ namespace llama
 	        }
 
 	        template<typename IndexType>
-	        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator[](IndexType&& idx) const -> T const&
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator[](IndexType&& idx) const -> const T&
 	        {
 	            return element[idx];
 	        }
@@ -2768,7 +2768,7 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>>
 	        inline AlignedAllocator() noexcept = default;
 
 	        template<typename T2>
-	        inline explicit AlignedAllocator(AlignedAllocator<T2, Alignment> const&) noexcept
+	        inline explicit AlignedAllocator(const AlignedAllocator<T2, Alignment>&) noexcept
 	        {
 	        }
 
@@ -4726,16 +4726,16 @@ namespace llama
 	        }
 
 	        template<typename T, typename = void>
-	        constexpr inline auto isTupleLike = false;
+	        inline constexpr auto isTupleLike = false;
 
 	        // get<I>(t) and std::tuple_size<T> must be available
 	        using std::get; // make sure a get<0>() can be found, so the compiler can compile the trait
 	        template<typename T>
-	        constexpr inline auto
+	        inline constexpr auto
 	            isTupleLike<T, std::void_t<decltype(get<0>(std::declval<T>())), std::tuple_size<T>>> = true;
 
 	        template<typename... Ts>
-	        constexpr inline auto dependentFalse = false;
+	        inline constexpr auto dependentFalse = false;
 
 	        template<typename Tuple1, typename Tuple2, std::size_t... Is>
 	        LLAMA_FN_HOST_ACC_INLINE void assignTuples(Tuple1&& dst, Tuple2&& src, std::index_sequence<Is...>);
@@ -4772,20 +4772,20 @@ namespace llama
 	        }
 
 	        template<typename T, typename SFINAE, typename... Args>
-	        constexpr inline auto isDirectListInitializableImpl = false;
+	        inline constexpr auto isDirectListInitializableImpl = false;
 
 	        template<typename T, typename... Args>
-	        constexpr inline auto
+	        inline constexpr auto
 	            isDirectListInitializableImpl<T, std::void_t<decltype(T{std::declval<Args>()...})>, Args...> = true;
 
 	        template<typename T, typename... Args>
-	        constexpr inline auto isDirectListInitializable = isDirectListInitializableImpl<T, void, Args...>;
+	        inline constexpr auto isDirectListInitializable = isDirectListInitializableImpl<T, void, Args...>;
 
 	        template<typename T, typename Tuple>
-	        constexpr inline auto isDirectListInitializableFromTuple = false;
+	        inline constexpr auto isDirectListInitializableFromTuple = false;
 
 	        template<typename T, template<typename...> typename Tuple, typename... Args>
-	        constexpr inline auto
+	        inline constexpr auto
 	            isDirectListInitializableFromTuple<T, Tuple<Args...>> = isDirectListInitializable<T, Args...>;
 
 	        template<typename T, typename Simd, typename RecordCoord>
@@ -6800,7 +6800,7 @@ namespace llama
             else if constexpr(mapping::isAoS<Mapping>)
             {
                 static_assert(mapping::isAoS<Mapping>);
-                constexpr static auto srcStride
+                static constexpr auto srcStride
                     = flatSizeOf<typename Mapping::Flattener::FlatRecordDim, Mapping::alignAndPad>;
                 const auto* srcBaseAddr = reinterpret_cast<const std::byte*>(&srcRef(rc));
                 ElementSimd elemSimd; // g++-12 really needs the intermediate elemSimd and memcpy
@@ -6839,7 +6839,7 @@ namespace llama
             }
             else if constexpr(mapping::isAoS<Mapping>)
             {
-                constexpr static auto stride
+                static constexpr auto stride
                     = flatSizeOf<typename Mapping::Flattener::FlatRecordDim, Mapping::alignAndPad>;
                 auto* dstBaseAddr = reinterpret_cast<std::byte*>(&dstRef(rc));
                 const ElementSimd elemSimd = srcSimd(rc);
@@ -8995,14 +8995,14 @@ namespace llama::mapping::tree
             }
 
             template<typename TreeCoord>
-            LLAMA_FN_HOST_ACC_INLINE auto basicCoordToResultCoord(TreeCoord const& basicCoord, Tree const& /*tree*/)
+            LLAMA_FN_HOST_ACC_INLINE auto basicCoordToResultCoord(const TreeCoord& basicCoord, const Tree& /*tree*/)
                 const -> TreeCoord
             {
                 return basicCoord;
             }
 
             template<typename TreeCoord>
-            LLAMA_FN_HOST_ACC_INLINE auto resultCoordToBasicCoord(TreeCoord const& resultCoord, Tree const& /*tree*/)
+            LLAMA_FN_HOST_ACC_INLINE auto resultCoordToBasicCoord(const TreeCoord& resultCoord, const Tree& /*tree*/)
                 const -> TreeCoord
             {
                 return resultCoord;
@@ -9124,8 +9124,8 @@ namespace llama::mapping::tree
             -> NrAndOffset<size_type>
         {
             // TODO(bgruber): propagate use of size_type
-            auto const basicTreeCoord = createTreeCoord<RecordCoord<RecordCoords...>>(ai);
-            auto const resultTreeCoord = mergedFunctors.basicCoordToResultCoord(basicTreeCoord, basicTree);
+            const auto basicTreeCoord = createTreeCoord<RecordCoord<RecordCoords...>>(ai);
+            const auto resultTreeCoord = mergedFunctors.basicCoordToResultCoord(basicTreeCoord, basicTree);
             const auto offset = static_cast<size_type>(internal::getTreeBlobByte(
                 resultTree,
                 resultTreeCoord)); // FIXME(bgruber): size_type should be propagated through getTreeBlobByte
@@ -9164,15 +9164,15 @@ namespace llama::mapping
         template<>
         struct FloatBitTraits<float>
         {
-            static inline constexpr unsigned mantissa = 23;
-            static inline constexpr unsigned exponent = 8;
+            inline static constexpr unsigned mantissa = 23;
+            inline static constexpr unsigned exponent = 8;
         };
 
         template<>
         struct FloatBitTraits<double>
         {
-            static inline constexpr unsigned mantissa = 52;
-            static inline constexpr unsigned exponent = 11;
+            inline static constexpr unsigned mantissa = 52;
+            inline static constexpr unsigned exponent = 11;
         };
 
         template<typename Integral>
