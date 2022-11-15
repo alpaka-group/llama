@@ -1,7 +1,7 @@
 ---
 # General options
 Language: Cpp
-Standard: c++17
+Standard: c++20
 DisableFormat: false
 
 AccessModifierOffset: -4
@@ -73,6 +73,8 @@ PenaltyExcessCharacter: 1000000
 PenaltyReturnTypeOnItsOwnLine: 1000
 PointerAlignment: Left
 ReflowComments: true
+QualifierAlignment: Custom
+QualifierOrder: ['inline', 'static', 'constexpr', 'const', 'volatile', 'restrict', 'type' ]
 SortIncludes: true
 SortUsingDeclarations: true
 SpaceAfterCStyleCast: true
