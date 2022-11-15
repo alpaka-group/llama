@@ -111,15 +111,15 @@ $(document).ready(function(){initNavTree('BitPackedFloatSoA_8hpp_source.html',''
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        <span class="keyword">template</span>&lt;&gt;</div>
 <div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="structllama_1_1mapping_1_1internal_1_1FloatBitTraits_3_01float_01_4.html">   24</a></span>&#160;        <span class="keyword">struct </span><a class="code" href="structllama_1_1mapping_1_1internal_1_1FloatBitTraits.html">FloatBitTraits</a>&lt;float&gt;</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        {</div>
-<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="structllama_1_1mapping_1_1internal_1_1FloatBitTraits_3_01float_01_4.html#a6dbfc13467fc2696ae7d2ab85974f4bd">   26</a></span>&#160;            <span class="keyword">static</span> <span class="keyword">inline</span> constexpr <span class="keywordtype">unsigned</span> mantissa = 23;</div>
-<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="structllama_1_1mapping_1_1internal_1_1FloatBitTraits_3_01float_01_4.html#a0eb3b40be2a13f10e68ced54b0fc8d14">   27</a></span>&#160;            <span class="keyword">static</span> <span class="keyword">inline</span> constexpr <span class="keywordtype">unsigned</span> exponent = 8;</div>
+<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="structllama_1_1mapping_1_1internal_1_1FloatBitTraits_3_01float_01_4.html#a6dbfc13467fc2696ae7d2ab85974f4bd">   26</a></span>&#160;            <span class="keyword">inline</span> <span class="keyword">static</span> constexpr <span class="keywordtype">unsigned</span> mantissa = 23;</div>
+<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="structllama_1_1mapping_1_1internal_1_1FloatBitTraits_3_01float_01_4.html#a0eb3b40be2a13f10e68ced54b0fc8d14">   27</a></span>&#160;            <span class="keyword">inline</span> <span class="keyword">static</span> constexpr <span class="keywordtype">unsigned</span> exponent = 8;</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        };</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <span class="keyword">template</span>&lt;&gt;</div>
 <div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="structllama_1_1mapping_1_1internal_1_1FloatBitTraits_3_01double_01_4.html">   31</a></span>&#160;        <span class="keyword">struct </span><a class="code" href="structllama_1_1mapping_1_1internal_1_1FloatBitTraits.html">FloatBitTraits</a>&lt;double&gt;</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        {</div>
-<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="structllama_1_1mapping_1_1internal_1_1FloatBitTraits_3_01double_01_4.html#af14b3a3ab1d4f7227486148aa7eca763">   33</a></span>&#160;            <span class="keyword">static</span> <span class="keyword">inline</span> constexpr <span class="keywordtype">unsigned</span> mantissa = 52;</div>
-<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="structllama_1_1mapping_1_1internal_1_1FloatBitTraits_3_01double_01_4.html#ac2285f2cd106b8e92f6f4a626b9ad9d0">   34</a></span>&#160;            <span class="keyword">static</span> <span class="keyword">inline</span> constexpr <span class="keywordtype">unsigned</span> exponent = 11;</div>
+<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="structllama_1_1mapping_1_1internal_1_1FloatBitTraits_3_01double_01_4.html#af14b3a3ab1d4f7227486148aa7eca763">   33</a></span>&#160;            <span class="keyword">inline</span> <span class="keyword">static</span> constexpr <span class="keywordtype">unsigned</span> mantissa = 52;</div>
+<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="structllama_1_1mapping_1_1internal_1_1FloatBitTraits_3_01double_01_4.html#ac2285f2cd106b8e92f6f4a626b9ad9d0">   34</a></span>&#160;            <span class="keyword">inline</span> <span class="keyword">static</span> constexpr <span class="keywordtype">unsigned</span> exponent = 11;</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        };</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> Integral&gt;</div>
@@ -426,7 +426,7 @@ $(document).ready(function(){initNavTree('BitPackedFloatSoA_8hpp_source.html',''
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc.html">mapping</a></li><li class="navelem"><a class="el" href="BitPackedFloatSoA_8hpp.html">BitPackedFloatSoA.hpp</a></li>
-    <li class="footer">Generated on Tue Nov 15 2022 13:55:36 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Tue Nov 15 2022 16:06:03 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

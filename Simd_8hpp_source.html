@@ -249,7 +249,7 @@ $(document).ready(function(){initNavTree('Simd_8hpp_source.html',''); initResiza
 <div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;            <span class="keywordflow">else</span> <span class="keywordflow">if</span> constexpr(mapping::isAoS&lt;Mapping&gt;)</div>
 <div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;            {</div>
 <div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;                static_assert(mapping::isAoS&lt;Mapping&gt;);</div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;                constexpr <span class="keyword">static</span> <span class="keyword">auto</span> srcStride</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;                <span class="keyword">static</span> constexpr <span class="keyword">auto</span> srcStride</div>
 <div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;                    = flatSizeOf&lt;typename Mapping::Flattener::FlatRecordDim, Mapping::alignAndPad&gt;;</div>
 <div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;                <span class="keyword">const</span> <span class="keyword">auto</span>* srcBaseAddr = <span class="keyword">reinterpret_cast&lt;</span><span class="keyword">const </span>std::byte*<span class="keyword">&gt;</span>(&amp;srcRef(rc));</div>
 <div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;                ElementSimd elemSimd; <span class="comment">// g++-12 really needs the intermediate elemSimd and memcpy</span></div>
@@ -288,7 +288,7 @@ $(document).ready(function(){initNavTree('Simd_8hpp_source.html',''); initResiza
 <div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;            }</div>
 <div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;            <span class="keywordflow">else</span> <span class="keywordflow">if</span> constexpr(mapping::isAoS&lt;Mapping&gt;)</div>
 <div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;            {</div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;                constexpr <span class="keyword">static</span> <span class="keyword">auto</span> stride</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;                <span class="keyword">static</span> constexpr <span class="keyword">auto</span> stride</div>
 <div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;                    = flatSizeOf&lt;typename Mapping::Flattener::FlatRecordDim, Mapping::alignAndPad&gt;;</div>
 <div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;                <span class="keyword">auto</span>* dstBaseAddr = <span class="keyword">reinterpret_cast&lt;</span>std::byte*<span class="keyword">&gt;</span>(&amp;dstRef(rc));</div>
 <div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;                <span class="keyword">const</span> ElementSimd elemSimd = srcSimd(rc);</div>
@@ -458,7 +458,7 @@ $(document).ready(function(){initNavTree('Simd_8hpp_source.html',''); initResiza
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="Simd_8hpp.html">Simd.hpp</a></li>
-    <li class="footer">Generated on Tue Nov 15 2022 13:55:36 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Tue Nov 15 2022 16:06:03 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -1,7 +1,7 @@
 var searchData=
 [
   ['accessor_956',['accessor',['../structllama_1_1View.html#a97b7ae30e104e9b9aa3701b4958b4a4e',1,'llama::View::accessor() -&gt; Accessor &amp;'],['../structllama_1_1View.html#a91123eb8b6a1081bee3ec06a6457b64c',1,'llama::View::accessor() const -&gt; const Accessor &amp;']]],
-  ['alignedallocator_957',['AlignedAllocator',['../structllama_1_1bloballoc_1_1AlignedAllocator.html#afc1b74be5b9bec25c966fe343f0aa235',1,'llama::bloballoc::AlignedAllocator::AlignedAllocator() noexcept=default'],['../structllama_1_1bloballoc_1_1AlignedAllocator.html#a36f6a75a027a96d79fd6a8623359d8a8',1,'llama::bloballoc::AlignedAllocator::AlignedAllocator(AlignedAllocator&lt; T2, Alignment &gt; const &amp;) noexcept']]],
+  ['alignedallocator_957',['AlignedAllocator',['../structllama_1_1bloballoc_1_1AlignedAllocator.html#afc1b74be5b9bec25c966fe343f0aa235',1,'llama::bloballoc::AlignedAllocator::AlignedAllocator() noexcept=default'],['../structllama_1_1bloballoc_1_1AlignedAllocator.html#a273f8879906816c32b54382bc0858bad',1,'llama::bloballoc::AlignedAllocator::AlignedAllocator(const AlignedAllocator&lt; T2, Alignment &gt; &amp;) noexcept']]],
   ['allocate_958',['allocate',['../structllama_1_1bloballoc_1_1AlignedAllocator.html#a81dc20deb1d961e997070c14951cf2f3',1,'llama::bloballoc::AlignedAllocator']]],
   ['allocview_959',['allocView',['../namespacellama.html#a8e5d70e7cec0c305424ed3890c4cedc6',1,'llama']]],
   ['allocviewstack_960',['allocViewStack',['../namespacellama.html#a3750d27a7f8dd111fbe32dc769b44120',1,'llama']]],
