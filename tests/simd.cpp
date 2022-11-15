@@ -169,7 +169,7 @@ TEST_CASE("simd.simdLanes.stdsimd")
 
 TEST_CASE("simd.loadSimd.scalar")
 {
-    float mem = 3.14f;
+    const float mem = 3.14f;
     float s = 0;
     llama::loadSimd(mem, s);
     CHECK(s == mem);
@@ -262,14 +262,14 @@ TEST_CASE("simd.loadSimd.record.stdsimd")
 TEST_CASE("simd.storeSimd.scalar")
 {
     float mem = 0;
-    float s = 3.14f;
+    const float s = 3.14f;
     llama::storeSimd(s, mem);
     CHECK(s == mem);
 }
 
 TEST_CASE("simd.storeSimd.simd.stdsimd")
 {
-    stdx::fixed_size_simd<float, 4> s([](auto ic) -> float { return ic() + 1; });
+    const stdx::fixed_size_simd<float, 4> s([](auto ic) -> float { return ic() + 1; });
 
     std::array<float, 4> a{};
     llama::storeSimd(s, a[0]);

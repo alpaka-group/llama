@@ -986,19 +986,19 @@ namespace llama
 } // namespace llama
 
 template<typename View, typename BoundRecordCoord, bool OwnView>
-struct std::tuple_size<llama::RecordRef<View, BoundRecordCoord, OwnView>>
+struct std::tuple_size<llama::RecordRef<View, BoundRecordCoord, OwnView>> // NOLINT(cert-dcl58-cpp)
     : boost::mp11::mp_size<typename llama::RecordRef<View, BoundRecordCoord, OwnView>::AccessibleRecordDim>
 {
 };
 
 template<std::size_t I, typename View, typename BoundRecordCoord, bool OwnView>
-struct std::tuple_element<I, llama::RecordRef<View, BoundRecordCoord, OwnView>>
+struct std::tuple_element<I, llama::RecordRef<View, BoundRecordCoord, OwnView>> // NOLINT(cert-dcl58-cpp)
 {
     using type = decltype(std::declval<llama::RecordRef<View, BoundRecordCoord, OwnView>>().template get<I>());
 };
 
 template<std::size_t I, typename View, typename BoundRecordCoord, bool OwnView>
-struct std::tuple_element<I, const llama::RecordRef<View, BoundRecordCoord, OwnView>>
+struct std::tuple_element<I, const llama::RecordRef<View, BoundRecordCoord, OwnView>> // NOLINT(cert-dcl58-cpp)
 {
     using type = decltype(std::declval<const llama::RecordRef<View, BoundRecordCoord, OwnView>>().template get<I>());
 };

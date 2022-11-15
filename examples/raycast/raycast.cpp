@@ -178,7 +178,7 @@ namespace
 } // namespace
 
 template<typename T>
-struct std::tuple_size<Vector<T>>
+struct std::tuple_size<Vector<T>> // NOLINT(cert-dcl58-cpp)
 {
     static constexpr auto value = 3;
 };
@@ -541,7 +541,7 @@ namespace
     {
         auto sqr = [](auto x) { return x * x; };
 
-        float r2 = s.radius * s.radius;
+        const float r2 = s.radius * s.radius;
         float dmin = 0.0f;
         for(auto i : {0, 1, 2})
         {
@@ -572,9 +572,9 @@ namespace
         {
             VectorF vmin;
             VectorF vmax;
-            for(int q : {0, 1, 2})
+            for(const int q : {0, 1, 2})
             {
-                float v = vert[q];
+                const float v = vert[q];
                 if(normal[q] > 0.0f)
                 {
                     vmin[q] = -maxbox[q] - v;

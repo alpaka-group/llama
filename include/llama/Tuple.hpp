@@ -130,13 +130,13 @@ namespace llama
 } // namespace llama
 
 template<typename... Elements>
-struct std::tuple_size<llama::Tuple<Elements...>>
+struct std::tuple_size<llama::Tuple<Elements...>> // NOLINT(cert-dcl58-cpp)
 {
     static constexpr auto value = sizeof...(Elements);
 };
 
 template<std::size_t I, typename... Elements>
-struct std::tuple_element<I, llama::Tuple<Elements...>>
+struct std::tuple_element<I, llama::Tuple<Elements...>> // NOLINT(cert-dcl58-cpp)
 {
     using type = boost::mp11::mp_at_c<llama::Tuple<Elements...>, I>;
 };

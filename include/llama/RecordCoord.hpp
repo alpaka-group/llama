@@ -81,7 +81,7 @@ namespace llama
         {
             constexpr auto coord = []() constexpr
             {
-                char digits[] = {(Digits - 48)...};
+                const char digits[] = {(Digits - 48)...};
                 std::size_t acc = 0;
                 std ::size_t powerOf10 = 1;
                 for(int i = sizeof...(Digits) - 1; i >= 0; i--)

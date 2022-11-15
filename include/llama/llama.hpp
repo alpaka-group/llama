@@ -22,8 +22,11 @@
 ///
 /// LLAMA is licensed under the LGPL3+.
 
+// NOLINTNEXTLINE(modernize-macro-to-enum)
 #define LLAMA_VERSION_MAJOR 0
+// NOLINTNEXTLINE(modernize-macro-to-enum)
 #define LLAMA_VERSION_MINOR 4
+// NOLINTNEXTLINE(modernize-macro-to-enum)
 #define LLAMA_VERSION_PATCH 0
 
 // suppress warnings on missing return statements. we get a lot of these because nvcc/nvc++ have some troubles with if

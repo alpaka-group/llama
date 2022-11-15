@@ -469,11 +469,11 @@ namespace
 
 TEST_CASE("BoxedValue.implicit_ctor")
 {
-    [[maybe_unused]] llama::internal::BoxedValue<unsigned> v1{42};
-    [[maybe_unused]] llama::internal::BoxedValue<unsigned> v2 = 42;
-    [[maybe_unused]] WithValue wv{42};
-    [[maybe_unused]] WithValueCtor wvc1{1, 2.4, 4};
-    [[maybe_unused]] WithValueCtor wvc2{1, 2, 4};
+    [[maybe_unused]] const llama::internal::BoxedValue<unsigned> v1{42};
+    [[maybe_unused]] const llama::internal::BoxedValue<unsigned> v2 = 42;
+    [[maybe_unused]] const WithValue wv{42};
+    [[maybe_unused]] const WithValueCtor wvc1{1, 2.4, 4};
+    [[maybe_unused]] const WithValueCtor wvc2{1, 2, 4};
 }
 
 namespace
@@ -495,13 +495,13 @@ namespace
 
 TEST_CASE("BoxedValue.Value")
 {
-    ValueConsumer<unsigned> vc{1};
+    const ValueConsumer<unsigned> vc{1};
     CHECK(vc() == 1);
 }
 
 TEST_CASE("BoxedValue.Constant")
 {
-    ValueConsumer<llama::Constant<1>> vc{{}};
+    const ValueConsumer<llama::Constant<1>> vc{{}};
     CHECK(vc() == 1);
     STATIC_REQUIRE(vc() == 1);
 }

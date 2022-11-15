@@ -463,7 +463,7 @@ namespace llama
             using namespace boost::mp11;
 
             std::size_t size = 0;
-            std::size_t maxAlign = 0;
+            std::size_t maxAlign = 0; // NOLINT(misc-const-correctness)
             mp_for_each<mp_transform<mp_identity, TypeList>>([&](auto e) constexpr {
                 using T = typename decltype(e)::type;
                 if constexpr(Align)
@@ -516,7 +516,7 @@ namespace llama
                 return 0;
             else
             {
-                std::size_t offset
+                std::size_t offset // NOLINT(misc-const-correctness)
                     = flatOffsetOf<TypeList, I - 1, Align> + sizeof(boost::mp11::mp_at_c<TypeList, I - 1>);
                 if constexpr(Align)
                     offset = roundUpToMultiple(offset, alignof(boost::mp11::mp_at_c<TypeList, I>));

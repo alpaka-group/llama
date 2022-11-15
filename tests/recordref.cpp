@@ -373,9 +373,9 @@ TEST_CASE("RecordRef.asTuple.types")
     {
         llama::One<ParticleInt> record;
 
-        std::tuple<int&, int&> pos = record(tag::Pos{}).asTuple();
-        std::tuple<int&, int&, int&> vel = record(tag::Vel{}).asTuple();
-        std::tuple<std::tuple<int&, int&>, std::tuple<int&, int&, int&>, int&> name = record.asTuple();
+        const std::tuple<int&, int&> pos = record(tag::Pos{}).asTuple();
+        const std::tuple<int&, int&, int&> vel = record(tag::Vel{}).asTuple();
+        const std::tuple<std::tuple<int&, int&>, std::tuple<int&, int&, int&>, int&> name = record.asTuple();
         static_cast<void>(pos);
         static_cast<void>(vel);
         static_cast<void>(name);
@@ -383,10 +383,11 @@ TEST_CASE("RecordRef.asTuple.types")
     {
         const llama::One<ParticleInt> record;
 
-        std::tuple<const int&, const int&> pos = record(tag::Pos{}).asTuple();
-        std::tuple<const int&, const int&, const int&> vel = record(tag::Vel{}).asTuple();
-        std::tuple<std::tuple<const int&, const int&>, std::tuple<const int&, const int&, const int&>, const int&> name
-            = record.asTuple();
+        const std::tuple<const int&, const int&> pos = record(tag::Pos{}).asTuple();
+        const std::tuple<const int&, const int&, const int&> vel = record(tag::Vel{}).asTuple();
+        const std::
+            tuple<std::tuple<const int&, const int&>, std::tuple<const int&, const int&, const int&>, const int&>
+                name = record.asTuple();
         static_cast<void>(pos);
         static_cast<void>(vel);
         static_cast<void>(name);
@@ -476,9 +477,9 @@ TEST_CASE("RecordRef.asFlatTuple.types")
     {
         llama::One<ParticleInt> record;
 
-        std::tuple<int&, int&> pos = record(tag::Pos{}).asFlatTuple();
-        std::tuple<int&, int&, int&> vel = record(tag::Vel{}).asFlatTuple();
-        std::tuple<int&, int&, int&, int&, int&, int&> name = record.asFlatTuple();
+        const std::tuple<int&, int&> pos = record(tag::Pos{}).asFlatTuple();
+        const std::tuple<int&, int&, int&> vel = record(tag::Vel{}).asFlatTuple();
+        const std::tuple<int&, int&, int&, int&, int&, int&> name = record.asFlatTuple();
         static_cast<void>(pos);
         static_cast<void>(vel);
         static_cast<void>(name);
@@ -486,9 +487,10 @@ TEST_CASE("RecordRef.asFlatTuple.types")
     {
         const llama::One<ParticleInt> record;
 
-        std::tuple<const int&, const int&> pos = record(tag::Pos{}).asFlatTuple();
-        std::tuple<const int&, const int&, const int&> vel = record(tag::Vel{}).asFlatTuple();
-        std::tuple<const int&, const int&, const int&, const int&, const int&, const int&> name = record.asFlatTuple();
+        const std::tuple<const int&, const int&> pos = record(tag::Pos{}).asFlatTuple();
+        const std::tuple<const int&, const int&, const int&> vel = record(tag::Vel{}).asFlatTuple();
+        const std::tuple<const int&, const int&, const int&, const int&, const int&, const int&> name
+            = record.asFlatTuple();
         static_cast<void>(pos);
         static_cast<void>(vel);
         static_cast<void>(name);
@@ -679,19 +681,19 @@ namespace
 } // namespace
 
 template<typename T>
-struct std::tuple_size<MyPos<T>>
+struct std::tuple_size<MyPos<T>> // NOLINT(cert-dcl58-cpp)
 {
     static constexpr std::size_t value = 2;
 };
 
 template<typename T>
-struct std::tuple_size<MyVel<T>>
+struct std::tuple_size<MyVel<T>> // NOLINT(cert-dcl58-cpp)
 {
     static constexpr std::size_t value = 3;
 };
 
 template<typename T>
-struct std::tuple_size<MyStruct<T>>
+struct std::tuple_size<MyStruct<T>> // NOLINT(cert-dcl58-cpp)
 {
     static constexpr std::size_t value = 3;
 };
@@ -702,18 +704,18 @@ TEST_CASE("RecordRef.load.value")
     record = 1;
 
     {
-        MyPos<int> pos = record(tag::Pos{}).load();
+        const MyPos<int> pos = record(tag::Pos{}).load();
         CHECK(pos.a == 1);
         CHECK(pos.y == 1);
     }
     {
-        MyPos<int> pos = std::as_const(record)(tag::Pos{}).load();
+        const MyPos<int> pos = std::as_const(record)(tag::Pos{}).load();
         CHECK(pos.a == 1);
         CHECK(pos.y == 1);
     }
 
     {
-        MyStruct<int> d = record.load();
+        const MyStruct<int> d = record.load();
         CHECK(d.pos.a == 1);
         CHECK(d.pos.y == 1);
         CHECK(d.vel.x == 1);
@@ -722,7 +724,7 @@ TEST_CASE("RecordRef.load.value")
         CHECK(d.weight == 1);
     }
     {
-        MyStruct<int> d = std::as_const(record).load();
+        const MyStruct<int> d = std::as_const(record).load();
         CHECK(d.pos.a == 1);
         CHECK(d.pos.y == 1);
         CHECK(d.vel.x == 1);
@@ -779,22 +781,22 @@ TEST_CASE("RecordRef.load.constref")
     record = 1;
 
     {
-        MyPos<const int&> pos = record(tag::Pos{}).load();
+        const MyPos<const int&> pos = record(tag::Pos{}).load();
         CHECK(pos.a == 1);
         CHECK(pos.y == 1);
     }
     {
-        MyPos<const int&> pos = std::as_const(record)(tag::Pos{}).load();
+        const MyPos<const int&> pos = std::as_const(record)(tag::Pos{}).load();
         CHECK(pos.a == 1);
         CHECK(pos.y == 1);
     }
     {
-        MyStruct<const int&> d = record.load();
+        const MyStruct<const int&> d = record.load();
         CHECK(d.pos.a == 1);
         CHECK(d.pos.y == 1);
     }
     {
-        MyStruct<const int&> d = std::as_const(record).load();
+        const MyStruct<const int&> d = std::as_const(record).load();
         CHECK(d.pos.a == 1);
         CHECK(d.pos.y == 1);
     }
@@ -808,18 +810,18 @@ TEST_CASE("RecordRef.load.value.fromproxyref")
     record = 1;
 
     {
-        MyPos<int> pos = record(tag::Pos{}).load();
+        const MyPos<int> pos = record(tag::Pos{}).load();
         CHECK(pos.a == 1);
         CHECK(pos.y == 1);
     }
     {
-        MyPos<int> pos = std::as_const(record)(tag::Pos{}).load();
+        const MyPos<int> pos = std::as_const(record)(tag::Pos{}).load();
         CHECK(pos.a == 1);
         CHECK(pos.y == 1);
     }
 
     {
-        MyStruct<int> d = record.load();
+        const MyStruct<int> d = record.load();
         CHECK(d.pos.a == 1);
         CHECK(d.pos.y == 1);
         CHECK(d.vel.x == 1);
@@ -828,7 +830,7 @@ TEST_CASE("RecordRef.load.value.fromproxyref")
         CHECK(d.weight == 1);
     }
     {
-        MyStruct<int> d = std::as_const(record).load();
+        const MyStruct<int> d = std::as_const(record).load();
         CHECK(d.pos.a == 1);
         CHECK(d.pos.y == 1);
         CHECK(d.vel.x == 1);
@@ -844,7 +846,7 @@ TEST_CASE("RecordRef.store")
 
     record = 1;
     {
-        MyPos<int> pos{2, 3};
+        const MyPos<int> pos{2, 3};
         record(tag::Pos{}).store(pos);
         CHECK(record(tag::Pos{}, tag::A{}) == 2);
         CHECK(record(tag::Pos{}, tag::Y{}) == 3);
@@ -856,7 +858,7 @@ TEST_CASE("RecordRef.store")
 
     record = 1;
     {
-        MyStruct<int> d{{2, 3}, {4, 5, 6}, 7};
+        const MyStruct<int> d{{2, 3}, {4, 5, 6}, 7};
         record.store(d);
         CHECK(record(tag::Pos{}, tag::A{}) == 2);
         CHECK(record(tag::Pos{}, tag::Y{}) == 3);
@@ -875,7 +877,7 @@ TEST_CASE("RecordRef.store.toproxyref")
 
     record = 1;
     {
-        MyPos<int> pos{2, 3};
+        const MyPos<int> pos{2, 3};
         record(tag::Pos{}).store(pos);
         CHECK(record(tag::Pos{}, tag::A{}) == 2);
         CHECK(record(tag::Pos{}, tag::Y{}) == 3);
@@ -887,7 +889,7 @@ TEST_CASE("RecordRef.store.toproxyref")
 
     record = 1;
     {
-        MyStruct<int> d{{2, 3}, {4, 5, 6}, 7};
+        const MyStruct<int> d{{2, 3}, {4, 5, 6}, 7};
         record.store(d);
         CHECK(record(tag::Pos{}, tag::A{}) == 2);
         CHECK(record(tag::Pos{}, tag::Y{}) == 3);

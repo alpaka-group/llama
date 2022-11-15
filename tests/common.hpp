@@ -78,7 +78,7 @@ auto prettyPrintType(const T& t = {}) -> std::string
 #endif
 #ifdef __GNUG__
     // remove clutter in g++
-    static std::regex ulLiteral{"(\\d+)ul"};
+    static const std::regex ulLiteral{"(\\d+)ul"};
     raw = std::regex_replace(raw, ulLiteral, "$1");
 #endif
 

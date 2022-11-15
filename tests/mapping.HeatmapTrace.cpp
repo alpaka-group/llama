@@ -149,7 +149,7 @@ TEST_CASE("Trace.ctor")
 
     // mapping ctor
     {
-        Mapping mapping{AE{42}};
+        const Mapping mapping{AE{42}};
         auto trace = llama::mapping::Trace<Mapping>{mapping};
         CHECK(trace.extents() == AE{42});
     }
@@ -178,7 +178,7 @@ TEMPLATE_LIST_TEST_CASE("Trace.nbody.mem_locs_computed", "", SizeTypes)
         CHECK(hits[5].memLocsComputed == 400);
         CHECK(hits[6].memLocsComputed == 10300);
 
-        std::stringstream buffer;
+        const std::stringstream buffer;
         std::streambuf* old = std::cout.rdbuf(buffer.rdbuf());
         particles.mapping().printFieldHits(particles.storageBlobs);
         std::cout.rdbuf(old);
@@ -220,7 +220,7 @@ TEMPLATE_LIST_TEST_CASE("Trace.nbody.reads_writes", "", SizeTypes)
         CHECK(hits[5].writes == 200);
         CHECK(hits[6].writes == 200);
 
-        std::stringstream buffer;
+        const std::stringstream buffer;
         std::streambuf* old = std::cout.rdbuf(buffer.rdbuf());
         particles.mapping().printFieldHits(particles.storageBlobs);
         std::cout.rdbuf(old);

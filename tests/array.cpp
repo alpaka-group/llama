@@ -35,7 +35,7 @@ TEST_CASE("Array.begin")
 
 TEST_CASE("Array.range_for")
 {
-    llama::Array a{1, 2, 3};
+    const llama::Array a{1, 2, 3};
     int i = 1;
     for(auto e : a)
     {
