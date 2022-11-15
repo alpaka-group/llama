@@ -7919,33 +7919,57 @@ namespace llama::mapping
             return reinterpret_cast<CountType*>(&blobs[size_type{Mapping::blobCount} + forBlobI][0]);
         }
 
+    private:
+        static auto trimBlobRight(const CountType* bh, std::size_t size)
+        {
+            while(size > 0 && bh[size - 1] == 0)
+                size--;
+            return size;
+        }
+
+    public:
         /// Writes a data file suitable for gnuplot containing the heatmap data. You can use the script provided by
         /// \ref gnuplotScript to plot this data file.
         /// @param blobs The blobs of the view containing this mapping
         /// @param os The stream to write the data to. Should be some form of std::ostream.
         template<typename Blobs, typename OStream>
-        void writeGnuplotDataFileAscii(const Blobs& blobs, OStream&& os, std::size_t wrapAfterBlocks = 64) const
+        void writeGnuplotDataFileAscii(
+            const Blobs& blobs,
+            OStream&& os,
+            bool trimEnd = true,
+            std::size_t wrapAfterBlocks = 64) const
         {
             for(std::size_t i = 0; i < Mapping::blobCount; i++)
             {
                 auto* bh = blockHits(i, blobs);
-                std::size_t blockCount = 0;
-                const auto size = blockHitsSize(i);
+                auto size = blockHitsSize(i);
+                if(trimEnd)
+                    size = trimBlobRight(bh, size);
                 for(size_type j = 0; j < size; j++)
-                    os << bh[j] << ((++blockCount % wrapAfterBlocks == 0) ? '\n' : ' ');
-                while(blockCount++ % wrapAfterBlocks != 0)
-                    os << "0 ";
+                {
+                    if(j > 0)
+                        os << (j % wrapAfterBlocks == 0 ? '\n' : ' ');
+                    os << bh[j];
+                }
+                for(size_type j = size; j < roundUpToMultiple(size, wrapAfterBlocks); j++)
+                    os << " 0";
                 os << '\n';
             }
         }
 
         template<typename Blobs, typename OStream>
-        void writeGnuplotDataFileBinary(const Blobs& blobs, OStream&& os, std::size_t afterBlobRoundUpTo = 64) const
+        void writeGnuplotDataFileBinary(
+            const Blobs& blobs,
+            OStream&& os,
+            bool trimEnd = true,
+            std::size_t afterBlobRoundUpTo = 64) const
         {
             for(std::size_t i = 0; i < Mapping::blobCount; i++)
             {
                 auto* bh = blockHits(i, blobs);
-                const auto size = blockHitsSize(i);
+                auto size = blockHitsSize(i);
+                if(trimEnd)
+                    size = trimBlobRight(bh, size);
                 os.write(reinterpret_cast<const char*>(bh), size * sizeof(CountType));
 
                 // round up before starting next blob
