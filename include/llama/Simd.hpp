@@ -199,7 +199,7 @@ namespace llama
             else if constexpr(mapping::isAoS<Mapping>)
             {
                 static_assert(mapping::isAoS<Mapping>);
-                constexpr static auto srcStride
+                static constexpr auto srcStride
                     = flatSizeOf<typename Mapping::Flattener::FlatRecordDim, Mapping::alignAndPad>;
                 const auto* srcBaseAddr = reinterpret_cast<const std::byte*>(&srcRef(rc));
                 ElementSimd elemSimd; // g++-12 really needs the intermediate elemSimd and memcpy
@@ -238,7 +238,7 @@ namespace llama
             }
             else if constexpr(mapping::isAoS<Mapping>)
             {
-                constexpr static auto stride
+                static constexpr auto stride
                     = flatSizeOf<typename Mapping::Flattener::FlatRecordDim, Mapping::alignAndPad>;
                 auto* dstBaseAddr = reinterpret_cast<std::byte*>(&dstRef(rc));
                 const ElementSimd elemSimd = srcSimd(rc);

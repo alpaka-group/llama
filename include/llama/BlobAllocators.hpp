@@ -76,7 +76,7 @@ namespace llama::bloballoc
         inline AlignedAllocator() noexcept = default;
 
         template<typename T2>
-        inline explicit AlignedAllocator(AlignedAllocator<T2, Alignment> const&) noexcept
+        inline explicit AlignedAllocator(const AlignedAllocator<T2, Alignment>&) noexcept
         {
         }
 

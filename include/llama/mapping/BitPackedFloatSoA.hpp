@@ -23,15 +23,15 @@ namespace llama::mapping
         template<>
         struct FloatBitTraits<float>
         {
-            static inline constexpr unsigned mantissa = 23;
-            static inline constexpr unsigned exponent = 8;
+            inline static constexpr unsigned mantissa = 23;
+            inline static constexpr unsigned exponent = 8;
         };
 
         template<>
         struct FloatBitTraits<double>
         {
-            static inline constexpr unsigned mantissa = 52;
-            static inline constexpr unsigned exponent = 11;
+            inline static constexpr unsigned mantissa = 52;
+            inline static constexpr unsigned exponent = 11;
         };
 
         template<typename Integral>

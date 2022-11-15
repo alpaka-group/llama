@@ -88,14 +88,14 @@ namespace llama::mapping::tree
             }
 
             template<typename TreeCoord>
-            LLAMA_FN_HOST_ACC_INLINE auto basicCoordToResultCoord(TreeCoord const& basicCoord, Tree const& /*tree*/)
+            LLAMA_FN_HOST_ACC_INLINE auto basicCoordToResultCoord(const TreeCoord& basicCoord, const Tree& /*tree*/)
                 const -> TreeCoord
             {
                 return basicCoord;
             }
 
             template<typename TreeCoord>
-            LLAMA_FN_HOST_ACC_INLINE auto resultCoordToBasicCoord(TreeCoord const& resultCoord, Tree const& /*tree*/)
+            LLAMA_FN_HOST_ACC_INLINE auto resultCoordToBasicCoord(const TreeCoord& resultCoord, const Tree& /*tree*/)
                 const -> TreeCoord
             {
                 return resultCoord;
@@ -217,8 +217,8 @@ namespace llama::mapping::tree
             -> NrAndOffset<size_type>
         {
             // TODO(bgruber): propagate use of size_type
-            auto const basicTreeCoord = createTreeCoord<RecordCoord<RecordCoords...>>(ai);
-            auto const resultTreeCoord = mergedFunctors.basicCoordToResultCoord(basicTreeCoord, basicTree);
+            const auto basicTreeCoord = createTreeCoord<RecordCoord<RecordCoords...>>(ai);
+            const auto resultTreeCoord = mergedFunctors.basicCoordToResultCoord(basicTreeCoord, basicTree);
             const auto offset = static_cast<size_type>(internal::getTreeBlobByte(
                 resultTree,
                 resultTreeCoord)); // FIXME(bgruber): size_type should be propagated through getTreeBlobByte

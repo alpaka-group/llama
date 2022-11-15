@@ -108,7 +108,7 @@ void updateSimdPeelUnalignedStore(const View& uCurr, View& uNext, uint32_t exten
 // u_t(x, t) = u_xx(x, t), x in [0, 1], t in [0, T]
 // u(0, t) = u(1, t) = 0
 // u(x, 0) = sin(pi * x)
-auto exactSolution(double const x, double const t) -> double
+auto exactSolution(const double x, const double t) -> double
 {
     constexpr double pi = 3.14159265358979323846;
     return std::exp(-pi * pi * t) * std::sin(pi * x);
