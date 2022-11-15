@@ -77,7 +77,7 @@ namespace llama
         }
 
         template<typename IndexType>
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator[](IndexType&& idx) const -> T const&
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator[](IndexType&& idx) const -> const T&
         {
             return element[idx];
         }

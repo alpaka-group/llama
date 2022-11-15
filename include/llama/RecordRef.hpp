@@ -270,16 +270,16 @@ namespace llama
         }
 
         template<typename T, typename = void>
-        constexpr inline auto isTupleLike = false;
+        inline constexpr auto isTupleLike = false;
 
         // get<I>(t) and std::tuple_size<T> must be available
         using std::get; // make sure a get<0>() can be found, so the compiler can compile the trait
         template<typename T>
-        constexpr inline auto
+        inline constexpr auto
             isTupleLike<T, std::void_t<decltype(get<0>(std::declval<T>())), std::tuple_size<T>>> = true;
 
         template<typename... Ts>
-        constexpr inline auto dependentFalse = false;
+        inline constexpr auto dependentFalse = false;
 
         template<typename Tuple1, typename Tuple2, std::size_t... Is>
         LLAMA_FN_HOST_ACC_INLINE void assignTuples(Tuple1&& dst, Tuple2&& src, std::index_sequence<Is...>);
@@ -316,20 +316,20 @@ namespace llama
         }
 
         template<typename T, typename SFINAE, typename... Args>
-        constexpr inline auto isDirectListInitializableImpl = false;
+        inline constexpr auto isDirectListInitializableImpl = false;
 
         template<typename T, typename... Args>
-        constexpr inline auto
+        inline constexpr auto
             isDirectListInitializableImpl<T, std::void_t<decltype(T{std::declval<Args>()...})>, Args...> = true;
 
         template<typename T, typename... Args>
-        constexpr inline auto isDirectListInitializable = isDirectListInitializableImpl<T, void, Args...>;
+        inline constexpr auto isDirectListInitializable = isDirectListInitializableImpl<T, void, Args...>;
 
         template<typename T, typename Tuple>
-        constexpr inline auto isDirectListInitializableFromTuple = false;
+        inline constexpr auto isDirectListInitializableFromTuple = false;
 
         template<typename T, template<typename...> typename Tuple, typename... Args>
-        constexpr inline auto
+        inline constexpr auto
             isDirectListInitializableFromTuple<T, Tuple<Args...>> = isDirectListInitializable<T, Args...>;
 
         template<typename T, typename Simd, typename RecordCoord>
