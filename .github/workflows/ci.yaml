@@ -125,7 +125,7 @@ jobs:
         cd build
         mkdir llama
         cp -p ../single-header/llama.hpp llama
-        $CXX -std=c++20 "$(cmake --find-package -DNAME=Boost -DCOMPILER_ID=GNU -DLANGUAGE=CXX -DMODE=COMPILE)" -I. ../examples/heatequation/heatequation.cpp
+        $CXX -std=c++20 -I$VCPKG_INSTALLATION_ROOT/installed/x64-linux/include -I. ../examples/heatequation/heatequation.cpp
     - name: upload llama.hpp
       uses: actions/upload-artifact@v3
       with:
