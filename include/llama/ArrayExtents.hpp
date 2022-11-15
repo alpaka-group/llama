@@ -66,12 +66,12 @@ namespace llama
 } // namespace llama
 
 template<typename V, size_t N>
-struct std::tuple_size<llama::ArrayIndex<V, N>> : std::integral_constant<size_t, N>
+struct std::tuple_size<llama::ArrayIndex<V, N>> : std::integral_constant<size_t, N> // NOLINT(cert-dcl58-cpp)
 {
 };
 
 template<size_t I, typename V, size_t N>
-struct std::tuple_element<I, llama::ArrayIndex<V, N>>
+struct std::tuple_element<I, llama::ArrayIndex<V, N>> // NOLINT(cert-dcl58-cpp)
 {
     using type = V;
 };
@@ -254,12 +254,13 @@ namespace llama
 } // namespace llama
 
 template<typename SizeType, SizeType... Sizes>
-struct std::tuple_size<llama::ArrayExtents<SizeType, Sizes...>> : std::integral_constant<std::size_t, sizeof...(Sizes)>
+struct std::tuple_size<llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(cert-dcl58-cpp)
+    : std::integral_constant<std::size_t, sizeof...(Sizes)>
 {
 };
 
 template<typename SizeType, std::size_t I, SizeType... Sizes>
-struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>>
+struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(cert-dcl58-cpp)
 {
     using type = SizeType;
 };

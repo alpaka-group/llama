@@ -131,7 +131,7 @@ namespace llama::mapping::tree
                 static_cast<std::size_t>(size[N - 1])}; // FIXME(bgruber): propagate index type
         else
         {
-            Tuple inner{createTree<RecordDim, V, N, Pos + 1>(size)};
+            Tuple inner{createTree<RecordDim, V, N, Pos + 1>(size)}; // NOLINT(misc-const-correctness)
             return Node<NoName, decltype(inner)>{
                 static_cast<std::size_t>(size[Pos]),
                 inner}; // FIXME(bgruber): propagate index type

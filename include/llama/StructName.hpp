@@ -191,7 +191,7 @@ namespace llama
     inline constexpr auto qualifiedTypeName = []
     {
         constexpr auto& value = internal::typeNameStorage<T>;
-        return std::string_view{&value[0], value.size()};
+        return std::string_view{value.data(), value.size()};
     }();
 
     namespace internal

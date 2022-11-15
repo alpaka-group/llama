@@ -10,27 +10,27 @@ TEST_CASE("VirtualView.CTAD")
     using View = decltype(view);
 
     {
-        llama::VirtualView virtualView{view, {2, 4}};
+        const llama::VirtualView virtualView{view, {2, 4}};
         STATIC_REQUIRE(std::is_same_v<typename decltype(virtualView)::StoredParentView, View&>);
         STATIC_REQUIRE(std::is_same_v<typename decltype(virtualView)::ParentView, View>);
     }
 
     {
         auto& viewRef = view;
-        llama::VirtualView virtualView{viewRef, {2, 4}};
+        const llama::VirtualView virtualView{viewRef, {2, 4}};
         STATIC_REQUIRE(std::is_same_v<typename decltype(virtualView)::StoredParentView, View&>);
         STATIC_REQUIRE(std::is_same_v<typename decltype(virtualView)::ParentView, View>);
     }
 
     {
         const auto& viewConstRef = view;
-        llama::VirtualView virtualView{viewConstRef, {2, 4}};
+        const llama::VirtualView virtualView{viewConstRef, {2, 4}};
         STATIC_REQUIRE(std::is_same_v<typename decltype(virtualView)::StoredParentView, const View&>);
         STATIC_REQUIRE(std::is_same_v<typename decltype(virtualView)::ParentView, View>);
     }
 
     {
-        llama::VirtualView virtualView{std::move(view), {2, 4}};
+        const llama::VirtualView virtualView{std::move(view), {2, 4}};
         STATIC_REQUIRE(std::is_same_v<typename decltype(virtualView)::StoredParentView, View>);
         STATIC_REQUIRE(std::is_same_v<typename decltype(virtualView)::ParentView, View>);
     }

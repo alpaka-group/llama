@@ -9,15 +9,16 @@ TEMPLATE_LIST_TEST_CASE("ArrayExtents.CTAD", "", SizeTypes)
 {
     TestType one = 1;
 
-    [[maybe_unused]] llama::ArrayExtents ad0{};
-    llama::ArrayExtents ad1{one};
-    llama::ArrayExtents ad2{one, one};
-    llama::ArrayExtents ad3{one, one, one};
+    [[maybe_unused]] const llama::ArrayExtents ad0{};
+    const llama::ArrayExtents ad1{one};
+    const llama::ArrayExtents ad2{one, one};
+    const llama::ArrayExtents ad3{one, one, one};
 
-    STATIC_REQUIRE(std::is_same_v<decltype(ad0), llama::ArrayExtents<std::size_t>>);
-    STATIC_REQUIRE(std::is_same_v<decltype(ad1), llama::ArrayExtents<TestType, llama::dyn>>);
-    STATIC_REQUIRE(std::is_same_v<decltype(ad2), llama::ArrayExtents<TestType, llama::dyn, llama::dyn>>);
-    STATIC_REQUIRE(std::is_same_v<decltype(ad3), llama::ArrayExtents<TestType, llama::dyn, llama::dyn, llama::dyn>>);
+    STATIC_REQUIRE(std::is_same_v<decltype(ad0), const llama::ArrayExtents<std::size_t>>);
+    STATIC_REQUIRE(std::is_same_v<decltype(ad1), const llama::ArrayExtents<TestType, llama::dyn>>);
+    STATIC_REQUIRE(std::is_same_v<decltype(ad2), const llama::ArrayExtents<TestType, llama::dyn, llama::dyn>>);
+    STATIC_REQUIRE(
+        std::is_same_v<decltype(ad3), const llama::ArrayExtents<TestType, llama::dyn, llama::dyn, llama::dyn>>);
 
     STATIC_REQUIRE(decltype(ad0)::rank == 0);
     STATIC_REQUIRE(decltype(ad1)::rank == 1);
@@ -170,7 +171,7 @@ TEMPLATE_LIST_TEST_CASE("ArrayExtents.toArray", "", SizeTypes)
 TEMPLATE_LIST_TEST_CASE("forEachADCoord_1D", "", SizeTypes)
 {
     const auto n = TestType{3};
-    llama::ArrayExtents extents{n};
+    const llama::ArrayExtents extents{n};
 
     std::vector<llama::ArrayIndex<TestType, 1>> indices;
     llama::forEachADCoord(extents, [&](llama::ArrayIndex<TestType, 1> ai) { indices.push_back(ai); });
@@ -181,7 +182,7 @@ TEMPLATE_LIST_TEST_CASE("forEachADCoord_1D", "", SizeTypes)
 TEMPLATE_LIST_TEST_CASE("forEachADCoord_2D", "", SizeTypes)
 {
     const auto n = TestType{3};
-    llama::ArrayExtents extents{n, n};
+    const llama::ArrayExtents extents{n, n};
 
     std::vector<llama::ArrayIndex<TestType, 2>> indices;
     llama::forEachADCoord(extents, [&](llama::ArrayIndex<TestType, 2> ai) { indices.push_back(ai); });
@@ -195,7 +196,7 @@ TEMPLATE_LIST_TEST_CASE("forEachADCoord_2D", "", SizeTypes)
 TEMPLATE_LIST_TEST_CASE("forEachADCoord_3D", "", SizeTypes)
 {
     const auto n = TestType{3};
-    llama::ArrayExtents extents{n, n, n};
+    const llama::ArrayExtents extents{n, n, n};
 
     std::vector<llama::ArrayIndex<TestType, 3>> indices;
     llama::forEachADCoord(extents, [&](llama::ArrayIndex<TestType, 3> ai) { indices.push_back(ai); });

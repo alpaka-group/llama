@@ -274,12 +274,12 @@ namespace llama
 namespace std
 {
     template<typename T, size_t N>
-    struct tuple_size<llama::Array<T, N>> : integral_constant<size_t, N>
+    struct tuple_size<llama::Array<T, N>> : integral_constant<size_t, N> // NOLINT(cert-dcl58-cpp)
     {
     };
 
     template<size_t I, typename T, size_t N>
-    struct tuple_element<I, llama::Array<T, N>>
+    struct tuple_element<I, llama::Array<T, N>> // NOLINT(cert-dcl58-cpp)
     {
         using type = T;
     };

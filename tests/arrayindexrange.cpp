@@ -70,7 +70,7 @@ TEST_CASE("ArrayIndexIterator")
 TEST_CASE("ArrayIndexIterator.operator+=")
 {
     std::vector<llama::ArrayIndex<int, 2>> indices;
-    llama::ArrayIndexRange r{llama::ArrayExtentsDynamic<int, 2>{3, 4}};
+    const llama::ArrayIndexRange r{llama::ArrayExtentsDynamic<int, 2>{3, 4}};
     for(auto it = r.begin(); it != r.end(); it += 2)
         indices.push_back(*it);
 

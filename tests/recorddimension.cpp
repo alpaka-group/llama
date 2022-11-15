@@ -31,9 +31,9 @@ TEST_CASE("recorddim.record_with_int[3]")
     using RecordDim = llama::Record<llama::Field<Tag, int[3]>>;
     auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{1}, RecordDim{}});
 
-    [[maybe_unused]] int& e0 = view(0u)(Tag{})(0_RC);
-    [[maybe_unused]] int& e1 = view(0u)(Tag{})(1_RC);
-    [[maybe_unused]] int& e2 = view(0u)(Tag{})(2_RC);
+    [[maybe_unused]] const int& e0 = view(0u)(Tag{})(0_RC);
+    [[maybe_unused]] const int& e1 = view(0u)(Tag{})(1_RC);
+    [[maybe_unused]] const int& e2 = view(0u)(Tag{})(2_RC);
 }
 
 TEST_CASE("recorddim.record_with_std::complex<float>")
@@ -143,7 +143,7 @@ TEST_CASE("recorddim.record_with_nontrivial_ctor")
     using RecordDim = llama::Record<llama::Field<Tag, ElementWithCtor>>;
     auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{1}, RecordDim{}});
 
-    ElementWithCtor& e = view(0u)(Tag{});
+    const ElementWithCtor& e = view(0u)(Tag{});
     CHECK(e.value == 42);
 }
 
