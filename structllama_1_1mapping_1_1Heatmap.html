@@ -148,12 +148,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2f98a642116da1f5d8b732ea0aceba1e"><td class="memTemplParams" colspan="2">template&lt;typename Blobs &gt; </td></tr>
 <tr class="memitem:a2f98a642116da1f5d8b732ea0aceba1e"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Heatmap.html#a2f98a642116da1f5d8b732ea0aceba1e">blockHits</a> (size_type forBlobI, Blobs &amp;blobs) const -&gt; <a class="el" href="structllama_1_1mapping_1_1Heatmap.html#af6a30d2930a1dbdb549142ab6a5218de">CountType</a> *</td></tr>
 <tr class="separator:a2f98a642116da1f5d8b732ea0aceba1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a36979bf44114bf3a2d86aac37c2e1a7e"><td class="memTemplParams" colspan="2">template&lt;typename Blobs , typename OStream &gt; </td></tr>
-<tr class="memitem:a36979bf44114bf3a2d86aac37c2e1a7e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Heatmap.html#a36979bf44114bf3a2d86aac37c2e1a7e">writeGnuplotDataFileAscii</a> (const Blobs &amp;blobs, OStream &amp;&amp;os, std::size_t wrapAfterBlocks=64) const</td></tr>
-<tr class="separator:a36979bf44114bf3a2d86aac37c2e1a7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa18073a202fc4034069651a0c1338b64"><td class="memTemplParams" colspan="2">template&lt;typename Blobs , typename OStream &gt; </td></tr>
-<tr class="memitem:aa18073a202fc4034069651a0c1338b64"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Heatmap.html#aa18073a202fc4034069651a0c1338b64">writeGnuplotDataFileBinary</a> (const Blobs &amp;blobs, OStream &amp;&amp;os, std::size_t afterBlobRoundUpTo=64) const</td></tr>
-<tr class="separator:aa18073a202fc4034069651a0c1338b64"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7228b39457a0ff5b656f368e956ffa62"><td class="memTemplParams" colspan="2">template&lt;typename Blobs , typename OStream &gt; </td></tr>
+<tr class="memitem:a7228b39457a0ff5b656f368e956ffa62"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Heatmap.html#a7228b39457a0ff5b656f368e956ffa62">writeGnuplotDataFileAscii</a> (const Blobs &amp;blobs, OStream &amp;&amp;os, bool trimEnd=true, std::size_t wrapAfterBlocks=64) const</td></tr>
+<tr class="separator:a7228b39457a0ff5b656f368e956ffa62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84b3989ab82a9fd9349090825bdede8a"><td class="memTemplParams" colspan="2">template&lt;typename Blobs , typename OStream &gt; </td></tr>
+<tr class="memitem:a84b3989ab82a9fd9349090825bdede8a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Heatmap.html#a84b3989ab82a9fd9349090825bdede8a">writeGnuplotDataFileBinary</a> (const Blobs &amp;blobs, OStream &amp;&amp;os, bool trimEnd=true, std::size_t afterBlobRoundUpTo=64) const</td></tr>
+<tr class="separator:a84b3989ab82a9fd9349090825bdede8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -545,8 +545,8 @@ template&lt;std::size_t... RecordCoords&gt; </div>
 
 </div>
 </div>
-<a id="a36979bf44114bf3a2d86aac37c2e1a7e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a36979bf44114bf3a2d86aac37c2e1a7e">&#9670;&nbsp;</a></span>writeGnuplotDataFileAscii()</h2>
+<a id="a7228b39457a0ff5b656f368e956ffa62"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7228b39457a0ff5b656f368e956ffa62">&#9670;&nbsp;</a></span>writeGnuplotDataFileAscii()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -569,6 +569,12 @@ template&lt;typename Blobs , typename OStream &gt; </div>
           <td></td>
           <td class="paramtype">OStream &amp;&amp;&#160;</td>
           <td class="paramname"><em>os</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>trimEnd</em> = <code>true</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -596,12 +602,12 @@ template&lt;typename Blobs , typename OStream &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00124">124</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00133">133</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
 
 </div>
 </div>
-<a id="aa18073a202fc4034069651a0c1338b64"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa18073a202fc4034069651a0c1338b64">&#9670;&nbsp;</a></span>writeGnuplotDataFileBinary()</h2>
+<a id="a84b3989ab82a9fd9349090825bdede8a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a84b3989ab82a9fd9349090825bdede8a">&#9670;&nbsp;</a></span>writeGnuplotDataFileBinary()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -628,6 +634,12 @@ template&lt;typename Blobs , typename OStream &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>trimEnd</em> = <code>true</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">std::size_t&#160;</td>
           <td class="paramname"><em>afterBlobRoundUpTo</em> = <code>64</code>&#160;</td>
         </tr>
@@ -644,7 +656,7 @@ template&lt;typename Blobs , typename OStream &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00140">140</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00158">158</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
 
 </div>
 </div>
@@ -712,7 +724,7 @@ template&lt;typename Mapping , typename Mapping::ArrayExtents::value_type Granul
 </div><!-- fragment -->
 <p>An example script for plotting the ASCII heatmap data using gnuplot. </p>
 
-<p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00156">156</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00180">180</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
 
 </div>
 </div>
@@ -757,7 +769,7 @@ template&lt;typename Mapping , typename Mapping::ArrayExtents::value_type Granul
 </div><!-- fragment -->
 <p>An example script for plotting the binary heatmap data using gnuplot. </p>
 
-<p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00171">171</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00195">195</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
 
 </div>
 </div>
@@ -796,7 +808,7 @@ template&lt;typename Mapping , typename Mapping::ArrayExtents::value_type Granul
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1Heatmap.html">Heatmap</a></li>
-    <li class="footer">Generated on Tue Nov 15 2022 06:56:16 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Tue Nov 15 2022 13:55:37 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

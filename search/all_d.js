@@ -4,7 +4,7 @@ var searchData=
   ['packedone_475',['PackedOne',['../namespacellama_1_1mapping.html#a0232e67cb311c835b39b540a400f4da0',1,'llama::mapping']]],
   ['packedsingleblobsoa_476',['PackedSingleBlobSoA',['../namespacellama_1_1mapping.html#a7dafaadaed054ff638b834a708c53ad7',1,'llama::mapping']]],
   ['parallelmemcpy_477',['parallelMemcpy',['../namespacellama_1_1internal.html#a0a81e9975bf6750cae8fa41b8b94f58c',1,'llama::internal']]],
-  ['parentview_478',['parentView',['../structllama_1_1VirtualView.html#a0d668503865e6f8b8eba50f879ffc851',1,'llama::VirtualView::parentView()'],['../structllama_1_1VirtualView.html#a13c137f45f79d7a6eb198a4e61970ee8',1,'llama::VirtualView::ParentView()']]],
+  ['parentview_478',['ParentView',['../structllama_1_1VirtualView.html#a13c137f45f79d7a6eb198a4e61970ee8',1,'llama::VirtualView::ParentView()'],['../structllama_1_1VirtualView.html#a0d668503865e6f8b8eba50f879ffc851',1,'llama::VirtualView::parentView()']]],
   ['part1after_479',['Part1After',['../structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html#acd986c335569566cea48f6c1ff697d1d',1,'llama::mapping::internal::PartitionFoldOpImpl']]],
   ['part1before_480',['Part1Before',['../structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html#ac3328efa4293b945075081b601b22b56',1,'llama::mapping::internal::PartitionFoldOpImpl']]],
   ['part2after_481',['Part2After',['../structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html#a7b1689236c1ae5b422bd586b56059914',1,'llama::mapping::internal::PartitionFoldOpImpl']]],
