@@ -219,7 +219,7 @@ $(document).ready(function(){initNavTree('TreeFromDimensions_8hpp_source.html','
 <div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;                <span class="keyword">static_cast&lt;</span>std::size_t<span class="keyword">&gt;</span>(size[N - 1])}; <span class="comment">// FIXME(bgruber): propagate index type</span></div>
 <div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;        <span class="keywordflow">else</span></div>
 <div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;        {</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;            <a class="code" href="structllama_1_1Tuple.html">Tuple</a> inner{createTree&lt;RecordDim, V, N, Pos + 1&gt;(size)};</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;            <a class="code" href="structllama_1_1Tuple.html">Tuple</a> inner{createTree&lt;RecordDim, V, N, Pos + 1&gt;(size)}; <span class="comment">// NOLINT(misc-const-correctness)</span></div>
 <div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="structllama_1_1mapping_1_1tree_1_1Node.html">Node</a>&lt;<a class="code" href="structllama_1_1NoName.html">NoName</a>, decltype(inner)&gt;{</div>
 <div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;                <span class="keyword">static_cast&lt;</span>std::size_t<span class="keyword">&gt;</span>(size[Pos]),</div>
 <div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;                inner}; <span class="comment">// FIXME(bgruber): propagate index type</span></div>
@@ -293,7 +293,7 @@ $(document).ready(function(){initNavTree('TreeFromDimensions_8hpp_source.html','
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc.html">mapping</a></li><li class="navelem"><a class="el" href="dir_167d1c89d05e547509b1688d85c563df.html">tree</a></li><li class="navelem"><a class="el" href="TreeFromDimensions_8hpp.html">TreeFromDimensions.hpp</a></li>
-    <li class="footer">Generated on Wed Nov 16 2022 11:37:05 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Nov 16 2022 16:33:21 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

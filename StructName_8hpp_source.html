@@ -279,7 +279,7 @@ $(document).ready(function(){initNavTree('StructName_8hpp_source.html',''); init
 <div class="line"><a name="l00191"></a><span class="lineno"><a class="line" href="namespacellama.html#a06d7068ee2176f6a3bbd750665ac5af0">  191</a></span>&#160;    <span class="keyword">inline</span> constexpr <span class="keyword">auto</span> <a class="code" href="namespacellama.html#a06d7068ee2176f6a3bbd750665ac5af0">qualifiedTypeName</a> = []</div>
 <div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;    {</div>
 <div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;        constexpr <span class="keyword">auto</span>&amp; value = internal::typeNameStorage&lt;T&gt;;</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;        <span class="keywordflow">return</span> std::string_view{&amp;value[0], value.size()};</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;        <span class="keywordflow">return</span> std::string_view{value.data(), value.size()};</div>
 <div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;    }();</div>
 <div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160; </div>
 <div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;    <span class="keyword">namespace </span>internal</div>
@@ -457,7 +457,7 @@ $(document).ready(function(){initNavTree('StructName_8hpp_source.html',''); init
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="StructName_8hpp.html">StructName.hpp</a></li>
-    <li class="footer">Generated on Wed Nov 16 2022 11:37:05 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Nov 16 2022 16:33:21 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

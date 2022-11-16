@@ -211,13 +211,13 @@ $(document).ready(function(){initNavTree('Tuple_8hpp_source.html',''); initResiz
 <div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;} <span class="comment">// namespace llama</span></div>
 <div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160; </div>
 <div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Elements&gt;</div>
-<div class="line"><a name="l00133"></a><span class="lineno"><a class="line" href="structstd_1_1tuple__size_3_01llama_1_1Tuple_3_01Elements_8_8_8_01_4_01_4.html">  133</a></span>&#160;<span class="keyword">struct </span>std::tuple_size&lt;<a class="code" href="namespacellama.html">llama</a>::<a class="code" href="namespacellama.html#a1604e8162498ff814c1b1efacd212e95">Tuple</a>&lt;Elements...&gt;&gt;</div>
+<div class="line"><a name="l00133"></a><span class="lineno"><a class="line" href="structstd_1_1tuple__size_3_01llama_1_1Tuple_3_01Elements_8_8_8_01_4_01_4.html">  133</a></span>&#160;<span class="keyword">struct </span>std::tuple_size&lt;<a class="code" href="namespacellama.html">llama</a>::<a class="code" href="namespacellama.html#a1604e8162498ff814c1b1efacd212e95">Tuple</a>&lt;Elements...&gt;&gt; <span class="comment">// NOLINT(cert-dcl58-cpp)</span></div>
 <div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;{</div>
 <div class="line"><a name="l00135"></a><span class="lineno"><a class="line" href="structstd_1_1tuple__size_3_01llama_1_1Tuple_3_01Elements_8_8_8_01_4_01_4.html#abfb585e14c073fe0440706749d845b00">  135</a></span>&#160;    <span class="keyword">static</span> constexpr <span class="keyword">auto</span> value = <span class="keyword">sizeof</span>...(Elements);</div>
 <div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;};</div>
 <div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160; </div>
 <div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;<span class="keyword">template</span>&lt;std::size_t I, <span class="keyword">typename</span>... Elements&gt;</div>
-<div class="line"><a name="l00139"></a><span class="lineno"><a class="line" href="structstd_1_1tuple__element_3_01I_00_01llama_1_1Tuple_3_01Elements_8_8_8_01_4_01_4.html">  139</a></span>&#160;<span class="keyword">struct </span>std::tuple_element&lt;I, <a class="code" href="namespacellama.html">llama</a>::<a class="code" href="namespacellama.html#a1604e8162498ff814c1b1efacd212e95">Tuple</a>&lt;Elements...&gt;&gt;</div>
+<div class="line"><a name="l00139"></a><span class="lineno"><a class="line" href="structstd_1_1tuple__element_3_01I_00_01llama_1_1Tuple_3_01Elements_8_8_8_01_4_01_4.html">  139</a></span>&#160;<span class="keyword">struct </span>std::tuple_element&lt;I, <a class="code" href="namespacellama.html">llama</a>::<a class="code" href="namespacellama.html#a1604e8162498ff814c1b1efacd212e95">Tuple</a>&lt;Elements...&gt;&gt; <span class="comment">// NOLINT(cert-dcl58-cpp)</span></div>
 <div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;{</div>
 <div class="line"><a name="l00141"></a><span class="lineno"><a class="line" href="structstd_1_1tuple__element_3_01I_00_01llama_1_1Tuple_3_01Elements_8_8_8_01_4_01_4.html#ab58302406179f5fe72d1c568fcc3fc2f">  141</a></span>&#160;    <span class="keyword">using</span> <a class="code" href="structstd_1_1tuple__element_3_01I_00_01llama_1_1Tuple_3_01Elements_8_8_8_01_4_01_4.html#ab58302406179f5fe72d1c568fcc3fc2f">type</a> = boost::mp11::mp_at_c&lt;<a class="code" href="structllama_1_1Tuple.html">llama::Tuple</a>&lt;Elements...&gt;, I&gt;;</div>
 <div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;};</div>
@@ -375,7 +375,7 @@ $(document).ready(function(){initNavTree('Tuple_8hpp_source.html',''); initResiz
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="Tuple_8hpp.html">Tuple.hpp</a></li>
-    <li class="footer">Generated on Wed Nov 16 2022 11:37:05 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Nov 16 2022 16:33:21 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

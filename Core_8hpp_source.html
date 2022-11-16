@@ -506,7 +506,7 @@ $(document).ready(function(){initNavTree('Core_8hpp_source.html',''); initResiza
 <div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;            <span class="keyword">using namespace </span><a class="code" href="namespaceboost_1_1mp11.html">boost::mp11</a>;</div>
 <div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160; </div>
 <div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;            std::size_t size = 0;</div>
-<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;            std::size_t maxAlign = 0;</div>
+<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;            std::size_t maxAlign = 0; <span class="comment">// NOLINT(misc-const-correctness)</span></div>
 <div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;            mp_for_each&lt;mp_transform&lt;mp_identity, TypeList&gt;&gt;([&amp;](<span class="keyword">auto</span> e) constexpr {</div>
 <div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;                <span class="keyword">using</span> T = <span class="keyword">typename</span> decltype(e)::type;</div>
 <div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;                <span class="keywordflow">if</span> constexpr(Align)</div>
@@ -555,7 +555,7 @@ $(document).ready(function(){initNavTree('Core_8hpp_source.html',''); initResiza
 <div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;                <span class="keywordflow">return</span> 0;</div>
 <div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;            <span class="keywordflow">else</span></div>
 <div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160;            {</div>
-<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160;                std::size_t offset</div>
+<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160;                std::size_t offset <span class="comment">// NOLINT(misc-const-correctness)</span></div>
 <div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;                    = <a class="code" href="namespacellama.html#a7b86f2441b1aae82532668e1a8377df2">flatOffsetOf</a>&lt;TypeList, I - 1, Align&gt; + <span class="keyword">sizeof</span>(boost::mp11::mp_at_c&lt;TypeList, I - 1&gt;);</div>
 <div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;                <span class="keywordflow">if</span> constexpr(Align)</div>
 <div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;                    offset = <a class="code" href="namespacellama.html#ab9c5c0a1ca0698a8871689b9924736ac">roundUpToMultiple</a>(offset, <span class="keyword">alignof</span>(boost::mp11::mp_at_c&lt;TypeList, I&gt;));</div>
@@ -895,7 +895,7 @@ $(document).ready(function(){initNavTree('Core_8hpp_source.html',''); initResiza
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="Core_8hpp.html">Core.hpp</a></li>
-    <li class="footer">Generated on Wed Nov 16 2022 11:37:05 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Wed Nov 16 2022 16:33:21 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
