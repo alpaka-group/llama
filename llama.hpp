@@ -567,13 +567,13 @@ namespace llama
 } // namespace llama
 
 template<typename... Elements>
-struct std::tuple_size<llama::Tuple<Elements...>>
+struct std::tuple_size<llama::Tuple<Elements...>> // NOLINT(cert-dcl58-cpp)
 {
     static constexpr auto value = sizeof...(Elements);
 };
 
 template<std::size_t I, typename... Elements>
-struct std::tuple_element<I, llama::Tuple<Elements...>>
+struct std::tuple_element<I, llama::Tuple<Elements...>> // NOLINT(cert-dcl58-cpp)
 {
     using type = boost::mp11::mp_at_c<llama::Tuple<Elements...>, I>;
 };
@@ -984,12 +984,12 @@ namespace llama
 	namespace std
 	{
 	    template<typename T, size_t N>
-	    struct tuple_size<llama::Array<T, N>> : integral_constant<size_t, N>
+	    struct tuple_size<llama::Array<T, N>> : integral_constant<size_t, N> // NOLINT(cert-dcl58-cpp)
 	    {
 	    };
 
 	    template<size_t I, typename T, size_t N>
-	    struct tuple_element<I, llama::Array<T, N>>
+	    struct tuple_element<I, llama::Array<T, N>> // NOLINT(cert-dcl58-cpp)
 	    {
 	        using type = T;
 	    };
@@ -1061,12 +1061,12 @@ namespace llama
 } // namespace llama
 
 template<typename V, size_t N>
-struct std::tuple_size<llama::ArrayIndex<V, N>> : std::integral_constant<size_t, N>
+struct std::tuple_size<llama::ArrayIndex<V, N>> : std::integral_constant<size_t, N> // NOLINT(cert-dcl58-cpp)
 {
 };
 
 template<size_t I, typename V, size_t N>
-struct std::tuple_element<I, llama::ArrayIndex<V, N>>
+struct std::tuple_element<I, llama::ArrayIndex<V, N>> // NOLINT(cert-dcl58-cpp)
 {
     using type = V;
 };
@@ -1249,12 +1249,13 @@ namespace llama
 } // namespace llama
 
 template<typename SizeType, SizeType... Sizes>
-struct std::tuple_size<llama::ArrayExtents<SizeType, Sizes...>> : std::integral_constant<std::size_t, sizeof...(Sizes)>
+struct std::tuple_size<llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(cert-dcl58-cpp)
+    : std::integral_constant<std::size_t, sizeof...(Sizes)>
 {
 };
 
 template<typename SizeType, std::size_t I, SizeType... Sizes>
-struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>>
+struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(cert-dcl58-cpp)
 {
     using type = SizeType;
 };
@@ -1372,7 +1373,7 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>>
 				        {
 				            constexpr auto coord = []() constexpr
 				            {
-				                char digits[] = {(Digits - 48)...};
+				                const char digits[] = {(Digits - 48)...};
 				                std::size_t acc = 0;
 				                std ::size_t powerOf10 = 1;
 				                for(int i = sizeof...(Digits) - 1; i >= 0; i--)
@@ -1911,7 +1912,7 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>>
 			            using namespace boost::mp11;
 
 			            std::size_t size = 0;
-			            std::size_t maxAlign = 0;
+			            std::size_t maxAlign = 0; // NOLINT(misc-const-correctness)
 			            mp_for_each<mp_transform<mp_identity, TypeList>>([&](auto e) constexpr {
 			                using T = typename decltype(e)::type;
 			                if constexpr(Align)
@@ -1964,7 +1965,7 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>>
 			                return 0;
 			            else
 			            {
-			                std::size_t offset
+			                std::size_t offset // NOLINT(misc-const-correctness)
 			                    = flatOffsetOf<TypeList, I - 1, Align> + sizeof(boost::mp11::mp_at_c<TypeList, I - 1>);
 			                if constexpr(Align)
 			                    offset = roundUpToMultiple(offset, alignof(boost::mp11::mp_at_c<TypeList, I>));
@@ -4309,7 +4310,7 @@ namespace llama
 		    inline constexpr auto qualifiedTypeName = []
 		    {
 		        constexpr auto& value = internal::typeNameStorage<T>;
-		        return std::string_view{&value[0], value.size()};
+		        return std::string_view{value.data(), value.size()};
 		    }();
 
 		    namespace internal
@@ -5443,19 +5444,19 @@ namespace llama
 	} // namespace llama
 
 	template<typename View, typename BoundRecordCoord, bool OwnView>
-	struct std::tuple_size<llama::RecordRef<View, BoundRecordCoord, OwnView>>
+	struct std::tuple_size<llama::RecordRef<View, BoundRecordCoord, OwnView>> // NOLINT(cert-dcl58-cpp)
 	    : boost::mp11::mp_size<typename llama::RecordRef<View, BoundRecordCoord, OwnView>::AccessibleRecordDim>
 	{
 	};
 
 	template<std::size_t I, typename View, typename BoundRecordCoord, bool OwnView>
-	struct std::tuple_element<I, llama::RecordRef<View, BoundRecordCoord, OwnView>>
+	struct std::tuple_element<I, llama::RecordRef<View, BoundRecordCoord, OwnView>> // NOLINT(cert-dcl58-cpp)
 	{
 	    using type = decltype(std::declval<llama::RecordRef<View, BoundRecordCoord, OwnView>>().template get<I>());
 	};
 
 	template<std::size_t I, typename View, typename BoundRecordCoord, bool OwnView>
-	struct std::tuple_element<I, const llama::RecordRef<View, BoundRecordCoord, OwnView>>
+	struct std::tuple_element<I, const llama::RecordRef<View, BoundRecordCoord, OwnView>> // NOLINT(cert-dcl58-cpp)
 	{
 	    using type = decltype(std::declval<const llama::RecordRef<View, BoundRecordCoord, OwnView>>().template get<I>());
 	};
@@ -8534,7 +8535,7 @@ namespace llama::mapping
 	                static_cast<std::size_t>(size[N - 1])}; // FIXME(bgruber): propagate index type
 	        else
 	        {
-	            Tuple inner{createTree<RecordDim, V, N, Pos + 1>(size)};
+	            Tuple inner{createTree<RecordDim, V, N, Pos + 1>(size)}; // NOLINT(misc-const-correctness)
 	            return Node<NoName, decltype(inner)>{
 	                static_cast<std::size_t>(size[Pos]),
 	                inner}; // FIXME(bgruber): propagate index type
@@ -10206,8 +10207,11 @@ namespace llama::mapping
 ///
 /// LLAMA is licensed under the LGPL3+.
 
+// NOLINTNEXTLINE(modernize-macro-to-enum)
 #define LLAMA_VERSION_MAJOR 0
+// NOLINTNEXTLINE(modernize-macro-to-enum)
 #define LLAMA_VERSION_MINOR 4
+// NOLINTNEXTLINE(modernize-macro-to-enum)
 #define LLAMA_VERSION_PATCH 0
 
 // suppress warnings on missing return statements. we get a lot of these because nvcc/nvc++ have some troubles with if
