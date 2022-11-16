@@ -7987,7 +7987,6 @@ file = '${1:-plot.bin}'
 
 set xtics format ""
 set x2tics autofreq 32
-set ytics autofreq 32
 set yrange [] reverse
 set link x2; set link y2
 set x2label "Byte"
@@ -7999,18 +7998,20 @@ EOF
         static constexpr std::string_view gnuplotScriptBinary = R"(#!/bin/bash
 gnuplot -p <<EOF
 file = '${1:-plot.bin}'
-row = '${2:-64}'
-format = '${3:-%uint64}'
+rowlength = '${2:-64}'
+maxrows = '${3:-all}'
+format = '${4:-%uint64}'
 
 counts = system('stat -c "%s" ${1:-plot.bin}')/8
+rows = counts/rowlength
+rows = maxrows eq 'all' ? rows : (rows < maxrows ? rows : maxrows)
 
 set xtics format ""
 set x2tics autofreq 32
-set ytics autofreq 32
 set yrange [] reverse
 set link x2; set link y2
 set x2label "Byte"
-plot file binary array=(row,counts/row) format=format with image pixels axes x2y1
+plot file binary array=(rowlength,rows) format=format with image pixels axes x2y1
 EOF
 )";
     };
