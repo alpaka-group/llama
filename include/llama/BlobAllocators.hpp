@@ -22,22 +22,25 @@
 
 namespace llama::bloballoc
 {
-    /// Allocates stack memory for a \ref View, which is copied each time a \ref View is copied.
+    /// Allocates statically sized memory for a \ref View, which is copied each time a \ref View is copied.
     /// \tparam BytesToReserve the amount of memory to reserve.
     template<std::size_t BytesToReserve>
-    struct Stack
+    struct Array
     {
         template<std::size_t Alignment>
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(std::integral_constant<std::size_t, Alignment>, std::size_t) const
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(
+            std::integral_constant<std::size_t, Alignment>,
+            [[maybe_unused]] std::size_t count) const
         {
-            struct alignas(Alignment) AlignedArray : Array<std::byte, BytesToReserve>
+            assert(count == BytesToReserve);
+            struct alignas(Alignment) AlignedArray : llama::Array<std::byte, BytesToReserve>
             {
             };
             return AlignedArray{};
         }
     };
 #ifdef __cpp_lib_concepts
-    static_assert(BlobAllocator<Stack<64>>);
+    static_assert(BlobAllocator<Array<64>>);
 #endif
 
     /// Allocates heap memory managed by a `std::shared_ptr` for a \ref View. This memory is shared between all copies

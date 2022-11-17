@@ -120,7 +120,7 @@ Blob allocators
    :members:
 .. doxygenstruct:: llama::bloballoc::SharedPtr
    :members:
-.. doxygenstruct:: llama::bloballoc::Stack
+.. doxygenstruct:: llama::bloballoc::Array
    :members:
 
 Mappings

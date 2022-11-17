@@ -3,10 +3,10 @@
 using ArrayExtents = llama::ArrayExtents<int, 16>;
 using Mapping = llama::mapping::AoS<ArrayExtents, Vec3I>;
 
-TEST_CASE("bloballocators.Stack")
+TEST_CASE("bloballocators.Array")
 {
     constexpr auto mapping = Mapping{{}};
-    auto view = llama::allocView(mapping, llama::bloballoc::Stack<mapping.blobSize(0)>{});
+    auto view = llama::allocView(mapping, llama::bloballoc::Array<mapping.blobSize(0)>{});
     iotaFillView(view);
     iotaCheckView(view);
 }
