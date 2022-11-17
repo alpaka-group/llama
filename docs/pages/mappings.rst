@@ -94,7 +94,7 @@ The integral type used for computing blob number and offset should be the value 
         template <typename M>
         concept ComputedMapping = Mapping<M> && requires(M m, typename M::ArrayIndex ai, RecordCoord<> rc) {
             { m.isComputed(rc) } -> std::same_as<bool>;
-            { m.compute(ai, rc, Array<Array<std::byte, 0>, 0>{}) } -> AnyReference;
+            { m.compute(ai, rc, Array<Array<std::byte, 0>, 0>{}) } -> AnyReferenceTo<GetType<typename M::RecordDim, RC>>;
             { m.blobNrAndOffset(ai, rc) } -> std::same_as<NrAndOffset<typename M::ArrayExtents::value_type>>;
         };
 

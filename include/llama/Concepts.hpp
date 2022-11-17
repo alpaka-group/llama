@@ -56,9 +56,12 @@ namespace llama
     template <typename R>
     concept AnyReference = LValueReference<R> || ProxyReference<R>;
 
+    template <typename R, typename T>
+    concept AnyReferenceTo = (LValueReference<R> && std::is_same_v<std::remove_cvref_t<R>, T>) || (ProxyReference<R> && std::is_same_v<typename R::value_type, T>);
+
     template <typename M, typename RC>
     concept ComputedField = M::isComputed(RC{}) && requires(M m, typename M::ArrayIndex ai, Array<Array<std::byte, 1>, 1> blobs) {
-        { m.compute(ai, RC{}, blobs) } -> AnyReference;
+        { m.compute(ai, RC{}, blobs) } -> AnyReferenceTo<GetType<typename M::RecordDim, RC>>;
     };
 
     template<typename M>
