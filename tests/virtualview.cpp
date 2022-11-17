@@ -101,7 +101,7 @@ TEST_CASE("VirtualView")
             using MiniMapping = llama::mapping::SoA<ArrayExtents, Vec3D>;
             auto miniView = llama::allocViewUninitialized(
                 MiniMapping(miniSize),
-                llama::bloballoc::Stack<miniSize[0] * miniSize[1] * llama::sizeOf<Vec3D>>{});
+                llama::bloballoc::Array<miniSize[0] * miniSize[1] * llama::sizeOf<Vec3D>>{});
 
             for(std::size_t a = 0; a < validMiniSize[0]; ++a)
                 for(std::size_t b = 0; b < validMiniSize[1]; ++b)

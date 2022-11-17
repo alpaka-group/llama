@@ -186,10 +186,10 @@ namespace llama
     LLAMA_FN_HOST_ACC_INLINE auto allocViewStackUninitialized() -> decltype(auto)
     {
         constexpr auto mapping = mapping::MinAlignedOne<ArrayExtentsNCube<int, Dim, 1>, RecordDim>{};
-        return allocViewUninitialized(mapping, bloballoc::Stack<mapping.blobSize(0)>{});
+        return allocViewUninitialized(mapping, bloballoc::Array<mapping.blobSize(0)>{});
     }
 
-    /// Allocates a \ref View holding a single record backed by stack memory (\ref bloballoc::Stack).
+    /// Allocates a \ref View holding a single record backed by stack memory (\ref bloballoc::Array).
     /// \tparam Dim Dimension of the \ref ArrayExtents of the \ref View.
     template<std::size_t Dim, typename RecordDim>
     LLAMA_FN_HOST_ACC_INLINE auto allocViewStack() -> decltype(auto)

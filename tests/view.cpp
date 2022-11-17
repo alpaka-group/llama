@@ -29,6 +29,18 @@ TEST_CASE("view.default-ctor")
         View<llama::mapping::tree::Mapping<ArrayExtents, RecordDim, llama::Tuple<>>, std::byte*>
             view7{};
 }
+//
+// TEST_CASE("view.trivial")
+//{
+//    using ArrayExtents = llama::ArrayExtents<std::size_t, 2, llama::dyn>;
+//    using Mapping = llama::mapping::AlignedAoS<ArrayExtents, RecordDim>;
+//    constexpr auto s = Mapping{{10}}.blobSize(0);
+//    using BlobType = decltype(llama::bloballoc::Stack<s>{}(std::integral_constant<std::size_t, 4>{}, 0));
+//    using View = llama::View<llama::mapping::AlignedAoS<ArrayExtents, RecordDim>, BlobType>;
+//    STATIC_REQUIRE(std::is_trivially_constructible_v<View>);
+//    STATIC_REQUIRE(std::is_trivial_v<View>);
+//    STATIC_REQUIRE(std::is_trivial_v<View>);
+//}
 
 TEST_CASE("view.move")
 {
