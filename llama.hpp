@@ -2719,22 +2719,25 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(
 
 	namespace llama::bloballoc
 	{
-	    /// Allocates stack memory for a \ref View, which is copied each time a \ref View is copied.
+	    /// Allocates statically sized memory for a \ref View, which is copied each time a \ref View is copied.
 	    /// \tparam BytesToReserve the amount of memory to reserve.
 	    template<std::size_t BytesToReserve>
-	    struct Stack
+	    struct Array
 	    {
 	        template<std::size_t Alignment>
-	        LLAMA_FN_HOST_ACC_INLINE auto operator()(std::integral_constant<std::size_t, Alignment>, std::size_t) const
+	        LLAMA_FN_HOST_ACC_INLINE auto operator()(
+	            std::integral_constant<std::size_t, Alignment>,
+	            [[maybe_unused]] std::size_t count) const
 	        {
-	            struct alignas(Alignment) AlignedArray : Array<std::byte, BytesToReserve>
+	            assert(count == BytesToReserve);
+	            struct alignas(Alignment) AlignedArray : llama::Array<std::byte, BytesToReserve>
 	            {
 	            };
 	            return AlignedArray{};
 	        }
 	    };
 	#ifdef __cpp_lib_concepts
-	    static_assert(BlobAllocator<Stack<64>>);
+	    static_assert(BlobAllocator<Array<64>>);
 	#endif
 
 	    /// Allocates heap memory managed by a `std::shared_ptr` for a \ref View. This memory is shared between all copies
@@ -3387,10 +3390,10 @@ namespace llama
     LLAMA_FN_HOST_ACC_INLINE auto allocViewStackUninitialized() -> decltype(auto)
     {
         constexpr auto mapping = mapping::MinAlignedOne<ArrayExtentsNCube<int, Dim, 1>, RecordDim>{};
-        return allocViewUninitialized(mapping, bloballoc::Stack<mapping.blobSize(0)>{});
+        return allocViewUninitialized(mapping, bloballoc::Array<mapping.blobSize(0)>{});
     }
 
-    /// Allocates a \ref View holding a single record backed by stack memory (\ref bloballoc::Stack).
+    /// Allocates a \ref View holding a single record backed by stack memory (\ref bloballoc::Array).
     /// \tparam Dim Dimension of the \ref ArrayExtents of the \ref View.
     template<std::size_t Dim, typename RecordDim>
     LLAMA_FN_HOST_ACC_INLINE auto allocViewStack() -> decltype(auto)
