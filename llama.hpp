@@ -1079,31 +1079,31 @@ namespace llama
         {
             template<typename T, std::enable_if_t<std::is_integral_v<T>, int> = 0>
             // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
-            constexpr operator T() const
+            LLAMA_FN_HOST_ACC_INLINE constexpr operator T() const
             {
                 return static_cast<T>(-1);
             }
 
             template<typename T>
-            friend constexpr auto operator==(T i, Dyn) -> bool
+            LLAMA_FN_HOST_ACC_INLINE friend constexpr auto operator==(T i, Dyn) -> bool
             {
                 return i == static_cast<T>(-1);
             }
 
             template<typename T>
-            friend constexpr auto operator==(Dyn d, T i) -> bool
+            LLAMA_FN_HOST_ACC_INLINE friend constexpr auto operator==(Dyn d, T i) -> bool
             {
                 return i == d;
             }
 
             template<typename T>
-            friend constexpr auto operator!=(T i, Dyn d) -> bool
+            LLAMA_FN_HOST_ACC_INLINE friend constexpr auto operator!=(T i, Dyn d) -> bool
             {
                 return !(i == d);
             }
 
             template<typename T>
-            friend constexpr auto operator!=(Dyn d, T i) -> bool
+            LLAMA_FN_HOST_ACC_INLINE friend constexpr auto operator!=(Dyn d, T i) -> bool
             {
                 return !(i == d);
             }
@@ -1398,7 +1398,7 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(
 
 				    /// Concatenate a set of \ref RecordCoord%s instances.
 				    template<typename... RecordCoords>
-				    constexpr auto cat(RecordCoords...)
+				    LLAMA_FN_HOST_ACC_INLINE constexpr auto cat(RecordCoords...)
 				    {
 				        return Cat<RecordCoords...>{};
 				    }
