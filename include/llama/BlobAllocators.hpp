@@ -43,6 +43,23 @@ namespace llama::bloballoc
     static_assert(BlobAllocator<Array<64>>);
 #endif
 
+    /// Allocates heap memory managed by a `std::unique_ptr` for a \ref View. This memory can only be uniquely owned by
+    /// a single \ref View.
+    struct UniquePtr
+    {
+        template<std::size_t Alignment>
+        auto operator()(std::integral_constant<std::size_t, Alignment>, std::size_t count) const
+        {
+            auto* ptr
+                = static_cast<std::byte*>(::operator new[](count * sizeof(std::byte), std::align_val_t{Alignment}));
+            auto deleter = [](std::byte* ptr) { ::operator delete[](ptr, std::align_val_t{Alignment}); };
+            return std::unique_ptr<std::byte[], decltype(deleter)>{ptr, deleter};
+        }
+    };
+#ifdef __cpp_lib_concepts
+    static_assert(BlobAllocator<UniquePtr>);
+#endif
+
     /// Allocates heap memory managed by a `std::shared_ptr` for a \ref View. This memory is shared between all copies
     /// of a \ref View.
     struct SharedPtr
@@ -62,7 +79,7 @@ namespace llama::bloballoc
         {
             auto* ptr
                 = static_cast<std::byte*>(::operator new[](count * sizeof(std::byte), std::align_val_t{Alignment}));
-            auto deleter = [=](std::byte* ptr) { ::operator delete[](ptr, std::align_val_t{Alignment}); };
+            auto deleter = [](std::byte* ptr) { ::operator delete[](ptr, std::align_val_t{Alignment}); };
             return shared_ptr<std::byte[]>{ptr, deleter};
         }
     };
