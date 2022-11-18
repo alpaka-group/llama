@@ -373,10 +373,10 @@ Functions</h2></td></tr>
 <tr class="memitem:aafe5ae24f96109b3ca3d05eaf550e880"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1literals.html#aafe5ae24f96109b3ca3d05eaf550e880">operator&quot;&quot;_RC</a> ()</td></tr>
 <tr class="memdesc:aafe5ae24f96109b3ca3d05eaf550e880"><td class="mdescLeft">&#160;</td><td class="mdescRight">Literal operator for converting a numeric literal into a <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>.  <a href="namespacellama_1_1literals.html#aafe5ae24f96109b3ca3d05eaf550e880">More...</a><br /></td></tr>
 <tr class="separator:aafe5ae24f96109b3ca3d05eaf550e880"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a42cdd926d98388052f028ab19c94b649"><td class="memTemplParams" colspan="2">template&lt;typename... RecordCoords&gt; </td></tr>
-<tr class="memitem:a42cdd926d98388052f028ab19c94b649"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a42cdd926d98388052f028ab19c94b649">cat</a> (RecordCoords...)</td></tr>
-<tr class="memdesc:a42cdd926d98388052f028ab19c94b649"><td class="mdescLeft">&#160;</td><td class="mdescRight">Concatenate a set of <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>s instances.  <a href="namespacellama.html#a42cdd926d98388052f028ab19c94b649">More...</a><br /></td></tr>
-<tr class="separator:a42cdd926d98388052f028ab19c94b649"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae442e49eb3d8d604de1ef8ef3c7fb1d7"><td class="memTemplParams" colspan="2">template&lt;typename... RecordCoords&gt; </td></tr>
+<tr class="memitem:ae442e49eb3d8d604de1ef8ef3c7fb1d7"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a> auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ae442e49eb3d8d604de1ef8ef3c7fb1d7">cat</a> (RecordCoords...)</td></tr>
+<tr class="memdesc:ae442e49eb3d8d604de1ef8ef3c7fb1d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Concatenate a set of <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>s instances.  <a href="namespacellama.html#ae442e49eb3d8d604de1ef8ef3c7fb1d7">More...</a><br /></td></tr>
+<tr class="separator:ae442e49eb3d8d604de1ef8ef3c7fb1d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4fca680f97ca52a42cd74519e6347395"><td class="memTemplParams" colspan="2">template&lt;typename View , typename BoundRecordCoord , bool OwnView&gt; </td></tr>
 <tr class="memitem:a4fca680f97ca52a42cd74519e6347395"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a4fca680f97ca52a42cd74519e6347395">copyRecord</a> (const <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a>&lt; <a class="el" href="structllama_1_1View.html">View</a>, BoundRecordCoord, OwnView &gt; &amp;rr)</td></tr>
 <tr class="memdesc:a4fca680f97ca52a42cd74519e6347395"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a <a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a> with the same record dimension as the given record ref, with values copyied from rr.  <a href="namespacellama.html#a4fca680f97ca52a42cd74519e6347395">More...</a><br /></td></tr>
@@ -1427,8 +1427,8 @@ template&lt;typename Mapping , typename SrcBlob , typename DstBlob &gt; </div>
 
 </div>
 </div>
-<a id="a42cdd926d98388052f028ab19c94b649"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a42cdd926d98388052f028ab19c94b649">&#9670;&nbsp;</a></span>cat()</h2>
+<a id="ae442e49eb3d8d604de1ef8ef3c7fb1d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae442e49eb3d8d604de1ef8ef3c7fb1d7">&#9670;&nbsp;</a></span>cat()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1439,7 +1439,7 @@ template&lt;typename... RecordCoords&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr auto llama::cat </td>
+          <td class="memname">constexpr <a class="el" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a> auto llama::cat </td>
           <td>(</td>
           <td class="paramtype">RecordCoords...&#160;</td>
           <td class="paramname"></td><td>)</td>
@@ -4653,7 +4653,7 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Fri Nov 18 2022 12:34:51 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Fri Nov 18 2022 17:50:25 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>
