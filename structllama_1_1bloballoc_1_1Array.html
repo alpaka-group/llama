@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Low-Level Abstraction of Memory Access: llama::bloballoc::Stack&lt; BytesToReserve &gt; Struct Template Reference</title>
+<title>Low-Level Abstraction of Memory Access: llama::bloballoc::Array&lt; BytesToReserve &gt; Struct Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -63,7 +63,7 @@ $(function() {
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
-$(document).ready(function(){initNavTree('structllama_1_1bloballoc_1_1Stack.html',''); initResizable(); });
+$(document).ready(function(){initNavTree('structllama_1_1bloballoc_1_1Array.html',''); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -84,9 +84,9 @@ $(document).ready(function(){initNavTree('structllama_1_1bloballoc_1_1Stack.html
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="structllama_1_1bloballoc_1_1Stack-members.html">List of all members</a>  </div>
+<a href="structllama_1_1bloballoc_1_1Array-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">llama::bloballoc::Stack&lt; BytesToReserve &gt; Struct Template Reference</div>  </div>
+<div class="title">llama::bloballoc::Array&lt; BytesToReserve &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -94,15 +94,15 @@ $(document).ready(function(){initNavTree('structllama_1_1bloballoc_1_1Stack.html
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a1cd9b08ee10451d464517c47c1172d9d"><td class="memTemplParams" colspan="2">template&lt;std::size_t Alignment&gt; </td></tr>
-<tr class="memitem:a1cd9b08ee10451d464517c47c1172d9d"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1bloballoc_1_1Stack.html#a1cd9b08ee10451d464517c47c1172d9d">operator()</a> (std::integral_constant&lt; std::size_t, Alignment &gt;, std::size_t) const</td></tr>
-<tr class="separator:a1cd9b08ee10451d464517c47c1172d9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af934c30f2846edeeed8dd4a764d72839"><td class="memTemplParams" colspan="2">template&lt;std::size_t Alignment&gt; </td></tr>
+<tr class="memitem:af934c30f2846edeeed8dd4a764d72839"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1bloballoc_1_1Array.html#af934c30f2846edeeed8dd4a764d72839">operator()</a> (std::integral_constant&lt; std::size_t, Alignment &gt;, [[maybe_unused]] std::size_t count) const</td></tr>
+<tr class="separator:af934c30f2846edeeed8dd4a764d72839"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;std::size_t BytesToReserve&gt;<br />
-struct llama::bloballoc::Stack&lt; BytesToReserve &gt;</h3>
+struct llama::bloballoc::Array&lt; BytesToReserve &gt;</h3>
 
-<p>Allocates stack memory for a <a class="el" href="structllama_1_1View.html">View</a>, which is copied each time a <a class="el" href="structllama_1_1View.html">View</a> is copied. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
+<p>Allocates statically sized memory for a <a class="el" href="structllama_1_1View.html">View</a>, which is copied each time a <a class="el" href="structllama_1_1View.html">View</a> is copied. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">BytesToReserve</td><td>the amount of memory to reserve. </td></tr>
   </table>
@@ -111,8 +111,8 @@ struct llama::bloballoc::Stack&lt; BytesToReserve &gt;</h3>
 
 <p class="definition">Definition at line <a class="el" href="BlobAllocators_8hpp_source.html#l00028">28</a> of file <a class="el" href="BlobAllocators_8hpp_source.html">BlobAllocators.hpp</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a1cd9b08ee10451d464517c47c1172d9d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1cd9b08ee10451d464517c47c1172d9d">&#9670;&nbsp;</a></span>operator()()</h2>
+<a id="af934c30f2846edeeed8dd4a764d72839"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af934c30f2846edeeed8dd4a764d72839">&#9670;&nbsp;</a></span>operator()()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -125,7 +125,7 @@ template&lt;std::size_t Alignment&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto <a class="el" href="structllama_1_1bloballoc_1_1Stack.html">llama::bloballoc::Stack</a>&lt; BytesToReserve &gt;::operator() </td>
+          <td class="memname">auto <a class="el" href="structllama_1_1bloballoc_1_1Array.html">llama::bloballoc::Array</a>&lt; BytesToReserve &gt;::operator() </td>
           <td>(</td>
           <td class="paramtype">std::integral_constant&lt; std::size_t, Alignment &gt;&#160;</td>
           <td class="paramname">, </td>
@@ -133,8 +133,8 @@ template&lt;std::size_t Alignment&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::size_t&#160;</td>
-          <td class="paramname">&#160;</td>
+          <td class="paramtype">[[maybe_unused] ] std::size_t&#160;</td>
+          <td class="paramname"><em>count</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -161,8 +161,8 @@ template&lt;std::size_t Alignment&gt; </div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1bloballoc.html">bloballoc</a></li><li class="navelem"><a class="el" href="structllama_1_1bloballoc_1_1Stack.html">Stack</a></li>
-    <li class="footer">Generated on Fri Nov 18 2022 17:50:25 for Low-Level Abstraction of Memory Access by
+    <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1bloballoc.html">bloballoc</a></li><li class="navelem"><a class="el" href="structllama_1_1bloballoc_1_1Array.html">Array</a></li>
+    <li class="footer">Generated on Fri Nov 18 2022 18:19:43 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

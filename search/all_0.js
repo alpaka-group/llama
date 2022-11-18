@@ -28,7 +28,7 @@ var searchData=
   ['aosoalanes_25',['aosoaLanes',['../namespacellama_1_1internal.html#a6be5f6ab0482c0b8d8276f41c70667c2',1,'llama::internal']]],
   ['areequal_26',['areEqual',['../namespacellama_1_1internal.html#ad6320a13162da7c7c045674a49a741b4',1,'llama::internal']]],
   ['argumenttype_27',['ArgumentType',['../structllama_1_1mapping_1_1internal_1_1UnaryFunctionTraits_3_01Ret_07_5_08_07Arg_08_4.html#a0e5619a039ea44abe3dbb99a56492812',1,'llama::mapping::internal::UnaryFunctionTraits&lt; Ret(*)(Arg)&gt;']]],
-  ['array_28',['Array',['../structllama_1_1Array.html',1,'llama::Array&lt; T, N &gt;'],['../namespacellama.html#a690689d38b43930430e58bb7fe17aca7',1,'llama::Array(First, Args... args) -&gt; Array&lt; First, sizeof...(Args)+1 &gt;']]],
+  ['array_28',['Array',['../structllama_1_1Array.html',1,'llama::Array&lt; T, N &gt;'],['../structllama_1_1bloballoc_1_1Array.html',1,'llama::bloballoc::Array&lt; BytesToReserve &gt;'],['../namespacellama.html#a690689d38b43930430e58bb7fe17aca7',1,'llama::Array()']]],
   ['array_2ehpp_29',['Array.hpp',['../Array_8hpp.html',1,'']]],
   ['array_3c_20blobtype_2c_20mapping_3a_3ablobcount_20_3e_30',['Array&lt; BlobType, Mapping::blobCount &gt;',['../structllama_1_1Array.html',1,'llama']]],
   ['array_3c_20std_3a_3asize_5ft_2c_28_28sizes_3d_3ddyn_29_2b_2e_2e_2e_2b0_29_3e_31',['Array&lt; std::size_t,((Sizes==dyn)+...+0)&gt;',['../structllama_1_1Array.html',1,'llama']]],
