@@ -106,7 +106,7 @@ namespace llama
 
     /// Concatenate a set of \ref RecordCoord%s instances.
     template<typename... RecordCoords>
-    constexpr auto cat(RecordCoords...)
+    LLAMA_FN_HOST_ACC_INLINE constexpr auto cat(RecordCoords...)
     {
         return Cat<RecordCoords...>{};
     }
