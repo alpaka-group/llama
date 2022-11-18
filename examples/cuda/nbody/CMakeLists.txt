@@ -9,6 +9,6 @@ endif ()
 add_executable(${PROJECT_NAME} nbody.cu ../../common/Stopwatch.hpp)
 target_compile_features(${PROJECT_NAME} PRIVATE cuda_std_17)
 target_compile_options(${PROJECT_NAME} PUBLIC
-        --expt-extended-lambda --expt-relaxed-constexpr --use_fast_math
+        --expt-relaxed-constexpr --use_fast_math
         $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:--compiler-options -Wall,-Wextra>)
 target_link_libraries(${PROJECT_NAME} PRIVATE llama::llama CUDA::cudart fmt::fmt)
