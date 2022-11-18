@@ -10137,19 +10137,24 @@ namespace llama::mapping
         template<typename T>
         LLAMA_FN_HOST_ACC_INLINE auto byteswap(T t) -> T
         {
-            llama::Array<std::byte, sizeof(T)> arr{};
-            std::memcpy(&arr, &t, sizeof(T));
-
-            for(std::size_t i = 0; i < sizeof(T) / 2; i++)
+            if constexpr(sizeof(T) == 1)
+                return t;
+            else
             {
-                const auto a = arr[i];
-                const auto b = arr[sizeof(T) - 1 - i];
-                arr[i] = b;
-                arr[sizeof(T) - 1 - i] = a;
-            }
+                llama::Array<std::byte, sizeof(T)> arr{};
+                std::memcpy(&arr, &t, sizeof(T));
 
-            std::memcpy(&t, &arr, sizeof(T));
-            return t;
+                for(std::size_t i = 0; i < sizeof(T) / 2; i++)
+                {
+                    const auto a = arr[i];
+                    const auto b = arr[sizeof(T) - 1 - i];
+                    arr[i] = b;
+                    arr[sizeof(T) - 1 - i] = a;
+                }
+
+                std::memcpy(&t, &arr, sizeof(T));
+                return t;
+            }
         }
 
         template<typename T>
