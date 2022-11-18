@@ -125,6 +125,7 @@ $(document).ready(function(){initNavTree('functions_func_o.html',''); initResiza
 , <a class="el" href="structllama_1_1accessor_1_1Restrict.html#a5c9e0516db9ef5137d4efe33f7954721">llama::accessor::Restrict</a>
 , <a class="el" href="structllama_1_1bloballoc_1_1Array.html#af934c30f2846edeeed8dd4a764d72839">llama::bloballoc::Array&lt; BytesToReserve &gt;</a>
 , <a class="el" href="structllama_1_1bloballoc_1_1SharedPtr.html#ae90813d3ac4877d722150d240e790c98">llama::bloballoc::SharedPtr</a>
+, <a class="el" href="structllama_1_1bloballoc_1_1UniquePtr.html#affa75475e5567690fee1a68fab39b5b7">llama::bloballoc::UniquePtr</a>
 , <a class="el" href="structllama_1_1bloballoc_1_1Vector.html#a460676ac82586d1bef38037a1816464b">llama::bloballoc::Vector</a>
 , <a class="el" href="structllama_1_1Copy.html#a5456c747d230db86a65cb67f67d1aa05">llama::Copy&lt; SrcMapping, DstMapping, SFINAE &gt;</a>
 , <a class="el" href="structllama_1_1Copy_3_01Mapping_00_01Mapping_01_4.html#a07d8bb1043f704c649aba7ec2090b4c0">llama::Copy&lt; Mapping, Mapping &gt;</a>
@@ -140,7 +141,7 @@ $(document).ready(function(){initNavTree('functions_func_o.html',''); initResiza
 , <a class="el" href="structllama_1_1mapping_1_1LinearizeArrayDimsCpp.html#aa3d20b80b03f7177bbcde3260f521ac2">llama::mapping::LinearizeArrayDimsCpp</a>
 , <a class="el" href="structllama_1_1mapping_1_1LinearizeArrayDimsFortran.html#ac230216ab9c29bb95a2791b3cb36851c">llama::mapping::LinearizeArrayDimsFortran</a>
 , <a class="el" href="structllama_1_1mapping_1_1LinearizeArrayDimsMorton.html#adeeb93904e5c9ff34b97046f26471a3a">llama::mapping::LinearizeArrayDimsMorton</a>
-, <a class="el" href="structllama_1_1mapping_1_1tree_1_1functor_1_1internal_1_1ChangeNodeChildsRuntimeFunctor.html#a88176c7696b38941ce3359063566933b">llama::mapping::tree::functor::internal::ChangeNodeChildsRuntimeFunctor</a>
+, <a class="el" href="structllama_1_1mapping_1_1tree_1_1functor_1_1internal_1_1ChangeNodeChildsRuntimeFunctor.html#a32b64325b2b8255a3965a073fd4075d0">llama::mapping::tree::functor::internal::ChangeNodeChildsRuntimeFunctor</a>
 , <a class="el" href="structllama_1_1RecordRef.html#a6e3f77a18819a49ab694345faffab318">llama::RecordRef&lt; TView, TBoundRecordCoord, OwnView &gt;</a>
 , <a class="el" href="structllama_1_1View.html#aeb97975804a31ebbddc3c53d4fbacdd5">llama::View&lt; TMapping, TBlobType, TAccessor &gt;</a>
 , <a class="el" href="structllama_1_1VirtualView.html#a4a747ea4e0cc33b766bfbb8eba433eaf">llama::VirtualView&lt; TStoredParentView &gt;</a>
@@ -155,8 +156,8 @@ $(document).ready(function(){initNavTree('functions_func_o.html',''); initResiza
 </li>
 <li>operator++()
 : <a class="el" href="structllama_1_1ArrayIndexIterator.html#aa0690871b4b8f9a59376db29497c1b9a">llama::ArrayIndexIterator&lt; ArrayExtents &gt;</a>
-, <a class="el" href="structllama_1_1Iterator.html#ae8ae5582cfdbdcefc5507083a83422d7">llama::Iterator&lt; View &gt;</a>
-, <a class="el" href="structllama_1_1ProxyRefOpMixin.html#a1df0708f468d3bde426e868788da05ba">llama::ProxyRefOpMixin&lt; Derived, ValueType &gt;</a>
+, <a class="el" href="structllama_1_1Iterator.html#a7c9b13ab0033fe418550d192dbf8c8e1">llama::Iterator&lt; View &gt;</a>
+, <a class="el" href="structllama_1_1ProxyRefOpMixin.html#a0bf9f2e980a32925ce02eacec3103bf1">llama::ProxyRefOpMixin&lt; Derived, ValueType &gt;</a>
 </li>
 <li>operator+=()
 : <a class="el" href="structllama_1_1ArrayIndexIterator.html#a601f4eb37dbc1c4e2af0905d00ef40f7">llama::ArrayIndexIterator&lt; ArrayExtents &gt;</a>
@@ -167,7 +168,7 @@ $(document).ready(function(){initNavTree('functions_func_o.html',''); initResiza
 <li>operator--()
 : <a class="el" href="structllama_1_1ArrayIndexIterator.html#ae64cfbd8c33f73c3cf38d8c2429233bc">llama::ArrayIndexIterator&lt; ArrayExtents &gt;</a>
 , <a class="el" href="structllama_1_1Iterator.html#a8c51c62fb62cc6ee312758abc6614bc9">llama::Iterator&lt; View &gt;</a>
-, <a class="el" href="structllama_1_1ProxyRefOpMixin.html#aaf96151b0aface32e6510a9f15ee616c">llama::ProxyRefOpMixin&lt; Derived, ValueType &gt;</a>
+, <a class="el" href="structllama_1_1ProxyRefOpMixin.html#a38d2f14e872312209bb5089dcb48b5a1">llama::ProxyRefOpMixin&lt; Derived, ValueType &gt;</a>
 </li>
 <li>operator-=()
 : <a class="el" href="structllama_1_1ArrayIndexIterator.html#a18c922c3e83766318c6acb3132dafeef">llama::ArrayIndexIterator&lt; ArrayExtents &gt;</a>
@@ -194,10 +195,10 @@ $(document).ready(function(){initNavTree('functions_func_o.html',''); initResiza
 , <a class="el" href="structllama_1_1mapping_1_1internal_1_1NullReference.html#aec59109e33b5a655f8a782fea81cde82">llama::mapping::internal::NullReference&lt; T &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1internal_1_1ProjectionReference.html#a1f6cd477412a83bb1e02412fee99f51e">llama::mapping::internal::ProjectionReference&lt; Reference, Projection &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1internal_1_1TraceReference.html#af304453d9a51335c8296e837dfe51533">llama::mapping::internal::TraceReference&lt; Value, Ref, Count &gt;</a>
-, <a class="el" href="structllama_1_1RecordRef.html#a3f3bb1d6f14928ec1a5aac3cdbcd40f6">llama::RecordRef&lt; TView, TBoundRecordCoord, OwnView &gt;</a>
+, <a class="el" href="structllama_1_1RecordRef.html#a2e05d072491116eca8afbe5251b79abf">llama::RecordRef&lt; TView, TBoundRecordCoord, OwnView &gt;</a>
 , <a class="el" href="structllama_1_1ScopedUpdate.html#aef4f92c4473a19dad4b219686a3bba57">llama::ScopedUpdate&lt; Reference, typename &gt;</a>
-, <a class="el" href="structllama_1_1ScopedUpdate_3_01Reference_00_01std_1_1enable__if__t_3_01std_1_1is__fundamental__e14f71eb64730a69a1b74dea5c5f8b59.html#aeae27e5a2b92ad99e3da4a4cd16b50b8">llama::ScopedUpdate&lt; Reference, std::enable_if_t&lt; std::is_fundamental_v&lt; typename internal::ValueOf&lt; Reference &gt;::type &gt; &gt; &gt;</a>
-, <a class="el" href="structllama_1_1Vector.html#a9438c49ab6897f544779b06f5a3d8c8c">llama::Vector&lt; Mapping &gt;</a>
+, <a class="el" href="structllama_1_1ScopedUpdate_3_01Reference_00_01std_1_1enable__if__t_3_01std_1_1is__fundamental__e14f71eb64730a69a1b74dea5c5f8b59.html#aef0d1e7e602204027ed415063a85f8ba">llama::ScopedUpdate&lt; Reference, std::enable_if_t&lt; std::is_fundamental_v&lt; typename internal::ValueOf&lt; Reference &gt;::type &gt; &gt; &gt;</a>
+, <a class="el" href="structllama_1_1Vector.html#a36792850ed3212ef272c31d1f6006bd7">llama::Vector&lt; Mapping &gt;</a>
 </li>
 <li>operator==()
 : <a class="el" href="structllama_1_1bloballoc_1_1AlignedAllocator.html#ad907d1d91d829b7eb80c3d64969bad92">llama::bloballoc::AlignedAllocator&lt; T, Alignment &gt;</a>
@@ -206,12 +207,12 @@ $(document).ready(function(){initNavTree('functions_func_o.html',''); initResiza
 : <a class="el" href="structllama_1_1ProxyRefOpMixin.html#a461255210746b50f4b018054a2e00079">llama::ProxyRefOpMixin&lt; Derived, ValueType &gt;</a>
 </li>
 <li>operator[]()
-: <a class="el" href="structllama_1_1Array.html#a18c4dca04c7d6ed3091def6653a8ae75">llama::Array&lt; T, N &gt;</a>
+: <a class="el" href="structllama_1_1Array.html#acee9cb1b5239b0bd63be77c4f76b4603">llama::Array&lt; T, N &gt;</a>
 , <a class="el" href="structllama_1_1ArrayExtents.html#abff3ef6c9c1dede51fb8d21bc45d7e80">llama::ArrayExtents&lt; T, Sizes &gt;</a>
 , <a class="el" href="structllama_1_1ArrayIndexIterator.html#a72f93926977ca4360c7feca921f93c20">llama::ArrayIndexIterator&lt; ArrayExtents &gt;</a>
 , <a class="el" href="structllama_1_1Iterator.html#a1fd67ec2c13b9fee525c8757ae494d61">llama::Iterator&lt; View &gt;</a>
 , <a class="el" href="structllama_1_1Vector.html#a5c067fb96450c34ec8a1462d15fa5bcd">llama::Vector&lt; Mapping &gt;</a>
-, <a class="el" href="structllama_1_1View.html#a13b76bc25289fb7376b9dbfe9afc0cec">llama::View&lt; TMapping, TBlobType, TAccessor &gt;</a>
+, <a class="el" href="structllama_1_1View.html#a5b2e47c3ed82390f8a988f9cd8451a08">llama::View&lt; TMapping, TBlobType, TAccessor &gt;</a>
 </li>
 <li>operator^=()
 : <a class="el" href="structllama_1_1ProxyRefOpMixin.html#a74fa44395646ece004b25ddc9058ab54">llama::ProxyRefOpMixin&lt; Derived, ValueType &gt;</a>
@@ -225,7 +226,7 @@ $(document).ready(function(){initNavTree('functions_func_o.html',''); initResiza
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri Nov 18 2022 18:19:44 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Fri Nov 18 2022 19:23:50 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

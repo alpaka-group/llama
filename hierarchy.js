@@ -248,13 +248,14 @@ var hierarchy =
     ] ],
     [ "llama::mapping::internal::UnaryFunctionTraits< F >", "structllama_1_1mapping_1_1internal_1_1UnaryFunctionTraits.html", null ],
     [ "llama::mapping::internal::UnaryFunctionTraits< Ret(*)(Arg)>", "structllama_1_1mapping_1_1internal_1_1UnaryFunctionTraits_3_01Ret_07_5_08_07Arg_08_4.html", null ],
+    [ "llama::bloballoc::UniquePtr", "structllama_1_1bloballoc_1_1UniquePtr.html", null ],
     [ "llama::internal::ValueOf< T, typename >", "structllama_1_1internal_1_1ValueOf.html", null ],
     [ "llama::internal::ValueOf< Reference >", "structllama_1_1internal_1_1ValueOf.html", null ],
     [ "llama::internal::ValueOf< T & >", "structllama_1_1internal_1_1ValueOf_3_01T_01_6_01_4.html", null ],
     [ "llama::internal::ValueOf< T, std::enable_if_t< isProxyReference< T > > >", "structllama_1_1internal_1_1ValueOf_3_01T_00_01std_1_1enable__if__t_3_01isProxyReference_3_01T_01_4_01_4_01_4.html", null ],
     [ "llama::internal::ValueOf< T, std::enable_if_t< isRecordRef< T > > >", "structllama_1_1internal_1_1ValueOf_3_01T_00_01std_1_1enable__if__t_3_01isRecordRef_3_01T_01_4_01_4_01_4.html", null ],
-    [ "llama::Vector< Mapping >", "structllama_1_1Vector.html", null ],
     [ "llama::bloballoc::Vector", "structllama_1_1bloballoc_1_1Vector.html", null ],
+    [ "llama::Vector< Mapping >", "structllama_1_1Vector.html", null ],
     [ "VHBits", null, [
       [ "llama::mapping::internal::BitPackedIntRef< Integral, StoredIntegralPointer, VHBits, SizeType >", "structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html", null ]
     ] ],

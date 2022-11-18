@@ -1,5 +1,7 @@
 var NAVTREEINDEX4 =
 {
+"structllama_1_1internal_1_1TransformLeavesWithCoordImpl_3_01RecordCoord_3_01Is_8_8_8_01_4_00_01C1fa9eea95bd347b217962f0d40f323c8.html":[2,0,1,2,58],
+"structllama_1_1internal_1_1TransformLeavesWithCoordImpl_3_01RecordCoord_3_01Is_8_8_8_01_4_00_01C1fa9eea95bd347b217962f0d40f323c8.html#a90604f1217d9acf3b7a5afd329893f0c":[2,0,1,2,58,0],
 "structllama_1_1internal_1_1TransformLeavesWithCoordImpl_3_01RecordCoord_3_01Is_8_8_8_01_4_00_01C1fa9eea95bd347b217962f0d40f323c8.html#a9cc8ef5254e9cf2f921bc5465c849f12":[2,0,1,2,58,2],
 "structllama_1_1internal_1_1TransformLeavesWithCoordImpl_3_01RecordCoord_3_01Is_8_8_8_01_4_00_01C1fa9eea95bd347b217962f0d40f323c8.html#adc93b9b415181ff2af49e004b2fbefd2":[2,0,1,2,58,1],
 "structllama_1_1internal_1_1TransformLeavesWithCoordImpl_3_01RecordCoord_3_01Is_8_8_8_01_4_00_01R42adaa4e9e950291b6a81a9b9f4ba005.html":[2,0,1,2,59],
@@ -247,7 +249,5 @@ var NAVTREEINDEX4 =
 "structllama_1_1mapping_1_1internal_1_1MakeUnsigned_3_01bool_01_4.html#a4016fe4d4250f23415f00682e5a23d29":[2,0,1,3,0,11,0],
 "structllama_1_1mapping_1_1internal_1_1NullReference.html":[2,0,1,3,0,13],
 "structllama_1_1mapping_1_1internal_1_1NullReference.html#a99a9f1b8d254b905ab6f1a352057269d":[2,0,1,3,0,13,0],
-"structllama_1_1mapping_1_1internal_1_1NullReference.html#ab7175083a8875287bb278fc746bf8fb2":[2,0,1,3,0,13,1],
-"structllama_1_1mapping_1_1internal_1_1NullReference.html#aec59109e33b5a655f8a782fea81cde82":[2,0,1,3,0,13,2],
-"structllama_1_1mapping_1_1internal_1_1PartionedRecordDim.html":[2,0,1,3,0,14]
+"structllama_1_1mapping_1_1internal_1_1NullReference.html#ab7175083a8875287bb278fc746bf8fb2":[2,0,1,3,0,13,1]
 };

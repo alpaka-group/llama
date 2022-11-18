@@ -127,8 +127,10 @@ var NAVTREEINDEX3 =
 "structllama_1_1bloballoc_1_1SharedPtr.html":[2,0,1,1,2],
 "structllama_1_1bloballoc_1_1SharedPtr.html#a5080b68a3c4da3051afa37f04871e837":[2,0,1,1,2,0],
 "structllama_1_1bloballoc_1_1SharedPtr.html#ae90813d3ac4877d722150d240e790c98":[2,0,1,1,2,1],
-"structllama_1_1bloballoc_1_1Vector.html":[2,0,1,1,3],
-"structllama_1_1bloballoc_1_1Vector.html#a460676ac82586d1bef38037a1816464b":[2,0,1,1,3,0],
+"structllama_1_1bloballoc_1_1UniquePtr.html":[2,0,1,1,3],
+"structllama_1_1bloballoc_1_1UniquePtr.html#affa75475e5567690fee1a68fab39b5b7":[2,0,1,1,3,0],
+"structllama_1_1bloballoc_1_1Vector.html":[2,0,1,1,4],
+"structllama_1_1bloballoc_1_1Vector.html#a460676ac82586d1bef38037a1816464b":[2,0,1,1,4,0],
 "structllama_1_1internal_1_1Assign.html":[2,0,1,2,0],
 "structllama_1_1internal_1_1Assign.html#ae8e7737477254928607c54a1dbe94918":[2,0,1,2,0,0],
 "structllama_1_1internal_1_1BindMakeSizedSimd.html":[2,0,1,2,1],
@@ -247,7 +249,5 @@ var NAVTREEINDEX3 =
 "structllama_1_1internal_1_1SizeEqualTo.html":[2,0,1,2,56],
 "structllama_1_1internal_1_1SizeEqualTo.html#a40c704eb6956b099cbe4aeb8f0cee320":[2,0,1,2,56,0],
 "structllama_1_1internal_1_1TransformLeavesWithCoordImpl.html":[2,0,1,2,57],
-"structllama_1_1internal_1_1TransformLeavesWithCoordImpl.html#ad0d1d15280c8fdd3a0f39fb71f7f9aa5":[2,0,1,2,57,0],
-"structllama_1_1internal_1_1TransformLeavesWithCoordImpl_3_01RecordCoord_3_01Is_8_8_8_01_4_00_01C1fa9eea95bd347b217962f0d40f323c8.html":[2,0,1,2,58],
-"structllama_1_1internal_1_1TransformLeavesWithCoordImpl_3_01RecordCoord_3_01Is_8_8_8_01_4_00_01C1fa9eea95bd347b217962f0d40f323c8.html#a90604f1217d9acf3b7a5afd329893f0c":[2,0,1,2,58,0]
+"structllama_1_1internal_1_1TransformLeavesWithCoordImpl.html#ad0d1d15280c8fdd3a0f39fb71f7f9aa5":[2,0,1,2,57,0]
 };
