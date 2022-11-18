@@ -308,7 +308,7 @@ TEST_CASE("view.indexing")
         });
 }
 
-TEMPLATE_TEST_CASE("view.transformBlobs", "", llama::bloballoc::Vector)
+TEST_CASE("view.transformBlobs")
 {
     auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{16, 16}, Particle{}});
     iotaFillView(view);
@@ -320,7 +320,12 @@ TEMPLATE_TEST_CASE("view.transformBlobs", "", llama::bloballoc::Vector)
     iotaCheckView(copy);
 }
 
-TEMPLATE_TEST_CASE("view.shallowCopy", "", llama::bloballoc::Vector, llama::bloballoc::SharedPtr)
+TEMPLATE_TEST_CASE(
+    "view.shallowCopy",
+    "",
+    llama::bloballoc::Vector,
+    llama::bloballoc::SharedPtr,
+    llama::bloballoc::UniquePtr)
 {
     auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{16, 16}, Particle{}}, TestType{});
     auto checkCopy = [&](const auto& copy)
@@ -420,7 +425,12 @@ TEST_CASE("view.withAccessor.Default.SharedPtr")
     CHECK(addr == addr2);
 }
 
-TEMPLATE_TEST_CASE("view.withAccessor.shallowCopy.Default", "", llama::bloballoc::Vector, llama::bloballoc::SharedPtr)
+TEMPLATE_TEST_CASE(
+    "view.withAccessor.shallowCopy.Default",
+    "",
+    llama::bloballoc::Vector,
+    llama::bloballoc::SharedPtr,
+    llama::bloballoc::UniquePtr)
 {
     auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{16, 16}, Particle{}}, TestType{});
     auto view2 = llama::withAccessor<llama::accessor::Default>(llama::shallowCopy(view));
@@ -429,7 +439,12 @@ TEMPLATE_TEST_CASE("view.withAccessor.shallowCopy.Default", "", llama::bloballoc
 }
 
 #ifdef __cpp_lib_atomic_ref
-TEMPLATE_TEST_CASE("view.withAccessor.shallowCopy.Atomic", "", llama::bloballoc::Vector, llama::bloballoc::SharedPtr)
+TEMPLATE_TEST_CASE(
+    "view.withAccessor.shallowCopy.Atomic",
+    "",
+    llama::bloballoc::Vector,
+    llama::bloballoc::SharedPtr,
+    llama::bloballoc::UniquePtr)
 {
     auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{16, 16}, Particle{}}, TestType{});
     auto view2 = llama::withAccessor<llama::accessor::Atomic>(llama::shallowCopy(view));
@@ -438,7 +453,12 @@ TEMPLATE_TEST_CASE("view.withAccessor.shallowCopy.Atomic", "", llama::bloballoc:
 }
 #endif
 
-TEMPLATE_TEST_CASE("view.withAccessor.shallowCopy.Restrict", "", llama::bloballoc::Vector, llama::bloballoc::SharedPtr)
+TEMPLATE_TEST_CASE(
+    "view.withAccessor.shallowCopy.Restrict",
+    "",
+    llama::bloballoc::Vector,
+    llama::bloballoc::SharedPtr,
+    llama::bloballoc::UniquePtr)
 {
     auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{16, 16}, Particle{}}, TestType{});
     auto view2 = llama::withAccessor<llama::accessor::Restrict>(llama::shallowCopy(view));

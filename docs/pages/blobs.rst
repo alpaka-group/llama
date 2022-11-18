@@ -37,18 +37,24 @@ A blob allocator is called like this:
 
 There is a number of a built-in blob allocators:
 
-Shared memory
-^^^^^^^^^^^^^
-
-:cpp:`llama::bloballoc::SharedPtr` is a blob allocator creating blobs of type :cpp:`std::shared_ptr<std::byte[]>`.
-These blobs will be shared between each copy of the view and only destroyed then the last view is destroyed.
-
 Vector
 ^^^^^^
 
 :cpp:`llama::bloballoc::Vector` is a blob allocator creating blobs of type :cpp:`std::vector<std::byte>`.
 This means every time a view is copied, the whole memory is copied too.
 When the view is moved, no extra allocation or copy operation happens.
+
+Shared pointer
+^^^^^^^^^^^^^^
+
+:cpp:`llama::bloballoc::SharedPtr` is a blob allocator creating blobs of type :cpp:`std::shared_ptr<std::byte[]>`.
+These blobs will be shared between each copy of the view and only destroyed then the last view is destroyed.
+
+Unique pointer
+^^^^^^^^^^^^^^
+
+:cpp:`llama::bloballoc::UniquePtr` is a blob allocator creating blobs of type :cpp:`std::unique_ptr<std::byte[], ...>`.
+These blobs will be uniquely owned by a single view, so the view cannot be copied, only moved.
 
 Array
 ^^^^^
