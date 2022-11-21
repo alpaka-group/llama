@@ -124,6 +124,13 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:af53a4328ce9a69176ae4ebc59c46be53"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1PermuteArrayIndex.html#af53a4328ce9a69176ae4ebc59c46be53">PermuteArrayIndex</a> ()=default</td></tr>
+<tr class="separator:af53a4328ce9a69176ae4ebc59c46be53"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72bc9ec6ce4430d71976bb8e2e33ced3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1PermuteArrayIndex.html#a72bc9ec6ce4430d71976bb8e2e33ced3">PermuteArrayIndex</a> (Mapping mapping)</td></tr>
+<tr class="separator:a72bc9ec6ce4430d71976bb8e2e33ced3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07613716d01fbb9c05dc69e8de1f1054"><td class="memTemplParams" colspan="2">template&lt;typename... Args&gt; </td></tr>
+<tr class="memitem:a07613716d01fbb9c05dc69e8de1f1054"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1PermuteArrayIndex.html#a07613716d01fbb9c05dc69e8de1f1054">PermuteArrayIndex</a> (Args &amp;&amp;... innerArgs)</td></tr>
+<tr class="separator:a07613716d01fbb9c05dc69e8de1f1054"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaabac4033bb984e09dde4690451caf6b"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RCs&gt; </td></tr>
 <tr class="memitem:aaabac4033bb984e09dde4690451caf6b"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1PermuteArrayIndex.html#aaabac4033bb984e09dde4690451caf6b">blobNrAndOffset</a> (<a class="el" href="structllama_1_1mapping_1_1PermuteArrayIndex.html#a79398c2e7bd2508aeb5b004c754ffacd">ArrayIndex</a> ai, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RCs... &gt; rc={}) const -&gt; <a class="el" href="structllama_1_1NrAndOffset.html">NrAndOffset</a>&lt; size_type &gt;</td></tr>
 <tr class="separator:aaabac4033bb984e09dde4690451caf6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -158,7 +165,7 @@ template&lt;typename Mapping , std::size_t... Permutation&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PermuteArrayIndex_8hpp_source.html#l00023">23</a> of file <a class="el" href="PermuteArrayIndex_8hpp_source.html">PermuteArrayIndex.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PermuteArrayIndex_8hpp_source.html#l00021">21</a> of file <a class="el" href="PermuteArrayIndex_8hpp_source.html">PermuteArrayIndex.hpp</a>.</p>
 
 </div>
 </div>
@@ -177,6 +184,96 @@ template&lt;typename Mapping , std::size_t... Permutation&gt; </div>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="PermuteArrayIndex_8hpp_source.html#l00020">20</a> of file <a class="el" href="PermuteArrayIndex_8hpp_source.html">PermuteArrayIndex.hpp</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="af53a4328ce9a69176ae4ebc59c46be53"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af53a4328ce9a69176ae4ebc59c46be53">&#9670;&nbsp;</a></span>PermuteArrayIndex() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Mapping , std::size_t... Permutation&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr <a class="el" href="structllama_1_1mapping_1_1PermuteArrayIndex.html">llama::mapping::PermuteArrayIndex</a>&lt; Mapping, Permutation &gt;::<a class="el" href="structllama_1_1mapping_1_1PermuteArrayIndex.html">PermuteArrayIndex</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a72bc9ec6ce4430d71976bb8e2e33ced3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a72bc9ec6ce4430d71976bb8e2e33ced3">&#9670;&nbsp;</a></span>PermuteArrayIndex() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Mapping , std::size_t... Permutation&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structllama_1_1mapping_1_1PermuteArrayIndex.html">llama::mapping::PermuteArrayIndex</a>&lt; Mapping, Permutation &gt;::<a class="el" href="structllama_1_1mapping_1_1PermuteArrayIndex.html">PermuteArrayIndex</a> </td>
+          <td>(</td>
+          <td class="paramtype">Mapping&#160;</td>
+          <td class="paramname"><em>mapping</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="PermuteArrayIndex_8hpp_source.html#l00026">26</a> of file <a class="el" href="PermuteArrayIndex_8hpp_source.html">PermuteArrayIndex.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a07613716d01fbb9c05dc69e8de1f1054"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a07613716d01fbb9c05dc69e8de1f1054">&#9670;&nbsp;</a></span>PermuteArrayIndex() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Mapping , std::size_t... Permutation&gt; </div>
+<div class="memtemplate">
+template&lt;typename... Args&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structllama_1_1mapping_1_1PermuteArrayIndex.html">llama::mapping::PermuteArrayIndex</a>&lt; Mapping, Permutation &gt;::<a class="el" href="structllama_1_1mapping_1_1PermuteArrayIndex.html">PermuteArrayIndex</a> </td>
+          <td>(</td>
+          <td class="paramtype">Args &amp;&amp;...&#160;</td>
+          <td class="paramname"><em>innerArgs</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="PermuteArrayIndex_8hpp_source.html#l00031">31</a> of file <a class="el" href="PermuteArrayIndex_8hpp_source.html">PermuteArrayIndex.hpp</a>.</p>
 
 </div>
 </div>
@@ -220,7 +317,7 @@ template&lt;std::size_t... RCs&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PermuteArrayIndex_8hpp_source.html#l00030">30</a> of file <a class="el" href="PermuteArrayIndex_8hpp_source.html">PermuteArrayIndex.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PermuteArrayIndex_8hpp_source.html#l00041">41</a> of file <a class="el" href="PermuteArrayIndex_8hpp_source.html">PermuteArrayIndex.hpp</a>.</p>
 
 </div>
 </div>
@@ -269,7 +366,7 @@ template&lt;std::size_t... RCs, typename Blobs &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="PermuteArrayIndex_8hpp_source.html#l00037">37</a> of file <a class="el" href="PermuteArrayIndex_8hpp_source.html">PermuteArrayIndex.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="PermuteArrayIndex_8hpp_source.html#l00048">48</a> of file <a class="el" href="PermuteArrayIndex_8hpp_source.html">PermuteArrayIndex.hpp</a>.</p>
 
 </div>
 </div>
@@ -282,7 +379,7 @@ template&lt;std::size_t... RCs, typename Blobs &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1PermuteArrayIndex.html">PermuteArrayIndex</a></li>
-    <li class="footer">Generated on Fri Nov 18 2022 23:18:20 for Low-Level Abstraction of Memory Access by
+    <li class="footer">Generated on Mon Nov 21 2022 16:22:53 for Low-Level Abstraction of Memory Access by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

@@ -153,10 +153,13 @@ var NAVTREEINDEX4 =
 "structllama_1_1mapping_1_1One.html#a8d01a45ddf9b1b020450151c117d2581":[2,0,1,3,29,0],
 "structllama_1_1mapping_1_1One.html#afa1423c641574452672daae815b15495":[2,0,1,3,29,3],
 "structllama_1_1mapping_1_1PermuteArrayIndex.html":[2,0,1,3,30],
-"structllama_1_1mapping_1_1PermuteArrayIndex.html#a52893b528b8192ec4882f154ba01294f":[2,0,1,3,30,3],
+"structllama_1_1mapping_1_1PermuteArrayIndex.html#a07613716d01fbb9c05dc69e8de1f1054":[2,0,1,3,30,4],
+"structllama_1_1mapping_1_1PermuteArrayIndex.html#a52893b528b8192ec4882f154ba01294f":[2,0,1,3,30,6],
 "structllama_1_1mapping_1_1PermuteArrayIndex.html#a62eb3f9b50656086f868504acb084925":[2,0,1,3,30,1],
+"structllama_1_1mapping_1_1PermuteArrayIndex.html#a72bc9ec6ce4430d71976bb8e2e33ced3":[2,0,1,3,30,3],
 "structllama_1_1mapping_1_1PermuteArrayIndex.html#a79398c2e7bd2508aeb5b004c754ffacd":[2,0,1,3,30,0],
-"structllama_1_1mapping_1_1PermuteArrayIndex.html#aaabac4033bb984e09dde4690451caf6b":[2,0,1,3,30,2],
+"structllama_1_1mapping_1_1PermuteArrayIndex.html#aaabac4033bb984e09dde4690451caf6b":[2,0,1,3,30,5],
+"structllama_1_1mapping_1_1PermuteArrayIndex.html#af53a4328ce9a69176ae4ebc59c46be53":[2,0,1,3,30,2],
 "structllama_1_1mapping_1_1Projection.html":[2,0,1,3,31],
 "structllama_1_1mapping_1_1Projection.html#a1e5e2a679aa7c64196360208dcd0bc49":[2,0,1,3,31,3],
 "structllama_1_1mapping_1_1Projection.html#a22727dd1e166dbfea0a762d7d163bac0":[2,0,1,3,31,2],
@@ -246,8 +249,5 @@ var NAVTREEINDEX4 =
 "structllama_1_1mapping_1_1internal_1_1MakeUnsigned.html":[2,0,1,3,0,10],
 "structllama_1_1mapping_1_1internal_1_1MakeUnsigned_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__enum__v_3_01T_01_4_01_4_01_4.html":[2,0,1,3,0,12],
 "structllama_1_1mapping_1_1internal_1_1MakeUnsigned_3_01bool_01_4.html":[2,0,1,3,0,11],
-"structllama_1_1mapping_1_1internal_1_1MakeUnsigned_3_01bool_01_4.html#a4016fe4d4250f23415f00682e5a23d29":[2,0,1,3,0,11,0],
-"structllama_1_1mapping_1_1internal_1_1NullReference.html":[2,0,1,3,0,13],
-"structllama_1_1mapping_1_1internal_1_1NullReference.html#a99a9f1b8d254b905ab6f1a352057269d":[2,0,1,3,0,13,0],
-"structllama_1_1mapping_1_1internal_1_1NullReference.html#ab7175083a8875287bb278fc746bf8fb2":[2,0,1,3,0,13,1]
+"structllama_1_1mapping_1_1internal_1_1MakeUnsigned_3_01bool_01_4.html#a4016fe4d4250f23415f00682e5a23d29":[2,0,1,3,0,11,0]
 };
