@@ -7495,9 +7495,20 @@ namespace llama::mapping
 
     public:
         using Inner = Mapping;
-
-        using Inner::Inner;
         using ArrayIndex = typename Inner::ArrayIndex;
+
+        constexpr PermuteArrayIndex() = default;
+
+        LLAMA_FN_HOST_ACC_INLINE
+        explicit PermuteArrayIndex(Mapping mapping) : Mapping(std::move(mapping))
+        {
+        }
+
+        template<typename... Args>
+        LLAMA_FN_HOST_ACC_INLINE explicit PermuteArrayIndex(Args&&... innerArgs)
+            : Mapping(std::forward<Args>(innerArgs)...)
+        {
+        }
 
         static_assert(
             sizeof...(Permutation) == ArrayIndex::rank,
