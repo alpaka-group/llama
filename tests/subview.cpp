@@ -1,6 +1,6 @@
 #include "common.hpp"
 
-TEST_CASE("VirtualView.CTAD")
+TEST_CASE("SubView.CTAD")
 {
     using ArrayExtents = llama::ArrayExtentsDynamic<std::size_t, 2>;
     constexpr ArrayExtents viewSize{10, 10};
@@ -10,33 +10,33 @@ TEST_CASE("VirtualView.CTAD")
     using View = decltype(view);
 
     {
-        const llama::VirtualView virtualView{view, {2, 4}};
-        STATIC_REQUIRE(std::is_same_v<typename decltype(virtualView)::StoredParentView, View&>);
-        STATIC_REQUIRE(std::is_same_v<typename decltype(virtualView)::ParentView, View>);
+        const llama::SubView subView{view, {2, 4}};
+        STATIC_REQUIRE(std::is_same_v<typename decltype(subView)::StoredParentView, View&>);
+        STATIC_REQUIRE(std::is_same_v<typename decltype(subView)::ParentView, View>);
     }
 
     {
         auto& viewRef = view;
-        const llama::VirtualView virtualView{viewRef, {2, 4}};
-        STATIC_REQUIRE(std::is_same_v<typename decltype(virtualView)::StoredParentView, View&>);
-        STATIC_REQUIRE(std::is_same_v<typename decltype(virtualView)::ParentView, View>);
+        const llama::SubView subView{viewRef, {2, 4}};
+        STATIC_REQUIRE(std::is_same_v<typename decltype(subView)::StoredParentView, View&>);
+        STATIC_REQUIRE(std::is_same_v<typename decltype(subView)::ParentView, View>);
     }
 
     {
         const auto& viewConstRef = view;
-        const llama::VirtualView virtualView{viewConstRef, {2, 4}};
-        STATIC_REQUIRE(std::is_same_v<typename decltype(virtualView)::StoredParentView, const View&>);
-        STATIC_REQUIRE(std::is_same_v<typename decltype(virtualView)::ParentView, View>);
+        const llama::SubView subView{viewConstRef, {2, 4}};
+        STATIC_REQUIRE(std::is_same_v<typename decltype(subView)::StoredParentView, const View&>);
+        STATIC_REQUIRE(std::is_same_v<typename decltype(subView)::ParentView, View>);
     }
 
     {
-        const llama::VirtualView virtualView{std::move(view), {2, 4}};
-        STATIC_REQUIRE(std::is_same_v<typename decltype(virtualView)::StoredParentView, View>);
-        STATIC_REQUIRE(std::is_same_v<typename decltype(virtualView)::ParentView, View>);
+        const llama::SubView subView{std::move(view), {2, 4}};
+        STATIC_REQUIRE(std::is_same_v<typename decltype(subView)::StoredParentView, View>);
+        STATIC_REQUIRE(std::is_same_v<typename decltype(subView)::ParentView, View>);
     }
 }
 
-TEST_CASE("VirtualView.fast")
+TEST_CASE("SubView.fast")
 {
     using ArrayExtents = llama::ArrayExtentsDynamic<int, 2>;
     constexpr ArrayExtents viewSize{10, 10};
@@ -48,15 +48,15 @@ TEST_CASE("VirtualView.fast")
         for(int y = 0; y < viewSize[1]; ++y)
             view(x, y) = x * y;
 
-    llama::VirtualView<decltype(view)&> virtualView{view, {2, 4}};
+    llama::SubView<decltype(view)&> subView{view, {2, 4}};
 
-    CHECK(virtualView.offset == llama::ArrayIndex{2, 4});
+    CHECK(subView.offset == llama::ArrayIndex{2, 4});
 
-    CHECK(view(virtualView.offset)(tag::X()) == 8.0);
-    CHECK(virtualView({0, 0})(tag::X()) == 8.0);
+    CHECK(view(subView.offset)(tag::X()) == 8.0);
+    CHECK(subView({0, 0})(tag::X()) == 8.0);
 
-    CHECK(view({virtualView.offset[0] + 2, virtualView.offset[1] + 3})(tag::Z()) == 28.0);
-    CHECK(virtualView({2, 3})(tag::Z()) == 28.0);
+    CHECK(view({subView.offset[0] + 2, subView.offset[1] + 3})(tag::Z()) == 28.0);
+    CHECK(subView({2, 3})(tag::Z()) == 28.0);
 }
 
 namespace
@@ -73,7 +73,7 @@ namespace
     };
 } // namespace
 
-TEST_CASE("VirtualView")
+TEST_CASE("SubView")
 {
     using ArrayExtents = llama::ArrayExtentsDynamic<std::size_t, 2>;
     constexpr ArrayExtents viewSize{32, 32};
@@ -96,7 +96,7 @@ TEST_CASE("VirtualView")
                 (x < iterations[0] - 1) ? miniSize[0] : (viewSize[0] - 1) % miniSize[0] + 1,
                 (y < iterations[1] - 1) ? miniSize[1] : (viewSize[1] - 1) % miniSize[1] + 1};
 
-            llama::VirtualView<decltype(view)&> virtualView(view, {x * miniSize[0], y * miniSize[1]});
+            llama::SubView<decltype(view)&> subView(view, {x * miniSize[0], y * miniSize[1]});
 
             using MiniMapping = llama::mapping::SoA<ArrayExtents, Vec3D>;
             constexpr auto miniMapping = MiniMapping(miniSize);
@@ -105,7 +105,7 @@ TEST_CASE("VirtualView")
 
             for(std::size_t a = 0; a < validMiniSize[0]; ++a)
                 for(std::size_t b = 0; b < validMiniSize[1]; ++b)
-                    miniView(a, b) = virtualView(a, b);
+                    miniView(a, b) = subView(a, b);
 
             for(std::size_t a = 0; a < validMiniSize[0]; ++a)
                 for(std::size_t b = 0; b < validMiniSize[1]; ++b)
@@ -116,7 +116,7 @@ TEST_CASE("VirtualView")
 
             for(std::size_t a = 0; a < validMiniSize[0]; ++a)
                 for(std::size_t b = 0; b < validMiniSize[1]; ++b)
-                    virtualView(a, b) = miniView(a, b);
+                    subView(a, b) = miniView(a, b);
         }
 
     for(std::size_t x = 0; x < viewSize[0]; ++x)
@@ -124,10 +124,10 @@ TEST_CASE("VirtualView")
             CHECK((view(x, y)) == x * y * 2);
 }
 
-TEST_CASE("VirtualView.negative_indices")
+TEST_CASE("SubView.negative_indices")
 {
     auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{10, 10}, int{}});
-    auto shiftedView = llama::VirtualView{view, {2, 4}};
+    auto shiftedView = llama::SubView{view, {2, 4}};
 
     int i = 0;
     for(int y = -2; y < 8; y++)
@@ -141,11 +141,11 @@ TEST_CASE("VirtualView.negative_indices")
 }
 
 
-TEST_CASE("VirtualView.negative_offsets")
+TEST_CASE("SubView.negative_offsets")
 {
     auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{10u, 10u}, int{}});
-    auto shiftedView = llama::VirtualView{view, {2, 4}};
-    auto shiftedView2 = llama::VirtualView{shiftedView, {static_cast<unsigned>(-2), static_cast<unsigned>(-4)}};
+    auto shiftedView = llama::SubView{view, {2, 4}};
+    auto shiftedView2 = llama::SubView{shiftedView, {static_cast<unsigned>(-2), static_cast<unsigned>(-4)}};
 
     int i = 0;
     for(int y = 0; y < 10; y++)
@@ -158,11 +158,11 @@ TEST_CASE("VirtualView.negative_offsets")
             CHECK(view(y, x) == i++);
 }
 
-TEST_CASE("VirtualView.stored_view")
+TEST_CASE("SubView.stored_view")
 {
-    auto shiftedView = llama::VirtualView{
-        llama::VirtualView{
-            llama::VirtualView{llama::allocView(llama::mapping::AoS{llama::ArrayExtents{10, 10}, int{}}), {1, 2}},
+    auto shiftedView = llama::SubView{
+        llama::SubView{
+            llama::SubView{llama::allocView(llama::mapping::AoS{llama::ArrayExtents{10, 10}, int{}}), {1, 2}},
             {0, 2}},
         {1, 0}};
 

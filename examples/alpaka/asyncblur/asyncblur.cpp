@@ -286,7 +286,7 @@ try
 
     struct VirtualHostElement
     {
-        llama::VirtualView<decltype(hostView)&> virtualHost;
+        llama::SubView<decltype(hostView)&> subViewHost;
         const llama::ArrayExtentsDynamic<int, 2> validMiniSize;
     };
     std::list<VirtualHostElement> virtualHostList;
@@ -297,12 +297,12 @@ try
             const auto validMiniSize = llama::ArrayExtentsDynamic<int, 2>{
                 ((chunkY < chunks[0] - 1) ? chunkSize : (imgY - 1) % chunkSize + 1) + 2 * kernelSize,
                 ((chunkX < chunks[1] - 1) ? chunkSize : (imgX - 1) % chunkSize + 1) + 2 * kernelSize};
-            llama::VirtualView virtualHost(hostView, {chunkY * chunkSize, chunkX * chunkSize});
+            llama::SubView subViewHost(hostView, {chunkY * chunkSize, chunkX * chunkSize});
 
             // Find free chunk stream
             auto chunkNr = virtualHostList.size();
             if(virtualHostList.size() < chunkCount)
-                virtualHostList.push_back({virtualHost, validMiniSize});
+                virtualHostList.push_back({subViewHost, validMiniSize});
             else
             {
                 bool notFound = true;
@@ -320,11 +320,11 @@ try
                             {
                                 LLAMA_INDEPENDENT_DATA
                                 for(int x = 0; x < chunkIt->validMiniSize[1] - 2 * kernelSize; ++x)
-                                    chunkIt->virtualHost(y + kernelSize, x + kernelSize)
+                                    chunkIt->subViewHost(y + kernelSize, x + kernelSize)
                                         = hostChunkView[chunkNr](y + kernelSize, x + kernelSize);
                             }
                             chunkIt = virtualHostList.erase(chunkIt);
-                            virtualHostList.insert(chunkIt, {virtualHost, validMiniSize});
+                            virtualHostList.insert(chunkIt, {subViewHost, validMiniSize});
                             notFound = false;
                             break;
                         }
@@ -340,7 +340,7 @@ try
             {
                 LLAMA_INDEPENDENT_DATA
                 for(int x = 0; x < validMiniSize[1]; ++x)
-                    hostChunkView[chunkNr](y, x) = virtualHost(y, x);
+                    hostChunkView[chunkNr](y, x) = subViewHost(y, x);
             }
             for(std::size_t i = 0; i < devMapping.blobCount; i++)
                 alpaka::memcpy(
@@ -372,7 +372,7 @@ try
         {
             LLAMA_INDEPENDENT_DATA
             for(int x = 0; x < chunkIt->validMiniSize[1] - 2 * kernelSize; ++x)
-                chunkIt->virtualHost(y + kernelSize, x + kernelSize)
+                chunkIt->subViewHost(y + kernelSize, x + kernelSize)
                     = hostChunkView[chunkNr](y + kernelSize, x + kernelSize);
         }
         chunkIt++;

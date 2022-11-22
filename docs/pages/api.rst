@@ -219,7 +219,7 @@ Data access
 
 .. doxygenstruct:: llama::View
    :members:
-.. doxygenstruct:: llama::VirtualView
+.. doxygenstruct:: llama::SubView
    :members:
 .. doxygenstruct:: llama::RecordRef
    :members:

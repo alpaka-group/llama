@@ -108,8 +108,8 @@ A blob allocator is again an abstract concept and any object returning a blob of
 LLAMA comes with a set of predefined blob allocators and users can again provider their own.
 
 Once a view is created, the user can navigate on the data managed by the view.
-On top of a view, a :ref:`VirtualView <label-virtualview>` can be created, offering access to a subspace of the array dimensions.
-Elements of the array dimensions, called records, are accessed on both, View and VirtualView, by calling :cpp:`operator()` with an array index as instance of :cpp:`ArrayIndex`.
+On top of a view, a :ref:`SubView <label-subview>` can be created, offering access to a subspace of the array dimensions.
+Elements of the array dimensions, called records, are accessed on both, View and SubView, by calling :cpp:`operator()` with an array index as instance of :cpp:`ArrayIndex`.
 This access returns a :ref:`RecordRef <label-recordref>`, allowing further access using the tags from the record dimension, until eventually a reference to actual data in memory is returned.
 
 
