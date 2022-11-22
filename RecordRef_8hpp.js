@@ -1,6 +1,5 @@
 var RecordRef_8hpp =
 [
-    [ "RecordRef", "structllama_1_1RecordRef.html", "structllama_1_1RecordRef" ],
     [ "Assign", "structllama_1_1internal_1_1Assign.html", "structllama_1_1internal_1_1Assign" ],
     [ "PlusAssign", "structllama_1_1internal_1_1PlusAssign.html", "structllama_1_1internal_1_1PlusAssign" ],
     [ "MinusAssign", "structllama_1_1internal_1_1MinusAssign.html", "structllama_1_1internal_1_1MinusAssign" ],

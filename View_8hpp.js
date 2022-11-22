@@ -1,12 +1,10 @@
 var View_8hpp =
 [
-    [ "View", "structllama_1_1View.html", "structllama_1_1View" ],
     [ "IsComputed", "structllama_1_1internal_1_1IsComputed.html", null ],
     [ "IsComputed< Mapping, RecordCoord, std::void_t< decltype(Mapping::isComputed(RecordCoord{}))> >", "structllama_1_1internal_1_1IsComputed_3_01Mapping_00_01RecordCoord_00_01std_1_1void__t_3_01declt31ec39d02aa75d5ea3308109fe018112.html", null ],
-    [ "RecordRef", "structllama_1_1RecordRef.html", "structllama_1_1RecordRef" ],
     [ "Iterator", "structllama_1_1Iterator.html", "structllama_1_1Iterator" ],
     [ "View", "structllama_1_1View.html", "structllama_1_1View" ],
-    [ "VirtualView", "structllama_1_1VirtualView.html", "structllama_1_1VirtualView" ],
+    [ "SubView", "structllama_1_1SubView.html", "structllama_1_1SubView" ],
     [ "AllocatorBlobType", "View_8hpp.html#a6b703634fd8ad7364cf42588add461bc", null ],
     [ "One", "View_8hpp.html#ace059168abe83f42c9493ad853abb746", null ],
     [ "allocView", "View_8hpp.html#a8e5d70e7cec0c305424ed3890c4cedc6", null ],
@@ -18,8 +16,8 @@ var View_8hpp =
     [ "makeTransformedBlobArray", "View_8hpp.html#ac918dee3b9de15beb006a38d668788df", null ],
     [ "mapToMemory", "View_8hpp.html#ac1445fa67728a9433fbd8b68f195fbe4", null ],
     [ "shallowCopy", "View_8hpp.html#ae800146eabadd222999acf6020391b75", null ],
+    [ "SubView", "View_8hpp.html#ad76145974be23fcd0fcc5ad7bb4e972a", null ],
     [ "transformBlobs", "View_8hpp.html#a887c0f2f25b3a4e104c73178fa12c92c", null ],
-    [ "VirtualView", "View_8hpp.html#a416bef7f5a6a9e2cecf4f9b090c9d4ed", null ],
     [ "withAccessor", "View_8hpp.html#a7ce30d8d3b31c0aae29c78915aa20221", null ],
     [ "withMapping", "View_8hpp.html#ad72593353a457dae8a55d0fb5279144a", null ],
     [ "isComputed", "View_8hpp.html#a9676a3903b134df116791bcae533d6c6", null ],

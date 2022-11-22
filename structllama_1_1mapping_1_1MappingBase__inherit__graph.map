@@ -1,11 +1,11 @@
 <map id="llama::mapping::MappingBase&lt; TArrayExtents, TRecordDim &gt;" name="llama::mapping::MappingBase&lt; TArrayExtents, TRecordDim &gt;">
-<area shape="rect" id="node1" title=" " alt="" coords="167,224,397,265"/>
-<area shape="rect" id="node3" href="$structllama_1_1mapping_1_1AoS.html" title=" " alt="" coords="445,5,676,47"/>
-<area shape="rect" id="node4" href="$structllama_1_1mapping_1_1AoSoA.html" title=" " alt="" coords="445,71,676,112"/>
-<area shape="rect" id="node5" href="$structllama_1_1mapping_1_1BitPackedFloatSoA.html" title=" " alt="" coords="463,137,658,193"/>
-<area shape="rect" id="node6" href="$structllama_1_1mapping_1_1BitPackedIntSoA.html" title=" " alt="" coords="463,217,658,273"/>
-<area shape="rect" id="node7" href="$structllama_1_1mapping_1_1Null.html" title=" " alt="" coords="445,297,676,339"/>
-<area shape="rect" id="node8" href="$structllama_1_1mapping_1_1One.html" title=" " alt="" coords="445,363,676,404"/>
-<area shape="rect" id="node9" href="$structllama_1_1mapping_1_1SoA.html" title=" " alt="" coords="445,428,676,469"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,231,119,258"/>
+<area shape="rect" id="node1" title=" " alt="" coords="167,320,397,361"/>
+<area shape="rect" id="node3" href="$structllama_1_1mapping_1_1AoS.html" title=" " alt="" coords="475,5,725,76"/>
+<area shape="rect" id="node4" href="$structllama_1_1mapping_1_1AoSoA.html" title=" " alt="" coords="470,100,730,171"/>
+<area shape="rect" id="node5" href="$structllama_1_1mapping_1_1BitPackedFloatSoA.html" title=" " alt="" coords="473,195,727,281"/>
+<area shape="rect" id="node6" href="$structllama_1_1mapping_1_1BitPackedIntSoA.html" title=" " alt="" coords="475,305,725,376"/>
+<area shape="rect" id="node7" href="$structllama_1_1mapping_1_1Null.html" title=" " alt="" coords="485,400,715,441"/>
+<area shape="rect" id="node8" href="$structllama_1_1mapping_1_1One.html" title=" " alt="" coords="476,466,724,522"/>
+<area shape="rect" id="node9" href="$structllama_1_1mapping_1_1SoA.html" title=" " alt="" coords="445,546,755,631"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,327,119,354"/>
 </map>

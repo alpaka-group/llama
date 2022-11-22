@@ -1,13 +1,13 @@
 <map id="/home/runner/work/llama/llama/include/llama/BlobAllocators.hpp" name="/home/runner/work/llama/llama/include/llama/BlobAllocators.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="854,5,1135,47"/>
-<area shape="rect" id="node2" href="$View_8hpp.html" title=" " alt="" coords="739,95,957,136"/>
-<area shape="rect" id="node4" href="$llama_8hpp.html" title=" " alt="" coords="1089,295,1313,337"/>
-<area shape="rect" id="node3" href="$Copy_8hpp.html" title=" " alt="" coords="967,191,1185,233"/>
-<area shape="rect" id="node5" href="$Projection_8hpp.html" title=" " alt="" coords="159,184,375,240"/>
-<area shape="rect" id="node8" href="$Split_8hpp.html" title=" " alt="" coords="399,184,615,240"/>
-<area shape="rect" id="node9" href="$RecordRef_8hpp.html" title=" " alt="" coords="639,191,892,233"/>
-<area shape="rect" id="node11" href="$Vector_8hpp.html" title=" " alt="" coords="816,295,1043,337"/>
-<area shape="rect" id="node6" href="$Byteswap_8hpp.html" title=" " alt="" coords="5,288,221,344"/>
-<area shape="rect" id="node7" href="$ChangeType_8hpp.html" title=" " alt="" coords="245,288,461,344"/>
-<area shape="rect" id="node10" href="$Simd_8hpp.html" title=" " alt="" coords="571,295,791,337"/>
+<area shape="rect" id="node1" title=" " alt="" coords="150,5,431,47"/>
+<area shape="rect" id="node2" href="$llama_8hpp.html" title=" " alt="" coords="5,295,229,337"/>
+<area shape="rect" id="node3" href="$View_8hpp.html" title=" " alt="" coords="496,95,715,136"/>
+<area shape="rect" id="node4" href="$Copy_8hpp.html" title=" " alt="" coords="135,191,353,233"/>
+<area shape="rect" id="node5" href="$Projection_8hpp.html" title=" " alt="" coords="377,184,593,240"/>
+<area shape="rect" id="node8" href="$Split_8hpp.html" title=" " alt="" coords="617,184,833,240"/>
+<area shape="rect" id="node9" href="$RecordRef_8hpp.html" title=" " alt="" coords="857,191,1111,233"/>
+<area shape="rect" id="node11" href="$Vector_8hpp.html" title=" " alt="" coords="1035,295,1261,337"/>
+<area shape="rect" id="node6" href="$Byteswap_8hpp.html" title=" " alt="" coords="291,288,507,344"/>
+<area shape="rect" id="node7" href="$ChangeType_8hpp.html" title=" " alt="" coords="531,288,747,344"/>
+<area shape="rect" id="node10" href="$Simd_8hpp.html" title=" " alt="" coords="790,295,1010,337"/>
 </map>

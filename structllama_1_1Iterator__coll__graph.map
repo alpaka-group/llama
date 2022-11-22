@@ -2,5 +2,7 @@
 <area shape="rect" id="node1" title=" " alt="" coords="691,45,868,71"/>
 <area shape="rect" id="node2" href="$structllama_1_1ArrayIndexIterator.html" title=" " alt="" coords="323,5,568,47"/>
 <area shape="rect" id="node3" href="$structllama_1_1View.html" title=" " alt="" coords="354,71,537,112"/>
-<area shape="rect" id="node4" href="$structllama_1_1Array.html" title=" " alt="" coords="5,71,185,112"/>
+<area shape="rect" id="node4" title=" " alt="" coords="52,27,139,54"/>
+<area shape="rect" id="node5" href="$structllama_1_1accessor_1_1Default.html" title="Default accessor. Passes through the given reference." alt="" coords="5,78,185,105"/>
+<area shape="rect" id="node6" href="$structllama_1_1Array.html" title=" " alt="" coords="5,129,185,171"/>
 </map>
