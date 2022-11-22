@@ -295,14 +295,14 @@ TEST_CASE("view.indexing")
                 });
         });
 
-    llama::VirtualView virtualView{view, {0, 0}};
+    llama::SubView subView{view, {0, 0}};
     boost::mp11::mp_for_each<integrals>(
         [&](auto i)
         {
             boost::mp11::mp_for_each<integrals>(
                 [&](auto j)
                 {
-                    const float& w = virtualView(i, j)(tag::Mass{});
+                    const float& w = subView(i, j)(tag::Mass{});
                     CHECK(w == 42.0f);
                 });
         });

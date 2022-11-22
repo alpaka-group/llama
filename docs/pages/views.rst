@@ -93,15 +93,15 @@ or shallow copy the view before changing its accessor.
     auto view4 = llama::withAccessor(llama::shallowCopy(view3),
                      llama::accessor::Const{}); // view4 shares blobs with view3
 
-.. _label-virtualview:
+.. _label-subview:
 
-VirtualView
------------
+SubView
+-------
 
-Virtual views can be created on top of existing views, offering shifted access to a subspace of the array dimensions.
+Sub views can be created on top of existing views, offering shifted access to a subspace of the array dimensions.
 
 .. code-block:: C++
 
     auto view = ...;
-    llama::VirtualView virtualView{view, {10, 20, 30}};
-    virtualView(1, 2, 3)(color{}, g{}) = 1.0; // accesses record {11, 22, 33}
+    llama::SubView subView{view, {10, 20, 30}};
+    subView(1, 2, 3)(color{}, g{}) = 1.0; // accesses record {11, 22, 33}
