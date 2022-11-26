@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Concepts.hpp"
+#include "ProxyRefOpMixin.hpp"
 #include "macros.hpp"
 
 #include <atomic>
@@ -34,10 +35,39 @@ namespace llama::accessor
     /// Allows only read access by qualifying the references to memory with const. Only works on l-value references.
     struct Const
     {
+        // for l-value references
         template<typename T>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(T& r) const -> const T&
         {
             return r;
+        }
+
+        template<typename Ref>
+        struct Reference : ProxyRefOpMixin<Reference<Ref>, typename Ref::value_type>
+        {
+            using value_type = typename Ref::value_type;
+
+            Ref ref;
+
+            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
+            operator value_type() const
+            {
+                return static_cast<value_type>(ref);
+            }
+
+            template<typename T>
+            auto operator=(T) -> Reference&
+            {
+                static_assert(sizeof(T) == 0, "You cannot write through a Const accessor");
+                return *this;
+            }
+        };
+
+        // for proxy references
+        template<typename ProxyReference, std::enable_if_t<llama::isProxyReference<ProxyReference>, int> = 0>
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(ProxyReference r) const
+        {
+            return Reference<ProxyReference>{{}, std::move(r)};
         }
     };
 

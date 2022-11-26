@@ -76,6 +76,25 @@ TEMPLATE_TEST_CASE(
     iotaCheckView(view);
 }
 
+TEST_CASE("view.withAccessor.shallowCopy.Const")
+{
+    auto view
+        = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{4, 4}, Vec3I{}}, llama::bloballoc::SharedPtr{});
+    iotaFillView(view);
+    auto view2 = llama::withAccessor<llama::accessor::Const>(llama::shallowCopy(view));
+    iotaCheckView(view2);
+}
+
+TEST_CASE("view.withAccessor.shallowCopy.Const.ProxyRef")
+{
+    auto view = llama::allocView(
+        llama::mapping::Byteswap<llama::ArrayExtents<int, 4, 4>, Vec3I, llama::mapping::BindAoS<>::fn>{{}},
+        llama::bloballoc::SharedPtr{});
+    iotaFillView(view);
+    auto view2 = llama::withAccessor<llama::accessor::Const>(llama::shallowCopy(view));
+    iotaCheckView(view2);
+}
+
 #ifdef __cpp_lib_atomic_ref
 TEMPLATE_TEST_CASE(
     "view.withAccessor.shallowCopy.Atomic",
