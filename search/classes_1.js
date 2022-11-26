@@ -23,5 +23,6 @@ var searchData=
   ['boxedvalue_3c_20typename_20tarrayextents_3a_3avalue_5ftype_2c_201_20_3e_753',['BoxedValue&lt; typename TArrayExtents::value_type, 1 &gt;',['../structllama_1_1internal_1_1BoxedValue.html',1,'llama::internal']]],
   ['bytesplit_754',['Bytesplit',['../structllama_1_1mapping_1_1Bytesplit.html',1,'llama::mapping']]],
   ['byteswap_755',['Byteswap',['../structllama_1_1mapping_1_1Byteswap.html',1,'llama::mapping']]],
-  ['byteswapprojection_756',['ByteswapProjection',['../structllama_1_1mapping_1_1internal_1_1ByteswapProjection.html',1,'llama::mapping::internal']]]
+  ['byteswapprojection_756',['ByteswapProjection',['../structllama_1_1mapping_1_1internal_1_1ByteswapProjection.html',1,'llama::mapping::internal']]],
+  ['byvalue_757',['ByValue',['../structllama_1_1accessor_1_1ByValue.html',1,'llama::accessor']]]
 ];

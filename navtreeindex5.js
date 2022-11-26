@@ -1,6 +1,5 @@
 var NAVTREEINDEX5 =
 {
-"structllama_1_1internal_1_1MakePassSecond.html#a8a36ab4e38565686d9e56564c6552bc6":[2,0,1,2,35,0],
 "structllama_1_1internal_1_1MinusAssign.html":[2,0,1,2,47],
 "structllama_1_1internal_1_1MinusAssign.html#a5478fd18a86b7a6c8f07f45159f8e9b7":[2,0,1,2,47,0],
 "structllama_1_1internal_1_1ModuloAssign.html":[2,0,1,2,50],
@@ -249,5 +248,6 @@ var NAVTREEINDEX5 =
 "structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html#a5ba0023e4e76da5e6af39c9767d95534":[2,0,1,3,0,3,2],
 "structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html#aa1158d366823962bb503a6592987fcd3":[2,0,1,3,0,3,3],
 "structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html#aba7dd85b2f01f805d25f9af24f727aaa":[2,0,1,3,0,3,1],
-"structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html":[2,0,1,3,0,4]
+"structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html":[2,0,1,3,0,4],
+"structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html#a3f4d4be20a75eb29a69764f328875596":[2,0,1,3,0,4,1]
 };

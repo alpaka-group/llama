@@ -49,6 +49,7 @@ var hierarchy =
       [ "llama::mapping::BitPackedFloatSoA< TArrayExtents, TRecordDim, ExponentBits, MantissaBits, TLinearizeArrayDimsFunctor, TStoredIntegral >", "structllama_1_1mapping_1_1BitPackedFloatSoA.html", null ]
     ] ],
     [ "llama::mapping::internal::ByteswapProjection< T >", "structllama_1_1mapping_1_1internal_1_1ByteswapProjection.html", null ],
+    [ "llama::accessor::ByValue", "structllama_1_1accessor_1_1ByValue.html", null ],
     [ "llama::mapping::tree::functor::internal::ChangeNodeChildsRuntimeFunctor", "structllama_1_1mapping_1_1tree_1_1functor_1_1internal_1_1ChangeNodeChildsRuntimeFunctor.html", null ],
     [ "llama::mapping::internal::ChangeTypeProjection< UserT, StoredT >", "structllama_1_1mapping_1_1internal_1_1ChangeTypeProjection.html", null ],
     [ "llama::accessor::Const", "structllama_1_1accessor_1_1Const.html", null ],
@@ -191,7 +192,6 @@ var hierarchy =
     [ "llama::ProxyRefOpMixin< TraceReference< Value, Ref, Count >, Value >", "structllama_1_1ProxyRefOpMixin.html", [
       [ "llama::mapping::internal::TraceReference< Value, Ref, Count >", "structllama_1_1mapping_1_1internal_1_1TraceReference.html", null ]
     ] ],
-    [ "llama::accessor::ReadOnlyByValue", "structllama_1_1accessor_1_1ReadOnlyByValue.html", null ],
     [ "llama::bloballoc::AlignedAllocator< T, Alignment >::rebind< T2 >", "structllama_1_1bloballoc_1_1AlignedAllocator_1_1rebind.html", null ],
     [ "llama::Record< Fields >", "structllama_1_1Record.html", null ],
     [ "llama::RecordCoord< Coords >", "structllama_1_1RecordCoord.html", null ],

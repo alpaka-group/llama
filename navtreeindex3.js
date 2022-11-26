@@ -1,6 +1,5 @@
 var NAVTREEINDEX3 =
 {
-"namespacellama_1_1mapping_1_1tree_1_1internal.html#ac2eb7732be218b043c755eb7bc8ccd6a":[1,0,1,4,1,1,13],
 "namespacellama_1_1mapping_1_1tree_1_1internal.html#ac64ac187e14ff4540b332b55e4fdc7f7":[1,0,1,4,1,1,17],
 "namespacemembers.html":[1,1,0],
 "namespacemembers.html":[1,1,0,0],
@@ -249,5 +248,6 @@ var NAVTREEINDEX3 =
 "structllama_1_1RecordRef_1_1LoaderConst.html#af4d6e3db8606933fb111f22029d388f2":[2,0,1,23,1,1],
 "structllama_1_1ScopedUpdate.html":[2,0,1,24],
 "structllama_1_1ScopedUpdate.html#a029b104aea23cf590774d8dda65aa63e":[2,0,1,24,4],
-"structllama_1_1ScopedUpdate.html#a3ca302d22bedc64d8cc9ff42d2aeec23":[2,0,1,24,2]
+"structllama_1_1ScopedUpdate.html#a3ca302d22bedc64d8cc9ff42d2aeec23":[2,0,1,24,2],
+"structllama_1_1ScopedUpdate.html#a3ce7e6001813df201f857f039fda5d63":[2,0,1,24,7]
 };
