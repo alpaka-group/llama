@@ -18,7 +18,7 @@ namespace llama::accessor
     };
 
     /// Allows only read access and returns values instead of references to memory.
-    struct ReadOnlyByValue
+    struct ByValue
     {
         template<typename Reference>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Reference&& r) const

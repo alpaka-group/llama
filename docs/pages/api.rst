@@ -167,7 +167,7 @@ Acessors
 ^^^^^^^^
 
 .. doxygenstruct:: llama::accessor::Default
-.. doxygenstruct:: llama::accessor::ReadOnlyByValue
+.. doxygenstruct:: llama::accessor::ByValue
 .. doxygenstruct:: llama::accessor::Const
 .. doxygenstruct:: llama::accessor::Restrict
 .. doxygenstruct:: llama::accessor::Atomic

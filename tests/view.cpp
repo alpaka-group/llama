@@ -370,10 +370,10 @@ TEST_CASE("view.allocView.Default")
     iotaCheckView(view);
 }
 
-TEST_CASE("view.allocView.ReadOnlyByValue")
+TEST_CASE("view.allocView.ByValue")
 {
     auto mapping = llama::mapping::AoS{llama::ArrayExtents{3, 4}, Vec3I{}};
-    auto view = llama::allocView(mapping, llama::bloballoc::Vector{}, llama::accessor::ReadOnlyByValue{});
+    auto view = llama::allocView(mapping, llama::bloballoc::Vector{}, llama::accessor::ByValue{});
     STATIC_REQUIRE(std::is_same_v<decltype(view(1, 2)(tag::X{})), int>);
 }
 
