@@ -125,7 +125,7 @@ if (LLAMA_BUILD_EXAMPLES)
 	add_subdirectory("examples/memmap")
 
 	# alpaka examples
-	find_package(alpaka 0.9.0 QUIET)
+	find_package(alpaka 0.9.0)
 	if (_alpaka_FOUND)
 		add_subdirectory("examples/alpaka/nbody")
 		add_subdirectory("examples/alpaka/vectoradd")
