@@ -364,18 +364,24 @@ namespace usellama
         double sumMove = 0;
         for(std::size_t s = 0; s < steps; ++s)
         {
+#ifdef HAVE_XSIMD
             constexpr auto width = llama::simdLanesWithFullVectorsFor<Particle, MakeBatch>;
+#endif
             if constexpr(runUpate)
             {
+#ifdef HAVE_XSIMD
                 if constexpr(UseSimd)
                     updateSimd<width>(particles);
                 else
+#endif
                     update(particles);
                 sumUpdate += watch.printAndReset("update", '\t');
             }
+#ifdef HAVE_XSIMD
             if constexpr(UseSimd)
                 moveSimd<width>(particles);
             else
+#endif
                 move(particles);
             sumMove += watch.printAndReset("move");
         }
