@@ -123,6 +123,7 @@ if (LLAMA_BUILD_EXAMPLES)
 	add_subdirectory("examples/bitpackint")
 	add_subdirectory("examples/bitpackfloat")
 	add_subdirectory("examples/memmap")
+	add_subdirectory("examples/stream")
 
 	# alpaka examples
 	find_package(alpaka 0.9.0)
