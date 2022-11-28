@@ -121,7 +121,7 @@ namespace llama
             view.mapping().extents(),
             [&]([[maybe_unused]] typename View::ArrayIndex ai)
             {
-                if constexpr(isRecord<RecordDim> || internal::IsBoundedArray<RecordDim>::value)
+                if constexpr(isRecordDim<RecordDim>)
                 {
                     forEachLeafCoord<RecordDim>(
 #if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ <= 4
@@ -470,7 +470,7 @@ namespace llama
         /// Retrieves the \ref RecordRef at the given \ref ArrayIndex index.
         LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayIndex ai) const -> decltype(auto)
         {
-            if constexpr(isRecord<RecordDim> || internal::IsBoundedArray<RecordDim>::value)
+            if constexpr(isRecordDim<RecordDim>)
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
                 return RecordRef<const View>{ai, *this};
@@ -484,7 +484,7 @@ namespace llama
 
         LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayIndex ai) -> decltype(auto)
         {
-            if constexpr(isRecord<RecordDim> || internal::IsBoundedArray<RecordDim>::value)
+            if constexpr(isRecordDim<RecordDim>)
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
                 return RecordRef<View>{ai, *this};

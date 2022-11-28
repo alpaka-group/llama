@@ -563,6 +563,10 @@ namespace llama
         };
     } // namespace internal
 
+    /// True if the T is a record dimension. That is, T is either a llama::Record or a bounded array.
+    template<typename T>
+    inline constexpr bool isRecordDim = isRecord<T> || internal::IsBoundedArray<T>::value;
+
     namespace internal
     {
         template<typename Coord, typename T, template<typename, typename> typename TypeFunctor>

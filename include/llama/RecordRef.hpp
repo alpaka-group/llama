@@ -424,7 +424,7 @@ namespace llama
         {
             using AbsolutCoord = Cat<BoundRecordCoord, RecordCoord<Coord...>>;
             using AccessedType = GetType<RecordDim, AbsolutCoord>;
-            if constexpr(isRecord<AccessedType> || internal::IsBoundedArray<AccessedType>::value)
+            if constexpr(isRecordDim<AccessedType>)
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
                 return RecordRef<const View, AbsolutCoord>{arrayIndex(), this->view};
@@ -442,7 +442,7 @@ namespace llama
         {
             using AbsolutCoord = Cat<BoundRecordCoord, RecordCoord<Coord...>>;
             using AccessedType = GetType<RecordDim, AbsolutCoord>;
-            if constexpr(isRecord<AccessedType> || internal::IsBoundedArray<AccessedType>::value)
+            if constexpr(isRecordDim<AccessedType>)
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
                 return RecordRef<View, AbsolutCoord>{arrayIndex(), this->view};
