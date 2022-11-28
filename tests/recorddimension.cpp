@@ -205,7 +205,7 @@ TEST_CASE("recorddim.uninitialized_ctor.constructFields")
 TEST_CASE("recorddim.int")
 {
     using RecordDim = int;
-    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{1}, RecordDim{}});
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{16}, RecordDim{}});
 
     STATIC_REQUIRE(std::is_same_v<decltype(view(0u)), int&>);
     view(0u) = 42;
@@ -218,6 +218,9 @@ TEST_CASE("recorddim.int")
     STATIC_REQUIRE(std::is_same_v<decltype(view[llama::ArrayIndex{0}]), int&>);
     view[llama::ArrayIndex{0}] = 42;
     CHECK(view[llama::ArrayIndex{0}] == 42);
+
+    iotaFillView(view);
+    iotaCheckView(view);
 }
 
 TEST_CASE("recorddim.int[3]")

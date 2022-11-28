@@ -139,13 +139,23 @@ void iotaFillView(View& view)
     std::int64_t value = 0;
     using RecordDim = typename View::RecordDim;
     for(auto ai : llama::ArrayIndexRange{view.mapping().extents()})
-        llama::forEachLeafCoord<RecordDim>(
-            [&](auto rc)
-            {
-                using Type = llama::GetType<RecordDim, decltype(rc)>;
-                view(ai)(rc) = static_cast<Type>(value);
-                ++value;
-            });
+    {
+        if constexpr(llama::isRecordDim<RecordDim>)
+        {
+            llama::forEachLeafCoord<RecordDim>(
+                [&](auto rc)
+                {
+                    using Type = llama::GetType<RecordDim, decltype(rc)>;
+                    view(ai)(rc) = static_cast<Type>(value);
+                    ++value;
+                });
+        }
+        else
+        {
+            view(ai) = static_cast<RecordDim>(value);
+            ++value;
+        }
+    }
 }
 
 template<typename View>
@@ -154,14 +164,24 @@ void iotaCheckView(View& view)
     std::int64_t value = 0;
     using RecordDim = typename View::RecordDim;
     for(auto ai : llama::ArrayIndexRange{view.mapping().extents()})
-        llama::forEachLeafCoord<RecordDim>(
-            [&](auto rc)
-            {
-                CAPTURE(ai, rc);
-                using Type = llama::GetType<RecordDim, decltype(rc)>;
-                CHECK(view(ai)(rc) == static_cast<Type>(value));
-                ++value;
-            });
+    {
+        if constexpr(llama::isRecordDim<RecordDim>)
+        {
+            llama::forEachLeafCoord<RecordDim>(
+                [&](auto rc)
+                {
+                    CAPTURE(ai, rc);
+                    using Type = llama::GetType<RecordDim, decltype(rc)>;
+                    CHECK(view(ai)(rc) == static_cast<Type>(value));
+                    ++value;
+                });
+        }
+        else
+        {
+            CHECK(view(ai) == static_cast<RecordDim>(value));
+            ++value;
+        }
+    }
 }
 
 // maps each element of the record dimension into a separate blobs. Each blob stores Modulus elements. If the array
