@@ -128,7 +128,7 @@ namespace llama
     /// created. If N is 1 (and T is not a record dimension), then T is produced.
     template<typename T, std::size_t N, template<typename, /* std::integral */ auto> typename MakeSizedSimd>
     using SimdN = typename std::conditional_t<
-        isRecord<T> || internal::IsBoundedArray<T>::value,
+        isRecordDim<T>,
         std::conditional_t<
             N == 1,
             boost::mp11::mp_identity<One<T>>,
@@ -142,7 +142,7 @@ namespace llama
     /// SIMD type of the original field type.
     template<typename T, template<typename> typename MakeSimd>
     using Simd = typename std::conditional_t<
-        isRecord<T> || internal::IsBoundedArray<T>::value,
+        isRecordDim<T>,
         boost::mp11::mp_identity<One<Simdize<T, MakeSimd>>>,
         boost::mp11::mp_identity<Simdize<T, MakeSimd>>>::type;
 
