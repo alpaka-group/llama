@@ -594,15 +594,67 @@ void checkSTREAMresults()
 
 #    undef abs
 #    undef M
+#    include <emmintrin.h>
 #    include <llama/llama.hpp>
 
 constexpr auto mapping = llama::mapping::AoS<llama::ArrayExtents<ssize_t, STREAM_ARRAY_SIZE>, STREAM_TYPE>{};
+
+struct NonTemporalStoreAccessor
+{
+    template<typename T>
+    struct Reference
+    {
+        T& ref;
+
+        auto operator=(T t) -> Reference&
+        {
+#    ifdef __clang__
+            __builtin_nontemporal_store(t, &ref);
+#    else
+            if constexpr(sizeof(T) == sizeof(long long))
+            {
+                long long i;
+                std::memcpy(&i, &t, sizeof(i));
+                _mm_stream_si64(reinterpret_cast<long long*>(&ref), i);
+            }
+            else if constexpr(sizeof(T) == sizeof(int))
+            {
+                int i;
+                std::memcpy(&i, &t, sizeof(i));
+                _mm_stream_si32(reinterpret_cast<int*>(&ref), i);
+            }
+            else
+            {
+                static_assert(sizeof(T) == 0, "Non-temporal store only implemented for 32 and 64 bit Ts");
+            }
+#    endif
+
+            return *this;
+        }
+
+        // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
+        operator T() const
+        {
+            return ref;
+        }
+    };
+
+
+    template<typename T>
+    auto operator()(T& ref) const -> Reference<T>
+    {
+        return Reference<T>{ref};
+    }
+};
+
+// using StoreAccessor = llama::accessor::Default;
+using StoreAccessor = NonTemporalStoreAccessor;
 
 /* stubs for "tuned" versions of the kernels */
 void tuned_STREAM_Copy()
 {
     auto viewA = llama::View{mapping, llama::Array{reinterpret_cast<std::byte*>(a)}};
-    auto viewC = llama::View{mapping, llama::Array{reinterpret_cast<std::byte*>(c)}};
+    auto viewC = llama::View{mapping, llama::Array{reinterpret_cast<std::byte*>(c)}, StoreAccessor{}};
 
 #    pragma omp parallel for
     for(ssize_t j = 0; j < STREAM_ARRAY_SIZE; j++)
@@ -611,7 +663,7 @@ void tuned_STREAM_Copy()
 
 void tuned_STREAM_Scale(STREAM_TYPE scalar)
 {
-    auto viewB = llama::View{mapping, llama::Array{reinterpret_cast<std::byte*>(b)}};
+    auto viewB = llama::View{mapping, llama::Array{reinterpret_cast<std::byte*>(b)}, StoreAccessor{}};
     auto viewC = llama::View{mapping, llama::Array{reinterpret_cast<std::byte*>(c)}};
 
 #    pragma omp parallel for
@@ -623,7 +675,7 @@ void tuned_STREAM_Add()
 {
     auto viewA = llama::View{mapping, llama::Array{reinterpret_cast<std::byte*>(a)}};
     auto viewB = llama::View{mapping, llama::Array{reinterpret_cast<std::byte*>(b)}};
-    auto viewC = llama::View{mapping, llama::Array{reinterpret_cast<std::byte*>(c)}};
+    auto viewC = llama::View{mapping, llama::Array{reinterpret_cast<std::byte*>(c)}, StoreAccessor{}};
 
 #    pragma omp parallel for
     for(ssize_t j = 0; j < STREAM_ARRAY_SIZE; j++)
@@ -632,7 +684,7 @@ void tuned_STREAM_Add()
 
 void tuned_STREAM_Triad(STREAM_TYPE scalar)
 {
-    auto viewA = llama::View{mapping, llama::Array{reinterpret_cast<std::byte*>(a)}};
+    auto viewA = llama::View{mapping, llama::Array{reinterpret_cast<std::byte*>(a)}, StoreAccessor{}};
     auto viewB = llama::View{mapping, llama::Array{reinterpret_cast<std::byte*>(b)}};
     auto viewC = llama::View{mapping, llama::Array{reinterpret_cast<std::byte*>(c)}};
 
