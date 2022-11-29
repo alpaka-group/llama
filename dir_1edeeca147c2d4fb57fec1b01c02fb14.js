@@ -5,6 +5,7 @@ var dir_1edeeca147c2d4fb57fec1b01c02fb14 =
       [ "Default", "structllama_1_1accessor_1_1Default.html", "structllama_1_1accessor_1_1Default" ],
       [ "ByValue", "structllama_1_1accessor_1_1ByValue.html", "structllama_1_1accessor_1_1ByValue" ],
       [ "Const", "structllama_1_1accessor_1_1Const.html", "structllama_1_1accessor_1_1Const" ],
+      [ "Reference", "structllama_1_1accessor_1_1Const_1_1Reference.html", "structllama_1_1accessor_1_1Const_1_1Reference" ],
       [ "Restrict", "structllama_1_1accessor_1_1Restrict.html", "structllama_1_1accessor_1_1Restrict" ]
     ] ],
     [ "Array.hpp", "Array_8hpp.html", "Array_8hpp" ],

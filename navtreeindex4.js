@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"structllama_1_1ScopedUpdate.html#a3ce7e6001813df201f857f039fda5d63":[2,0,1,24,7],
 "structllama_1_1ScopedUpdate.html#a3fb6bbcdac3b919b02f07443c8270ac6":[2,0,1,24,5],
 "structllama_1_1ScopedUpdate.html#a7d88a7ec80ed16d09dade610fb3ac386":[2,0,1,24,6],
 "structllama_1_1ScopedUpdate.html#ab6fe9d5125a5fddc3deca9a75820c9c9":[2,0,1,24,1],
@@ -135,7 +136,13 @@ var NAVTREEINDEX4 =
 "structllama_1_1accessor_1_1ByValue.html":[2,0,1,0,1],
 "structllama_1_1accessor_1_1ByValue.html#a0cb861c84429f058947e64cb305d3943":[2,0,1,0,1,0],
 "structllama_1_1accessor_1_1Const.html":[2,0,1,0,2],
-"structllama_1_1accessor_1_1Const.html#aea8d22de7eb9b5f5020b69ed6286a435":[2,0,1,0,2,0],
+"structllama_1_1accessor_1_1Const.html#a1f214c5b705993d5a170c6441b6ec026":[2,0,1,0,2,1],
+"structllama_1_1accessor_1_1Const.html#aea8d22de7eb9b5f5020b69ed6286a435":[2,0,1,0,2,2],
+"structllama_1_1accessor_1_1Const_1_1Reference.html":[2,0,1,0,2,0],
+"structllama_1_1accessor_1_1Const_1_1Reference.html#a54245525bd23e9bbe3950b1809e2e8f4":[2,0,1,0,2,0,1],
+"structllama_1_1accessor_1_1Const_1_1Reference.html#a987fcaf6929646d8f264947e2c4d81c5":[2,0,1,0,2,0,2],
+"structllama_1_1accessor_1_1Const_1_1Reference.html#a9aff77012565388f68c699781429be7a":[2,0,1,0,2,0,0],
+"structllama_1_1accessor_1_1Const_1_1Reference.html#aa38d2eeb28bbd3c49bea659eb3b29274":[2,0,1,0,2,0,3],
 "structllama_1_1accessor_1_1Default.html":[2,0,1,0,0],
 "structllama_1_1accessor_1_1Default.html#a6bf43e681fa33310219aa1389743e6bc":[2,0,1,0,0,0],
 "structllama_1_1accessor_1_1Restrict.html":[2,0,1,0,3],
@@ -242,12 +249,5 @@ var NAVTREEINDEX4 =
 "structllama_1_1internal_1_1LeafRecordCoordsImpl.html":[2,0,1,2,22],
 "structllama_1_1internal_1_1LeafRecordCoordsImpl_3_01Child_0fN_0e_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html":[2,0,1,2,25],
 "structllama_1_1internal_1_1LeafRecordCoordsImpl_3_01Child_0fN_0e_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html#a7016562e5bb37ff5997b85bcaabef280":[2,0,1,2,25,0],
-"structllama_1_1internal_1_1LeafRecordCoordsImpl_3_01Child_0fN_0e_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html#adb2bd117dda728656e636518bc81e1e7":[2,0,1,2,25,1],
-"structllama_1_1internal_1_1LeafRecordCoordsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html":[2,0,1,2,24],
-"structllama_1_1internal_1_1LeafRecordCoordsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html#a241d0ae35f9bac0dabf5713cde4dfda4":[2,0,1,2,24,1],
-"structllama_1_1internal_1_1LeafRecordCoordsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html#a9a6d2e2e78a46b2a9901de35280a32a9":[2,0,1,2,24,0],
-"structllama_1_1internal_1_1LeafRecordCoordsImpl_3_01T_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html":[2,0,1,2,23],
-"structllama_1_1internal_1_1LeafRecordCoordsImpl_3_01T_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html#a12ddbf42ab557dff563abf254b04cc60":[2,0,1,2,23,0],
-"structllama_1_1internal_1_1MakePassSecond.html":[2,0,1,2,35],
-"structllama_1_1internal_1_1MakePassSecond.html#a8a36ab4e38565686d9e56564c6552bc6":[2,0,1,2,35,0]
+"structllama_1_1internal_1_1LeafRecordCoordsImpl_3_01Child_0fN_0e_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html#adb2bd117dda728656e636518bc81e1e7":[2,0,1,2,25,1]
 };

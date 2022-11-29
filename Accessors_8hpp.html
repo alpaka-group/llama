@@ -90,6 +90,7 @@ $(document).ready(function(){initNavTree('Accessors_8hpp.html',''); initResizabl
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="Concepts_8hpp_source.html">Concepts.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="ProxyRefOpMixin_8hpp_source.html">ProxyRefOpMixin.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="macros_8hpp_source.html">macros.hpp</a>&quot;</code><br />
 <code>#include &lt;atomic&gt;</code><br />
 </div><div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
@@ -99,23 +100,24 @@ $(document).ready(function(){initNavTree('Accessors_8hpp.html',''); initResizabl
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="Accessors_8hpp__incl.png" border="0" usemap="#a_2home_2runner_2work_2llama_2llama_2include_2llama_2Accessors_8hpp" alt=""/></div>
 <map name="a_2home_2runner_2work_2llama_2llama_2include_2llama_2Accessors_8hpp" id="a_2home_2runner_2work_2llama_2llama_2include_2llama_2Accessors_8hpp">
-<area shape="rect" title=" " alt="" coords="27,5,279,47"/>
-<area shape="rect" href="Concepts_8hpp.html" title=" " alt="" coords="98,95,209,121"/>
-<area shape="rect" href="macros_8hpp.html" title=" " alt="" coords="5,393,104,420"/>
-<area shape="rect" title=" " alt="" coords="233,95,300,121"/>
-<area shape="rect" href="Array_8hpp.html" title=" " alt="" coords="120,319,203,345"/>
-<area shape="rect" href="Core_8hpp.html" title=" " alt="" coords="401,169,481,196"/>
-<area shape="rect" title=" " alt="" coords="315,319,407,345"/>
-<area shape="rect" href="RecordCoord_8hpp.html" title=" " alt="" coords="639,244,772,271"/>
-<area shape="rect" title=" " alt="" coords="327,393,403,420"/>
-<area shape="rect" title=" " alt="" coords="134,393,189,420"/>
-<area shape="rect" href="ArrayExtents_8hpp.html" title=" " alt="" coords="191,244,326,271"/>
-<area shape="rect" href="Meta_8hpp.html" title=" " alt="" coords="540,319,623,345"/>
-<area shape="rect" title=" " alt="" coords="401,244,481,271"/>
-<area shape="rect" title=" " alt="" coords="505,244,564,271"/>
-<area shape="rect" title=" " alt="" coords="229,319,288,345"/>
-<area shape="rect" title=" " alt="" coords="518,393,645,420"/>
-<area shape="rect" title=" " alt="" coords="697,319,753,345"/>
+<area shape="rect" title=" " alt="" coords="637,5,889,47"/>
+<area shape="rect" href="Concepts_8hpp.html" title=" " alt="" coords="486,95,597,121"/>
+<area shape="rect" href="macros_8hpp.html" title=" " alt="" coords="704,393,803,420"/>
+<area shape="rect" href="ProxyRefOpMixin_8hpp.html" title=" " alt="" coords="775,169,938,196"/>
+<area shape="rect" title=" " alt="" coords="826,95,892,121"/>
+<area shape="rect" href="Array_8hpp.html" title=" " alt="" coords="618,319,700,345"/>
+<area shape="rect" href="Core_8hpp.html" title=" " alt="" coords="292,169,372,196"/>
+<area shape="rect" title=" " alt="" coords="181,319,273,345"/>
+<area shape="rect" href="RecordCoord_8hpp.html" title=" " alt="" coords="475,244,608,271"/>
+<area shape="rect" title=" " alt="" coords="520,393,596,420"/>
+<area shape="rect" title=" " alt="" coords="625,393,680,420"/>
+<area shape="rect" href="ArrayExtents_8hpp.html" title=" " alt="" coords="265,244,400,271"/>
+<area shape="rect" href="Meta_8hpp.html" title=" " alt="" coords="380,319,463,345"/>
+<area shape="rect" title=" " alt="" coords="27,244,107,271"/>
+<area shape="rect" title=" " alt="" coords="131,244,190,271"/>
+<area shape="rect" title=" " alt="" coords="298,319,356,345"/>
+<area shape="rect" title=" " alt="" coords="358,393,485,420"/>
+<area shape="rect" title=" " alt="" coords="538,319,594,345"/>
 </map>
 </div>
 </div><div class="textblock"><div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
@@ -152,6 +154,8 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1accessor_1_1Const.html">llama::accessor::Const</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allows only read access by qualifying the references to memory with const. Only works on l-value references.  <a href="structllama_1_1accessor_1_1Const.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1accessor_1_1Const_1_1Reference.html">llama::accessor::Const::Reference&lt; Ref &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1accessor_1_1Restrict.html">llama::accessor::Restrict</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Qualifies references to memory with __restrict. Only works on l-value references.  <a href="structllama_1_1accessor_1_1Restrict.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -169,7 +173,7 @@ Namespaces</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="Accessors_8hpp.html">Accessors.hpp</a></li>
-    <li class="footer">Generated on Mon Nov 28 2022 18:22:24 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Nov 29 2022 08:55:32 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

@@ -186,6 +186,9 @@ var hierarchy =
     [ "llama::ProxyRefOpMixin< Reference< RC, BlobArray >, GetType< TRecordDim, RC > >", "structllama_1_1ProxyRefOpMixin.html", [
       [ "llama::mapping::Bytesplit< TArrayExtents, TRecordDim, InnerMapping >::Reference< RC, BlobArray >", "structllama_1_1mapping_1_1Bytesplit_1_1Reference.html", null ]
     ] ],
+    [ "llama::ProxyRefOpMixin< Reference< Ref >, Ref::value_type >", "structllama_1_1ProxyRefOpMixin.html", [
+      [ "llama::accessor::Const::Reference< Ref >", "structllama_1_1accessor_1_1Const_1_1Reference.html", null ]
+    ] ],
     [ "llama::ProxyRefOpMixin< ScopedUpdate< Reference >, internal::ValueOf< Reference >::type >", "structllama_1_1ProxyRefOpMixin.html", [
       [ "llama::ScopedUpdate< Reference, std::enable_if_t< std::is_fundamental_v< typename internal::ValueOf< Reference >::type > > >", "structllama_1_1ScopedUpdate_3_01Reference_00_01std_1_1enable__if__t_3_01std_1_1is__fundamental__e14f71eb64730a69a1b74dea5c5f8b59.html", null ]
     ] ],

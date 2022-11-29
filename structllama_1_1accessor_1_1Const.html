@@ -83,6 +83,7 @@ $(document).ready(function(){initNavTree('structllama_1_1accessor_1_1Const.html'
 
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="structllama_1_1accessor_1_1Const-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -95,19 +96,57 @@ $(document).ready(function(){initNavTree('structllama_1_1accessor_1_1Const.html'
 
 <p><code>#include &lt;<a class="el" href="Accessors_8hpp_source.html">Accessors.hpp</a>&gt;</code></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1accessor_1_1Const_1_1Reference.html">Reference</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:aea8d22de7eb9b5f5020b69ed6286a435"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:aea8d22de7eb9b5f5020b69ed6286a435"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1accessor_1_1Const.html#aea8d22de7eb9b5f5020b69ed6286a435">operator()</a> (T &amp;r) const -&gt; const T &amp;</td></tr>
 <tr class="separator:aea8d22de7eb9b5f5020b69ed6286a435"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f214c5b705993d5a170c6441b6ec026"><td class="memTemplParams" colspan="2">template&lt;typename ProxyReference , std::enable_if_t&lt; llama::isProxyReference&lt; ProxyReference &gt;, int &gt;  = 0&gt; </td></tr>
+<tr class="memitem:a1f214c5b705993d5a170c6441b6ec026"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1accessor_1_1Const.html#a1f214c5b705993d5a170c6441b6ec026">operator()</a> (ProxyReference r) const</td></tr>
+<tr class="separator:a1f214c5b705993d5a170c6441b6ec026"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Allows only read access by qualifying the references to memory with const. Only works on l-value references. </p>
 
-<p class="definition">Definition at line <a class="el" href="Accessors_8hpp_source.html#l00035">35</a> of file <a class="el" href="Accessors_8hpp_source.html">Accessors.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Accessors_8hpp_source.html#l00036">36</a> of file <a class="el" href="Accessors_8hpp_source.html">Accessors.hpp</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a1f214c5b705993d5a170c6441b6ec026"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f214c5b705993d5a170c6441b6ec026">&#9670;&nbsp;</a></span>operator()() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ProxyReference , std::enable_if_t&lt; llama::isProxyReference&lt; ProxyReference &gt;, int &gt;  = 0&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto llama::accessor::Const::operator() </td>
+          <td>(</td>
+          <td class="paramtype">ProxyReference&#160;</td>
+          <td class="paramname"><em>r</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Accessors_8hpp_source.html#l00068">68</a> of file <a class="el" href="Accessors_8hpp_source.html">Accessors.hpp</a>.</p>
+
+</div>
+</div>
 <a id="aea8d22de7eb9b5f5020b69ed6286a435"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aea8d22de7eb9b5f5020b69ed6286a435">&#9670;&nbsp;</a></span>operator()()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aea8d22de7eb9b5f5020b69ed6286a435">&#9670;&nbsp;</a></span>operator()() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -133,7 +172,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Accessors_8hpp_source.html#l00038">38</a> of file <a class="el" href="Accessors_8hpp_source.html">Accessors.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Accessors_8hpp_source.html#l00040">40</a> of file <a class="el" href="Accessors_8hpp_source.html">Accessors.hpp</a>.</p>
 
 </div>
 </div>
@@ -146,7 +185,7 @@ template&lt;typename T &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1accessor.html">accessor</a></li><li class="navelem"><a class="el" href="structllama_1_1accessor_1_1Const.html">Const</a></li>
-    <li class="footer">Generated on Mon Nov 28 2022 18:22:24 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Nov 29 2022 08:55:32 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

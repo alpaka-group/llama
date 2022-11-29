@@ -1,5 +1,12 @@
 var NAVTREEINDEX5 =
 {
+"structllama_1_1internal_1_1LeafRecordCoordsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html":[2,0,1,2,24],
+"structllama_1_1internal_1_1LeafRecordCoordsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html#a241d0ae35f9bac0dabf5713cde4dfda4":[2,0,1,2,24,1],
+"structllama_1_1internal_1_1LeafRecordCoordsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html#a9a6d2e2e78a46b2a9901de35280a32a9":[2,0,1,2,24,0],
+"structllama_1_1internal_1_1LeafRecordCoordsImpl_3_01T_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html":[2,0,1,2,23],
+"structllama_1_1internal_1_1LeafRecordCoordsImpl_3_01T_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html#a12ddbf42ab557dff563abf254b04cc60":[2,0,1,2,23,0],
+"structllama_1_1internal_1_1MakePassSecond.html":[2,0,1,2,35],
+"structllama_1_1internal_1_1MakePassSecond.html#a8a36ab4e38565686d9e56564c6552bc6":[2,0,1,2,35,0],
 "structllama_1_1internal_1_1MinusAssign.html":[2,0,1,2,47],
 "structllama_1_1internal_1_1MinusAssign.html#a5478fd18a86b7a6c8f07f45159f8e9b7":[2,0,1,2,47,0],
 "structllama_1_1internal_1_1ModuloAssign.html":[2,0,1,2,50],
@@ -242,12 +249,5 @@ var NAVTREEINDEX5 =
 "structllama_1_1mapping_1_1Trace.html#a9b25f3d5758ef03239b82a527edcc34f":[2,0,1,3,34,3],
 "structllama_1_1mapping_1_1Trace.html#aa8cbd51bb9d6150155c9e2dae16d62e1":[2,0,1,3,34,14],
 "structllama_1_1mapping_1_1Trace.html#ab10e84b0807819670c21d3c15e8c953c":[2,0,1,3,34,7],
-"structllama_1_1mapping_1_1Trace.html#ae2bd175f9e4f9b6075ed687756e9040d":[2,0,1,3,34,9],
-"structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html":[2,0,1,3,0,3],
-"structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html#a3be77bbc66766e7fc6f5313b10090215":[2,0,1,3,0,3,0],
-"structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html#a5ba0023e4e76da5e6af39c9767d95534":[2,0,1,3,0,3,2],
-"structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html#aa1158d366823962bb503a6592987fcd3":[2,0,1,3,0,3,3],
-"structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html#aba7dd85b2f01f805d25f9af24f727aaa":[2,0,1,3,0,3,1],
-"structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html":[2,0,1,3,0,4],
-"structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html#a3f4d4be20a75eb29a69764f328875596":[2,0,1,3,0,4,1]
+"structllama_1_1mapping_1_1Trace.html#ae2bd175f9e4f9b6075ed687756e9040d":[2,0,1,3,34,9]
 };
