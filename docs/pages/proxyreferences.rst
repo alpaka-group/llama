@@ -215,3 +215,10 @@ This is also how :cpp:`llama::ProxyRefOpMixin` is implemented.
 
 In order to allow :cpp:`rng` to forward the call :cpp:`.next()` to a different object than itself,
 C++ would require a frequently discussed, but not standardized, extension: smart references.
+
+Implementing proxy references
+-----------------------------
+
+A good explanation on how to implement proxy references is given `here <https://stackoverflow.com/a/73518716>`_.
+In addition to that, proxy references used with LLAMA should inherit from :cpp:`llama::ProxyRefOpMixin`
+and satisfy the concept :cpp:`llama::ProxyReference`.
