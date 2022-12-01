@@ -5791,28 +5791,23 @@ namespace llama
 	            using RightRecord = RecordRef<RightView, RightBoundRecordDim, RightOwnView>;
 	            // if the record dimension left and right is the same, a single loop is enough and no tag check is needed.
 	            // this safes a lot of compilation time.
-	            if constexpr(std::is_same_v<
-	                             typename LeftRecord::AccessibleRecordDim,
-	                             typename RightRecord::AccessibleRecordDim>)
+	            using LARD = typename LeftRecord::AccessibleRecordDim;
+	            using RARD = typename RightRecord::AccessibleRecordDim;
+	            if constexpr(std::is_same_v<LARD, RARD>)
 	            {
-	                forEachLeafCoord<typename LeftRecord::AccessibleRecordDim>([&](auto rc) LLAMA_LAMBDA_INLINE
-	                                                                           { Functor{}(left(rc), right(rc)); });
+	                forEachLeafCoord<LARD>([&](auto rc) LLAMA_LAMBDA_INLINE { Functor{}(left(rc), right(rc)); });
 	            }
 	            else
 	            {
-	                forEachLeafCoord<typename LeftRecord::AccessibleRecordDim>(
+	                forEachLeafCoord<LARD>(
 	                    [&](auto leftRC) LLAMA_LAMBDA_INLINE
 	                    {
 	                        using LeftInnerCoord = decltype(leftRC);
-	                        forEachLeafCoord<typename RightRecord::AccessibleRecordDim>(
+	                        forEachLeafCoord<RARD>(
 	                            [&](auto rightRC) LLAMA_LAMBDA_INLINE
 	                            {
 	                                using RightInnerCoord = decltype(rightRC);
-	                                if constexpr(hasSameTags<
-	                                                 typename LeftRecord::AccessibleRecordDim,
-	                                                 LeftInnerCoord,
-	                                                 typename RightRecord::AccessibleRecordDim,
-	                                                 RightInnerCoord>)
+	                                if constexpr(hasSameTags<LARD, LeftInnerCoord, RARD, RightInnerCoord>)
 	                                {
 	                                    Functor{}(left(leftRC), right(rightRC));
 	                                }
@@ -5844,28 +5839,23 @@ namespace llama
 	            bool result = true;
 	            // if the record dimension left and right is the same, a single loop is enough and no tag check is needed.
 	            // this safes a lot of compilation time.
-	            if constexpr(std::is_same_v<
-	                             typename LeftRecord::AccessibleRecordDim,
-	                             typename RightRecord::AccessibleRecordDim>)
+	            using LARD = typename LeftRecord::AccessibleRecordDim;
+	            using RARD = typename RightRecord::AccessibleRecordDim;
+	            if constexpr(std::is_same_v<LARD, RARD>)
 	            {
-	                forEachLeafCoord<typename LeftRecord::AccessibleRecordDim>(
-	                    [&](auto rc) LLAMA_LAMBDA_INLINE { result &= Functor{}(left(rc), right(rc)); });
+	                forEachLeafCoord<LARD>([&](auto rc) LLAMA_LAMBDA_INLINE { result &= Functor{}(left(rc), right(rc)); });
 	            }
 	            else
 	            {
-	                forEachLeafCoord<typename LeftRecord::AccessibleRecordDim>(
+	                forEachLeafCoord<LARD>(
 	                    [&](auto leftRC) LLAMA_LAMBDA_INLINE
 	                    {
 	                        using LeftInnerCoord = decltype(leftRC);
-	                        forEachLeafCoord<typename RightRecord::AccessibleRecordDim>(
+	                        forEachLeafCoord<RARD>(
 	                            [&](auto rightRC) LLAMA_LAMBDA_INLINE
 	                            {
 	                                using RightInnerCoord = decltype(rightRC);
-	                                if constexpr(hasSameTags<
-	                                                 typename LeftRecord::AccessibleRecordDim,
-	                                                 LeftInnerCoord,
-	                                                 typename RightRecord::AccessibleRecordDim,
-	                                                 RightInnerCoord>)
+	                                if constexpr(hasSameTags<LARD, LeftInnerCoord, RARD, RightInnerCoord>)
 	                                {
 	                                    result &= Functor{}(left(leftRC), right(rightRC));
 	                                }
