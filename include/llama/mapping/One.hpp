@@ -31,7 +31,15 @@ namespace llama::mapping
         using Flattener = FlattenRecordDim<TRecordDim>;
         static constexpr std::size_t blobCount = 1;
 
+#ifndef __NVCC__
         using Base::Base;
+#else
+        constexpr One() = default;
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr explicit One(TArrayExtents extents, TRecordDim = {}) : Base(extents)
+        {
+        }
+#endif
 
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(size_type) const -> size_type
         {
