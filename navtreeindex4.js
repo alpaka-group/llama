@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"structllama_1_1ScopedUpdate.html#a3ce7e6001813df201f857f039fda5d63":[2,0,1,24,7],
 "structllama_1_1ScopedUpdate.html#a3fb6bbcdac3b919b02f07443c8270ac6":[2,0,1,24,5],
 "structllama_1_1ScopedUpdate.html#a7d88a7ec80ed16d09dade610fb3ac386":[2,0,1,24,6],
 "structllama_1_1ScopedUpdate.html#ab6fe9d5125a5fddc3deca9a75820c9c9":[2,0,1,24,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX4 =
 "structllama_1_1internal_1_1LeafRecordCoordsImpl.html":[2,0,1,2,22],
 "structllama_1_1internal_1_1LeafRecordCoordsImpl_3_01Child_0fN_0e_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html":[2,0,1,2,25],
 "structllama_1_1internal_1_1LeafRecordCoordsImpl_3_01Child_0fN_0e_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html#a7016562e5bb37ff5997b85bcaabef280":[2,0,1,2,25,0],
-"structllama_1_1internal_1_1LeafRecordCoordsImpl_3_01Child_0fN_0e_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html#adb2bd117dda728656e636518bc81e1e7":[2,0,1,2,25,1],
-"structllama_1_1internal_1_1LeafRecordCoordsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html":[2,0,1,2,24]
+"structllama_1_1internal_1_1LeafRecordCoordsImpl_3_01Child_0fN_0e_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html#adb2bd117dda728656e636518bc81e1e7":[2,0,1,2,25,1]
 };

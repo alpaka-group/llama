@@ -1,5 +1,6 @@
 var NAVTREEINDEX5 =
 {
+"structllama_1_1internal_1_1LeafRecordCoordsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html":[2,0,1,2,24],
 "structllama_1_1internal_1_1LeafRecordCoordsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html#a241d0ae35f9bac0dabf5713cde4dfda4":[2,0,1,2,24,1],
 "structllama_1_1internal_1_1LeafRecordCoordsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html#a9a6d2e2e78a46b2a9901de35280a32a9":[2,0,1,2,24,0],
 "structllama_1_1internal_1_1LeafRecordCoordsImpl_3_01T_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html":[2,0,1,2,23],
@@ -248,6 +249,5 @@ var NAVTREEINDEX5 =
 "structllama_1_1mapping_1_1Trace.html#a9b25f3d5758ef03239b82a527edcc34f":[2,0,1,3,34,3],
 "structllama_1_1mapping_1_1Trace.html#aa8cbd51bb9d6150155c9e2dae16d62e1":[2,0,1,3,34,14],
 "structllama_1_1mapping_1_1Trace.html#ab10e84b0807819670c21d3c15e8c953c":[2,0,1,3,34,7],
-"structllama_1_1mapping_1_1Trace.html#ae2bd175f9e4f9b6075ed687756e9040d":[2,0,1,3,34,9],
-"structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html":[2,0,1,3,0,3]
+"structllama_1_1mapping_1_1Trace.html#ae2bd175f9e4f9b6075ed687756e9040d":[2,0,1,3,34,9]
 };
