@@ -421,6 +421,41 @@ TEST_CASE("CopyConst")
     STATIC_REQUIRE(std::is_same_v<llama::CopyConst<const int, const float>, const float>);
 }
 
+// NOLINTBEGIN(readability-identifier-naming)
+namespace pmacc
+{
+    struct pmacc_void
+    {
+    };
+    struct pmacc_isAlias
+    {
+    };
+    struct multiMask
+    {
+    };
+    struct localCellIdx
+    {
+    };
+} // namespace pmacc
+
+namespace picongpu
+{
+    template<typename T_Type = pmacc::pmacc_void, typename T_IsAlias = pmacc::pmacc_isAlias>
+    struct position
+    {
+    };
+    struct position_pic
+    {
+    };
+    struct momentum
+    {
+    };
+    struct weighting
+    {
+    };
+} // namespace picongpu
+// NOLINTEND(readability-identifier-naming)
+
 TEST_CASE("qualifiedTypeName")
 {
     CHECK(llama::qualifiedTypeName<int> == "int");
@@ -434,6 +469,20 @@ TEST_CASE("qualifiedTypeName")
     CHECK(
         llama::qualifiedTypeName<
             Vec3D> == "llama::Record<llama::Field<tag::X,double>,llama::Field<tag::Y,double>,llama::Field<tag::Z,double>>");
+
+    CHECK(llama::qualifiedTypeName<pmacc::multiMask> == "pmacc::multiMask");
+    CHECK(llama::qualifiedTypeName<pmacc::localCellIdx> == "pmacc::localCellIdx");
+#if defined(__NVCOMPILER) || defined(_MSC_VER) || (defined(__clang__) && __clang_major__ < 12)
+    CHECK(
+        llama::qualifiedTypeName<picongpu::position<
+            picongpu::position_pic>> == "picongpu::position<picongpu::position_pic,pmacc::pmacc_isAlias>");
+#else
+    CHECK(
+        llama::qualifiedTypeName<
+            picongpu::position<picongpu::position_pic>> == "picongpu::position<picongpu::position_pic>");
+#endif
+    CHECK(llama::qualifiedTypeName<picongpu::momentum> == "picongpu::momentum");
+    CHECK(llama::qualifiedTypeName<picongpu::weighting> == "picongpu::weighting");
 }
 
 TEST_CASE("structName")
@@ -450,6 +499,51 @@ TEST_CASE("structName")
         llama::structName(std::remove_const<std::add_const<std::common_type<int, char>>>{})
         == "remove_const<add_const<common_type<int,char>>>");
     CHECK(llama::structName(Vec3D{}) == "Record<Field<X,double>,Field<Y,double>,Field<Z,double>>");
+
+    CHECK(llama::structName<pmacc::multiMask>() == "multiMask");
+    CHECK(llama::structName<pmacc::localCellIdx>() == "localCellIdx");
+#if defined(__NVCOMPILER) || defined(_MSC_VER) || (defined(__clang__) && __clang_major__ < 12)
+    CHECK(llama::structName<picongpu::position<picongpu::position_pic>>() == "position<position_pic,pmacc_isAlias>");
+#else
+    CHECK(llama::structName<picongpu::position<picongpu::position_pic>>() == "position<position_pic>");
+#endif
+    CHECK(llama::structName<picongpu::momentum>() == "momentum");
+    CHECK(llama::structName<picongpu::weighting>() == "weighting");
+}
+
+TEST_CASE("recordCoordTags.Particle")
+{
+    CHECK(llama::recordCoordTags<Particle>(llama::RecordCoord<0, 0>{}) == "Pos.X");
+    CHECK(llama::recordCoordTags<Particle>(llama::RecordCoord<0, 1>{}) == "Pos.Y");
+    CHECK(llama::recordCoordTags<Particle>(llama::RecordCoord<0, 2>{}) == "Pos.Z");
+    CHECK(llama::recordCoordTags<Particle>(llama::RecordCoord<1>{}) == "Mass");
+    CHECK(llama::recordCoordTags<Particle>(llama::RecordCoord<2, 0>{}) == "Vel.X");
+    CHECK(llama::recordCoordTags<Particle>(llama::RecordCoord<2, 1>{}) == "Vel.Y");
+    CHECK(llama::recordCoordTags<Particle>(llama::RecordCoord<2, 2>{}) == "Vel.Z");
+    CHECK(llama::recordCoordTags<Particle>(llama::RecordCoord<3, 0>{}) == "Flags.0");
+    CHECK(llama::recordCoordTags<Particle>(llama::RecordCoord<3, 1>{}) == "Flags.1");
+    CHECK(llama::recordCoordTags<Particle>(llama::RecordCoord<3, 2>{}) == "Flags.2");
+    CHECK(llama::recordCoordTags<Particle>(llama::RecordCoord<3, 3>{}) == "Flags.3");
+}
+
+TEST_CASE("recordCoordTags.picongpu")
+{
+    using RecordDim = llama::Record<
+        llama::Field<pmacc::multiMask, std::uint8_t>,
+        llama::Field<pmacc::localCellIdx, std::int16_t>,
+        llama::Field<picongpu::position<picongpu::position_pic>, float[3]>,
+        llama::Field<picongpu::momentum, float[3]>,
+        llama::Field<picongpu::weighting, float>>;
+
+    CHECK(llama::recordCoordTags<RecordDim>(llama::RecordCoord<0>{}) == "multiMask");
+    CHECK(llama::recordCoordTags<RecordDim>(llama::RecordCoord<1>{}) == "localCellIdx");
+#if defined(__NVCOMPILER) || defined(_MSC_VER) || (defined(__clang__) && __clang_major__ < 12)
+    CHECK(llama::recordCoordTags<RecordDim>(llama::RecordCoord<2>{}) == "position<position_pic,pmacc_isAlias>");
+#else
+    CHECK(llama::recordCoordTags<RecordDim>(llama::RecordCoord<2>{}) == "position<position_pic>");
+#endif
+    CHECK(llama::recordCoordTags<RecordDim>(llama::RecordCoord<3>{}) == "momentum");
+    CHECK(llama::recordCoordTags<RecordDim>(llama::RecordCoord<4>{}) == "weighting");
 }
 
 namespace
