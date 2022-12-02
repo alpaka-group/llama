@@ -261,9 +261,12 @@ namespace llama
     {
         constexpr auto intToStrSize(std::size_t s)
         {
-            std::size_t len = 1;
-            for(auto n = s; n != 0; n /= 10)
+            std::size_t len = 0;
+            do
+            {
                 len++;
+                s /= 10;
+            } while(s != 0);
             return len;
         }
 
@@ -291,8 +294,6 @@ namespace llama
             }
             ();
             llama::Array<char, size> a{};
-            for(auto& c : a)
-                c = '?';
             auto w = a.begin();
 
             boost::mp11::mp_for_each<Tags>([&](auto tag) constexpr {
