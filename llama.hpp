@@ -1584,6 +1584,10 @@
 	        };
 	    } // namespace internal
 
+	    /// True if the T is a record dimension. That is, T is either a llama::Record or a bounded array.
+	    template<typename T>
+	    inline constexpr bool isRecordDim = isRecord<T> || internal::IsBoundedArray<T>::value;
+
 	    namespace internal
 	    {
 	        template<typename Coord, typename T, template<typename, typename> typename TypeFunctor>
@@ -3386,7 +3390,7 @@ namespace llama
 	            view.mapping().extents(),
 	            [&]([[maybe_unused]] typename View::ArrayIndex ai)
 	            {
-	                if constexpr(isRecord<RecordDim> || internal::IsBoundedArray<RecordDim>::value)
+	                if constexpr(isRecordDim<RecordDim>)
 	                {
 	                    forEachLeafCoord<RecordDim>(
 	#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ <= 4
@@ -3735,7 +3739,7 @@ namespace llama
 	        /// Retrieves the \ref RecordRef at the given \ref ArrayIndex index.
 	        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayIndex ai) const -> decltype(auto)
 	        {
-	            if constexpr(isRecord<RecordDim> || internal::IsBoundedArray<RecordDim>::value)
+	            if constexpr(isRecordDim<RecordDim>)
 	            {
 	                LLAMA_FORCE_INLINE_RECURSIVE
 	                return RecordRef<const View>{ai, *this};
@@ -3749,7 +3753,7 @@ namespace llama
 
 	        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayIndex ai) -> decltype(auto)
 	        {
-	            if constexpr(isRecord<RecordDim> || internal::IsBoundedArray<RecordDim>::value)
+	            if constexpr(isRecordDim<RecordDim>)
 	            {
 	                LLAMA_FORCE_INLINE_RECURSIVE
 	                return RecordRef<View>{ai, *this};
@@ -6183,7 +6187,7 @@ namespace llama
 	        {
 	            using AbsolutCoord = Cat<BoundRecordCoord, RecordCoord<Coord...>>;
 	            using AccessedType = GetType<RecordDim, AbsolutCoord>;
-	            if constexpr(isRecord<AccessedType> || internal::IsBoundedArray<AccessedType>::value)
+	            if constexpr(isRecordDim<AccessedType>)
 	            {
 	                LLAMA_FORCE_INLINE_RECURSIVE
 	                return RecordRef<const View, AbsolutCoord>{arrayIndex(), this->view};
@@ -6201,7 +6205,7 @@ namespace llama
 	        {
 	            using AbsolutCoord = Cat<BoundRecordCoord, RecordCoord<Coord...>>;
 	            using AccessedType = GetType<RecordDim, AbsolutCoord>;
-	            if constexpr(isRecord<AccessedType> || internal::IsBoundedArray<AccessedType>::value)
+	            if constexpr(isRecordDim<AccessedType>)
 	            {
 	                LLAMA_FORCE_INLINE_RECURSIVE
 	                return RecordRef<View, AbsolutCoord>{arrayIndex(), this->view};
@@ -7017,7 +7021,7 @@ namespace llama
 	    /// created. If N is 1 (and T is not a record dimension), then T is produced.
 	    template<typename T, std::size_t N, template<typename, /* std::integral */ auto> typename MakeSizedSimd>
 	    using SimdN = typename std::conditional_t<
-	        isRecord<T> || internal::IsBoundedArray<T>::value,
+	        isRecordDim<T>,
 	        std::conditional_t<
 	            N == 1,
 	            boost::mp11::mp_identity<One<T>>,
@@ -7031,7 +7035,7 @@ namespace llama
 	    /// SIMD type of the original field type.
 	    template<typename T, template<typename> typename MakeSimd>
 	    using Simd = typename std::conditional_t<
-	        isRecord<T> || internal::IsBoundedArray<T>::value,
+	        isRecordDim<T>,
 	        boost::mp11::mp_identity<One<Simdize<T, MakeSimd>>>,
 	        boost::mp11::mp_identity<Simdize<T, MakeSimd>>>::type;
 
