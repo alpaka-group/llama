@@ -3211,7 +3211,15 @@ namespace llama
 		        using Flattener = FlattenRecordDim<TRecordDim>;
 		        static constexpr std::size_t blobCount = 1;
 
+		#ifndef __NVCC__
 		        using Base::Base;
+		#else
+		        constexpr One() = default;
+
+		        LLAMA_FN_HOST_ACC_INLINE constexpr explicit One(TArrayExtents extents, TRecordDim = {}) : Base(extents)
+		        {
+		        }
+		#endif
 
 		        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(size_type) const -> size_type
 		        {
@@ -4176,7 +4184,15 @@ namespace llama
 	        inline static constexpr std::size_t blobCount
 	            = SeparateBuffers ? boost::mp11::mp_size<FlatRecordDim<TRecordDim>>::value : 1;
 
+	#ifndef __NVCC__
 	        using Base::Base;
+	#else
+	        constexpr SoA() = default;
+
+	        LLAMA_FN_HOST_ACC_INLINE constexpr explicit SoA(TArrayExtents extents, TRecordDim = {}) : Base(extents)
+	        {
+	        }
+	#endif
 
 	        LLAMA_FN_HOST_ACC_INLINE
 	        constexpr auto blobSize([[maybe_unused]] size_type blobIndex) const -> size_type
