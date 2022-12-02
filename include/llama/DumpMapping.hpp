@@ -40,6 +40,38 @@ namespace llama
             return c;
         }
 
+        // from: https://stackoverflow.com/questions/5665231/most-efficient-way-to-escape-xml-html-in-c-string
+        inline auto xmlEscape(const std::string& str) -> std::string
+        {
+            std::string result;
+            result.reserve(str.size());
+            for(const char c : str)
+            {
+                switch(c)
+                {
+                case '&':
+                    result.append("&amp;");
+                    break;
+                case '\"':
+                    result.append("&quot;");
+                    break;
+                case '\'':
+                    result.append("&apos;");
+                    break;
+                case '<':
+                    result.append("&lt;");
+                    break;
+                case '>':
+                    result.append("&gt;");
+                    break;
+                default:
+                    result += c;
+                    break;
+                }
+            }
+            return result;
+        }
+
         template<typename T, std::size_t Dim>
         auto formatArrayIndex(const ArrayIndex<T, Dim>& ai)
         {
@@ -347,7 +379,7 @@ namespace llama
                 x + width / 2,
                 y + byteSizeInPixel * 3 / 4,
                 internal::formatArrayIndex(info.arrayIndex),
-                info.recordTags);
+                internal::xmlEscape(std::string{info.recordTags}));
             if(cropBoxes)
                 svg += R"(</svg>
 )";
@@ -463,7 +495,7 @@ namespace llama
                 R"(<div class="box {0}" title="{1} {2}">{1} {2}</div>)",
                 internal::cssClass(std::string{info.recordTags}),
                 internal::formatArrayIndex(info.arrayIndex),
-                info.recordTags);
+                internal::xmlEscape(std::string{info.recordTags}));
         }
         html += R"(</body>
 </html>)";
