@@ -21,10 +21,12 @@ namespace llama::mapping
         Align
     };
 
-    /// Struct of array mapping. Used to create a \ref View via \ref allocView.
+    /// Struct of array mapping. Used to create a \ref View via \ref allocView. We recommend to use multiple blobs when
+    /// the array extents are dynamic and an aligned single blob version when they are static.
     /// \tparam TBlobs If OnePerField, every element of the record dimension is mapped to its own blob.
     /// \tparam TSubArrayAlignment Only relevant when TBlobs == Single, ignored otherwise. If Align, aligns the sub
-    /// arrays created within the single blob by inserting padding.
+    /// arrays created within the single blob by inserting padding. If the array extents are dynamic, this may add some
+    /// overhead to the mapping logic.
     /// \tparam TLinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
     /// how big the linear domain gets.
     /// \tparam FlattenRecordDimSingleBlob Defines how the record dimension's fields should be flattened if Blobs is
@@ -34,7 +36,8 @@ namespace llama::mapping
         typename TArrayExtents,
         typename TRecordDim,
         Blobs TBlobs = Blobs::OnePerField,
-        SubArrayAlignment TSubArrayAlignment = SubArrayAlignment::Pack,
+        SubArrayAlignment TSubArrayAlignment
+        = TBlobs == Blobs::Single ? SubArrayAlignment::Align : SubArrayAlignment::Pack,
         typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
         template<typename> typename FlattenRecordDimSingleBlob = FlattenRecordDimInOrder>
     struct SoA : MappingBase<TArrayExtents, TRecordDim>
