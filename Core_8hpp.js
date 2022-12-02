@@ -85,6 +85,7 @@ var Core_8hpp =
     [ "isConstant", "Core_8hpp.html#aeb3261387e3af25b2f65fb3725bacde1", null ],
     [ "isRecord", "Core_8hpp.html#a3b2aa8fd3e43e43b830bc4a71b180175", null ],
     [ "isRecord< Record< Fields... > >", "Core_8hpp.html#adee8dc812f8d14dbea092728c88a937d", null ],
+    [ "isRecordDim", "Core_8hpp.html#ab8f37f9e6c5055a9fa84709a6c5e5304", null ],
     [ "offsetOf", "Core_8hpp.html#aae03df933faef61723569d4655563bbe", null ],
     [ "sizeOf", "Core_8hpp.html#a2404e09083dc2c685bc283cd4ead0edc", null ],
     [ "sizeOf< Record< Fields... >, Align, IncludeTailPadding >", "Core_8hpp.html#a585d55cd3a51152ec452bc1f2d49a3ec", null ]

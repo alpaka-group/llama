@@ -255,12 +255,12 @@ Typedefs</h2></td></tr>
 <tr class="memitem:adf54146d2fef06baf9d512e22793f41a"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , template&lt; typename &gt; typename MakeSimd&gt; </td></tr>
 <tr class="memitem:adf54146d2fef06baf9d512e22793f41a"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#adf54146d2fef06baf9d512e22793f41a">Simdize</a> = <a class="el" href="namespacellama.html#a825425dc4761ab3b27c3ec6d42876f32">TransformLeaves</a>&lt; RecordDim, MakeSimd &gt;</td></tr>
 <tr class="separator:adf54146d2fef06baf9d512e22793f41a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a145a8c9a7fd516bf596718949b7c4318"><td class="memTemplParams" colspan="2">template&lt;typename T , std::size_t N, template&lt; typename, auto &gt; typename MakeSizedSimd&gt; </td></tr>
-<tr class="memitem:a145a8c9a7fd516bf596718949b7c4318"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a145a8c9a7fd516bf596718949b7c4318">SimdN</a> = typename std::conditional_t&lt; <a class="el" href="namespacellama.html#a3b2aa8fd3e43e43b830bc4a71b180175">isRecord</a>&lt; T &gt;||<a class="el" href="structllama_1_1internal_1_1IsBoundedArray.html">internal::IsBoundedArray</a>&lt; T &gt;::value, std::conditional_t&lt; N==1, boost::mp11::mp_identity&lt; <a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a>&lt; T &gt; &gt;, boost::mp11::mp_identity&lt; <a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a>&lt; <a class="el" href="namespacellama.html#ab5050ae091b407bcd3adabb734f2aba0">SimdizeN</a>&lt; T, N, MakeSizedSimd &gt; &gt;&gt; &gt;, std::conditional_t&lt; N==1, boost::mp11::mp_identity&lt; T &gt;, boost::mp11::mp_identity&lt; <a class="el" href="namespacellama.html#ab5050ae091b407bcd3adabb734f2aba0">SimdizeN</a>&lt; T, N, MakeSizedSimd &gt; &gt;&gt; &gt;::type</td></tr>
-<tr class="separator:a145a8c9a7fd516bf596718949b7c4318"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab12da747c068e8576dec5182d398d378"><td class="memTemplParams" colspan="2">template&lt;typename T , template&lt; typename &gt; typename MakeSimd&gt; </td></tr>
-<tr class="memitem:ab12da747c068e8576dec5182d398d378"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a> = typename std::conditional_t&lt; <a class="el" href="namespacellama.html#a3b2aa8fd3e43e43b830bc4a71b180175">isRecord</a>&lt; T &gt;||<a class="el" href="structllama_1_1internal_1_1IsBoundedArray.html">internal::IsBoundedArray</a>&lt; T &gt;::value, boost::mp11::mp_identity&lt; <a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a>&lt; <a class="el" href="namespacellama.html#adf54146d2fef06baf9d512e22793f41a">Simdize</a>&lt; T, MakeSimd &gt; &gt;&gt;, boost::mp11::mp_identity&lt; <a class="el" href="namespacellama.html#adf54146d2fef06baf9d512e22793f41a">Simdize</a>&lt; T, MakeSimd &gt; &gt;&gt;::type</td></tr>
-<tr class="separator:ab12da747c068e8576dec5182d398d378"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf87c7bd7e5e13c9d7194ce488146686"><td class="memTemplParams" colspan="2">template&lt;typename T , std::size_t N, template&lt; typename, auto &gt; typename MakeSizedSimd&gt; </td></tr>
+<tr class="memitem:aaf87c7bd7e5e13c9d7194ce488146686"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#aaf87c7bd7e5e13c9d7194ce488146686">SimdN</a> = typename std::conditional_t&lt; <a class="el" href="namespacellama.html#ab8f37f9e6c5055a9fa84709a6c5e5304">isRecordDim</a>&lt; T &gt;, std::conditional_t&lt; N==1, boost::mp11::mp_identity&lt; <a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a>&lt; T &gt; &gt;, boost::mp11::mp_identity&lt; <a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a>&lt; <a class="el" href="namespacellama.html#ab5050ae091b407bcd3adabb734f2aba0">SimdizeN</a>&lt; T, N, MakeSizedSimd &gt; &gt;&gt; &gt;, std::conditional_t&lt; N==1, boost::mp11::mp_identity&lt; T &gt;, boost::mp11::mp_identity&lt; <a class="el" href="namespacellama.html#ab5050ae091b407bcd3adabb734f2aba0">SimdizeN</a>&lt; T, N, MakeSizedSimd &gt; &gt;&gt; &gt;::type</td></tr>
+<tr class="separator:aaf87c7bd7e5e13c9d7194ce488146686"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acbffc3150313c513f88f7c008aa51694"><td class="memTemplParams" colspan="2">template&lt;typename T , template&lt; typename &gt; typename MakeSimd&gt; </td></tr>
+<tr class="memitem:acbffc3150313c513f88f7c008aa51694"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#acbffc3150313c513f88f7c008aa51694">Simd</a> = typename std::conditional_t&lt; <a class="el" href="namespacellama.html#ab8f37f9e6c5055a9fa84709a6c5e5304">isRecordDim</a>&lt; T &gt;, boost::mp11::mp_identity&lt; <a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a>&lt; <a class="el" href="namespacellama.html#adf54146d2fef06baf9d512e22793f41a">Simdize</a>&lt; T, MakeSimd &gt; &gt;&gt;, boost::mp11::mp_identity&lt; <a class="el" href="namespacellama.html#adf54146d2fef06baf9d512e22793f41a">Simdize</a>&lt; T, MakeSimd &gt; &gt;&gt;::type</td></tr>
+<tr class="separator:acbffc3150313c513f88f7c008aa51694"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace059168abe83f42c9493ad853abb746"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim &gt; </td></tr>
 <tr class="memitem:ace059168abe83f42c9493ad853abb746"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a> = <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a>&lt; decltype(<a class="el" href="namespacellama.html#a3750d27a7f8dd111fbe32dc769b44120">allocViewStack</a>&lt; 0, RecordDim &gt;()), <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt;&gt;, true &gt;</td></tr>
 <tr class="memdesc:ace059168abe83f42c9493ad853abb746"><td class="mdescLeft">&#160;</td><td class="mdescRight">A <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> that owns and holds a single value.  <a href="namespacellama.html#ace059168abe83f42c9493ad853abb746">More...</a><br /></td></tr>
@@ -397,10 +397,10 @@ Functions</h2></td></tr>
 <tr class="memitem:abb21e8bcb7c41613b7183a1beef1f600"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#abb21e8bcb7c41613b7183a1beef1f600">chooseSimdLanes</a> (BinaryReductionFunction reduce) -&gt; std::size_t</td></tr>
 <tr class="separator:abb21e8bcb7c41613b7183a1beef1f600"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6060f4836e56bda4689232f0d22fecf8"><td class="memTemplParams" colspan="2">template&lt;typename T , typename Simd &gt; </td></tr>
-<tr class="memitem:a6060f4836e56bda4689232f0d22fecf8"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a6060f4836e56bda4689232f0d22fecf8">loadSimd</a> (const T &amp;srcRef, <a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a> &amp;dstSimd)</td></tr>
+<tr class="memitem:a6060f4836e56bda4689232f0d22fecf8"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a6060f4836e56bda4689232f0d22fecf8">loadSimd</a> (const T &amp;srcRef, <a class="el" href="namespacellama.html#acbffc3150313c513f88f7c008aa51694">Simd</a> &amp;dstSimd)</td></tr>
 <tr class="separator:a6060f4836e56bda4689232f0d22fecf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a85e63e02c425ced774c87dfc1e3dda3d"><td class="memTemplParams" colspan="2">template&lt;typename Simd , typename T &gt; </td></tr>
-<tr class="memitem:a85e63e02c425ced774c87dfc1e3dda3d"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a85e63e02c425ced774c87dfc1e3dda3d">storeSimd</a> (const <a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a> &amp;srcSimd, T &amp;&amp;dstRef)</td></tr>
+<tr class="memitem:a85e63e02c425ced774c87dfc1e3dda3d"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a85e63e02c425ced774c87dfc1e3dda3d">storeSimd</a> (const <a class="el" href="namespacellama.html#acbffc3150313c513f88f7c008aa51694">Simd</a> &amp;srcSimd, T &amp;&amp;dstRef)</td></tr>
 <tr class="separator:a85e63e02c425ced774c87dfc1e3dda3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4451ec281eb037ebac7c08772ce0670f"><td class="memTemplParams" colspan="2">template&lt;std::size_t N, template&lt; typename, auto &gt; typename MakeSizedSimd, typename View , typename UnarySimdFunction &gt; </td></tr>
 <tr class="memitem:a4451ec281eb037ebac7c08772ce0670f"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a4451ec281eb037ebac7c08772ce0670f">simdForEachN</a> (<a class="el" href="structllama_1_1View.html">View</a> &amp;view, UnarySimdFunction f)</td></tr>
@@ -557,6 +557,10 @@ Variables</h2></td></tr>
 <tr class="memitem:aae03df933faef61723569d4655563bbe"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , typename RecordCoord , bool Align = false&gt; </td></tr>
 <tr class="memitem:aae03df933faef61723569d4655563bbe"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#aae03df933faef61723569d4655563bbe">offsetOf</a> = <a class="el" href="namespacellama.html#a7b86f2441b1aae82532668e1a8377df2">flatOffsetOf</a>&lt;<a class="el" href="namespacellama.html#a1fddf1f638927edfb8da8e3c78da4e1c">FlatRecordDim</a>&lt;RecordDim&gt;, <a class="el" href="namespacellama.html#a6c3056b43b48f32a66160a6dd273662d">flatRecordCoord</a>&lt;RecordDim, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&gt;, Align&gt;</td></tr>
 <tr class="separator:aae03df933faef61723569d4655563bbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8f37f9e6c5055a9fa84709a6c5e5304"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ab8f37f9e6c5055a9fa84709a6c5e5304"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ab8f37f9e6c5055a9fa84709a6c5e5304">isRecordDim</a> = <a class="el" href="namespacellama.html#a3b2aa8fd3e43e43b830bc4a71b180175">isRecord</a>&lt;T&gt; || <a class="el" href="structllama_1_1internal_1_1IsBoundedArray.html">internal::IsBoundedArray</a>&lt;T&gt;::value</td></tr>
+<tr class="memdesc:ab8f37f9e6c5055a9fa84709a6c5e5304"><td class="mdescLeft">&#160;</td><td class="mdescRight">True if the T is a record dimension. That is, T is either a <a class="el" href="structllama_1_1Record.html" title="A type list of Fields which may be used to define a record dimension.">llama::Record</a> or a bounded array.  <a href="namespacellama.html#ab8f37f9e6c5055a9fa84709a6c5e5304">More...</a><br /></td></tr>
+<tr class="separator:ab8f37f9e6c5055a9fa84709a6c5e5304"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeb3261387e3af25b2f65fb3725bacde1"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:aeb3261387e3af25b2f65fb3725bacde1"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#aeb3261387e3af25b2f65fb3725bacde1">isConstant</a> = <a class="el" href="structllama_1_1internal_1_1IsConstant.html">internal::IsConstant</a>&lt;T&gt;::value</td></tr>
 <tr class="separator:aeb3261387e3af25b2f65fb3725bacde1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -581,7 +585,7 @@ Variables</h2></td></tr>
 <tr class="memitem:a88abd408b8ac8bd2456a8316a62a5928"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a88abd408b8ac8bd2456a8316a62a5928">isRecordRef&lt; RecordRef&lt; View, BoundRecordCoord, OwnView &gt; &gt;</a> = true</td></tr>
 <tr class="separator:a88abd408b8ac8bd2456a8316a62a5928"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a85e41b88e239189c88b2d895bfc2691e"><td class="memTemplParams" colspan="2">template&lt;typename Simd , typename SFINAE  = void&gt; </td></tr>
-<tr class="memitem:a85e41b88e239189c88b2d895bfc2691e"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a85e41b88e239189c88b2d895bfc2691e">simdLanes</a> = <a class="el" href="structllama_1_1SimdTraits.html">SimdTraits</a>&lt;<a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a>&gt;::lanes</td></tr>
+<tr class="memitem:a85e41b88e239189c88b2d895bfc2691e"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a85e41b88e239189c88b2d895bfc2691e">simdLanes</a> = <a class="el" href="structllama_1_1SimdTraits.html">SimdTraits</a>&lt;<a class="el" href="namespacellama.html#acbffc3150313c513f88f7c008aa51694">Simd</a>&gt;::lanes</td></tr>
 <tr class="separator:a85e41b88e239189c88b2d895bfc2691e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a34f90853e28950fdd34ecf9696ae1f63"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , template&lt; typename &gt; typename MakeSimd&gt; </td></tr>
 <tr class="memitem:a34f90853e28950fdd34ecf9696ae1f63"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a34f90853e28950fdd34ecf9696ae1f63">simdLanesWithFullVectorsFor</a> = <a class="el" href="namespacellama.html#abb21e8bcb7c41613b7183a1beef1f600">chooseSimdLanes</a>&lt;RecordDim, MakeSimd&gt;([](auto a, auto b) { return std::max(a, b); })</td></tr>
@@ -687,7 +691,7 @@ template&lt;auto V&gt; </div>
 
 <p>Used as template argument to specify a constant/compile-time value. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00697">697</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00701">701</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -707,7 +711,7 @@ template&lt;typename FromT , typename ToT &gt; </div>
 
 <p>Alias for ToT, adding <code>const</code> if FromT is const qualified. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00693">693</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00697">697</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -885,7 +889,7 @@ template&lt;typename RecordDimA , typename RecordDimB &gt; </div>
 
 <p>Creates a merged record dimension, where duplicated, nested fields are unified. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00687">687</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00691">691</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -967,8 +971,8 @@ template&lt;typename Expression , typename... Args&gt; </div>
 
 </div>
 </div>
-<a id="ab12da747c068e8576dec5182d398d378"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab12da747c068e8576dec5182d398d378">&#9670;&nbsp;</a></span>Simd</h2>
+<a id="acbffc3150313c513f88f7c008aa51694"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acbffc3150313c513f88f7c008aa51694">&#9670;&nbsp;</a></span>Simd</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -976,7 +980,7 @@ template&lt;typename Expression , typename... Args&gt; </div>
 template&lt;typename T , template&lt; typename &gt; typename MakeSimd&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">llama::Simd</a> = typedef typename std::conditional_t&lt; <a class="el" href="namespacellama.html#a3b2aa8fd3e43e43b830bc4a71b180175">isRecord</a>&lt;T&gt; || <a class="el" href="structllama_1_1internal_1_1IsBoundedArray.html">internal::IsBoundedArray</a>&lt;T&gt;::value, boost::mp11::mp_identity&lt;<a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a>&lt;<a class="el" href="namespacellama.html#adf54146d2fef06baf9d512e22793f41a">Simdize</a>&lt;T, MakeSimd&gt; &gt;&gt;, boost::mp11::mp_identity&lt;<a class="el" href="namespacellama.html#adf54146d2fef06baf9d512e22793f41a">Simdize</a>&lt;T, MakeSimd&gt; &gt;&gt;::type</td>
+          <td class="memname">using <a class="el" href="namespacellama.html#acbffc3150313c513f88f7c008aa51694">llama::Simd</a> = typedef typename std::conditional_t&lt; <a class="el" href="namespacellama.html#ab8f37f9e6c5055a9fa84709a6c5e5304">isRecordDim</a>&lt;T&gt;, boost::mp11::mp_identity&lt;<a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a>&lt;<a class="el" href="namespacellama.html#adf54146d2fef06baf9d512e22793f41a">Simdize</a>&lt;T, MakeSimd&gt; &gt;&gt;, boost::mp11::mp_identity&lt;<a class="el" href="namespacellama.html#adf54146d2fef06baf9d512e22793f41a">Simdize</a>&lt;T, MakeSimd&gt; &gt;&gt;::type</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1024,8 +1028,8 @@ template&lt;typename RecordDim , std::size_t N, template&lt; typename, auto &gt;
 
 </div>
 </div>
-<a id="a145a8c9a7fd516bf596718949b7c4318"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a145a8c9a7fd516bf596718949b7c4318">&#9670;&nbsp;</a></span>SimdN</h2>
+<a id="aaf87c7bd7e5e13c9d7194ce488146686"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf87c7bd7e5e13c9d7194ce488146686">&#9670;&nbsp;</a></span>SimdN</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1033,7 +1037,7 @@ template&lt;typename RecordDim , std::size_t N, template&lt; typename, auto &gt;
 template&lt;typename T , std::size_t N, template&lt; typename, auto &gt; typename MakeSizedSimd&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="namespacellama.html#a145a8c9a7fd516bf596718949b7c4318">llama::SimdN</a> = typedef typename std::conditional_t&lt; <a class="el" href="namespacellama.html#a3b2aa8fd3e43e43b830bc4a71b180175">isRecord</a>&lt;T&gt; || <a class="el" href="structllama_1_1internal_1_1IsBoundedArray.html">internal::IsBoundedArray</a>&lt;T&gt;::value, std::conditional_t&lt; N == 1, boost::mp11::mp_identity&lt;<a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a>&lt;T&gt; &gt;, boost::mp11::mp_identity&lt;<a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a>&lt;<a class="el" href="namespacellama.html#ab5050ae091b407bcd3adabb734f2aba0">SimdizeN</a>&lt;T, N, MakeSizedSimd&gt; &gt;&gt; &gt;, std::conditional_t&lt; N == 1, boost::mp11::mp_identity&lt;T&gt;, boost::mp11::mp_identity&lt;<a class="el" href="namespacellama.html#ab5050ae091b407bcd3adabb734f2aba0">SimdizeN</a>&lt;T, N, MakeSizedSimd&gt; &gt;&gt; &gt;::type</td>
+          <td class="memname">using <a class="el" href="namespacellama.html#aaf87c7bd7e5e13c9d7194ce488146686">llama::SimdN</a> = typedef typename std::conditional_t&lt; <a class="el" href="namespacellama.html#ab8f37f9e6c5055a9fa84709a6c5e5304">isRecordDim</a>&lt;T&gt;, std::conditional_t&lt; N == 1, boost::mp11::mp_identity&lt;<a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a>&lt;T&gt; &gt;, boost::mp11::mp_identity&lt;<a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a>&lt;<a class="el" href="namespacellama.html#ab5050ae091b407bcd3adabb734f2aba0">SimdizeN</a>&lt;T, N, MakeSizedSimd&gt; &gt;&gt; &gt;, std::conditional_t&lt; N == 1, boost::mp11::mp_identity&lt;T&gt;, boost::mp11::mp_identity&lt;<a class="el" href="namespacellama.html#ab5050ae091b407bcd3adabb734f2aba0">SimdizeN</a>&lt;T, N, MakeSizedSimd&gt; &gt;&gt; &gt;::type</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1058,7 +1062,7 @@ template&lt;typename RecordDim , template&lt; typename &gt; typename FieldTypeFu
 </div><div class="memdoc">
 <p>Creates a new record dimension where each new leaf field's type is the result of applying FieldTypeFunctor to the original leaf field's type. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00622">622</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00626">626</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1077,7 +1081,7 @@ template&lt;typename RecordDim , template&lt; typename, typename &gt; typename F
 </div><div class="memdoc">
 <p>Creates a new record dimension where each new leaf field's type is the result of applying FieldTypeFunctor to the original leaf's <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a> and field's type. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00616">616</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00620">620</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -2051,7 +2055,7 @@ template&lt;typename T , typename Simd &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a> &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="namespacellama.html#acbffc3150313c513f88f7c008aa51694">Simd</a> &amp;&#160;</td>
           <td class="paramname"><em>dstSimd</em>&#160;</td>
         </tr>
         <tr>
@@ -3197,7 +3201,7 @@ template&lt;typename Simd , typename T &gt; </div>
         <tr>
           <td class="memname">void llama::storeSimd </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a> &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacellama.html#acbffc3150313c513f88f7c008aa51694">Simd</a> &amp;&#160;</td>
           <td class="paramname"><em>srcSimd</em>, </td>
         </tr>
         <tr>
@@ -4078,7 +4082,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00713">713</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00717">717</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -4263,6 +4267,34 @@ template&lt;std::size_t... Coords&gt; </div>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="RecordCoord_8hpp_source.html#l00057">57</a> of file <a class="el" href="RecordCoord_8hpp_source.html">RecordCoord.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ab8f37f9e6c5055a9fa84709a6c5e5304"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8f37f9e6c5055a9fa84709a6c5e5304">&#9670;&nbsp;</a></span>isRecordDim</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool llama::isRecordDim = <a class="el" href="namespacellama.html#a3b2aa8fd3e43e43b830bc4a71b180175">isRecord</a>&lt;T&gt; || <a class="el" href="structllama_1_1internal_1_1IsBoundedArray.html">internal::IsBoundedArray</a>&lt;T&gt;::value</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>True if the T is a record dimension. That is, T is either a <a class="el" href="structllama_1_1Record.html" title="A type list of Fields which may be used to define a record dimension.">llama::Record</a> or a bounded array. </p>
+
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00568">568</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -4502,7 +4534,7 @@ template&lt;typename Simd , typename SFINAE  = void&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr auto llama::simdLanes = <a class="el" href="structllama_1_1SimdTraits.html">SimdTraits</a>&lt;<a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a>&gt;::lanes</td>
+          <td class="memname">constexpr auto llama::simdLanes = <a class="el" href="structllama_1_1SimdTraits.html">SimdTraits</a>&lt;<a class="el" href="namespacellama.html#acbffc3150313c513f88f7c008aa51694">Simd</a>&gt;::lanes</td>
         </tr>
       </table>
   </td>
@@ -4511,7 +4543,7 @@ template&lt;typename Simd , typename SFINAE  = void&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>The number of SIMD simdLanes the given SIMD vector or <a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd&lt;T&gt;</a> has. If Simd is not a structural <a class="el" href="namespacellama.html#ab12da747c068e8576dec5182d398d378">Simd</a> or <a class="el" href="namespacellama.html#a145a8c9a7fd516bf596718949b7c4318">SimdN</a>, this is a shortcut for SimdTraits&lt;Simd&gt;::lanes. </p>
+<p>The number of SIMD simdLanes the given SIMD vector or <a class="el" href="namespacellama.html#acbffc3150313c513f88f7c008aa51694">Simd&lt;T&gt;</a> has. If Simd is not a structural <a class="el" href="namespacellama.html#acbffc3150313c513f88f7c008aa51694">Simd</a> or <a class="el" href="namespacellama.html#aaf87c7bd7e5e13c9d7194ce488146686">SimdN</a>, this is a shortcut for SimdTraits&lt;Simd&gt;::lanes. </p>
 
 <p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00049">49</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
 
@@ -4651,7 +4683,7 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Fri Dec 2 2022 10:10:19 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Fri Dec 2 2022 18:57:04 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

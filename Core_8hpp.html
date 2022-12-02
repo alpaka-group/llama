@@ -429,6 +429,10 @@ Variables</h2></td></tr>
 <tr class="memitem:aae03df933faef61723569d4655563bbe"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , typename RecordCoord , bool Align = false&gt; </td></tr>
 <tr class="memitem:aae03df933faef61723569d4655563bbe"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#aae03df933faef61723569d4655563bbe">llama::offsetOf</a> = flatOffsetOf&lt;FlatRecordDim&lt;RecordDim&gt;, flatRecordCoord&lt;RecordDim, RecordCoord&gt;, Align&gt;</td></tr>
 <tr class="separator:aae03df933faef61723569d4655563bbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8f37f9e6c5055a9fa84709a6c5e5304"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ab8f37f9e6c5055a9fa84709a6c5e5304"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ab8f37f9e6c5055a9fa84709a6c5e5304">llama::isRecordDim</a> = isRecord&lt;T&gt; || internal::IsBoundedArray&lt;T&gt;::value</td></tr>
+<tr class="memdesc:ab8f37f9e6c5055a9fa84709a6c5e5304"><td class="mdescLeft">&#160;</td><td class="mdescRight">True if the T is a record dimension. That is, T is either a <a class="el" href="structllama_1_1Record.html" title="A type list of Fields which may be used to define a record dimension.">llama::Record</a> or a bounded array.  <a href="namespacellama.html#ab8f37f9e6c5055a9fa84709a6c5e5304">More...</a><br /></td></tr>
+<tr class="separator:ab8f37f9e6c5055a9fa84709a6c5e5304"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeb3261387e3af25b2f65fb3725bacde1"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:aeb3261387e3af25b2f65fb3725bacde1"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#aeb3261387e3af25b2f65fb3725bacde1">llama::isConstant</a> = internal::IsConstant&lt;T&gt;::value</td></tr>
 <tr class="separator:aeb3261387e3af25b2f65fb3725bacde1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -439,7 +443,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="Core_8hpp.html">Core.hpp</a></li>
-    <li class="footer">Generated on Fri Dec 2 2022 10:10:19 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Fri Dec 2 2022 18:57:04 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
