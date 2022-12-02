@@ -18,12 +18,6 @@ namespace llama
     {
     };
 
-    /// A type list of \ref Field%s which may be used to define a record dimension.
-    template<typename... Fields>
-    struct Record
-    {
-    };
-
     /// @brief Tells whether the given type is allowed as a field type in LLAMA. Such types need to be trivially
     /// constructible and trivially destructible.
     template<typename T>
@@ -40,6 +34,23 @@ namespace llama
     struct Field
     {
         static_assert(isAllowedFieldType<Type>, "This field's type is not allowed");
+    };
+
+    template<typename T>
+    inline constexpr bool isField = false;
+
+    template<typename Tag, typename Type>
+    inline constexpr bool isField<Field<Tag, Type>> = true;
+
+    /// A type list of \ref Field%s which may be used to define a record dimension.
+    template<typename... Fields>
+#if __cpp_concepts
+        // Cannot use a fold expression here, because clang/nvcc/icx cannot handle more than 256 arguments.
+        // If you get an error here, then you passed a type which is not llama::Field as argument to Record
+        requires(boost::mp11::mp_all<boost::mp11::mp_bool<isField<Fields>>...>::value)
+#endif
+    struct Record
+    {
     };
 
     template<typename T>
