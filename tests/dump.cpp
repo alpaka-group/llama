@@ -43,6 +43,13 @@ TEST_CASE("dump.different_extents")
     CHECK(refHtml == llama::toHtml(mapping4));
 }
 
+TEST_CASE("dump.xmlEscape")
+{
+    CHECK(llama::internal::xmlEscape("position") == "position");
+    CHECK(llama::internal::xmlEscape("position<position_pic>") == "position&lt;position_pic&gt;");
+    CHECK(llama::internal::xmlEscape("a<b>c&d\"e'f") == "a&lt;b&gt;c&amp;d&quot;e&apos;f");
+}
+
 TEST_CASE("dump.int")
 {
     dump(llama::mapping::AlignedAoS<llama::ArrayExtentsDynamic<std::size_t, 1>, int>{{32}});
