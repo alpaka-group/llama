@@ -1039,12 +1039,6 @@
 	    {
 	    };
 
-	    /// A type list of \ref Field%s which may be used to define a record dimension.
-	    template<typename... Fields>
-	    struct Record
-	    {
-	    };
-
 	    /// @brief Tells whether the given type is allowed as a field type in LLAMA. Such types need to be trivially
 	    /// constructible and trivially destructible.
 	    template<typename T>
@@ -1061,6 +1055,23 @@
 	    struct Field
 	    {
 	        static_assert(isAllowedFieldType<Type>, "This field's type is not allowed");
+	    };
+
+	    template<typename T>
+	    inline constexpr bool isField = false;
+
+	    template<typename Tag, typename Type>
+	    inline constexpr bool isField<Field<Tag, Type>> = true;
+
+	    /// A type list of \ref Field%s which may be used to define a record dimension.
+	    template<typename... Fields>
+	#if __cpp_concepts
+	        // Cannot use a fold expression here, because clang/nvcc/icx cannot handle more than 256 arguments.
+	        // If you get an error here, then you passed a type which is not llama::Field as argument to Record
+	        requires(boost::mp11::mp_all<boost::mp11::mp_bool<isField<Fields>>...>::value)
+	#endif
+	    struct Record
+	    {
 	    };
 
 	    template<typename T>
@@ -5201,9 +5212,12 @@ namespace llama
 		    {
 		        constexpr auto intToStrSize(std::size_t s)
 		        {
-		            std::size_t len = 1;
-		            for(auto n = s; n != 0; n /= 10)
+		            std::size_t len = 0;
+		            do
+		            {
 		                len++;
+		                s /= 10;
+		            } while(s != 0);
 		            return len;
 		        }
 
@@ -5231,8 +5245,6 @@ namespace llama
 		            }
 		            ();
 		            llama::Array<char, size> a{};
-		            for(auto& c : a)
-		                c = '?';
 		            auto w = a.begin();
 
 		            boost::mp11::mp_for_each<Tags>([&](auto tag) constexpr {
@@ -5318,6 +5330,38 @@ namespace llama
 	            auto c = boost::hash<std::vector<std::size_t>>{}(recordCoord) &std::size_t{0xFFFFFF};
 	            c |= std::size_t{0x404040}; // ensure color per channel is at least 0x40.
 	            return c;
+	        }
+
+	        // from: https://stackoverflow.com/questions/5665231/most-efficient-way-to-escape-xml-html-in-c-string
+	        inline auto xmlEscape(const std::string& str) -> std::string
+	        {
+	            std::string result;
+	            result.reserve(str.size());
+	            for(const char c : str)
+	            {
+	                switch(c)
+	                {
+	                case '&':
+	                    result.append("&amp;");
+	                    break;
+	                case '\"':
+	                    result.append("&quot;");
+	                    break;
+	                case '\'':
+	                    result.append("&apos;");
+	                    break;
+	                case '<':
+	                    result.append("&lt;");
+	                    break;
+	                case '>':
+	                    result.append("&gt;");
+	                    break;
+	                default:
+	                    result += c;
+	                    break;
+	                }
+	            }
+	            return result;
 	        }
 
 	        template<typename T, std::size_t Dim>
@@ -5627,7 +5671,7 @@ namespace llama
 	                x + width / 2,
 	                y + byteSizeInPixel * 3 / 4,
 	                internal::formatArrayIndex(info.arrayIndex),
-	                info.recordTags);
+	                internal::xmlEscape(std::string{info.recordTags}));
 	            if(cropBoxes)
 	                svg += R"(</svg>
 	)";
@@ -5743,7 +5787,7 @@ namespace llama
 	                R"(<div class="box {0}" title="{1} {2}">{1} {2}</div>)",
 	                internal::cssClass(std::string{info.recordTags}),
 	                internal::formatArrayIndex(info.arrayIndex),
-	                info.recordTags);
+	                internal::xmlEscape(std::string{info.recordTags}));
 	        }
 	        html += R"(</body>
 	</html>)";
