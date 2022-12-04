@@ -1,5 +1,10 @@
 var NAVTREEINDEX4 =
 {
+"structllama_1_1RecordRef_1_1LoaderConst.html":[2,0,1,23,1],
+"structllama_1_1RecordRef_1_1LoaderConst.html#a8ec460ffb2980ae5d3c28f89399ea91e":[2,0,1,23,1,0],
+"structllama_1_1RecordRef_1_1LoaderConst.html#af4d6e3db8606933fb111f22029d388f2":[2,0,1,23,1,1],
+"structllama_1_1ScopedUpdate.html":[2,0,1,24],
+"structllama_1_1ScopedUpdate.html#a029b104aea23cf590774d8dda65aa63e":[2,0,1,24,4],
 "structllama_1_1ScopedUpdate.html#a3ca302d22bedc64d8cc9ff42d2aeec23":[2,0,1,24,2],
 "structllama_1_1ScopedUpdate.html#a3ce7e6001813df201f857f039fda5d63":[2,0,1,24,7],
 "structllama_1_1ScopedUpdate.html#a3fb6bbcdac3b919b02f07443c8270ac6":[2,0,1,24,5],
@@ -244,10 +249,5 @@ var NAVTREEINDEX4 =
 "structllama_1_1internal_1_1IsComputed.html":[2,0,1,2,64],
 "structllama_1_1internal_1_1IsComputed_3_01Mapping_00_01RecordCoord_00_01std_1_1void__t_3_01declt31ec39d02aa75d5ea3308109fe018112.html":[2,0,1,2,65],
 "structllama_1_1internal_1_1IsConstant.html":[2,0,1,2,36],
-"structllama_1_1internal_1_1IsConstant_3_01std_1_1integral__constant_3_01T_00_01V_01_4_01_4.html":[2,0,1,2,37],
-"structllama_1_1internal_1_1IsProxyReferenceImpl.html":[2,0,1,2,3],
-"structllama_1_1internal_1_1IsProxyReferenceImpl_3_01R_00_01std_1_1void__t_3_01typename_01R_1_1vaf29d5bd88afd76084d03518114f19340.html":[2,0,1,2,4],
-"structllama_1_1internal_1_1LeafRecordCoordsImpl.html":[2,0,1,2,22],
-"structllama_1_1internal_1_1LeafRecordCoordsImpl_3_01Child_0fN_0e_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html":[2,0,1,2,25],
-"structllama_1_1internal_1_1LeafRecordCoordsImpl_3_01Child_0fN_0e_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html#a7016562e5bb37ff5997b85bcaabef280":[2,0,1,2,25,0]
+"structllama_1_1internal_1_1IsConstant_3_01std_1_1integral__constant_3_01T_00_01V_01_4_01_4.html":[2,0,1,2,37]
 };

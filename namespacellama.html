@@ -138,10 +138,10 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1NoName.html">NoName</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Anonymous naming for a <a class="el" href="structllama_1_1Field.html">Field</a>.  <a href="structllama_1_1NoName.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Field.html">Field</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Record.html">Record</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A type list of <a class="el" href="structllama_1_1Field.html">Field</a>s which may be used to define a record dimension.  <a href="structllama_1_1Record.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Field.html">Field</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1NrAndOffset.html">NrAndOffset</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -495,6 +495,12 @@ Variables</h2></td></tr>
 <tr class="memitem:acca32b49e2be7c3c136e940939c531ae"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#acca32b49e2be7c3c136e940939c531ae">isAllowedFieldType</a> = std::is_trivially_destructible_v&lt;T&gt;</td></tr>
 <tr class="memdesc:acca32b49e2be7c3c136e940939c531ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tells whether the given type is allowed as a field type in LLAMA. Such types need to be trivially constructible and trivially destructible.  <a href="namespacellama.html#acca32b49e2be7c3c136e940939c531ae">More...</a><br /></td></tr>
 <tr class="separator:acca32b49e2be7c3c136e940939c531ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75482a9b4713c755f75805bd247866e9"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a75482a9b4713c755f75805bd247866e9"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a75482a9b4713c755f75805bd247866e9">isField</a> = false</td></tr>
+<tr class="separator:a75482a9b4713c755f75805bd247866e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae026262aaccd3c32d553a96d7a56e8b3"><td class="memTemplParams" colspan="2">template&lt;typename Tag , typename Type &gt; </td></tr>
+<tr class="memitem:ae026262aaccd3c32d553a96d7a56e8b3"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ae026262aaccd3c32d553a96d7a56e8b3">isField&lt; Field&lt; Tag, Type &gt; &gt;</a> = true</td></tr>
+<tr class="separator:ae026262aaccd3c32d553a96d7a56e8b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b2aa8fd3e43e43b830bc4a71b180175"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a3b2aa8fd3e43e43b830bc4a71b180175"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a3b2aa8fd3e43e43b830bc4a71b180175">isRecord</a> = false</td></tr>
 <tr class="separator:a3b2aa8fd3e43e43b830bc4a71b180175"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -691,7 +697,7 @@ template&lt;auto V&gt; </div>
 
 <p>Used as template argument to specify a constant/compile-time value. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00701">701</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00712">712</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -711,7 +717,7 @@ template&lt;typename FromT , typename ToT &gt; </div>
 
 <p>Alias for ToT, adding <code>const</code> if FromT is const qualified. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00697">697</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00708">708</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -731,7 +737,7 @@ template&lt;typename RecordDim &gt; </div>
 
 <p>Returns a flat type list containing all leaf field types of the given record dimension. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00363">363</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00374">374</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -751,7 +757,7 @@ template&lt;typename RecordDim , typename... Tags&gt; </div>
 
 <p>Converts a series of tags, or a list of tags, navigating down a record dimension into a <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00227">227</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00238">238</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -771,7 +777,7 @@ template&lt;typename Field &gt; </div>
 
 <p>Get the tag from a <a class="el" href="structllama_1_1Field.html">Field</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00074">74</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00085">85</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -791,7 +797,7 @@ template&lt;typename Field &gt; </div>
 
 <p>Get the type from a <a class="el" href="structllama_1_1Field.html">Field</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00078">78</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00089">89</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -811,7 +817,7 @@ template&lt;typename RecordDim , typename RecordCoord &gt; </div>
 
 <p>Get the tag of the <a class="el" href="structllama_1_1Field.html">Field</a> at a <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a> inside the record dimension tree. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00138">138</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00149">149</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -830,7 +836,7 @@ template&lt;typename RecordDim , typename RecordCoord &gt; </div>
 </div><div class="memdoc">
 <p>Get the tags of all <a class="el" href="structllama_1_1Field.html">Field</a>s from the root of the record dimension tree until to the node identified by <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00119">119</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00130">130</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -849,7 +855,7 @@ template&lt;typename RecordDim , typename... RecordCoordOrTags&gt; </div>
 </div><div class="memdoc">
 <p>Returns the type of a node in a record dimension tree identified by a given <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a> or a series of tags. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00261">261</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00272">272</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -869,7 +875,7 @@ template&lt;typename RecordDim &gt; </div>
 
 <p>Returns a flat type list containing all record coordinates to all leaves of the given record dimension. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00301">301</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00312">312</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -889,7 +895,7 @@ template&lt;typename RecordDimA , typename RecordDimB &gt; </div>
 
 <p>Creates a merged record dimension, where duplicated, nested fields are unified. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00691">691</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00702">702</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1062,7 +1068,7 @@ template&lt;typename RecordDim , template&lt; typename &gt; typename FieldTypeFu
 </div><div class="memdoc">
 <p>Creates a new record dimension where each new leaf field's type is the result of applying FieldTypeFunctor to the original leaf field's type. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00626">626</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00637">637</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1081,7 +1087,7 @@ template&lt;typename RecordDim , template&lt; typename, typename &gt; typename F
 </div><div class="memdoc">
 <p>Creates a new record dimension where each new leaf field's type is the result of applying FieldTypeFunctor to the original leaf's <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a> and field's type. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00620">620</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00631">631</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1657,7 +1663,7 @@ template&lt;typename Integral &gt; </div>
 
 <p>Returns the ceiling of a / b. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00446">446</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00457">457</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1922,7 +1928,7 @@ template&lt;typename RecordDim , typename Functor , std::size_t... Coords&gt; </
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00320">320</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00331">331</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1969,7 +1975,7 @@ template&lt;typename RecordDim , typename Functor , typename... Tags&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00335">335</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00346">346</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -2303,7 +2309,7 @@ template&lt;typename TA , typename TB &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00067">67</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00078">78</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -2598,7 +2604,7 @@ template&lt;typename TA , typename TB &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00061">61</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00072">72</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -2988,7 +2994,7 @@ template&lt;typename RecordDim , std::size_t... Coords&gt; </div>
 
 <p>Returns the tags interspersed by '.' represented by the given record coord in the given record dimension. </p>
 
-<p class="definition">Definition at line <a class="el" href="StructName_8hpp_source.html#l00333">333</a> of file <a class="el" href="StructName_8hpp_source.html">StructName.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="StructName_8hpp_source.html#l00334">334</a> of file <a class="el" href="StructName_8hpp_source.html">StructName.hpp</a>.</p>
 
 </div>
 </div>
@@ -3019,7 +3025,7 @@ template&lt;typename RecordDim &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="StructName_8hpp_source.html#l00340">340</a> of file <a class="el" href="StructName_8hpp_source.html">StructName.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="StructName_8hpp_source.html#l00341">341</a> of file <a class="el" href="StructName_8hpp_source.html">StructName.hpp</a>.</p>
 
 </div>
 </div>
@@ -3062,7 +3068,7 @@ template&lt;typename Integral &gt; </div>
 
 <p>Returns the integral n rounded up to be a multiple of mult. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00453">453</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00464">464</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -3622,7 +3628,7 @@ template&lt;typename T &gt; </div>
 
 <p>The alignment of a type T. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00438">438</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00449">449</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -3650,7 +3656,7 @@ template&lt;typename... Fields&gt; </div>
 
 <p>The alignment of a record dimension if its fields would be in a normal struct. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00442">442</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00453">453</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -3704,7 +3710,7 @@ template&lt;typename TypeList &gt; </div>
 
 <p>The alignment of a type list if its elements would be in a normal struct. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00434">434</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00445">445</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -3732,7 +3738,7 @@ template&lt;typename RecordDim &gt; </div>
 
 <p>The total number of fields in the recursively expanded record dimension. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00367">367</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00378">378</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -3758,7 +3764,7 @@ template&lt;typename Child , std::size_t N&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00374">374</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00385">385</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -3784,7 +3790,7 @@ template&lt;typename... Children&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00370">370</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00381">381</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -3812,7 +3818,7 @@ template&lt;typename TypeList , std::size_t I, bool Align&gt; </div>
 
 <p>The byte offset of an element in a type list ifs elements would be in a normal struct. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00506">506</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00517">517</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -3839,7 +3845,7 @@ template&lt;typename RecordDim , typename RecordCoord &gt; </div>
 </div><div class="memdoc">
 <p>The equivalent zero based index into a flat record dimension (<a class="el" href="namespacellama.html#a1fddf1f638927edfb8da8e3c78da4e1c">FlatRecordDim</a>) of the given hierarchical record coordinate. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00396">396</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00407">407</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -3866,9 +3872,9 @@ template&lt;typename Child , std::size_t N, std::size_t I, std::size_t... Is&gt;
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">= flatFieldCount&lt;Child&gt;* I</div>
 <div class="line">        + <a class="code" href="namespacellama.html#a6c3056b43b48f32a66160a6dd273662d">flatRecordCoord</a>&lt;Child, RecordCoord&lt;Is...&gt;&gt;</div>
-<div class="ttc" id="anamespacellama_html_a6c3056b43b48f32a66160a6dd273662d"><div class="ttname"><a href="namespacellama.html#a6c3056b43b48f32a66160a6dd273662d">llama::flatRecordCoord</a></div><div class="ttdeci">constexpr std::size_t flatRecordCoord</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00396">Core.hpp:396</a></div></div>
+<div class="ttc" id="anamespacellama_html_a6c3056b43b48f32a66160a6dd273662d"><div class="ttname"><a href="namespacellama.html#a6c3056b43b48f32a66160a6dd273662d">llama::flatRecordCoord</a></div><div class="ttdeci">constexpr std::size_t flatRecordCoord</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00407">Core.hpp:407</a></div></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00413">413</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00424">424</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -3898,9 +3904,9 @@ template&lt;typename... Children, std::size_t I, std::size_t... Is&gt; </div>
 <div class="line">                              I,</div>
 <div class="line">                              Record&lt;</div>
 <div class="line">                                  Children...&gt;&gt; + <a class="code" href="namespacellama.html#a6c3056b43b48f32a66160a6dd273662d">flatRecordCoord</a>&lt;<a class="code" href="namespacellama.html#ae4381442d997f1a8d4ace841c2b4eff9">GetFieldType</a>&lt;boost::mp11::mp_at_c&lt;Record&lt;Children...&gt;, I&gt;&gt;, RecordCoord&lt;Is...&gt;&gt;</div>
-<div class="ttc" id="anamespacellama_html_ae4381442d997f1a8d4ace841c2b4eff9"><div class="ttname"><a href="namespacellama.html#ae4381442d997f1a8d4ace841c2b4eff9">llama::GetFieldType</a></div><div class="ttdeci">boost::mp11::mp_second&lt; Field &gt; GetFieldType</div><div class="ttdoc">Get the type from a Field.</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00078">Core.hpp:78</a></div></div>
+<div class="ttc" id="anamespacellama_html_ae4381442d997f1a8d4ace841c2b4eff9"><div class="ttname"><a href="namespacellama.html#ae4381442d997f1a8d4ace841c2b4eff9">llama::GetFieldType</a></div><div class="ttdeci">boost::mp11::mp_second&lt; Field &gt; GetFieldType</div><div class="ttdoc">Get the type from a Field.</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00089">Core.hpp:89</a></div></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00402">402</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00413">413</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -3926,7 +3932,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00399">399</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00410">410</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -3954,7 +3960,7 @@ template&lt;typename TypeList , bool Align, bool IncludeTailPadding = true&gt; <
 
 <p>The size of a type list if its elements would be in a normal struct. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00491">491</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00502">502</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -3989,7 +3995,7 @@ template&lt;typename RecordDimA , typename LocalA , typename RecordDimB , typena
 <div class="line">            return std::is_same_v&lt;<a class="code" href="namespacellama.html#a4a4fd33218cce7b2e592486d80f2ae90">GetTags</a>&lt;RecordDimA, LocalA&gt;, <a class="code" href="namespacellama.html#a4a4fd33218cce7b2e592486d80f2ae90">GetTags</a>&lt;RecordDimB, LocalB&gt;&gt;;</div>
 <div class="line">    }</div>
 <div class="line">    ()</div>
-<div class="ttc" id="anamespacellama_html_a4a4fd33218cce7b2e592486d80f2ae90"><div class="ttname"><a href="namespacellama.html#a4a4fd33218cce7b2e592486d80f2ae90">llama::GetTags</a></div><div class="ttdeci">typename internal::GetTagsImpl&lt; RecordDim, RecordCoord &gt;::type GetTags</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00119">Core.hpp:119</a></div></div>
+<div class="ttc" id="anamespacellama_html_a4a4fd33218cce7b2e592486d80f2ae90"><div class="ttname"><a href="namespacellama.html#a4a4fd33218cce7b2e592486d80f2ae90">llama::GetTags</a></div><div class="ttdeci">typename internal::GetTagsImpl&lt; RecordDim, RecordCoord &gt;::type GetTags</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00130">Core.hpp:130</a></div></div>
 </div><!-- fragment --><p>Is true if, starting at two coordinates in two record dimensions, all subsequent nodes in the record dimension tree have the same tag. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">RecordDimA</td><td>First record dimension. </td></tr>
@@ -4000,7 +4006,7 @@ template&lt;typename RecordDimA , typename LocalA , typename RecordDimB , typena
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00147">147</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00158">158</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -4028,7 +4034,7 @@ template&lt;typename T &gt; </div>
 
 <p>Tells whether the given type is allowed as a field type in LLAMA. Such types need to be trivially constructible and trivially destructible. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00030">30</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00024">24</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -4082,7 +4088,59 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00717">717</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00728">728</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a75482a9b4713c755f75805bd247866e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75482a9b4713c755f75805bd247866e9">&#9670;&nbsp;</a></span>isField</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool llama::isField = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00040">40</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ae026262aaccd3c32d553a96d7a56e8b3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae026262aaccd3c32d553a96d7a56e8b3">&#9670;&nbsp;</a></span>isField&lt; Field&lt; Tag, Type &gt; &gt;</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Tag , typename Type &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool <a class="el" href="namespacellama.html#a75482a9b4713c755f75805bd247866e9">llama::isField</a>&lt; <a class="el" href="structllama_1_1Field.html">Field</a>&lt; Tag, Type &gt; &gt; = true</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00043">43</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -4188,7 +4246,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00081">81</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00092">92</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -4214,7 +4272,7 @@ template&lt;typename... Fields&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00084">84</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00095">95</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -4294,7 +4352,7 @@ template&lt;typename T &gt; </div>
 
 <p>True if the T is a record dimension. That is, T is either a <a class="el" href="structllama_1_1Record.html" title="A type list of Fields which may be used to define a record dimension.">llama::Record</a> or a bounded array. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00568">568</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00579">579</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -4431,7 +4489,7 @@ template&lt;typename RecordDim , typename RecordCoord , bool Align = false&gt; <
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00532">532</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00543">543</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -4639,7 +4697,7 @@ template&lt;typename T , bool Align = false, bool IncludeTailPadding = true&gt; 
 
 <p>The size of a type T. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00495">495</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00506">506</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -4668,12 +4726,12 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 <div class="line">        <a class="code" href="namespacellama.html#a1fddf1f638927edfb8da8e3c78da4e1c">FlatRecordDim</a>&lt;Record&lt;Fields...&gt;&gt;,</div>
 <div class="line">        Align,</div>
 <div class="line">        IncludeTailPadding&gt;</div>
-<div class="ttc" id="anamespacellama_html_a1fddf1f638927edfb8da8e3c78da4e1c"><div class="ttname"><a href="namespacellama.html#a1fddf1f638927edfb8da8e3c78da4e1c">llama::FlatRecordDim</a></div><div class="ttdeci">typename internal::FlattenRecordDimImpl&lt; RecordDim &gt;::type FlatRecordDim</div><div class="ttdoc">Returns a flat type list containing all leaf field types of the given record dimension.</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00363">Core.hpp:363</a></div></div>
-<div class="ttc" id="anamespacellama_html_ac8f48517b46c35c1a511273f08d2abb3"><div class="ttname"><a href="namespacellama.html#ac8f48517b46c35c1a511273f08d2abb3">llama::flatSizeOf</a></div><div class="ttdeci">constexpr std::size_t flatSizeOf</div><div class="ttdoc">The size of a type list if its elements would be in a normal struct.</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00491">Core.hpp:491</a></div></div>
+<div class="ttc" id="anamespacellama_html_a1fddf1f638927edfb8da8e3c78da4e1c"><div class="ttname"><a href="namespacellama.html#a1fddf1f638927edfb8da8e3c78da4e1c">llama::FlatRecordDim</a></div><div class="ttdeci">typename internal::FlattenRecordDimImpl&lt; RecordDim &gt;::type FlatRecordDim</div><div class="ttdoc">Returns a flat type list containing all leaf field types of the given record dimension.</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00374">Core.hpp:374</a></div></div>
+<div class="ttc" id="anamespacellama_html_ac8f48517b46c35c1a511273f08d2abb3"><div class="ttname"><a href="namespacellama.html#ac8f48517b46c35c1a511273f08d2abb3">llama::flatSizeOf</a></div><div class="ttdeci">constexpr std::size_t flatSizeOf</div><div class="ttdoc">The size of a type list if its elements would be in a normal struct.</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00502">Core.hpp:502</a></div></div>
 </div><!-- fragment -->
 <p>The size of a record dimension if its fields would be in a normal struct. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00499">499</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00510">510</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -4683,7 +4741,7 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Fri Dec 2 2022 18:57:04 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Sun Dec 4 2022 21:35:02 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

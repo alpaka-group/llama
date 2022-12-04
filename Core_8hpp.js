@@ -1,8 +1,8 @@
 var Core_8hpp =
 [
     [ "NoName", "structllama_1_1NoName.html", null ],
-    [ "Record", "structllama_1_1Record.html", null ],
     [ "Field", "structllama_1_1Field.html", null ],
+    [ "Record", "structllama_1_1Record.html", null ],
     [ "NrAndOffset", "structllama_1_1NrAndOffset.html", "structllama_1_1NrAndOffset" ],
     [ "GetTagsImpl< Record< Fields... >, RecordCoord< FirstCoord, Coords... > >", "structllama_1_1internal_1_1GetTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoord_3_01Fir6e3f04ac1206e0b3d3bf8dfbb0ac429a.html", "structllama_1_1internal_1_1GetTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoord_3_01Fir6e3f04ac1206e0b3d3bf8dfbb0ac429a" ],
     [ "GetTagsImpl< ChildType[Count], RecordCoord< FirstCoord, Coords... > >", "structllama_1_1internal_1_1GetTagsImpl_3_01ChildType_0fCount_0e_00_01RecordCoord_3_01FirstCoord_00_01Coords_8_8_8_01_4_01_4.html", "structllama_1_1internal_1_1GetTagsImpl_3_01ChildType_0fCount_0e_00_01RecordCoord_3_01FirstCoord_00_01Coords_8_8_8_01_4_01_4" ],
@@ -83,6 +83,8 @@ var Core_8hpp =
     [ "hasSameTags", "Core_8hpp.html#a39d280955e5b9deb36f6c8fa1124ca2b", null ],
     [ "isAllowedFieldType", "Core_8hpp.html#acca32b49e2be7c3c136e940939c531ae", null ],
     [ "isConstant", "Core_8hpp.html#aeb3261387e3af25b2f65fb3725bacde1", null ],
+    [ "isField", "Core_8hpp.html#a75482a9b4713c755f75805bd247866e9", null ],
+    [ "isField< Field< Tag, Type > >", "Core_8hpp.html#ae026262aaccd3c32d553a96d7a56e8b3", null ],
     [ "isRecord", "Core_8hpp.html#a3b2aa8fd3e43e43b830bc4a71b180175", null ],
     [ "isRecord< Record< Fields... > >", "Core_8hpp.html#adee8dc812f8d14dbea092728c88a937d", null ],
     [ "isRecordDim", "Core_8hpp.html#ab8f37f9e6c5055a9fa84709a6c5e5304", null ],
