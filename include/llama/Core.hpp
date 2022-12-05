@@ -440,7 +440,8 @@ namespace llama
         }
     } // namespace internal
 
-    /// The alignment of a type list if its elements would be in a normal struct.
+    /// The alignment of a type list if its elements would be in a normal struct. Effectively returns the maximum
+    /// alignment value in the type list.
     template<typename TypeList>
     inline constexpr std::size_t flatAlignOf = internal::flatAlignOfImpl<TypeList>();
 
@@ -448,7 +449,8 @@ namespace llama
     template<typename T>
     inline constexpr std::size_t alignOf = alignof(T);
 
-    /// The alignment of a record dimension if its fields would be in a normal struct.
+    /// The alignment of a record dimension if its fields would be in a normal struct. Effectively returns the maximum
+    /// alignment value in the type list.
     template<typename... Fields>
     inline constexpr std::size_t alignOf<Record<Fields...>> = flatAlignOf<FlatRecordDim<Record<Fields...>>>;
 
