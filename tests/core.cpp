@@ -421,41 +421,6 @@ TEST_CASE("CopyConst")
     STATIC_REQUIRE(std::is_same_v<llama::CopyConst<const int, const float>, const float>);
 }
 
-// NOLINTBEGIN(readability-identifier-naming)
-namespace pmacc
-{
-    struct pmacc_void
-    {
-    };
-    struct pmacc_isAlias
-    {
-    };
-    struct multiMask
-    {
-    };
-    struct localCellIdx
-    {
-    };
-} // namespace pmacc
-
-namespace picongpu
-{
-    template<typename T_Type = pmacc::pmacc_void, typename T_IsAlias = pmacc::pmacc_isAlias>
-    struct position
-    {
-    };
-    struct position_pic
-    {
-    };
-    struct momentum
-    {
-    };
-    struct weighting
-    {
-    };
-} // namespace picongpu
-// NOLINTEND(readability-identifier-naming)
-
 TEST_CASE("qualifiedTypeName")
 {
     CHECK(llama::qualifiedTypeName<int> == "int");
@@ -528,22 +493,15 @@ TEST_CASE("recordCoordTags.Particle")
 
 TEST_CASE("recordCoordTags.picongpu")
 {
-    using RecordDim = llama::Record<
-        llama::Field<pmacc::multiMask, std::uint8_t>,
-        llama::Field<pmacc::localCellIdx, std::int16_t>,
-        llama::Field<picongpu::position<picongpu::position_pic>, float[3]>,
-        llama::Field<picongpu::momentum, float[3]>,
-        llama::Field<picongpu::weighting, float>>;
-
-    CHECK(llama::recordCoordTags<RecordDim>(llama::RecordCoord<0>{}) == "multiMask");
-    CHECK(llama::recordCoordTags<RecordDim>(llama::RecordCoord<1>{}) == "localCellIdx");
+    CHECK(llama::recordCoordTags<picongpu::Frame>(llama::RecordCoord<0>{}) == "multiMask");
+    CHECK(llama::recordCoordTags<picongpu::Frame>(llama::RecordCoord<1>{}) == "localCellIdx");
 #if defined(__NVCOMPILER) || defined(_MSC_VER) || (defined(__clang__) && __clang_major__ < 12)
-    CHECK(llama::recordCoordTags<RecordDim>(llama::RecordCoord<2>{}) == "position<position_pic,pmacc_isAlias>");
+    CHECK(llama::recordCoordTags<picongpu::Frame>(llama::RecordCoord<2>{}) == "position<position_pic,pmacc_isAlias>");
 #else
-    CHECK(llama::recordCoordTags<RecordDim>(llama::RecordCoord<2>{}) == "position<position_pic>");
+    CHECK(llama::recordCoordTags<picongpu::Frame>(llama::RecordCoord<2>{}) == "position<position_pic>");
 #endif
-    CHECK(llama::recordCoordTags<RecordDim>(llama::RecordCoord<3>{}) == "momentum");
-    CHECK(llama::recordCoordTags<RecordDim>(llama::RecordCoord<4>{}) == "weighting");
+    CHECK(llama::recordCoordTags<picongpu::Frame>(llama::RecordCoord<3>{}) == "momentum");
+    CHECK(llama::recordCoordTags<picongpu::Frame>(llama::RecordCoord<4>{}) == "weighting");
 }
 
 namespace

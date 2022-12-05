@@ -325,3 +325,66 @@ struct TriangleAoSWithComputedNormal : llama::mapping::PackedAoS<ArrayExtents, R
         //}
     }
 };
+
+// NOLINTBEGIN(readability-identifier-naming)
+namespace pmacc
+{
+    template<typename T_Type, int T_dim>
+    struct Vector
+    {
+        T_Type data[T_dim];
+    };
+
+    struct pmacc_void
+    {
+    };
+    struct pmacc_isAlias
+    {
+    };
+    struct multiMask
+    {
+    };
+    struct localCellIdx
+    {
+    };
+
+    template<unsigned T_Dim>
+    struct DataSpace : Vector<int, T_Dim>
+    {
+    };
+} // namespace pmacc
+
+namespace picongpu
+{
+    template<typename T_Type = pmacc::pmacc_void, typename T_IsAlias = pmacc::pmacc_isAlias>
+    struct position
+    {
+    };
+    struct position_pic
+    {
+    };
+    struct momentum
+    {
+    };
+    struct weighting
+    {
+    };
+
+    using Frame = llama::Record<
+        llama::Field<pmacc::multiMask, std::uint8_t>,
+        llama::Field<pmacc::localCellIdx, std::int16_t>,
+        llama::Field<position<position_pic>, pmacc::Vector<float, 3>>,
+        llama::Field<momentum, pmacc::Vector<float, 3>>,
+        llama::Field<weighting, float>>;
+
+    struct totalCellIdx
+    {
+    };
+
+    using FrameOpenPMD = llama::Record<
+        llama::Field<position<position_pic>, pmacc::Vector<float, 3>>,
+        llama::Field<momentum, pmacc::Vector<float, 3>>,
+        llama::Field<weighting, float>,
+        llama::Field<totalCellIdx, pmacc::DataSpace<3>>>;
+} // namespace picongpu
+// NOLINTEND(readability-identifier-naming)

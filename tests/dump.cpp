@@ -362,4 +362,20 @@ TEST_CASE("dump.Triangle.TriangleAoSWithComputedNormal")
 {
     dump(TriangleAoSWithComputedNormal<ArrayExtents, Triangle>{extents});
 }
+
+TEST_CASE("dump.picongpu.frame.256")
+{
+    using ArrayExtents = llama::ArrayExtentsDynamic<int, 1>;
+    using Mapping = llama::mapping::SoA<ArrayExtents, picongpu::Frame, false, true>;
+    auto mapping = Mapping{ArrayExtents{256}};
+    dump(mapping);
+}
+
+TEST_CASE("dump.picongpu.frame_openPMD.25")
+{
+    using ArrayExtents = llama::ArrayExtentsDynamic<int, 1>;
+    using Mapping = llama::mapping::SoA<ArrayExtents, picongpu::FrameOpenPMD, true, false>;
+    auto mapping = Mapping{ArrayExtents{25}};
+    dump(mapping);
+}
 #endif
