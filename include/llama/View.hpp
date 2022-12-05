@@ -55,10 +55,12 @@ namespace llama
         Mapping mapping = {},
         const Allocator& alloc = {},
         Accessor accessor = {})
-        -> View<Mapping, internal::AllocatorBlobType<Allocator, typename Mapping::RecordDim>, Accessor>
     {
         auto blobs = internal::makeBlobArray(alloc, mapping, std::make_index_sequence<Mapping::blobCount>{});
-        return {std::move(mapping), std::move(blobs), std::move(accessor)};
+        return View<Mapping, internal::AllocatorBlobType<Allocator, typename Mapping::RecordDim>, Accessor>{
+            std::move(mapping),
+            std::move(blobs),
+            std::move(accessor)};
     }
 
     namespace internal
@@ -432,7 +434,7 @@ namespace llama
         View() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        View(Mapping mapping, Array<BlobType, Mapping::blobCount> storageBlobs, Accessor accessor = {})
+        explicit View(Mapping mapping, Array<BlobType, Mapping::blobCount> storageBlobs = {}, Accessor accessor = {})
             : Mapping(std::move(mapping))
             , Accessor(std::move(accessor))
             , storageBlobs(std::move(storageBlobs))
