@@ -333,7 +333,7 @@ namespace llama
                 if(&info == &infos.back())
                     return std::numeric_limits<std::size_t>::max();
                 const auto& nextInfo = (&info)[1];
-                if(nextInfo.nrAndOffset.nr < Mapping::blobCount)
+                if(info.nrAndOffset.nr < Mapping::blobCount && info.nrAndOffset.nr == nextInfo.nrAndOffset.nr)
                     return nextInfo.nrAndOffset.offset;
 
                 return std::numeric_limits<std::size_t>::max();
