@@ -1461,7 +1461,8 @@
 	        }
 	    } // namespace internal
 
-	    /// The alignment of a type list if its elements would be in a normal struct.
+	    /// The alignment of a type list if its elements would be in a normal struct. Effectively returns the maximum
+	    /// alignment value in the type list.
 	    template<typename TypeList>
 	    inline constexpr std::size_t flatAlignOf = internal::flatAlignOfImpl<TypeList>();
 
@@ -1469,7 +1470,8 @@
 	    template<typename T>
 	    inline constexpr std::size_t alignOf = alignof(T);
 
-	    /// The alignment of a record dimension if its fields would be in a normal struct.
+	    /// The alignment of a record dimension if its fields would be in a normal struct. Effectively returns the maximum
+	    /// alignment value in the type list.
 	    template<typename... Fields>
 	    inline constexpr std::size_t alignOf<Record<Fields...>> = flatAlignOf<FlatRecordDim<Record<Fields...>>>;
 
@@ -3335,10 +3337,12 @@ namespace llama
 	        Mapping mapping = {},
 	        const Allocator& alloc = {},
 	        Accessor accessor = {})
-	        -> View<Mapping, internal::AllocatorBlobType<Allocator, typename Mapping::RecordDim>, Accessor>
 	    {
 	        auto blobs = internal::makeBlobArray(alloc, mapping, std::make_index_sequence<Mapping::blobCount>{});
-	        return {std::move(mapping), std::move(blobs), std::move(accessor)};
+	        return View<Mapping, internal::AllocatorBlobType<Allocator, typename Mapping::RecordDim>, Accessor>{
+	            std::move(mapping),
+	            std::move(blobs),
+	            std::move(accessor)};
 	    }
 
 	    namespace internal
@@ -3712,7 +3716,7 @@ namespace llama
 	        View() = default;
 
 	        LLAMA_FN_HOST_ACC_INLINE
-	        View(Mapping mapping, Array<BlobType, Mapping::blobCount> storageBlobs, Accessor accessor = {})
+	        explicit View(Mapping mapping, Array<BlobType, Mapping::blobCount> storageBlobs = {}, Accessor accessor = {})
 	            : Mapping(std::move(mapping))
 	            , Accessor(std::move(accessor))
 	            , storageBlobs(std::move(storageBlobs))
@@ -5625,7 +5629,7 @@ namespace llama
 	                if(&info == &infos.back())
 	                    return std::numeric_limits<std::size_t>::max();
 	                const auto& nextInfo = (&info)[1];
-	                if(nextInfo.nrAndOffset.nr < Mapping::blobCount)
+	                if(info.nrAndOffset.nr < Mapping::blobCount && info.nrAndOffset.nr == nextInfo.nrAndOffset.nr)
 	                    return nextInfo.nrAndOffset.offset;
 
 	                return std::numeric_limits<std::size_t>::max();
