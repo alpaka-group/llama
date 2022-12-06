@@ -1,6 +1,5 @@
 var NAVTREEINDEX3 =
 {
-"namespacellama_1_1mapping_1_1tree_1_1internal.html#a11f58f162722edf45582c4f3a409dde3":[1,0,1,4,1,1,14],
 "namespacellama_1_1mapping_1_1tree_1_1internal.html#a2c18fb59a758ab64477a2719ad0ce4bc":[1,0,1,4,1,1,18],
 "namespacellama_1_1mapping_1_1tree_1_1internal.html#a7bbee2eb82b2b9e2fdc3e20c9712bdfa":[1,0,1,4,1,1,11],
 "namespacellama_1_1mapping_1_1tree_1_1internal.html#ab24406f0b8b84c41b373b9857ef0b917":[1,0,1,4,1,1,8],
@@ -249,5 +248,6 @@ var NAVTREEINDEX3 =
 "structllama_1_1RecordRef.html#aff7f72b957384a550cb2fee9c303b23b":[2,0,1,23,20],
 "structllama_1_1RecordRef_1_1Loader.html":[2,0,1,23,0],
 "structllama_1_1RecordRef_1_1Loader.html#a3fbaeb4addcd0e1cac9df74d5e49bbf3":[2,0,1,23,0,1],
-"structllama_1_1RecordRef_1_1Loader.html#a82ac4d3357448dc9d5bc8f699d9347f1":[2,0,1,23,0,0]
+"structllama_1_1RecordRef_1_1Loader.html#a82ac4d3357448dc9d5bc8f699d9347f1":[2,0,1,23,0,0],
+"structllama_1_1RecordRef_1_1LoaderConst.html":[2,0,1,23,1]
 };

@@ -64,7 +64,7 @@ var namespacellama =
     [ "allocView", "namespacellama.html#a8e5d70e7cec0c305424ed3890c4cedc6", null ],
     [ "allocViewStack", "namespacellama.html#a3750d27a7f8dd111fbe32dc769b44120", null ],
     [ "allocViewStackUninitialized", "namespacellama.html#a6b8a4632ab312dc849343500487296ab", null ],
-    [ "allocViewUninitialized", "namespacellama.html#a67f91e79d969f654c770e0d6863a7593", null ],
+    [ "allocViewUninitialized", "namespacellama.html#a1a76478259d35873449cc44e27dd5abc", null ],
     [ "aosoaCommonBlockCopy", "namespacellama.html#abaefce711ff5d4566ea761ef08fab469", null ],
     [ "Array", "namespacellama.html#a690689d38b43930430e58bb7fe17aca7", null ],
     [ "ArrayExtents", "namespacellama.html#ab5bdb087aec71d514d126ab243db4b63", null ],

@@ -13,7 +13,7 @@ var searchData=
   ['vector_2ehpp_709',['Vector.hpp',['../Vector_8hpp.html',1,'']]],
   ['view_710',['View',['../structllama_1_1View.html',1,'llama']]],
   ['view_711',['view',['../structllama_1_1Iterator.html#a6d5bad87b068fd6786c1c8828bb3367f',1,'llama::Iterator']]],
-  ['view_712',['View',['../structllama_1_1RecordRef.html#ac9965a14a4632a3ac4d2ea35e722dca9',1,'llama::RecordRef::View()'],['../structllama_1_1View.html#aa827a9b348f8608d209b74065c33fea9',1,'llama::View::View()=default'],['../structllama_1_1View.html#ad5f8771a67e8c1f7f3fd6cf7378118f1',1,'llama::View::View(Mapping mapping, Array&lt; BlobType, Mapping::blobCount &gt; storageBlobs, Accessor accessor={})']]],
+  ['view_712',['View',['../structllama_1_1RecordRef.html#ac9965a14a4632a3ac4d2ea35e722dca9',1,'llama::RecordRef::View()'],['../structllama_1_1View.html#aa827a9b348f8608d209b74065c33fea9',1,'llama::View::View()=default'],['../structllama_1_1View.html#ad506d7f530e6d122f2888167496e3daa',1,'llama::View::View(Mapping mapping, Array&lt; BlobType, Mapping::blobCount &gt; storageBlobs={}, Accessor accessor={})']]],
   ['view_2ehpp_713',['View.hpp',['../View_8hpp.html',1,'']]],
   ['viewtype_714',['ViewType',['../structllama_1_1Vector.html#af3bb6141fb09a14f15976d8a2f57e3bc',1,'llama::Vector']]]
 ];

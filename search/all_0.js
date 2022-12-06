@@ -19,7 +19,7 @@ var searchData=
   ['allocview_16',['allocView',['../namespacellama.html#a8e5d70e7cec0c305424ed3890c4cedc6',1,'llama']]],
   ['allocviewstack_17',['allocViewStack',['../namespacellama.html#a3750d27a7f8dd111fbe32dc769b44120',1,'llama']]],
   ['allocviewstackuninitialized_18',['allocViewStackUninitialized',['../namespacellama.html#a6b8a4632ab312dc849343500487296ab',1,'llama']]],
-  ['allocviewuninitialized_19',['allocViewUninitialized',['../namespacellama.html#a67f91e79d969f654c770e0d6863a7593',1,'llama']]],
+  ['allocviewuninitialized_19',['allocViewUninitialized',['../namespacellama.html#a1a76478259d35873449cc44e27dd5abc',1,'llama']]],
   ['amount_20',['amount',['../structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDown.html#ac116255f840f0cee439b5ce01bd90b34',1,'llama::mapping::tree::functor::MoveRTDown']]],
   ['aos_21',['AoS',['../namespacellama_1_1mapping.html#a965fada1523c268aed9e3588ebf57d7c',1,'llama::mapping::AoS(TArrayExtents, TRecordDim) -&gt; AoS&lt; TArrayExtents, TRecordDim &gt;'],['../structllama_1_1mapping_1_1AoS.html',1,'llama::mapping::AoS&lt; TArrayExtents, TRecordDim, AlignAndPad, TLinearizeArrayDimsFunctor, FlattenRecordDim &gt;']]],
   ['aos_2ehpp_22',['AoS.hpp',['../AoS_8hpp.html',1,'']]],

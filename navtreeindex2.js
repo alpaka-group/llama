@@ -2,7 +2,6 @@ var NAVTREEINDEX2 =
 {
 "namespacellama.html#a62c0b490774fc0bbdc859c10af82b8c2":[1,0,1,41],
 "namespacellama.html#a672915c49821a718f5dfa5d4540c4192":[1,0,1,74],
-"namespacellama.html#a67f91e79d969f654c770e0d6863a7593":[1,0,1,62],
 "namespacellama.html#a690689d38b43930430e58bb7fe17aca7":[1,0,1,64],
 "namespacellama.html#a6add7a44239c13c19a356a2fa16af10e":[1,0,1,48],
 "namespacellama.html#a6b6c9452091052f330217e1dbb448b96":[1,0,1,91],
@@ -249,5 +248,6 @@ var NAVTREEINDEX2 =
 "namespacellama_1_1mapping_1_1tree_1_1internal.html":[1,0,1,4,1,1],
 "namespacellama_1_1mapping_1_1tree_1_1internal.html#a0aea1f0bc186541052da5076cf573b3b":[1,0,1,4,1,1,16],
 "namespacellama_1_1mapping_1_1tree_1_1internal.html#a0f5840fc793fb073e78d7801f57ec9e9":[1,0,1,4,1,1,9],
-"namespacellama_1_1mapping_1_1tree_1_1internal.html#a10fbf0b82282d13a9bb7f1d5557aaaf2":[1,0,1,4,1,1,15]
+"namespacellama_1_1mapping_1_1tree_1_1internal.html#a10fbf0b82282d13a9bb7f1d5557aaaf2":[1,0,1,4,1,1,15],
+"namespacellama_1_1mapping_1_1tree_1_1internal.html#a11f58f162722edf45582c4f3a409dde3":[1,0,1,4,1,1,14]
 };
