@@ -41,5 +41,5 @@ public:
 
 // Implementation specific device functions
 void listDevices(void);
-std::string getDeviceName(int const);
-std::string getDeviceDriver(int const);
+std::string getDeviceName(const int);
+std::string getDeviceDriver(const int);

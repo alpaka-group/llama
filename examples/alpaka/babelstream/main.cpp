@@ -63,7 +63,7 @@ bool mibibytes = false;
 std::string csv_separator = ",";
 
 template<typename T>
-void check_solution(unsigned int const ntimes, std::vector<T>& a, std::vector<T>& b, std::vector<T>& c, T& sum);
+void check_solution(const unsigned int ntimes, std::vector<T>& a, std::vector<T>& b, std::vector<T>& c, T& sum);
 
 template<typename T>
 void run();
@@ -428,7 +428,7 @@ void run()
 
 
 template<typename T>
-void check_solution(unsigned int const ntimes, std::vector<T>& a, std::vector<T>& b, std::vector<T>& c, T& sum)
+void check_solution(const unsigned int ntimes, std::vector<T>& a, std::vector<T>& b, std::vector<T>& c, T& sum)
 {
     // Generate correct solution
     T goldA = startA;
@@ -487,14 +487,14 @@ void check_solution(unsigned int const ntimes, std::vector<T>& a, std::vector<T>
                   << std::setprecision(15) << "Sum was " << sum << " but should be " << goldSum << std::endl;
 }
 
-int parseUInt(char const* str, unsigned int* output)
+int parseUInt(const char* str, unsigned int* output)
 {
     char* next;
     *output = strtoul(str, &next, 10);
     return !strlen(next);
 }
 
-int parseInt(char const* str, int* output)
+int parseInt(const char* str, int* output)
 {
     char* next;
     *output = strtol(str, &next, 10);
