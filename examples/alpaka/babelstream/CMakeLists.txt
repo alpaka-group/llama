@@ -1,0 +1,11 @@
+cmake_minimum_required (VERSION 3.18.3)
+project(llama-alpaka-babelstream CXX)
+
+if (NOT TARGET llama::llama)
+	find_package(llama REQUIRED)
+endif()
+find_package(alpaka 0.9.0 REQUIRED)
+alpaka_add_executable(${PROJECT_NAME} src/main.cpp src/Stream.h src/AlpakaStream.cpp src/AlpakaStream.h)
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
+target_compile_definitions(${PROJECT_NAME} PUBLIC ALPAKA)
+target_link_libraries(${PROJECT_NAME} PRIVATE llama::llama alpaka::alpaka)
