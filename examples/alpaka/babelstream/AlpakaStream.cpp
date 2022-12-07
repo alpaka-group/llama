@@ -16,7 +16,8 @@ constexpr auto DOT_NUM_BLOCKS = 256;
 
 template<typename T>
 AlpakaStream<T>::AlpakaStream(Idx arraySize, Idx deviceIndex)
-    : arraySize(arraySize)
+    : mapping({arraySize})
+    , arraySize(arraySize)
     , devHost(alpaka::getDevByIdx<DevHost>(0u))
     , devAcc(alpaka::getDevByIdx<Acc>(deviceIndex))
     , sums(alpaka::allocBuf<T, Idx>(devHost, DOT_NUM_BLOCKS))
@@ -64,15 +65,19 @@ void AlpakaStream<T>::init_arrays(T initA, T initB, T initC)
 template<typename T>
 void AlpakaStream<T>::read_arrays(std::vector<T>& a, std::vector<T>& b, std::vector<T>& c)
 {
-    alpaka::memcpy(queue, alpaka::createView(devHost, a), d_a);
-    alpaka::memcpy(queue, alpaka::createView(devHost, b), d_b);
-    alpaka::memcpy(queue, alpaka::createView(devHost, c), d_c);
+    // TODO(bgruber): avoid temporary alpaka views when we upgrade to alpaka 1.0.0
+    auto va = alpaka::createView(devHost, a, arraySize);
+    alpaka::memcpy(queue, va, d_a);
+    auto vb = alpaka::createView(devHost, b, arraySize);
+    alpaka::memcpy(queue, vb, d_b);
+    auto vc = alpaka::createView(devHost, c, arraySize);
+    alpaka::memcpy(queue, vc, d_c);
 }
 
 struct CopyKernel
 {
-    template<typename TAcc, typename T>
-    ALPAKA_FN_ACC void operator()(const TAcc& acc, const T* a, T* c) const
+    template<typename TAcc, typename ViewA, typename ViewB>
+    ALPAKA_FN_ACC void operator()(const TAcc& acc, ViewA a, ViewB c) const
     {
         const auto [i] = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc);
         c[i] = a[i];
@@ -84,16 +89,20 @@ void AlpakaStream<T>::copy()
 {
     const auto workdiv = WorkDiv{arraySize / TBSIZE, TBSIZE, 1};
     // auto const workdiv = alpaka::getValidWorkDiv(devAcc, arraySize);
-    alpaka::exec<Acc>(queue, workdiv, CopyKernel{}, alpaka::getPtrNative(d_a), alpaka::getPtrNative(d_c));
+
+    auto viewA = llama::View{mapping, llama::Array{alpaka::getPtrNative(d_a)}};
+    auto viewC = llama::View{mapping, llama::Array{alpaka::getPtrNative(d_c)}};
+
+    alpaka::exec<Acc>(queue, workdiv, CopyKernel{}, viewA, viewC);
     alpaka::wait(queue);
 }
 
 struct MulKernel
 {
-    template<typename TAcc, typename T>
-    ALPAKA_FN_ACC void operator()(const TAcc& acc, T* b, const T* c) const
+    template<typename TAcc, typename ViewB, typename ViewC>
+    ALPAKA_FN_ACC void operator()(const TAcc& acc, ViewB b, ViewC c) const
     {
-        const T scalar = startScalar;
+        const typename ViewB::RecordDim scalar = startScalar;
         const auto [i] = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc);
         b[i] = scalar * c[i];
     }
@@ -104,14 +113,18 @@ void AlpakaStream<T>::mul()
 {
     const auto workdiv = WorkDiv{arraySize / TBSIZE, TBSIZE, 1};
     // auto const workdiv = alpaka::getValidWorkDiv(devAcc, arraySize);
-    alpaka::exec<Acc>(queue, workdiv, MulKernel{}, alpaka::getPtrNative(d_b), alpaka::getPtrNative(d_c));
+
+    auto viewB = llama::View{mapping, llama::Array{alpaka::getPtrNative(d_b)}};
+    auto viewC = llama::View{mapping, llama::Array{alpaka::getPtrNative(d_c)}};
+
+    alpaka::exec<Acc>(queue, workdiv, MulKernel{}, viewB, viewC);
     alpaka::wait(queue);
 }
 
 struct AddKernel
 {
-    template<typename TAcc, typename T>
-    ALPAKA_FN_ACC void operator()(const TAcc& acc, const T* a, const T* b, T* c) const
+    template<typename TAcc, typename ViewA, typename ViewB, typename ViewC>
+    ALPAKA_FN_ACC void operator()(const TAcc& acc, ViewA a, ViewB b, ViewC c) const
     {
         const auto [i] = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc);
         c[i] = a[i] + b[i];
@@ -123,22 +136,21 @@ void AlpakaStream<T>::add()
 {
     const auto workdiv = WorkDiv{arraySize / TBSIZE, TBSIZE, 1};
     // auto const workdiv = alpaka::getValidWorkDiv(devAcc, arraySize);
-    alpaka::exec<Acc>(
-        queue,
-        workdiv,
-        AddKernel{},
-        alpaka::getPtrNative(d_a),
-        alpaka::getPtrNative(d_b),
-        alpaka::getPtrNative(d_c));
+
+    auto viewA = llama::View{mapping, llama::Array{alpaka::getPtrNative(d_a)}};
+    auto viewB = llama::View{mapping, llama::Array{alpaka::getPtrNative(d_b)}};
+    auto viewC = llama::View{mapping, llama::Array{alpaka::getPtrNative(d_c)}};
+
+    alpaka::exec<Acc>(queue, workdiv, AddKernel{}, viewA, viewB, viewC);
     alpaka::wait(queue);
 }
 
 struct TriadKernel
 {
-    template<typename TAcc, typename T>
-    ALPAKA_FN_ACC void operator()(const TAcc& acc, T* a, const T* b, const T* c) const
+    template<typename TAcc, typename ViewA, typename ViewB, typename ViewC>
+    ALPAKA_FN_ACC void operator()(const TAcc& acc, ViewA a, ViewB b, ViewC c) const
     {
-        const T scalar = startScalar;
+        const typename ViewB::RecordDim scalar = startScalar;
         const auto [i] = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc);
         a[i] = b[i] + scalar * c[i];
     }
@@ -149,22 +161,21 @@ void AlpakaStream<T>::triad()
 {
     const auto workdiv = WorkDiv{arraySize / TBSIZE, TBSIZE, 1};
     // auto const workdiv = alpaka::getValidWorkDiv(devAcc, arraySize);
-    alpaka::exec<Acc>(
-        queue,
-        workdiv,
-        TriadKernel{},
-        alpaka::getPtrNative(d_a),
-        alpaka::getPtrNative(d_b),
-        alpaka::getPtrNative(d_c));
+
+    auto viewA = llama::View{mapping, llama::Array{alpaka::getPtrNative(d_a)}};
+    auto viewB = llama::View{mapping, llama::Array{alpaka::getPtrNative(d_b)}};
+    auto viewC = llama::View{mapping, llama::Array{alpaka::getPtrNative(d_c)}};
+
+    alpaka::exec<Acc>(queue, workdiv, TriadKernel{}, viewA, viewB, viewC);
     alpaka::wait(queue);
 }
 
 struct NstreamKernel
 {
-    template<typename TAcc, typename T>
-    ALPAKA_FN_ACC void operator()(const TAcc& acc, T* a, const T* b, const T* c) const
+    template<typename TAcc, typename ViewA, typename ViewB, typename ViewC>
+    ALPAKA_FN_ACC void operator()(const TAcc& acc, ViewA a, ViewB b, ViewC c) const
     {
-        const T scalar = startScalar;
+        const typename ViewB::RecordDim scalar = startScalar;
         const auto [i] = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc);
         a[i] += b[i] + scalar * c[i];
     }
@@ -175,21 +186,22 @@ void AlpakaStream<T>::nstream()
 {
     const auto workdiv = WorkDiv{arraySize / TBSIZE, TBSIZE, 1};
     // auto const workdiv = alpaka::getValidWorkDiv(devAcc, arraySize);
-    alpaka::exec<Acc>(
-        queue,
-        workdiv,
-        NstreamKernel{},
-        alpaka::getPtrNative(d_a),
-        alpaka::getPtrNative(d_b),
-        alpaka::getPtrNative(d_c));
+
+    auto viewA = llama::View{mapping, llama::Array{alpaka::getPtrNative(d_a)}};
+    auto viewB = llama::View{mapping, llama::Array{alpaka::getPtrNative(d_b)}};
+    auto viewC = llama::View{mapping, llama::Array{alpaka::getPtrNative(d_c)}};
+
+    alpaka::exec<Acc>(queue, workdiv, NstreamKernel{}, viewA, viewB, viewC);
     alpaka::wait(queue);
 }
 
 struct DotKernel
 {
-    template<typename TAcc, typename T>
-    ALPAKA_FN_ACC void operator()(const TAcc& acc, const T* a, const T* b, T* sum, int arraySize) const
+    template<typename TAcc, typename ViewA, typename ViewB, typename ViewSum>
+    ALPAKA_FN_ACC void operator()(const TAcc& acc, ViewA a, ViewB b, ViewSum sum, int arraySize) const
     {
+        using T = typename ViewA::RecordDim;
+
         // TODO - test if sharedMem bug is affecting performance here
         auto& tb_sum = alpaka::declareSharedVar<T[TBSIZE], __COUNTER__>(acc);
 
@@ -220,20 +232,17 @@ T AlpakaStream<T>::dot()
 {
     const auto workdiv = WorkDiv{DOT_NUM_BLOCKS, TBSIZE, 1};
     // auto const workdiv = alpaka::getValidWorkDiv(devAcc, DOT_NUM_BLOCKS * TBSIZE);
-    alpaka::exec<Acc>(
-        queue,
-        workdiv,
-        DotKernel{},
-        alpaka::getPtrNative(d_a),
-        alpaka::getPtrNative(d_b),
-        alpaka::getPtrNative(d_sum),
-        arraySize);
+
+    auto viewA = llama::View{mapping, llama::Array{alpaka::getPtrNative(d_a)}};
+    auto viewB = llama::View{mapping, llama::Array{alpaka::getPtrNative(d_b)}};
+    auto viewSum = llama::View{mapping, llama::Array{alpaka::getPtrNative(d_sum)}};
+
+    alpaka::exec<Acc>(queue, workdiv, DotKernel{}, viewA, viewB, viewSum, arraySize);
     alpaka::wait(queue);
 
     alpaka::memcpy(queue, sums, d_sum);
     const T* sumPtr = alpaka::getPtrNative(sums);
-    // TODO(bgruber): replace by std::reduce, when gcc 9.3 is the baseline
-    return std::accumulate(sumPtr, sumPtr + DOT_NUM_BLOCKS, T{0});
+    return std::reduce(sumPtr, sumPtr + DOT_NUM_BLOCKS);
 }
 
 void listDevices()

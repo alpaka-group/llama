@@ -13,6 +13,7 @@
 
 #include <alpaka/alpaka.hpp>
 #include <alpaka/example/ExampleDefaultAcc.hpp>
+#include <llama/llama.hpp>
 #include <vector>
 
 inline constexpr auto IMPLEMENTATION_STRING = "alpaka";
@@ -46,6 +47,7 @@ struct AlpakaStream : Stream<T>
     using WorkDiv = alpaka::WorkDivMembers<Dim, Idx>;
 
 private:
+    llama::mapping::AoS<llama::ArrayExtents<Idx, llama::dyn>, T> mapping;
     Idx arraySize;
     DevHost devHost;
     DevAcc devAcc;
