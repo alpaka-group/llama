@@ -13,7 +13,6 @@
 
 #include <alpaka/alpaka.hpp>
 #include <alpaka/example/ExampleDefaultAcc.hpp>
-
 #include <vector>
 
 inline constexpr auto IMPLEMENTATION_STRING = "alpaka";

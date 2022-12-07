@@ -34,9 +34,9 @@ AlpakaStream<T>::AlpakaStream(Idx arraySize, Idx deviceIndex)
 struct InitKernel
 {
     template<typename TAcc, typename T>
-    ALPAKA_FN_ACC void operator()(TAcc const& acc, T* a, T* b, T* c, T initA, T initB, T initC) const
+    ALPAKA_FN_ACC void operator()(const TAcc& acc, T* a, T* b, T* c, T initA, T initB, T initC) const
     {
-        auto const [i] = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc);
+        const auto [i] = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc);
         a[i] = initA;
         b[i] = initB;
         c[i] = initC;
@@ -46,7 +46,7 @@ struct InitKernel
 template<typename T>
 void AlpakaStream<T>::init_arrays(T initA, T initB, T initC)
 {
-    auto const workdiv = WorkDiv{arraySize / TBSIZE, TBSIZE, 1};
+    const auto workdiv = WorkDiv{arraySize / TBSIZE, TBSIZE, 1};
     // auto const workdiv = alpaka::getValidWorkDiv(devAcc, arraySize);
     alpaka::exec<Acc>(
         queue,
@@ -72,9 +72,9 @@ void AlpakaStream<T>::read_arrays(std::vector<T>& a, std::vector<T>& b, std::vec
 struct CopyKernel
 {
     template<typename TAcc, typename T>
-    ALPAKA_FN_ACC void operator()(TAcc const& acc, T const* a, T* c) const
+    ALPAKA_FN_ACC void operator()(const TAcc& acc, const T* a, T* c) const
     {
-        auto const [i] = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc);
+        const auto [i] = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc);
         c[i] = a[i];
     }
 };
@@ -82,7 +82,7 @@ struct CopyKernel
 template<typename T>
 void AlpakaStream<T>::copy()
 {
-    auto const workdiv = WorkDiv{arraySize / TBSIZE, TBSIZE, 1};
+    const auto workdiv = WorkDiv{arraySize / TBSIZE, TBSIZE, 1};
     // auto const workdiv = alpaka::getValidWorkDiv(devAcc, arraySize);
     alpaka::exec<Acc>(queue, workdiv, CopyKernel{}, alpaka::getPtrNative(d_a), alpaka::getPtrNative(d_c));
     alpaka::wait(queue);
@@ -91,10 +91,10 @@ void AlpakaStream<T>::copy()
 struct MulKernel
 {
     template<typename TAcc, typename T>
-    ALPAKA_FN_ACC void operator()(TAcc const& acc, T* b, T const* c) const
+    ALPAKA_FN_ACC void operator()(const TAcc& acc, T* b, const T* c) const
     {
         const T scalar = startScalar;
-        auto const [i] = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc);
+        const auto [i] = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc);
         b[i] = scalar * c[i];
     }
 };
@@ -102,7 +102,7 @@ struct MulKernel
 template<typename T>
 void AlpakaStream<T>::mul()
 {
-    auto const workdiv = WorkDiv{arraySize / TBSIZE, TBSIZE, 1};
+    const auto workdiv = WorkDiv{arraySize / TBSIZE, TBSIZE, 1};
     // auto const workdiv = alpaka::getValidWorkDiv(devAcc, arraySize);
     alpaka::exec<Acc>(queue, workdiv, MulKernel{}, alpaka::getPtrNative(d_b), alpaka::getPtrNative(d_c));
     alpaka::wait(queue);
@@ -111,9 +111,9 @@ void AlpakaStream<T>::mul()
 struct AddKernel
 {
     template<typename TAcc, typename T>
-    ALPAKA_FN_ACC void operator()(TAcc const& acc, T const* a, T const* b, T* c) const
+    ALPAKA_FN_ACC void operator()(const TAcc& acc, const T* a, const T* b, T* c) const
     {
-        auto const [i] = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc);
+        const auto [i] = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc);
         c[i] = a[i] + b[i];
     }
 };
@@ -121,7 +121,7 @@ struct AddKernel
 template<typename T>
 void AlpakaStream<T>::add()
 {
-    auto const workdiv = WorkDiv{arraySize / TBSIZE, TBSIZE, 1};
+    const auto workdiv = WorkDiv{arraySize / TBSIZE, TBSIZE, 1};
     // auto const workdiv = alpaka::getValidWorkDiv(devAcc, arraySize);
     alpaka::exec<Acc>(
         queue,
@@ -136,10 +136,10 @@ void AlpakaStream<T>::add()
 struct TriadKernel
 {
     template<typename TAcc, typename T>
-    ALPAKA_FN_ACC void operator()(TAcc const& acc, T* a, T const* b, T const* c) const
+    ALPAKA_FN_ACC void operator()(const TAcc& acc, T* a, const T* b, const T* c) const
     {
         const T scalar = startScalar;
-        auto const [i] = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc);
+        const auto [i] = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc);
         a[i] = b[i] + scalar * c[i];
     }
 };
@@ -147,7 +147,7 @@ struct TriadKernel
 template<typename T>
 void AlpakaStream<T>::triad()
 {
-    auto const workdiv = WorkDiv{arraySize / TBSIZE, TBSIZE, 1};
+    const auto workdiv = WorkDiv{arraySize / TBSIZE, TBSIZE, 1};
     // auto const workdiv = alpaka::getValidWorkDiv(devAcc, arraySize);
     alpaka::exec<Acc>(
         queue,
@@ -162,10 +162,10 @@ void AlpakaStream<T>::triad()
 struct NstreamKernel
 {
     template<typename TAcc, typename T>
-    ALPAKA_FN_ACC void operator()(TAcc const& acc, T* a, T const* b, T const* c) const
+    ALPAKA_FN_ACC void operator()(const TAcc& acc, T* a, const T* b, const T* c) const
     {
         const T scalar = startScalar;
-        auto const [i] = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc);
+        const auto [i] = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc);
         a[i] += b[i] + scalar * c[i];
     }
 };
@@ -173,7 +173,7 @@ struct NstreamKernel
 template<typename T>
 void AlpakaStream<T>::nstream()
 {
-    auto const workdiv = WorkDiv{arraySize / TBSIZE, TBSIZE, 1};
+    const auto workdiv = WorkDiv{arraySize / TBSIZE, TBSIZE, 1};
     // auto const workdiv = alpaka::getValidWorkDiv(devAcc, arraySize);
     alpaka::exec<Acc>(
         queue,
@@ -188,20 +188,20 @@ void AlpakaStream<T>::nstream()
 struct DotKernel
 {
     template<typename TAcc, typename T>
-    ALPAKA_FN_ACC void operator()(TAcc const& acc, T const* a, T const* b, T* sum, int arraySize) const
+    ALPAKA_FN_ACC void operator()(const TAcc& acc, const T* a, const T* b, T* sum, int arraySize) const
     {
         // TODO - test if sharedMem bug is affecting performance here
         auto& tb_sum = alpaka::declareSharedVar<T[TBSIZE], __COUNTER__>(acc);
 
         auto [i] = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc);
-        auto const [local_i] = alpaka::getIdx<alpaka::Block, alpaka::Threads>(acc);
-        auto const [totalThreads] = alpaka::getWorkDiv<alpaka::Grid, alpaka::Threads>(acc);
+        const auto [local_i] = alpaka::getIdx<alpaka::Block, alpaka::Threads>(acc);
+        const auto [totalThreads] = alpaka::getWorkDiv<alpaka::Grid, alpaka::Threads>(acc);
 
         tb_sum[local_i] = 0.0;
         for(; i < arraySize; i += totalThreads)
             tb_sum[local_i] += a[i] * b[i];
 
-        auto const [blockDim] = alpaka::getWorkDiv<alpaka::Block, alpaka::Threads>(acc);
+        const auto [blockDim] = alpaka::getWorkDiv<alpaka::Block, alpaka::Threads>(acc);
         for(int offset = blockDim / 2; offset > 0; offset /= 2)
         {
             alpaka::syncBlockThreads(acc);
@@ -209,7 +209,7 @@ struct DotKernel
                 tb_sum[local_i] += tb_sum[local_i + offset];
         }
 
-        auto const [blockIdx] = alpaka::getIdx<alpaka::Grid, alpaka::Blocks>(acc);
+        const auto [blockIdx] = alpaka::getIdx<alpaka::Grid, alpaka::Blocks>(acc);
         if(local_i == 0)
             sum[blockIdx] = tb_sum[local_i];
     }
@@ -218,7 +218,7 @@ struct DotKernel
 template<typename T>
 T AlpakaStream<T>::dot()
 {
-    auto const workdiv = WorkDiv{DOT_NUM_BLOCKS, TBSIZE, 1};
+    const auto workdiv = WorkDiv{DOT_NUM_BLOCKS, TBSIZE, 1};
     // auto const workdiv = alpaka::getValidWorkDiv(devAcc, DOT_NUM_BLOCKS * TBSIZE);
     alpaka::exec<Acc>(
         queue,
@@ -231,14 +231,14 @@ T AlpakaStream<T>::dot()
     alpaka::wait(queue);
 
     alpaka::memcpy(queue, sums, d_sum);
-    T const* sumPtr = alpaka::getPtrNative(sums);
+    const T* sumPtr = alpaka::getPtrNative(sums);
     // TODO(bgruber): replace by std::reduce, when gcc 9.3 is the baseline
     return std::accumulate(sumPtr, sumPtr + DOT_NUM_BLOCKS, T{0});
 }
 
 void listDevices()
 {
-    auto const count = alpaka::getDevCount<Acc>();
+    const auto count = alpaka::getDevCount<Acc>();
     std::cout << "Devices:" << std::endl;
     for(int i = 0; i < count; i++)
         std::cout << i << ": " << getDeviceName(i) << std::endl;
