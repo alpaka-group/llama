@@ -34,7 +34,7 @@
 #endif
 
 #ifndef LLAMA_FORCE_INLINE
-#    if defined(__NVCC__)
+#    if defined(__NVCC__) || defined(__HIP__)
 #        define LLAMA_FORCE_INLINE __forceinline__
 #    elif defined(__GNUC__) || defined(__clang__)
 #        define LLAMA_FORCE_INLINE inline __attribute__((always_inline))
@@ -52,7 +52,8 @@
 #endif
 
 #ifndef LLAMA_UNROLL
-#    if defined(__NVCC__) || defined(__NVCOMPILER) || defined(__clang__) || defined(__INTEL_LLVM_COMPILER)
+#    if defined(__HIP__) || defined(__NVCC__) || defined(__NVCOMPILER) || defined(__clang__)                          \
+        || defined(__INTEL_LLVM_COMPILER)
 #        define LLAMA_UNROLL(...) LLAMA_PRAGMA(unroll __VA_ARGS__)
 #    elif defined(__GNUG__)
 #        define LLAMA_UNROLL(...) LLAMA_PRAGMA(GCC unroll __VA_ARGS__)
@@ -68,7 +69,7 @@
 #endif
 
 #ifndef LLAMA_ACC
-#    if defined(__NVCC__) || (defined(__clang__) && defined(__CUDA__))
+#    if defined(__HIP__) || defined(__NVCC__) || (defined(__clang__) && defined(__CUDA__))
 #        define LLAMA_ACC __device__
 #    elif defined(__GNUC__) || defined(__clang__) || defined(_MSC_VER) || defined(__INTEL_LLVM_COMPILER)
 #        define LLAMA_ACC
@@ -79,7 +80,7 @@
 #endif
 
 #ifndef LLAMA_HOST_ACC
-#    if defined(__NVCC__) || (defined(__clang__) && defined(__CUDA__))
+#    if defined(__HIP__) || defined(__NVCC__) || (defined(__clang__) && defined(__CUDA__))
 #        define LLAMA_HOST_ACC __host__ __device__
 #    elif defined(__GNUC__) || defined(__clang__) || defined(_MSC_VER) || defined(__INTEL_LLVM_COMPILER)
 #        define LLAMA_HOST_ACC
