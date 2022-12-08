@@ -5,6 +5,8 @@
 // For full license terms please see the LICENSE file distributed with this
 // source code
 
+// NOLINTBEGIN
+
 #pragma once
 
 #include <string>
@@ -43,3 +45,5 @@ public:
 void listDevices(void);
 std::string getDeviceName(const int);
 std::string getDeviceDriver(const int);
+
+// NOLINTEND
