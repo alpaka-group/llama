@@ -4,6 +4,8 @@ TEST_CASE("mapping.SoA.SingleBlob.Packed.address")
 {
     auto test = [](auto arrayExtents)
     {
+        CAPTURE(arrayExtents);
+
         using Mapping = llama::mapping::PackedSingleBlobSoA<decltype(arrayExtents), Particle>;
         auto mapping = Mapping{arrayExtents};
         using ArrayIndex = typename Mapping::ArrayIndex;
@@ -62,10 +64,12 @@ TEST_CASE("mapping.SoA.SingleBlob.Packed.address")
     test(llama::ArrayExtents<int, 11, 17>{});
 }
 
-TEST_CASE("mapping.SoA.SingleBlob.fortran.address")
+TEST_CASE("mapping.SoA.SingleBlob.Packed.fortran.address")
 {
     auto test = [](auto arrayExtents)
     {
+        CAPTURE(arrayExtents);
+
         using Mapping = llama::mapping::
             PackedSingleBlobSoA<decltype(arrayExtents), Particle, llama::mapping::LinearizeArrayDimsFortran>;
         auto mapping = Mapping{arrayExtents};
@@ -125,10 +129,12 @@ TEST_CASE("mapping.SoA.SingleBlob.fortran.address")
     test(llama::ArrayExtents<int, 11, 17>{});
 }
 
-TEST_CASE("mapping.SoA.SingleBlob.morton.address")
+TEST_CASE("mapping.SoA.SingleBlob.Packed.morton.address")
 {
     auto test = [](auto arrayExtents)
     {
+        CAPTURE(arrayExtents);
+
         using Mapping = llama::mapping::
             PackedSingleBlobSoA<decltype(arrayExtents), Particle, llama::mapping::LinearizeArrayDimsMorton>;
         auto mapping = Mapping{arrayExtents};
@@ -192,6 +198,8 @@ TEST_CASE("mapping.SoA.SingleBlob.Aligned.address")
 {
     auto test = [](auto arrayExtents)
     {
+        CAPTURE(arrayExtents);
+
         using Mapping = llama::mapping::AlignedSingleBlobSoA<decltype(arrayExtents), Particle>;
         auto mapping = Mapping{arrayExtents};
         using ArrayIndex = typename Mapping::ArrayIndex;
@@ -257,6 +265,8 @@ TEST_CASE("mapping.SoA.SingleBlob.Aligned.fortran.address")
 {
     auto test = [](auto arrayExtents)
     {
+        CAPTURE(arrayExtents);
+
         using Mapping = llama::mapping::
             AlignedSingleBlobSoA<decltype(arrayExtents), Particle, llama::mapping::LinearizeArrayDimsFortran>;
         auto mapping = Mapping{arrayExtents};
@@ -323,6 +333,8 @@ TEST_CASE("mapping.SoA.SingleBlob.Aligned.morton.address")
 {
     auto test = [](auto arrayExtents)
     {
+        CAPTURE(arrayExtents);
+
         using Mapping = llama::mapping::
             AlignedSingleBlobSoA<decltype(arrayExtents), Particle, llama::mapping::LinearizeArrayDimsMorton>;
         auto mapping = Mapping{arrayExtents};
@@ -390,6 +402,8 @@ TEST_CASE("mapping.SoA.MultiBlob.address")
 {
     auto test = [](auto arrayExtents)
     {
+        CAPTURE(arrayExtents);
+
         using Mapping = llama::mapping::MultiBlobSoA<decltype(arrayExtents), Particle>;
         auto mapping = Mapping{arrayExtents};
         using ArrayIndex = typename Mapping::ArrayIndex;
