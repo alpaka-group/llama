@@ -14,12 +14,12 @@ namespace llama::mapping
         template<typename UserT, typename StoredT>
         struct ChangeTypeProjection
         {
-            static auto load(StoredT v) -> UserT
+            LLAMA_FN_HOST_ACC_INLINE static auto load(StoredT v) -> UserT
             {
                 return static_cast<UserT>(v); // we could allow stronger casts here
             }
 
-            static auto store(UserT v) -> StoredT
+            LLAMA_FN_HOST_ACC_INLINE static auto store(UserT v) -> StoredT
             {
                 return static_cast<StoredT>(v); // we could allow stronger casts here
             }

@@ -151,6 +151,7 @@ jobs:
     runs-on: ${{ matrix.os || 'ubuntu-22.04' }}
     env:
       CXX: ${{ matrix.cxx }}
+      CUDACXX: ${{ matrix.cudacxx }}
     name: ${{ matrix.name }}
     strategy:
       fail-fast: false
@@ -160,37 +161,37 @@ jobs:
             cxx: g++-9
           - name: build-ubuntu-gcc10
             cxx: g++-10
-          - name: build-ubuntu-gcc10-cuda11.2
+          - name: build-ubuntu-gcc10-nvcc11.2
             cxx: g++-10
             cuda_url: https://developer.download.nvidia.com/compute/cuda/11.2.2/local_installers/cuda_11.2.2_460.32.03_linux.run
-          - name: build-ubuntu-gcc10-cuda11.3
+          - name: build-ubuntu-gcc10-nvcc11.3
             cxx: g++-10
             cuda_url: https://developer.download.nvidia.com/compute/cuda/11.3.1/local_installers/cuda_11.3.1_465.19.01_linux.run
-          - name: build-ubuntu-gcc10-cuda11.4
+          - name: build-ubuntu-gcc10-nvcc11.4
             cxx: g++-10
             cuda_url: https://developer.download.nvidia.com/compute/cuda/11.4.4/local_installers/cuda_11.4.4_470.82.01_linux.run
-          - name: build-ubuntu-gcc10-cuda11.5
+          - name: build-ubuntu-gcc10-nvcc11.5
             cxx: g++-10
             cuda_url: https://developer.download.nvidia.com/compute/cuda/11.5.2/local_installers/cuda_11.5.2_495.29.05_linux.run
-          - name: build-ubuntu-gcc10-cuda11.6
+          - name: build-ubuntu-gcc10-nvcc11.6
             cxx: g++-10
             cuda_url: https://developer.download.nvidia.com/compute/cuda/11.6.2/local_installers/cuda_11.6.2_510.47.03_linux.run
           - name: build-ubuntu-gcc11
             cxx: g++-11
-          - name: build-ubuntu-gcc11-cuda11.7
+          - name: build-ubuntu-gcc11-nvcc11.7
             cxx: g++-11
             cuda_url: https://developer.download.nvidia.com/compute/cuda/11.7.1/local_installers/cuda_11.7.1_515.65.01_linux.run
-          - name: build-ubuntu-gcc11-cuda11.8
+          - name: build-ubuntu-gcc11-nvcc11.8
             cxx: g++-11
             cuda_url: https://developer.download.nvidia.com/compute/cuda/11.8.0/local_installers/cuda_11.8.0_520.61.05_linux.run
           - name: build-ubuntu-gcc12
             cxx: g++-12
             install_extra: g++-12
-          - name: build-ubuntu-gcc12-cuda12.0
+          - name: build-ubuntu-gcc12-nvcc12.0
             cxx: g++-12
             install_extra: g++-12
             cuda_url: https://developer.download.nvidia.com/compute/cuda/12.0.1/local_installers/cuda_12.0.1_525.85.12_linux.run
-          - name: build-ubuntu-gcc12-cuda12.1
+          - name: build-ubuntu-gcc12-nvcc12.1
             cxx: g++-12
             install_extra: g++-12
             cuda_url: https://developer.download.nvidia.com/compute/cuda/12.1.0/local_installers/cuda_12.1.0_530.30.02_linux.run
@@ -219,6 +220,13 @@ jobs:
             cxx: clang++-16
             install_extra: clang-16 libomp-16-dev
             add_llvm_repo: true
+          - name: build-ubuntu-clang16-cuda11.6
+            cxx: clang++-16
+            cudacxx: clang++-16
+            install_extra: clang-16 libomp-16-dev
+            cuda_url: https://developer.download.nvidia.com/compute/cuda/12.1.0/local_installers/cuda_12.1.0_530.30.02_linux.run
+            add_llvm_repo: true
+            cxx_std: 20
           - name: build-ubuntu-icpx
             cxx: icpx
             install_oneapi: true
@@ -279,16 +287,19 @@ jobs:
           mkdir build
           cd build
 
-          CUDACXX=(`echo /usr/local/cuda-*/bin/nvcc`)
-          if [ ! -f $CUDACXX ]; then
-            unset CUDACXX
+          # try to find nvcc if no CUDACXX is provided
+          if [ -z "$CUDACXX" ]; then
+            CUDACXX=(`echo /usr/local/cuda-*/bin/nvcc`)
+            if [ ! -f $CUDACXX ]; then
+              unset CUDACXX
+            fi
           fi
-          echo "nvcc is here: $CUDACXX"
+          echo "CUDACXX is here: $CUDACXX"
 
-          NVHPC_FLAGS=
+          CXX_FLAGS=${{ matrix.cxx_flags }}
           if [ ${{ matrix.add_nvcpp_repo }} ]; then
             # cmake (in some versions) passes some flags that nvc++ does not understand
-            NVHPC_FLAGS='-noswitcherror'
+            CXX_FLAGS+=" -noswitcherror"
           fi
 
           cmake .. -DBUILD_TESTING=ON \
@@ -298,10 +309,11 @@ jobs:
                    -Dalpaka_ACC_CPU_B_SEQ_T_SEQ_ENABLE=${{ !matrix.cuda_url }} \
                    -Dalpaka_ACC_CPU_DISABLE_ATOMIC_REF=ON \
                    -Dalpaka_ACC_GPU_CUDA_ENABLE=${{ !!matrix.cuda_url }} \
-                   -Dalpaka_CXX_STANDARD=17 \
+                   -Dalpaka_CXX_STANDARD=${{ matrix.cxx_std || '17' }} \
                    -DCMAKE_CUDA_COMPILER=$CUDACXX \
                    -DCMAKE_CUDA_HOST_COMPILER=$CXX \
-                   -DCMAKE_CXX_FLAGS=$NVHPC_FLAGS \
+                   -DCMAKE_CXX_FLAGS="$CXX_FLAGS" \
+                   -DCMAKE_CUDA_FLAGS="${{ matrix.cuda_flags }}" \
                    -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
       - name: build tests + examples
         run: |
