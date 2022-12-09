@@ -103,20 +103,19 @@ namespace llama::mapping
 
         template<std::size_t... RecordCoords>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
-            typename Base::ArrayIndex ad,
+            typename Base::ArrayIndex ai,
             RecordCoord<RecordCoords...> = {}) const -> NrAndOffset<size_type>
         {
+            using namespace boost::mp11;
+            const auto elementOffset = LinearizeArrayDimsFunctor{}(ai, Base::extents())
+                * static_cast<size_type>(sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>));
             if constexpr(blobs == Blobs::OnePerField)
             {
                 constexpr auto blob = flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>;
-                const auto offset = LinearizeArrayDimsFunctor{}(ad, Base::extents())
-                    * static_cast<size_type>(sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>));
-                return {blob, offset};
+                return {blob, elementOffset};
             }
             else
             {
-                const auto subArrayOffset = LinearizeArrayDimsFunctor{}(ad, Base::extents())
-                    * static_cast<size_type>(sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>));
                 constexpr std::size_t flatFieldIndex =
 #ifdef __NVCC__
                     *& // mess with nvcc compiler state to workaround bug
@@ -126,26 +125,57 @@ namespace llama::mapping
                 using FRD = typename Flattener::FlatRecordDim;
                 if constexpr(subArrayAlignment == SubArrayAlignment::Align)
                 {
-                    // TODO(bgruber): we can take a shortcut here if we know that flatSize is a multiple of all type's
-                    // alignment. We can also precompute a table of sub array starts (and maybe store it), or rely on
-                    // the compiler pulling it out of loops.
-                    using namespace boost::mp11;
-                    size_type offset = 0;
-                    mp_for_each<mp_transform<mp_identity, mp_take_c<FRD, flatFieldIndex>>>(
-                        [&](auto ti)
+                    if constexpr(TArrayExtents::rankStatic == TArrayExtents::rank)
+                    {
+                        // full array extents are known statically, we can precompute the sub array offsets
+                        constexpr auto subArrayOffsets = []() constexpr
                         {
-                            using FieldType = typename decltype(ti)::type;
-                            offset = roundUpToMultiple(offset, static_cast<size_type>(alignof(FieldType)));
-                            offset += static_cast<size_type>(sizeof(FieldType)) * flatSize;
-                        });
-                    offset = roundUpToMultiple(offset, static_cast<size_type>(alignof(mp_at_c<FRD, flatFieldIndex>)));
-                    offset += subArrayOffset;
-                    return {0, offset};
+                            constexpr auto staticFlatSize = LinearizeArrayDimsFunctor{}.size(TArrayExtents{});
+                            constexpr auto subArrays = mp_size<FRD>::value;
+                            Array<size_type, subArrays> r{};
+                            // r[0] == 0, only compute the following offsets
+                            mp_for_each<mp_iota_c<subArrays - 1>>(
+                                [&](auto ic)
+                                {
+                                    constexpr auto i = decltype(ic)::value;
+                                    r[i + 1] = r[i];
+                                    using ThisFieldType = mp_at_c<FRD, i>;
+                                    r[i + 1] += static_cast<size_type>(sizeof(ThisFieldType)) * staticFlatSize;
+                                    using NextFieldType = mp_at_c<FRD, i + 1>;
+                                    r[i + 1]
+                                        = roundUpToMultiple(r[i + 1], static_cast<size_type>(alignof(NextFieldType)));
+                                });
+                            return r;
+                        }
+                        ();
+
+                        size_type offset = subArrayOffsets[flatFieldIndex];
+                        offset += elementOffset;
+                        return {0, offset};
+                    }
+                    else
+                    {
+                        // TODO(bgruber): we can take a shortcut here if we know that flatSize is a multiple of all
+                        // type's alignment. We can also precompute a table of sub array starts (and maybe store it),
+                        // or rely on the compiler it out of loops.
+                        size_type offset = 0;
+                        mp_for_each<mp_iota_c<flatFieldIndex>>(
+                            [&](auto ic)
+                            {
+                                constexpr auto i = decltype(ic)::value;
+                                using ThisFieldType = mp_at_c<FRD, i>;
+                                offset += static_cast<size_type>(sizeof(ThisFieldType)) * flatSize;
+                                using NextFieldType = mp_at_c<FRD, i + 1>;
+                                offset = roundUpToMultiple(offset, static_cast<size_type>(alignof(NextFieldType)));
+                            });
+                        offset += elementOffset;
+                        return {0, offset};
+                    }
                 }
                 else
                 {
                     const auto offset
-                        = subArrayOffset + static_cast<size_type>(flatOffsetOf<FRD, flatFieldIndex, false>) * flatSize;
+                        = elementOffset + static_cast<size_type>(flatOffsetOf<FRD, flatFieldIndex, false>) * flatSize;
                     return {0, offset};
                 }
             }
