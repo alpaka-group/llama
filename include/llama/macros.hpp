@@ -124,7 +124,7 @@
 #endif
 
 #ifndef LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-#    ifdef __CUDACC__
+#    ifdef __NVCC__
 #        ifdef __NVCC_DIAG_PRAGMA_SUPPORT__
 #            define LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING                                                          \
                 _Pragma("nv_diag_suppress 20011") _Pragma("nv_diag_suppress 20014")
@@ -142,7 +142,7 @@
 #    endif
 #endif
 #ifndef LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
-#    ifdef __CUDACC__
+#    ifdef __NVCC__
 #        ifdef __NVCC_DIAG_PRAGMA_SUPPORT__
 #            define LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING                                                            \
                 _Pragma("nv_diag_default 20011") _Pragma("nv_diag_default 20014")

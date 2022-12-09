@@ -31,7 +31,7 @@
 
 // suppress warnings on missing return statements. we get a lot of these because nvcc/nvc++ have some troubles with if
 // constexpr.
-#ifdef __CUDACC__
+#ifdef __NVCC__
 #    ifdef __NVCC_DIAG_PRAGMA_SUPPORT__
 #        pragma nv_diag_suppress 940
 #    else
@@ -76,7 +76,7 @@
 #include "mapping/Split.hpp"
 #include "mapping/tree/Mapping.hpp"
 
-#if defined(__CUDACC__)
+#if defined(__NVCC__)
 #    ifdef __NVCC_DIAG_PRAGMA_SUPPORT__
 #        pragma nv_diag_default 940
 #    else

@@ -11,7 +11,12 @@ if (NOT TARGET llama::llama)
 endif ()
 add_executable(${PROJECT_NAME} nbody.cu ../../common/Stopwatch.hpp)
 target_compile_features(${PROJECT_NAME} PRIVATE cuda_std_17)
-target_compile_options(${PROJECT_NAME} PUBLIC
-        --expt-relaxed-constexpr --use_fast_math
-        $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:--compiler-options -Wall,-Wextra>)
+if (CMAKE_CUDA_COMPILER_ID STREQUAL "NVIDIA")
+    target_compile_options(${PROJECT_NAME} PUBLIC
+            --expt-relaxed-constexpr --use_fast_math
+            $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:--compiler-options -Wall,-Wextra>
+            )
+else ()
+    target_compile_options(${PROJECT_NAME} PUBLIC -ffast-math -Wall -Wextra)
+endif ()
 target_link_libraries(${PROJECT_NAME} PRIVATE llama::llama CUDA::cudart fmt::fmt)

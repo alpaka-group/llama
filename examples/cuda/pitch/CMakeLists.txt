@@ -19,8 +19,13 @@ if (NOT TARGET llama::llama)
 endif ()
 add_executable(${PROJECT_NAME} pitch.cu)
 target_compile_features(${PROJECT_NAME} PRIVATE cuda_std_17)
-target_compile_options(${PROJECT_NAME} PUBLIC
+if (CMAKE_CUDA_COMPILER_ID STREQUAL "NVIDIA")
+    target_compile_options(${PROJECT_NAME} PUBLIC
         --expt-relaxed-constexpr --use_fast_math
-        --compiler-options -Wall,-Wextra)
+        $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:--compiler-options -Wall,-Wextra>
+    )
+else ()
+    target_compile_options(${PROJECT_NAME} PUBLIC -ffast-math -Wall -Wextra)
+endif ()
 target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ../../../thirdparty/stb/include)
 target_link_libraries(${PROJECT_NAME} PRIVATE llama::llama CUDA::cudart fmt::fmt)

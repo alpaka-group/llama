@@ -43,6 +43,18 @@ check_language(CUDA)
 if (CMAKE_CUDA_COMPILER)
 	enable_language(CUDA)
 	set(CMAKE_CUDA_ARCHITECTURES "35" CACHE STRING "CUDA architectures to compile for")
+
+	if (CMAKE_CUDA_COMPILER_ID STREQUAL "Clang")
+		target_compile_definitions(${PROJECT_NAME} INTERFACE -DFMT_USE_FLOAT128=0)
+
+		# Workaround for clang as CUDA compiler with libstdc++ 12
+		file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/clang_cuda_libstdc++12_workaround.hpp"
+				"#include <__clang_cuda_runtime_wrapper.h>\n"
+				"#if defined(__clang__) && defined(__CUDA__) && defined(_GLIBCXX_RELEASE) && _GLIBCXX_RELEASE >= 12 && defined(__noinline__)\n"
+				"#    undef __noinline__\n"
+				"#endif\n")
+		target_compile_options(${PROJECT_NAME} INTERFACE -include "${CMAKE_CURRENT_BINARY_DIR}/clang_cuda_libstdc++12_workaround.hpp")
+	endif()
 else()
 	message(WARNING "Could not find CUDA. Try setting CMAKE_CUDA_COMPILER. CUDA tests and examples are disabled.")
 endif()
