@@ -7,46 +7,60 @@
  */
 
 #include "../../common/Stopwatch.hpp"
-#include "../../common/alpakaHelpers.hpp"
+#include "../../common/hostname.hpp"
 
 #include <alpaka/alpaka.hpp>
 #include <alpaka/example/ExampleDefaultAcc.hpp>
+#include <fstream>
 #include <iostream>
 #include <llama/llama.hpp>
 #include <random>
 #include <utility>
 
-constexpr auto mappingIndex = 2; ///< 0 native AoS, 1 native SoA, 2 native SoA, 3 tree AoS, 4 tree SoA
-constexpr auto problemSize = 64 * 1024 * 1024;
-constexpr auto blockSize = 256;
-constexpr auto steps = 10;
+using Size = std::size_t;
 
-using FP = float;
+constexpr auto problemSize = Size{64 * 1024 * 1024 + 3}; ///< problem size
+constexpr auto steps = 10;
+constexpr auto aosoaLanes = 32;
+constexpr auto elements = Size{32};
+
+// use different types for various struct members to alignment/padding plays a role
+using X_t = float;
+using Y_t = double;
+using Z_t = std::uint16_t;
 
 // clang-format off
 namespace tag
 {
-    struct X{};
-    struct Y{};
-    struct Z{};
+    struct X{} x;
+    struct Y{} y;
+    struct Z{} z;
 } // namespace tag
 
 using Vector = llama::Record<
-    llama::Field<tag::X, FP>,
-    llama::Field<tag::Y, FP>,
-    llama::Field<tag::Z, FP>>;
+    llama::Field<tag::X, X_t>,
+    llama::Field<tag::Y, Y_t>,
+    llama::Field<tag::Z, Z_t>>;
 // clang-format on
 
-template<std::size_t ProblemSize, std::size_t Elems>
-struct AddKernel
+template<typename Acc>
+inline constexpr bool isGpu = false;
+
+#ifdef ALPAKA_ACC_GPU_CUDA_ENABLED
+template<typename Dim, typename Size>
+inline constexpr bool isGpu<alpaka::AccGpuCudaRt<Dim, Size>> = true;
+#endif
+
+template<std::size_t Elems>
+struct ComputeKernel
 {
     template<typename Acc, typename View>
     LLAMA_FN_HOST_ACC_INLINE void operator()(const Acc& acc, View a, View b) const
     {
         const auto ti = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc)[0];
-
+        const auto [n] = a.mapping().extents();
         const auto start = ti * Elems;
-        const auto end = alpaka::math::min(acc, start + Elems, ProblemSize);
+        const auto end = alpaka::math::min(acc, start + Elems, n);
 
         LLAMA_INDEPENDENT_DATA
         for(auto i = start; i < end; ++i)
@@ -58,51 +72,65 @@ struct AddKernel
     }
 };
 
-auto main() -> int
+template<int MappingIndex>
+void run(std::ofstream& plotFile)
 try
 {
-#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ >= 3 && __CUDACC_VER_MINOR__ < 4
-// nvcc 11.3 fails to generate the template signature for llama::View, if it has a forward declaration with a default
-// argument (which we need for the default accessor)
-#    warning "alpaka nbody example disabled for nvcc 11.3, because it generates invalid C++ code for the host compiler"
-    return -1;
-#else
+    const auto mappingname = [&]
+    {
+        if constexpr(MappingIndex == 0)
+            return "AoS";
+        if constexpr(MappingIndex == 1)
+            return "SoA SB packed";
+        if constexpr(MappingIndex == 2)
+            return "SoA SB aligned";
+        if constexpr(MappingIndex == 3)
+            return "SoA SB aligned CT size";
+        if constexpr(MappingIndex == 4)
+            return "SoA MB";
+        if constexpr(MappingIndex == 5)
+            return "AoSoA" + std::to_string(aosoaLanes);
+    }();
 
-    // ALPAKA
+    std::cout << "\nLLAMA " << mappingname << "\n";
+
+    // alpaka
     using Dim = alpaka::DimInt<1>;
-    using Size = std::size_t;
 
     using Acc = alpaka::ExampleDefaultAcc<Dim, Size>;
-    // using Acc = alpaka::AccGpuCudaRt<Dim, Size>;
-    // using Acc = alpaka::AccCpuSerial<Dim, Size>;
-
-    using DevHost = alpaka::DevCpu;
-    using DevAcc = alpaka::Dev<Acc>;
-    using PltfHost = alpaka::Pltf<DevHost>;
-    using PltfAcc = alpaka::Pltf<DevAcc>;
-    using Queue = alpaka::Queue<DevAcc, alpaka::Blocking>;
-    const DevAcc devAcc(alpaka::getDevByIdx<PltfAcc>(0u));
-    const DevHost devHost(alpaka::getDevByIdx<PltfHost>(0u));
-    Queue queue(devAcc);
+    const auto devAcc = alpaka::getDevByIdx<Acc>(0);
+    const auto devHost = alpaka::getDevByIdx<alpaka::DevCpu>(0);
+    auto queue = alpaka::Queue<Acc, alpaka::Blocking>(devAcc);
 
     // LLAMA
     const auto mapping = [&]
     {
-        using ArrayExtents = llama::ArrayExtentsDynamic<unsigned, 1>;
+        using ArrayExtents = llama::ArrayExtentsDynamic<Size, 1>;
         const auto extents = ArrayExtents{problemSize};
-        if constexpr(mappingIndex == 0)
-            return llama::mapping::AoS<ArrayExtents, Vector>{extents};
-        if constexpr(mappingIndex == 1)
-            return llama::mapping::SoA<ArrayExtents, Vector, llama::mapping::Blobs::Single>{extents};
-        if constexpr(mappingIndex == 2)
+        if constexpr(MappingIndex == 0)
+            return llama::mapping::AoS{extents, Vector{}};
+        if constexpr(MappingIndex == 1)
+        {
+            if constexpr(isGpu<Acc>)
+                throw std::runtime_error{"Misaligned memory access not supported"};
+            return llama::mapping::
+                SoA<ArrayExtents, Vector, llama::mapping::Blobs::Single, llama::mapping::SubArrayAlignment::Pack>{
+                    extents};
+        }
+        if constexpr(MappingIndex == 2)
+            return llama::mapping::
+                SoA<ArrayExtents, Vector, llama::mapping::Blobs::Single, llama::mapping::SubArrayAlignment::Align>{
+                    extents};
+        if constexpr(MappingIndex == 3)
+            return llama::mapping::SoA<
+                llama::ArrayExtents<Size, problemSize>,
+                Vector,
+                llama::mapping::Blobs::Single,
+                llama::mapping::SubArrayAlignment::Align>{};
+        if constexpr(MappingIndex == 4)
             return llama::mapping::SoA<ArrayExtents, Vector, llama::mapping::Blobs::OnePerField>{extents};
-        if constexpr(mappingIndex == 3)
-            return llama::mapping::tree::Mapping{extents, llama::Tuple{}, Vector{}};
-        if constexpr(mappingIndex == 4)
-            return llama::mapping::tree::Mapping{
-                extents,
-                llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()},
-                Vector{}};
+        if constexpr(MappingIndex == 5)
+            return llama::mapping::AoSoA<ArrayExtents, Vector, aosoaLanes>{extents};
     }();
 
     std::cout << problemSize / 1000 / 1000 << " million vectors\n"
@@ -118,14 +146,11 @@ try
 
     chrono.printAndReset("Alloc views");
 
-    std::default_random_engine generator;
-    std::normal_distribution<FP> distribution(FP{0}, FP{1});
-    auto seed = distribution(generator);
     LLAMA_INDEPENDENT_DATA
     for(std::size_t i = 0; i < problemSize; ++i)
     {
-        hostA(i) = seed + static_cast<FP>(i);
-        hostB(i) = seed - static_cast<FP>(i);
+        hostA(i) = i;
+        hostB(i) = i;
     }
     chrono.printAndReset("Init");
 
@@ -137,27 +162,21 @@ try
     }
     chrono.printAndReset("Copy H->D");
 
-    constexpr std::size_t hardwareThreads = 2; // relevant for OpenMP2Threads
-    using Distribution = common::ThreadsElemsDistribution<Acc, blockSize, hardwareThreads>;
-    constexpr std::size_t elemCount = Distribution::elemCount;
-    constexpr std::size_t threadCount = Distribution::threadCount;
-    const alpaka::Vec<Dim, Size> elems(static_cast<Size>(elemCount));
-    const alpaka::Vec<Dim, Size> threads(static_cast<Size>(threadCount));
-    constexpr auto innerCount = elemCount * threadCount;
-    const alpaka::Vec<Dim, Size> blocks(static_cast<Size>((problemSize + innerCount - 1) / innerCount));
+    const auto workdiv = alpaka::getValidWorkDiv<Acc>(devAcc, problemSize, elements, false);
+    std::cout << "Workdiv: " << workdiv << "\n";
 
-    const auto workdiv = alpaka::WorkDivMembers<Dim, Size>{blocks, threads, elems};
-
+    double acc = 0;
     for(std::size_t s = 0; s < steps; ++s)
     {
         alpaka::exec<Acc>(
             queue,
             workdiv,
-            AddKernel<problemSize, elemCount>{},
+            ComputeKernel<elements>{},
             llama::shallowCopy(devA),
             llama::shallowCopy(devB));
-        chrono.printAndReset("Add kernel");
+        acc += chrono.printAndReset("Compute kernel");
     }
+    plotFile << "\"" << mappingname << "\"\t" << acc / steps << '\n';
 
     for(std::size_t i = 0; i < blobCount; i++)
     {
@@ -165,11 +184,45 @@ try
         alpaka::memcpy(queue, hostB.storageBlobs[i], devB.storageBlobs[i]);
     }
     chrono.printAndReset("Copy D->H");
-
-    return 0;
-#endif
 }
 catch(const std::exception& e)
 {
     std::cerr << "Exception: " << e.what() << '\n';
+}
+
+auto main() -> int
+{
+#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ >= 3 && __CUDACC_VER_MINOR__ < 4
+// nvcc 11.3 fails to generate the template signature for llama::View, if it has a forward declaration with a default
+// argument (which we need for the default accessor)
+#    warning "alpaka nbody example disabled for nvcc 11.3, because it generates invalid C++ code for the host compiler"
+    return -1;
+#else
+    std::cout << problemSize / 1000 / 1000 << "M values "
+              << "(" << problemSize * sizeof(float) / 1024 << "kiB)\n";
+
+    std::ofstream plotFile{"vectoradd_alpaka.sh"};
+    plotFile.exceptions(std::ios::badbit | std::ios::failbit);
+    plotFile << fmt::format(
+        R"(#!/usr/bin/gnuplot -p
+set title "vectoradd alpaka {}Mi elements on {} on {}"
+set style data histograms
+set style fill solid
+set xtics rotate by 45 right
+set yrange [0:*]
+set ylabel "runtime [s]"
+$data << EOD
+)",
+        problemSize / 1024 / 1024,
+        alpaka::getAccName<alpaka::ExampleDefaultAcc<alpaka::DimInt<1>, Size>>(),
+        common::hostname());
+
+    boost::mp11::mp_for_each<boost::mp11::mp_iota_c<6>>([&](auto ic) { run<decltype(ic)::value>(plotFile); });
+
+    plotFile << R"(EOD
+plot $data using 2:xtic(1) ti "compute kernel"
+)";
+    std::cout << "Plot with: ./vectoradd_alpaka.sh\n";
+    return 0;
+#endif
 }
