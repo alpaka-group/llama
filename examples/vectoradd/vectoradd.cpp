@@ -6,63 +6,91 @@
 #include <iostream>
 #include <llama/llama.hpp>
 
-constexpr auto mappingIndex = 2; ///< 0 native AoS, 1 native SoA, 2 native SoA (separate blobs), 3 tree AoS, 4 tree SoA
-constexpr auto problemSize = 64 * 1024 * 1024; ///< problem size
+constexpr auto problemSize = 64 * 1024 * 1024 + 3; ///< problem size
 constexpr auto steps = 10; ///< number of vector adds to perform
+constexpr auto aosoaLanes = 16;
 
-using FP = float;
+// use different types for various struct members to alignment/padding plays a role
+using X_t = float;
+using Y_t = double;
+using Z_t = std::uint16_t;
 
 namespace usellama
 {
     // clang-format off
     namespace tag
     {
-        struct X{};
-        struct Y{};
-        struct Z{};
+        struct X{} x;
+        struct Y{} y;
+        struct Z{} z;
     } // namespace tag
 
     using Vector = llama::Record<
-        llama::Field<tag::X, FP>,
-        llama::Field<tag::Y, FP>,
-        llama::Field<tag::Z, FP>
+        llama::Field<tag::X, X_t>,
+        llama::Field<tag::Y, Y_t>,
+        llama::Field<tag::Z, Z_t>
     >;
     // clang-format on
 
     template<typename View>
-    void add(const View& a, const View& b, View& c)
+    [[gnu::noinline]] void compute(const View& a, const View& b, View& c)
     {
-        LLAMA_INDEPENDENT_DATA
-        for(std::size_t i = 0; i < problemSize; i++)
+        const auto [n] = c.mapping().extents();
+
+        for(std::size_t i = 0; i < n; i++)
         {
-            c(i)(tag::X{}) = a(i)(tag::X{}) + b(i)(tag::X{});
-            c(i)(tag::Y{}) = a(i)(tag::Y{}) - b(i)(tag::Y{});
-            c(i)(tag::Z{}) = a(i)(tag::Z{}) * b(i)(tag::Z{});
+            c(i)(tag::x) = a(i)(tag::x) + b(i)(tag::x);
+            c(i)(tag::y) = a(i)(tag::y) - b(i)(tag::y);
+            c(i)(tag::z) = a(i)(tag::z) * b(i)(tag::z);
         }
     }
 
+    template<int MappingIndex>
     auto main(std::ofstream& plotFile) -> int
     {
-        std::cout << "\nLLAMA\n";
+        const auto mappingname = [&]
+        {
+            if constexpr(MappingIndex == 0)
+                return "AoS";
+            if constexpr(MappingIndex == 1)
+                return "SoA SB packed";
+            if constexpr(MappingIndex == 2)
+                return "SoA SB aligned";
+            if constexpr(MappingIndex == 3)
+                return "SoA SB aligned CT size";
+            if constexpr(MappingIndex == 4)
+                return "SoA MB";
+            if constexpr(MappingIndex == 5)
+                return "AoSoA" + std::to_string(aosoaLanes);
+        }();
+
+        std::cout << "\nLLAMA " << mappingname << "\n";
         Stopwatch watch;
 
         const auto mapping = [&]
         {
             using ArrayExtents = llama::ArrayExtentsDynamic<std::size_t, 1>;
             const auto extents = ArrayExtents{problemSize};
-            if constexpr(mappingIndex == 0)
+            if constexpr(MappingIndex == 0)
                 return llama::mapping::AoS{extents, Vector{}};
-            if constexpr(mappingIndex == 1)
-                return llama::mapping::SoA<ArrayExtents, Vector, llama::mapping::Blobs::Single>{extents};
-            if constexpr(mappingIndex == 2)
+            if constexpr(MappingIndex == 1)
+                return llama::mapping::
+                    SoA<ArrayExtents, Vector, llama::mapping::Blobs::Single, llama::mapping::SubArrayAlignment::Pack>{
+                        extents};
+            if constexpr(MappingIndex == 2)
+                return llama::mapping::SoA<
+                    llama::ArrayExtents<std::size_t, problemSize>,
+                    Vector,
+                    llama::mapping::Blobs::Single,
+                    llama::mapping::SubArrayAlignment::Align>{};
+            if constexpr(MappingIndex == 3)
+                return llama::mapping::
+                    SoA<ArrayExtents, Vector, llama::mapping::Blobs::Single, llama::mapping::SubArrayAlignment::Align>{
+                        extents};
+            if constexpr(MappingIndex == 4)
                 return llama::mapping::SoA<ArrayExtents, Vector, llama::mapping::Blobs::OnePerField>{extents};
-            if constexpr(mappingIndex == 3)
-                return llama::mapping::tree::Mapping{extents, llama::Tuple{}, Vector{}};
-            if constexpr(mappingIndex == 4)
-                return llama::mapping::tree::Mapping{
-                    extents,
-                    llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()},
-                    Vector{}};
+            if constexpr(MappingIndex == 5)
+                return llama::mapping::AoSoA<ArrayExtents, Vector, aosoaLanes>{extents};
         }();
 
         auto a = allocViewUninitialized(mapping);
@@ -73,21 +101,20 @@ namespace usellama
         LLAMA_INDEPENDENT_DATA
         for(std::size_t i = 0; i < problemSize; ++i)
         {
-            const auto value = static_cast<FP>(i);
-            a[i](tag::X{}) = value; // X
-            a[i](tag::Y{}) = value; // Y
-            a[i](llama::RecordCoord<2>{}) = value; // Z
-            b(i) = value; // writes to all (X, Y, Z)
+            a[i](tag::x) = i; // X
+            a[i](tag::y) = i; // Y
+            a[i](llama::RecordCoord<2>{}) = i; // Z
+            b(i) = i; // writes to all (X, Y, Z)
         }
         watch.printAndReset("init");
 
         double acc = 0;
         for(std::size_t s = 0; s < steps; ++s)
         {
-            add(a, b, c);
-            acc += watch.printAndReset("add");
+            compute(a, b, c);
+            acc += watch.printAndReset("compute");
         }
-        plotFile << "LLAMA\t" << acc / steps << '\n';
+        plotFile << "\"" << mappingname << "\"\t" << acc / steps << '\n';
 
         return static_cast<int>(c.storageBlobs[0][0]);
     }
@@ -97,15 +124,15 @@ namespace manualAoS
 {
     struct Vector
     {
-        FP x;
-        FP y;
-        FP z;
+        X_t x;
+        Y_t y;
+        Z_t z;
     };
 
-    inline void add(const Vector* a, const Vector* b, Vector* c)
+    [[gnu::noinline]] void compute(const Vector* a, const Vector* b, Vector* c, std::size_t n)
     {
         LLAMA_INDEPENDENT_DATA
-        for(std::size_t i = 0; i < problemSize; i++)
+        for(std::size_t i = 0; i < n; i++)
         {
             c[i].x = a[i].x + b[i].x;
             c[i].y = a[i].y - b[i].y;
@@ -126,21 +153,17 @@ namespace manualAoS
         LLAMA_INDEPENDENT_DATA
         for(std::size_t i = 0; i < problemSize; ++i)
         {
-            const auto value = static_cast<FP>(i);
-            a[i].x = value;
-            a[i].y = value;
-            a[i].z = value;
-            b[i].x = value;
-            b[i].y = value;
-            b[i].z = value;
+            b[i].x = a[i].x = static_cast<X_t>(i);
+            b[i].y = a[i].y = static_cast<Y_t>(i);
+            b[i].z = a[i].z = static_cast<Z_t>(i);
         }
         watch.printAndReset("init");
 
         double acc = 0;
         for(std::size_t s = 0; s < steps; ++s)
         {
-            add(a.data(), b.data(), c.data());
-            acc += watch.printAndReset("add");
+            compute(a.data(), b.data(), c.data(), problemSize);
+            acc += watch.printAndReset("compute");
         }
         plotFile << "AoS\t" << acc / steps << '\n';
 
@@ -150,19 +173,20 @@ namespace manualAoS
 
 namespace manualSoA
 {
-    inline void add(
-        const FP* ax,
-        const FP* ay,
-        const FP* az,
-        const FP* bx,
-        const FP* by,
-        const FP* bz,
-        FP* cx,
-        FP* cy,
-        FP* cz)
+    [[gnu::noinline]] void compute(
+        const X_t* ax,
+        const Y_t* ay,
+        const Z_t* az,
+        const X_t* bx,
+        const Y_t* by,
+        const Z_t* bz,
+        X_t* cx,
+        Y_t* cy,
+        Z_t* cz,
+        std::size_t n)
     {
         LLAMA_INDEPENDENT_DATA
-        for(std::size_t i = 0; i < problemSize; i++)
+        for(std::size_t i = 0; i < n; i++)
         {
             cx[i] = ax[i] + bx[i];
             cy[i] = ay[i] - by[i];
@@ -175,36 +199,44 @@ namespace manualSoA
         std::cout << "\nSoA\n";
         Stopwatch watch;
 
-        using Vector = std::vector<float, llama::bloballoc::AlignedAllocator<float, 64>>;
-        Vector ax(problemSize);
-        Vector ay(problemSize);
-        Vector az(problemSize);
-        Vector bx(problemSize);
-        Vector by(problemSize);
-        Vector bz(problemSize);
-        Vector cx(problemSize);
-        Vector cy(problemSize);
-        Vector cz(problemSize);
+        using VectorX = std::vector<X_t, llama::bloballoc::AlignedAllocator<X_t, 64>>;
+        using VectorY = std::vector<Y_t, llama::bloballoc::AlignedAllocator<Y_t, 64>>;
+        using VectorZ = std::vector<Z_t, llama::bloballoc::AlignedAllocator<Z_t, 64>>;
+        VectorX ax(problemSize);
+        VectorY ay(problemSize);
+        VectorZ az(problemSize);
+        VectorX bx(problemSize);
+        VectorY by(problemSize);
+        VectorZ bz(problemSize);
+        VectorX cx(problemSize);
+        VectorY cy(problemSize);
+        VectorZ cz(problemSize);
         watch.printAndReset("alloc");
 
         LLAMA_INDEPENDENT_DATA
         for(std::size_t i = 0; i < problemSize; ++i)
         {
-            const auto value = static_cast<FP>(i);
-            ax[i] = value;
-            ay[i] = value;
-            az[i] = value;
-            bx[i] = value;
-            by[i] = value;
-            bz[i] = value;
+            bx[i] = ax[i] = static_cast<X_t>(i);
+            by[i] = ay[i] = static_cast<Y_t>(i);
+            bz[i] = az[i] = static_cast<Z_t>(i);
         }
         watch.printAndReset("init");
 
         double acc = 0;
         for(std::size_t s = 0; s < steps; ++s)
         {
-            add(ax.data(), ay.data(), az.data(), bx.data(), by.data(), bz.data(), cx.data(), cy.data(), cz.data());
-            acc += watch.printAndReset("add");
+            compute(
+                ax.data(),
+                ay.data(),
+                az.data(),
+                bx.data(),
+                by.data(),
+                bz.data(),
+                cx.data(),
+                cy.data(),
+                cz.data(),
+                problemSize);
+            acc += watch.printAndReset("compute");
         }
         plotFile << "SoA\t" << acc / steps << '\n';
 
@@ -215,25 +247,21 @@ namespace manualSoA
 
 namespace manualAoSoA
 {
-    constexpr auto lanes = 16;
-
     struct alignas(64) VectorBlock
     {
-        FP x[lanes];
-        FP y[lanes];
-        FP z[lanes];
+        X_t x[aosoaLanes];
+        Y_t y[aosoaLanes];
+        Z_t z[aosoaLanes];
     };
 
-    constexpr auto blocks = problemSize / lanes;
-
-    inline void add(const VectorBlock* a, const VectorBlock* b, VectorBlock* c)
+    [[gnu::noinline]] void compute(const VectorBlock* a, const VectorBlock* b, VectorBlock* c, std::size_t n)
     {
-        for(std::size_t bi = 0; bi < problemSize / lanes; bi++)
+        for(std::size_t bi = 0; bi < n / aosoaLanes; bi++)
         {
 // the unroll 1 is needed to prevent unrolling, which prevents vectorization in GCC
 #pragma GCC unroll 1
             LLAMA_INDEPENDENT_DATA
-            for(std::size_t i = 0; i < lanes; ++i)
+            for(std::size_t i = 0; i < aosoaLanes; ++i)
             {
                 const auto& blockA = a[bi];
                 const auto& blockB = b[bi];
@@ -250,23 +278,20 @@ namespace manualAoSoA
         std::cout << "\nAoSoA\n";
         Stopwatch watch;
 
+        constexpr auto blocks = problemSize / aosoaLanes;
         std::vector<VectorBlock> a(blocks);
         std::vector<VectorBlock> b(blocks);
         std::vector<VectorBlock> c(blocks);
         watch.printAndReset("alloc");
 
-        for(std::size_t bi = 0; bi < problemSize / lanes; ++bi)
+        for(std::size_t bi = 0; bi < problemSize / aosoaLanes; ++bi)
         {
             LLAMA_INDEPENDENT_DATA
-            for(std::size_t i = 0; i < lanes; ++i)
+            for(std::size_t i = 0; i < aosoaLanes; ++i)
             {
-                const auto value = static_cast<float>(bi * lanes + i);
-                a[bi].x[i] = value;
-                a[bi].y[i] = value;
-                a[bi].z[i] = value;
-                b[bi].x[i] = value;
-                b[bi].y[i] = value;
-                b[bi].z[i] = value;
+                b[bi].x[i] = a[bi].x[i] = static_cast<X_t>(bi * aosoaLanes + i);
+                b[bi].y[i] = a[bi].y[i] = static_cast<Y_t>(bi * aosoaLanes + i);
+                b[bi].z[i] = a[bi].z[i] = static_cast<Z_t>(bi * aosoaLanes + i);
             }
         }
         watch.printAndReset("init");
@@ -274,10 +299,10 @@ namespace manualAoSoA
         double acc = 0;
         for(std::size_t s = 0; s < steps; ++s)
         {
-            add(a.data(), b.data(), c.data());
-            acc += watch.printAndReset("add");
+            compute(a.data(), b.data(), c.data(), problemSize);
+            acc += watch.printAndReset("compute");
         }
-        plotFile << "AoSoA\t" << acc / steps << '\n';
+        plotFile << "AoSoA" << aosoaLanes << "\t" << acc / steps << '\n';
 
         return static_cast<int>(c[0].x[0]);
     }
@@ -297,22 +322,23 @@ try
 set title "vectoradd CPU {}Mi elements on {}"
 set style data histograms
 set style fill solid
-#set key out top center maxrows 3
+set xtics rotate by 45 right
 set yrange [0:*]
-set ylabel "update runtime [s]"
+set ylabel "runtime [s]"
 $data << EOD
 )",
         problemSize / 1024 / 1024,
         common::hostname());
 
     int r = 0;
-    r += usellama::main(plotFile);
+    boost::mp11::mp_for_each<boost::mp11::mp_iota_c<6>>([&](auto ic)
+                                                        { r += usellama::main<decltype(ic)::value>(plotFile); });
     r += manualAoS::main(plotFile);
     r += manualSoA::main(plotFile);
     r += manualAoSoA::main(plotFile);
 
     plotFile << R"(EOD
-plot $data using 2:xtic(1) ti "runtime"
+plot $data using 2:xtic(1) ti "compute kernel"
 )";
     std::cout << "Plot with: ./vectoradd.sh\n";
 
