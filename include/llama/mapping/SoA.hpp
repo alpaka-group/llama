@@ -101,6 +101,29 @@ namespace llama::mapping
             }
         }
 
+    private:
+        LLAMA_FN_HOST_ACC_INLINE static constexpr auto computeSubArrayOffsets()
+        {
+            using namespace boost::mp11;
+            using FRD = typename Flattener::FlatRecordDim;
+            constexpr auto staticFlatSize = LinearizeArrayDimsFunctor{}.size(TArrayExtents{});
+            constexpr auto subArrays = mp_size<FRD>::value;
+            Array<size_type, subArrays> r{};
+            // r[0] == 0, only compute the following offsets
+            mp_for_each<mp_iota_c<subArrays - 1>>(
+                [&](auto ic)
+                {
+                    constexpr auto i = decltype(ic)::value;
+                    r[i + 1] = r[i];
+                    using ThisFieldType = mp_at_c<FRD, i>;
+                    r[i + 1] += static_cast<size_type>(sizeof(ThisFieldType)) * staticFlatSize;
+                    using NextFieldType = mp_at_c<FRD, i + 1>;
+                    r[i + 1] = roundUpToMultiple(r[i + 1], static_cast<size_type>(alignof(NextFieldType)));
+                });
+            return r;
+        }
+
+    public:
         template<std::size_t... RecordCoords>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
             typename Base::ArrayIndex ai,
@@ -128,27 +151,7 @@ namespace llama::mapping
                     if constexpr(TArrayExtents::rankStatic == TArrayExtents::rank)
                     {
                         // full array extents are known statically, we can precompute the sub array offsets
-                        constexpr auto subArrayOffsets = []() constexpr
-                        {
-                            constexpr auto staticFlatSize = LinearizeArrayDimsFunctor{}.size(TArrayExtents{});
-                            constexpr auto subArrays = mp_size<FRD>::value;
-                            Array<size_type, subArrays> r{};
-                            // r[0] == 0, only compute the following offsets
-                            mp_for_each<mp_iota_c<subArrays - 1>>(
-                                [&](auto ic)
-                                {
-                                    constexpr auto i = decltype(ic)::value;
-                                    r[i + 1] = r[i];
-                                    using ThisFieldType = mp_at_c<FRD, i>;
-                                    r[i + 1] += static_cast<size_type>(sizeof(ThisFieldType)) * staticFlatSize;
-                                    using NextFieldType = mp_at_c<FRD, i + 1>;
-                                    r[i + 1]
-                                        = roundUpToMultiple(r[i + 1], static_cast<size_type>(alignof(NextFieldType)));
-                                });
-                            return r;
-                        }
-                        ();
-
+                        constexpr auto subArrayOffsets = computeSubArrayOffsets();
                         size_type offset = subArrayOffsets[flatFieldIndex];
                         offset += elementOffset;
                         return {0, offset};
