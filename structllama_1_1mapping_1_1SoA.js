@@ -1,10 +1,10 @@
 var structllama_1_1mapping_1_1SoA =
 [
-    [ "Flattener", "structllama_1_1mapping_1_1SoA.html#aac9f35dfe06b58c02b9f477e48f2a934", null ],
-    [ "LinearizeArrayDimsFunctor", "structllama_1_1mapping_1_1SoA.html#a5f59c50938d2aaa41ebb3e16c7d666cd", null ],
-    [ "blobNrAndOffset", "structllama_1_1mapping_1_1SoA.html#a7f7d41b37fa09b0ea7df7625cead9527", null ],
-    [ "blobSize", "structllama_1_1mapping_1_1SoA.html#a70369752e47c084601e13edfdf8f8e10", null ],
-    [ "alignSubArrays", "structllama_1_1mapping_1_1SoA.html#a1fb0421308dee0e708f9e449bea1f085", null ],
-    [ "blobCount", "structllama_1_1mapping_1_1SoA.html#a29bcd5c978c73befd6cbb9dd75b7836f", null ],
-    [ "separateBuffers", "structllama_1_1mapping_1_1SoA.html#adda91103d268e3beb28a3e628a490f3c", null ]
+    [ "Flattener", "structllama_1_1mapping_1_1SoA.html#a72280082063a4d1a67b90b915c5cbc44", null ],
+    [ "LinearizeArrayDimsFunctor", "structllama_1_1mapping_1_1SoA.html#a699cd5c599b7493c3c7f461d4cae71fe", null ],
+    [ "blobNrAndOffset", "structllama_1_1mapping_1_1SoA.html#abab83b29129d52c47523a9da23373d99", null ],
+    [ "blobSize", "structllama_1_1mapping_1_1SoA.html#a312b390196c9d6b87ae6c0140982a8bf", null ],
+    [ "blobCount", "structllama_1_1mapping_1_1SoA.html#aa98be08bc24fee8f9d632f475d950b22", null ],
+    [ "blobs", "structllama_1_1mapping_1_1SoA.html#af4defff48ee41e3b1140061d6610e4f3", null ],
+    [ "subArrayAlignment", "structllama_1_1mapping_1_1SoA.html#a93611594bec185f89dc46ba44c384811", null ]
 ];

@@ -146,9 +146,9 @@ $(document).ready(function(){initNavTree('One_8hpp.html',''); initResizable(); }
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1One.html">llama::mapping::One&lt; TArrayExtents, TRecordDim, AlignAndPad, FlattenRecordDim &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1One.html">llama::mapping::One&lt; TArrayExtents, TRecordDim, TFieldAlignment, FlattenRecordDim &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BindOne.html">llama::mapping::BindOne&lt; AlignAndPad, FlattenRecordDim &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BindOne.html">llama::mapping::BindOne&lt; FieldAlignment, FlattenRecordDim &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -160,24 +160,24 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:a5abb72fb758db92b6d6f92b624788338"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim &gt; </td></tr>
-<tr class="memitem:a5abb72fb758db92b6d6f92b624788338"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a5abb72fb758db92b6d6f92b624788338">llama::mapping::AlignedOne</a> = One&lt; ArrayExtents, RecordDim, true, FlattenRecordDimInOrder &gt;</td></tr>
-<tr class="separator:a5abb72fb758db92b6d6f92b624788338"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad653148b50ae64d819bb606faba75d60"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim &gt; </td></tr>
-<tr class="memitem:ad653148b50ae64d819bb606faba75d60"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#ad653148b50ae64d819bb606faba75d60">llama::mapping::MinAlignedOne</a> = One&lt; ArrayExtents, RecordDim, true, FlattenRecordDimMinimizePadding &gt;</td></tr>
-<tr class="separator:ad653148b50ae64d819bb606faba75d60"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0232e67cb311c835b39b540a400f4da0"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim &gt; </td></tr>
-<tr class="memitem:a0232e67cb311c835b39b540a400f4da0"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a0232e67cb311c835b39b540a400f4da0">llama::mapping::PackedOne</a> = One&lt; ArrayExtents, RecordDim, false, FlattenRecordDimInOrder &gt;</td></tr>
-<tr class="separator:a0232e67cb311c835b39b540a400f4da0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f252fba81515a43984abffec3562b40"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim &gt; </td></tr>
+<tr class="memitem:a3f252fba81515a43984abffec3562b40"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a3f252fba81515a43984abffec3562b40">llama::mapping::AlignedOne</a> = One&lt; ArrayExtents, RecordDim, FieldAlignment::Align, FlattenRecordDimInOrder &gt;</td></tr>
+<tr class="separator:a3f252fba81515a43984abffec3562b40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1410e3763162e6ccb3758e028024e5f"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim &gt; </td></tr>
+<tr class="memitem:aa1410e3763162e6ccb3758e028024e5f"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#aa1410e3763162e6ccb3758e028024e5f">llama::mapping::MinAlignedOne</a> = One&lt; ArrayExtents, RecordDim, FieldAlignment::Align, FlattenRecordDimMinimizePadding &gt;</td></tr>
+<tr class="separator:aa1410e3763162e6ccb3758e028024e5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5bacdd00bf2d0b905938bbf33cb0baf"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim &gt; </td></tr>
+<tr class="memitem:ac5bacdd00bf2d0b905938bbf33cb0baf"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#ac5bacdd00bf2d0b905938bbf33cb0baf">llama::mapping::PackedOne</a> = One&lt; ArrayExtents, RecordDim, FieldAlignment::Pack, FlattenRecordDimInOrder &gt;</td></tr>
+<tr class="separator:ac5bacdd00bf2d0b905938bbf33cb0baf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:a3f61909f579ae3a51762dd71aaae2556"><td class="memTemplParams" colspan="2">template&lt;typename Mapping &gt; </td></tr>
 <tr class="memitem:a3f61909f579ae3a51762dd71aaae2556"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a3f61909f579ae3a51762dd71aaae2556">llama::mapping::isOne</a> = false</td></tr>
 <tr class="separator:a3f61909f579ae3a51762dd71aaae2556"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3efc7ad7e0eb7cd89e537b070e60178c"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim , bool AlignAndPad, template&lt; typename &gt; typename FlattenRecordDim&gt; </td></tr>
-<tr class="memitem:a3efc7ad7e0eb7cd89e537b070e60178c"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a3efc7ad7e0eb7cd89e537b070e60178c">llama::mapping::isOne&lt; One&lt; ArrayExtents, RecordDim, AlignAndPad, FlattenRecordDim &gt; &gt;</a> = true</td></tr>
-<tr class="separator:a3efc7ad7e0eb7cd89e537b070e60178c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adcdbfe447fc898bc63551a6be638f148"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim , FieldAlignment FieldAlignment, template&lt; typename &gt; typename FlattenRecordDim&gt; </td></tr>
+<tr class="memitem:adcdbfe447fc898bc63551a6be638f148"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#adcdbfe447fc898bc63551a6be638f148">llama::mapping::isOne&lt; One&lt; ArrayExtents, RecordDim, FieldAlignment, FlattenRecordDim &gt; &gt;</a> = true</td></tr>
+<tr class="separator:adcdbfe447fc898bc63551a6be638f148"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -185,7 +185,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc.html">mapping</a></li><li class="navelem"><a class="el" href="One_8hpp.html">One.hpp</a></li>
-    <li class="footer">Generated on Mon Dec 12 2022 15:14:27 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Dec 13 2022 23:13:03 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

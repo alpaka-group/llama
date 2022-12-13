@@ -131,9 +131,9 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayExtents_00_01RecordDim_00_01LanesSrc_00_01Line6dc3fb3fdb46e2d3a2a87dd652990741.html">Copy&lt; mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesSrc, LinearizeArrayDims &gt;, mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesDst, LinearizeArrayDims &gt;, std::enable_if_t&lt; LanesSrc !=LanesDst &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayExtents_00_01RecordDim_00_01LanesSrc_00_01Linebe5d1aa3c239f699c56c4cd3f3c48056.html">Copy&lt; mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesSrc, LinearizeArrayDims &gt;, mapping::SoA&lt; ArrayExtents, RecordDim, DstSeparateBuffers, DstAlignSubArrays, LinearizeArrayDims &gt; &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayExtents_00_01RecordDim_00_01LanesSrc_00_01Line5a80f5c9504c4dabc70b463a8f64667f.html">Copy&lt; mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesSrc, LinearizeArrayDims &gt;, mapping::SoA&lt; ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayDims &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Copy_3_01mapping_1_1SoA_3_01ArrayExtents_00_01RecordDim_00_01SrcSeparateBuffers_0591e166a76fdf9780e2a3b7d9a23850e.html">Copy&lt; mapping::SoA&lt; ArrayExtents, RecordDim, SrcSeparateBuffers, SrcAlignSubArrays, LinearizeArrayDims &gt;, mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesDst, LinearizeArrayDims &gt; &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Copy_3_01mapping_1_1SoA_3_01ArrayExtents_00_01RecordDim_00_01SrcBlobs_00_01SrcSub188205056335a1384df501fb670c7830.html">Copy&lt; mapping::SoA&lt; ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayDims &gt;, mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesDst, LinearizeArrayDims &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1NoName.html">NoName</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Anonymous naming for a <a class="el" href="structllama_1_1Field.html">Field</a>.  <a href="structllama_1_1NoName.html#details">More...</a><br /></td></tr>
@@ -464,9 +464,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a3750d27a7f8dd111fbe32dc769b44120"><td class="memTemplParams" colspan="2">template&lt;std::size_t Dim, typename RecordDim &gt; </td></tr>
 <tr class="memitem:a3750d27a7f8dd111fbe32dc769b44120"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a3750d27a7f8dd111fbe32dc769b44120">allocViewStack</a> () -&gt; decltype(auto)</td></tr>
 <tr class="separator:a3750d27a7f8dd111fbe32dc769b44120"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac1445fa67728a9433fbd8b68f195fbe4"><td class="memTemplParams" colspan="2">template&lt;typename Mapping , std::size_t... Coords, typename Blobs &gt; </td></tr>
-<tr class="memitem:ac1445fa67728a9433fbd8b68f195fbe4"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ac1445fa67728a9433fbd8b68f195fbe4">mapToMemory</a> (Mapping &amp;mapping, typename Mapping::ArrayIndex ai, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coords... &gt; rc, Blobs &amp;blobs) -&gt; decltype(auto)</td></tr>
-<tr class="separator:ac1445fa67728a9433fbd8b68f195fbe4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f8b2bbd3934fae49394efdc1b4ce3c4"><td class="memTemplParams" colspan="2">template&lt;typename Mapping , typename RecordCoord , typename Blobs &gt; </td></tr>
+<tr class="memitem:a4f8b2bbd3934fae49394efdc1b4ce3c4"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a4f8b2bbd3934fae49394efdc1b4ce3c4">mapToMemory</a> (Mapping &amp;mapping, typename Mapping::ArrayIndex ai, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a> rc, Blobs &amp;blobs) -&gt; decltype(auto)</td></tr>
+<tr class="separator:a4f8b2bbd3934fae49394efdc1b4ce3c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a887c0f2f25b3a4e104c73178fa12c92c"><td class="memTemplParams" colspan="2">template&lt;typename View , typename TransformBlobFunc , typename  = std::enable_if_t&lt;isView&lt;std::decay_t&lt;View&gt;&gt;&gt;&gt; </td></tr>
 <tr class="memitem:a887c0f2f25b3a4e104c73178fa12c92c"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a887c0f2f25b3a4e104c73178fa12c92c">transformBlobs</a> (<a class="el" href="structllama_1_1View.html">View</a> &amp;view, const TransformBlobFunc &amp;transformBlob)</td></tr>
 <tr class="separator:a887c0f2f25b3a4e104c73178fa12c92c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1585,7 +1585,7 @@ template&lt;typename SrcMapping , typename SrcBlob , typename DstMapping , typen
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Copy_8hpp_source.html#l00412">412</a> of file <a class="el" href="Copy_8hpp_source.html">Copy.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Copy_8hpp_source.html#l00411">411</a> of file <a class="el" href="Copy_8hpp_source.html">Copy.hpp</a>.</p>
 
 </div>
 </div>
@@ -2075,7 +2075,7 @@ template&lt;typename T , typename Simd &gt; </div>
 </div><div class="memdoc">
 <p>Loads SIMD vectors of data starting from the given record reference to dstSimd. Only field tags occurring in <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> are loaded. If Simd contains multiple fields of SIMD types, a SIMD vector will be fetched for each of the fields. The number of elements fetched per SIMD vector depends on the SIMD width of the vector. Simd is allowed to have different vector lengths per element. </p>
 
-<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00267">267</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00269">269</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
 
 </div>
 </div>
@@ -2111,13 +2111,13 @@ template&lt;std::size_t PieceLength, typename Mapping &gt; </div>
 
 </div>
 </div>
-<a id="ac1445fa67728a9433fbd8b68f195fbe4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac1445fa67728a9433fbd8b68f195fbe4">&#9670;&nbsp;</a></span>mapToMemory()</h2>
+<a id="a4f8b2bbd3934fae49394efdc1b4ce3c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f8b2bbd3934fae49394efdc1b4ce3c4">&#9670;&nbsp;</a></span>mapToMemory()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Mapping , std::size_t... Coords, typename Blobs &gt; </div>
+template&lt;typename Mapping , typename RecordCoord , typename Blobs &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -2137,7 +2137,7 @@ template&lt;typename Mapping , std::size_t... Coords, typename Blobs &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coords... &gt;&#160;</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&#160;</td>
           <td class="paramname"><em>rc</em>, </td>
         </tr>
         <tr>
@@ -3154,7 +3154,7 @@ template&lt;template&lt; typename &gt; typename MakeSimd, template&lt; typename,
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00360">360</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00362">362</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
 
 </div>
 </div>
@@ -3186,7 +3186,7 @@ template&lt;std::size_t N, template&lt; typename, auto &gt; typename MakeSizedSi
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00322">322</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00324">324</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
 
 </div>
 </div>
@@ -3227,7 +3227,7 @@ template&lt;typename Simd , typename T &gt; </div>
 </div><div class="memdoc">
 <p>Stores SIMD vectors of element data from the given srcSimd into memory starting at the provided record reference. Only field tags occurring in <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> are stored. If Simd contains multiple fields of SIMD types, a SIMD vector will be stored for each of the fields. The number of elements stored per SIMD vector depends on the SIMD width of the vector. Simd is allowed to have different vector lengths per element. </p>
 
-<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00294">294</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00296">296</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
 
 </div>
 </div>
@@ -4719,8 +4719,9 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">= <a class="code" href="namespacellama.html#ac8f48517b46c35c1a511273f08d2abb3">flatSizeOf</a>&lt;</div>
 <div class="line">        <a class="code" href="namespacellama.html#a1fddf1f638927edfb8da8e3c78da4e1c">FlatRecordDim</a>&lt;Record&lt;Fields...&gt;&gt;,</div>
-<div class="line">        Align,</div>
+<div class="line">        <a class="code" href="namespacellama_1_1mapping.html#aeead2d9c8929b8c0aff18aad054a0710ad12fbc9a2ba3b0b91a4190959b4c966b">Align</a>,</div>
 <div class="line">        IncludeTailPadding&gt;</div>
+<div class="ttc" id="anamespacellama_1_1mapping_html_aeead2d9c8929b8c0aff18aad054a0710ad12fbc9a2ba3b0b91a4190959b4c966b"><div class="ttname"><a href="namespacellama_1_1mapping.html#aeead2d9c8929b8c0aff18aad054a0710ad12fbc9a2ba3b0b91a4190959b4c966b">llama::mapping::FieldAlignment::Align</a></div><div class="ttdeci">@ Align</div></div>
 <div class="ttc" id="anamespacellama_html_a1fddf1f638927edfb8da8e3c78da4e1c"><div class="ttname"><a href="namespacellama.html#a1fddf1f638927edfb8da8e3c78da4e1c">llama::FlatRecordDim</a></div><div class="ttdeci">typename internal::FlattenRecordDimImpl&lt; RecordDim &gt;::type FlatRecordDim</div><div class="ttdoc">Returns a flat type list containing all leaf field types of the given record dimension.</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00374">Core.hpp:374</a></div></div>
 <div class="ttc" id="anamespacellama_html_ac8f48517b46c35c1a511273f08d2abb3"><div class="ttname"><a href="namespacellama.html#ac8f48517b46c35c1a511273f08d2abb3">llama::flatSizeOf</a></div><div class="ttdeci">constexpr std::size_t flatSizeOf</div><div class="ttdoc">The size of a type list if its elements would be in a normal struct.</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00504">Core.hpp:504</a></div></div>
 </div><!-- fragment -->
@@ -4736,7 +4737,7 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Mon Dec 12 2022 15:14:27 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Dec 13 2022 23:13:03 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

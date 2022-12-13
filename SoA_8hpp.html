@@ -86,6 +86,7 @@ $(document).ready(function(){initNavTree('SoA_8hpp.html',''); initResizable(); }
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
+<a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
@@ -140,9 +141,9 @@ $(document).ready(function(){initNavTree('SoA_8hpp.html',''); initResizable(); }
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1SoA.html">llama::mapping::SoA&lt; TArrayExtents, TRecordDim, SeparateBuffers, AlignSubArrays, TLinearizeArrayDimsFunctor, FlattenRecordDimSingleBlob &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1SoA.html">llama::mapping::SoA&lt; TArrayExtents, TRecordDim, TBlobs, TSubArrayAlignment, TLinearizeArrayDimsFunctor, FlattenRecordDimSingleBlob &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BindSoA.html">llama::mapping::BindSoA&lt; SeparateBuffers, AlignSubArrays, LinearizeArrayDimsFunctor &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BindSoA.html">llama::mapping::BindSoA&lt; Blobs, SubArrayAlignment, LinearizeArrayDimsFunctor &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -154,15 +155,32 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:a39ee3bd4146afeba314a257074e2237e"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim , typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </td></tr>
-<tr class="memitem:a39ee3bd4146afeba314a257074e2237e"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a39ee3bd4146afeba314a257074e2237e">llama::mapping::AlignedSingleBlobSoA</a> = SoA&lt; ArrayExtents, RecordDim, false, true, LinearizeArrayDimsFunctor &gt;</td></tr>
-<tr class="separator:a39ee3bd4146afeba314a257074e2237e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7dafaadaed054ff638b834a708c53ad7"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim , typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </td></tr>
-<tr class="memitem:a7dafaadaed054ff638b834a708c53ad7"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a7dafaadaed054ff638b834a708c53ad7">llama::mapping::PackedSingleBlobSoA</a> = SoA&lt; ArrayExtents, RecordDim, false, false, LinearizeArrayDimsFunctor &gt;</td></tr>
-<tr class="separator:a7dafaadaed054ff638b834a708c53ad7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab83b961bac0dcf12326d895f91a9451a"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim , typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </td></tr>
-<tr class="memitem:ab83b961bac0dcf12326d895f91a9451a"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#ab83b961bac0dcf12326d895f91a9451a">llama::mapping::MultiBlobSoA</a> = SoA&lt; ArrayExtents, RecordDim, true, false, LinearizeArrayDimsFunctor &gt;</td></tr>
-<tr class="separator:ab83b961bac0dcf12326d895f91a9451a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:accfd4273c96686b7220702d1590fbfce"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim , typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </td></tr>
+<tr class="memitem:accfd4273c96686b7220702d1590fbfce"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#accfd4273c96686b7220702d1590fbfce">llama::mapping::AlignedSingleBlobSoA</a> = SoA&lt; ArrayExtents, RecordDim, Blobs::Single, SubArrayAlignment::Align, LinearizeArrayDimsFunctor &gt;</td></tr>
+<tr class="separator:accfd4273c96686b7220702d1590fbfce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f5184f74fae747c64fe4453f9d3111d"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim , typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </td></tr>
+<tr class="memitem:a4f5184f74fae747c64fe4453f9d3111d"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a4f5184f74fae747c64fe4453f9d3111d">llama::mapping::PackedSingleBlobSoA</a> = SoA&lt; ArrayExtents, RecordDim, Blobs::Single, SubArrayAlignment::Pack, LinearizeArrayDimsFunctor &gt;</td></tr>
+<tr class="separator:a4f5184f74fae747c64fe4453f9d3111d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93a70417f230f74406caa71a3c6f3eab"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim , typename LinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp&gt; </td></tr>
+<tr class="memitem:a93a70417f230f74406caa71a3c6f3eab"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a93a70417f230f74406caa71a3c6f3eab">llama::mapping::MultiBlobSoA</a> = SoA&lt; ArrayExtents, RecordDim, Blobs::OnePerField, SubArrayAlignment::Pack, LinearizeArrayDimsFunctor &gt;</td></tr>
+<tr class="separator:a93a70417f230f74406caa71a3c6f3eab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:a79bb2d70c1866c3090d5810dd0c92cb3"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a79bb2d70c1866c3090d5810dd0c92cb3">llama::mapping::Blobs</a> { <br />
+&#160;&#160;<a class="el" href="namespacellama_1_1mapping.html#a79bb2d70c1866c3090d5810dd0c92cb3a66ba162102bbf6ae31b522aec561735e">llama::mapping::Single</a>
+, <br />
+&#160;&#160;<a class="el" href="namespacellama_1_1mapping.html#a79bb2d70c1866c3090d5810dd0c92cb3aa8d7ca911df4c0991253a7aaaa4e3708">llama::mapping::OnePerField</a>
+<br />
+ }</td></tr>
+<tr class="separator:a79bb2d70c1866c3090d5810dd0c92cb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf047d4798871c30b501074a70374086"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#abf047d4798871c30b501074a70374086">llama::mapping::SubArrayAlignment</a> { <br />
+&#160;&#160;<a class="el" href="namespacellama_1_1mapping.html#abf047d4798871c30b501074a70374086a4492081ca02b059f9e8af4ddaf0f7292">llama::mapping::Pack</a>
+, <br />
+&#160;&#160;<a class="el" href="namespacellama_1_1mapping.html#abf047d4798871c30b501074a70374086ad12fbc9a2ba3b0b91a4190959b4c966b">llama::mapping::Align</a>
+<br />
+ }</td></tr>
+<tr class="separator:abf047d4798871c30b501074a70374086"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -175,9 +193,9 @@ Variables</h2></td></tr>
 <tr class="memitem:a131edc0148d778b3ebe27f58df87ffc1"><td class="memTemplParams" colspan="2">template&lt;typename Mapping &gt; </td></tr>
 <tr class="memitem:a131edc0148d778b3ebe27f58df87ffc1"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a131edc0148d778b3ebe27f58df87ffc1">llama::mapping::isSoA</a> = false</td></tr>
 <tr class="separator:a131edc0148d778b3ebe27f58df87ffc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a75616bcdaa2a9c847151d43df56a9273"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim , bool SeparateBuffers, bool AlignSubArrays, typename LinearizeArrayDimsFunctor &gt; </td></tr>
-<tr class="memitem:a75616bcdaa2a9c847151d43df56a9273"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a75616bcdaa2a9c847151d43df56a9273">llama::mapping::isSoA&lt; SoA&lt; ArrayExtents, RecordDim, SeparateBuffers, AlignSubArrays, LinearizeArrayDimsFunctor &gt; &gt;</a> = true</td></tr>
-<tr class="separator:a75616bcdaa2a9c847151d43df56a9273"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac76f06ca10faa7056adfcd823c4face4"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim , Blobs Blobs, SubArrayAlignment SubArrayAlignment, typename LinearizeArrayDimsFunctor &gt; </td></tr>
+<tr class="memitem:ac76f06ca10faa7056adfcd823c4face4"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#ac76f06ca10faa7056adfcd823c4face4">llama::mapping::isSoA&lt; SoA&lt; ArrayExtents, RecordDim, Blobs, SubArrayAlignment, LinearizeArrayDimsFunctor &gt; &gt;</a> = true</td></tr>
+<tr class="separator:ac76f06ca10faa7056adfcd823c4face4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -185,7 +203,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc.html">mapping</a></li><li class="navelem"><a class="el" href="SoA_8hpp.html">SoA.hpp</a></li>
-    <li class="footer">Generated on Mon Dec 12 2022 15:14:27 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Dec 13 2022 23:13:03 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

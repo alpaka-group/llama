@@ -249,162 +249,164 @@ $(document).ready(function(){initNavTree('Simd_8hpp_source.html',''); initResiza
 <div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;            <span class="keywordflow">else</span> <span class="keywordflow">if</span> constexpr(mapping::isAoS&lt;Mapping&gt;)</div>
 <div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;            {</div>
 <div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;                static_assert(mapping::isAoS&lt;Mapping&gt;);</div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;                <span class="keyword">static</span> constexpr <span class="keyword">auto</span> srcStride</div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;                    = flatSizeOf&lt;typename Mapping::Flattener::FlatRecordDim, Mapping::alignAndPad&gt;;</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;                <span class="keyword">const</span> <span class="keyword">auto</span>* srcBaseAddr = <span class="keyword">reinterpret_cast&lt;</span><span class="keyword">const </span>std::byte*<span class="keyword">&gt;</span>(&amp;srcRef(rc));</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;                ElementSimd elemSimd; <span class="comment">// g++-12 really needs the intermediate elemSimd and memcpy</span></div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;                <span class="keywordflow">for</span>(<span class="keyword">auto</span> i = 0; i &lt; Traits::lanes; i++)</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;                    <span class="keyword">reinterpret_cast&lt;</span>FieldType*<span class="keyword">&gt;</span>(&amp;elemSimd)[i]</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;                        = *<span class="keyword">reinterpret_cast&lt;</span><span class="keyword">const </span>FieldType*<span class="keyword">&gt;</span>(srcBaseAddr + i * srcStride);</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;                std::memcpy(&amp;dstSimd(rc), &amp;elemSimd, <span class="keyword">sizeof</span>(elemSimd));</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;            }</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;            <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;            {</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;                <span class="keyword">auto</span> b = <a class="code" href="structllama_1_1ArrayIndexIterator.html">ArrayIndexIterator</a>{srcRef.view.mapping().extents(), srcRef.arrayIndex()};</div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;                ElementSimd elemSimd; <span class="comment">// g++-12 really needs the intermediate elemSimd and memcpy</span></div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;                <span class="keywordflow">for</span>(<span class="keyword">auto</span> i = 0; i &lt; Traits::lanes; i++)</div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;                    <span class="keyword">reinterpret_cast&lt;</span>FieldType*<span class="keyword">&gt;</span>(&amp;elemSimd)[i]</div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;                        = srcRef.view(*b++)(<a class="code" href="namespacellama.html#ae442e49eb3d8d604de1ef8ef3c7fb1d7">cat</a>(<span class="keyword">typename</span> T::BoundRecordCoord{}, rc)); <span class="comment">// scalar loads</span></div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;                std::memcpy(&amp;dstSimd(rc), &amp;elemSimd, <span class="keyword">sizeof</span>(elemSimd));</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;            }</div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;        }</div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160; </div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> Simd, <span class="keyword">typename</span> TFwd, <span class="keyword">typename</span> RecordCoord&gt;</div>
-<div class="line"><a name="l00223"></a><span class="lineno"><a class="line" href="namespacellama_1_1internal.html#a383757e5ef0435ab24cc8570e355912f">  223</a></span>&#160;        <a class="code" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a> <span class="keywordtype">void</span> <a class="code" href="namespacellama_1_1internal.html#a39d130ecf8dc32be0c10f142df6a0d42">storeSimdRecord</a>(<span class="keyword">const</span> <a class="code" href="namespacellama.html#acbffc3150313c513f88f7c008aa51694">Simd</a>&amp; srcSimd, TFwd&amp;&amp; dstRef, <a class="code" href="structllama_1_1RecordCoord.html">RecordCoord</a> rc)</div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;        {</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;            <span class="keyword">using</span> T = std::remove_reference_t&lt;TFwd&gt;;</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;            <span class="keyword">using</span> RecordDim = <span class="keyword">typename</span> T::AccessibleRecordDim;</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;            <span class="keyword">using</span> FieldType = <a class="code" href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">GetType</a>&lt;RecordDim, decltype(rc)&gt;;</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;            <span class="keyword">using</span> ElementSimd = std::decay_t&lt;decltype(srcSimd(rc))&gt;;</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;            <span class="keyword">using</span> Traits = <a class="code" href="structllama_1_1SimdTraits.html">SimdTraits&lt;ElementSimd&gt;</a>;</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160; </div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;            <span class="comment">// TODO(bgruber): can we generalize the logic whether we can store a srcSimd to that mapping?</span></div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;            <span class="keyword">using</span> Mapping = <span class="keyword">typename</span> std::remove_reference_t&lt;T&gt;::View::Mapping;</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;            <span class="keywordflow">if</span> constexpr(mapping::isSoA&lt;Mapping&gt;)</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;            {</div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;                <a class="code" href="macros_8hpp.html#a721a8877e1c29f2118eb4c2cb84bae66">LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING</a></div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;                Traits::storeUnaligned(srcSimd(rc), &amp;dstRef(rc)); <span class="comment">// SIMD store</span></div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;                <a class="code" href="macros_8hpp.html#af7008057667ae5357a49f28a175743bf">LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING</a></div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;            }</div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;            <span class="keywordflow">else</span> <span class="keywordflow">if</span> constexpr(mapping::isAoS&lt;Mapping&gt;)</div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;            {</div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;                <span class="keyword">static</span> constexpr <span class="keyword">auto</span> stride</div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;                    = flatSizeOf&lt;typename Mapping::Flattener::FlatRecordDim, Mapping::alignAndPad&gt;;</div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;                <span class="keyword">auto</span>* dstBaseAddr = <span class="keyword">reinterpret_cast&lt;</span>std::byte*<span class="keyword">&gt;</span>(&amp;dstRef(rc));</div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;                <span class="keyword">const</span> ElementSimd elemSimd = srcSimd(rc);</div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;                <span class="keywordflow">for</span>(<span class="keyword">auto</span> i = 0; i &lt; Traits::lanes; i++)</div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;                    *<span class="keyword">reinterpret_cast&lt;</span>FieldType*<span class="keyword">&gt;</span>(dstBaseAddr + i * stride)</div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;                        = <span class="keyword">reinterpret_cast&lt;</span><span class="keyword">const </span>FieldType*<span class="keyword">&gt;</span>(&amp;elemSimd)[i];</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;            }</div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;            <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;            {</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;                <span class="comment">// TODO(bgruber): how does this generalize conceptually to 2D and higher dimensions? in which</span></div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;                <span class="comment">// direction should we collect SIMD values?</span></div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;                <span class="keyword">const</span> ElementSimd elemSimd = srcSimd(rc);</div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;                <span class="keyword">auto</span> b = <a class="code" href="structllama_1_1ArrayIndexIterator.html">ArrayIndexIterator</a>{dstRef.view.mapping().extents(), dstRef.arrayIndex()};</div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;                <span class="keywordflow">for</span>(<span class="keyword">auto</span> i = 0; i &lt; Traits::lanes; i++)</div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;                    dstRef.view (*b++)(<a class="code" href="namespacellama.html#ae442e49eb3d8d604de1ef8ef3c7fb1d7">cat</a>(<span class="keyword">typename</span> T::BoundRecordCoord{}, rc))</div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;                        = <span class="keyword">reinterpret_cast&lt;</span><span class="keyword">const </span>FieldType*<span class="keyword">&gt;</span>(&amp;elemSimd)[i]; <span class="comment">// scalar store</span></div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;            }</div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;        }</div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;    } <span class="comment">// namespace internal</span></div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160; </div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> Simd&gt;</div>
-<div class="line"><a name="l00267"></a><span class="lineno"><a class="line" href="namespacellama.html#a6060f4836e56bda4689232f0d22fecf8">  267</a></span>&#160;    <a class="code" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a> <span class="keywordtype">void</span> <a class="code" href="namespacellama.html#a6060f4836e56bda4689232f0d22fecf8">loadSimd</a>(<span class="keyword">const</span> T&amp; srcRef, <a class="code" href="namespacellama.html#acbffc3150313c513f88f7c008aa51694">Simd</a>&amp; dstSimd)</div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;    {</div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;        <span class="comment">// structured dstSimd type and record reference</span></div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;        <span class="keywordflow">if</span> constexpr(isRecordRef&lt;Simd&gt; &amp;&amp; isRecordRef&lt;T&gt;)</div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;        {</div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;            forEachLeafCoord&lt;typename T::AccessibleRecordDim&gt;([&amp;](<span class="keyword">auto</span> rc) <a class="code" href="macros_8hpp.html#a5a40ca12db507af3cf9cbff655513aca">LLAMA_LAMBDA_INLINE</a></div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;                                                              { <a class="code" href="namespacellama_1_1internal.html#a6cc3ab81fd3ee9d9fa0579a062e14dcb">internal::loadSimdRecord</a>(srcRef, dstSimd, rc); });</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;        }</div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;        <span class="comment">// unstructured dstSimd and reference type</span></div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> constexpr(!isRecordRef&lt;Simd&gt; &amp;&amp; !isRecordRef&lt;T&gt;)</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;        {</div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;            <a class="code" href="macros_8hpp.html#a721a8877e1c29f2118eb4c2cb84bae66">LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING</a></div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;            dstSimd = <a class="code" href="structllama_1_1SimdTraits.html">SimdTraits&lt;Simd&gt;::loadUnaligned</a>(&amp;srcRef);</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;            <a class="code" href="macros_8hpp.html#af7008057667ae5357a49f28a175743bf">LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING</a></div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;        }</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;        <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;        {</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;            <span class="comment">// TODO(bgruber): when could we get here? Is this always an error?</span></div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;            static_assert(<span class="keyword">sizeof</span>(<a class="code" href="namespacellama.html#acbffc3150313c513f88f7c008aa51694">Simd</a>) == 0, <span class="stringliteral">&quot;Invalid combination of Simd type and reference type&quot;</span>);</div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;        }</div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;    }</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160; </div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> Simd, <span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00294"></a><span class="lineno"><a class="line" href="namespacellama.html#a85e63e02c425ced774c87dfc1e3dda3d">  294</a></span>&#160;    <a class="code" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a> <span class="keywordtype">void</span> <a class="code" href="namespacellama.html#a85e63e02c425ced774c87dfc1e3dda3d">storeSimd</a>(<span class="keyword">const</span> <a class="code" href="namespacellama.html#acbffc3150313c513f88f7c008aa51694">Simd</a>&amp; srcSimd, T&amp;&amp; dstRef)</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;    {</div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;        <span class="comment">// structured Simd type and record reference</span></div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;        <span class="keywordflow">if</span> constexpr(isRecordRef&lt;Simd&gt; &amp;&amp; isRecordRef&lt;T&gt;)</div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;        {</div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;            forEachLeafCoord&lt;typename T::AccessibleRecordDim&gt;([&amp;](<span class="keyword">auto</span> rc) <a class="code" href="macros_8hpp.html#a5a40ca12db507af3cf9cbff655513aca">LLAMA_LAMBDA_INLINE</a></div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;                                                              { <a class="code" href="namespacellama_1_1internal.html#a39d130ecf8dc32be0c10f142df6a0d42">internal::storeSimdRecord</a>(srcSimd, dstRef, rc); });</div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;        }</div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;        <span class="comment">// unstructured srcSimd and reference type</span></div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> constexpr(!isRecordRef&lt;Simd&gt; &amp;&amp; !isRecordRef&lt;T&gt;)</div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;        {</div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;            <a class="code" href="macros_8hpp.html#a721a8877e1c29f2118eb4c2cb84bae66">LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING</a></div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;            <a class="code" href="structllama_1_1SimdTraits.html">SimdTraits&lt;Simd&gt;::storeUnaligned</a>(srcSimd, &amp;dstRef);</div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;            <a class="code" href="macros_8hpp.html#af7008057667ae5357a49f28a175743bf">LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING</a></div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;        }</div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;        <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;        {</div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;            <span class="comment">// TODO(bgruber): when could we get here? Is this always an error?</span></div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;            static_assert(<span class="keyword">sizeof</span>(<a class="code" href="namespacellama.html#acbffc3150313c513f88f7c008aa51694">Simd</a>) == 0, <span class="stringliteral">&quot;Invalid combination of Simd type and reference type&quot;</span>);</div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;        }</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;    }</div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160; </div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;    <span class="keyword">template</span>&lt;</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;        std::size_t N,</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span>, <span class="comment">/* std::integral */</span> <span class="keyword">auto</span>&gt;</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;        <span class="keyword">typename</span> MakeSizedSimd,</div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;        <span class="keyword">typename</span> View,</div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;        <span class="keyword">typename</span> UnarySimdFunction&gt;</div>
-<div class="line"><a name="l00322"></a><span class="lineno"><a class="line" href="namespacellama.html#a4451ec281eb037ebac7c08772ce0670f">  322</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="namespacellama.html#a4451ec281eb037ebac7c08772ce0670f">simdForEachN</a>(<a class="code" href="structllama_1_1View.html">View</a>&amp; view, UnarySimdFunction f)</div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;    {</div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;        <span class="keyword">using</span> IndexType = <span class="keyword">typename</span> View::Mapping::ArrayExtents::value_type;</div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;        <span class="keyword">const</span> <span class="keyword">auto</span> total = <a class="code" href="namespacellama.html#abab7973f7686f93f02ad33e4d0636a25">product</a>(view.<a class="code" href="structllama_1_1View.html#a02995d9561c50196f5efae24031c0af6">mapping</a>().extents());</div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;        <span class="keyword">auto</span> it = view.<a class="code" href="structllama_1_1View.html#a5ef11158b3423bb2a9e4251680ccc435">begin</a>();</div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;        IndexType i = 0;</div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;        <span class="comment">// simd loop</span></div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;        <span class="keywordflow">while</span>(i + IndexType{N} &lt;= total)</div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;        {</div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;            <a class="code" href="namespacellama.html#aaf87c7bd7e5e13c9d7194ce488146686">SimdN&lt;typename View::RecordDim, N, MakeSizedSimd&gt;</a> simd;</div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;            <a class="code" href="namespacellama.html#a6060f4836e56bda4689232f0d22fecf8">loadSimd</a>(*it, simd);</div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;            <span class="keywordflow">if</span> constexpr(std::is_void_v&lt;decltype(f(simd))&gt;)</div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;                f(simd);</div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;            <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;                <a class="code" href="namespacellama.html#a85e63e02c425ced774c87dfc1e3dda3d">storeSimd</a>(f(simd), *it);</div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;            i += IndexType{N};</div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;            it += IndexType{N};</div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;        }</div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;        <span class="comment">// tail</span></div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;        <span class="keywordflow">while</span>(i &lt; total)</div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;        {</div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;            <span class="keyword">auto</span> scalar = <a class="code" href="structllama_1_1RecordRef.html">One&lt;typename View::RecordDim&gt;</a>{*it};</div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;            <span class="keywordflow">if</span> constexpr(std::is_void_v&lt;decltype(f(scalar))&gt;)</div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;                f(scalar);</div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;            <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;                *it = f(scalar);</div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;            ++i;</div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;            ++it;</div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;        }</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;    }</div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160; </div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;    <span class="keyword">template</span>&lt;</div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span>&gt;</div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;        <span class="keyword">typename</span> MakeSimd,</div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span>, <span class="comment">/* std::integral */</span> <span class="keyword">auto</span>&gt;</div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;        <span class="keyword">typename</span> MakeSizedSimd,</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;        <span class="keyword">typename</span> View,</div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;        <span class="keyword">typename</span> UnarySimdFunction&gt;</div>
-<div class="line"><a name="l00360"></a><span class="lineno"><a class="line" href="namespacellama.html#acebdbc18176bbf81e01c2b268665a94c">  360</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="namespacellama.html#acebdbc18176bbf81e01c2b268665a94c">simdForEach</a>(<a class="code" href="structllama_1_1View.html">View</a>&amp; view, UnarySimdFunction f)</div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;    {</div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;        constexpr <span class="keyword">auto</span> n = llama::simdLanesWithFullVectorsFor&lt;typename View::RecordDim, MakeSimd&gt;;</div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;        simdForEachN&lt;n, MakeSizedSimd&gt;(view, f);</div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;    }</div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;} <span class="comment">// namespace llama</span></div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;                <span class="keyword">static</span> constexpr <span class="keyword">auto</span> srcStride = <a class="code" href="namespacellama.html#ac8f48517b46c35c1a511273f08d2abb3">flatSizeOf</a>&lt;</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;                    <span class="keyword">typename</span> <a class="code" href="namespacellama.html#a1fddf1f638927edfb8da8e3c78da4e1c">Mapping::Flattener::FlatRecordDim</a>,</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;                    Mapping::fieldAlignment == <a class="code" href="namespacellama_1_1mapping.html#aeead2d9c8929b8c0aff18aad054a0710ad12fbc9a2ba3b0b91a4190959b4c966b">llama::mapping::FieldAlignment::Align</a>&gt;;</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;                <span class="keyword">const</span> <span class="keyword">auto</span>* srcBaseAddr = <span class="keyword">reinterpret_cast&lt;</span><span class="keyword">const </span>std::byte*<span class="keyword">&gt;</span>(&amp;srcRef(rc));</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;                ElementSimd elemSimd; <span class="comment">// g++-12 really needs the intermediate elemSimd and memcpy</span></div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;                <span class="keywordflow">for</span>(<span class="keyword">auto</span> i = 0; i &lt; Traits::lanes; i++)</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;                    <span class="keyword">reinterpret_cast&lt;</span>FieldType*<span class="keyword">&gt;</span>(&amp;elemSimd)[i]</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;                        = *<span class="keyword">reinterpret_cast&lt;</span><span class="keyword">const </span>FieldType*<span class="keyword">&gt;</span>(srcBaseAddr + i * srcStride);</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;                std::memcpy(&amp;dstSimd(rc), &amp;elemSimd, <span class="keyword">sizeof</span>(elemSimd));</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;            }</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;            {</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;                <span class="keyword">auto</span> b = <a class="code" href="structllama_1_1ArrayIndexIterator.html">ArrayIndexIterator</a>{srcRef.view.mapping().extents(), srcRef.arrayIndex()};</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;                ElementSimd elemSimd; <span class="comment">// g++-12 really needs the intermediate elemSimd and memcpy</span></div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;                <span class="keywordflow">for</span>(<span class="keyword">auto</span> i = 0; i &lt; Traits::lanes; i++)</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;                    <span class="keyword">reinterpret_cast&lt;</span>FieldType*<span class="keyword">&gt;</span>(&amp;elemSimd)[i]</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;                        = srcRef.view(*b++)(<a class="code" href="namespacellama.html#ae442e49eb3d8d604de1ef8ef3c7fb1d7">cat</a>(<span class="keyword">typename</span> T::BoundRecordCoord{}, rc)); <span class="comment">// scalar loads</span></div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;                std::memcpy(&amp;dstSimd(rc), &amp;elemSimd, <span class="keyword">sizeof</span>(elemSimd));</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;            }</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;        }</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160; </div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> Simd, <span class="keyword">typename</span> TFwd, <span class="keyword">typename</span> RecordCoord&gt;</div>
+<div class="line"><a name="l00224"></a><span class="lineno"><a class="line" href="namespacellama_1_1internal.html#a383757e5ef0435ab24cc8570e355912f">  224</a></span>&#160;        <a class="code" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a> <span class="keywordtype">void</span> <a class="code" href="namespacellama_1_1internal.html#a39d130ecf8dc32be0c10f142df6a0d42">storeSimdRecord</a>(<span class="keyword">const</span> <a class="code" href="namespacellama.html#acbffc3150313c513f88f7c008aa51694">Simd</a>&amp; srcSimd, TFwd&amp;&amp; dstRef, <a class="code" href="structllama_1_1RecordCoord.html">RecordCoord</a> rc)</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;        {</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;            <span class="keyword">using</span> T = std::remove_reference_t&lt;TFwd&gt;;</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;            <span class="keyword">using</span> RecordDim = <span class="keyword">typename</span> T::AccessibleRecordDim;</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;            <span class="keyword">using</span> FieldType = <a class="code" href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">GetType</a>&lt;RecordDim, decltype(rc)&gt;;</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;            <span class="keyword">using</span> ElementSimd = std::decay_t&lt;decltype(srcSimd(rc))&gt;;</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;            <span class="keyword">using</span> Traits = <a class="code" href="structllama_1_1SimdTraits.html">SimdTraits&lt;ElementSimd&gt;</a>;</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160; </div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;            <span class="comment">// TODO(bgruber): can we generalize the logic whether we can store a srcSimd to that mapping?</span></div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;            <span class="keyword">using</span> Mapping = <span class="keyword">typename</span> std::remove_reference_t&lt;T&gt;::View::Mapping;</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;            <span class="keywordflow">if</span> constexpr(mapping::isSoA&lt;Mapping&gt;)</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;            {</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;                <a class="code" href="macros_8hpp.html#a721a8877e1c29f2118eb4c2cb84bae66">LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING</a></div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;                Traits::storeUnaligned(srcSimd(rc), &amp;dstRef(rc)); <span class="comment">// SIMD store</span></div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;                <a class="code" href="macros_8hpp.html#af7008057667ae5357a49f28a175743bf">LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING</a></div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;            }</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;            <span class="keywordflow">else</span> <span class="keywordflow">if</span> constexpr(mapping::isAoS&lt;Mapping&gt;)</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;            {</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;                <span class="keyword">static</span> constexpr <span class="keyword">auto</span> stride = <a class="code" href="namespacellama.html#ac8f48517b46c35c1a511273f08d2abb3">flatSizeOf</a>&lt;</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;                    <span class="keyword">typename</span> <a class="code" href="namespacellama.html#a1fddf1f638927edfb8da8e3c78da4e1c">Mapping::Flattener::FlatRecordDim</a>,</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;                    Mapping::fieldAlignment == <a class="code" href="namespacellama_1_1mapping.html#aeead2d9c8929b8c0aff18aad054a0710ad12fbc9a2ba3b0b91a4190959b4c966b">llama::mapping::FieldAlignment::Align</a>&gt;;</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;                <span class="keyword">auto</span>* dstBaseAddr = <span class="keyword">reinterpret_cast&lt;</span>std::byte*<span class="keyword">&gt;</span>(&amp;dstRef(rc));</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;                <span class="keyword">const</span> ElementSimd elemSimd = srcSimd(rc);</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;                <span class="keywordflow">for</span>(<span class="keyword">auto</span> i = 0; i &lt; Traits::lanes; i++)</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;                    *<span class="keyword">reinterpret_cast&lt;</span>FieldType*<span class="keyword">&gt;</span>(dstBaseAddr + i * stride)</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;                        = <span class="keyword">reinterpret_cast&lt;</span><span class="keyword">const </span>FieldType*<span class="keyword">&gt;</span>(&amp;elemSimd)[i];</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;            }</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;            {</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;                <span class="comment">// TODO(bgruber): how does this generalize conceptually to 2D and higher dimensions? in which</span></div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;                <span class="comment">// direction should we collect SIMD values?</span></div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;                <span class="keyword">const</span> ElementSimd elemSimd = srcSimd(rc);</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;                <span class="keyword">auto</span> b = <a class="code" href="structllama_1_1ArrayIndexIterator.html">ArrayIndexIterator</a>{dstRef.view.mapping().extents(), dstRef.arrayIndex()};</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;                <span class="keywordflow">for</span>(<span class="keyword">auto</span> i = 0; i &lt; Traits::lanes; i++)</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;                    dstRef.view (*b++)(<a class="code" href="namespacellama.html#ae442e49eb3d8d604de1ef8ef3c7fb1d7">cat</a>(<span class="keyword">typename</span> T::BoundRecordCoord{}, rc))</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;                        = <span class="keyword">reinterpret_cast&lt;</span><span class="keyword">const </span>FieldType*<span class="keyword">&gt;</span>(&amp;elemSimd)[i]; <span class="comment">// scalar store</span></div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;            }</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;        }</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;    } <span class="comment">// namespace internal</span></div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160; </div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> Simd&gt;</div>
+<div class="line"><a name="l00269"></a><span class="lineno"><a class="line" href="namespacellama.html#a6060f4836e56bda4689232f0d22fecf8">  269</a></span>&#160;    <a class="code" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a> <span class="keywordtype">void</span> <a class="code" href="namespacellama.html#a6060f4836e56bda4689232f0d22fecf8">loadSimd</a>(<span class="keyword">const</span> T&amp; srcRef, <a class="code" href="namespacellama.html#acbffc3150313c513f88f7c008aa51694">Simd</a>&amp; dstSimd)</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;    {</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;        <span class="comment">// structured dstSimd type and record reference</span></div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;        <span class="keywordflow">if</span> constexpr(isRecordRef&lt;Simd&gt; &amp;&amp; isRecordRef&lt;T&gt;)</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;        {</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;            forEachLeafCoord&lt;typename T::AccessibleRecordDim&gt;([&amp;](<span class="keyword">auto</span> rc) <a class="code" href="macros_8hpp.html#a5a40ca12db507af3cf9cbff655513aca">LLAMA_LAMBDA_INLINE</a></div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;                                                              { <a class="code" href="namespacellama_1_1internal.html#a6cc3ab81fd3ee9d9fa0579a062e14dcb">internal::loadSimdRecord</a>(srcRef, dstSimd, rc); });</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;        }</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;        <span class="comment">// unstructured dstSimd and reference type</span></div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> constexpr(!isRecordRef&lt;Simd&gt; &amp;&amp; !isRecordRef&lt;T&gt;)</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;        {</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;            <a class="code" href="macros_8hpp.html#a721a8877e1c29f2118eb4c2cb84bae66">LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING</a></div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;            dstSimd = <a class="code" href="structllama_1_1SimdTraits.html">SimdTraits&lt;Simd&gt;::loadUnaligned</a>(&amp;srcRef);</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;            <a class="code" href="macros_8hpp.html#af7008057667ae5357a49f28a175743bf">LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING</a></div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;        }</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;        <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;        {</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;            <span class="comment">// TODO(bgruber): when could we get here? Is this always an error?</span></div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;            static_assert(<span class="keyword">sizeof</span>(<a class="code" href="namespacellama.html#acbffc3150313c513f88f7c008aa51694">Simd</a>) == 0, <span class="stringliteral">&quot;Invalid combination of Simd type and reference type&quot;</span>);</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;        }</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;    }</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160; </div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> Simd, <span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00296"></a><span class="lineno"><a class="line" href="namespacellama.html#a85e63e02c425ced774c87dfc1e3dda3d">  296</a></span>&#160;    <a class="code" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a> <span class="keywordtype">void</span> <a class="code" href="namespacellama.html#a85e63e02c425ced774c87dfc1e3dda3d">storeSimd</a>(<span class="keyword">const</span> <a class="code" href="namespacellama.html#acbffc3150313c513f88f7c008aa51694">Simd</a>&amp; srcSimd, T&amp;&amp; dstRef)</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;    {</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;        <span class="comment">// structured Simd type and record reference</span></div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;        <span class="keywordflow">if</span> constexpr(isRecordRef&lt;Simd&gt; &amp;&amp; isRecordRef&lt;T&gt;)</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;        {</div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;            forEachLeafCoord&lt;typename T::AccessibleRecordDim&gt;([&amp;](<span class="keyword">auto</span> rc) <a class="code" href="macros_8hpp.html#a5a40ca12db507af3cf9cbff655513aca">LLAMA_LAMBDA_INLINE</a></div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;                                                              { <a class="code" href="namespacellama_1_1internal.html#a39d130ecf8dc32be0c10f142df6a0d42">internal::storeSimdRecord</a>(srcSimd, dstRef, rc); });</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;        }</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;        <span class="comment">// unstructured srcSimd and reference type</span></div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> constexpr(!isRecordRef&lt;Simd&gt; &amp;&amp; !isRecordRef&lt;T&gt;)</div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;        {</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;            <a class="code" href="macros_8hpp.html#a721a8877e1c29f2118eb4c2cb84bae66">LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING</a></div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;            <a class="code" href="structllama_1_1SimdTraits.html">SimdTraits&lt;Simd&gt;::storeUnaligned</a>(srcSimd, &amp;dstRef);</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;            <a class="code" href="macros_8hpp.html#af7008057667ae5357a49f28a175743bf">LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING</a></div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;        }</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;        <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;        {</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;            <span class="comment">// TODO(bgruber): when could we get here? Is this always an error?</span></div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;            static_assert(<span class="keyword">sizeof</span>(<a class="code" href="namespacellama.html#acbffc3150313c513f88f7c008aa51694">Simd</a>) == 0, <span class="stringliteral">&quot;Invalid combination of Simd type and reference type&quot;</span>);</div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;        }</div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;    }</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160; </div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;    <span class="keyword">template</span>&lt;</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;        std::size_t N,</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span>, <span class="comment">/* std::integral */</span> <span class="keyword">auto</span>&gt;</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;        <span class="keyword">typename</span> MakeSizedSimd,</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;        <span class="keyword">typename</span> View,</div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;        <span class="keyword">typename</span> UnarySimdFunction&gt;</div>
+<div class="line"><a name="l00324"></a><span class="lineno"><a class="line" href="namespacellama.html#a4451ec281eb037ebac7c08772ce0670f">  324</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="namespacellama.html#a4451ec281eb037ebac7c08772ce0670f">simdForEachN</a>(<a class="code" href="structllama_1_1View.html">View</a>&amp; view, UnarySimdFunction f)</div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;    {</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;        <span class="keyword">using</span> IndexType = <span class="keyword">typename</span> View::Mapping::ArrayExtents::value_type;</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;        <span class="keyword">const</span> <span class="keyword">auto</span> total = <a class="code" href="namespacellama.html#abab7973f7686f93f02ad33e4d0636a25">product</a>(view.<a class="code" href="structllama_1_1View.html#a02995d9561c50196f5efae24031c0af6">mapping</a>().extents());</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;        <span class="keyword">auto</span> it = view.<a class="code" href="structllama_1_1View.html#a5ef11158b3423bb2a9e4251680ccc435">begin</a>();</div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;        IndexType i = 0;</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;        <span class="comment">// simd loop</span></div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;        <span class="keywordflow">while</span>(i + IndexType{N} &lt;= total)</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;        {</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;            <a class="code" href="namespacellama.html#aaf87c7bd7e5e13c9d7194ce488146686">SimdN&lt;typename View::RecordDim, N, MakeSizedSimd&gt;</a> simd;</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;            <a class="code" href="namespacellama.html#a6060f4836e56bda4689232f0d22fecf8">loadSimd</a>(*it, simd);</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;            <span class="keywordflow">if</span> constexpr(std::is_void_v&lt;decltype(f(simd))&gt;)</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;                f(simd);</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;                <a class="code" href="namespacellama.html#a85e63e02c425ced774c87dfc1e3dda3d">storeSimd</a>(f(simd), *it);</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;            i += IndexType{N};</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;            it += IndexType{N};</div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;        }</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;        <span class="comment">// tail</span></div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;        <span class="keywordflow">while</span>(i &lt; total)</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;        {</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;            <span class="keyword">auto</span> scalar = <a class="code" href="structllama_1_1RecordRef.html">One&lt;typename View::RecordDim&gt;</a>{*it};</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;            <span class="keywordflow">if</span> constexpr(std::is_void_v&lt;decltype(f(scalar))&gt;)</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;                f(scalar);</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;                *it = f(scalar);</div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;            ++i;</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;            ++it;</div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;        }</div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;    }</div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160; </div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;    <span class="keyword">template</span>&lt;</div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span>&gt;</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;        <span class="keyword">typename</span> MakeSimd,</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span>, <span class="comment">/* std::integral */</span> <span class="keyword">auto</span>&gt;</div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;        <span class="keyword">typename</span> MakeSizedSimd,</div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;        <span class="keyword">typename</span> View,</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;        <span class="keyword">typename</span> UnarySimdFunction&gt;</div>
+<div class="line"><a name="l00362"></a><span class="lineno"><a class="line" href="namespacellama.html#acebdbc18176bbf81e01c2b268665a94c">  362</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="namespacellama.html#acebdbc18176bbf81e01c2b268665a94c">simdForEach</a>(<a class="code" href="structllama_1_1View.html">View</a>&amp; view, UnarySimdFunction f)</div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;    {</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;        constexpr <span class="keyword">auto</span> n = llama::simdLanesWithFullVectorsFor&lt;typename View::RecordDim, MakeSimd&gt;;</div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;        simdForEachN&lt;n, MakeSizedSimd&gt;(view, f);</div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;    }</div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;} <span class="comment">// namespace llama</span></div>
 <div class="ttc" id="aAoS_8hpp_html"><div class="ttname"><a href="AoS_8hpp.html">AoS.hpp</a></div></div>
 <div class="ttc" id="aCore_8hpp_html"><div class="ttname"><a href="Core_8hpp.html">Core.hpp</a></div></div>
 <div class="ttc" id="aRecordRef_8hpp_html"><div class="ttname"><a href="RecordRef_8hpp.html">RecordRef.hpp</a></div></div>
@@ -416,22 +418,24 @@ $(document).ready(function(){initNavTree('Simd_8hpp_source.html',''); initResiza
 <div class="ttc" id="amacros_8hpp_html_af7008057667ae5357a49f28a175743bf"><div class="ttname"><a href="macros_8hpp.html#af7008057667ae5357a49f28a175743bf">LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING</a></div><div class="ttdeci">#define LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING</div><div class="ttdef"><b>Definition:</b> <a href="macros_8hpp_source.html#l00153">macros.hpp:153</a></div></div>
 <div class="ttc" id="anamespacellama_1_1internal_html_a39d130ecf8dc32be0c10f142df6a0d42"><div class="ttname"><a href="namespacellama_1_1internal.html#a39d130ecf8dc32be0c10f142df6a0d42">llama::internal::storeSimdRecord</a></div><div class="ttdeci">void storeSimdRecord(const Simd &amp;srcSimd, T &amp;&amp;dstRef, RecordCoord rc)</div></div>
 <div class="ttc" id="anamespacellama_1_1internal_html_a6cc3ab81fd3ee9d9fa0579a062e14dcb"><div class="ttname"><a href="namespacellama_1_1internal.html#a6cc3ab81fd3ee9d9fa0579a062e14dcb">llama::internal::loadSimdRecord</a></div><div class="ttdeci">void loadSimdRecord(const T &amp;srcRef, Simd &amp;dstSimd, RecordCoord rc)</div><div class="ttdef"><b>Definition:</b> <a href="Simd_8hpp_source.html#l00173">Simd.hpp:173</a></div></div>
+<div class="ttc" id="anamespacellama_1_1mapping_html_aeead2d9c8929b8c0aff18aad054a0710ad12fbc9a2ba3b0b91a4190959b4c966b"><div class="ttname"><a href="namespacellama_1_1mapping.html#aeead2d9c8929b8c0aff18aad054a0710ad12fbc9a2ba3b0b91a4190959b4c966b">llama::mapping::FieldAlignment::Align</a></div><div class="ttdeci">@ Align</div></div>
 <div class="ttc" id="anamespacellama_html"><div class="ttname"><a href="namespacellama.html">llama</a></div><div class="ttdef"><b>Definition:</b> <a href="Accessors_8hpp_source.html#l00009">Accessors.hpp:10</a></div></div>
 <div class="ttc" id="anamespacellama_html_a1fddf1f638927edfb8da8e3c78da4e1c"><div class="ttname"><a href="namespacellama.html#a1fddf1f638927edfb8da8e3c78da4e1c">llama::FlatRecordDim</a></div><div class="ttdeci">typename internal::FlattenRecordDimImpl&lt; RecordDim &gt;::type FlatRecordDim</div><div class="ttdoc">Returns a flat type list containing all leaf field types of the given record dimension.</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00374">Core.hpp:374</a></div></div>
 <div class="ttc" id="anamespacellama_html_a34f90853e28950fdd34ecf9696ae1f63"><div class="ttname"><a href="namespacellama.html#a34f90853e28950fdd34ecf9696ae1f63">llama::simdLanesWithFullVectorsFor</a></div><div class="ttdeci">constexpr std::size_t simdLanesWithFullVectorsFor</div><div class="ttdef"><b>Definition:</b> <a href="Simd_8hpp_source.html#l00076">Simd.hpp:77</a></div></div>
-<div class="ttc" id="anamespacellama_html_a4451ec281eb037ebac7c08772ce0670f"><div class="ttname"><a href="namespacellama.html#a4451ec281eb037ebac7c08772ce0670f">llama::simdForEachN</a></div><div class="ttdeci">void simdForEachN(View &amp;view, UnarySimdFunction f)</div><div class="ttdef"><b>Definition:</b> <a href="Simd_8hpp_source.html#l00322">Simd.hpp:322</a></div></div>
-<div class="ttc" id="anamespacellama_html_a6060f4836e56bda4689232f0d22fecf8"><div class="ttname"><a href="namespacellama.html#a6060f4836e56bda4689232f0d22fecf8">llama::loadSimd</a></div><div class="ttdeci">void loadSimd(const T &amp;srcRef, Simd &amp;dstSimd)</div><div class="ttdef"><b>Definition:</b> <a href="Simd_8hpp_source.html#l00267">Simd.hpp:267</a></div></div>
+<div class="ttc" id="anamespacellama_html_a4451ec281eb037ebac7c08772ce0670f"><div class="ttname"><a href="namespacellama.html#a4451ec281eb037ebac7c08772ce0670f">llama::simdForEachN</a></div><div class="ttdeci">void simdForEachN(View &amp;view, UnarySimdFunction f)</div><div class="ttdef"><b>Definition:</b> <a href="Simd_8hpp_source.html#l00324">Simd.hpp:324</a></div></div>
+<div class="ttc" id="anamespacellama_html_a6060f4836e56bda4689232f0d22fecf8"><div class="ttname"><a href="namespacellama.html#a6060f4836e56bda4689232f0d22fecf8">llama::loadSimd</a></div><div class="ttdeci">void loadSimd(const T &amp;srcRef, Simd &amp;dstSimd)</div><div class="ttdef"><b>Definition:</b> <a href="Simd_8hpp_source.html#l00269">Simd.hpp:269</a></div></div>
 <div class="ttc" id="anamespacellama_html_a825425dc4761ab3b27c3ec6d42876f32"><div class="ttname"><a href="namespacellama.html#a825425dc4761ab3b27c3ec6d42876f32">llama::TransformLeaves</a></div><div class="ttdeci">TransformLeavesWithCoord&lt; RecordDim, internal::MakePassSecond&lt; FieldTypeFunctor &gt;::template fn &gt; TransformLeaves</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00639">Core.hpp:640</a></div></div>
 <div class="ttc" id="anamespacellama_html_a85e41b88e239189c88b2d895bfc2691e"><div class="ttname"><a href="namespacellama.html#a85e41b88e239189c88b2d895bfc2691e">llama::simdLanes</a></div><div class="ttdeci">constexpr auto simdLanes</div><div class="ttdef"><b>Definition:</b> <a href="Simd_8hpp_source.html#l00049">Simd.hpp:49</a></div></div>
-<div class="ttc" id="anamespacellama_html_a85e63e02c425ced774c87dfc1e3dda3d"><div class="ttname"><a href="namespacellama.html#a85e63e02c425ced774c87dfc1e3dda3d">llama::storeSimd</a></div><div class="ttdeci">void storeSimd(const Simd &amp;srcSimd, T &amp;&amp;dstRef)</div><div class="ttdef"><b>Definition:</b> <a href="Simd_8hpp_source.html#l00294">Simd.hpp:294</a></div></div>
+<div class="ttc" id="anamespacellama_html_a85e63e02c425ced774c87dfc1e3dda3d"><div class="ttname"><a href="namespacellama.html#a85e63e02c425ced774c87dfc1e3dda3d">llama::storeSimd</a></div><div class="ttdeci">void storeSimd(const Simd &amp;srcSimd, T &amp;&amp;dstRef)</div><div class="ttdef"><b>Definition:</b> <a href="Simd_8hpp_source.html#l00296">Simd.hpp:296</a></div></div>
 <div class="ttc" id="anamespacellama_html_aaf87c7bd7e5e13c9d7194ce488146686"><div class="ttname"><a href="namespacellama.html#aaf87c7bd7e5e13c9d7194ce488146686">llama::SimdN</a></div><div class="ttdeci">typename std::conditional_t&lt; isRecordDim&lt; T &gt;, std::conditional_t&lt; N==1, boost::mp11::mp_identity&lt; One&lt; T &gt; &gt;, boost::mp11::mp_identity&lt; One&lt; SimdizeN&lt; T, N, MakeSizedSimd &gt; &gt;&gt; &gt;, std::conditional_t&lt; N==1, boost::mp11::mp_identity&lt; T &gt;, boost::mp11::mp_identity&lt; SimdizeN&lt; T, N, MakeSizedSimd &gt; &gt;&gt; &gt;::type SimdN</div><div class="ttdef"><b>Definition:</b> <a href="Simd_8hpp_source.html#l00130">Simd.hpp:139</a></div></div>
 <div class="ttc" id="anamespacellama_html_ab5050ae091b407bcd3adabb734f2aba0"><div class="ttname"><a href="namespacellama.html#ab5050ae091b407bcd3adabb734f2aba0">llama::SimdizeN</a></div><div class="ttdeci">typename internal::SimdizeNImpl&lt; RecordDim, N, MakeSizedSimd &gt;::type SimdizeN</div><div class="ttdef"><b>Definition:</b> <a href="Simd_8hpp_source.html#l00118">Simd.hpp:118</a></div></div>
 <div class="ttc" id="anamespacellama_html_abab7973f7686f93f02ad33e4d0636a25"><div class="ttname"><a href="namespacellama.html#abab7973f7686f93f02ad33e4d0636a25">llama::product</a></div><div class="ttdeci">constexpr auto product(Array&lt; T, N &gt; a) -&gt; T</div><div class="ttdef"><b>Definition:</b> <a href="Array_8hpp_source.html#l00255">Array.hpp:255</a></div></div>
 <div class="ttc" id="anamespacellama_html_abb21e8bcb7c41613b7183a1beef1f600"><div class="ttname"><a href="namespacellama.html#abb21e8bcb7c41613b7183a1beef1f600">llama::chooseSimdLanes</a></div><div class="ttdeci">constexpr auto chooseSimdLanes(BinaryReductionFunction reduce) -&gt; std::size_t</div><div class="ttdef"><b>Definition:</b> <a href="Simd_8hpp_source.html#l00056">Simd.hpp:56</a></div></div>
+<div class="ttc" id="anamespacellama_html_ac8f48517b46c35c1a511273f08d2abb3"><div class="ttname"><a href="namespacellama.html#ac8f48517b46c35c1a511273f08d2abb3">llama::flatSizeOf</a></div><div class="ttdeci">constexpr std::size_t flatSizeOf</div><div class="ttdoc">The size of a type list if its elements would be in a normal struct.</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00504">Core.hpp:504</a></div></div>
 <div class="ttc" id="anamespacellama_html_ac902aa26f43ee2c8cceeb580a1df0c50"><div class="ttname"><a href="namespacellama.html#ac902aa26f43ee2c8cceeb580a1df0c50">llama::simdLanesWithLeastRegistersFor</a></div><div class="ttdeci">constexpr std::size_t simdLanesWithLeastRegistersFor</div><div class="ttdef"><b>Definition:</b> <a href="Simd_8hpp_source.html#l00085">Simd.hpp:86</a></div></div>
 <div class="ttc" id="anamespacellama_html_acbffc3150313c513f88f7c008aa51694"><div class="ttname"><a href="namespacellama.html#acbffc3150313c513f88f7c008aa51694">llama::Simd</a></div><div class="ttdeci">typename std::conditional_t&lt; isRecordDim&lt; T &gt;, boost::mp11::mp_identity&lt; One&lt; Simdize&lt; T, MakeSimd &gt; &gt;&gt;, boost::mp11::mp_identity&lt; Simdize&lt; T, MakeSimd &gt; &gt;&gt;::type Simd</div><div class="ttdef"><b>Definition:</b> <a href="Simd_8hpp_source.html#l00144">Simd.hpp:147</a></div></div>
 <div class="ttc" id="anamespacellama_html_acdfb627d325de5ab6c18cdc842cd7350"><div class="ttname"><a href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">llama::GetType</a></div><div class="ttdeci">typename internal::GetTypeImpl&lt; RecordDim, RecordCoordOrTags... &gt;::type GetType</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00272">Core.hpp:272</a></div></div>
-<div class="ttc" id="anamespacellama_html_acebdbc18176bbf81e01c2b268665a94c"><div class="ttname"><a href="namespacellama.html#acebdbc18176bbf81e01c2b268665a94c">llama::simdForEach</a></div><div class="ttdeci">void simdForEach(View &amp;view, UnarySimdFunction f)</div><div class="ttdef"><b>Definition:</b> <a href="Simd_8hpp_source.html#l00360">Simd.hpp:360</a></div></div>
+<div class="ttc" id="anamespacellama_html_acebdbc18176bbf81e01c2b268665a94c"><div class="ttname"><a href="namespacellama.html#acebdbc18176bbf81e01c2b268665a94c">llama::simdForEach</a></div><div class="ttdeci">void simdForEach(View &amp;view, UnarySimdFunction f)</div><div class="ttdef"><b>Definition:</b> <a href="Simd_8hpp_source.html#l00362">Simd.hpp:362</a></div></div>
 <div class="ttc" id="anamespacellama_html_adf54146d2fef06baf9d512e22793f41a"><div class="ttname"><a href="namespacellama.html#adf54146d2fef06baf9d512e22793f41a">llama::Simdize</a></div><div class="ttdeci">TransformLeaves&lt; RecordDim, MakeSimd &gt; Simdize</div><div class="ttdef"><b>Definition:</b> <a href="Simd_8hpp_source.html#l00123">Simd.hpp:123</a></div></div>
 <div class="ttc" id="anamespacellama_html_ae442e49eb3d8d604de1ef8ef3c7fb1d7"><div class="ttname"><a href="namespacellama.html#ae442e49eb3d8d604de1ef8ef3c7fb1d7">llama::cat</a></div><div class="ttdeci">constexpr LLAMA_FN_HOST_ACC_INLINE auto cat(RecordCoords...)</div><div class="ttdoc">Concatenate a set of RecordCoords instances.</div><div class="ttdef"><b>Definition:</b> <a href="RecordCoord_8hpp_source.html#l00109">RecordCoord.hpp:109</a></div></div>
 <div class="ttc" id="astructllama_1_1ArrayIndexIterator_html"><div class="ttname"><a href="structllama_1_1ArrayIndexIterator.html">llama::ArrayIndexIterator</a></div><div class="ttdoc">Iterator supporting ArrayIndexRange.</div><div class="ttdef"><b>Definition:</b> <a href="ArrayIndexRange_8hpp_source.html#l00018">ArrayIndexRange.hpp:19</a></div></div>
@@ -457,7 +461,7 @@ $(document).ready(function(){initNavTree('Simd_8hpp_source.html',''); initResiza
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="Simd_8hpp.html">Simd.hpp</a></li>
-    <li class="footer">Generated on Mon Dec 12 2022 15:14:27 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Dec 13 2022 23:13:03 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

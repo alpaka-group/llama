@@ -32,7 +32,8 @@ var NAVTREE =
         [ "All", "namespacemembers.html", "namespacemembers_dup" ],
         [ "Functions", "namespacemembers_func.html", null ],
         [ "Variables", "namespacemembers_vars.html", null ],
-        [ "Typedefs", "namespacemembers_type.html", null ]
+        [ "Typedefs", "namespacemembers_type.html", null ],
+        [ "Enumerations", "namespacemembers_enum.html", null ]
       ] ]
     ] ],
     [ "Classes", "annotated.html", [
@@ -60,12 +61,12 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "Accessors_8hpp.html",
-"RecordRef_8hpp.html#aa30231c6e488d62d3b26388e1ca9f590",
-"namespacellama.html#a62c0b490774fc0bbdc859c10af82b8c2",
-"namespacellama_1_1mapping_1_1tree_1_1internal.html#a2c18fb59a758ab64477a2719ad0ce4bc",
-"structllama_1_1RecordRef_1_1LoaderConst.html#a8ec460ffb2980ae5d3c28f89399ea91e",
-"structllama_1_1internal_1_1IsProxyReferenceImpl_3_01R_00_01std_1_1void__t_3_01typename_01R_1_1vaf29d5bd88afd76084d03518114f19340.html",
-"structllama_1_1mapping_1_1Trace.html#a86343561c50392c151e40e93cbf45ec7"
+"RecordRef_8hpp.html#a771e3206f84801cb13a0c35928fbd4dd",
+"namespacellama.html#a50289a09b368b8f1c333e3d6feb49398",
+"namespacellama_1_1mapping_1_1tree.html#ad5b9ef0bed3b8a2e014b6583d780180d",
+"structllama_1_1RecordRef.html#ac3fb0845d41aba3b8e0412a663491aa2",
+"structllama_1_1internal_1_1GetTypeImpl_3_01Record_3_01Children_8_8_8_01_4_00_01RecordCoord_3_01Hd335281b58bf9419f48b7fc65f5657ab.html#a20d230f3fb7208ab88e3e55a73936293",
+"structllama_1_1mapping_1_1Split.html#aa2c71856662ff917d29141d2eb12e07b"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
