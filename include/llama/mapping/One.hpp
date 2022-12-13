@@ -10,15 +10,15 @@ namespace llama::mapping
 {
     /// Maps all array dimension indices to the same location and layouts struct members consecutively. This mapping is
     /// used for temporary, single element views.
-    /// \tparam AlignAndPad If true, padding bytes are inserted to guarantee that struct members are properly aligned.
-    /// If false, struct members are tightly packed.
+    /// \tparam TFieldAlignment If Align, padding bytes are inserted to guarantee that struct members are properly
+    /// aligned. If false, struct members are tightly packed.
     /// \tparam FlattenRecordDim Defines how the record dimension's fields should be flattened. See \ref
     /// FlattenRecordDimInOrder, \ref FlattenRecordDimIncreasingAlignment, \ref FlattenRecordDimDecreasingAlignment and
     /// \ref FlattenRecordDimMinimizePadding.
     template<
         typename TArrayExtents,
         typename TRecordDim,
-        bool AlignAndPad = true,
+        FieldAlignment TFieldAlignment = FieldAlignment::Align,
         template<typename> typename FlattenRecordDim = FlattenRecordDimMinimizePadding>
     struct One : MappingBase<TArrayExtents, TRecordDim>
     {
@@ -27,7 +27,7 @@ namespace llama::mapping
         using size_type = typename Base::size_type;
 
     public:
-        inline static constexpr bool alignAndPad = AlignAndPad;
+        inline static constexpr FieldAlignment fieldAlignment = TFieldAlignment;
         using Flattener = FlattenRecordDim<TRecordDim>;
         static constexpr std::size_t blobCount = 1;
 
@@ -43,7 +43,10 @@ namespace llama::mapping
 
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(size_type) const -> size_type
         {
-            return flatSizeOf<typename Flattener::FlatRecordDim, AlignAndPad, false>; // no tail padding
+            return flatSizeOf<
+                typename Flattener::FlatRecordDim,
+                fieldAlignment == FieldAlignment::Align,
+                false>; // no tail padding
         }
 
         template<std::size_t... RecordCoords>
@@ -56,8 +59,10 @@ namespace llama::mapping
                 *& // mess with nvcc compiler state to workaround bug
 #endif
                  Flattener::template flatIndex<RecordCoords...>;
-            constexpr auto offset
-                = static_cast<size_type>(flatOffsetOf<typename Flattener::FlatRecordDim, flatFieldIndex, AlignAndPad>);
+            constexpr auto offset = static_cast<size_type>(flatOffsetOf<
+                                                           typename Flattener::FlatRecordDim,
+                                                           flatFieldIndex,
+                                                           fieldAlignment == FieldAlignment::Align>);
             return {size_type{0}, offset};
         }
     };
@@ -65,31 +70,36 @@ namespace llama::mapping
     /// One mapping preserving the alignment of the field types by inserting padding.
     /// \see One
     template<typename ArrayExtents, typename RecordDim>
-    using AlignedOne = One<ArrayExtents, RecordDim, true, FlattenRecordDimInOrder>;
+    using AlignedOne = One<ArrayExtents, RecordDim, FieldAlignment::Align, FlattenRecordDimInOrder>;
 
     /// One mapping preserving the alignment of the field types by inserting padding and permuting the field order to
     /// minimize this padding.
     /// \see One
     template<typename ArrayExtents, typename RecordDim>
-    using MinAlignedOne = One<ArrayExtents, RecordDim, true, FlattenRecordDimMinimizePadding>;
+    using MinAlignedOne = One<ArrayExtents, RecordDim, FieldAlignment::Align, FlattenRecordDimMinimizePadding>;
 
     /// One mapping packing the field types tightly, violating the types' alignment requirements.
     /// \see One
     template<typename ArrayExtents, typename RecordDim>
-    using PackedOne = One<ArrayExtents, RecordDim, false, FlattenRecordDimInOrder>;
+    using PackedOne = One<ArrayExtents, RecordDim, FieldAlignment::Pack, FlattenRecordDimInOrder>;
 
     /// Binds parameters to a \ref One mapping except for array and record dimension, producing a quoted
     /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
-    template<bool AlignAndPad, template<typename> typename FlattenRecordDim>
+    template<FieldAlignment FieldAlignment, template<typename> typename FlattenRecordDim>
     struct BindOne
     {
         template<typename ArrayExtents, typename RecordDim>
-        using fn = One<ArrayExtents, RecordDim, AlignAndPad, FlattenRecordDim>;
+        using fn = One<ArrayExtents, RecordDim, FieldAlignment, FlattenRecordDim>;
     };
 
     template<typename Mapping>
     inline constexpr bool isOne = false;
 
-    template<typename ArrayExtents, typename RecordDim, bool AlignAndPad, template<typename> typename FlattenRecordDim>
-    inline constexpr bool isOne<One<ArrayExtents, RecordDim, AlignAndPad, FlattenRecordDim>> = true;
+    template<
+        typename ArrayExtents,
+        typename RecordDim,
+        FieldAlignment FieldAlignment,
+        template<typename>
+        typename FlattenRecordDim>
+    inline constexpr bool isOne<One<ArrayExtents, RecordDim, FieldAlignment, FlattenRecordDim>> = true;
 } // namespace llama::mapping

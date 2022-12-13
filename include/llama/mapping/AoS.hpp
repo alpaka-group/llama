@@ -7,12 +7,6 @@
 
 namespace llama::mapping
 {
-    enum class FieldAlignment
-    {
-        Pack,
-        Align
-    };
-
     /// Array of struct mapping. Used to create a \ref View via \ref allocView.
     /// \tparam Alignment If Align, padding bytes are inserted to guarantee that struct members are properly aligned.
     /// If Pack, struct members are tightly packed.
