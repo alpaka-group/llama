@@ -4,6 +4,103 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 
+## [0.5] - unreleased
+
+### Added features
+- allow record coords in `llama::mapping::ChangeType`'s replacement map #468
+- converted the daxpy example to alpaka, so it can be used on more architectures #469
+- added new CUDA demo for pitched allocation #473
+- added small utilities `llama::divCeil`, `llama::roundToMultiple` and `llama::dot(Array)` #477
+- added support for new compilers/OSes: clang-14 #484, clang-15 #590, gcc-12 #490, nvcc 11.7 #501, nvcc 11.8 #591, nvcc 12.0 #654, MacOS-12 #540, nvc++ 22.9 (nvhpc) #547, #589
+- support array extents with arbitrary value types #488
+- the creation of the single amalgamated header is now available as script: #497, #535
+- a single amalgamated header from LLAMA is now published on each commit: #535
+- the `Trace` mapping is now supported on GPUs #503
+- the `Heatmap` mapping is now supported on GPUs #587
+- added macros for likely and unlikely attributes #506
+- added `front()` and `back()` to `llama::Array` #517, #528
+- added `data()` to `llama::Array` #553
+- allow in-place construction of `llama::Trace`'s inner mapping #517
+- make printing API in `llama::Trace` more versatile #517
+- added a documentation section comparing C++ and LLAMA data structure access #522
+- documented interplay of member functions and proxy references #524
+- added new utility functions `llama::transformBlobs()` and `llama::shallowCopy()` #525
+- added `llama::isTrace` trait #529
+- documented how to form references to `llama::One` #532
+- documented new LLAMA mappings and accessors #545, #583, #640
+- added `llama::isOne` trait #549
+- added `llama::isProxyReference` trait #550
+- added `llama::ScopedUpdate`, a tool to generically update values through a (proxy) reference #550
+- added an API for explicit SIMD programming #577, #578, #581
+- data access can now be customized using accessors #579, #611, #612, #642
+- the `README.md` has been updated with a link to our first publication on LLAMA #596
+- all mappings now re-expose their template parameters as nested types/values #599
+- added the `Projection` and `Byteswap` mappings #607, #612
+- added an example viewing a memory mapped file #608
+- heatmaps can now be written to binary files in addition to ASCII #615
+- added meta mapping `llama::mapping::PermuteArrayIndex` to permute array indices #616, #636
+- heatmap output can be trimmed #618
+- added blob allocator `llama::bloballoc::UniquePtr` #630
+- added STREAM benchmark #643
+- added some preliminary support for HIP (not CI tested yet) #651
+- added the BabelStream benchmark #650
+- added ROOT LHCB B2HHH analysis example #660, #672, #684
+- the `Split` mapping now additionally supports tag lists as selectors #674
+- allow the `BitPackedInt*` mappings to omit the sign bit #675
+- added new mapping `BitPackedIntAoS` #678
+- added new mapping `BitPackedFloatAoS` #687
+
+### Breaking changes
+
+- the template parameter list for `llama::ArrayExtents` changed to support specifying the index type: #488
+- the CI now uses alpaka 0.9 and not the development version #492
+- LLAMA's cmake project now builds in Release mode by default with tests/examples off #509
+- the unit tests now require Catch2 v3 to build, which can be downloaded automatically or taken from the system #511, #570
+- cmake 3.18.3 is now required by LLAMA and all examples #526
+- renamed `llama::VirtualRecord` into `llama::RecordRef` #551
+- the `Vc` library has been replaced by `xsimd` for explicit vectorization #557
+- the requirements on computed mappings have been tightened #627
+- renamed blob allocator `llama::bloballoc::Stack` to `llama::bloballoc::Array` #629
+- renamed `llama::VirtualView` to `llama::SubView` #638
+- the `SoA` mapping now aligns subarrays by default if a single blob is used #648
+- replaced Boolean parameters of mappings by enums to increase readability #655
+
+### Bug fixes and improvements
+- fixed various compilation flags #470
+- aligned `std::vector` in `daxpy` baseline benchmark #471
+- refactored common mapping code into a shared base class #472
+- fixed alpaka examples to support alpaka 0.9 #474, #504
+- made Codecov reports on PRs less verbose and allow for small coverage decreases #475
+- removed some MSVC workarounds #476
+- various minor CI fixes and updates: #478, #479, #483, #485, #491, #493, #494, #505, #512, #515, #519, #533, #538, #546, #556, #558, #562, #569, #571, #586, #600, #601, #602, #619, #620, #621, #622, #645, #646, #686, #688
+- various small code fixes: #486, #489, #495, #500, #502, #507, #527, #560, #575, #584, #597, #598, #603, #617, #631, #632, #641, #649, #658, #659, #673
+- various documentation fixes: #496, #514, #543, #563, #588, #624, #644, #649, #689
+- various unit test improvements: #531, #534, #537, #568, #609, #613, #661
+- fixed empty base optimization for MSVC: #499
+- `llama::structName<T>()` and `llama::recordCoordTags<T>` are now `constexpr` #521
+- cmake variables from Catch are now hidden by default in cmake guis #548
+- fixed warnings and asserts, and improve bitpacked mappings #549, #671, #677, #681
+- fixed some edge cases and improved mapping dumping #552, #647
+- allow assigning Trace references directly to each other #555
+- the naming of identifiers in LLAMA code is now enforced by `clang-tidy` #565
+- code formatting now requires `clang-format-15` #508, #564, #685
+- support proxy references in RecordRef tuple interface #572
+- comply to new CRP clang-tidy checks #573
+- the runs of the n-body example are now verified against each other #574
+- suppress unnecessary CUDA warnings #580
+- the n-body and alpaka n-body example are now more similar and support explicit SIMD #582
+- the gnuplot scripts for heatmaps have been improved #623
+- a view constructed without a blob array argument will now value initialize the blob array #649
+- the `SoA` mapping's performance has been improved when the array extents are fully known at compile time #653
+- fix `llama::structName<T>()` for `T`s in unnamed namespaces
+
+### Removed features
+
+- support for Visual Studio 2019 has been dropped #539
+- support for MacOS 11.15 has been dropped #561
+- support for AppleClang has been dropped, use brew's clang on MacOS #593
+- the obsolete `nbody_benchmark` example has been removed #595
+
 ## [0.4] - 2022-01-25
 
 ### Added features
