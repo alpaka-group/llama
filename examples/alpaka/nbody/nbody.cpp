@@ -152,9 +152,11 @@ struct UpdateKernel
                     if constexpr(MappingSM == AoS)
                         return llama::mapping::AoS<ArrayExtents, SharedMemoryParticle>{};
                     if constexpr(MappingSM == SoA_SB)
-                        return llama::mapping::SoA<ArrayExtents, SharedMemoryParticle, false>{};
+                        return llama::mapping::
+                            SoA<ArrayExtents, SharedMemoryParticle, llama::mapping::Blobs::Single>{};
                     if constexpr(MappingSM == SoA_MB)
-                        return llama::mapping::SoA<ArrayExtents, SharedMemoryParticle, true>{};
+                        return llama::mapping::
+                            SoA<ArrayExtents, SharedMemoryParticle, llama::mapping::Blobs::OnePerField>{};
                     if constexpr(MappingSM == AoSoA)
                         return llama::mapping::AoSoA<ArrayExtents, SharedMemoryParticle, aosoaLanes>{};
                 }();
@@ -245,9 +247,9 @@ void run(std::ostream& plotFile)
         if constexpr(MappingGM == AoS)
             return llama::mapping::AoS<ArrayExtents, Particle>{extents};
         if constexpr(MappingGM == SoA_SB)
-            return llama::mapping::SoA<ArrayExtents, Particle, false>{extents};
+            return llama::mapping::SoA<ArrayExtents, Particle, llama::mapping::Blobs::Single>{extents};
         if constexpr(MappingGM == SoA_MB)
-            return llama::mapping::SoA<ArrayExtents, Particle, true>{extents};
+            return llama::mapping::SoA<ArrayExtents, Particle, llama::mapping::Blobs::OnePerField>{extents};
         if constexpr(MappingGM == AoSoA)
             return llama::mapping::AoSoA<ArrayExtents, Particle, aosoaLanes>{extents};
     }();

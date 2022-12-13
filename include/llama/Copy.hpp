@@ -119,11 +119,11 @@ namespace llama
         template<
             typename ArrayExtents,
             typename RecordDim,
-            bool SeparateBuffers,
-            bool AlignSubArrays,
+            mapping::Blobs Blobs,
+            mapping::SubArrayAlignment SubArrayAlignment,
             typename LinearizeArrayDimsFunctor>
         inline constexpr std::size_t aosoaLanes<
-            mapping::SoA<ArrayExtents, RecordDim, SeparateBuffers, AlignSubArrays, LinearizeArrayDimsFunctor>> = std::
+            mapping::SoA<ArrayExtents, RecordDim, Blobs, SubArrayAlignment, LinearizeArrayDimsFunctor>> = std::
             numeric_limits<std::size_t>::max();
 
         template<typename ArrayExtents, typename RecordDim, std::size_t Lanes, typename LinearizeArrayDimsFunctor>
@@ -359,18 +359,17 @@ namespace llama
         typename RecordDim,
         typename LinearizeArrayDims,
         std::size_t LanesSrc,
-        bool DstSeparateBuffers,
-        bool DstAlignSubArrays>
+        mapping::Blobs DstBlobs,
+        mapping::SubArrayAlignment DstSubArrayAlignment>
     struct Copy<
         mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayDims>,
-        mapping::SoA<ArrayExtents, RecordDim, DstSeparateBuffers, DstAlignSubArrays, LinearizeArrayDims>>
+        mapping::SoA<ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayDims>>
     {
         template<typename SrcBlob, typename DstBlob>
         void operator()(
             const View<mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayDims>, SrcBlob>& srcView,
-            View<
-                mapping::SoA<ArrayExtents, RecordDim, DstSeparateBuffers, DstAlignSubArrays, LinearizeArrayDims>,
-                DstBlob>& dstView,
+            View<mapping::SoA<ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayDims>, DstBlob>&
+                dstView,
             std::size_t threadId,
             std::size_t threadCount)
         {
@@ -384,16 +383,16 @@ namespace llama
         typename RecordDim,
         typename LinearizeArrayDims,
         std::size_t LanesDst,
-        bool SrcSeparateBuffers,
-        bool SrcAlignSubArrays>
+        mapping::Blobs SrcBlobs,
+        mapping::SubArrayAlignment SrcSubArrayAlignment>
     struct Copy<
-        mapping::SoA<ArrayExtents, RecordDim, SrcSeparateBuffers, SrcAlignSubArrays, LinearizeArrayDims>,
+        mapping::SoA<ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayDims>,
         mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayDims>>
     {
         template<typename SrcBlob, typename DstBlob>
         void operator()(
             const View<
-                mapping::SoA<ArrayExtents, RecordDim, SrcSeparateBuffers, SrcAlignSubArrays, LinearizeArrayDims>,
+                mapping::SoA<ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayDims>,
                 SrcBlob>& srcView,
             View<mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayDims>, DstBlob>& dstView,
             std::size_t threadId,

@@ -196,11 +196,13 @@ $data << EOD
     daxpyAlpakaLlama(
         "SoA",
         plotFile,
-        llama::mapping::SoA<llama::ArrayExtentsDynamic<std::size_t, 1>, double, false>{extents});
+        llama::mapping::SoA<llama::ArrayExtentsDynamic<std::size_t, 1>, double, llama::mapping::Blobs::Single>{
+            extents});
     daxpyAlpakaLlama(
         "SoA MB",
         plotFile,
-        llama::mapping::SoA<llama::ArrayExtentsDynamic<std::size_t, 1>, double, true>{extents});
+        llama::mapping::SoA<llama::ArrayExtentsDynamic<std::size_t, 1>, double, llama::mapping::Blobs::OnePerField>{
+            extents});
     daxpyAlpakaLlama(
         "Bytesplit",
         plotFile,

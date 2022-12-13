@@ -96,9 +96,9 @@ __global__ void updateSM(View particles)
             if constexpr(MappingSM == 0)
                 return llama::mapping::AoS<ArrayExtents, SharedMemoryParticle>{};
             if constexpr(MappingSM == 1)
-                return llama::mapping::SoA<ArrayExtents, SharedMemoryParticle, false>{};
+                return llama::mapping::SoA<ArrayExtents, SharedMemoryParticle, llama::mapping::Blobs::Single>{};
             if constexpr(MappingSM == 2)
-                return llama::mapping::SoA<ArrayExtents, SharedMemoryParticle, true>{};
+                return llama::mapping::SoA<ArrayExtents, SharedMemoryParticle, llama::mapping::Blobs::OnePerField>{};
             if constexpr(MappingSM == 3)
                 return llama::mapping::AoSoA<ArrayExtents, SharedMemoryParticle, aosoaLanes>{};
         }();
@@ -189,9 +189,9 @@ try
         if constexpr(Mapping == 0)
             return llama::mapping::AoS<ArrayExtents, Particle>{extents};
         if constexpr(Mapping == 1)
-            return llama::mapping::SoA<ArrayExtents, Particle, false>{extents};
+            return llama::mapping::SoA<ArrayExtents, Particle, llama::mapping::Blobs::Single>{extents};
         if constexpr(Mapping == 2)
-            return llama::mapping::SoA<ArrayExtents, Particle, true>{extents};
+            return llama::mapping::SoA<ArrayExtents, Particle, llama::mapping::Blobs::OnePerField>{extents};
         if constexpr(Mapping == 3)
             return llama::mapping::AoSoA<ArrayExtents, Particle, aosoaLanes>{extents};
         if constexpr(Mapping == 4)

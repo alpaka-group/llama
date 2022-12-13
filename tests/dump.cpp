@@ -247,7 +247,7 @@ TEST_CASE("dump.ParticleUnaligned.Split.SoA_MB.AoS_Aligned.One")
          ArrayExtents,
          ParticleUnaligned,
          llama::RecordCoord<1>,
-         llama::mapping::BindSoA<true>::fn,
+         llama::mapping::BindSoA<llama::mapping::Blobs::OnePerField>::fn,
          llama::mapping::
              BindSplit<llama::RecordCoord<1>, llama::mapping::PackedOne, llama::mapping::AlignedAoS, true>::fn,
          true>{extents});
@@ -366,7 +366,8 @@ TEST_CASE("dump.Triangle.TriangleAoSWithComputedNormal")
 TEST_CASE("dump.picongpu.frame.256")
 {
     using ArrayExtents = llama::ArrayExtentsDynamic<int, 1>;
-    using Mapping = llama::mapping::SoA<ArrayExtents, picongpu::Frame, false, true>;
+    using Mapping = llama::mapping::
+        SoA<ArrayExtents, picongpu::Frame, llama::mapping::Blobs::Single, llama::mapping::SubArrayAlignment::Align>;
     auto mapping = Mapping{ArrayExtents{256}};
     dump(mapping);
 }
@@ -374,7 +375,11 @@ TEST_CASE("dump.picongpu.frame.256")
 TEST_CASE("dump.picongpu.frame_openPMD.25")
 {
     using ArrayExtents = llama::ArrayExtentsDynamic<int, 1>;
-    using Mapping = llama::mapping::SoA<ArrayExtents, picongpu::FrameOpenPMD, true, false>;
+    using Mapping = llama::mapping::SoA<
+        ArrayExtents,
+        picongpu::FrameOpenPMD,
+        llama::mapping::Blobs::OnePerField,
+        llama::mapping::SubArrayAlignment::Pack>;
     auto mapping = Mapping{ArrayExtents{25}};
     dump(mapping);
 }

@@ -93,9 +93,9 @@ try
         if constexpr(mappingIndex == 0)
             return llama::mapping::AoS<ArrayExtents, Vector>{extents};
         if constexpr(mappingIndex == 1)
-            return llama::mapping::SoA<ArrayExtents, Vector, false>{extents};
+            return llama::mapping::SoA<ArrayExtents, Vector, llama::mapping::Blobs::Single>{extents};
         if constexpr(mappingIndex == 2)
-            return llama::mapping::SoA<ArrayExtents, Vector, true>{extents};
+            return llama::mapping::SoA<ArrayExtents, Vector, llama::mapping::Blobs::OnePerField>{extents};
         if constexpr(mappingIndex == 3)
             return llama::mapping::tree::Mapping{extents, llama::Tuple{}, Vector{}};
         if constexpr(mappingIndex == 4)

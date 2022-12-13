@@ -280,21 +280,37 @@ auto setup(Queue& queue, const Dev& dev, const DevHost& /*devHost*/)
                 llama::mapping::FieldAlignment::Align,
                 llama::mapping::LinearizeArrayDimsMorton>(fieldExtents);
         if constexpr(FieldMapping == 3)
-            return llama::mapping::SoA<ArrayExtents, V3Real, false>(fieldExtents);
+            return llama::mapping::SoA<ArrayExtents, V3Real, llama::mapping::Blobs::Single>(fieldExtents);
         if constexpr(FieldMapping == 4)
-            return llama::mapping::SoA<ArrayExtents, V3Real, false, false, llama::mapping::LinearizeArrayDimsFortran>(
-                fieldExtents);
+            return llama::mapping::SoA<
+                ArrayExtents,
+                V3Real,
+                llama::mapping::Blobs::Single,
+                llama::mapping::SubArrayAlignment::Pack,
+                llama::mapping::LinearizeArrayDimsFortran>(fieldExtents);
         if constexpr(FieldMapping == 5)
-            return llama::mapping::SoA<ArrayExtents, V3Real, false, false, llama::mapping::LinearizeArrayDimsMorton>(
-                fieldExtents);
+            return llama::mapping::SoA<
+                ArrayExtents,
+                V3Real,
+                llama::mapping::Blobs::Single,
+                llama::mapping::SubArrayAlignment::Pack,
+                llama::mapping::LinearizeArrayDimsMorton>(fieldExtents);
         if constexpr(FieldMapping == 6)
-            return llama::mapping::SoA<ArrayExtents, V3Real, true>(fieldExtents);
+            return llama::mapping::SoA<ArrayExtents, V3Real, llama::mapping::Blobs::OnePerField>(fieldExtents);
         if constexpr(FieldMapping == 7)
-            return llama::mapping::SoA<ArrayExtents, V3Real, true, false, llama::mapping::LinearizeArrayDimsFortran>(
-                fieldExtents);
+            return llama::mapping::SoA<
+                ArrayExtents,
+                V3Real,
+                llama::mapping::Blobs::OnePerField,
+                llama::mapping::SubArrayAlignment::Pack,
+                llama::mapping::LinearizeArrayDimsFortran>(fieldExtents);
         if constexpr(FieldMapping == 8)
-            return llama::mapping::SoA<ArrayExtents, V3Real, true, false, llama::mapping::LinearizeArrayDimsMorton>(
-                fieldExtents);
+            return llama::mapping::SoA<
+                ArrayExtents,
+                V3Real,
+                llama::mapping::Blobs::OnePerField,
+                llama::mapping::SubArrayAlignment::Pack,
+                llama::mapping::LinearizeArrayDimsMorton>(fieldExtents);
         if constexpr(FieldMapping == 9)
             return llama::mapping::AoSoA<ArrayExtents, V3Real, aosoaLanes>{fieldExtents};
     }();
@@ -322,9 +338,9 @@ auto setup(Queue& queue, const Dev& dev, const DevHost& /*devHost*/)
         if constexpr(ParticleMapping == 0)
             return llama::mapping::AoS<ArrayExtents, Particle>{particleExtents};
         if constexpr(ParticleMapping == 1)
-            return llama::mapping::SoA<ArrayExtents, Particle, false>{particleExtents};
+            return llama::mapping::SoA<ArrayExtents, Particle, llama::mapping::Blobs::Single>{particleExtents};
         if constexpr(ParticleMapping == 2)
-            return llama::mapping::SoA<ArrayExtents, Particle, true>{particleExtents};
+            return llama::mapping::SoA<ArrayExtents, Particle, llama::mapping::Blobs::OnePerField>{particleExtents};
         if constexpr(ParticleMapping == 3)
             return llama::mapping::AoSoA<ArrayExtents, Particle, aosoaLanes>{particleExtents};
     }();
