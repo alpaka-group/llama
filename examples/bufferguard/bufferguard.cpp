@@ -266,8 +266,8 @@ auto main() -> int
 try
 {
     run<llama::mapping::BindAoS<>::fn>("AoS");
-    run<llama::mapping::BindSoA<>::fn>("SoA");
-    run<llama::mapping::BindSoA<true>::fn>("SoA_MB");
+    run<llama::mapping::BindSoA<llama::mapping::Blobs::Single>::fn>("SoA");
+    run<llama::mapping::BindSoA<llama::mapping::Blobs::OnePerField>::fn>("SoA_MB");
 }
 catch(const std::exception& e)
 {

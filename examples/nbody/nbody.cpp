@@ -298,9 +298,9 @@ namespace usellama
             if constexpr(Mapping == 0)
                 return llama::mapping::AoS<ArrayExtents, Particle>{extents};
             if constexpr(Mapping == 1)
-                return llama::mapping::SoA<ArrayExtents, Particle, false>{extents};
+                return llama::mapping::SoA<ArrayExtents, Particle, llama::mapping::Blobs::Single>{extents};
             if constexpr(Mapping == 2)
-                return llama::mapping::SoA<ArrayExtents, Particle, true>{extents};
+                return llama::mapping::SoA<ArrayExtents, Particle, llama::mapping::Blobs::OnePerField>{extents};
             if constexpr(Mapping == 3)
                 return llama::mapping::AoSoA<ArrayExtents, Particle, AoSoALanes>{extents};
             if constexpr(Mapping == 4)
