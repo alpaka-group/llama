@@ -266,13 +266,19 @@ auto setup(Queue& queue, const Dev& dev, const DevHost& /*devHost*/)
         using ArrayExtents = llama::ArrayExtentsDynamic<size_t, 2>;
         const auto fieldExtents = ArrayExtents{{gridX, gridY}};
         if constexpr(FieldMapping == 0)
-            return llama::mapping::AoS<ArrayExtents, V3Real>(fieldExtents);
+            return llama::mapping::AoS<ArrayExtents, V3Real, llama::mapping::FieldAlignment::Pack>(fieldExtents);
         if constexpr(FieldMapping == 1)
-            return llama::mapping::AoS<ArrayExtents, V3Real, true, llama::mapping::LinearizeArrayDimsFortran>(
-                fieldExtents);
+            return llama::mapping::AoS<
+                ArrayExtents,
+                V3Real,
+                llama::mapping::FieldAlignment::Align,
+                llama::mapping::LinearizeArrayDimsFortran>(fieldExtents);
         if constexpr(FieldMapping == 2)
-            return llama::mapping::AoS<ArrayExtents, V3Real, true, llama::mapping::LinearizeArrayDimsMorton>(
-                fieldExtents);
+            return llama::mapping::AoS<
+                ArrayExtents,
+                V3Real,
+                llama::mapping::FieldAlignment::Align,
+                llama::mapping::LinearizeArrayDimsMorton>(fieldExtents);
         if constexpr(FieldMapping == 3)
             return llama::mapping::SoA<ArrayExtents, V3Real, false>(fieldExtents);
         if constexpr(FieldMapping == 4)

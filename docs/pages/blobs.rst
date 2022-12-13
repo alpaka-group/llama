@@ -33,7 +33,7 @@ A blob allocator is called like this:
 .. code-block:: C++
 
     auto blobAllocator = ...;
-    auto blob = blobAllocator(std::integral_constant<std::size_t, Alignment>{}, size);
+    auto blob = blobAllocator(std::integral_constant<std::size_t, FieldAlignment>{}, size);
 
 There is a number of a built-in blob allocators:
 

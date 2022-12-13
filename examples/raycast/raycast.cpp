@@ -52,7 +52,7 @@ namespace
         llama::Field<BaseLod, float>>;
 
     using ArrayExtents = llama::ArrayExtentsDynamic<std::size_t, 1>;
-    using Mapping = llama::mapping::AoS<ArrayExtents, PrepTriangle, true>;
+    using Mapping = llama::mapping::AlignedAoS<ArrayExtents, PrepTriangle>;
     // using Mapping = llama::mapping::SoA<ArrayExtents, PrepTriangle, true>;
     // using Mapping = llama::mapping::AoSoA<ArrayExtents, PrepTriangle, 8>;
 

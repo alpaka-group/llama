@@ -21,10 +21,16 @@ namespace
 
     // Do not test all combinations as this exlodes the unit test compile and runtime.
     using AoSMappings = boost::mp11::mp_list<
-        llama::mapping::AoS<ArrayExtents, RecordDim, false, llama::mapping::LinearizeArrayDimsCpp>,
-        // llama::mapping::AoS<ArrayExtents, RecordDim, false, llama::mapping::LinearizeArrayDimsFortran>,
-        // llama::mapping::AoS<ArrayExtents, RecordDim, true, llama::mapping::LinearizeArrayDimsCpp>,
-        llama::mapping::AoS<ArrayExtents, RecordDim, true, llama::mapping::LinearizeArrayDimsFortran>>;
+        llama::mapping::
+            AoS<ArrayExtents, RecordDim, llama::mapping::FieldAlignment::Pack, llama::mapping::LinearizeArrayDimsCpp>,
+        // llama::mapping::AoS<ArrayExtents, RecordDim, llama::mapping::FieldAlignment::Pack,
+        // llama::mapping::LinearizeArrayDimsFortran>, llama::mapping::AoS<ArrayExtents, RecordDim,
+        // llama::mapping::FieldAlignment::Align, llama::mapping::LinearizeArrayDimsCpp>,
+        llama::mapping::AoS<
+            ArrayExtents,
+            RecordDim,
+            llama::mapping::FieldAlignment::Align,
+            llama::mapping::LinearizeArrayDimsFortran>>;
 
     using OtherMappings = boost::mp11::mp_list<
         llama::mapping::SoA<ArrayExtents, RecordDim, false, false, llama::mapping::LinearizeArrayDimsCpp>,
