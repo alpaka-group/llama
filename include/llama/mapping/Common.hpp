@@ -248,4 +248,11 @@ namespace llama::mapping
 #endif
         }
     } // namespace internal
+
+
+    enum class FieldAlignment
+    {
+        Pack,
+        Align
+    };
 } // namespace llama::mapping
