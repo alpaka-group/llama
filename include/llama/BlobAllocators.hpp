@@ -147,13 +147,13 @@ namespace llama::bloballoc
     /// on the view before passing it to the kernel.
     struct CudaMalloc
     {
-        template<std::size_t Alignment>
-        inline auto operator()(std::integral_constant<std::size_t, Alignment>, std::size_t count) const
+        template<std::size_t FieldAlignment>
+        inline auto operator()(std::integral_constant<std::size_t, FieldAlignment>, std::size_t count) const
         {
             std::byte* p = nullptr;
             if(const auto code = cudaMalloc(&p, count); code != cudaSuccess)
                 throw std::runtime_error(std::string{"cudaMalloc failed with code "} + cudaGetErrorString(code));
-            if(reinterpret_cast<std::uintptr_t>(p) & (Alignment - 1 != 0u))
+            if(reinterpret_cast<std::uintptr_t>(p) & (FieldAlignment - 1 != 0u))
                 throw std::runtime_error{"cudaMalloc does not align sufficiently"};
             auto deleter = [](void* p)
             {

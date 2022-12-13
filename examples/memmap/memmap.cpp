@@ -59,7 +59,7 @@ auto main(int argc, const char* argv[]) -> int
     const auto mapping = llama::mapping::AoS<
         llama::ArrayExtents<uint32_t, llama::dyn>,
         Triangle,
-        false,
+        llama::mapping::FieldAlignment::Pack,
         llama::mapping::LinearizeArrayDimsCpp,
         llama::mapping::FlattenRecordDimInOrder>{{n}};
     if(size != 80u + 4u + mapping.blobSize(0))

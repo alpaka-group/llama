@@ -7,7 +7,7 @@ TEST_CASE("mapping.ChangeType.AoS")
     auto mapping = llama::mapping::ChangeType<
         llama::ArrayExtents<std::size_t, 128>,
         Vec3D,
-        llama::mapping::BindAoS<false>::fn,
+        llama::mapping::BindAoS<llama::mapping::FieldAlignment::Pack>::fn,
         boost::mp11::mp_list<>>{{}};
     CHECK(mapping.blobSize(0) == 3072);
     auto view = llama::allocView(mapping);
@@ -20,7 +20,7 @@ TEST_CASE("mapping.ChangeType.AoS.doubleToFloat")
     auto mapping = llama::mapping::ChangeType<
         llama::ArrayExtents<std::size_t, 128>,
         Vec3D,
-        llama::mapping::BindAoS<false>::fn,
+        llama::mapping::BindAoS<llama::mapping::FieldAlignment::Pack>::fn,
         boost::mp11::mp_list<boost::mp11::mp_list<double, float>>>{{}};
     CHECK(mapping.blobSize(0) == 1536);
     auto view = llama::allocView(mapping);
@@ -33,7 +33,7 @@ TEST_CASE("mapping.ChangeType.AoS.Coord1ToFloat")
     auto mapping = llama::mapping::ChangeType<
         llama::ArrayExtents<std::size_t, 128>,
         Vec3D,
-        llama::mapping::BindAoS<false>::fn,
+        llama::mapping::BindAoS<llama::mapping::FieldAlignment::Pack>::fn,
         boost::mp11::mp_list<boost::mp11::mp_list<llama::RecordCoord<1>, float>>>{{}};
     CHECK(mapping.blobSize(0) == 2560);
     auto view = llama::allocView(mapping);
@@ -46,7 +46,7 @@ TEST_CASE("mapping.ChangeType.AoS.CoordsAndTypes")
     auto mapping = llama::mapping::ChangeType<
         llama::ArrayExtents<std::size_t, 128>,
         Vec3D,
-        llama::mapping::BindAoS<false>::fn,
+        llama::mapping::BindAoS<llama::mapping::FieldAlignment::Pack>::fn,
         boost::mp11::
             mp_list<boost::mp11::mp_list<double, float>, boost::mp11::mp_list<llama::RecordCoord<1>, double>>>{{}};
     CHECK(mapping.blobSize(0) == 2048);
@@ -63,7 +63,7 @@ TEST_CASE("mapping.ChangeType.SoA.particle.types")
     auto mapping = llama::mapping::ChangeType<
         llama::ArrayExtents<std::size_t, 128>,
         Particle,
-        llama::mapping::BindAoS<false>::fn,
+        llama::mapping::BindAoS<llama::mapping::FieldAlignment::Pack>::fn,
         boost::mp11::mp_list<
             boost::mp11::mp_list<double, float>,
             boost::mp11::mp_list<float, std::int16_t>,
@@ -80,7 +80,7 @@ TEST_CASE("mapping.ChangeType.SoA.particle.coords")
     auto mapping = llama::mapping::ChangeType<
         llama::ArrayExtents<std::size_t, 128>,
         Particle,
-        llama::mapping::BindAoS<false>::fn,
+        llama::mapping::BindAoS<llama::mapping::FieldAlignment::Pack>::fn,
         mp_list<
             mp_list<llama::RecordCoord<0, 1>, float>,
             mp_list<llama::RecordCoord<1>, std::int16_t>,

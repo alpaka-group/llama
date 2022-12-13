@@ -255,7 +255,7 @@ TEST_CASE("proxyrefopmixin.ChangeType")
     auto view = llama::allocView(llama::mapping::ChangeType<
                                  llama::ArrayExtents<std::size_t, 4>,
                                  Vec3D,
-                                 llama::mapping::BindAoS<false>::fn,
+                                 llama::mapping::BindAoS<llama::mapping::FieldAlignment::Pack>::fn,
                                  boost::mp11::mp_list<boost::mp11::mp_list<double, float>>>{{}});
     testProxyRef(view(2)(tag::X{}));
 }
