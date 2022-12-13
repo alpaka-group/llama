@@ -372,19 +372,19 @@ namespace llama
     /// Using a mapping, maps the given array index and record coordinate to a memory reference onto the given blobs.
     /// \return Either an l-value reference if the record coord maps to a physical field or a proxy reference if mapped
     /// to a computed field.
-    template<typename Mapping, std::size_t... Coords, typename Blobs>
+    template<typename Mapping, typename RecordCoord, typename Blobs>
     LLAMA_FN_HOST_ACC_INLINE auto mapToMemory(
         Mapping& mapping,
         typename Mapping::ArrayIndex ai,
-        RecordCoord<Coords...> rc,
+        RecordCoord rc,
         Blobs& blobs) -> decltype(auto)
     {
-        if constexpr(llama::isComputed<Mapping, RecordCoord<Coords...>>)
+        if constexpr(llama::isComputed<Mapping, RecordCoord>)
             return mapping.compute(ai, rc, blobs);
         else
         {
             const auto [nr, offset] = mapping.blobNrAndOffset(ai, rc);
-            using Type = GetType<typename Mapping::RecordDim, RecordCoord<Coords...>>;
+            using Type = GetType<typename Mapping::RecordDim, RecordCoord>;
             LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
             return reinterpret_cast<CopyConst<std::remove_reference_t<decltype(blobs[nr][offset])>, Type>&>(
                 blobs[nr][offset]);

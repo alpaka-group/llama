@@ -69,6 +69,11 @@ namespace llama::mapping
             // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
             LLAMA_FN_HOST_ACC_INLINE operator value_type() const
             {
+#ifdef _MSC_VER
+                // MSVC workaround. Without this, MSVC deduces the last template parameter of mapToMemory wrongly
+                BlobArray& blobs = this->blobs;
+#endif
+
                 value_type v;
                 auto* p = reinterpret_cast<std::byte*>(&v);
                 boost::mp11::mp_for_each<boost::mp11::mp_iota_c<sizeof(value_type)>>(
@@ -76,6 +81,7 @@ namespace llama::mapping
                     {
                         constexpr auto i = decltype(ic)::value;
                         auto&& ref = mapToMemory(inner, ai, Cat<RC, RecordCoord<i>>{}, blobs);
+
                         p[i] = ref;
                     });
                 return v;
@@ -83,11 +89,17 @@ namespace llama::mapping
 
             LLAMA_FN_HOST_ACC_INLINE auto operator=(value_type v) -> Reference&
             {
+#ifdef _MSC_VER
+                // MSVC workaround. Without this, MSVC deduces the last template parameter of mapToMemory wrongly
+                BlobArray& blobs = this->blobs;
+#endif
+
                 auto* p = reinterpret_cast<std::byte*>(&v);
                 boost::mp11::mp_for_each<boost::mp11::mp_iota_c<sizeof(value_type)>>(
                     [&](auto ic)
                     {
                         constexpr auto i = decltype(ic)::value;
+
                         auto&& ref = mapToMemory(inner, ai, Cat<RC, RecordCoord<i>>{}, blobs);
                         ref = p[i];
                     });
