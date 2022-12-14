@@ -124,12 +124,6 @@ namespace llamaex
 auto main() -> int
 try
 {
-#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ >= 3 && __CUDACC_VER_MINOR__ < 4
-// nvcc 11.3 fails to generate the template signature for llama::View, if it has a forward declaration with a default
-// argument (which we need for the default accessor)
-#    warning "alpaka nbody example disabled for nvcc 11.3, because it generates invalid C++ code for the host compiler"
-    return -1;
-#else
     int device = 0;
     checkError(cudaGetDevice(&device));
     cudaDeviceProp prop{};
@@ -169,8 +163,6 @@ try
         stbi_write_png("pitch1.png", extents[1], extents[0], 3, host1.data(), 0);
     }
 
-    // nvcc 11.3 fails to compile the AoS mapping here
-#    if !(defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ == 3)
     {
         std::byte* mem = nullptr;
         checkError(cudaMalloc(&mem, widthBytes * extents[0]));
@@ -185,13 +177,11 @@ try
 
         stbi_write_png("pitch2.png", extents[1], extents[0], 3, host2.data(), 0);
     }
-#    endif
 
     if(host1 != host2)
         fmt::print("ERROR: produced two different images");
 
     return 0;
-#endif
 }
 catch(const std::exception& e)
 {
