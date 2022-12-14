@@ -10434,12 +10434,16 @@ namespace llama
 	// ============================================================================
 
 
-#if defined(__CUDACC__) || defined(__NVCOMPILER)
+#if defined(__CUDACC__)
 #    ifdef __NVCC_DIAG_PRAGMA_SUPPORT__
 #        pragma nv_diag_default 940
 #    else
 #        pragma diag_default 940
 #    endif
+#endif
+#ifdef __NVCOMPILER
+#    pragma push
+#    pragma diag_default 941
 #endif
 // ==
 // == ./llama.hpp ==
