@@ -159,20 +159,20 @@ Static Public Attributes</h2></td></tr>
 <tr class="separator:aa98be08bc24fee8f9d632f475d950b22"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename TArrayExtents, typename TRecordDim, Blobs TBlobs = Blobs::OnePerField, SubArrayAlignment TSubArrayAlignment = SubArrayAlignment::Pack, typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDimSingleBlob = FlattenRecordDimInOrder&gt;<br />
+<div class="textblock"><h3>template&lt;typename TArrayExtents, typename TRecordDim, Blobs TBlobs = Blobs::OnePerField, SubArrayAlignment TSubArrayAlignment = TBlobs == Blobs::Single ? SubArrayAlignment::Align : SubArrayAlignment::Pack, typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDimSingleBlob = FlattenRecordDimInOrder&gt;<br />
 struct llama::mapping::SoA&lt; TArrayExtents, TRecordDim, TBlobs, TSubArrayAlignment, TLinearizeArrayDimsFunctor, FlattenRecordDimSingleBlob &gt;</h3>
 
-<p>Struct of array mapping. Used to create a <a class="el" href="structllama_1_1View.html">View</a> via <a class="el" href="namespacellama.html#a8e5d70e7cec0c305424ed3890c4cedc6">allocView</a>. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
+<p>Struct of array mapping. Used to create a <a class="el" href="structllama_1_1View.html">View</a> via <a class="el" href="namespacellama.html#a8e5d70e7cec0c305424ed3890c4cedc6">allocView</a>. We recommend to use multiple blobs when the array extents are dynamic and an aligned single blob version when they are static. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">TBlobs</td><td>If OnePerField, every element of the record dimension is mapped to its own blob. </td></tr>
-    <tr><td class="paramname">TSubArrayAlignment</td><td>Only relevant when TBlobs == Single, ignored otherwise. If Align, aligns the sub arrays created within the single blob by inserting padding. </td></tr>
+    <tr><td class="paramname">TSubArrayAlignment</td><td>Only relevant when TBlobs == Single, ignored otherwise. If Align, aligns the sub arrays created within the single blob by inserting padding. If the array extents are dynamic, this may add some overhead to the mapping logic. </td></tr>
     <tr><td class="paramname">TLinearizeArrayDimsFunctor</td><td>Defines how the array dimensions should be mapped into linear numbers and how big the linear domain gets. </td></tr>
     <tr><td class="paramname">FlattenRecordDimSingleBlob</td><td>Defines how the record dimension's fields should be flattened if Blobs is Single. See <a class="el" href="structllama_1_1mapping_1_1FlattenRecordDimInOrder.html">FlattenRecordDimInOrder</a>, <a class="el" href="namespacellama_1_1mapping.html#a2426632bf12fc075d5508b09a1feed4e">FlattenRecordDimIncreasingAlignment</a>, <a class="el" href="namespacellama_1_1mapping.html#a100e4e327b6795d55012446cc37c50ed">FlattenRecordDimDecreasingAlignment</a> and <a class="el" href="namespacellama_1_1mapping.html#a65287f3ded6e419e868b0e2819777206">FlattenRecordDimMinimizePadding</a>. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00040">40</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00043">43</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="a72280082063a4d1a67b90b915c5cbc44"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a72280082063a4d1a67b90b915c5cbc44">&#9670;&nbsp;</a></span>Flattener</h2>
@@ -180,7 +180,7 @@ struct llama::mapping::SoA&lt; TArrayExtents, TRecordDim, TBlobs, TSubArrayAlign
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TArrayExtents , typename TRecordDim , Blobs TBlobs = Blobs::OnePerField, SubArrayAlignment TSubArrayAlignment = SubArrayAlignment::Pack, typename TLinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDimSingleBlob = FlattenRecordDimInOrder&gt; </div>
+template&lt;typename TArrayExtents , typename TRecordDim , Blobs TBlobs = Blobs::OnePerField, SubArrayAlignment TSubArrayAlignment = TBlobs == Blobs::Single ? SubArrayAlignment::Align : SubArrayAlignment::Pack, typename TLinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDimSingleBlob = FlattenRecordDimInOrder&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1SoA.html">llama::mapping::SoA</a>&lt; TArrayExtents, TRecordDim, TBlobs, TSubArrayAlignment, TLinearizeArrayDimsFunctor, FlattenRecordDimSingleBlob &gt;::<a class="el" href="structllama_1_1mapping_1_1SoA.html#a72280082063a4d1a67b90b915c5cbc44">Flattener</a> =  FlattenRecordDimSingleBlob&lt;TRecordDim&gt;</td>
@@ -188,7 +188,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , Blobs TBlobs = Blobs:
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00050">50</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00053">53</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -198,7 +198,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , Blobs TBlobs = Blobs:
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TArrayExtents , typename TRecordDim , Blobs TBlobs = Blobs::OnePerField, SubArrayAlignment TSubArrayAlignment = SubArrayAlignment::Pack, typename TLinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDimSingleBlob = FlattenRecordDimInOrder&gt; </div>
+template&lt;typename TArrayExtents , typename TRecordDim , Blobs TBlobs = Blobs::OnePerField, SubArrayAlignment TSubArrayAlignment = TBlobs == Blobs::Single ? SubArrayAlignment::Align : SubArrayAlignment::Pack, typename TLinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDimSingleBlob = FlattenRecordDimInOrder&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1SoA.html">llama::mapping::SoA</a>&lt; TArrayExtents, TRecordDim, TBlobs, TSubArrayAlignment, TLinearizeArrayDimsFunctor, FlattenRecordDimSingleBlob &gt;::<a class="el" href="structllama_1_1mapping_1_1SoA.html#a699cd5c599b7493c3c7f461d4cae71fe">LinearizeArrayDimsFunctor</a> =  TLinearizeArrayDimsFunctor</td>
@@ -206,7 +206,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , Blobs TBlobs = Blobs:
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00049">49</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00052">52</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -217,7 +217,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , Blobs TBlobs = Blobs:
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TArrayExtents , typename TRecordDim , Blobs TBlobs = Blobs::OnePerField, SubArrayAlignment TSubArrayAlignment = SubArrayAlignment::Pack, typename TLinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDimSingleBlob = FlattenRecordDimInOrder&gt; </div>
+template&lt;typename TArrayExtents , typename TRecordDim , Blobs TBlobs = Blobs::OnePerField, SubArrayAlignment TSubArrayAlignment = TBlobs == Blobs::Single ? SubArrayAlignment::Align : SubArrayAlignment::Pack, typename TLinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDimSingleBlob = FlattenRecordDimInOrder&gt; </div>
 <div class="memtemplate">
 template&lt;std::size_t... RecordCoords&gt; </div>
 <table class="mlabels">
@@ -250,7 +250,7 @@ template&lt;std::size_t... RecordCoords&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00102">102</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00105">105</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -260,7 +260,7 @@ template&lt;std::size_t... RecordCoords&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TArrayExtents , typename TRecordDim , Blobs TBlobs = Blobs::OnePerField, SubArrayAlignment TSubArrayAlignment = SubArrayAlignment::Pack, typename TLinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDimSingleBlob = FlattenRecordDimInOrder&gt; </div>
+template&lt;typename TArrayExtents , typename TRecordDim , Blobs TBlobs = Blobs::OnePerField, SubArrayAlignment TSubArrayAlignment = TBlobs == Blobs::Single ? SubArrayAlignment::Align : SubArrayAlignment::Pack, typename TLinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDimSingleBlob = FlattenRecordDimInOrder&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -281,7 +281,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , Blobs TBlobs = Blobs:
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00065">65</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00068">68</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -292,7 +292,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , Blobs TBlobs = Blobs:
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TArrayExtents , typename TRecordDim , Blobs TBlobs = Blobs::OnePerField, SubArrayAlignment TSubArrayAlignment = SubArrayAlignment::Pack, typename TLinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDimSingleBlob = FlattenRecordDimInOrder&gt; </div>
+template&lt;typename TArrayExtents , typename TRecordDim , Blobs TBlobs = Blobs::OnePerField, SubArrayAlignment TSubArrayAlignment = TBlobs == Blobs::Single ? SubArrayAlignment::Align : SubArrayAlignment::Pack, typename TLinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDimSingleBlob = FlattenRecordDimInOrder&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -308,7 +308,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , Blobs TBlobs = Blobs:
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00051">51</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00054">54</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -318,7 +318,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , Blobs TBlobs = Blobs:
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TArrayExtents , typename TRecordDim , Blobs TBlobs = Blobs::OnePerField, SubArrayAlignment TSubArrayAlignment = SubArrayAlignment::Pack, typename TLinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDimSingleBlob = FlattenRecordDimInOrder&gt; </div>
+template&lt;typename TArrayExtents , typename TRecordDim , Blobs TBlobs = Blobs::OnePerField, SubArrayAlignment TSubArrayAlignment = TBlobs == Blobs::Single ? SubArrayAlignment::Align : SubArrayAlignment::Pack, typename TLinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDimSingleBlob = FlattenRecordDimInOrder&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -334,7 +334,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , Blobs TBlobs = Blobs:
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00047">47</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00050">50</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -344,7 +344,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , Blobs TBlobs = Blobs:
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename TArrayExtents , typename TRecordDim , Blobs TBlobs = Blobs::OnePerField, SubArrayAlignment TSubArrayAlignment = SubArrayAlignment::Pack, typename TLinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDimSingleBlob = FlattenRecordDimInOrder&gt; </div>
+template&lt;typename TArrayExtents , typename TRecordDim , Blobs TBlobs = Blobs::OnePerField, SubArrayAlignment TSubArrayAlignment = TBlobs == Blobs::Single ? SubArrayAlignment::Align : SubArrayAlignment::Pack, typename TLinearizeArrayDimsFunctor  = LinearizeArrayDimsCpp, template&lt; typename &gt; typename FlattenRecordDimSingleBlob = FlattenRecordDimInOrder&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -360,7 +360,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , Blobs TBlobs = Blobs:
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00048">48</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00051">51</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -373,7 +373,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , Blobs TBlobs = Blobs:
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1SoA.html">SoA</a></li>
-    <li class="footer">Generated on Tue Dec 13 2022 23:13:03 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Wed Dec 14 2022 11:00:03 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
