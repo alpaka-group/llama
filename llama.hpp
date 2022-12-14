@@ -1,855 +1,490 @@
 #pragma once
 
 // ============================================================================
-// == ./ArrayIndexRange.hpp ==
+// == ./Concepts.hpp ==
 // ==
 // #pragma once
 	// ============================================================================
-	// == ./ArrayExtents.hpp ==
+	// == ./Array.hpp ==
 	// ==
+	// Copyright 2018 Alexander Matthes
 	// SPDX-License-Identifier: GPL-3.0-or-later
 
 	// #pragma once
 		// ============================================================================
-		// == ./Array.hpp ==
+		// == ./macros.hpp ==
 		// ==
 		// Copyright 2018 Alexander Matthes
 		// SPDX-License-Identifier: GPL-3.0-or-later
 
 		// #pragma once
-			// ============================================================================
-			// == ./macros.hpp ==
-			// ==
-			// Copyright 2018 Alexander Matthes
-			// SPDX-License-Identifier: GPL-3.0-or-later
-
-			// #pragma once
-			#ifdef __INTEL_COMPILER
-			#    error LLAMA has stopped supporting the Intel Classic Compiler after Intel announced its planned deprecation and \
-			 replacement by the Intel LLVM-based compiler. Please migrate to the Intel LLVM-based compiler.
-			#endif
-
-			#if defined(__INTEL_LLVM_COMPILER)
-			// icx supports #pragma ivdep, but it will issue a diagnostic that it needs vectorize(assume_safety) to vectorize.
-			// Let's keep both pragmas for now.
-			#    define LLAMA_INDEPENDENT_DATA                                                                                    \
-			        _Pragma("ivdep") _Pragma("clang loop vectorize(assume_safety) interleave(assume_safety)")
-			#elif defined(__clang__)
-			#    define LLAMA_INDEPENDENT_DATA _Pragma("clang loop vectorize(assume_safety) interleave(assume_safety)")
-			#elif defined(__NVCOMPILER)
-			#    define LLAMA_INDEPENDENT_DATA _Pragma("ivdep")
-			#elif defined(__GNUC__)
-			#    define LLAMA_INDEPENDENT_DATA _Pragma("GCC ivdep")
-			#elif defined(_MSC_VER)
-			#    define LLAMA_INDEPENDENT_DATA __pragma(loop(ivdep))
-			#else
-			/// May be put in front of a loop statement. Indicates that all (!) data access inside the loop is indepent, so the
-			/// loop can be safely vectorized. Example: \code{.cpp}
-			///     LLAMA_INDEPENDENT_DATA
-			///     for(int i = 0; i < N; ++i)
-			///         // because of LLAMA_INDEPENDENT_DATA the compiler knows that a and b
-			///         // do not overlap and the operation can safely be vectorized
-			///         a[i] += b[i];
-			/// \endcode
-			#    define LLAMA_INDEPENDENT_DATA
-			#endif
-
-			#ifndef LLAMA_FORCE_INLINE
-			#    if defined(__NVCC__) || defined(__HIP__)
-			#        define LLAMA_FORCE_INLINE __forceinline__
-			#    elif defined(__GNUC__) || defined(__clang__)
-			#        define LLAMA_FORCE_INLINE inline __attribute__((always_inline))
-			#    elif defined(_MSC_VER) || defined(__INTEL_LLVM_COMPILER)
-			#        define LLAMA_FORCE_INLINE __forceinline
-			#    else
-			/// Forces the compiler to inline a function annotated with this macro
-			#        define LLAMA_FORCE_INLINE inline
-			#        warning LLAMA_FORCE_INLINE is only defined to "inline" for this compiler
-			#    endif
-			#endif
-
-			#ifndef LLAMA_PRAGMA
-			#    define LLAMA_PRAGMA(tokens) _Pragma(#    tokens)
-			#endif
-
-			#ifndef LLAMA_UNROLL
-			#    if defined(__HIP__) || defined(__NVCC__) || defined(__NVCOMPILER) || defined(__clang__)                          \
-			        || defined(__INTEL_LLVM_COMPILER)
-			#        define LLAMA_UNROLL(...) LLAMA_PRAGMA(unroll __VA_ARGS__)
-			#    elif defined(__GNUG__)
-			#        define LLAMA_UNROLL(...) LLAMA_PRAGMA(GCC unroll __VA_ARGS__)
-			#    elif defined(_MSC_VER)
-			// MSVC does not support a pragma for unrolling
-			#        define LLAMA_UNROLL(...)
-			#    else
-			/// Requests the compiler to unroll the loop following this directive. An optional unrolling count may be provided as
-			/// argument, which must be a constant expression.
-			#        define LLAMA_UNROLL(...)
-			#        warning LLAMA_UNROLL is not implemented for your compiler
-			#    endif
-			#endif
-
-			#ifndef LLAMA_ACC
-			#    if defined(__HIP__) || defined(__NVCC__) || (defined(__clang__) && defined(__CUDA__))
-			#        define LLAMA_ACC __device__
-			#    elif defined(__GNUC__) || defined(__clang__) || defined(_MSC_VER) || defined(__INTEL_LLVM_COMPILER)
-			#        define LLAMA_ACC
-			#    else
-			#        define LLAMA_ACC
-			#        warning LLAMA_HOST_ACC is only defined empty for this compiler
-			#    endif
-			#endif
-
-			#ifndef LLAMA_HOST_ACC
-			#    if defined(__HIP__) || defined(__NVCC__) || (defined(__clang__) && defined(__CUDA__))
-			#        define LLAMA_HOST_ACC __host__ __device__
-			#    elif defined(__GNUC__) || defined(__clang__) || defined(_MSC_VER) || defined(__INTEL_LLVM_COMPILER)
-			#        define LLAMA_HOST_ACC
-			#    else
-			/// Some offloading parallelization language extensions such a CUDA, OpenACC or OpenMP 4.5 need to specify whether a
-			/// class, struct, function or method "resides" on the host, the accelerator (the offloading device) or both. LLAMA
-			/// supports this with marking every function needed on an accelerator with `LLAMA_HOST_ACC`.
-			#        define LLAMA_HOST_ACC
-			#        warning LLAMA_HOST_ACC is only defined empty for this compiler
-			#    endif
-			#endif
-
-			#define LLAMA_FN_HOST_ACC_INLINE LLAMA_FORCE_INLINE LLAMA_HOST_ACC
-
-			#ifndef LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS
-			#    if defined(__clang__) || defined(__INTEL_LLVM_COMPILER)
-			#        define LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(...) __attribute__((always_inline)) __VA_ARGS__
-			#    elif defined(__GNUC__) || (defined(__NVCC__) && !defined(_MSC_VER))
-			#        define LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(...) __VA_ARGS__ __attribute__((always_inline))
-			#    elif defined(_MSC_VER)
-			#        define LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(...)                                                              \
-			            __VA_ARGS__ /* FIXME: MSVC cannot combine constexpr and [[msvc::forceinline]] */
-			#    else
-			#        define LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(...) __VA_ARGS__
-			#        warning LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS not defined for this compiler
-			#    endif
-			#endif
-			#ifndef LLAMA_LAMBDA_INLINE
-			/// Gives strong indication to the compiler to inline the attributed lambda.
-			#    define LLAMA_LAMBDA_INLINE LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS()
-			#endif
-
-			#ifndef LLAMA_SUPPRESS_HOST_DEVICE_WARNING
-			#    if defined(__NVCC__) && !defined(__clang__)
-			#        define LLAMA_SUPPRESS_HOST_DEVICE_WARNING _Pragma("nv_exec_check_disable")
-			#    else
-			/// Suppresses the nvcc warning: 'calling a __host__ function from __host__ __device__ function.'
-			/// This macro can be applied to function declarations
-			#        define LLAMA_SUPPRESS_HOST_DEVICE_WARNING
-			#    endif
-			#endif
-
-			#ifndef LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-			#    ifdef __CUDACC__
-			#        ifdef __NVCC_DIAG_PRAGMA_SUPPORT__
-			#            define LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING                                                          \
-			                _Pragma("nv_diag_suppress 20011") _Pragma("nv_diag_suppress 20014")
-			#        else
-			#            define LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING                                                          \
-			                _Pragma("diag_suppress 20011") _Pragma("diag_suppress 20014")
-			#        endif
-			#    else
-			/// Suppresses the nvcc warnings:
-			/// 'calling a __host__ function from a __host__ __device__ function is not allowed' and
-			/// 'calling a __host__ function("...") from a __host__ __device__ function("...") is not allowed'
-			/// This macro can be applied before the concerned code block, which then needs to be ended with \ref
-			/// LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING.
-			#        define LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-			#    endif
-			#endif
-			#ifndef LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
-			#    ifdef __CUDACC__
-			#        ifdef __NVCC_DIAG_PRAGMA_SUPPORT__
-			#            define LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING                                                            \
-			                _Pragma("nv_diag_default 20011") _Pragma("nv_diag_default 20014")
-			#        else
-			#            define LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING _Pragma("diag_default 20011") _Pragma("diag_default 20014")
-			#        endif
-			#    else
-			#        define LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
-			#    endif
-			#endif
-
-			#if defined(_MSC_VER)
-			#    define LLAMA_FORCE_INLINE_RECURSIVE __pragma(inline_depth(255))
-			#else
-			/// Forces the compiler to recursively inline the call hiearchy started by the subsequent function call.
-			#    define LLAMA_FORCE_INLINE_RECURSIVE
-			#endif
-
-			/// Forces a copy of a value. This is useful to prevent ODR usage of constants when compiling for GPU targets.
-			#define LLAMA_COPY(x) decltype(x)(x)
-
-			// https://devblogs.microsoft.com/cppblog/optimizing-the-layout-of-empty-base-classes-in-vs2015-update-2-3/
-			#if defined(_MSC_VER)
-			#    define LLAMA_DECLSPEC_EMPTY_BASES __declspec(empty_bases)
-			#else
-			#    define LLAMA_DECLSPEC_EMPTY_BASES
-			#endif
-
-			/// Expands to likely if [[likely]] supported by the compiler. Use as [[LLAMA_LIKELY]].
-			#if __has_cpp_attribute(likely)
-			#    define LLAMA_LIKELY likely
-			#else
-			#    define LLAMA_LIKELY
-			#endif
-
-			/// Expands to unlikely if [[unlikely]] supported by the compiler. Use as [[LLAMA_UNLIKELY]].
-			#if __has_cpp_attribute(unlikely)
-			#    define LLAMA_UNLIKELY unlikely
-			#else
-			#    define LLAMA_UNLIKELY
-			#endif
-			// ==
-			// == ./macros.hpp ==
-			// ============================================================================
-
-
-		#include <ostream>
-		#include <tuple>
-
-		namespace llama
-		{
-		    /// Array class like `std::array` but suitable for use with offloading devices like GPUs.
-		    /// \tparam T type if array elements.
-		    /// \tparam N rank of the array.
-		    template<typename T, std::size_t N>
-		    // NOLINTNEXTLINE(bugprone-reserved-identifier,cert-dcl37-c,cert-dcl51-cpp,readability-identifier-naming)
-		    struct Array
-		    {
-		        using value_type = T;
-		        T element[N];
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto size() const
-		        {
-		            return N;
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto empty() const -> bool
-		        {
-		            return N == 0;
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto begin() -> T*
-		        {
-		            return &element[0];
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto begin() const -> const T*
-		        {
-		            return &element[0];
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto end() -> T*
-		        {
-		            return &element[N];
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto end() const -> const T*
-		        {
-		            return &element[N];
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto front() -> T&
-		        {
-		            return element[0];
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto front() const -> const T&
-		        {
-		            return element[0];
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto back() -> T&
-		        {
-		            return element[N - 1];
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto back() const -> const T&
-		        {
-		            return element[N - 1];
-		        }
-
-		        template<typename IndexType>
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator[](IndexType&& idx) -> T&
-		        {
-		            return element[idx];
-		        }
-
-		        template<typename IndexType>
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator[](IndexType&& idx) const -> const T&
-		        {
-		            return element[idx];
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto data() -> T*
-		        {
-		            return &element[0];
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto data() const -> const T*
-		        {
-		            return &element[0];
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator==(const Array& a, const Array& b) -> bool
-		        {
-		            for(std::size_t i = 0; i < N; ++i)
-		                if(a.element[i] != b.element[i])
-		                    return false;
-		            return true;
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator!=(const Array& a, const Array& b) -> bool
-		        {
-		            return !(a == b);
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator+(const Array& a, const Array& b) -> Array
-		        {
-		            Array temp{};
-		            for(std::size_t i = 0; i < N; ++i)
-		                temp[i] = a[i] + b[i];
-		            return temp;
-		        }
-
-		        template<std::size_t I>
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto get() -> T&
-		        {
-		            return element[I];
-		        }
-
-		        template<std::size_t I>
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto get() const -> const T&
-		        {
-		            return element[I];
-		        }
-		    };
-
-		    template<typename T>
-		    struct Array<T, 0>
-		    {
-		        using value_type = T;
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto size() const
-		        {
-		            return 0;
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto empty() const -> bool
-		        {
-		            return true;
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto begin() -> T*
-		        {
-		            return nullptr;
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto begin() const -> const T*
-		        {
-		            return nullptr;
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto end() -> T*
-		        {
-		            return nullptr;
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto end() const -> const T*
-		        {
-		            return nullptr;
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto data() -> T*
-		        {
-		            return nullptr;
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto data() const -> const T*
-		        {
-		            return nullptr;
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator==(const Array&, const Array&) -> bool
-		        {
-		            return true;
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator!=(const Array&, const Array&) -> bool
-		        {
-		            return false;
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator+(const Array&, const Array&) -> Array
-		        {
-		            return {};
-		        }
-		    };
-
-		    template<typename First, typename... Args>
-		    Array(First, Args... args) -> Array<First, sizeof...(Args) + 1>;
-
-		    template<typename T, std::size_t N>
-		    auto operator<<(std::ostream& os, const Array<T, N>& a) -> std::ostream&
-		    {
-		        os << "Array{";
-		        bool first = true;
-		        for(auto e : a)
-		        {
-		            if(first)
-		                first = false;
-		            else
-		                os << ", ";
-		            os << e;
-		        }
-		        os << "}";
-		        return os;
-		    }
-
-		    template<typename T, std::size_t N>
-		    LLAMA_FN_HOST_ACC_INLINE constexpr auto pushFront([[maybe_unused]] Array<T, N> a, T v) -> Array<T, N + 1>
-		    {
-		        Array<T, N + 1> r{};
-		        r[0] = v;
-		        if constexpr(N > 0)
-		            for(std::size_t i = 0; i < N; i++)
-		                r[i + 1] = a[i];
-		        return r;
-		    }
-
-		    template<typename T, std::size_t N>
-		    LLAMA_FN_HOST_ACC_INLINE constexpr auto pushBack([[maybe_unused]] Array<T, N> a, T v) -> Array<T, N + 1>
-		    {
-		        Array<T, N + 1> r{};
-		        if constexpr(N > 0)
-		            for(std::size_t i = 0; i < N; i++)
-		                r[i] = a[i];
-		        r[N] = v;
-		        return r;
-		    }
-
-		    template<typename T, std::size_t N>
-		    LLAMA_FN_HOST_ACC_INLINE constexpr auto popBack([[maybe_unused]] Array<T, N> a)
-		    {
-		        static_assert(N > 0);
-		        Array<T, N - 1> r{};
-		        if constexpr(N > 1)
-		            for(std::size_t i = 0; i < N - 1; i++)
-		                r[i] = a[i];
-		        return r;
-		    }
-
-		    template<typename T, std::size_t N>
-		    LLAMA_FN_HOST_ACC_INLINE constexpr auto popFront([[maybe_unused]] Array<T, N> a)
-		    {
-		        static_assert(N > 0);
-		        Array<T, N - 1> r{};
-		        if constexpr(N > 1)
-		            for(std::size_t i = 0; i < N - 1; i++)
-		                r[i] = a[i + 1];
-		        return r;
-		    }
-
-		    template<typename T, std::size_t N>
-		    LLAMA_FN_HOST_ACC_INLINE constexpr auto product(Array<T, N> a) -> T
-		    {
-		        T prod = 1;
-		        for(auto s : a)
-		            prod *= s;
-		        return prod;
-		    }
-
-		    template<typename T, std::size_t N>
-		    LLAMA_FN_HOST_ACC_INLINE constexpr auto dot([[maybe_unused]] Array<T, N> a, [[maybe_unused]] Array<T, N> b) -> T
-		    {
-		        T r = 0;
-		        if constexpr(N > 0)
-		            for(std::size_t i = 0; i < N; i++)
-		                r += a[i] * b[i];
-		        return r;
-		    }
-		} // namespace llama
-
-		namespace std
-		{
-		    template<typename T, size_t N>
-		    struct tuple_size<llama::Array<T, N>> : integral_constant<size_t, N> // NOLINT(cert-dcl58-cpp)
-		    {
-		    };
-
-		    template<size_t I, typename T, size_t N>
-		    struct tuple_element<I, llama::Array<T, N>> // NOLINT(cert-dcl58-cpp)
-		    {
-		        using type = T;
-		    };
-		} // namespace std
-		// ==
-		// == ./Array.hpp ==
-		// ============================================================================
-
-		// ============================================================================
-		// == ./Meta.hpp ==
-		// ==
-		// SPDX-License-Identifier: GPL-3.0-or-later
-
-		// #pragma once
-		#include <boost/mp11.hpp>
-
-		#if BOOST_MP11_VERSION < 107300
-		//  Copyright 2015 Peter Dimov.
-		//
-		//  Distributed under the Boost Software License, Version 1.0.
-		//
-		// Boost Software License - Version 1.0 - August 17th, 2003
-		//
-		// Permission is hereby granted, free of charge, to any person or organization
-		// obtaining a copy of the software and accompanying documentation covered by
-		// this license (the "Software") to use, reproduce, display, distribute,
-		// execute, and transmit the Software, and to prepare derivative works of the
-		// Software, and to permit third-parties to whom the Software is furnished to
-		// do so, all subject to the following:
-		//
-		// The copyright notices in the Software and this entire statement, including
-		// the above license grant, this restriction and the following disclaimer,
-		// must be included in all copies of the Software, in whole or in part, and
-		// all derivative works of the Software, unless such copies or derivative
-		// works are solely in the form of machine-executable object code generated by
-		// a source language processor.
-		//
-		// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-		// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-		// FITNESS FOR A PARTICULAR PURPOSE, TITLE AND NON-INFRINGEMENT. IN NO EVENT
-		// SHALL THE COPYRIGHT HOLDERS OR ANYONE DISTRIBUTING THE SOFTWARE BE LIABLE
-		// FOR ANY DAMAGES OR OTHER LIABILITY, WHETHER IN CONTRACT, TORT OR OTHERWISE,
-		// ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-		// DEALINGS IN THE SOFTWARE.
-
-		namespace boost::mp11
-		{
-		    namespace detail
-		    {
-		        template<class L2>
-		        struct mp_flatten_impl
-		        {
-		            template<class T>
-		            using fn = mp_if<mp_similar<L2, T>, T, mp_list<T>>;
-		        };
-		    } // namespace detail
-
-		    template<class L, class L2 = mp_clear<L>>
-		    using mp_flatten = mp_apply<mp_append, mp_push_front<mp_transform_q<detail::mp_flatten_impl<L2>, L>, mp_clear<L>>>;
-		} // namespace boost::mp11
+		#ifdef __INTEL_COMPILER
+		#    error LLAMA has stopped supporting the Intel Classic Compiler after Intel announced its planned deprecation and \
+		 replacement by the Intel LLVM-based compiler. Please migrate to the Intel LLVM-based compiler.
 		#endif
 
-		namespace llama
-		{
-		    namespace internal
-		    {
-		        template<typename FromList, template<auto...> class ToList>
-		        struct mp_unwrap_values_into_impl;
+		#if defined(__INTEL_LLVM_COMPILER)
+		// icx supports #pragma ivdep, but it will issue a diagnostic that it needs vectorize(assume_safety) to vectorize.
+		// Let's keep both pragmas for now.
+		#    define LLAMA_INDEPENDENT_DATA                                                                                    \
+		        _Pragma("ivdep") _Pragma("clang loop vectorize(assume_safety) interleave(assume_safety)")
+		#elif defined(__clang__)
+		#    define LLAMA_INDEPENDENT_DATA _Pragma("clang loop vectorize(assume_safety) interleave(assume_safety)")
+		#elif defined(__NVCOMPILER)
+		#    define LLAMA_INDEPENDENT_DATA _Pragma("ivdep")
+		#elif defined(__GNUC__)
+		#    define LLAMA_INDEPENDENT_DATA _Pragma("GCC ivdep")
+		#elif defined(_MSC_VER)
+		#    define LLAMA_INDEPENDENT_DATA __pragma(loop(ivdep))
+		#else
+		/// May be put in front of a loop statement. Indicates that all (!) data access inside the loop is indepent, so the
+		/// loop can be safely vectorized. Example: \code{.cpp}
+		///     LLAMA_INDEPENDENT_DATA
+		///     for(int i = 0; i < N; ++i)
+		///         // because of LLAMA_INDEPENDENT_DATA the compiler knows that a and b
+		///         // do not overlap and the operation can safely be vectorized
+		///         a[i] += b[i];
+		/// \endcode
+		#    define LLAMA_INDEPENDENT_DATA
+		#endif
 
-		        template<template<class...> class FromList, typename... Values, template<auto...> class ToList>
-		        struct mp_unwrap_values_into_impl<FromList<Values...>, ToList>
-		        {
-		            using type = ToList<Values::value...>;
-		        };
+		#ifndef LLAMA_FORCE_INLINE
+		#    if defined(__NVCC__) || defined(__HIP__)
+		#        define LLAMA_FORCE_INLINE __forceinline__
+		#    elif defined(__GNUC__) || defined(__clang__)
+		#        define LLAMA_FORCE_INLINE inline __attribute__((always_inline))
+		#    elif defined(_MSC_VER) || defined(__INTEL_LLVM_COMPILER)
+		#        define LLAMA_FORCE_INLINE __forceinline
+		#    else
+		/// Forces the compiler to inline a function annotated with this macro
+		#        define LLAMA_FORCE_INLINE inline
+		#        warning LLAMA_FORCE_INLINE is only defined to "inline" for this compiler
+		#    endif
+		#endif
 
-		        template<typename FromList, template<auto...> class ToList>
-		        using mp_unwrap_values_into = typename mp_unwrap_values_into_impl<FromList, ToList>::type;
+		#ifndef LLAMA_PRAGMA
+		#    define LLAMA_PRAGMA(tokens) _Pragma(#    tokens)
+		#endif
 
-		        template<typename E, typename... Args>
-		        struct ReplacePlaceholdersImpl
-		        {
-		            using type = E;
-		        };
-		        template<std::size_t I, typename... Args>
-		        struct ReplacePlaceholdersImpl<boost::mp11::mp_arg<I>, Args...>
-		        {
-		            using type = boost::mp11::mp_at_c<boost::mp11::mp_list<Args...>, I>;
-		        };
+		#ifndef LLAMA_UNROLL
+		#    if defined(__HIP__) || defined(__NVCC__) || defined(__NVCOMPILER) || defined(__clang__)                          \
+		        || defined(__INTEL_LLVM_COMPILER)
+		#        define LLAMA_UNROLL(...) LLAMA_PRAGMA(unroll __VA_ARGS__)
+		#    elif defined(__GNUG__)
+		#        define LLAMA_UNROLL(...) LLAMA_PRAGMA(GCC unroll __VA_ARGS__)
+		#    elif defined(_MSC_VER)
+		// MSVC does not support a pragma for unrolling
+		#        define LLAMA_UNROLL(...)
+		#    else
+		/// Requests the compiler to unroll the loop following this directive. An optional unrolling count may be provided as
+		/// argument, which must be a constant expression.
+		#        define LLAMA_UNROLL(...)
+		#        warning LLAMA_UNROLL is not implemented for your compiler
+		#    endif
+		#endif
 
-		        template<template<typename...> typename E, typename... Ts, typename... Args>
-		        struct ReplacePlaceholdersImpl<E<Ts...>, Args...>
-		        {
-		            using type = E<typename ReplacePlaceholdersImpl<Ts, Args...>::type...>;
-		        };
-		    } // namespace internal
+		#ifndef LLAMA_ACC
+		#    if defined(__HIP__) || defined(__NVCC__) || (defined(__clang__) && defined(__CUDA__))
+		#        define LLAMA_ACC __device__
+		#    elif defined(__GNUC__) || defined(__clang__) || defined(_MSC_VER) || defined(__INTEL_LLVM_COMPILER)
+		#        define LLAMA_ACC
+		#    else
+		#        define LLAMA_ACC
+		#        warning LLAMA_HOST_ACC is only defined empty for this compiler
+		#    endif
+		#endif
 
-		    template<typename Expression, typename... Args>
-		    using ReplacePlaceholders = typename internal::ReplacePlaceholdersImpl<Expression, Args...>::type;
-		} // namespace llama
+		#ifndef LLAMA_HOST_ACC
+		#    if defined(__HIP__) || defined(__NVCC__) || (defined(__clang__) && defined(__CUDA__))
+		#        define LLAMA_HOST_ACC __host__ __device__
+		#    elif defined(__GNUC__) || defined(__clang__) || defined(_MSC_VER) || defined(__INTEL_LLVM_COMPILER)
+		#        define LLAMA_HOST_ACC
+		#    else
+		/// Some offloading parallelization language extensions such a CUDA, OpenACC or OpenMP 4.5 need to specify whether a
+		/// class, struct, function or method "resides" on the host, the accelerator (the offloading device) or both. LLAMA
+		/// supports this with marking every function needed on an accelerator with `LLAMA_HOST_ACC`.
+		#        define LLAMA_HOST_ACC
+		#        warning LLAMA_HOST_ACC is only defined empty for this compiler
+		#    endif
+		#endif
+
+		#define LLAMA_FN_HOST_ACC_INLINE LLAMA_FORCE_INLINE LLAMA_HOST_ACC
+
+		#ifndef LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS
+		#    if defined(__clang__) || defined(__INTEL_LLVM_COMPILER)
+		#        define LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(...) __attribute__((always_inline)) __VA_ARGS__
+		#    elif defined(__GNUC__) || (defined(__NVCC__) && !defined(_MSC_VER))
+		#        define LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(...) __VA_ARGS__ __attribute__((always_inline))
+		#    elif defined(_MSC_VER)
+		#        define LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(...)                                                              \
+		            __VA_ARGS__ /* FIXME: MSVC cannot combine constexpr and [[msvc::forceinline]] */
+		#    else
+		#        define LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(...) __VA_ARGS__
+		#        warning LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS not defined for this compiler
+		#    endif
+		#endif
+		#ifndef LLAMA_LAMBDA_INLINE
+		/// Gives strong indication to the compiler to inline the attributed lambda.
+		#    define LLAMA_LAMBDA_INLINE LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS()
+		#endif
+
+		#ifndef LLAMA_SUPPRESS_HOST_DEVICE_WARNING
+		#    if defined(__NVCC__) && !defined(__clang__)
+		#        define LLAMA_SUPPRESS_HOST_DEVICE_WARNING _Pragma("nv_exec_check_disable")
+		#    else
+		/// Suppresses the nvcc warning: 'calling a __host__ function from __host__ __device__ function.'
+		/// This macro can be applied to function declarations
+		#        define LLAMA_SUPPRESS_HOST_DEVICE_WARNING
+		#    endif
+		#endif
+
+		#ifndef LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
+		#    ifdef __CUDACC__
+		#        ifdef __NVCC_DIAG_PRAGMA_SUPPORT__
+		#            define LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING                                                          \
+		                _Pragma("nv_diag_suppress 20011") _Pragma("nv_diag_suppress 20014")
+		#        else
+		#            define LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING                                                          \
+		                _Pragma("diag_suppress 20011") _Pragma("diag_suppress 20014")
+		#        endif
+		#    else
+		/// Suppresses the nvcc warnings:
+		/// 'calling a __host__ function from a __host__ __device__ function is not allowed' and
+		/// 'calling a __host__ function("...") from a __host__ __device__ function("...") is not allowed'
+		/// This macro can be applied before the concerned code block, which then needs to be ended with \ref
+		/// LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING.
+		#        define LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
+		#    endif
+		#endif
+		#ifndef LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
+		#    ifdef __CUDACC__
+		#        ifdef __NVCC_DIAG_PRAGMA_SUPPORT__
+		#            define LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING                                                            \
+		                _Pragma("nv_diag_default 20011") _Pragma("nv_diag_default 20014")
+		#        else
+		#            define LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING _Pragma("diag_default 20011") _Pragma("diag_default 20014")
+		#        endif
+		#    else
+		#        define LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
+		#    endif
+		#endif
+
+		#if defined(_MSC_VER)
+		#    define LLAMA_FORCE_INLINE_RECURSIVE __pragma(inline_depth(255))
+		#else
+		/// Forces the compiler to recursively inline the call hiearchy started by the subsequent function call.
+		#    define LLAMA_FORCE_INLINE_RECURSIVE
+		#endif
+
+		/// Forces a copy of a value. This is useful to prevent ODR usage of constants when compiling for GPU targets.
+		#define LLAMA_COPY(x) decltype(x)(x)
+
+		// https://devblogs.microsoft.com/cppblog/optimizing-the-layout-of-empty-base-classes-in-vs2015-update-2-3/
+		#if defined(_MSC_VER)
+		#    define LLAMA_DECLSPEC_EMPTY_BASES __declspec(empty_bases)
+		#else
+		#    define LLAMA_DECLSPEC_EMPTY_BASES
+		#endif
+
+		/// Expands to likely if [[likely]] supported by the compiler. Use as [[LLAMA_LIKELY]].
+		#if __has_cpp_attribute(likely)
+		#    define LLAMA_LIKELY likely
+		#else
+		#    define LLAMA_LIKELY
+		#endif
+
+		/// Expands to unlikely if [[unlikely]] supported by the compiler. Use as [[LLAMA_UNLIKELY]].
+		#if __has_cpp_attribute(unlikely)
+		#    define LLAMA_UNLIKELY unlikely
+		#else
+		#    define LLAMA_UNLIKELY
+		#endif
 		// ==
-		// == ./Meta.hpp ==
+		// == ./macros.hpp ==
 		// ============================================================================
 
 
-	#include <limits>
-	#include <type_traits>
+	#include <ostream>
+	#include <tuple>
 
 	namespace llama
 	{
-	    // TODO(bgruber): make this an alias in C++20, when we have CTAD for aliases
-	    /// Represents a run-time index into the array dimensions.
-	    /// \tparam Dim Compile-time number of dimensions.
-	    template<typename T, std::size_t Dim>
-	    struct ArrayIndex : Array<T, Dim>
+	    /// Array class like `std::array` but suitable for use with offloading devices like GPUs.
+	    /// \tparam T type if array elements.
+	    /// \tparam N rank of the array.
+	    template<typename T, std::size_t N>
+	    // NOLINTNEXTLINE(bugprone-reserved-identifier,cert-dcl37-c,cert-dcl51-cpp,readability-identifier-naming)
+	    struct Array
 	    {
-	        static constexpr std::size_t rank = Dim;
-	    };
-
-	    // allow comparing ArrayIndex with different size types:
-	    template<std::size_t Dim, typename TA, typename TB>
-	    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator==(ArrayIndex<TA, Dim> a, ArrayIndex<TB, Dim> b) -> bool
-	    {
-	        for(std::size_t i = 0; i < Dim; ++i)
-	            if(a[i] != b[i])
-	                return false;
-	        return true;
-	    }
-
-	    template<std::size_t Dim, typename TA, typename TB>
-	    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator!=(ArrayIndex<TA, Dim> a, ArrayIndex<TB, Dim> b) -> bool
-	    {
-	        return !(a == b);
-	    }
-
-	    static_assert(
-	        std::is_trivially_default_constructible_v<ArrayIndex<int, 1>>); // so ArrayIndex<1>{} will produce a zeroed
-	                                                                        // index. Should hold for all dimensions,
-	                                                                        // but just checking for <1> here.
-	    static_assert(std::is_trivially_copy_constructible_v<ArrayIndex<int, 1>>);
-	    static_assert(std::is_trivially_move_constructible_v<ArrayIndex<int, 1>>);
-	    static_assert(std::is_trivially_copy_assignable_v<ArrayIndex<int, 1>>);
-	    static_assert(std::is_trivially_move_assignable_v<ArrayIndex<int, 1>>);
-
-	    namespace internal
-	    {
-	        template<typename Default, typename... Ints>
-	        struct IndexTypeFromArgs
-	        {
-	            using type = Default;
-	        };
-
-	        template<typename Default, typename FirstInt, typename... Ints>
-	        struct IndexTypeFromArgs<Default, FirstInt, Ints...>
-	        {
-	            static_assert(std::conjunction_v<std::is_same<FirstInt, Ints>...>, "All index types must be the same");
-	            using type = FirstInt;
-	        };
-	    } // namespace internal
-
-	    template<typename... Args>
-	    ArrayIndex(Args...)
-	        -> ArrayIndex<typename internal::IndexTypeFromArgs<std::size_t, Args...>::type, sizeof...(Args)>;
-	} // namespace llama
-
-	template<typename V, size_t N>
-	struct std::tuple_size<llama::ArrayIndex<V, N>> : std::integral_constant<size_t, N> // NOLINT(cert-dcl58-cpp)
-	{
-	};
-
-	template<size_t I, typename V, size_t N>
-	struct std::tuple_element<I, llama::ArrayIndex<V, N>> // NOLINT(cert-dcl58-cpp)
-	{
-	    using type = V;
-	};
-
-	namespace llama
-	{
-	    namespace internal
-	    {
-	        struct Dyn
-	        {
-	            template<typename T, std::enable_if_t<std::is_integral_v<T>, int> = 0>
-	            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
-	            LLAMA_FN_HOST_ACC_INLINE constexpr operator T() const
-	            {
-	                return static_cast<T>(-1);
-	            }
-
-	            template<typename T>
-	            LLAMA_FN_HOST_ACC_INLINE friend constexpr auto operator==(T i, Dyn) -> bool
-	            {
-	                return i == static_cast<T>(-1);
-	            }
-
-	            template<typename T>
-	            LLAMA_FN_HOST_ACC_INLINE friend constexpr auto operator==(Dyn d, T i) -> bool
-	            {
-	                return i == d;
-	            }
-
-	            template<typename T>
-	            LLAMA_FN_HOST_ACC_INLINE friend constexpr auto operator!=(T i, Dyn d) -> bool
-	            {
-	                return !(i == d);
-	            }
-
-	            template<typename T>
-	            LLAMA_FN_HOST_ACC_INLINE friend constexpr auto operator!=(Dyn d, T i) -> bool
-	            {
-	                return !(i == d);
-	            }
-	        };
-	    } // namespace internal
-
-	    /// Used as a template argument to \ref ArrayExtents to mark a dynamic extent.
-	    inline constexpr auto dyn = internal::Dyn{};
-
-	    /// ArrayExtents holding compile and runtime indices. This is conceptually equivalent to the std::extent of
-	    /// std::mdspan (@see: https://wg21.link/P0009) including the changes to make the size_type controllable (@see:
-	    /// https://wg21.link/P2553).
-	    template<typename T = std::size_t, T... Sizes>
-	    struct ArrayExtents : Array<T, ((Sizes == dyn) + ... + 0)>
-	    {
-	        static constexpr std::size_t rank = sizeof...(Sizes);
-	        static constexpr auto rankDynamic = ((Sizes == dyn) + ... + 0);
-	        static constexpr auto rankStatic = rank - rankDynamic;
-
-	        using Index = ArrayIndex<T, rank>;
 	        using value_type = T;
+	        T element[N];
+
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto size() const
+	        {
+	            return N;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto empty() const -> bool
+	        {
+	            return N == 0;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto begin() -> T*
+	        {
+	            return &element[0];
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto begin() const -> const T*
+	        {
+	            return &element[0];
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto end() -> T*
+	        {
+	            return &element[N];
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto end() const -> const T*
+	        {
+	            return &element[N];
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto front() -> T&
+	        {
+	            return element[0];
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto front() const -> const T&
+	        {
+	            return element[0];
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto back() -> T&
+	        {
+	            return element[N - 1];
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto back() const -> const T&
+	        {
+	            return element[N - 1];
+	        }
+
+	        template<typename IndexType>
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator[](IndexType&& idx) -> T&
+	        {
+	            return element[idx];
+	        }
+
+	        template<typename IndexType>
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator[](IndexType&& idx) const -> const T&
+	        {
+	            return element[idx];
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto data() -> T*
+	        {
+	            return &element[0];
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto data() const -> const T*
+	        {
+	            return &element[0];
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator==(const Array& a, const Array& b) -> bool
+	        {
+	            for(std::size_t i = 0; i < N; ++i)
+	                if(a.element[i] != b.element[i])
+	                    return false;
+	            return true;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator!=(const Array& a, const Array& b) -> bool
+	        {
+	            return !(a == b);
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator+(const Array& a, const Array& b) -> Array
+	        {
+	            Array temp{};
+	            for(std::size_t i = 0; i < N; ++i)
+	                temp[i] = a[i] + b[i];
+	            return temp;
+	        }
 
 	        template<std::size_t I>
-	        LLAMA_FN_HOST_ACC_INLINE constexpr auto get() const -> value_type
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto get() -> T&
 	        {
-	            using namespace boost::mp11;
-	            using TypeList = mp_list_c<T, Sizes...>;
-	            constexpr auto extent = mp_at_c<TypeList, I>::value;
-	            if constexpr(extent != dyn)
-	                return extent;
-	            else
-	                return static_cast<const Array<value_type, rankDynamic>&>(
-	                    *this)[+mp_count<mp_take_c<TypeList, I>, std::integral_constant<T, dyn>>::value];
+	            return element[I];
 	        }
 
-	        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator[](T i) const -> value_type
+	        template<std::size_t I>
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto get() const -> const T&
 	        {
-	            return boost::mp11::mp_with_index<rank>(i, [&](auto ic) { return get<decltype(ic)::value>(); });
-	        }
-
-	    private:
-	        template<std::size_t... Is>
-	        LLAMA_FN_HOST_ACC_INLINE constexpr auto toArray(std::index_sequence<Is...>) const -> Index
-	        {
-	            return {get<Is>()...};
-	        }
-
-	    public:
-	        LLAMA_FN_HOST_ACC_INLINE constexpr auto toArray() const -> Index
-	        {
-	            return toArray(std::make_index_sequence<rank>{});
+	            return element[I];
 	        }
 	    };
 
 	    template<typename T>
-	    struct ArrayExtents<T>
+	    struct Array<T, 0>
 	    {
-	        static constexpr std::size_t rank = 0;
-	        static constexpr auto rankDynamic = 0;
-	        static constexpr auto rankStatic = 0;
-
-	        using Index = ArrayIndex<T, 0>;
 	        using value_type = T;
 
-	        LLAMA_FN_HOST_ACC_INLINE constexpr auto toArray() const -> Index
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto size() const
+	        {
+	            return 0;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto empty() const -> bool
+	        {
+	            return true;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto begin() -> T*
+	        {
+	            return nullptr;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto begin() const -> const T*
+	        {
+	            return nullptr;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto end() -> T*
+	        {
+	            return nullptr;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto end() const -> const T*
+	        {
+	            return nullptr;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto data() -> T*
+	        {
+	            return nullptr;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto data() const -> const T*
+	        {
+	            return nullptr;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator==(const Array&, const Array&) -> bool
+	        {
+	            return true;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator!=(const Array&, const Array&) -> bool
+	        {
+	            return false;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator+(const Array&, const Array&) -> Array
 	        {
 	            return {};
 	        }
 	    };
 
-	    template<typename... Args>
-	    ArrayExtents(Args... args)
-	        -> ArrayExtents<typename internal::IndexTypeFromArgs<std::size_t, Args...>::type, (Args{}, dyn)...>;
+	    template<typename First, typename... Args>
+	    Array(First, Args... args) -> Array<First, sizeof...(Args) + 1>;
 
-	    static_assert(std::is_trivially_default_constructible_v<ArrayExtents<std::size_t, 1>>);
-	    static_assert(std::is_trivially_copy_constructible_v<ArrayExtents<std::size_t, 1>>);
-	    static_assert(std::is_trivially_move_constructible_v<ArrayExtents<std::size_t, 1>>);
-	    static_assert(std::is_trivially_copy_assignable_v<ArrayExtents<std::size_t, 1>>);
-	    static_assert(std::is_trivially_move_assignable_v<ArrayExtents<std::size_t, 1>>);
-	    static_assert(std::is_empty_v<ArrayExtents<std::size_t, 1>>);
-
-	    template<typename SizeTypeA, SizeTypeA... SizesA, typename SizeTypeB, SizeTypeB... SizesB>
-	    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator==(
-	        ArrayExtents<SizeTypeA, SizesA...> a,
-	        ArrayExtents<SizeTypeB, SizesB...> b) -> bool
+	    template<typename T, std::size_t N>
+	    auto operator<<(std::ostream& os, const Array<T, N>& a) -> std::ostream&
 	    {
-	        return a.toArray() == b.toArray();
-	    }
-
-	    template<typename SizeTypeA, SizeTypeA... SizesA, typename SizeTypeB, SizeTypeB... SizesB>
-	    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator!=(
-	        ArrayExtents<SizeTypeA, SizesA...> a,
-	        ArrayExtents<SizeTypeB, SizesB...> b) -> bool
-	    {
-	        return !(a == b);
-	    }
-
-	    template<typename SizeType, SizeType... Sizes>
-	    LLAMA_FN_HOST_ACC_INLINE constexpr auto product(ArrayExtents<SizeType, Sizes...> e) -> SizeType
-	    {
-	        return product(e.toArray());
-	    }
-
-	    namespace internal
-	    {
-	        template<typename SizeType, SizeType Extent, std::size_t... Is>
-	        constexpr auto makeArrayExtents(std::index_sequence<Is...>)
+	        os << "Array{";
+	        bool first = true;
+	        for(auto e : a)
 	        {
-	            return ArrayExtents<SizeType, (static_cast<void>(Is), Extent)...>{};
+	            if(first)
+	                first = false;
+	            else
+	                os << ", ";
+	            os << e;
 	        }
-	    } // namespace internal
-
-	    /// N-dimensional ArrayExtents where all N extents are Extent.
-	    template<typename SizeType, std::size_t N, SizeType Extent>
-	    using ArrayExtentsNCube = decltype(internal::makeArrayExtents<SizeType, Extent>(std::make_index_sequence<N>{}));
-
-	    /// N-dimensional ArrayExtents where all values are dynamic.
-	    template<typename SizeType, std::size_t N>
-	    using ArrayExtentsDynamic = ArrayExtentsNCube<SizeType, N, dyn>;
-
-	    template<typename SizeType, std::size_t Dim, typename Func, typename... OuterIndices>
-	    LLAMA_FN_HOST_ACC_INLINE void forEachADCoord(
-	        [[maybe_unused]] ArrayIndex<SizeType, Dim> adSize,
-	        Func&& func,
-	        OuterIndices... outerIndices)
-	    {
-	        if constexpr(Dim > 0)
-	            for(SizeType i = 0; i < adSize[0]; i++)
-	                forEachADCoord(
-	                    ArrayIndex<SizeType, Dim - 1>{popFront(adSize)},
-	                    std::forward<Func>(func),
-	                    outerIndices...,
-	                    i);
-	        else
-	            std::forward<Func>(func)(ArrayIndex<SizeType, sizeof...(outerIndices)>{outerIndices...});
+	        os << "}";
+	        return os;
 	    }
 
-	    template<typename SizeType, SizeType... Sizes, typename Func>
-	    LLAMA_FN_HOST_ACC_INLINE void forEachADCoord(ArrayExtents<SizeType, Sizes...> extents, Func&& func)
+	    template<typename T, std::size_t N>
+	    LLAMA_FN_HOST_ACC_INLINE constexpr auto pushFront([[maybe_unused]] Array<T, N> a, T v) -> Array<T, N + 1>
 	    {
-	        forEachADCoord(extents.toArray(), std::forward<Func>(func));
+	        Array<T, N + 1> r{};
+	        r[0] = v;
+	        if constexpr(N > 0)
+	            for(std::size_t i = 0; i < N; i++)
+	                r[i + 1] = a[i];
+	        return r;
+	    }
+
+	    template<typename T, std::size_t N>
+	    LLAMA_FN_HOST_ACC_INLINE constexpr auto pushBack([[maybe_unused]] Array<T, N> a, T v) -> Array<T, N + 1>
+	    {
+	        Array<T, N + 1> r{};
+	        if constexpr(N > 0)
+	            for(std::size_t i = 0; i < N; i++)
+	                r[i] = a[i];
+	        r[N] = v;
+	        return r;
+	    }
+
+	    template<typename T, std::size_t N>
+	    LLAMA_FN_HOST_ACC_INLINE constexpr auto popBack([[maybe_unused]] Array<T, N> a)
+	    {
+	        static_assert(N > 0);
+	        Array<T, N - 1> r{};
+	        if constexpr(N > 1)
+	            for(std::size_t i = 0; i < N - 1; i++)
+	                r[i] = a[i];
+	        return r;
+	    }
+
+	    template<typename T, std::size_t N>
+	    LLAMA_FN_HOST_ACC_INLINE constexpr auto popFront([[maybe_unused]] Array<T, N> a)
+	    {
+	        static_assert(N > 0);
+	        Array<T, N - 1> r{};
+	        if constexpr(N > 1)
+	            for(std::size_t i = 0; i < N - 1; i++)
+	                r[i] = a[i + 1];
+	        return r;
+	    }
+
+	    template<typename T, std::size_t N>
+	    LLAMA_FN_HOST_ACC_INLINE constexpr auto product(Array<T, N> a) -> T
+	    {
+	        T prod = 1;
+	        for(auto s : a)
+	            prod *= s;
+	        return prod;
+	    }
+
+	    template<typename T, std::size_t N>
+	    LLAMA_FN_HOST_ACC_INLINE constexpr auto dot([[maybe_unused]] Array<T, N> a, [[maybe_unused]] Array<T, N> b) -> T
+	    {
+	        T r = 0;
+	        if constexpr(N > 0)
+	            for(std::size_t i = 0; i < N; i++)
+	                r += a[i] * b[i];
+	        return r;
 	    }
 	} // namespace llama
 
-	template<typename SizeType, SizeType... Sizes>
-	struct std::tuple_size<llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(cert-dcl58-cpp)
-	    : std::integral_constant<std::size_t, sizeof...(Sizes)>
+	namespace std
 	{
-	};
+	    template<typename T, size_t N>
+	    struct tuple_size<llama::Array<T, N>> : integral_constant<size_t, N> // NOLINT(cert-dcl58-cpp)
+	    {
+	    };
 
-	template<typename SizeType, std::size_t I, SizeType... Sizes>
-	struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(cert-dcl58-cpp)
-	{
-	    using type = SizeType;
-	};
+	    template<size_t I, typename T, size_t N>
+	    struct tuple_element<I, llama::Array<T, N>> // NOLINT(cert-dcl58-cpp)
+	    {
+	        using type = T;
+	    };
+	} // namespace std
 	// ==
-	// == ./ArrayExtents.hpp ==
+	// == ./Array.hpp ==
 	// ============================================================================
 
 	// ============================================================================
@@ -859,7 +494,372 @@
 	// SPDX-License-Identifier: GPL-3.0-or-later
 
 	// #pragma once
-	// #include "ArrayExtents.hpp"    // amalgamate: file already expanded
+		// ============================================================================
+		// == ./ArrayExtents.hpp ==
+		// ==
+		// SPDX-License-Identifier: GPL-3.0-or-later
+
+		// #pragma once
+		// #include "Array.hpp"    // amalgamate: file already expanded
+			// ============================================================================
+			// == ./Meta.hpp ==
+			// ==
+			// SPDX-License-Identifier: GPL-3.0-or-later
+
+			// #pragma once
+			#include <boost/mp11.hpp>
+
+			#if BOOST_MP11_VERSION < 107300
+			//  Copyright 2015 Peter Dimov.
+			//
+			//  Distributed under the Boost Software License, Version 1.0.
+			//
+			// Boost Software License - Version 1.0 - August 17th, 2003
+			//
+			// Permission is hereby granted, free of charge, to any person or organization
+			// obtaining a copy of the software and accompanying documentation covered by
+			// this license (the "Software") to use, reproduce, display, distribute,
+			// execute, and transmit the Software, and to prepare derivative works of the
+			// Software, and to permit third-parties to whom the Software is furnished to
+			// do so, all subject to the following:
+			//
+			// The copyright notices in the Software and this entire statement, including
+			// the above license grant, this restriction and the following disclaimer,
+			// must be included in all copies of the Software, in whole or in part, and
+			// all derivative works of the Software, unless such copies or derivative
+			// works are solely in the form of machine-executable object code generated by
+			// a source language processor.
+			//
+			// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+			// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+			// FITNESS FOR A PARTICULAR PURPOSE, TITLE AND NON-INFRINGEMENT. IN NO EVENT
+			// SHALL THE COPYRIGHT HOLDERS OR ANYONE DISTRIBUTING THE SOFTWARE BE LIABLE
+			// FOR ANY DAMAGES OR OTHER LIABILITY, WHETHER IN CONTRACT, TORT OR OTHERWISE,
+			// ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+			// DEALINGS IN THE SOFTWARE.
+
+			namespace boost::mp11
+			{
+			    namespace detail
+			    {
+			        template<class L2>
+			        struct mp_flatten_impl
+			        {
+			            template<class T>
+			            using fn = mp_if<mp_similar<L2, T>, T, mp_list<T>>;
+			        };
+			    } // namespace detail
+
+			    template<class L, class L2 = mp_clear<L>>
+			    using mp_flatten = mp_apply<mp_append, mp_push_front<mp_transform_q<detail::mp_flatten_impl<L2>, L>, mp_clear<L>>>;
+			} // namespace boost::mp11
+			#endif
+
+			namespace llama
+			{
+			    namespace internal
+			    {
+			        template<typename FromList, template<auto...> class ToList>
+			        struct mp_unwrap_values_into_impl;
+
+			        template<template<class...> class FromList, typename... Values, template<auto...> class ToList>
+			        struct mp_unwrap_values_into_impl<FromList<Values...>, ToList>
+			        {
+			            using type = ToList<Values::value...>;
+			        };
+
+			        template<typename FromList, template<auto...> class ToList>
+			        using mp_unwrap_values_into = typename mp_unwrap_values_into_impl<FromList, ToList>::type;
+
+			        template<typename E, typename... Args>
+			        struct ReplacePlaceholdersImpl
+			        {
+			            using type = E;
+			        };
+			        template<std::size_t I, typename... Args>
+			        struct ReplacePlaceholdersImpl<boost::mp11::mp_arg<I>, Args...>
+			        {
+			            using type = boost::mp11::mp_at_c<boost::mp11::mp_list<Args...>, I>;
+			        };
+
+			        template<template<typename...> typename E, typename... Ts, typename... Args>
+			        struct ReplacePlaceholdersImpl<E<Ts...>, Args...>
+			        {
+			            using type = E<typename ReplacePlaceholdersImpl<Ts, Args...>::type...>;
+			        };
+			    } // namespace internal
+
+			    template<typename Expression, typename... Args>
+			    using ReplacePlaceholders = typename internal::ReplacePlaceholdersImpl<Expression, Args...>::type;
+			} // namespace llama
+			// ==
+			// == ./Meta.hpp ==
+			// ============================================================================
+
+
+		#include <limits>
+		#include <type_traits>
+
+		namespace llama
+		{
+		    // TODO(bgruber): make this an alias in C++20, when we have CTAD for aliases
+		    /// Represents a run-time index into the array dimensions.
+		    /// \tparam Dim Compile-time number of dimensions.
+		    template<typename T, std::size_t Dim>
+		    struct ArrayIndex : Array<T, Dim>
+		    {
+		        static constexpr std::size_t rank = Dim;
+		    };
+
+		    // allow comparing ArrayIndex with different size types:
+		    template<std::size_t Dim, typename TA, typename TB>
+		    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator==(ArrayIndex<TA, Dim> a, ArrayIndex<TB, Dim> b) -> bool
+		    {
+		        for(std::size_t i = 0; i < Dim; ++i)
+		            if(a[i] != b[i])
+		                return false;
+		        return true;
+		    }
+
+		    template<std::size_t Dim, typename TA, typename TB>
+		    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator!=(ArrayIndex<TA, Dim> a, ArrayIndex<TB, Dim> b) -> bool
+		    {
+		        return !(a == b);
+		    }
+
+		    static_assert(
+		        std::is_trivially_default_constructible_v<ArrayIndex<int, 1>>); // so ArrayIndex<1>{} will produce a zeroed
+		                                                                        // index. Should hold for all dimensions,
+		                                                                        // but just checking for <1> here.
+		    static_assert(std::is_trivially_copy_constructible_v<ArrayIndex<int, 1>>);
+		    static_assert(std::is_trivially_move_constructible_v<ArrayIndex<int, 1>>);
+		    static_assert(std::is_trivially_copy_assignable_v<ArrayIndex<int, 1>>);
+		    static_assert(std::is_trivially_move_assignable_v<ArrayIndex<int, 1>>);
+
+		    namespace internal
+		    {
+		        template<typename Default, typename... Ints>
+		        struct IndexTypeFromArgs
+		        {
+		            using type = Default;
+		        };
+
+		        template<typename Default, typename FirstInt, typename... Ints>
+		        struct IndexTypeFromArgs<Default, FirstInt, Ints...>
+		        {
+		            static_assert(std::conjunction_v<std::is_same<FirstInt, Ints>...>, "All index types must be the same");
+		            using type = FirstInt;
+		        };
+		    } // namespace internal
+
+		    template<typename... Args>
+		    ArrayIndex(Args...)
+		        -> ArrayIndex<typename internal::IndexTypeFromArgs<std::size_t, Args...>::type, sizeof...(Args)>;
+		} // namespace llama
+
+		template<typename V, size_t N>
+		struct std::tuple_size<llama::ArrayIndex<V, N>> : std::integral_constant<size_t, N> // NOLINT(cert-dcl58-cpp)
+		{
+		};
+
+		template<size_t I, typename V, size_t N>
+		struct std::tuple_element<I, llama::ArrayIndex<V, N>> // NOLINT(cert-dcl58-cpp)
+		{
+		    using type = V;
+		};
+
+		namespace llama
+		{
+		    namespace internal
+		    {
+		        struct Dyn
+		        {
+		            template<typename T, std::enable_if_t<std::is_integral_v<T>, int> = 0>
+		            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
+		            LLAMA_FN_HOST_ACC_INLINE constexpr operator T() const
+		            {
+		                return static_cast<T>(-1);
+		            }
+
+		            template<typename T>
+		            LLAMA_FN_HOST_ACC_INLINE friend constexpr auto operator==(T i, Dyn) -> bool
+		            {
+		                return i == static_cast<T>(-1);
+		            }
+
+		            template<typename T>
+		            LLAMA_FN_HOST_ACC_INLINE friend constexpr auto operator==(Dyn d, T i) -> bool
+		            {
+		                return i == d;
+		            }
+
+		            template<typename T>
+		            LLAMA_FN_HOST_ACC_INLINE friend constexpr auto operator!=(T i, Dyn d) -> bool
+		            {
+		                return !(i == d);
+		            }
+
+		            template<typename T>
+		            LLAMA_FN_HOST_ACC_INLINE friend constexpr auto operator!=(Dyn d, T i) -> bool
+		            {
+		                return !(i == d);
+		            }
+		        };
+		    } // namespace internal
+
+		    /// Used as a template argument to \ref ArrayExtents to mark a dynamic extent.
+		    inline constexpr auto dyn = internal::Dyn{};
+
+		    /// ArrayExtents holding compile and runtime indices. This is conceptually equivalent to the std::extent of
+		    /// std::mdspan (@see: https://wg21.link/P0009) including the changes to make the size_type controllable (@see:
+		    /// https://wg21.link/P2553).
+		    template<typename T = std::size_t, T... Sizes>
+		    struct ArrayExtents : Array<T, ((Sizes == dyn) + ... + 0)>
+		    {
+		        static constexpr std::size_t rank = sizeof...(Sizes);
+		        static constexpr auto rankDynamic = ((Sizes == dyn) + ... + 0);
+		        static constexpr auto rankStatic = rank - rankDynamic;
+
+		        using Index = ArrayIndex<T, rank>;
+		        using value_type = T;
+
+		        template<std::size_t I>
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto get() const -> value_type
+		        {
+		            using namespace boost::mp11;
+		            using TypeList = mp_list_c<T, Sizes...>;
+		            constexpr auto extent = mp_at_c<TypeList, I>::value;
+		            if constexpr(extent != dyn)
+		                return extent;
+		            else
+		                return static_cast<const Array<value_type, rankDynamic>&>(
+		                    *this)[+mp_count<mp_take_c<TypeList, I>, std::integral_constant<T, dyn>>::value];
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator[](T i) const -> value_type
+		        {
+		            return boost::mp11::mp_with_index<rank>(i, [&](auto ic) { return get<decltype(ic)::value>(); });
+		        }
+
+		    private:
+		        template<std::size_t... Is>
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto toArray(std::index_sequence<Is...>) const -> Index
+		        {
+		            return {get<Is>()...};
+		        }
+
+		    public:
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto toArray() const -> Index
+		        {
+		            return toArray(std::make_index_sequence<rank>{});
+		        }
+		    };
+
+		    template<typename T>
+		    struct ArrayExtents<T>
+		    {
+		        static constexpr std::size_t rank = 0;
+		        static constexpr auto rankDynamic = 0;
+		        static constexpr auto rankStatic = 0;
+
+		        using Index = ArrayIndex<T, 0>;
+		        using value_type = T;
+
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto toArray() const -> Index
+		        {
+		            return {};
+		        }
+		    };
+
+		    template<typename... Args>
+		    ArrayExtents(Args... args)
+		        -> ArrayExtents<typename internal::IndexTypeFromArgs<std::size_t, Args...>::type, (Args{}, dyn)...>;
+
+		    static_assert(std::is_trivially_default_constructible_v<ArrayExtents<std::size_t, 1>>);
+		    static_assert(std::is_trivially_copy_constructible_v<ArrayExtents<std::size_t, 1>>);
+		    static_assert(std::is_trivially_move_constructible_v<ArrayExtents<std::size_t, 1>>);
+		    static_assert(std::is_trivially_copy_assignable_v<ArrayExtents<std::size_t, 1>>);
+		    static_assert(std::is_trivially_move_assignable_v<ArrayExtents<std::size_t, 1>>);
+		    static_assert(std::is_empty_v<ArrayExtents<std::size_t, 1>>);
+
+		    template<typename SizeTypeA, SizeTypeA... SizesA, typename SizeTypeB, SizeTypeB... SizesB>
+		    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator==(
+		        ArrayExtents<SizeTypeA, SizesA...> a,
+		        ArrayExtents<SizeTypeB, SizesB...> b) -> bool
+		    {
+		        return a.toArray() == b.toArray();
+		    }
+
+		    template<typename SizeTypeA, SizeTypeA... SizesA, typename SizeTypeB, SizeTypeB... SizesB>
+		    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator!=(
+		        ArrayExtents<SizeTypeA, SizesA...> a,
+		        ArrayExtents<SizeTypeB, SizesB...> b) -> bool
+		    {
+		        return !(a == b);
+		    }
+
+		    template<typename SizeType, SizeType... Sizes>
+		    LLAMA_FN_HOST_ACC_INLINE constexpr auto product(ArrayExtents<SizeType, Sizes...> e) -> SizeType
+		    {
+		        return product(e.toArray());
+		    }
+
+		    namespace internal
+		    {
+		        template<typename SizeType, SizeType Extent, std::size_t... Is>
+		        constexpr auto makeArrayExtents(std::index_sequence<Is...>)
+		        {
+		            return ArrayExtents<SizeType, (static_cast<void>(Is), Extent)...>{};
+		        }
+		    } // namespace internal
+
+		    /// N-dimensional ArrayExtents where all N extents are Extent.
+		    template<typename SizeType, std::size_t N, SizeType Extent>
+		    using ArrayExtentsNCube = decltype(internal::makeArrayExtents<SizeType, Extent>(std::make_index_sequence<N>{}));
+
+		    /// N-dimensional ArrayExtents where all values are dynamic.
+		    template<typename SizeType, std::size_t N>
+		    using ArrayExtentsDynamic = ArrayExtentsNCube<SizeType, N, dyn>;
+
+		    template<typename SizeType, std::size_t Dim, typename Func, typename... OuterIndices>
+		    LLAMA_FN_HOST_ACC_INLINE void forEachADCoord(
+		        [[maybe_unused]] ArrayIndex<SizeType, Dim> adSize,
+		        Func&& func,
+		        OuterIndices... outerIndices)
+		    {
+		        if constexpr(Dim > 0)
+		            for(SizeType i = 0; i < adSize[0]; i++)
+		                forEachADCoord(
+		                    ArrayIndex<SizeType, Dim - 1>{popFront(adSize)},
+		                    std::forward<Func>(func),
+		                    outerIndices...,
+		                    i);
+		        else
+		            std::forward<Func>(func)(ArrayIndex<SizeType, sizeof...(outerIndices)>{outerIndices...});
+		    }
+
+		    template<typename SizeType, SizeType... Sizes, typename Func>
+		    LLAMA_FN_HOST_ACC_INLINE void forEachADCoord(ArrayExtents<SizeType, Sizes...> extents, Func&& func)
+		    {
+		        forEachADCoord(extents.toArray(), std::forward<Func>(func));
+		    }
+		} // namespace llama
+
+		template<typename SizeType, SizeType... Sizes>
+		struct std::tuple_size<llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(cert-dcl58-cpp)
+		    : std::integral_constant<std::size_t, sizeof...(Sizes)>
+		{
+		};
+
+		template<typename SizeType, std::size_t I, SizeType... Sizes>
+		struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(cert-dcl58-cpp)
+		{
+		    using type = SizeType;
+		};
+		// ==
+		// == ./ArrayExtents.hpp ==
+		// ============================================================================
+
 	// #include "Meta.hpp"    // amalgamate: file already expanded
 		// ============================================================================
 		// == ./RecordCoord.hpp ==
@@ -1798,3386 +1798,137 @@
 	// == ./Core.hpp ==
 	// ============================================================================
 
-	// ============================================================================
-	// == ./HasRanges.hpp ==
-	// ==
-	// SPDX-License-Identifier: GPL-3.0-or-later
-
-	// #pragma once
-	// TODO(bgruber): clang 10-15 (libstdc++ from gcc 11.2 or gcc 12.1) fail to compile this currently with the issue
-	// described here:
-	// https://stackoverflow.com/questions/64300832/why-does-clang-think-gccs-subrange-does-not-satisfy-gccs-ranges-begin-functi
-	// Intel LLVM compiler is also using the clang frontend
-	#define CAN_USE_RANGES 0
-	#if __has_include(<version>)
-	#    include <version>
-	#    if defined(__cpp_concepts) && defined(__cpp_lib_ranges) && (!defined(__clang__) || __clang_major__ >= 16)        \
-	        && !defined(__INTEL_LLVM_COMPILER) && (!defined(_MSC_VER) || _MSC_VER > 1932) && !defined(__NVCOMPILER)
-	#        undef CAN_USE_RANGES
-	#        define CAN_USE_RANGES 1
-	#    endif
-	#endif
-	// ==
-	// == ./HasRanges.hpp ==
-	// ============================================================================
-
-
-#include <algorithm>
-#include <iterator>
-// #include <limits>    // amalgamate: file already included
-#if CAN_USE_RANGES
-#    include <ranges>
-#endif
-
-namespace llama
-{
-    /// Iterator supporting \ref ArrayIndexRange.
-    template<typename ArrayExtents>
-    struct ArrayIndexIterator
-    {
-        static_assert(!std::is_const_v<ArrayExtents>);
-
-        using value_type = typename ArrayExtents::Index;
-        using difference_type = std::ptrdiff_t;
-        using reference = value_type;
-        using pointer = internal::IndirectValue<value_type>;
-        using iterator_category = std::random_access_iterator_tag;
-
-        static constexpr std::size_t rank = ArrayExtents::rank;
-
-        constexpr ArrayIndexIterator() noexcept = default;
-
-        LLAMA_FN_HOST_ACC_INLINE constexpr ArrayIndexIterator(ArrayExtents extents, value_type current) noexcept
-            : extents(extents)
-            , current(current)
-        {
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        constexpr auto operator*() const noexcept -> value_type
-        {
-            return current;
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        constexpr auto operator->() const noexcept -> pointer
-        {
-            return {**this};
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        constexpr auto operator++() noexcept -> ArrayIndexIterator&
-        {
-            current[rank - 1]++;
-            for(auto i = static_cast<int>(rank) - 2; i >= 0; i--)
-            {
-                if(current[i + 1] != extents[i + 1])
-                    return *this;
-                current[i + 1] = 0;
-                current[i]++;
-            }
-            return *this;
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        constexpr auto operator++(int) noexcept -> ArrayIndexIterator
-        {
-            auto tmp = *this;
-            ++*this;
-            return tmp;
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        constexpr auto operator--() noexcept -> ArrayIndexIterator&
-        {
-            current[rank - 1]--;
-            for(auto i = static_cast<int>(rank) - 2; i >= 0; i--)
-            {
-                // return if no underflow
-                if(current[i + 1] != static_cast<typename ArrayExtents::value_type>(-1))
-                    return *this;
-                current[i + 1] = extents[i] - 1;
-                current[i]--;
-            }
-            // decrementing beyond [0, 0, ..., 0] is UB
-            return *this;
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        constexpr auto operator--(int) noexcept -> ArrayIndexIterator
-        {
-            auto tmp = *this;
-            --*this;
-            return tmp;
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        constexpr auto operator[](difference_type i) const noexcept -> reference
-        {
-            return *(*this + i);
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        constexpr auto operator+=(difference_type n) noexcept -> ArrayIndexIterator&
-        {
-            // add n to all lower dimensions with carry
-            for(auto i = static_cast<int>(rank) - 1; i > 0 && n != 0; i--)
-            {
-                n += static_cast<difference_type>(current[i]);
-                const auto s = static_cast<difference_type>(extents[i]);
-                auto mod = n % s;
-                n /= s;
-                if(mod < 0)
-                {
-                    mod += s;
-                    n--;
-                }
-                current[i] = mod;
-                assert(current[i] < extents[i]);
-            }
-
-            current[0] = static_cast<difference_type>(current[0]) + n;
-            // current is either within bounds or at the end ([last + 1, 0, 0, ..., 0])
-            assert(
-                (current[0] < extents[0]
-                 || (current[0] == extents[0]
-                     && std::all_of(std::begin(current) + 1, std::end(current), [](auto c) { return c == 0; })))
-                && "Iterator was moved past the end");
-
-            return *this;
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        friend constexpr auto operator+(ArrayIndexIterator it, difference_type n) noexcept -> ArrayIndexIterator
-        {
-            it += n;
-            return it;
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        friend constexpr auto operator+(difference_type n, ArrayIndexIterator it) noexcept -> ArrayIndexIterator
-        {
-            return it + n;
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        constexpr auto operator-=(difference_type n) noexcept -> ArrayIndexIterator&
-        {
-            return operator+=(-n);
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        friend constexpr auto operator-(ArrayIndexIterator it, difference_type n) noexcept -> ArrayIndexIterator
-        {
-            it -= n;
-            return it;
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        friend constexpr auto operator-(const ArrayIndexIterator& a, const ArrayIndexIterator& b) noexcept
-            -> difference_type
-        {
-            assert(a.extents == b.extents);
-
-            difference_type n = a.current[rank - 1] - b.current[rank - 1];
-            difference_type size = a.extents[rank - 1];
-            for(auto i = static_cast<int>(rank) - 2; i >= 0; i--)
-            {
-                n += (a.current[i] - b.current[i]) * size;
-                size *= a.extents[i];
-            }
-
-            return n;
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        friend constexpr auto operator==(
-            const ArrayIndexIterator<ArrayExtents>& a,
-            const ArrayIndexIterator<ArrayExtents>& b) noexcept -> bool
-        {
-            assert(a.extents == b.extents);
-            return a.current == b.current;
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        friend constexpr auto operator!=(
-            const ArrayIndexIterator<ArrayExtents>& a,
-            const ArrayIndexIterator<ArrayExtents>& b) noexcept -> bool
-        {
-            return !(a == b);
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        friend constexpr auto operator<(const ArrayIndexIterator& a, const ArrayIndexIterator& b) noexcept -> bool
-        {
-            assert(a.extents == b.extents);
-            return std::lexicographical_compare(
-                std::begin(a.current),
-                std::end(a.current),
-                std::begin(b.current),
-                std::end(b.current));
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        friend constexpr auto operator>(const ArrayIndexIterator& a, const ArrayIndexIterator& b) noexcept -> bool
-        {
-            return b < a;
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        friend constexpr auto operator<=(const ArrayIndexIterator& a, const ArrayIndexIterator& b) noexcept -> bool
-        {
-            return !(a > b);
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        friend constexpr auto operator>=(const ArrayIndexIterator& a, const ArrayIndexIterator& b) noexcept -> bool
-        {
-            return !(a < b);
-        }
-
-    private:
-        ArrayExtents extents; // TODO(bgruber): we only need to store rank - 1 sizes
-        value_type current;
-    };
-
-    /// Range allowing to iterate over all indices in an \ref ArrayExtents.
-    template<typename ArrayExtents>
-    struct ArrayIndexRange
-        : private ArrayExtents
-#if CAN_USE_RANGES
-        , std::ranges::view_base
-#endif
-    {
-        static_assert(!std::is_const_v<ArrayExtents>);
-
-        constexpr ArrayIndexRange() noexcept = default;
-
-        LLAMA_FN_HOST_ACC_INLINE
-        constexpr explicit ArrayIndexRange(ArrayExtents extents) noexcept : ArrayExtents(extents)
-        {
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        constexpr auto begin() const noexcept -> ArrayIndexIterator<ArrayExtents>
-        {
-            return {*this, typename ArrayExtents::Index{}};
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        constexpr auto end() const noexcept -> ArrayIndexIterator<ArrayExtents>
-        {
-            auto endPos = typename ArrayExtents::Index{};
-            endPos[0] = this->toArray()[0];
-            return {*this, endPos};
-        }
-    };
-} // namespace llama
-// ==
-// == ./ArrayIndexRange.hpp ==
-// ============================================================================
-
-// ============================================================================
-// == ./View.hpp ==
-// ==
-// Copyright 2018 Alexander Matthes
-// SPDX-License-Identifier: GPL-3.0-or-later
-
-// #pragma once
-	// ============================================================================
-	// == ./Accessors.hpp ==
-	// ==
-	// #pragma once
-		// ============================================================================
-		// == ./Concepts.hpp ==
-		// ==
-		// #pragma once
-		// #include "Array.hpp"    // amalgamate: file already expanded
-		// #include "Core.hpp"    // amalgamate: file already expanded
-		// #include "RecordCoord.hpp"    // amalgamate: file already expanded
-
-		// #include <type_traits>    // amalgamate: file already included
-
-		#if __has_include(<concepts>)
-		#    include <concepts>
-		#endif
-		namespace llama
-		{
-		#ifdef __cpp_lib_concepts
-		    // clang-format off
-		    template <typename M>
-		    concept Mapping = requires(M m) {
-		        typename M::ArrayExtents;
-		        typename M::ArrayIndex;
-		        typename M::RecordDim;
-		        { m.extents() } -> std::same_as<typename M::ArrayExtents>;
-		        { +M::blobCount } -> std::same_as<std::size_t>;
-		        std::integral_constant<std::size_t, M::blobCount>{}; // validates constexpr-ness
-		        { m.blobSize(typename M::ArrayExtents::value_type{}) } -> std::same_as<typename M::ArrayExtents::value_type>;
-		    };
-
-		    template <typename M, typename RC>
-		    concept PhysicalField = requires(M m, typename M::ArrayIndex ai) {
-		        { m.blobNrAndOffset(ai, RC{}) } -> std::same_as<NrAndOffset<typename M::ArrayExtents::value_type>>;
-		    };
-
-		    template<typename M>
-		    struct MakeIsPhysical
-		    {
-		        template<typename RC>
-		        using fn = boost::mp11::mp_bool<PhysicalField<M, RC>>;
-		    };
-
-		    template<typename M>
-		    inline constexpr bool allFieldsArePhysical
-		        = boost::mp11::mp_all_of<LeafRecordCoords<typename M::RecordDim>, MakeIsPhysical<M>::template fn>::value;
-
-		    template <typename M>
-		    concept PhysicalMapping = Mapping<M> && allFieldsArePhysical<M>;
-
-		    template <typename R>
-		    concept LValueReference = std::is_lvalue_reference_v<R>;
-
-		    template <typename R>
-		    concept ProxyReference = requires(R r) {
-		        typename R::value_type;
-		        { static_cast<typename R::value_type>(r) } -> std::same_as<typename R::value_type>;
-		        { r = std::declval<typename R::value_type>() } -> std::same_as<R&>;
-		    };
-
-		    template <typename R>
-		    concept AnyReference = LValueReference<R> || ProxyReference<R>;
-
-		    template <typename R, typename T>
-		    concept AnyReferenceTo = (LValueReference<R> && std::is_same_v<std::remove_cvref_t<R>, T>) || (ProxyReference<R> && std::is_same_v<typename R::value_type, T>);
-
-		    template <typename M, typename RC>
-		    concept ComputedField = M::isComputed(RC{}) && requires(M m, typename M::ArrayIndex ai, Array<Array<std::byte, 1>, 1> blobs) {
-		        { m.compute(ai, RC{}, blobs) } -> AnyReferenceTo<GetType<typename M::RecordDim, RC>>;
-		    };
-
-		    template<typename M>
-		    struct MakeIsComputed
-		    {
-		        template<typename RC>
-		        using fn = boost::mp11::mp_bool<ComputedField<M, RC>>;
-		    };
-
-		    template<typename M>
-		    inline constexpr bool allFieldsAreComputed
-		        = boost::mp11::mp_all_of<LeafRecordCoords<typename M::RecordDim>, MakeIsComputed<M>::template fn>::value;
-
-		    template <typename M>
-		    concept FullyComputedMapping = Mapping<M> && allFieldsAreComputed<M>;
-
-		    template<
-		        typename M,
-		        typename LeafCoords = LeafRecordCoords<typename M::RecordDim>,
-		        std::size_t PhysicalCount = boost::mp11::mp_count_if<LeafCoords, MakeIsPhysical<M>::template fn>::value,
-		        std::size_t ComputedCount = boost::mp11::mp_count_if<LeafCoords, MakeIsComputed<M>::template fn>::value>
-		    inline constexpr bool allFieldsArePhysicalOrComputed
-		        = (PhysicalCount + ComputedCount) >= boost::mp11::mp_size<LeafCoords>::value&& PhysicalCount > 0
-		        && ComputedCount > 0; // == instead of >= would be better, but it's not easy to count correctly,
-		                              // because we cannot check whether the call to blobNrOrOffset()
-		                              // or compute() is actually valid
-
-		    template <typename M>
-		    concept PartiallyComputedMapping = Mapping<M> && allFieldsArePhysicalOrComputed<M>;
-
-		    template<typename B>
-		    concept Blob = requires(B b, std::size_t i) {
-		        // according to http://eel.is/c++draft/intro.object#3 only std::byte and unsigned char can provide storage for
-		        // other types
-		        std::is_same_v<decltype(b[i]), std::byte&> || std::is_same_v<decltype(b[i]), unsigned char&>;
-		    };
-
-		    template <typename BA>
-		    concept BlobAllocator = requires(BA ba, std::integral_constant<std::size_t, 16> alignment, std::size_t size) {
-		        { ba(alignment, size) } -> Blob;
-		    };
-		        // clang-format on
-		#endif
-
-		    namespace internal
-		    {
-		        template<typename R, typename = void>
-		        struct IsProxyReferenceImpl : std::false_type
-		        {
-		        };
-
-		        template<typename R>
-		        struct IsProxyReferenceImpl<
-		            R,
-		            std::void_t<
-		                typename R::value_type,
-		                decltype(static_cast<typename R::value_type>(std::declval<R&>())),
-		                decltype(std::declval<R&>() = std::declval<typename R::value_type>())>> : std::true_type
-		        {
-		        };
-		    } // namespace internal
-
-		    template<typename R>
-		#ifdef __cpp_lib_concepts
-		    inline constexpr bool isProxyReference = ProxyReference<R>;
-		#else
-		    inline constexpr bool isProxyReference = internal::IsProxyReferenceImpl<R>::value;
-		#endif
-		} // namespace llama
-		// ==
-		// == ./Concepts.hpp ==
-		// ============================================================================
-
-		// ============================================================================
-		// == ./ProxyRefOpMixin.hpp ==
-		// ==
-		// SPDX-License-Identifier: GPL-3.0-or-later
-
-		// #pragma once
-		// #include "macros.hpp"    // amalgamate: file already expanded
-
-		namespace llama
-		{
-		    /// CRTP mixin for proxy reference types to support all compound assignment and increment/decrement operators.
-		    template<typename Derived, typename ValueType>
-		    struct ProxyRefOpMixin
-		    {
-		    private:
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto derived() -> Derived&
-		        {
-		            return static_cast<Derived&>(*this);
-		        }
-
-		        // in principle, load() could be const, but we use it only from non-const functions
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto load() -> ValueType
-		        {
-		            return static_cast<ValueType>(derived());
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr void store(ValueType t)
-		        {
-		            derived() = std::move(t);
-		        }
-
-		    public:
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator+=(const ValueType& rhs) -> Derived&
-		        {
-		            ValueType lhs = load();
-		            lhs += rhs;
-		            store(lhs);
-		            return derived();
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator-=(const ValueType& rhs) -> Derived&
-		        {
-		            ValueType lhs = load();
-		            lhs -= rhs;
-		            store(lhs);
-		            return derived();
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator*=(const ValueType& rhs) -> Derived&
-		        {
-		            ValueType lhs = load();
-		            lhs *= rhs;
-		            store(lhs);
-		            return derived();
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator/=(const ValueType& rhs) -> Derived&
-		        {
-		            ValueType lhs = load();
-		            lhs /= rhs;
-		            store(lhs);
-		            return derived();
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator%=(const ValueType& rhs) -> Derived&
-		        {
-		            ValueType lhs = load();
-		            lhs %= rhs;
-		            store(lhs);
-		            return derived();
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator<<=(const ValueType& rhs) -> Derived&
-		        {
-		            ValueType lhs = load();
-		            lhs <<= rhs;
-		            store(lhs);
-		            return derived();
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator>>=(const ValueType& rhs) -> Derived&
-		        {
-		            ValueType lhs = load();
-		            lhs >>= rhs;
-		            store(lhs);
-		            return derived();
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator&=(const ValueType& rhs) -> Derived&
-		        {
-		            ValueType lhs = load();
-		            lhs &= rhs;
-		            store(lhs);
-		            return derived();
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator|=(const ValueType& rhs) -> Derived&
-		        {
-		            ValueType lhs = load();
-		            lhs |= rhs;
-		            store(lhs);
-		            return derived();
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator^=(const ValueType& rhs) -> Derived&
-		        {
-		            ValueType lhs = load();
-		            lhs ^= rhs;
-		            store(lhs);
-		            return derived();
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator++() -> Derived&
-		        {
-		            ValueType v = load();
-		            ++v;
-		            store(v);
-		            return derived();
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator++(int) -> ValueType
-		        {
-		            ValueType v = load();
-		            ValueType old = v++;
-		            store(v);
-		            return old;
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator--() -> Derived&
-		        {
-		            ValueType v = load();
-		            --v;
-		            store(v);
-		            return derived();
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator--(int) -> ValueType
-		        {
-		            ValueType v = load();
-		            ValueType old = v--;
-		            store(v);
-		            return old;
-		        }
-		    };
-		} // namespace llama
-		// ==
-		// == ./ProxyRefOpMixin.hpp ==
-		// ============================================================================
-
-	// #include "macros.hpp"    // amalgamate: file already expanded
-
-	#include <atomic>
-
-	namespace llama::accessor
-	{
-	    /// Default accessor. Passes through the given reference.
-	    struct Default
-	    {
-	        template<typename Reference>
-	        LLAMA_FN_HOST_ACC_INLINE auto operator()(Reference&& r) const -> Reference
-	        {
-	            return std::forward<Reference>(r);
-	        }
-	    };
-
-	    /// Allows only read access and returns values instead of references to memory.
-	    struct ByValue
-	    {
-	        template<typename Reference>
-	        LLAMA_FN_HOST_ACC_INLINE auto operator()(Reference&& r) const
-	        {
-	            using ValueType = std::decay_t<Reference>;
-	            if constexpr(isProxyReference<ValueType>)
-	                return static_cast<typename ValueType::value_type>(r);
-	            else
-	                return ValueType{r};
-	        }
-	    };
-
-	    /// Allows only read access by qualifying the references to memory with const. Only works on l-value references.
-	    struct Const
-	    {
-	        // for l-value references
-	        template<typename T>
-	        LLAMA_FN_HOST_ACC_INLINE auto operator()(T& r) const -> const T&
-	        {
-	            return r;
-	        }
-
-	        template<typename Ref>
-	        struct Reference : ProxyRefOpMixin<Reference<Ref>, typename Ref::value_type>
-	        {
-	            using value_type = typename Ref::value_type;
-
-	            Ref ref;
-
-	            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
-	            operator value_type() const
-	            {
-	                return static_cast<value_type>(ref);
-	            }
-
-	            template<typename T>
-	            auto operator=(T) -> Reference&
-	            {
-	                static_assert(sizeof(T) == 0, "You cannot write through a Const accessor");
-	                return *this;
-	            }
-	        };
-
-	        // for proxy references
-	        template<typename ProxyReference, std::enable_if_t<llama::isProxyReference<ProxyReference>, int> = 0>
-	        LLAMA_FN_HOST_ACC_INLINE auto operator()(ProxyReference r) const
-	        {
-	            return Reference<ProxyReference>{{}, std::move(r)};
-	        }
-	    };
-
-	    /// Qualifies references to memory with __restrict. Only works on l-value references.
-	    struct Restrict
-	    {
-	        template<typename T>
-	        LLAMA_FN_HOST_ACC_INLINE auto operator()(T& r) const -> T& __restrict
-	        {
-	            return r;
-	        }
-	    };
-
-	#ifdef __cpp_lib_atomic_ref
-	    /// Accessor wrapping a reference into a std::atomic_ref. Can only wrap l-value references.
-	    struct Atomic
-	    {
-	        template<typename T>
-	        LLAMA_FN_HOST_ACC_INLINE auto operator()(T& r) const -> std::atomic_ref<T>
-	        {
-	            return std::atomic_ref<T>{r};
-	        }
-	    };
-	#endif
-	} // namespace llama::accessor
-	// ==
-	// == ./Accessors.hpp ==
-	// ============================================================================
-
-// #include "Array.hpp"    // amalgamate: file already expanded
-// #include "ArrayIndexRange.hpp"    // amalgamate: file already expanded
-	// ============================================================================
-	// == ./BlobAllocators.hpp ==
-	// ==
-	// Copyright 2018 Alexander Matthes
-	// SPDX-License-Identifier: GPL-3.0-or-later
-
-	// #pragma once
-	// #include "Array.hpp"    // amalgamate: file already expanded
-	// #include "Concepts.hpp"    // amalgamate: file already expanded
-	// #include "macros.hpp"    // amalgamate: file already expanded
-
-	#include <cstddef>
-	#include <memory>
-	#include <vector>
-	#if defined(_LIBCPP_VERSION) && _LIBCPP_VERSION < 11000
-	#    include <boost/shared_ptr.hpp>
-	#endif
-	#if __has_include(<cuda_runtime.h>)
-	#    include <cuda_runtime.h>
-	#endif
-	#if __has_include(<alpaka/alpaka.hpp>)
-	#    include <alpaka/alpaka.hpp>
-	#endif
-
-	namespace llama::bloballoc
-	{
-	    /// Allocates statically sized memory for a \ref View, which is copied each time a \ref View is copied.
-	    /// \tparam BytesToReserve the amount of memory to reserve.
-	    template<std::size_t BytesToReserve>
-	    struct Array
-	    {
-	        template<std::size_t Alignment>
-	        LLAMA_FN_HOST_ACC_INLINE auto operator()(
-	            std::integral_constant<std::size_t, Alignment>,
-	            [[maybe_unused]] std::size_t count) const
-	        {
-	            assert(count == BytesToReserve);
-	            struct alignas(Alignment) AlignedArray : llama::Array<std::byte, BytesToReserve>
-	            {
-	            };
-	            return AlignedArray{};
-	        }
-	    };
-	#ifdef __cpp_lib_concepts
-	    static_assert(BlobAllocator<Array<64>>);
-	#endif
-
-	    /// Allocates heap memory managed by a `std::unique_ptr` for a \ref View. This memory can only be uniquely owned by
-	    /// a single \ref View.
-	    struct UniquePtr
-	    {
-	        template<std::size_t Alignment>
-	        auto operator()(std::integral_constant<std::size_t, Alignment>, std::size_t count) const
-	        {
-	            auto* ptr
-	                = static_cast<std::byte*>(::operator new[](count * sizeof(std::byte), std::align_val_t{Alignment}));
-	            auto deleter = [](std::byte* ptr) { ::operator delete[](ptr, std::align_val_t{Alignment}); };
-	            return std::unique_ptr<std::byte[], decltype(deleter)>{ptr, deleter};
-	        }
-	    };
-	#ifdef __cpp_lib_concepts
-	    static_assert(BlobAllocator<UniquePtr>);
-	#endif
-
-	    /// Allocates heap memory managed by a `std::shared_ptr` for a \ref View. This memory is shared between all copies
-	    /// of a \ref View.
-	    struct SharedPtr
-	    {
-	        // libc++ below 11.0.0 does not yet support shared_ptr with arrays
-	        template<typename T>
-	        using shared_ptr =
-	#if defined(_LIBCPP_VERSION) && _LIBCPP_VERSION < 11000
-	            boost::shared_ptr<T>;
-	#else
-	            std::shared_ptr<T>;
-	#endif
-
-	        template<std::size_t Alignment>
-	        auto operator()(std::integral_constant<std::size_t, Alignment>, std::size_t count) const
-	            -> shared_ptr<std::byte[]>
-	        {
-	            auto* ptr
-	                = static_cast<std::byte*>(::operator new[](count * sizeof(std::byte), std::align_val_t{Alignment}));
-	            auto deleter = [](std::byte* ptr) { ::operator delete[](ptr, std::align_val_t{Alignment}); };
-	            return shared_ptr<std::byte[]>{ptr, deleter};
-	        }
-	    };
-	#ifdef __cpp_lib_concepts
-	    static_assert(BlobAllocator<SharedPtr>);
-	#endif
-
-	    /// An STL compatible allocator allowing to specify alignment.
-	    template<typename T, std::size_t Alignment>
-	    struct AlignedAllocator
-	    {
-	        using value_type = T;
-
-	        inline AlignedAllocator() noexcept = default;
-
-	        template<typename T2>
-	        inline explicit AlignedAllocator(const AlignedAllocator<T2, Alignment>&) noexcept
-	        {
-	        }
-
-	        inline auto allocate(std::size_t n) -> T*
-	        {
-	            return static_cast<T*>(::operator new[](n * sizeof(T), std::align_val_t{Alignment}));
-	        }
-
-	        inline void deallocate(T* p, std::size_t)
-	        {
-	            ::operator delete[](p, std::align_val_t{Alignment});
-	        }
-
-	        template<typename T2>
-	        struct rebind // NOLINT(readability-identifier-naming)
-	        {
-	            using other = AlignedAllocator<T2, Alignment>;
-	        };
-
-	        auto operator!=(const AlignedAllocator<T, Alignment>& other) const -> bool
-	        {
-	            return !(*this == other);
-	        }
-
-	        auto operator==(const AlignedAllocator<T, Alignment>&) const -> bool
-	        {
-	            return true;
-	        }
-	    };
-
-	    /// Allocates heap memory managed by a `std::vector` for a \ref View, which is copied each time a \ref View is
-	    /// copied.
-	    struct Vector
-	    {
-	        template<std::size_t Alignment>
-	        inline auto operator()(std::integral_constant<std::size_t, Alignment>, std::size_t count) const
-	        {
-	            return std::vector<std::byte, AlignedAllocator<std::byte, Alignment>>(count);
-	        }
-	    };
-	#ifdef __cpp_lib_concepts
-	    static_assert(BlobAllocator<Vector>);
-	#endif
-
-	#if __has_include(<cuda_runtime.h>)
-	    /// Allocates GPU device memory using cudaMalloc. The memory is managed by a std::unique_ptr with a deleter that
-	    /// calles cudaFree. If you want to use a view created with this allocator in a CUDA kernel, call \ref shallowCopy
-	    /// on the view before passing it to the kernel.
-	    struct CudaMalloc
-	    {
-	        template<std::size_t FieldAlignment>
-	        inline auto operator()(std::integral_constant<std::size_t, FieldAlignment>, std::size_t count) const
-	        {
-	            std::byte* p = nullptr;
-	            if(const auto code = cudaMalloc(&p, count); code != cudaSuccess)
-	                throw std::runtime_error(std::string{"cudaMalloc failed with code "} + cudaGetErrorString(code));
-	            if(reinterpret_cast<std::uintptr_t>(p) & (FieldAlignment - 1 != 0u))
-	                throw std::runtime_error{"cudaMalloc does not align sufficiently"};
-	            auto deleter = [](void* p)
-	            {
-	                if(const auto code = cudaFree(p); code != cudaSuccess)
-	                    throw std::runtime_error(std::string{"cudaFree failed with code "} + cudaGetErrorString(code));
-	            };
-	            return std::unique_ptr<std::byte[], decltype(deleter)>(p, deleter);
-	        }
-	    };
-	#endif
-
-	#if __has_include(<alpaka/alpaka.hpp>)
-	    template<typename Size, typename Dev>
-	    struct AlpakaBuf
-	    {
-	        Dev& dev;
-
-	        template<std::size_t Alignment>
-	        inline auto operator()(std::integral_constant<std::size_t, Alignment>, std::size_t count) const
-	        {
-	            return alpaka::allocBuf<std::byte, Size>(dev, static_cast<Size>(count));
-	        }
-	    };
-	#endif
-	} // namespace llama::bloballoc
-	// ==
-	// == ./BlobAllocators.hpp ==
-	// ============================================================================
-
-// #include "Concepts.hpp"    // amalgamate: file already expanded
-// #include "Core.hpp"    // amalgamate: file already expanded
-// #include "HasRanges.hpp"    // amalgamate: file already expanded
-// #include "macros.hpp"    // amalgamate: file already expanded
-	// ============================================================================
-	// == ./mapping/One.hpp ==
-	// ==
-	// Copyright 2018 Alexander Matthes
-	// SPDX-License-Identifier: GPL-3.0-or-later
-
-	// #pragma once
-	// #include "../Core.hpp"    // amalgamate: file already expanded
-		// ============================================================================
-		// == ./mapping/Common.hpp ==
-		// ==
-		// Copyright 2018 Alexander Matthes
-		// SPDX-License-Identifier: GPL-3.0-or-later
-
-		// #pragma once
-		// #include "../Core.hpp"    // amalgamate: file already expanded
-
-		// #include <atomic>    // amalgamate: file already included
-		#include <climits>
-		#ifndef __cpp_lib_atomic_ref
-		#    include <boost/atomic/atomic_ref.hpp>
-		#endif
-
-		namespace llama::mapping
-		{
-		    template<typename TArrayExtents, typename TRecordDim>
-		    struct MappingBase : private TArrayExtents
-		    {
-		        using ArrayExtents = TArrayExtents;
-		        using ArrayIndex = typename ArrayExtents::Index;
-		        using RecordDim = TRecordDim;
-		        using size_type = typename ArrayExtents::value_type;
-
-		        constexpr MappingBase() = default;
-
-		        LLAMA_FN_HOST_ACC_INLINE
-		        constexpr explicit MappingBase(ArrayExtents extents, RecordDim = {}) : ArrayExtents(extents)
-		        {
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto extents() const -> ArrayExtents
-		        {
-		            return static_cast<const ArrayExtents&>(*this);
-		        }
-		    };
-
-		    /// Functor that maps an \ref ArrayIndex into linear numbers the way C++ arrays work. The fast moving index of the
-		    /// ArrayIndex object should be the last one. E.g. ArrayIndex<3> a; stores 3 indices where a[2] should be
-		    /// incremented in the innermost loop.
-		    struct LinearizeArrayDimsCpp
-		    {
-		        template<typename ArrayExtents>
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const ArrayExtents& extents) -> typename ArrayExtents::value_type
-		        {
-		            return product(extents);
-		        }
-
-		        /// \param ai Index in the array dimensions.
-		        /// \param extents Total size of the array dimensions.
-		        /// \return Linearized index.
-		        template<typename ArrayExtents>
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator()(
-		            const typename ArrayExtents::Index& ai,
-		            const ArrayExtents& extents) const -> typename ArrayExtents::value_type
-		        {
-		            if constexpr(ArrayExtents::rank == 0)
-		                return 0;
-		            else
-		            {
-		                auto address = ai[0];
-		                for(int i = 1; i < static_cast<int>(ArrayExtents::rank); i++)
-		                {
-		                    address *= extents[i];
-		                    address += ai[i];
-		                }
-		                return address;
-		            }
-		        }
-		    };
-
-		    /// Functor that maps a \ref ArrayIndex into linear numbers the way Fortran arrays work. The fast moving index of
-		    /// the ArrayIndex object should be the last one. E.g. ArrayIndex<3> a; stores 3 indices where a[2] should be
-		    /// incremented in the innermost loop.
-		    struct LinearizeArrayDimsFortran
-		    {
-		        template<typename ArrayExtents>
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const ArrayExtents& extents) -> typename ArrayExtents::value_type
-		        {
-		            return product(extents);
-		        }
-
-		        /// \param ai Index in the array dimensions.
-		        /// \param extents Total size of the array dimensions.
-		        /// \return Linearized index.
-		        template<typename ArrayExtents>
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator()(
-		            const typename ArrayExtents::Index& ai,
-		            const ArrayExtents& extents) const -> typename ArrayExtents::value_type
-		        {
-		            if constexpr(ArrayExtents::rank == 0)
-		                return 0;
-		            else
-		            {
-		                auto address = ai[ArrayExtents::rank - 1];
-		                for(int i = static_cast<int>(ArrayExtents::rank) - 2; i >= 0; i--)
-		                {
-		                    address *= extents[i];
-		                    address += ai[i];
-		                }
-		                return address;
-		            }
-		        }
-		    };
-
-		    /// Functor that maps an \ref ArrayIndex into linear numbers using the Z-order space filling curve (Morton codes).
-		    struct LinearizeArrayDimsMorton
-		    {
-		        template<typename ArrayExtents>
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const ArrayExtents& extents) const ->
-		            typename ArrayExtents::value_type
-		        {
-		            if constexpr(ArrayExtents::rank == 0)
-		                return 0;
-		            else
-		            {
-		                auto longest = extents[0];
-		                for(int i = 1; i < static_cast<int>(ArrayExtents::rank); i++)
-		                    longest = std::max(longest, extents[i]);
-		                const auto longestPO2 = bitCeil(longest);
-		                return intPow(longestPO2, static_cast<typename ArrayExtents::value_type>(ArrayExtents::rank));
-		            }
-		        }
-
-		        /// \param ai Coordinate in the array dimensions.
-		        /// \param extents Total size of the array dimensions.
-		        /// \return Linearized index.
-		        template<typename ArrayExtents>
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator()(
-		            const typename ArrayExtents::Index& ai,
-		            [[maybe_unused]] const ArrayExtents& extents) const -> typename ArrayExtents::value_type
-		        {
-		            using size_type = typename ArrayExtents::value_type;
-		            constexpr auto rank = static_cast<size_type>(ArrayExtents::rank);
-		            size_type r = 0;
-		            for(size_type bit = 0; bit < (static_cast<size_type>(sizeof(size_type)) * CHAR_BIT) / rank; bit++)
-		                for(size_type i = 0; i < rank; i++)
-		                    r |= (ai[i] & (size_type{1} << bit)) << ((bit + 1) * (rank - 1) - i);
-		            return r;
-		        }
-
-		    private:
-		        template<typename T>
-		        LLAMA_FN_HOST_ACC_INLINE static constexpr auto bitCeil(T n) -> T
-		        {
-		            T r = 1u;
-		            while(r < n)
-		                r <<= 1u;
-		            return r;
-		        }
-
-		        template<typename T>
-		        LLAMA_FN_HOST_ACC_INLINE static constexpr auto intPow(T b, T e) -> T
-		        {
-		            e--;
-		            auto r = b;
-		            while(e != 0u)
-		            {
-		                r *= b;
-		                e--;
-		            }
-		            return r;
-		        }
-		    };
-
-		    /// Flattens the record dimension in the order fields are written.
-		    template<typename RecordDim>
-		    struct FlattenRecordDimInOrder
-		    {
-		        using FlatRecordDim = llama::FlatRecordDim<RecordDim>;
-
-		        template<std::size_t... RecordCoords>
-		        static constexpr std::size_t flatIndex = flatRecordCoord<RecordDim, RecordCoord<RecordCoords...>>;
-		    };
-
-		    /// Flattens the record dimension by sorting the fields according to a given predicate on the field types.
-		    /// @tparam Less A binary predicate accepting two field types, which exposes a member value. Value must be true if
-		    /// the first field type is less than the second one, otherwise false.
-		    template<typename RecordDim, template<typename, typename> typename Less>
-		    struct FlattenRecordDimSorted
-		    {
-		    private:
-		        using FlatOrigRecordDim = llama::FlatRecordDim<RecordDim>;
-		        using FlatSortedRecordDim = boost::mp11::mp_sort<FlatOrigRecordDim, Less>;
-
-		        template<typename A, typename B>
-		        using LessWithIndices
-		            = Less<boost::mp11::mp_at<FlatOrigRecordDim, A>, boost::mp11::mp_at<FlatOrigRecordDim, B>>;
-
-		        // A permutation from new FlatSortedRecordDim index to old FlatOrigRecordDim index
-		        using PermutedIndices
-		            = boost::mp11::mp_sort<boost::mp11::mp_iota<boost::mp11::mp_size<FlatOrigRecordDim>>, LessWithIndices>;
-
-		        template<typename A, typename B>
-		        using LessInvertPermutation = std::bool_constant<(
-		            boost::mp11::mp_at<PermutedIndices, A>::value < boost::mp11::mp_at<PermutedIndices, B>::value)>;
-
-		        // A permutation from old FlatOrigRecordDim index to new FlatSortedRecordDim index
-		        using InversePermutedIndices = boost::mp11::
-		            mp_sort<boost::mp11::mp_iota<boost::mp11::mp_size<FlatOrigRecordDim>>, LessInvertPermutation>;
-
-		    public:
-		        using FlatRecordDim = FlatSortedRecordDim;
-
-		        template<std::size_t... RecordCoords>
-		        static constexpr std::size_t flatIndex = []() constexpr
-		        {
-		            constexpr auto indexBefore = flatRecordCoord<RecordDim, RecordCoord<RecordCoords...>>;
-		            constexpr auto indexAfter = boost::mp11::mp_at_c<InversePermutedIndices, indexBefore>::value;
-		            return indexAfter;
-		        }
-		        ();
-		    };
-
-		    namespace internal
-		    {
-		        template<typename A, typename B>
-		        using LessAlignment = std::bool_constant<alignof(A) < alignof(B)>;
-
-		        template<typename A, typename B>
-		        using MoreAlignment = std::bool_constant<(alignof(A) > alignof(B))>;
-		    } // namespace internal
-
-		    /// Flattens and sorts the record dimension by increasing alignment of its fields.
-		    template<typename RecordDim>
-		    using FlattenRecordDimIncreasingAlignment = FlattenRecordDimSorted<RecordDim, internal::LessAlignment>;
-
-		    /// Flattens and sorts the record dimension by decreasing alignment of its fields.
-		    template<typename RecordDim>
-		    using FlattenRecordDimDecreasingAlignment = FlattenRecordDimSorted<RecordDim, internal::MoreAlignment>;
-
-		    /// Flattens and sorts the record dimension by the alignment of its fields to minimize padding.
-		    template<typename RecordDim>
-		    using FlattenRecordDimMinimizePadding = FlattenRecordDimIncreasingAlignment<RecordDim>;
-
-		    namespace internal
-		    {
-		        template<typename CountType>
-		        LLAMA_FN_HOST_ACC_INLINE void atomicInc(CountType& i)
-		        {
-		#ifdef __CUDA_ARCH__
-		            // if you get an error here that there is no overload of atomicAdd, your CMAKE_CUDA_ARCHITECTURE might be
-		            // too low or you need to use a smaller CountType for the Trace or Heatmap mapping.
-		            atomicAdd(&i, CountType{1});
-		#elif defined(__cpp_lib_atomic_ref)
-		            ++std::atomic_ref<CountType>{i};
-		#else
-		            ++boost::atomic_ref<CountType>{i};
-		#endif
-		        }
-		    } // namespace internal
-
-
-		    enum class FieldAlignment
-		    {
-		        Pack,
-		        Align
-		    };
-		} // namespace llama::mapping
-		// ==
-		// == ./mapping/Common.hpp ==
-		// ============================================================================
-
-
-	namespace llama::mapping
-	{
-	    /// Maps all array dimension indices to the same location and layouts struct members consecutively. This mapping is
-	    /// used for temporary, single element views.
-	    /// \tparam TFieldAlignment If Align, padding bytes are inserted to guarantee that struct members are properly
-	    /// aligned. If false, struct members are tightly packed.
-	    /// \tparam FlattenRecordDim Defines how the record dimension's fields should be flattened. See \ref
-	    /// FlattenRecordDimInOrder, \ref FlattenRecordDimIncreasingAlignment, \ref FlattenRecordDimDecreasingAlignment and
-	    /// \ref FlattenRecordDimMinimizePadding.
-	    template<
-	        typename TArrayExtents,
-	        typename TRecordDim,
-	        FieldAlignment TFieldAlignment = FieldAlignment::Align,
-	        template<typename> typename FlattenRecordDim = FlattenRecordDimMinimizePadding>
-	    struct One : MappingBase<TArrayExtents, TRecordDim>
-	    {
-	    private:
-	        using Base = MappingBase<TArrayExtents, TRecordDim>;
-	        using size_type = typename Base::size_type;
-
-	    public:
-	        inline static constexpr FieldAlignment fieldAlignment = TFieldAlignment;
-	        using Flattener = FlattenRecordDim<TRecordDim>;
-	        static constexpr std::size_t blobCount = 1;
-
-	#ifndef __NVCC__
-	        using Base::Base;
-	#else
-	        constexpr One() = default;
-
-	        LLAMA_FN_HOST_ACC_INLINE constexpr explicit One(TArrayExtents extents, TRecordDim = {}) : Base(extents)
-	        {
-	        }
-	#endif
-
-	        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(size_type) const -> size_type
-	        {
-	            return flatSizeOf<
-	                typename Flattener::FlatRecordDim,
-	                fieldAlignment == FieldAlignment::Align,
-	                false>; // no tail padding
-	        }
-
-	        template<std::size_t... RecordCoords>
-	        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
-	            typename Base::ArrayIndex,
-	            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset<size_type>
-	        {
-	            constexpr std::size_t flatFieldIndex =
-	#ifdef __NVCC__
-	                *& // mess with nvcc compiler state to workaround bug
-	#endif
-	                 Flattener::template flatIndex<RecordCoords...>;
-	            constexpr auto offset = static_cast<size_type>(flatOffsetOf<
-	                                                           typename Flattener::FlatRecordDim,
-	                                                           flatFieldIndex,
-	                                                           fieldAlignment == FieldAlignment::Align>);
-	            return {size_type{0}, offset};
-	        }
-	    };
-
-	    /// One mapping preserving the alignment of the field types by inserting padding.
-	    /// \see One
-	    template<typename ArrayExtents, typename RecordDim>
-	    using AlignedOne = One<ArrayExtents, RecordDim, FieldAlignment::Align, FlattenRecordDimInOrder>;
-
-	    /// One mapping preserving the alignment of the field types by inserting padding and permuting the field order to
-	    /// minimize this padding.
-	    /// \see One
-	    template<typename ArrayExtents, typename RecordDim>
-	    using MinAlignedOne = One<ArrayExtents, RecordDim, FieldAlignment::Align, FlattenRecordDimMinimizePadding>;
-
-	    /// One mapping packing the field types tightly, violating the types' alignment requirements.
-	    /// \see One
-	    template<typename ArrayExtents, typename RecordDim>
-	    using PackedOne = One<ArrayExtents, RecordDim, FieldAlignment::Pack, FlattenRecordDimInOrder>;
-
-	    /// Binds parameters to a \ref One mapping except for array and record dimension, producing a quoted
-	    /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
-	    template<FieldAlignment FieldAlignment, template<typename> typename FlattenRecordDim>
-	    struct BindOne
-	    {
-	        template<typename ArrayExtents, typename RecordDim>
-	        using fn = One<ArrayExtents, RecordDim, FieldAlignment, FlattenRecordDim>;
-	    };
-
-	    template<typename Mapping>
-	    inline constexpr bool isOne = false;
-
-	    template<
-	        typename ArrayExtents,
-	        typename RecordDim,
-	        FieldAlignment FieldAlignment,
-	        template<typename>
-	        typename FlattenRecordDim>
-	    inline constexpr bool isOne<One<ArrayExtents, RecordDim, FieldAlignment, FlattenRecordDim>> = true;
-	} // namespace llama::mapping
-	// ==
-	// == ./mapping/One.hpp ==
-	// ============================================================================
-
+// #include "RecordCoord.hpp"    // amalgamate: file already expanded
 
 // #include <type_traits>    // amalgamate: file already included
 
+#if __has_include(<concepts>)
+#    include <concepts>
+#endif
 namespace llama
 {
 #ifdef __cpp_lib_concepts
-    template<typename TMapping, Blob BlobType, typename TAccessor>
-#else
-    template<typename TMapping, typename BlobType, typename TAccessor>
-#endif
-    struct View;
-
-    namespace internal
-    {
-        template<typename Allocator, typename RecordDim>
-        using AllocatorBlobType
-            = decltype(std::declval<Allocator>()(std::integral_constant<std::size_t, alignOf<RecordDim>>{}, 0));
-
-        template<typename Allocator, typename Mapping, std::size_t... Is>
-        LLAMA_FN_HOST_ACC_INLINE auto makeBlobArray(
-            const Allocator& alloc,
-            const Mapping& mapping,
-            std::integer_sequence<std::size_t, Is...>)
-            -> Array<AllocatorBlobType<Allocator, typename Mapping::RecordDim>, Mapping::blobCount>
-        {
-            [[maybe_unused]] constexpr auto alignment
-                = alignOf<typename Mapping::RecordDim>; // g++-12 warns that alignment is unused
-            LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-            return {alloc(std::integral_constant<std::size_t, alignment>{}, mapping.blobSize(Is))...};
-            LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
-        } // NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
-    } // namespace internal
-
-    /// Same as \ref allocView but does not run field constructors.
-#ifdef __cpp_lib_concepts
-    template<typename Mapping, BlobAllocator Allocator = bloballoc::Vector, typename Accessor = accessor::Default>
-#else
-    template<typename Mapping, typename Allocator = bloballoc::Vector, typename Accessor = accessor::Default>
-#endif
-    LLAMA_FN_HOST_ACC_INLINE auto allocViewUninitialized(
-        Mapping mapping = {},
-        const Allocator& alloc = {},
-        Accessor accessor = {})
-    {
-        auto blobs = internal::makeBlobArray(alloc, mapping, std::make_index_sequence<Mapping::blobCount>{});
-        return View<Mapping, internal::AllocatorBlobType<Allocator, typename Mapping::RecordDim>, Accessor>{
-            std::move(mapping),
-            std::move(blobs),
-            std::move(accessor)};
-    }
-
-    namespace internal
-    {
-        template<typename Mapping, typename RecordCoord, typename = void>
-        struct IsComputed : std::false_type
-        {
-        };
-
-        template<typename Mapping, typename RecordCoord>
-        struct IsComputed<Mapping, RecordCoord, std::void_t<decltype(Mapping::isComputed(RecordCoord{}))>>
-            : std::bool_constant<Mapping::isComputed(RecordCoord{})>
-        {
-        };
-    } // namespace internal
-
-    /// Returns true if the field accessed via the given mapping and record coordinate is a computed value.
-    template<typename Mapping, typename RecordCoord>
-    inline constexpr bool isComputed = internal::IsComputed<Mapping, RecordCoord>::value;
-
-#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ <= 4
-    namespace internal
-    {
-        template<typename View>
-        struct NvccWorkaroundLambda
-        {
-            using RecordDim = typename View::RecordDim;
-            using ArrayIndex = typename View::ArrayIndex;
-
-            template<typename RecordCoord>
-            void operator()(RecordCoord rc) const
-            {
-                using FieldType = GetType<RecordDim, decltype(rc)>;
-                using RefType = decltype(view(ai)(rc));
-                // this handles physical and computed mappings
-                if constexpr(std::is_lvalue_reference_v<RefType>)
-                {
-                    new(&view(ai)(rc)) FieldType;
-                }
-                else if constexpr(isProxyReference<RefType>)
-                {
-                    view(ai)(rc) = FieldType{};
-                }
-            }
-
-            View& view;
-            ArrayIndex ai;
-        };
-    } // namespace internal
-#endif
-
-    /// Runs the constructor of all fields reachable through the given view. Computed fields are constructed if they
-    /// return l-value references. If the mapping is a computed
-    template<typename Mapping, typename BlobType, typename Accessor>
-    LLAMA_FN_HOST_ACC_INLINE void constructFields(View<Mapping, BlobType, Accessor>& view)
-    {
-        using View = View<Mapping, BlobType, Accessor>;
-        using RecordDim = typename View::RecordDim;
-        forEachADCoord(
-            view.mapping().extents(),
-            [&]([[maybe_unused]] typename View::ArrayIndex ai)
-            {
-                if constexpr(isRecordDim<RecordDim>)
-                {
-                    forEachLeafCoord<RecordDim>(
-#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ <= 4
-                        internal::NvccWorkaroundLambda<View>{view, ai}
-#else
-                        [&](auto rc)
-                        {
-                            using FieldType = GetType<RecordDim, decltype(rc)>;
-                            using RefType = decltype(view(ai)(rc));
-                            // this handles physical and computed mappings
-                            if constexpr(isProxyReference<RefType>)
-                            {
-                                view(ai)(rc) = FieldType{};
-                            }
-                            else if constexpr(
-                                std::is_lvalue_reference_v<
-                                    RefType> && !std::is_const_v<std::remove_reference_t<RefType>>)
-                            {
-                                new(&view(ai)(rc)) FieldType;
-                            }
-                        }
-#endif
-                    );
-                }
-                else
-                {
-                    // this handles physical and computed mappings
-                    using RefType = decltype(view(ai));
-                    if constexpr(isProxyReference<RefType>)
-                    {
-                        view(ai) = RecordDim{};
-                    }
-                    else if constexpr(
-                        std::is_lvalue_reference_v<RefType> && !std::is_const_v<std::remove_reference_t<RefType>>)
-                    {
-                        new(&view(ai)) RecordDim;
-                    }
-                }
-            });
-    }
-
-    /// Creates a view based on the given mapping, e.g. \ref AoS or \ref :SoA. For allocating the view's underlying
-    /// memory, the specified allocator callable is used (or the default one, which is \ref bloballoc::Vector). The
-    /// allocator callable is called with the alignment and size of bytes to allocate for each blob of the mapping.
-    /// The constructors are run for all fields by calling \ref constructFields. This function is the preferred way to
-    /// create a \ref View. See also \ref allocViewUninitialized.
-#ifdef __cpp_lib_concepts
-    template<typename Mapping, BlobAllocator Allocator = bloballoc::Vector, typename Accessor = accessor::Default>
-#else
-    template<typename Mapping, typename Allocator = bloballoc::Vector, typename Accessor = accessor::Default>
-#endif
-    LLAMA_FN_HOST_ACC_INLINE auto allocView(Mapping mapping = {}, const Allocator& alloc = {}, Accessor accessor = {})
-        -> View<Mapping, internal::AllocatorBlobType<Allocator, typename Mapping::RecordDim>, Accessor>
-    {
-        auto view = allocViewUninitialized(std::move(mapping), alloc, accessor);
-        constructFields(view);
-        return view;
-    }
-
-    /// Same as \ref allocViewStack but does not run field constructors.
-    template<std::size_t Dim, typename RecordDim>
-    LLAMA_FN_HOST_ACC_INLINE auto allocViewStackUninitialized() -> decltype(auto)
-    {
-        constexpr auto mapping = mapping::MinAlignedOne<ArrayExtentsNCube<int, Dim, 1>, RecordDim>{};
-        return allocViewUninitialized(mapping, bloballoc::Array<mapping.blobSize(0)>{});
-    }
-
-    /// Allocates a \ref View holding a single record backed by stack memory (\ref bloballoc::Array).
-    /// \tparam Dim Dimension of the \ref ArrayExtents of the \ref View.
-    template<std::size_t Dim, typename RecordDim>
-    LLAMA_FN_HOST_ACC_INLINE auto allocViewStack() -> decltype(auto)
-    {
-        auto view = allocViewStackUninitialized<Dim, RecordDim>();
-        constructFields(view);
-        return view;
-    }
-
-    template<typename View, typename BoundRecordCoord = RecordCoord<>, bool OwnView = false>
-    struct RecordRef;
-
-    /// A \ref RecordRef that owns and holds a single value.
-    template<typename RecordDim>
-    using One = RecordRef<decltype(allocViewStack<0, RecordDim>()), RecordCoord<>, true>;
-
-    /// Is true, if T is an instance of \ref One.
-    template<typename T>
-    inline constexpr bool isOne = false;
-
-    template<typename View, typename BoundRecordCoord>
-    inline constexpr bool isOne<RecordRef<View, BoundRecordCoord, true>> = true;
-
-    // TODO(bgruber): Higher dimensional iterators might not have good codegen. Multiple nested loops seem to be
-    // superior to a single iterator over multiple dimensions. At least compilers are able to produce better code.
-    // std::mdspan also discovered similar difficulties and there was a discussion in WG21 in Oulu 2016 to
-    // remove/postpone iterators from the design. In std::mdspan's design, the iterator iterated over the co-domain.
-    template<typename View>
-    struct Iterator
-    {
-        using ArrayIndexIterator = llama::ArrayIndexIterator<typename View::ArrayExtents>;
-
-        using iterator_category = std::random_access_iterator_tag;
-        using value_type = One<typename View::RecordDim>;
-        using difference_type = typename ArrayIndexIterator::difference_type;
-        using pointer = internal::IndirectValue<RecordRef<View>>;
-        using reference = RecordRef<View>;
-
-        constexpr Iterator() = default;
-
-        LLAMA_FN_HOST_ACC_INLINE constexpr Iterator(ArrayIndexIterator arrayIndex, View* view)
-            : arrayIndex(arrayIndex)
-            , view(view)
-        {
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        constexpr auto operator++() -> Iterator&
-        {
-            ++arrayIndex;
-            return *this;
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        constexpr auto operator++(int) -> Iterator
-        {
-            auto tmp = *this;
-            ++*this;
-            return tmp;
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        constexpr auto operator--() -> Iterator&
-        {
-            --arrayIndex;
-            return *this;
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        constexpr auto operator--(int) -> Iterator
-        {
-            auto tmp{*this};
-            --*this;
-            return tmp;
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        constexpr auto operator*() const -> reference
-        {
-            return (*view)(*arrayIndex);
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        constexpr auto operator->() const -> pointer
-        {
-            return {**this};
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        constexpr auto operator[](difference_type i) const -> reference
-        {
-            return *(*this + i);
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        constexpr auto operator+=(difference_type n) -> Iterator&
-        {
-            arrayIndex += n;
-            return *this;
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        friend constexpr auto operator+(Iterator it, difference_type n) -> Iterator
-        {
-            it += n;
-            return it;
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        friend constexpr auto operator+(difference_type n, Iterator it) -> Iterator
-        {
-            return it + n;
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        constexpr auto operator-=(difference_type n) -> Iterator&
-        {
-            arrayIndex -= n;
-            return *this;
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        friend constexpr auto operator-(Iterator it, difference_type n) -> Iterator
-        {
-            it -= n;
-            return it;
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        friend constexpr auto operator-(const Iterator& a, const Iterator& b) -> difference_type
-        {
-            assert(a.view == b.view);
-            return static_cast<std::ptrdiff_t>(a.arrayIndex - b.arrayIndex);
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        friend constexpr auto operator==(const Iterator& a, const Iterator& b) -> bool
-        {
-            assert(a.view == b.view);
-            return a.arrayIndex == b.arrayIndex;
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        friend constexpr auto operator!=(const Iterator& a, const Iterator& b) -> bool
-        {
-            return !(a == b);
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        friend constexpr auto operator<(const Iterator& a, const Iterator& b) -> bool
-        {
-            assert(a.view == b.view);
-            return a.arrayIndex < b.arrayIndex;
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        friend constexpr auto operator>(const Iterator& a, const Iterator& b) -> bool
-        {
-            return b < a;
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        friend constexpr auto operator<=(const Iterator& a, const Iterator& b) -> bool
-        {
-            return !(a > b);
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        friend constexpr auto operator>=(const Iterator& a, const Iterator& b) -> bool
-        {
-            return !(a < b);
-        }
-
-        ArrayIndexIterator arrayIndex;
-        View* view;
+    // clang-format off
+    template <typename M>
+    concept Mapping = requires(M m) {
+        typename M::ArrayExtents;
+        typename M::ArrayIndex;
+        typename M::RecordDim;
+        { m.extents() } -> std::same_as<typename M::ArrayExtents>;
+        { +M::blobCount } -> std::same_as<std::size_t>;
+        std::integral_constant<std::size_t, M::blobCount>{}; // validates constexpr-ness
+        { m.blobSize(typename M::ArrayExtents::value_type{}) } -> std::same_as<typename M::ArrayExtents::value_type>;
     };
 
-    /// Using a mapping, maps the given array index and record coordinate to a memory reference onto the given blobs.
-    /// \return Either an l-value reference if the record coord maps to a physical field or a proxy reference if mapped
-    /// to a computed field.
-    template<typename Mapping, typename RecordCoord, typename Blobs>
-    LLAMA_FN_HOST_ACC_INLINE auto mapToMemory(
-        Mapping& mapping,
-        typename Mapping::ArrayIndex ai,
-        RecordCoord rc,
-        Blobs& blobs) -> decltype(auto)
-    {
-        if constexpr(llama::isComputed<Mapping, RecordCoord>)
-            return mapping.compute(ai, rc, blobs);
-        else
-        {
-            const auto [nr, offset] = mapping.blobNrAndOffset(ai, rc);
-            using Type = GetType<typename Mapping::RecordDim, RecordCoord>;
-            LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-            return reinterpret_cast<CopyConst<std::remove_reference_t<decltype(blobs[nr][offset])>, Type>&>(
-                blobs[nr][offset]);
-            LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
-        }
-    }
-
-    /// Central LLAMA class holding memory for storage and giving access to values stored there defined by a mapping. A
-    /// view should be created using \ref allocView.
-    /// \tparam TMapping The mapping used by the view to map accesses into memory.
-    /// \tparam TBlobType The storage type used by the view holding memory.
-    /// \tparam TAccessor The accessor to use when an access is made through this view.
-#ifdef __cpp_lib_concepts
-    template<typename TMapping, Blob TBlobType, typename TAccessor = accessor::Default>
-#else
-    template<typename TMapping, typename TBlobType, typename TAccessor = accessor::Default>
-#endif
-    struct LLAMA_DECLSPEC_EMPTY_BASES View
-        : private TMapping
-        , private TAccessor
-#if CAN_USE_RANGES
-        , std::ranges::view_base
-#endif
-    {
-        static_assert(!std::is_const_v<TMapping>);
-        using Mapping = TMapping;
-        using BlobType = TBlobType;
-        using ArrayExtents = typename Mapping::ArrayExtents;
-        using ArrayIndex = typename Mapping::ArrayIndex;
-        using RecordDim = typename Mapping::RecordDim;
-        using Accessor = TAccessor;
-        using iterator = Iterator<View>;
-        using const_iterator = Iterator<const View>;
-        using size_type = typename ArrayExtents::value_type;
-
-        static_assert(
-            std::is_same_v<Mapping, std::decay_t<Mapping>>,
-            "Mapping must not be const qualified or a reference. Are you using decltype(...) as View template "
-            "argument?");
-        static_assert(
-            std::is_same_v<ArrayExtents, std::decay_t<ArrayExtents>>,
-            "Mapping::ArrayExtents must not be const qualified or a reference. Are you using decltype(...) as mapping "
-            "template argument?");
-
-        /// Performs default initialization of the blob array.
-        // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init,hicpp-member-init)
-        View() = default;
-
-        LLAMA_FN_HOST_ACC_INLINE
-        explicit View(Mapping mapping, Array<BlobType, Mapping::blobCount> storageBlobs = {}, Accessor accessor = {})
-            : Mapping(std::move(mapping))
-            , Accessor(std::move(accessor))
-            , storageBlobs(std::move(storageBlobs))
-        {
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE auto mapping() -> Mapping&
-        {
-            return static_cast<Mapping&>(*this);
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE auto mapping() const -> const Mapping&
-        {
-            return static_cast<const Mapping&>(*this);
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE auto accessor() -> Accessor&
-        {
-            return static_cast<Accessor&>(*this);
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE auto accessor() const -> const Accessor&
-        {
-            return static_cast<const Accessor&>(*this);
-        }
-
-#if !(defined(_MSC_VER) && defined(__NVCC__))
-        template<typename V>
-        auto operator()(llama::ArrayIndex<V, ArrayIndex::rank>) const
-        {
-            static_assert(!sizeof(V), "Passed ArrayIndex with SizeType different than Mapping::ArrayExtent");
-        }
-#endif
-
-        /// Retrieves the \ref RecordRef at the given \ref ArrayIndex index.
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayIndex ai) const -> decltype(auto)
-        {
-            if constexpr(isRecordDim<RecordDim>)
-            {
-                LLAMA_FORCE_INLINE_RECURSIVE
-                return RecordRef<const View>{ai, *this};
-            }
-            else
-            {
-                LLAMA_FORCE_INLINE_RECURSIVE
-                return access(ai, RecordCoord<>{});
-            }
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayIndex ai) -> decltype(auto)
-        {
-            if constexpr(isRecordDim<RecordDim>)
-            {
-                LLAMA_FORCE_INLINE_RECURSIVE
-                return RecordRef<View>{ai, *this};
-            }
-            else
-            {
-                LLAMA_FORCE_INLINE_RECURSIVE
-                return access(ai, RecordCoord<>{});
-            }
-        }
-
-        /// Retrieves the \ref RecordRef at the \ref ArrayIndex index constructed from the passed component
-        /// indices.
-        template<
-            typename... Indices,
-            std::enable_if_t<std::conjunction_v<std::is_convertible<Indices, size_type>...>, int> = 0>
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) const -> decltype(auto)
-        {
-            static_assert(
-                sizeof...(Indices) == ArrayIndex::rank,
-                "Please specify as many indices as you have array dimensions");
-            LLAMA_FORCE_INLINE_RECURSIVE
-            return (*this)(ArrayIndex{static_cast<typename ArrayIndex::value_type>(indices)...});
-        }
-
-        template<
-            typename... Indices,
-            std::enable_if_t<std::conjunction_v<std::is_convertible<Indices, size_type>...>, int> = 0>
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) -> decltype(auto)
-        {
-            static_assert(
-                sizeof...(Indices) == ArrayIndex::rank,
-                "Please specify as many indices as you have array dimensions");
-            LLAMA_FORCE_INLINE_RECURSIVE
-            return (*this)(ArrayIndex{static_cast<typename ArrayIndex::value_type>(indices)...});
-        }
-
-        /// Retrieves the \ref RecordRef at the \ref ArrayIndex index constructed from the passed component
-        /// indices.
-        LLAMA_FN_HOST_ACC_INLINE auto operator[](ArrayIndex ai) const -> decltype(auto)
-        {
-            LLAMA_FORCE_INLINE_RECURSIVE
-            return (*this)(ai);
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE auto operator[](ArrayIndex ai) -> decltype(auto)
-        {
-            LLAMA_FORCE_INLINE_RECURSIVE
-            return (*this)(ai);
-        }
-
-#if !(defined(_MSC_VER) && defined(__NVCC__))
-        template<typename V>
-        auto operator[](llama::ArrayIndex<V, ArrayIndex::rank>) const
-        {
-            static_assert(!sizeof(V), "Passed ArrayIndex with SizeType different than Mapping::ArrayExtent");
-        }
-#endif
-
-        /// Retrieves the \ref RecordRef at the 1D \ref ArrayIndex index constructed from the passed index.
-        LLAMA_FN_HOST_ACC_INLINE auto operator[](size_type index) const -> decltype(auto)
-        {
-            LLAMA_FORCE_INLINE_RECURSIVE
-            return (*this)(index);
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE auto operator[](size_type index) -> decltype(auto)
-        {
-            LLAMA_FORCE_INLINE_RECURSIVE
-            return (*this)(index);
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        auto begin() -> iterator
-        {
-            return {ArrayIndexRange<ArrayExtents>{mapping().extents()}.begin(), this};
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        auto begin() const -> const_iterator
-        {
-            return {ArrayIndexRange<ArrayExtents>{mapping().extents()}.begin(), this};
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        auto end() -> iterator
-        {
-            return {ArrayIndexRange<ArrayExtents>{mapping().extents()}.end(), this};
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        auto end() const -> const_iterator
-        {
-            return {ArrayIndexRange<ArrayExtents>{mapping().extents()}.end(), this};
-        }
-
-        Array<BlobType, Mapping::blobCount> storageBlobs;
-
-    private:
-        template<typename TView, typename TBoundRecordCoord, bool OwnView>
-        friend struct RecordRef;
-
-        template<std::size_t... Coords>
-        LLAMA_FN_HOST_ACC_INLINE auto access(ArrayIndex ai, RecordCoord<Coords...> rc = {}) const -> decltype(auto)
-        {
-            return accessor()(mapToMemory(mapping(), ai, rc, storageBlobs));
-        }
-
-        template<std::size_t... Coords>
-        LLAMA_FN_HOST_ACC_INLINE auto access(ArrayIndex ai, RecordCoord<Coords...> rc = {}) -> decltype(auto)
-        {
-            return accessor()(mapToMemory(mapping(), ai, rc, storageBlobs));
-        }
+    template <typename M, typename RC>
+    concept PhysicalField = requires(M m, typename M::ArrayIndex ai) {
+        { m.blobNrAndOffset(ai, RC{}) } -> std::same_as<NrAndOffset<typename M::ArrayExtents::value_type>>;
     };
 
-    template<typename View>
-    inline constexpr auto isView = false;
-
-    template<typename Mapping, typename BlobType, typename Accessor>
-    inline constexpr auto isView<View<Mapping, BlobType, Accessor>> = true;
-
-    namespace internal
+    template<typename M>
+    struct MakeIsPhysical
     {
-        template<typename Blobs, typename TransformBlobFunc, std::size_t... Is>
-        LLAMA_FN_HOST_ACC_INLINE auto makeTransformedBlobArray(
-            Blobs& storageBlobs,
-            const TransformBlobFunc& transformBlob,
-            std::integer_sequence<std::size_t, Is...>)
-        {
-            return llama::Array{transformBlob(storageBlobs[Is])...};
-        }
-    } // namespace internal
+        template<typename RC>
+        using fn = boost::mp11::mp_bool<PhysicalField<M, RC>>;
+    };
 
-    /// Applies the given transformation to the blobs of a view and creates a new view with the transformed blobs and
-    /// the same mapping and accessor as the old view.
-    template<typename View, typename TransformBlobFunc, typename = std::enable_if_t<isView<std::decay_t<View>>>>
-    LLAMA_FN_HOST_ACC_INLINE auto transformBlobs(View& view, const TransformBlobFunc& transformBlob)
+    template<typename M>
+    inline constexpr bool allFieldsArePhysical
+        = boost::mp11::mp_all_of<LeafRecordCoords<typename M::RecordDim>, MakeIsPhysical<M>::template fn>::value;
+
+    template <typename M>
+    concept PhysicalMapping = Mapping<M> && allFieldsArePhysical<M>;
+
+    template <typename R>
+    concept LValueReference = std::is_lvalue_reference_v<R>;
+
+    template <typename R>
+    concept ProxyReference = requires(R r) {
+        typename R::value_type;
+        { static_cast<typename R::value_type>(r) } -> std::same_as<typename R::value_type>;
+        { r = std::declval<typename R::value_type>() } -> std::same_as<R&>;
+    };
+
+    template <typename R>
+    concept AnyReference = LValueReference<R> || ProxyReference<R>;
+
+    template <typename R, typename T>
+    concept AnyReferenceTo = (LValueReference<R> && std::is_same_v<std::remove_cvref_t<R>, T>) || (ProxyReference<R> && std::is_same_v<typename R::value_type, T>);
+
+    template <typename M, typename RC>
+    concept ComputedField = M::isComputed(RC{}) && requires(M m, typename M::ArrayIndex ai, Array<Array<std::byte, 1>, 1> blobs) {
+        { m.compute(ai, RC{}, blobs) } -> AnyReferenceTo<GetType<typename M::RecordDim, RC>>;
+    };
+
+    template<typename M>
+    struct MakeIsComputed
     {
-        constexpr auto blobCount = std::decay_t<View>::Mapping::blobCount;
-        auto blobs = internal::makeTransformedBlobArray(
-            view.storageBlobs,
-            transformBlob,
-            std::make_index_sequence<blobCount>{});
-        return llama::View<typename View::Mapping, typename decltype(blobs)::value_type, typename View::Accessor>{
-            view.mapping(),
-            std::move(blobs),
-            view.accessor()};
-    }
+        template<typename RC>
+        using fn = boost::mp11::mp_bool<ComputedField<M, RC>>;
+    };
 
-    /// Creates a shallow copy of a view. This copy must not outlive the view, since it references its blob array.
-    /// \tparam NewBlobType The blob type of the shallow copy. Must be a non owning pointer like type.
-    /// \return A new view with the same mapping as view, where each blob refers to the blob in view.
+    template<typename M>
+    inline constexpr bool allFieldsAreComputed
+        = boost::mp11::mp_all_of<LeafRecordCoords<typename M::RecordDim>, MakeIsComputed<M>::template fn>::value;
+
+    template <typename M>
+    concept FullyComputedMapping = Mapping<M> && allFieldsAreComputed<M>;
+
     template<
-        typename View,
-        typename NewBlobType = CopyConst<View, std::byte>*,
-        typename = std::enable_if_t<isView<std::decay_t<View>>>>
-    LLAMA_FN_HOST_ACC_INLINE auto shallowCopy(View& view)
-    {
-        if constexpr(std::is_same_v<typename std::decay_t<View>::BlobType, NewBlobType>)
-            return view;
-        else
-            return transformBlobs(
-                view,
-                [](auto& blob)
-                {
-                    LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-                    return static_cast<NewBlobType>(&blob[0]);
-                    LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
-                });
-    }
+        typename M,
+        typename LeafCoords = LeafRecordCoords<typename M::RecordDim>,
+        std::size_t PhysicalCount = boost::mp11::mp_count_if<LeafCoords, MakeIsPhysical<M>::template fn>::value,
+        std::size_t ComputedCount = boost::mp11::mp_count_if<LeafCoords, MakeIsComputed<M>::template fn>::value>
+    inline constexpr bool allFieldsArePhysicalOrComputed
+        = (PhysicalCount + ComputedCount) >= boost::mp11::mp_size<LeafCoords>::value&& PhysicalCount > 0
+        && ComputedCount > 0; // == instead of >= would be better, but it's not easy to count correctly,
+                              // because we cannot check whether the call to blobNrOrOffset()
+                              // or compute() is actually valid
 
-    // Creates a new view from an existing view with the given accessor.
-    // \param view A view which's mapping and blobs are copied into a new view with the different accessor. If you no
-    // longer need the old view, consider moving it into the argument of this function.
-    template<typename NewAccessor, typename Mapping, typename BlobType, typename OldAccessor>
-    LLAMA_FN_HOST_ACC_INLINE auto withAccessor(View<Mapping, BlobType, OldAccessor> view, NewAccessor newAccessor = {})
-    {
-        return View<Mapping, BlobType, NewAccessor>{
-            std::move(view.mapping()),
-            std::move(view.storageBlobs),
-            std::move(newAccessor)};
-    }
+    template <typename M>
+    concept PartiallyComputedMapping = Mapping<M> && allFieldsArePhysicalOrComputed<M>;
 
-    // Creates a new view from an existing view with the given mapping.
-    // \param view A view which's accessor and blobs are copied into a new view with the different mapping. If you no
-    // longer need the old view, consider moving it into the argument of this function.
-    template<typename NewMapping, typename Mapping, typename BlobType, typename Accessor>
-    LLAMA_FN_HOST_ACC_INLINE auto withMapping(View<Mapping, BlobType, Accessor> view, NewMapping newMapping = {})
-    {
-        static_assert(Mapping::blobCount == NewMapping::blobCount);
-        for(std::size_t i = 0; i < Mapping::blobCount; i++)
-        {
-            assert(view.mapping().blobSize(i) == newMapping.blobSize(i));
-        }
-
-        return View<NewMapping, BlobType, Accessor>{
-            std::move(newMapping),
-            std::move(view.storageBlobs),
-            std::move(view.accessor())};
-    }
-
-    /// Like a \ref View, but array indices are shifted.
-    /// @tparam TStoredParentView Type of the underlying view. May be cv qualified and/or a reference type.
-    template<typename TStoredParentView>
-    struct SubView
-    {
-        using StoredParentView = TStoredParentView;
-        using ParentView = std::remove_const_t<std::remove_reference_t<StoredParentView>>; ///< type of the parent view
-        using Mapping = typename ParentView::Mapping; ///< mapping of the parent view
-        using ArrayExtents = typename Mapping::ArrayExtents; ///< array extents of the parent view
-        using ArrayIndex = typename Mapping::ArrayIndex; ///< array index of the parent view
-
-        using size_type = typename ArrayExtents::value_type;
-
-        /// Creates a SubView given a parent \ref View and offset.
-        template<typename StoredParentViewFwd>
-        LLAMA_FN_HOST_ACC_INLINE SubView(StoredParentViewFwd&& parentView, ArrayIndex offset)
-            : parentView(std::forward<StoredParentViewFwd>(parentView))
-            , offset(offset)
-        {
-        }
-
-        /// Same as \ref View::operator()(ArrayIndex), but shifted by the offset of this \ref SubView.
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayIndex ai) const -> decltype(auto)
-        {
-            LLAMA_FORCE_INLINE_RECURSIVE
-            return parentView(ArrayIndex{ai + offset});
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayIndex ai) -> decltype(auto)
-        {
-            LLAMA_FORCE_INLINE_RECURSIVE
-            return parentView(ArrayIndex{ai + offset});
-        }
-
-        /// Same as corresponding operator in \ref View, but shifted by the offset of this \ref SubView.
-        template<typename... Indices>
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) const -> decltype(auto)
-        {
-            static_assert(
-                sizeof...(Indices) == ArrayIndex::rank,
-                "Please specify as many indices as you have array dimensions");
-            static_assert(
-                std::conjunction_v<std::is_convertible<Indices, size_type>...>,
-                "Indices must be convertible to ArrayExtents::size_type");
-            LLAMA_FORCE_INLINE_RECURSIVE
-            return parentView(
-                ArrayIndex{ArrayIndex{static_cast<typename ArrayIndex::value_type>(indices)...} + offset});
-        }
-
-        template<typename... Indices>
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) -> decltype(auto)
-        {
-            static_assert(
-                sizeof...(Indices) == ArrayIndex::rank,
-                "Please specify as many indices as you have array dimensions");
-            static_assert(
-                std::conjunction_v<std::is_convertible<Indices, size_type>...>,
-                "Indices must be convertible to ArrayExtents::size_type");
-            LLAMA_FORCE_INLINE_RECURSIVE
-            return parentView(
-                ArrayIndex{ArrayIndex{static_cast<typename ArrayIndex::value_type>(indices)...} + offset});
-        }
-
-        template<std::size_t... Coords>
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(RecordCoord<Coords...> rc = {}) const -> decltype(auto)
-        {
-            return parentView(ArrayIndex{} + offset, rc);
-        }
-
-        template<std::size_t... Coords>
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(RecordCoord<Coords...> rc = {}) -> decltype(auto)
-        {
-            return parentView(ArrayIndex{} + offset, rc);
-        }
-
-        StoredParentView parentView;
-        const ArrayIndex offset; ///< offset by which this view's \ref ArrayIndex indices are shifted when passed to
-                                 ///< the parent view.
+    template<typename B>
+    concept Blob = requires(B b, std::size_t i) {
+        // according to http://eel.is/c++draft/intro.object#3 only std::byte and unsigned char can provide storage for
+        // other types
+        std::is_same_v<decltype(b[i]), std::byte&> || std::is_same_v<decltype(b[i]), unsigned char&>;
     };
 
-    /// SubView vview(view); will store a reference to view.
-    /// SubView vview(std::move(view)); will store the view.
-    template<typename TStoredParentView>
-    SubView(TStoredParentView&&, typename std::remove_reference_t<TStoredParentView>::Mapping::ArrayIndex)
-        -> SubView<TStoredParentView>;
+    template <typename BA>
+    concept BlobAllocator = requires(BA ba, std::integral_constant<std::size_t, 16> alignment, std::size_t size) {
+        { ba(alignment, size) } -> Blob;
+    };
+        // clang-format on
+#endif
+
+    namespace internal
+    {
+        template<typename R, typename = void>
+        struct IsProxyReferenceImpl : std::false_type
+        {
+        };
+
+        template<typename R>
+        struct IsProxyReferenceImpl<
+            R,
+            std::void_t<
+                typename R::value_type,
+                decltype(static_cast<typename R::value_type>(std::declval<R&>())),
+                decltype(std::declval<R&>() = std::declval<typename R::value_type>())>> : std::true_type
+        {
+        };
+    } // namespace internal
+
+    template<typename R>
+#ifdef __cpp_lib_concepts
+    inline constexpr bool isProxyReference = ProxyReference<R>;
+#else
+    inline constexpr bool isProxyReference = internal::IsProxyReferenceImpl<R>::value;
+#endif
 } // namespace llama
 // ==
-// == ./View.hpp ==
-// ============================================================================
-
-// ============================================================================
-// == ./RecordRef.hpp ==
-// ==
-// Copyright 2018 Alexander Matthes
-// SPDX-License-Identifier: GPL-3.0-or-later
-
-// #pragma once
-// #include "Concepts.hpp"    // amalgamate: file already expanded
-// #include "HasRanges.hpp"    // amalgamate: file already expanded
-// #include "ProxyRefOpMixin.hpp"    // amalgamate: file already expanded
-	// ============================================================================
-	// == ./StructName.hpp ==
-	// ==
-	// SPDX-License-Identifier: GPL-3.0-or-later
-
-	// #pragma once
-	// #include "Core.hpp"    // amalgamate: file already expanded
-
-	#include <string_view>
-
-	namespace llama
-	{
-	    namespace internal
-	    {
-	        // TODO(bgruber): just use std::copy which became constexpr in C++20
-	        template<typename In, typename Out>
-	        constexpr auto constexprCopy(In f, In l, Out d) -> Out
-	        {
-	            while(f != l)
-	                *d++ = *f++;
-	            return d;
-	        }
-
-	        // TODO(bgruber): just use std::search which became constexpr in C++20
-	        // from: https://en.cppreference.com/w/cpp/algorithm/search
-	        template<class ForwardIt1, class ForwardIt2>
-	        constexpr auto constexprSearch(ForwardIt1 first, ForwardIt1 last, ForwardIt2 sFirst, ForwardIt2 sLast)
-	            -> ForwardIt1
-	        {
-	            while(true)
-	            {
-	                ForwardIt1 it = first;
-	                for(ForwardIt2 sIt = sFirst;; ++it, ++sIt)
-	                {
-	                    if(sIt == sLast)
-	                        return first;
-	                    if(it == last)
-	                        return last;
-	                    if(!(*it == *sIt))
-	                        break;
-	                }
-	                ++first;
-	            }
-	        }
-
-	        // TODO(bgruber): just use std::remove_copy which became constexpr in C++20
-	        // from: https://en.cppreference.com/w/cpp/algorithm/remove_copy
-	        template<class InputIt, class OutputIt, class T>
-	        constexpr auto constexprRemoveCopy(InputIt first, InputIt last, OutputIt d_first, const T& value) -> OutputIt
-	        {
-	            for(; first != last; ++first)
-	            {
-	                if(!(*first == value))
-	                {
-	                    *d_first++ = *first;
-	                }
-	            }
-	            return d_first;
-	        }
-
-	        // TODO(bgruber): just use std::count which became constexpr in C++20
-	        // from: https://en.cppreference.com/w/cpp/algorithm/count
-	        template<class InputIt, class T>
-	        auto constexprCount(InputIt first, InputIt last, const T& value) ->
-	            typename std::iterator_traits<InputIt>::difference_type
-	        {
-	            typename std::iterator_traits<InputIt>::difference_type ret = 0;
-	            for(; first != last; ++first)
-	            {
-	                if(*first == value)
-	                {
-	                    ret++;
-	                }
-	            }
-	            return ret;
-	        }
-
-	        template<typename T>
-	        constexpr auto typeNameAsArray()
-	        {
-	            // adapted from Matthew Rodusek:
-	            // https://bitwizeshift.github.io/posts/2021/03/09/getting-an-unmangled-type-name-at-compile-time/
-	            //
-	            // Boost Software License - Version 1.0 - August 17th, 2003
-	            //
-	            // Permission is hereby granted, free of charge, to any person or organization
-	            // obtaining a copy of the software and accompanying documentation covered by
-	            // this license (the "Software") to use, reproduce, display, distribute,
-	            // execute, and transmit the Software, and to prepare derivative works of the
-	            // Software, and to permit third-parties to whom the Software is furnished to
-	            // do so, all subject to the following:
-	            //
-	            // The copyright notices in the Software and this entire statement, including
-	            // the above license grant, this restriction and the following disclaimer,
-	            // must be included in all copies of the Software, in whole or in part, and
-	            // all derivative works of the Software, unless such copies or derivative
-	            // works are solely in the form of machine-executable object code generated by
-	            // a source language processor.
-	            //
-	            // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	            // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	            // FITNESS FOR A PARTICULAR PURPOSE, TITLE AND NON-INFRINGEMENT. IN NO EVENT
-	            // SHALL THE COPYRIGHT HOLDERS OR ANYONE DISTRIBUTING THE SOFTWARE BE LIABLE
-	            // FOR ANY DAMAGES OR OTHER LIABILITY, WHETHER IN CONTRACT, TORT OR OTHERWISE,
-	            // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-	            // DEALINGS IN THE SOFTWARE.
-
-	#if defined(__clang__)
-	            constexpr auto prefix = std::string_view{"[T = "};
-	            constexpr auto suffix = std::string_view{"]"};
-	            constexpr auto function = std::string_view{__PRETTY_FUNCTION__};
-	#elif defined(__GNUC__)
-	            constexpr auto prefix = std::string_view{"with T = "};
-	            constexpr auto suffix = std::string_view{"]"};
-	            constexpr auto function = std::string_view{__PRETTY_FUNCTION__};
-	#elif defined(_MSC_VER)
-	            constexpr auto prefix = std::string_view{"typeNameAsArray<"};
-	            constexpr auto suffix = std::string_view{">(void)"};
-	            constexpr auto function = std::string_view{__FUNCSIG__};
-	#else
-	#    warning Unsupported compiler
-	            constexpr auto prefix = std::string_view{};
-	            constexpr auto suffix = std::string_view{};
-	            constexpr auto function = std::string_view{};
-	#endif
-
-	            constexpr auto start = function.find(prefix) + prefix.size();
-	            constexpr auto end = function.rfind(suffix);
-	            static_assert(start <= end);
-
-	            constexpr auto name = function.substr(start, (end - start));
-
-	            constexpr auto arrAndSize = [&]() constexpr
-	            {
-	                Array<char, name.size()> nameArray{};
-	                constexprCopy(name.begin(), name.end(), nameArray.begin());
-
-	#ifdef _MSC_VER
-	                // MSVC 19.32 runs into a syntax error if we just capture nameArray. Passing it as argument is a
-	                // workaround. Applies to the following lambdas.
-
-	                // strip "struct " and "class ".
-	                auto removeAllOccurences = [](auto& nameArray, std::size_t size, std::string_view str) constexpr
-	                {
-	                    auto e = nameArray.begin() + size;
-	                    while(true)
-	                    {
-	                        auto it = constexprSearch(nameArray.begin(), e, str.begin(), str.end());
-	                        if(it == e)
-	                            break;
-	                        constexprCopy(it + str.size(), e, it);
-	                        e -= str.size();
-	                    }
-	                    return e - nameArray.begin();
-	                };
-
-	                auto size1 = removeAllOccurences(nameArray, nameArray.size(), std::string_view{"struct "});
-	                auto size2 = removeAllOccurences(nameArray, size1, std::string_view{"class "});
-	#else
-	                auto size2 = nameArray.size();
-	#endif
-
-	                auto size3Func = [&](auto& nameArray) constexpr
-	                {
-	                    // remove spaces between closing template angle brackets and after commas
-	                    auto e = nameArray.begin() + size2;
-	                    for(auto b = nameArray.begin(); b < e - 2; b++)
-	                    {
-	                        if((b[0] == '>' && b[1] == ' ' && b[2] == '>') || (b[0] == ',' && b[1] == ' '))
-	                        {
-	                            constexprCopy(b + 2, e, b + 1);
-	                            e--;
-	                        }
-	                    }
-	                    return e - nameArray.begin();
-	                };
-	                auto size3 = size3Func(nameArray);
-
-	                return std::pair{nameArray, size3};
-	            }
-	            ();
-
-	            Array<char, arrAndSize.second> a{};
-	            constexprCopy(arrAndSize.first.begin(), arrAndSize.first.begin() + arrAndSize.second, a.begin());
-	            return a;
-	        }
-
-	        template<typename T>
-	        inline constexpr auto typeNameStorage = typeNameAsArray<T>();
-	    } // namespace internal
-
-	    template<typename T>
-	    inline constexpr auto qualifiedTypeName = []
-	    {
-	        constexpr auto& value = internal::typeNameStorage<T>;
-	        return std::string_view{value.data(), value.size()};
-	    }();
-
-	    namespace internal
-	    {
-	        constexpr auto isIdentChar(char c) -> bool
-	        {
-	            if(c >= 'A' && c <= 'Z')
-	                return true;
-	            if(c >= 'a' && c <= 'z')
-	                return true;
-	            if(c >= '0' && c <= '9')
-	                return true;
-	            if(c == '_')
-	                return true;
-	            return false;
-	        }
-
-	        template<typename T>
-	        inline constexpr auto structNameStorage = []() constexpr
-	        {
-	            // strip namespace qualifiers before type names
-	            constexpr auto arrAndSize = []() constexpr
-	            {
-	                auto s = internal::typeNameStorage<T>;
-	                auto e = s.end();
-	                auto b = s.begin();
-	                while(true)
-	                {
-	                    // find iterator to after "::"
-	                    auto l = b;
-	                    while(l + 1 < e && !(l[0] == ':' && l[1] == ':'))
-	                        l++;
-	                    if(l + 1 == e)
-	                        break;
-	                    l += 2;
-
-	                    // find iterator to first identifier char before "::"
-	                    auto f = l - 3; // start at first char before "::"
-	                    while(s.begin() < f && isIdentChar(f[-1]))
-	                        f--;
-
-	                    // cut out [f:l[
-	                    constexprCopy(l, e, f);
-	                    e -= (l - f);
-	                    b = f;
-	                }
-
-	                return std::pair{s, e - s.begin()};
-	            }
-	            ();
-
-	            Array<char, arrAndSize.second> a{};
-	            constexprCopy(arrAndSize.first.begin(), arrAndSize.first.begin() + arrAndSize.second, a.begin());
-	            return a;
-	        }
-	        ();
-	    } // namespace internal
-
-	    template<typename T>
-	    constexpr auto structName(T = {}) -> std::string_view
-	    {
-	        constexpr auto& value = internal::structNameStorage<T>;
-	        return std::string_view{&value[0], value.size()};
-	    }
-
-	    namespace internal
-	    {
-	        constexpr auto intToStrSize(std::size_t s)
-	        {
-	            std::size_t len = 0;
-	            do
-	            {
-	                len++;
-	                s /= 10;
-	            } while(s != 0);
-	            return len;
-	        }
-
-	        template<typename RecordDim, std::size_t... Coords>
-	        LLAMA_ACC inline constexpr auto recordCoordTagsStorage = []() constexpr
-	        {
-	            using Tags = GetTags<RecordDim, RecordCoord<Coords...>>;
-
-	            // precompute char array size
-	            constexpr auto size = [&]() constexpr
-	            {
-	                std::size_t s = 0;
-	                boost::mp11::mp_for_each<Tags>(
-	                    [&](auto tag)
-	                    {
-	                        if(s != 0)
-	                            s++; // for the '.'s
-	                        using Tag = decltype(tag);
-	                        if constexpr(isRecordCoord<Tag>)
-	                            s += intToStrSize(s);
-	                        else
-	                            s += structName(tag).size();
-	                    });
-	                return s;
-	            }
-	            ();
-	            llama::Array<char, size> a{};
-	            auto w = a.begin();
-
-	            boost::mp11::mp_for_each<Tags>([&](auto tag) constexpr {
-	                if(w != a.begin())
-	                {
-	                    *w = '.';
-	                    w++;
-	                }
-	                using Tag = decltype(tag);
-	                if constexpr(isRecordCoord<Tag>)
-	                {
-	                    // handle array indices
-	                    static_assert(Tag::size == 1);
-	                    // convert to string
-	                    auto n = Tag::front;
-	                    w += intToStrSize(n) - 1;
-	                    do
-	                    {
-	                        *w = '0' + n % 10;
-	                        w--;
-	                        n /= 10;
-	                    } while(n != 0);
-	                }
-	                else
-	                {
-	                    constexpr auto sn = structName(tag);
-	                    constexprCopy(sn.begin(), sn.end(), w);
-	                    w += sn.size();
-	                }
-	            });
-	            return a;
-	        }
-	        ();
-	    } // namespace internal
-
-	    /// Returns the tags interspersed by '.' represented by the given record coord in the given record dimension.
-	    template<typename RecordDim, std::size_t... Coords>
-	    constexpr auto recordCoordTags(RecordCoord<Coords...> = {}) -> std::string_view
-	    {
-	        constexpr auto& value = internal::recordCoordTagsStorage<RecordDim, Coords...>;
-	        return std::string_view{&value[0], value.size()};
-	    }
-
-	    template<typename RecordDim>
-	    constexpr auto recordCoordTags(RecordCoord<>) -> std::string_view
-	    {
-	        return {};
-	    }
-	} // namespace llama
-	// ==
-	// == ./StructName.hpp ==
-	// ============================================================================
-
-// #include "View.hpp"    // amalgamate: file already expanded
-
-#include <iosfwd>
-// #include <type_traits>    // amalgamate: file already included
-
-namespace llama
-{
-    template<typename View, typename BoundRecordCoord, bool OwnView>
-    struct RecordRef;
-
-    template<typename View>
-    inline constexpr auto isRecordRef = false;
-
-    template<typename View, typename BoundRecordCoord, bool OwnView>
-    inline constexpr auto isRecordRef<RecordRef<View, BoundRecordCoord, OwnView>> = true;
-
-    /// Returns a \ref One with the same record dimension as the given record ref, with values copyied from rr.
-    template<typename View, typename BoundRecordCoord, bool OwnView>
-    LLAMA_FN_HOST_ACC_INLINE auto copyRecord(const RecordRef<View, BoundRecordCoord, OwnView>& rr)
-    {
-        using RecordDim = typename RecordRef<View, BoundRecordCoord, OwnView>::AccessibleRecordDim;
-        One<RecordDim> temp;
-        temp = rr;
-        return temp;
-    }
-
-    namespace internal
-    {
-        template<
-            typename Functor,
-            typename LeftRecord,
-            typename RightView,
-            typename RightBoundRecordDim,
-            bool RightOwnView>
-        LLAMA_FN_HOST_ACC_INLINE auto recordRefArithOperator(
-            LeftRecord& left,
-            const RecordRef<RightView, RightBoundRecordDim, RightOwnView>& right) -> LeftRecord&
-        {
-            using RightRecord = RecordRef<RightView, RightBoundRecordDim, RightOwnView>;
-            // if the record dimension left and right is the same, a single loop is enough and no tag check is needed.
-            // this safes a lot of compilation time.
-            using LARD = typename LeftRecord::AccessibleRecordDim;
-            using RARD = typename RightRecord::AccessibleRecordDim;
-            if constexpr(std::is_same_v<LARD, RARD>)
-            {
-                forEachLeafCoord<LARD>([&](auto rc) LLAMA_LAMBDA_INLINE { Functor{}(left(rc), right(rc)); });
-            }
-            else
-            {
-                forEachLeafCoord<LARD>(
-                    [&](auto leftRC) LLAMA_LAMBDA_INLINE
-                    {
-                        using LeftInnerCoord = decltype(leftRC);
-                        forEachLeafCoord<RARD>(
-                            [&](auto rightRC) LLAMA_LAMBDA_INLINE
-                            {
-                                using RightInnerCoord = decltype(rightRC);
-                                if constexpr(hasSameTags<LARD, LeftInnerCoord, RARD, RightInnerCoord>)
-                                {
-                                    Functor{}(left(leftRC), right(rightRC));
-                                }
-                            });
-                    });
-            }
-            return left;
-        }
-
-        template<typename Functor, typename LeftRecord, typename T>
-        LLAMA_FN_HOST_ACC_INLINE auto recordRefArithOperator(LeftRecord& left, const T& right) -> LeftRecord&
-        {
-            forEachLeafCoord<typename LeftRecord::AccessibleRecordDim>([&](auto leftRC) LLAMA_LAMBDA_INLINE
-                                                                       { Functor{}(left(leftRC), right); });
-            return left;
-        }
-
-        template<
-            typename Functor,
-            typename LeftRecord,
-            typename RightView,
-            typename RightBoundRecordDim,
-            bool RightOwnView>
-        LLAMA_FN_HOST_ACC_INLINE auto recordRefRelOperator(
-            const LeftRecord& left,
-            const RecordRef<RightView, RightBoundRecordDim, RightOwnView>& right) -> bool
-        {
-            using RightRecord = RecordRef<RightView, RightBoundRecordDim, RightOwnView>;
-            bool result = true;
-            // if the record dimension left and right is the same, a single loop is enough and no tag check is needed.
-            // this safes a lot of compilation time.
-            using LARD = typename LeftRecord::AccessibleRecordDim;
-            using RARD = typename RightRecord::AccessibleRecordDim;
-            if constexpr(std::is_same_v<LARD, RARD>)
-            {
-                forEachLeafCoord<LARD>([&](auto rc) LLAMA_LAMBDA_INLINE { result &= Functor{}(left(rc), right(rc)); });
-            }
-            else
-            {
-                forEachLeafCoord<LARD>(
-                    [&](auto leftRC) LLAMA_LAMBDA_INLINE
-                    {
-                        using LeftInnerCoord = decltype(leftRC);
-                        forEachLeafCoord<RARD>(
-                            [&](auto rightRC) LLAMA_LAMBDA_INLINE
-                            {
-                                using RightInnerCoord = decltype(rightRC);
-                                if constexpr(hasSameTags<LARD, LeftInnerCoord, RARD, RightInnerCoord>)
-                                {
-                                    result &= Functor{}(left(leftRC), right(rightRC));
-                                }
-                            });
-                    });
-            }
-            return result;
-        }
-
-        template<typename Functor, typename LeftRecord, typename T>
-        LLAMA_FN_HOST_ACC_INLINE auto recordRefRelOperator(const LeftRecord& left, const T& right) -> bool
-        {
-            bool result = true;
-            forEachLeafCoord<typename LeftRecord::AccessibleRecordDim>([&](auto leftRC) LLAMA_LAMBDA_INLINE
-                                                                       { result &= Functor{}(left(leftRC), right); });
-            return result;
-        }
-
-        struct Assign
-        {
-            template<typename A, typename B>
-            LLAMA_FN_HOST_ACC_INLINE auto operator()(A&& a, const B& b) const -> decltype(auto)
-            {
-                return std::forward<A>(a) = b;
-            }
-        };
-
-        struct PlusAssign
-        {
-            template<typename A, typename B>
-            LLAMA_FN_HOST_ACC_INLINE auto operator()(A&& a, const B& b) const -> decltype(auto)
-            {
-                return std::forward<A>(a) += b;
-            }
-        };
-
-        struct MinusAssign
-        {
-            template<typename A, typename B>
-            LLAMA_FN_HOST_ACC_INLINE auto operator()(A&& a, const B& b) const -> decltype(auto)
-            {
-                return std::forward<A>(a) -= b;
-            }
-        };
-
-        struct MultiplyAssign
-        {
-            template<typename A, typename B>
-            LLAMA_FN_HOST_ACC_INLINE auto operator()(A&& a, const B& b) const -> decltype(auto)
-            {
-                return std::forward<A>(a) *= b;
-            }
-        };
-
-        struct DivideAssign
-        {
-            template<typename A, typename B>
-            LLAMA_FN_HOST_ACC_INLINE auto operator()(A&& a, const B& b) const -> decltype(auto)
-            {
-                return std::forward<A>(a) /= b;
-            }
-        };
-
-        struct ModuloAssign
-        {
-            template<typename A, typename B>
-            LLAMA_FN_HOST_ACC_INLINE auto operator()(A&& a, const B& b) const -> decltype(auto)
-            {
-                return std::forward<A>(a) %= b;
-            }
-        };
-
-        template<
-            typename ProxyReference,
-            typename T,
-            std::enable_if_t<!isRecordRef<std::decay_t<ProxyReference>>, int> = 0>
-        LLAMA_FN_HOST_ACC_INLINE auto asTupleImpl(ProxyReference&& leaf, T) -> ProxyReference
-        {
-            return leaf;
-        }
-
-        template<
-            typename TWithOptionalConst,
-            typename T,
-            std::enable_if_t<!isRecordRef<std::decay_t<TWithOptionalConst>>, int> = 0>
-        LLAMA_FN_HOST_ACC_INLINE auto asTupleImpl(TWithOptionalConst& leaf, T)
-            -> std::reference_wrapper<TWithOptionalConst>
-        {
-            return leaf;
-        }
-
-        template<typename RecordRef, typename T, std::size_t N, std::size_t... Is>
-        LLAMA_FN_HOST_ACC_INLINE auto asTupleImplForArray(RecordRef&& vd, T (&&)[N], std::index_sequence<Is...>)
-        {
-            return std::make_tuple(asTupleImpl(vd(RecordCoord<Is>{}), T{})...);
-        }
-
-        template<typename RecordRef, typename T, std::size_t N>
-        LLAMA_FN_HOST_ACC_INLINE auto asTupleImpl(RecordRef&& vd, T (&&a)[N])
-        {
-            return asTupleImplForArray(std::forward<RecordRef>(vd), std::move(a), std::make_index_sequence<N>{});
-        }
-
-        template<typename RecordRef, typename... Fields>
-        LLAMA_FN_HOST_ACC_INLINE auto asTupleImpl(RecordRef&& vd, Record<Fields...>)
-        {
-            return std::make_tuple(asTupleImpl(vd(GetFieldTag<Fields>{}), GetFieldType<Fields>{})...);
-        }
-
-        template<
-            typename ProxyReference,
-            typename T,
-            std::enable_if_t<!isRecordRef<std::decay_t<ProxyReference>>, int> = 0>
-        LLAMA_FN_HOST_ACC_INLINE auto asFlatTupleImpl(ProxyReference&& leaf, T) -> std::tuple<ProxyReference>
-        {
-            static_assert(!std::is_reference_v<ProxyReference>);
-            return {std::move(leaf)}; // NOLINT(bugprone-move-forwarding-reference)
-        }
-
-        template<
-            typename TWithOptionalConst,
-            typename T,
-            std::enable_if_t<!isRecordRef<std::decay_t<TWithOptionalConst>>, int> = 0>
-        LLAMA_FN_HOST_ACC_INLINE auto asFlatTupleImpl(TWithOptionalConst& leaf, T) -> std::tuple<TWithOptionalConst&>
-        {
-            return {leaf};
-        }
-
-        template<typename RecordRef, typename T, std::size_t N, std::size_t... Is>
-        LLAMA_FN_HOST_ACC_INLINE auto asFlatTupleImplForArray(RecordRef&& vd, T (&&)[N], std::index_sequence<Is...>)
-        {
-            return std::tuple_cat(asFlatTupleImpl(vd(RecordCoord<Is>{}), T{})...);
-        }
-
-        template<typename RecordRef, typename T, std::size_t N>
-        LLAMA_FN_HOST_ACC_INLINE auto asFlatTupleImpl(RecordRef&& vd, T (&&a)[N])
-        {
-            return asFlatTupleImplForArray(std::forward<RecordRef>(vd), std::move(a), std::make_index_sequence<N>{});
-        }
-
-        template<typename RecordRef, typename... Fields>
-        LLAMA_FN_HOST_ACC_INLINE auto asFlatTupleImpl(RecordRef&& vd, Record<Fields...>)
-        {
-            return std::tuple_cat(asFlatTupleImpl(vd(GetFieldTag<Fields>{}), GetFieldType<Fields>{})...);
-        }
-
-        template<typename T, typename = void>
-        inline constexpr auto isTupleLike = false;
-
-        // get<I>(t) and std::tuple_size<T> must be available
-        using std::get; // make sure a get<0>() can be found, so the compiler can compile the trait
-        template<typename T>
-        inline constexpr auto
-            isTupleLike<T, std::void_t<decltype(get<0>(std::declval<T>())), std::tuple_size<T>>> = true;
-
-        template<typename... Ts>
-        inline constexpr auto dependentFalse = false;
-
-        template<typename Tuple1, typename Tuple2, std::size_t... Is>
-        LLAMA_FN_HOST_ACC_INLINE void assignTuples(Tuple1&& dst, Tuple2&& src, std::index_sequence<Is...>);
-
-        template<typename T1, typename T2>
-        LLAMA_FN_HOST_ACC_INLINE void assignTupleElement(T1&& dst, T2&& src)
-        {
-            if constexpr(isTupleLike<std::decay_t<T1>> && isTupleLike<std::decay_t<T2>>)
-            {
-                static_assert(std::tuple_size_v<std::decay_t<T1>> == std::tuple_size_v<std::decay_t<T2>>);
-                assignTuples(dst, src, std::make_index_sequence<std::tuple_size_v<std::decay_t<T1>>>{});
-            }
-            else if constexpr(!isTupleLike<std::decay_t<T1>> && !isTupleLike<std::decay_t<T2>>)
-                std::forward<T1>(dst) = std::forward<T2>(src);
-            else
-                static_assert(
-                    dependentFalse<T1, T2>,
-                    "Elements to assign are not tuple/tuple or non-tuple/non-tuple.");
-        }
-
-        template<typename Tuple1, typename Tuple2, std::size_t... Is>
-        LLAMA_FN_HOST_ACC_INLINE void assignTuples(Tuple1&& dst, Tuple2&& src, std::index_sequence<Is...>)
-        {
-            static_assert(std::tuple_size_v<std::decay_t<Tuple1>> == std::tuple_size_v<std::decay_t<Tuple2>>);
-            using std::get;
-            (assignTupleElement(get<Is>(std::forward<Tuple1>(dst)), get<Is>(std::forward<Tuple2>(src))), ...);
-        }
-
-        template<typename T, typename Tuple, std::size_t... Is>
-        LLAMA_FN_HOST_ACC_INLINE auto makeFromTuple(Tuple&& src, std::index_sequence<Is...>)
-        {
-            using std::get;
-            return T{get<Is>(src)...}; // no forward of src, since we call get multiple times on it
-        }
-
-        template<typename T, typename SFINAE, typename... Args>
-        inline constexpr auto isDirectListInitializableImpl = false;
-
-        template<typename T, typename... Args>
-        inline constexpr auto
-            isDirectListInitializableImpl<T, std::void_t<decltype(T{std::declval<Args>()...})>, Args...> = true;
-
-        template<typename T, typename... Args>
-        inline constexpr auto isDirectListInitializable = isDirectListInitializableImpl<T, void, Args...>;
-
-        template<typename T, typename Tuple>
-        inline constexpr auto isDirectListInitializableFromTuple = false;
-
-        template<typename T, template<typename...> typename Tuple, typename... Args>
-        inline constexpr auto
-            isDirectListInitializableFromTuple<T, Tuple<Args...>> = isDirectListInitializable<T, Args...>;
-
-        template<typename T, typename Simd, typename RecordCoord>
-        LLAMA_FN_HOST_ACC_INLINE void loadSimdRecord(const T& srcRef, Simd& dstSimd, RecordCoord rc);
-
-        template<typename Simd, typename T, typename RecordCoord>
-        LLAMA_FN_HOST_ACC_INLINE void storeSimdRecord(const Simd& srcSimd, T&& dstRef, RecordCoord rc);
-    } // namespace internal
-
-    /// Record reference type returned by \ref View after resolving an array dimensions coordinate or partially
-    /// resolving a \ref RecordCoord. A record reference does not hold data itself, it just binds enough information
-    /// (array dimensions coord and partial record coord) to retrieve it later from a \ref View. Records references
-    /// should not be created by the user. They are returned from various access functions in \ref View and RecordRef
-    /// itself.
-    template<typename TView, typename TBoundRecordCoord, bool OwnView>
-    struct RecordRef : private TView::Mapping::ArrayIndex
-    {
-        using View = TView; ///< View this record reference points into.
-        using BoundRecordCoord
-            = TBoundRecordCoord; ///< Record coords into View::RecordDim which are already bound by this RecordRef.
-
-    private:
-        using ArrayIndex = typename View::Mapping::ArrayIndex;
-        using RecordDim = typename View::Mapping::RecordDim;
-
-        std::conditional_t<OwnView, View, View&> view;
-
-    public:
-        /// Subtree of the record dimension of View starting at BoundRecordCoord. If BoundRecordCoord is
-        /// `RecordCoord<>` (default) AccessibleRecordDim is the same as `Mapping::RecordDim`.
-        using AccessibleRecordDim = GetType<RecordDim, BoundRecordCoord>;
-
-        /// Creates an empty RecordRef. Only available for if the view is owned. Used by llama::One.
-        LLAMA_FN_HOST_ACC_INLINE RecordRef()
-            /* requires(OwnView) */
-            : ArrayIndex{}
-            , view{allocViewStack<0, RecordDim>()}
-        {
-            static_assert(OwnView, "The default constructor of RecordRef is only available if it owns the view.");
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE
-        RecordRef(ArrayIndex ai, std::conditional_t<OwnView, View&&, View&> view)
-            : ArrayIndex{ai}
-            , view{static_cast<decltype(view)>(view)}
-        {
-        }
-
-        RecordRef(const RecordRef&) = default;
-
-        // NOLINTNEXTLINE(cert-oop54-cpp)
-        LLAMA_FN_HOST_ACC_INLINE auto operator=(const RecordRef& other) -> RecordRef&
-        {
-            // NOLINTNEXTLINE(cppcoreguidelines-c-copy-assignment-signature,misc-unconventional-assign-operator)
-            return this->operator=<RecordRef>(other);
-        }
-
-        RecordRef(RecordRef&&) noexcept = default;
-        auto operator=(RecordRef&&) noexcept -> RecordRef& = default;
-
-        ~RecordRef() = default;
-
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto arrayIndex() const -> ArrayIndex
-        {
-            return static_cast<const ArrayIndex&>(*this);
-        }
-
-        /// Create a RecordRef from a different RecordRef. Only available for if the view is owned. Used by
-        /// llama::One.
-        template<typename OtherView, typename OtherBoundRecordCoord, bool OtherOwnView>
-        // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
-        LLAMA_FN_HOST_ACC_INLINE RecordRef(const RecordRef<OtherView, OtherBoundRecordCoord, OtherOwnView>& recordRef)
-            /* requires(OwnView) */
-            : RecordRef()
-        {
-            static_assert(
-                OwnView,
-                "The copy constructor of RecordRef from a different RecordRef is only available if it owns "
-                "the "
-                "view.");
-            *this = recordRef;
-        }
-
-        // TODO(bgruber): unify with previous in C++20 and use explicit(cond)
-        /// Create a RecordRef from a scalar. Only available for if the view is owned. Used by llama::One.
-        template<typename T, typename = std::enable_if_t<!isRecordRef<T>>>
-        LLAMA_FN_HOST_ACC_INLINE explicit RecordRef(const T& scalar)
-            /* requires(OwnView) */
-            : RecordRef()
-        {
-            static_assert(
-                OwnView,
-                "The constructor of RecordRef from a scalar is only available if it owns the view.");
-            *this = scalar;
-        }
-
-        /// Access a record in the record dimension underneath the current record reference using a \ref RecordCoord.
-        /// If the access resolves to a leaf, an l-value reference to a variable inside the \ref View storage is
-        /// returned, otherwise another RecordRef.
-        template<std::size_t... Coord>
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(RecordCoord<Coord...>) const -> decltype(auto)
-        {
-            using AbsolutCoord = Cat<BoundRecordCoord, RecordCoord<Coord...>>;
-            using AccessedType = GetType<RecordDim, AbsolutCoord>;
-            if constexpr(isRecordDim<AccessedType>)
-            {
-                LLAMA_FORCE_INLINE_RECURSIVE
-                return RecordRef<const View, AbsolutCoord>{arrayIndex(), this->view};
-            }
-            else
-            {
-                LLAMA_FORCE_INLINE_RECURSIVE
-                return this->view.access(arrayIndex(), AbsolutCoord{});
-            }
-        }
-
-        // FIXME(bgruber): remove redundancy
-        template<std::size_t... Coord>
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(RecordCoord<Coord...>) -> decltype(auto)
-        {
-            using AbsolutCoord = Cat<BoundRecordCoord, RecordCoord<Coord...>>;
-            using AccessedType = GetType<RecordDim, AbsolutCoord>;
-            if constexpr(isRecordDim<AccessedType>)
-            {
-                LLAMA_FORCE_INLINE_RECURSIVE
-                return RecordRef<View, AbsolutCoord>{arrayIndex(), this->view};
-            }
-            else
-            {
-                LLAMA_FORCE_INLINE_RECURSIVE
-                return this->view.access(arrayIndex(), AbsolutCoord{});
-            }
-        }
-
-        /// Access a record in the record dimension underneath the current record reference using a series of tags. If
-        /// the access resolves to a leaf, an l-value reference to a variable inside the \ref View storage is returned,
-        /// otherwise another RecordRef.
-        template<typename... Tags>
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(Tags...) const -> decltype(auto)
-        {
-            using RecordCoord = GetCoordFromTags<AccessibleRecordDim, Tags...>;
-
-            LLAMA_FORCE_INLINE_RECURSIVE
-            return operator()(RecordCoord{});
-        }
-
-        // FIXME(bgruber): remove redundancy
-        template<typename... Tags>
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(Tags...) -> decltype(auto)
-        {
-            using RecordCoord = GetCoordFromTags<AccessibleRecordDim, Tags...>;
-
-            LLAMA_FORCE_INLINE_RECURSIVE
-            return operator()(RecordCoord{});
-        }
-
-        template<typename T>
-        LLAMA_FN_HOST_ACC_INLINE auto operator=(const T& other) -> RecordRef&
-        {
-            // NOLINTNEXTLINE(cppcoreguidelines-c-copy-assignment-signature,misc-unconventional-assign-operator)
-            return internal::recordRefArithOperator<internal::Assign>(*this, other);
-        }
-
-        template<typename T>
-        LLAMA_FN_HOST_ACC_INLINE auto operator+=(const T& other) -> RecordRef&
-        {
-            return internal::recordRefArithOperator<internal::PlusAssign>(*this, other);
-        }
-
-        template<typename T>
-        LLAMA_FN_HOST_ACC_INLINE auto operator-=(const T& other) -> RecordRef&
-        {
-            return internal::recordRefArithOperator<internal::MinusAssign>(*this, other);
-        }
-
-        template<typename T>
-        LLAMA_FN_HOST_ACC_INLINE auto operator*=(const T& other) -> RecordRef&
-        {
-            return internal::recordRefArithOperator<internal::MultiplyAssign>(*this, other);
-        }
-
-        template<typename T>
-        LLAMA_FN_HOST_ACC_INLINE auto operator/=(const T& other) -> RecordRef&
-        {
-            return internal::recordRefArithOperator<internal::DivideAssign>(*this, other);
-        }
-
-        template<typename T>
-        LLAMA_FN_HOST_ACC_INLINE auto operator%=(const T& other) -> RecordRef&
-        {
-            return internal::recordRefArithOperator<internal::ModuloAssign>(*this, other);
-        }
-
-        template<typename T>
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator+(const RecordRef& vd, const T& t)
-        {
-            return copyRecord(vd) += t;
-        }
-
-        template<typename T, typename = std::enable_if_t<!isRecordRef<T>>>
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator+(const T& t, const RecordRef& vd)
-        {
-            return vd + t;
-        }
-
-        template<typename T>
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator-(const RecordRef& vd, const T& t)
-        {
-            return copyRecord(vd) -= t;
-        }
-
-        template<typename T>
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator*(const RecordRef& vd, const T& t)
-        {
-            return copyRecord(vd) *= t;
-        }
-
-        template<typename T, typename = std::enable_if_t<!isRecordRef<T>>>
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator*(const T& t, const RecordRef& vd)
-        {
-            return vd * t;
-        }
-
-        template<typename T>
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator/(const RecordRef& vd, const T& t)
-        {
-            return copyRecord(vd) /= t;
-        }
-
-        template<typename T>
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator%(const RecordRef& vd, const T& t)
-        {
-            return copyRecord(vd) %= t;
-        }
-
-        template<typename T>
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator==(const RecordRef& vd, const T& t) -> bool
-        {
-            return internal::recordRefRelOperator<std::equal_to<>>(vd, t);
-        }
-
-        template<typename T, typename = std::enable_if_t<!isRecordRef<T>>>
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator==(const T& t, const RecordRef& vd) -> bool
-        {
-            return vd == t;
-        }
-
-        template<typename T>
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator!=(const RecordRef& vd, const T& t) -> bool
-        {
-            return internal::recordRefRelOperator<std::not_equal_to<>>(vd, t);
-        }
-
-        template<typename T, typename = std::enable_if_t<!isRecordRef<T>>>
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator!=(const T& t, const RecordRef& vd) -> bool
-        {
-            return vd != t;
-        }
-
-        template<typename T>
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator<(const RecordRef& vd, const T& t) -> bool
-        {
-            return internal::recordRefRelOperator<std::less<>>(vd, t);
-        }
-
-        template<typename T, typename = std::enable_if_t<!isRecordRef<T>>>
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator<(const T& t, const RecordRef& vd) -> bool
-        {
-            return vd > t;
-        }
-
-        template<typename T>
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator<=(const RecordRef& vd, const T& t) -> bool
-        {
-            return internal::recordRefRelOperator<std::less_equal<>>(vd, t);
-        }
-
-        template<typename T, typename = std::enable_if_t<!isRecordRef<T>>>
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator<=(const T& t, const RecordRef& vd) -> bool
-        {
-            return vd >= t;
-        }
-
-        template<typename T>
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator>(const RecordRef& vd, const T& t) -> bool
-        {
-            return internal::recordRefRelOperator<std::greater<>>(vd, t);
-        }
-
-        template<typename T, typename = std::enable_if_t<!isRecordRef<T>>>
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator>(const T& t, const RecordRef& vd) -> bool
-        {
-            return vd < t;
-        }
-
-        template<typename T>
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator>=(const RecordRef& vd, const T& t) -> bool
-        {
-            return internal::recordRefRelOperator<std::greater_equal<>>(vd, t);
-        }
-
-        template<typename T, typename = std::enable_if_t<!isRecordRef<T>>>
-        LLAMA_FN_HOST_ACC_INLINE friend auto operator>=(const T& t, const RecordRef& vd) -> bool
-        {
-            return vd <= t;
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE auto asTuple()
-        {
-            return internal::asTupleImpl(*this, AccessibleRecordDim{});
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE auto asTuple() const
-        {
-            return internal::asTupleImpl(*this, AccessibleRecordDim{});
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE auto asFlatTuple()
-        {
-            return internal::asFlatTupleImpl(*this, AccessibleRecordDim{});
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE auto asFlatTuple() const
-        {
-            return internal::asFlatTupleImpl(*this, AccessibleRecordDim{});
-        }
-
-        template<std::size_t I>
-        LLAMA_FN_HOST_ACC_INLINE auto get() -> decltype(auto)
-        {
-            return operator()(RecordCoord<I>{});
-        }
-
-        template<std::size_t I>
-        LLAMA_FN_HOST_ACC_INLINE auto get() const -> decltype(auto)
-        {
-            return operator()(RecordCoord<I>{});
-        }
-
-        template<typename TupleLike>
-        LLAMA_FN_HOST_ACC_INLINE auto loadAs() -> TupleLike
-        {
-            static_assert(
-                internal::isDirectListInitializableFromTuple<TupleLike, decltype(asFlatTuple())>,
-                "TupleLike must be constructible from as many values as this RecordRef recursively represents "
-                "like "
-                "this: TupleLike{values...}");
-            return internal::makeFromTuple<TupleLike>(
-                asFlatTuple(),
-                std::make_index_sequence<std::tuple_size_v<decltype(asFlatTuple())>>{});
-        }
-
-        template<typename TupleLike>
-        LLAMA_FN_HOST_ACC_INLINE auto loadAs() const -> TupleLike
-        {
-            static_assert(
-                internal::isDirectListInitializableFromTuple<TupleLike, decltype(asFlatTuple())>,
-                "TupleLike must be constructible from as many values as this RecordRef recursively represents "
-                "like "
-                "this: TupleLike{values...}");
-            return internal::makeFromTuple<TupleLike>(
-                asFlatTuple(),
-                std::make_index_sequence<std::tuple_size_v<decltype(asFlatTuple())>>{});
-        }
-
-        struct Loader
-        {
-            RecordRef& vd;
-
-            template<typename T>
-            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
-            LLAMA_FN_HOST_ACC_INLINE operator T()
-            {
-                return vd.loadAs<T>();
-            }
-        };
-
-        struct LoaderConst
-        {
-            const RecordRef& vd;
-
-            template<typename T>
-            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
-            LLAMA_FN_HOST_ACC_INLINE operator T() const
-            {
-                return vd.loadAs<T>();
-            }
-        };
-
-        LLAMA_FN_HOST_ACC_INLINE auto load() -> Loader
-        {
-            return {*this};
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE auto load() const -> LoaderConst
-        {
-            return {*this};
-        }
-
-        template<typename TupleLike>
-        LLAMA_FN_HOST_ACC_INLINE void store(const TupleLike& t)
-        {
-            internal::assignTuples(asTuple(), t, std::make_index_sequence<std::tuple_size_v<TupleLike>>{});
-        }
-
-        // swap for equal RecordRef
-        LLAMA_FN_HOST_ACC_INLINE friend void swap(
-            std::conditional_t<OwnView, RecordRef&, RecordRef> a,
-            std::conditional_t<OwnView, RecordRef&, RecordRef> b) noexcept
-        {
-            forEachLeafCoord<AccessibleRecordDim>(
-                [&](auto rc) LLAMA_LAMBDA_INLINE
-                {
-                    using std::swap;
-                    swap(a(rc), b(rc));
-                });
-        }
-
-        // FIXME(bgruber): the SIMD load/store functions need to navigate back from a record ref to the contained view
-        // to find subsequent elements. This is not a great design for now and the SIMD load/store functions should
-        // probably take iterators to records.
-        template<typename T, typename Simd, typename RecordCoord>
-        friend LLAMA_FN_HOST_ACC_INLINE void internal::loadSimdRecord(const T& srcRef, Simd& dstSimd, RecordCoord rc);
-        template<typename Simd, typename T, typename RecordCoord>
-        friend LLAMA_FN_HOST_ACC_INLINE void internal::storeSimdRecord(
-            const Simd& srcSimd,
-            T&& dstRef,
-            RecordCoord rc);
-    };
-
-    // swap for heterogeneous RecordRef
-    template<
-        typename ViewA,
-        typename BoundRecordDimA,
-        bool OwnViewA,
-        typename ViewB,
-        typename BoundRecordDimB,
-        bool OwnViewB>
-    LLAMA_FN_HOST_ACC_INLINE auto swap(
-        RecordRef<ViewA, BoundRecordDimA, OwnViewA>& a,
-        RecordRef<ViewB, BoundRecordDimB, OwnViewB>& b) noexcept
-        -> std::enable_if_t<std::is_same_v<
-            typename RecordRef<ViewA, BoundRecordDimA, OwnViewA>::AccessibleRecordDim,
-            typename RecordRef<ViewB, BoundRecordDimB, OwnViewB>::AccessibleRecordDim>>
-    {
-        using LeftRecord = RecordRef<ViewA, BoundRecordDimA, OwnViewA>;
-        forEachLeafCoord<typename LeftRecord::AccessibleRecordDim>(
-            [&](auto rc) LLAMA_LAMBDA_INLINE
-            {
-                using std::swap;
-                swap(a(rc), b(rc));
-            });
-    }
-
-    template<typename View, typename BoundRecordCoord, bool OwnView>
-    auto operator<<(std::ostream& os, const RecordRef<View, BoundRecordCoord, OwnView>& vr) -> std::ostream&
-    {
-        using RecordDim = typename RecordRef<View, BoundRecordCoord, OwnView>::AccessibleRecordDim;
-        os << "{";
-        if constexpr(std::is_array_v<RecordDim>)
-        {
-            boost::mp11::mp_for_each<boost::mp11::mp_iota_c<std::extent_v<RecordDim>>>(
-                [&](auto ic)
-                {
-                    constexpr std::size_t i = decltype(ic)::value;
-                    if(i > 0)
-                        os << ", ";
-                    os << '[' << i << ']' << ": " << vr(RecordCoord<i>{});
-                });
-        }
-        else
-        {
-            boost::mp11::mp_for_each<boost::mp11::mp_iota<boost::mp11::mp_size<RecordDim>>>(
-                [&](auto ic)
-                {
-                    constexpr std::size_t i = decltype(ic)::value;
-                    if(i > 0)
-                        os << ", ";
-                    using Field = boost::mp11::mp_at_c<RecordDim, i>;
-                    os << structName<GetFieldTag<Field>>() << ": " << vr(RecordCoord<i>{});
-                });
-        }
-        os << "}";
-        return os;
-    }
-
-    template<typename RecordRefFwd, typename Functor>
-    LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeaf(RecordRefFwd&& vr, Functor&& functor)
-    {
-        using RecordRef = std::remove_reference_t<RecordRefFwd>;
-        LLAMA_FORCE_INLINE_RECURSIVE
-        forEachLeafCoord<typename RecordRef::AccessibleRecordDim>(
-            [functor = std::forward<Functor>(functor), &vr = vr](auto rc)
-                LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(constexpr mutable) { std::forward<Functor>(functor)(vr(rc)); });
-    }
-
-    namespace internal
-    {
-        // gets the value type for a given T, where T models a reference type. T is either an l-value reference, a
-        // proxy reference or a RecordRef
-        template<typename T, typename = void>
-        struct ValueOf
-        {
-            static_assert(sizeof(T) == 0, "T does not model a reference");
-        };
-
-        template<typename T>
-        struct ValueOf<T, std::enable_if_t<isRecordRef<T>>>
-        {
-            using type = One<typename T::AccessibleRecordDim>;
-        };
-
-#ifdef __cpp_lib_concepts
-        template<ProxyReference T>
-#else
-        template<typename T>
-#endif
-        struct ValueOf<T, std::enable_if_t<isProxyReference<T>>>
-        {
-            using type = typename T::value_type;
-        };
-
-        template<typename T>
-        struct ValueOf<T&>
-        {
-            using type = T;
-        };
-    } // namespace internal
-
-    /// Scope guard type. ScopedUpdate takes a copy of a value through a reference and stores it internally during
-    /// construction. The stored value is written back when ScopedUpdate is destroyed. ScopedUpdate tries to act like
-    /// the stored value as much as possible, exposing member functions of the stored value and acting like a proxy
-    /// reference if the stored value is a primitive type.
-    template<typename Reference, typename = void>
-    struct ScopedUpdate : internal::ValueOf<Reference>::type
-    {
-        using value_type = typename internal::ValueOf<Reference>::type;
-
-        /// Loads a copy of the value referenced by r. Stores r and the loaded value.
-        LLAMA_FN_HOST_ACC_INLINE explicit ScopedUpdate(Reference r) : value_type(r), ref(r)
-        {
-        }
-
-        ScopedUpdate(const ScopedUpdate&) = delete;
-        auto operator=(const ScopedUpdate&) -> ScopedUpdate& = delete;
-
-        ScopedUpdate(ScopedUpdate&&) noexcept = default;
-        auto operator=(ScopedUpdate&&) noexcept -> ScopedUpdate& = default;
-
-        using value_type::operator=;
-
-        /// Stores the internally stored value back to the referenced value.
-        LLAMA_FN_HOST_ACC_INLINE ~ScopedUpdate()
-        {
-            ref = static_cast<value_type&>(*this);
-        }
-
-        /// Get access to the stored value.
-        LLAMA_FN_HOST_ACC_INLINE auto get() -> value_type&
-        {
-            return *this;
-        }
-
-        /// Get access to the stored value.
-        LLAMA_FN_HOST_ACC_INLINE auto get() const -> const value_type&
-        {
-            return *this;
-        }
-
-    private:
-        Reference ref;
-    };
-
-    template<typename Reference>
-    struct ScopedUpdate<
-        Reference,
-        std::enable_if_t<std::is_fundamental_v<typename internal::ValueOf<Reference>::type>>>
-        : ProxyRefOpMixin<ScopedUpdate<Reference>, typename internal::ValueOf<Reference>::type>
-    {
-        using value_type = typename internal::ValueOf<Reference>::type;
-
-        LLAMA_FN_HOST_ACC_INLINE explicit ScopedUpdate(Reference r) : value(r), ref(r)
-        {
-        }
-
-        ScopedUpdate(const ScopedUpdate&) = delete;
-        auto operator=(const ScopedUpdate&) -> ScopedUpdate& = delete;
-
-        ScopedUpdate(ScopedUpdate&&) noexcept = default;
-        auto operator=(ScopedUpdate&&) noexcept -> ScopedUpdate& = default;
-
-        LLAMA_FN_HOST_ACC_INLINE auto get() -> value_type&
-        {
-            return value;
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE auto get() const -> const value_type&
-        {
-            return value;
-        }
-
-        // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
-        LLAMA_FN_HOST_ACC_INLINE operator const value_type&() const
-        {
-            return value;
-        }
-
-        // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
-        LLAMA_FN_HOST_ACC_INLINE operator value_type&()
-        {
-            return value;
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE auto operator=(value_type v) -> ScopedUpdate&
-        {
-            value = v;
-            return *this;
-        }
-
-        LLAMA_FN_HOST_ACC_INLINE ~ScopedUpdate()
-        {
-            ref = value;
-        }
-
-    private:
-        value_type value;
-        Reference ref;
-    };
-
-    namespace internal
-    {
-        template<typename T, typename = void>
-        struct ReferenceTo
-        {
-            using type = T&;
-        };
-
-        template<typename T>
-        struct ReferenceTo<T, std::enable_if_t<isRecordRef<T> && !isOne<T>>>
-        {
-            using type = T;
-        };
-
-#ifdef __cpp_lib_concepts
-        template<ProxyReference T>
-#else
-        template<typename T>
-#endif
-        struct ReferenceTo<T, std::enable_if_t<isProxyReference<T>>>
-        {
-            using type = T;
-        };
-    } // namespace internal
-
-    template<typename T>
-    ScopedUpdate(T) -> ScopedUpdate<typename internal::ReferenceTo<std::remove_reference_t<T>>::type>;
-} // namespace llama
-
-template<typename View, typename BoundRecordCoord, bool OwnView>
-struct std::tuple_size<llama::RecordRef<View, BoundRecordCoord, OwnView>> // NOLINT(cert-dcl58-cpp)
-    : boost::mp11::mp_size<typename llama::RecordRef<View, BoundRecordCoord, OwnView>::AccessibleRecordDim>
-{
-};
-
-template<std::size_t I, typename View, typename BoundRecordCoord, bool OwnView>
-struct std::tuple_element<I, llama::RecordRef<View, BoundRecordCoord, OwnView>> // NOLINT(cert-dcl58-cpp)
-{
-    using type = decltype(std::declval<llama::RecordRef<View, BoundRecordCoord, OwnView>>().template get<I>());
-};
-
-template<std::size_t I, typename View, typename BoundRecordCoord, bool OwnView>
-struct std::tuple_element<I, const llama::RecordRef<View, BoundRecordCoord, OwnView>> // NOLINT(cert-dcl58-cpp)
-{
-    using type = decltype(std::declval<const llama::RecordRef<View, BoundRecordCoord, OwnView>>().template get<I>());
-};
-
-#if CAN_USE_RANGES
-template<
-    typename ViewA,
-    typename BoundA,
-    bool OwnA,
-    typename ViewB,
-    typename BoundB,
-    bool OwnB,
-    template<class>
-    class TQual,
-    template<class>
-    class UQual>
-struct std::
-    basic_common_reference<llama::RecordRef<ViewA, BoundA, OwnA>, llama::RecordRef<ViewB, BoundB, OwnB>, TQual, UQual>
-{
-    using type = std::enable_if_t<
-        std::is_same_v<
-            typename llama::RecordRef<ViewA, BoundA, OwnA>::AccessibleRecordDim,
-            typename llama::RecordRef<ViewB, BoundB, OwnB>::AccessibleRecordDim>,
-        llama::One<typename ViewA::RecordDim>>;
-};
-#endif
-// ==
-// == ./RecordRef.hpp ==
+// == ./Concepts.hpp ==
 // ============================================================================
 
 // ============================================================================
@@ -5448,6 +2199,2733 @@ namespace llama
 // ============================================================================
 
 // ============================================================================
+// == ./ProxyRefOpMixin.hpp ==
+// ==
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+// #pragma once
+// #include "macros.hpp"    // amalgamate: file already expanded
+
+namespace llama
+{
+    /// CRTP mixin for proxy reference types to support all compound assignment and increment/decrement operators.
+    template<typename Derived, typename ValueType>
+    struct ProxyRefOpMixin
+    {
+    private:
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto derived() -> Derived&
+        {
+            return static_cast<Derived&>(*this);
+        }
+
+        // in principle, load() could be const, but we use it only from non-const functions
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto load() -> ValueType
+        {
+            return static_cast<ValueType>(derived());
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr void store(ValueType t)
+        {
+            derived() = std::move(t);
+        }
+
+    public:
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator+=(const ValueType& rhs) -> Derived&
+        {
+            ValueType lhs = load();
+            lhs += rhs;
+            store(lhs);
+            return derived();
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator-=(const ValueType& rhs) -> Derived&
+        {
+            ValueType lhs = load();
+            lhs -= rhs;
+            store(lhs);
+            return derived();
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator*=(const ValueType& rhs) -> Derived&
+        {
+            ValueType lhs = load();
+            lhs *= rhs;
+            store(lhs);
+            return derived();
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator/=(const ValueType& rhs) -> Derived&
+        {
+            ValueType lhs = load();
+            lhs /= rhs;
+            store(lhs);
+            return derived();
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator%=(const ValueType& rhs) -> Derived&
+        {
+            ValueType lhs = load();
+            lhs %= rhs;
+            store(lhs);
+            return derived();
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator<<=(const ValueType& rhs) -> Derived&
+        {
+            ValueType lhs = load();
+            lhs <<= rhs;
+            store(lhs);
+            return derived();
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator>>=(const ValueType& rhs) -> Derived&
+        {
+            ValueType lhs = load();
+            lhs >>= rhs;
+            store(lhs);
+            return derived();
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator&=(const ValueType& rhs) -> Derived&
+        {
+            ValueType lhs = load();
+            lhs &= rhs;
+            store(lhs);
+            return derived();
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator|=(const ValueType& rhs) -> Derived&
+        {
+            ValueType lhs = load();
+            lhs |= rhs;
+            store(lhs);
+            return derived();
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator^=(const ValueType& rhs) -> Derived&
+        {
+            ValueType lhs = load();
+            lhs ^= rhs;
+            store(lhs);
+            return derived();
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator++() -> Derived&
+        {
+            ValueType v = load();
+            ++v;
+            store(v);
+            return derived();
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator++(int) -> ValueType
+        {
+            ValueType v = load();
+            ValueType old = v++;
+            store(v);
+            return old;
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator--() -> Derived&
+        {
+            ValueType v = load();
+            --v;
+            store(v);
+            return derived();
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator--(int) -> ValueType
+        {
+            ValueType v = load();
+            ValueType old = v--;
+            store(v);
+            return old;
+        }
+    };
+} // namespace llama
+// ==
+// == ./ProxyRefOpMixin.hpp ==
+// ============================================================================
+
+// ============================================================================
+// == ./Copy.hpp ==
+// ==
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+// #pragma once
+	// ============================================================================
+	// == ./View.hpp ==
+	// ==
+	// Copyright 2018 Alexander Matthes
+	// SPDX-License-Identifier: GPL-3.0-or-later
+
+	// #pragma once
+		// ============================================================================
+		// == ./Accessors.hpp ==
+		// ==
+		// #pragma once
+		// #include "Concepts.hpp"    // amalgamate: file already expanded
+		// #include "ProxyRefOpMixin.hpp"    // amalgamate: file already expanded
+		// #include "macros.hpp"    // amalgamate: file already expanded
+
+		#include <atomic>
+
+		namespace llama::accessor
+		{
+		    /// Default accessor. Passes through the given reference.
+		    struct Default
+		    {
+		        template<typename Reference>
+		        LLAMA_FN_HOST_ACC_INLINE auto operator()(Reference&& r) const -> Reference
+		        {
+		            return std::forward<Reference>(r);
+		        }
+		    };
+
+		    /// Allows only read access and returns values instead of references to memory.
+		    struct ByValue
+		    {
+		        template<typename Reference>
+		        LLAMA_FN_HOST_ACC_INLINE auto operator()(Reference&& r) const
+		        {
+		            using ValueType = std::decay_t<Reference>;
+		            if constexpr(isProxyReference<ValueType>)
+		                return static_cast<typename ValueType::value_type>(r);
+		            else
+		                return ValueType{r};
+		        }
+		    };
+
+		    /// Allows only read access by qualifying the references to memory with const. Only works on l-value references.
+		    struct Const
+		    {
+		        // for l-value references
+		        template<typename T>
+		        LLAMA_FN_HOST_ACC_INLINE auto operator()(T& r) const -> const T&
+		        {
+		            return r;
+		        }
+
+		        template<typename Ref>
+		        struct Reference : ProxyRefOpMixin<Reference<Ref>, typename Ref::value_type>
+		        {
+		            using value_type = typename Ref::value_type;
+
+		            Ref ref;
+
+		            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
+		            operator value_type() const
+		            {
+		                return static_cast<value_type>(ref);
+		            }
+
+		            template<typename T>
+		            auto operator=(T) -> Reference&
+		            {
+		                static_assert(sizeof(T) == 0, "You cannot write through a Const accessor");
+		                return *this;
+		            }
+		        };
+
+		        // for proxy references
+		        template<typename ProxyReference, std::enable_if_t<llama::isProxyReference<ProxyReference>, int> = 0>
+		        LLAMA_FN_HOST_ACC_INLINE auto operator()(ProxyReference r) const
+		        {
+		            return Reference<ProxyReference>{{}, std::move(r)};
+		        }
+		    };
+
+		    /// Qualifies references to memory with __restrict. Only works on l-value references.
+		    struct Restrict
+		    {
+		        template<typename T>
+		        LLAMA_FN_HOST_ACC_INLINE auto operator()(T& r) const -> T& __restrict
+		        {
+		            return r;
+		        }
+		    };
+
+		#ifdef __cpp_lib_atomic_ref
+		    /// Accessor wrapping a reference into a std::atomic_ref. Can only wrap l-value references.
+		    struct Atomic
+		    {
+		        template<typename T>
+		        LLAMA_FN_HOST_ACC_INLINE auto operator()(T& r) const -> std::atomic_ref<T>
+		        {
+		            return std::atomic_ref<T>{r};
+		        }
+		    };
+		#endif
+		} // namespace llama::accessor
+		// ==
+		// == ./Accessors.hpp ==
+		// ============================================================================
+
+	// #include "Array.hpp"    // amalgamate: file already expanded
+		// ============================================================================
+		// == ./ArrayIndexRange.hpp ==
+		// ==
+		// #pragma once
+		// #include "ArrayExtents.hpp"    // amalgamate: file already expanded
+		// #include "Core.hpp"    // amalgamate: file already expanded
+			// ============================================================================
+			// == ./HasRanges.hpp ==
+			// ==
+			// SPDX-License-Identifier: GPL-3.0-or-later
+
+			// #pragma once
+			// TODO(bgruber): clang 10-15 (libstdc++ from gcc 11.2 or gcc 12.1) fail to compile this currently with the issue
+			// described here:
+			// https://stackoverflow.com/questions/64300832/why-does-clang-think-gccs-subrange-does-not-satisfy-gccs-ranges-begin-functi
+			// Intel LLVM compiler is also using the clang frontend
+			#define CAN_USE_RANGES 0
+			#if __has_include(<version>)
+			#    include <version>
+			#    if defined(__cpp_concepts) && defined(__cpp_lib_ranges) && (!defined(__clang__) || __clang_major__ >= 16)        \
+			        && !defined(__INTEL_LLVM_COMPILER) && (!defined(_MSC_VER) || _MSC_VER > 1932) && !defined(__NVCOMPILER)
+			#        undef CAN_USE_RANGES
+			#        define CAN_USE_RANGES 1
+			#    endif
+			#endif
+			// ==
+			// == ./HasRanges.hpp ==
+			// ============================================================================
+
+
+		#include <algorithm>
+		#include <iterator>
+		// #include <limits>    // amalgamate: file already included
+		#if CAN_USE_RANGES
+		#    include <ranges>
+		#endif
+
+		namespace llama
+		{
+		    /// Iterator supporting \ref ArrayIndexRange.
+		    template<typename ArrayExtents>
+		    struct ArrayIndexIterator
+		    {
+		        static_assert(!std::is_const_v<ArrayExtents>);
+
+		        using value_type = typename ArrayExtents::Index;
+		        using difference_type = std::ptrdiff_t;
+		        using reference = value_type;
+		        using pointer = internal::IndirectValue<value_type>;
+		        using iterator_category = std::random_access_iterator_tag;
+
+		        static constexpr std::size_t rank = ArrayExtents::rank;
+
+		        constexpr ArrayIndexIterator() noexcept = default;
+
+		        LLAMA_FN_HOST_ACC_INLINE constexpr ArrayIndexIterator(ArrayExtents extents, value_type current) noexcept
+		            : extents(extents)
+		            , current(current)
+		        {
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE
+		        constexpr auto operator*() const noexcept -> value_type
+		        {
+		            return current;
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE
+		        constexpr auto operator->() const noexcept -> pointer
+		        {
+		            return {**this};
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE
+		        constexpr auto operator++() noexcept -> ArrayIndexIterator&
+		        {
+		            current[rank - 1]++;
+		            for(auto i = static_cast<int>(rank) - 2; i >= 0; i--)
+		            {
+		                if(current[i + 1] != extents[i + 1])
+		                    return *this;
+		                current[i + 1] = 0;
+		                current[i]++;
+		            }
+		            return *this;
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE
+		        constexpr auto operator++(int) noexcept -> ArrayIndexIterator
+		        {
+		            auto tmp = *this;
+		            ++*this;
+		            return tmp;
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE
+		        constexpr auto operator--() noexcept -> ArrayIndexIterator&
+		        {
+		            current[rank - 1]--;
+		            for(auto i = static_cast<int>(rank) - 2; i >= 0; i--)
+		            {
+		                // return if no underflow
+		                if(current[i + 1] != static_cast<typename ArrayExtents::value_type>(-1))
+		                    return *this;
+		                current[i + 1] = extents[i] - 1;
+		                current[i]--;
+		            }
+		            // decrementing beyond [0, 0, ..., 0] is UB
+		            return *this;
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE
+		        constexpr auto operator--(int) noexcept -> ArrayIndexIterator
+		        {
+		            auto tmp = *this;
+		            --*this;
+		            return tmp;
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE
+		        constexpr auto operator[](difference_type i) const noexcept -> reference
+		        {
+		            return *(*this + i);
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE
+		        constexpr auto operator+=(difference_type n) noexcept -> ArrayIndexIterator&
+		        {
+		            // add n to all lower dimensions with carry
+		            for(auto i = static_cast<int>(rank) - 1; i > 0 && n != 0; i--)
+		            {
+		                n += static_cast<difference_type>(current[i]);
+		                const auto s = static_cast<difference_type>(extents[i]);
+		                auto mod = n % s;
+		                n /= s;
+		                if(mod < 0)
+		                {
+		                    mod += s;
+		                    n--;
+		                }
+		                current[i] = mod;
+		                assert(current[i] < extents[i]);
+		            }
+
+		            current[0] = static_cast<difference_type>(current[0]) + n;
+		            // current is either within bounds or at the end ([last + 1, 0, 0, ..., 0])
+		            assert(
+		                (current[0] < extents[0]
+		                 || (current[0] == extents[0]
+		                     && std::all_of(std::begin(current) + 1, std::end(current), [](auto c) { return c == 0; })))
+		                && "Iterator was moved past the end");
+
+		            return *this;
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE
+		        friend constexpr auto operator+(ArrayIndexIterator it, difference_type n) noexcept -> ArrayIndexIterator
+		        {
+		            it += n;
+		            return it;
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE
+		        friend constexpr auto operator+(difference_type n, ArrayIndexIterator it) noexcept -> ArrayIndexIterator
+		        {
+		            return it + n;
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE
+		        constexpr auto operator-=(difference_type n) noexcept -> ArrayIndexIterator&
+		        {
+		            return operator+=(-n);
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE
+		        friend constexpr auto operator-(ArrayIndexIterator it, difference_type n) noexcept -> ArrayIndexIterator
+		        {
+		            it -= n;
+		            return it;
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE
+		        friend constexpr auto operator-(const ArrayIndexIterator& a, const ArrayIndexIterator& b) noexcept
+		            -> difference_type
+		        {
+		            assert(a.extents == b.extents);
+
+		            difference_type n = a.current[rank - 1] - b.current[rank - 1];
+		            difference_type size = a.extents[rank - 1];
+		            for(auto i = static_cast<int>(rank) - 2; i >= 0; i--)
+		            {
+		                n += (a.current[i] - b.current[i]) * size;
+		                size *= a.extents[i];
+		            }
+
+		            return n;
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE
+		        friend constexpr auto operator==(
+		            const ArrayIndexIterator<ArrayExtents>& a,
+		            const ArrayIndexIterator<ArrayExtents>& b) noexcept -> bool
+		        {
+		            assert(a.extents == b.extents);
+		            return a.current == b.current;
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE
+		        friend constexpr auto operator!=(
+		            const ArrayIndexIterator<ArrayExtents>& a,
+		            const ArrayIndexIterator<ArrayExtents>& b) noexcept -> bool
+		        {
+		            return !(a == b);
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE
+		        friend constexpr auto operator<(const ArrayIndexIterator& a, const ArrayIndexIterator& b) noexcept -> bool
+		        {
+		            assert(a.extents == b.extents);
+		            return std::lexicographical_compare(
+		                std::begin(a.current),
+		                std::end(a.current),
+		                std::begin(b.current),
+		                std::end(b.current));
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE
+		        friend constexpr auto operator>(const ArrayIndexIterator& a, const ArrayIndexIterator& b) noexcept -> bool
+		        {
+		            return b < a;
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE
+		        friend constexpr auto operator<=(const ArrayIndexIterator& a, const ArrayIndexIterator& b) noexcept -> bool
+		        {
+		            return !(a > b);
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE
+		        friend constexpr auto operator>=(const ArrayIndexIterator& a, const ArrayIndexIterator& b) noexcept -> bool
+		        {
+		            return !(a < b);
+		        }
+
+		    private:
+		        ArrayExtents extents; // TODO(bgruber): we only need to store rank - 1 sizes
+		        value_type current;
+		    };
+
+		    /// Range allowing to iterate over all indices in an \ref ArrayExtents.
+		    template<typename ArrayExtents>
+		    struct ArrayIndexRange
+		        : private ArrayExtents
+		#if CAN_USE_RANGES
+		        , std::ranges::view_base
+		#endif
+		    {
+		        static_assert(!std::is_const_v<ArrayExtents>);
+
+		        constexpr ArrayIndexRange() noexcept = default;
+
+		        LLAMA_FN_HOST_ACC_INLINE
+		        constexpr explicit ArrayIndexRange(ArrayExtents extents) noexcept : ArrayExtents(extents)
+		        {
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE
+		        constexpr auto begin() const noexcept -> ArrayIndexIterator<ArrayExtents>
+		        {
+		            return {*this, typename ArrayExtents::Index{}};
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE
+		        constexpr auto end() const noexcept -> ArrayIndexIterator<ArrayExtents>
+		        {
+		            auto endPos = typename ArrayExtents::Index{};
+		            endPos[0] = this->toArray()[0];
+		            return {*this, endPos};
+		        }
+		    };
+		} // namespace llama
+		// ==
+		// == ./ArrayIndexRange.hpp ==
+		// ============================================================================
+
+		// ============================================================================
+		// == ./BlobAllocators.hpp ==
+		// ==
+		// Copyright 2018 Alexander Matthes
+		// SPDX-License-Identifier: GPL-3.0-or-later
+
+		// #pragma once
+		// #include "Array.hpp"    // amalgamate: file already expanded
+		// #include "Concepts.hpp"    // amalgamate: file already expanded
+		// #include "macros.hpp"    // amalgamate: file already expanded
+
+		#include <cstddef>
+		#include <memory>
+		#include <vector>
+		#if defined(_LIBCPP_VERSION) && _LIBCPP_VERSION < 11000
+		#    include <boost/shared_ptr.hpp>
+		#endif
+		#if __has_include(<cuda_runtime.h>)
+		#    include <cuda_runtime.h>
+		#endif
+		#if __has_include(<alpaka/alpaka.hpp>)
+		#    include <alpaka/alpaka.hpp>
+		#endif
+
+		namespace llama::bloballoc
+		{
+		    /// Allocates statically sized memory for a \ref View, which is copied each time a \ref View is copied.
+		    /// \tparam BytesToReserve the amount of memory to reserve.
+		    template<std::size_t BytesToReserve>
+		    struct Array
+		    {
+		        template<std::size_t Alignment>
+		        LLAMA_FN_HOST_ACC_INLINE auto operator()(
+		            std::integral_constant<std::size_t, Alignment>,
+		            [[maybe_unused]] std::size_t count) const
+		        {
+		            assert(count == BytesToReserve);
+		            struct alignas(Alignment) AlignedArray : llama::Array<std::byte, BytesToReserve>
+		            {
+		            };
+		            return AlignedArray{};
+		        }
+		    };
+		#ifdef __cpp_lib_concepts
+		    static_assert(BlobAllocator<Array<64>>);
+		#endif
+
+		    /// Allocates heap memory managed by a `std::unique_ptr` for a \ref View. This memory can only be uniquely owned by
+		    /// a single \ref View.
+		    struct UniquePtr
+		    {
+		        template<std::size_t Alignment>
+		        auto operator()(std::integral_constant<std::size_t, Alignment>, std::size_t count) const
+		        {
+		            auto* ptr
+		                = static_cast<std::byte*>(::operator new[](count * sizeof(std::byte), std::align_val_t{Alignment}));
+		            auto deleter = [](std::byte* ptr) { ::operator delete[](ptr, std::align_val_t{Alignment}); };
+		            return std::unique_ptr<std::byte[], decltype(deleter)>{ptr, deleter};
+		        }
+		    };
+		#ifdef __cpp_lib_concepts
+		    static_assert(BlobAllocator<UniquePtr>);
+		#endif
+
+		    /// Allocates heap memory managed by a `std::shared_ptr` for a \ref View. This memory is shared between all copies
+		    /// of a \ref View.
+		    struct SharedPtr
+		    {
+		        // libc++ below 11.0.0 does not yet support shared_ptr with arrays
+		        template<typename T>
+		        using shared_ptr =
+		#if defined(_LIBCPP_VERSION) && _LIBCPP_VERSION < 11000
+		            boost::shared_ptr<T>;
+		#else
+		            std::shared_ptr<T>;
+		#endif
+
+		        template<std::size_t Alignment>
+		        auto operator()(std::integral_constant<std::size_t, Alignment>, std::size_t count) const
+		            -> shared_ptr<std::byte[]>
+		        {
+		            auto* ptr
+		                = static_cast<std::byte*>(::operator new[](count * sizeof(std::byte), std::align_val_t{Alignment}));
+		            auto deleter = [](std::byte* ptr) { ::operator delete[](ptr, std::align_val_t{Alignment}); };
+		            return shared_ptr<std::byte[]>{ptr, deleter};
+		        }
+		    };
+		#ifdef __cpp_lib_concepts
+		    static_assert(BlobAllocator<SharedPtr>);
+		#endif
+
+		    /// An STL compatible allocator allowing to specify alignment.
+		    template<typename T, std::size_t Alignment>
+		    struct AlignedAllocator
+		    {
+		        using value_type = T;
+
+		        inline AlignedAllocator() noexcept = default;
+
+		        template<typename T2>
+		        inline explicit AlignedAllocator(const AlignedAllocator<T2, Alignment>&) noexcept
+		        {
+		        }
+
+		        inline auto allocate(std::size_t n) -> T*
+		        {
+		            return static_cast<T*>(::operator new[](n * sizeof(T), std::align_val_t{Alignment}));
+		        }
+
+		        inline void deallocate(T* p, std::size_t)
+		        {
+		            ::operator delete[](p, std::align_val_t{Alignment});
+		        }
+
+		        template<typename T2>
+		        struct rebind // NOLINT(readability-identifier-naming)
+		        {
+		            using other = AlignedAllocator<T2, Alignment>;
+		        };
+
+		        auto operator!=(const AlignedAllocator<T, Alignment>& other) const -> bool
+		        {
+		            return !(*this == other);
+		        }
+
+		        auto operator==(const AlignedAllocator<T, Alignment>&) const -> bool
+		        {
+		            return true;
+		        }
+		    };
+
+		    /// Allocates heap memory managed by a `std::vector` for a \ref View, which is copied each time a \ref View is
+		    /// copied.
+		    struct Vector
+		    {
+		        template<std::size_t Alignment>
+		        inline auto operator()(std::integral_constant<std::size_t, Alignment>, std::size_t count) const
+		        {
+		            return std::vector<std::byte, AlignedAllocator<std::byte, Alignment>>(count);
+		        }
+		    };
+		#ifdef __cpp_lib_concepts
+		    static_assert(BlobAllocator<Vector>);
+		#endif
+
+		#if __has_include(<cuda_runtime.h>)
+		    /// Allocates GPU device memory using cudaMalloc. The memory is managed by a std::unique_ptr with a deleter that
+		    /// calles cudaFree. If you want to use a view created with this allocator in a CUDA kernel, call \ref shallowCopy
+		    /// on the view before passing it to the kernel.
+		    struct CudaMalloc
+		    {
+		        template<std::size_t FieldAlignment>
+		        inline auto operator()(std::integral_constant<std::size_t, FieldAlignment>, std::size_t count) const
+		        {
+		            std::byte* p = nullptr;
+		            if(const auto code = cudaMalloc(&p, count); code != cudaSuccess)
+		                throw std::runtime_error(std::string{"cudaMalloc failed with code "} + cudaGetErrorString(code));
+		            if(reinterpret_cast<std::uintptr_t>(p) & (FieldAlignment - 1 != 0u))
+		                throw std::runtime_error{"cudaMalloc does not align sufficiently"};
+		            auto deleter = [](void* p)
+		            {
+		                if(const auto code = cudaFree(p); code != cudaSuccess)
+		                    throw std::runtime_error(std::string{"cudaFree failed with code "} + cudaGetErrorString(code));
+		            };
+		            return std::unique_ptr<std::byte[], decltype(deleter)>(p, deleter);
+		        }
+		    };
+		#endif
+
+		#if __has_include(<alpaka/alpaka.hpp>)
+		    template<typename Size, typename Dev>
+		    struct AlpakaBuf
+		    {
+		        Dev& dev;
+
+		        template<std::size_t Alignment>
+		        inline auto operator()(std::integral_constant<std::size_t, Alignment>, std::size_t count) const
+		        {
+		            return alpaka::allocBuf<std::byte, Size>(dev, static_cast<Size>(count));
+		        }
+		    };
+		#endif
+		} // namespace llama::bloballoc
+		// ==
+		// == ./BlobAllocators.hpp ==
+		// ============================================================================
+
+	// #include "Concepts.hpp"    // amalgamate: file already expanded
+	// #include "Core.hpp"    // amalgamate: file already expanded
+	// #include "HasRanges.hpp"    // amalgamate: file already expanded
+	// #include "macros.hpp"    // amalgamate: file already expanded
+		// ============================================================================
+		// == ./mapping/One.hpp ==
+		// ==
+		// Copyright 2018 Alexander Matthes
+		// SPDX-License-Identifier: GPL-3.0-or-later
+
+		// #pragma once
+		// #include "../Core.hpp"    // amalgamate: file already expanded
+			// ============================================================================
+			// == ./mapping/Common.hpp ==
+			// ==
+			// Copyright 2018 Alexander Matthes
+			// SPDX-License-Identifier: GPL-3.0-or-later
+
+			// #pragma once
+			// #include "../Core.hpp"    // amalgamate: file already expanded
+
+			// #include <atomic>    // amalgamate: file already included
+			#include <climits>
+			#ifndef __cpp_lib_atomic_ref
+			#    include <boost/atomic/atomic_ref.hpp>
+			#endif
+
+			namespace llama::mapping
+			{
+			    template<typename TArrayExtents, typename TRecordDim>
+			    struct MappingBase : private TArrayExtents
+			    {
+			        using ArrayExtents = TArrayExtents;
+			        using ArrayIndex = typename ArrayExtents::Index;
+			        using RecordDim = TRecordDim;
+			        using size_type = typename ArrayExtents::value_type;
+
+			        constexpr MappingBase() = default;
+
+			        LLAMA_FN_HOST_ACC_INLINE
+			        constexpr explicit MappingBase(ArrayExtents extents, RecordDim = {}) : ArrayExtents(extents)
+			        {
+			        }
+
+			        LLAMA_FN_HOST_ACC_INLINE constexpr auto extents() const -> ArrayExtents
+			        {
+			            return static_cast<const ArrayExtents&>(*this);
+			        }
+			    };
+
+			    /// Functor that maps an \ref ArrayIndex into linear numbers the way C++ arrays work. The fast moving index of the
+			    /// ArrayIndex object should be the last one. E.g. ArrayIndex<3> a; stores 3 indices where a[2] should be
+			    /// incremented in the innermost loop.
+			    struct LinearizeArrayDimsCpp
+			    {
+			        template<typename ArrayExtents>
+			        LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const ArrayExtents& extents) -> typename ArrayExtents::value_type
+			        {
+			            return product(extents);
+			        }
+
+			        /// \param ai Index in the array dimensions.
+			        /// \param extents Total size of the array dimensions.
+			        /// \return Linearized index.
+			        template<typename ArrayExtents>
+			        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator()(
+			            const typename ArrayExtents::Index& ai,
+			            const ArrayExtents& extents) const -> typename ArrayExtents::value_type
+			        {
+			            if constexpr(ArrayExtents::rank == 0)
+			                return 0;
+			            else
+			            {
+			                auto address = ai[0];
+			                for(int i = 1; i < static_cast<int>(ArrayExtents::rank); i++)
+			                {
+			                    address *= extents[i];
+			                    address += ai[i];
+			                }
+			                return address;
+			            }
+			        }
+			    };
+
+			    /// Functor that maps a \ref ArrayIndex into linear numbers the way Fortran arrays work. The fast moving index of
+			    /// the ArrayIndex object should be the last one. E.g. ArrayIndex<3> a; stores 3 indices where a[2] should be
+			    /// incremented in the innermost loop.
+			    struct LinearizeArrayDimsFortran
+			    {
+			        template<typename ArrayExtents>
+			        LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const ArrayExtents& extents) -> typename ArrayExtents::value_type
+			        {
+			            return product(extents);
+			        }
+
+			        /// \param ai Index in the array dimensions.
+			        /// \param extents Total size of the array dimensions.
+			        /// \return Linearized index.
+			        template<typename ArrayExtents>
+			        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator()(
+			            const typename ArrayExtents::Index& ai,
+			            const ArrayExtents& extents) const -> typename ArrayExtents::value_type
+			        {
+			            if constexpr(ArrayExtents::rank == 0)
+			                return 0;
+			            else
+			            {
+			                auto address = ai[ArrayExtents::rank - 1];
+			                for(int i = static_cast<int>(ArrayExtents::rank) - 2; i >= 0; i--)
+			                {
+			                    address *= extents[i];
+			                    address += ai[i];
+			                }
+			                return address;
+			            }
+			        }
+			    };
+
+			    /// Functor that maps an \ref ArrayIndex into linear numbers using the Z-order space filling curve (Morton codes).
+			    struct LinearizeArrayDimsMorton
+			    {
+			        template<typename ArrayExtents>
+			        LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const ArrayExtents& extents) const ->
+			            typename ArrayExtents::value_type
+			        {
+			            if constexpr(ArrayExtents::rank == 0)
+			                return 0;
+			            else
+			            {
+			                auto longest = extents[0];
+			                for(int i = 1; i < static_cast<int>(ArrayExtents::rank); i++)
+			                    longest = std::max(longest, extents[i]);
+			                const auto longestPO2 = bitCeil(longest);
+			                return intPow(longestPO2, static_cast<typename ArrayExtents::value_type>(ArrayExtents::rank));
+			            }
+			        }
+
+			        /// \param ai Coordinate in the array dimensions.
+			        /// \param extents Total size of the array dimensions.
+			        /// \return Linearized index.
+			        template<typename ArrayExtents>
+			        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator()(
+			            const typename ArrayExtents::Index& ai,
+			            [[maybe_unused]] const ArrayExtents& extents) const -> typename ArrayExtents::value_type
+			        {
+			            using size_type = typename ArrayExtents::value_type;
+			            constexpr auto rank = static_cast<size_type>(ArrayExtents::rank);
+			            size_type r = 0;
+			            for(size_type bit = 0; bit < (static_cast<size_type>(sizeof(size_type)) * CHAR_BIT) / rank; bit++)
+			                for(size_type i = 0; i < rank; i++)
+			                    r |= (ai[i] & (size_type{1} << bit)) << ((bit + 1) * (rank - 1) - i);
+			            return r;
+			        }
+
+			    private:
+			        template<typename T>
+			        LLAMA_FN_HOST_ACC_INLINE static constexpr auto bitCeil(T n) -> T
+			        {
+			            T r = 1u;
+			            while(r < n)
+			                r <<= 1u;
+			            return r;
+			        }
+
+			        template<typename T>
+			        LLAMA_FN_HOST_ACC_INLINE static constexpr auto intPow(T b, T e) -> T
+			        {
+			            e--;
+			            auto r = b;
+			            while(e != 0u)
+			            {
+			                r *= b;
+			                e--;
+			            }
+			            return r;
+			        }
+			    };
+
+			    /// Flattens the record dimension in the order fields are written.
+			    template<typename RecordDim>
+			    struct FlattenRecordDimInOrder
+			    {
+			        using FlatRecordDim = llama::FlatRecordDim<RecordDim>;
+
+			        template<std::size_t... RecordCoords>
+			        static constexpr std::size_t flatIndex = flatRecordCoord<RecordDim, RecordCoord<RecordCoords...>>;
+			    };
+
+			    /// Flattens the record dimension by sorting the fields according to a given predicate on the field types.
+			    /// @tparam Less A binary predicate accepting two field types, which exposes a member value. Value must be true if
+			    /// the first field type is less than the second one, otherwise false.
+			    template<typename RecordDim, template<typename, typename> typename Less>
+			    struct FlattenRecordDimSorted
+			    {
+			    private:
+			        using FlatOrigRecordDim = llama::FlatRecordDim<RecordDim>;
+			        using FlatSortedRecordDim = boost::mp11::mp_sort<FlatOrigRecordDim, Less>;
+
+			        template<typename A, typename B>
+			        using LessWithIndices
+			            = Less<boost::mp11::mp_at<FlatOrigRecordDim, A>, boost::mp11::mp_at<FlatOrigRecordDim, B>>;
+
+			        // A permutation from new FlatSortedRecordDim index to old FlatOrigRecordDim index
+			        using PermutedIndices
+			            = boost::mp11::mp_sort<boost::mp11::mp_iota<boost::mp11::mp_size<FlatOrigRecordDim>>, LessWithIndices>;
+
+			        template<typename A, typename B>
+			        using LessInvertPermutation = std::bool_constant<(
+			            boost::mp11::mp_at<PermutedIndices, A>::value < boost::mp11::mp_at<PermutedIndices, B>::value)>;
+
+			        // A permutation from old FlatOrigRecordDim index to new FlatSortedRecordDim index
+			        using InversePermutedIndices = boost::mp11::
+			            mp_sort<boost::mp11::mp_iota<boost::mp11::mp_size<FlatOrigRecordDim>>, LessInvertPermutation>;
+
+			    public:
+			        using FlatRecordDim = FlatSortedRecordDim;
+
+			        template<std::size_t... RecordCoords>
+			        static constexpr std::size_t flatIndex = []() constexpr
+			        {
+			            constexpr auto indexBefore = flatRecordCoord<RecordDim, RecordCoord<RecordCoords...>>;
+			            constexpr auto indexAfter = boost::mp11::mp_at_c<InversePermutedIndices, indexBefore>::value;
+			            return indexAfter;
+			        }
+			        ();
+			    };
+
+			    namespace internal
+			    {
+			        template<typename A, typename B>
+			        using LessAlignment = std::bool_constant<alignof(A) < alignof(B)>;
+
+			        template<typename A, typename B>
+			        using MoreAlignment = std::bool_constant<(alignof(A) > alignof(B))>;
+			    } // namespace internal
+
+			    /// Flattens and sorts the record dimension by increasing alignment of its fields.
+			    template<typename RecordDim>
+			    using FlattenRecordDimIncreasingAlignment = FlattenRecordDimSorted<RecordDim, internal::LessAlignment>;
+
+			    /// Flattens and sorts the record dimension by decreasing alignment of its fields.
+			    template<typename RecordDim>
+			    using FlattenRecordDimDecreasingAlignment = FlattenRecordDimSorted<RecordDim, internal::MoreAlignment>;
+
+			    /// Flattens and sorts the record dimension by the alignment of its fields to minimize padding.
+			    template<typename RecordDim>
+			    using FlattenRecordDimMinimizePadding = FlattenRecordDimIncreasingAlignment<RecordDim>;
+
+			    namespace internal
+			    {
+			        template<typename CountType>
+			        LLAMA_FN_HOST_ACC_INLINE void atomicInc(CountType& i)
+			        {
+			#ifdef __CUDA_ARCH__
+			            // if you get an error here that there is no overload of atomicAdd, your CMAKE_CUDA_ARCHITECTURE might be
+			            // too low or you need to use a smaller CountType for the Trace or Heatmap mapping.
+			            atomicAdd(&i, CountType{1});
+			#elif defined(__cpp_lib_atomic_ref)
+			            ++std::atomic_ref<CountType>{i};
+			#else
+			            ++boost::atomic_ref<CountType>{i};
+			#endif
+			        }
+			    } // namespace internal
+
+
+			    enum class FieldAlignment
+			    {
+			        Pack,
+			        Align
+			    };
+			} // namespace llama::mapping
+			// ==
+			// == ./mapping/Common.hpp ==
+			// ============================================================================
+
+
+		namespace llama::mapping
+		{
+		    /// Maps all array dimension indices to the same location and layouts struct members consecutively. This mapping is
+		    /// used for temporary, single element views.
+		    /// \tparam TFieldAlignment If Align, padding bytes are inserted to guarantee that struct members are properly
+		    /// aligned. If false, struct members are tightly packed.
+		    /// \tparam FlattenRecordDim Defines how the record dimension's fields should be flattened. See \ref
+		    /// FlattenRecordDimInOrder, \ref FlattenRecordDimIncreasingAlignment, \ref FlattenRecordDimDecreasingAlignment and
+		    /// \ref FlattenRecordDimMinimizePadding.
+		    template<
+		        typename TArrayExtents,
+		        typename TRecordDim,
+		        FieldAlignment TFieldAlignment = FieldAlignment::Align,
+		        template<typename> typename FlattenRecordDim = FlattenRecordDimMinimizePadding>
+		    struct One : MappingBase<TArrayExtents, TRecordDim>
+		    {
+		    private:
+		        using Base = MappingBase<TArrayExtents, TRecordDim>;
+		        using size_type = typename Base::size_type;
+
+		    public:
+		        inline static constexpr FieldAlignment fieldAlignment = TFieldAlignment;
+		        using Flattener = FlattenRecordDim<TRecordDim>;
+		        static constexpr std::size_t blobCount = 1;
+
+		#ifndef __NVCC__
+		        using Base::Base;
+		#else
+		        constexpr One() = default;
+
+		        LLAMA_FN_HOST_ACC_INLINE constexpr explicit One(TArrayExtents extents, TRecordDim = {}) : Base(extents)
+		        {
+		        }
+		#endif
+
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(size_type) const -> size_type
+		        {
+		            return flatSizeOf<
+		                typename Flattener::FlatRecordDim,
+		                fieldAlignment == FieldAlignment::Align,
+		                false>; // no tail padding
+		        }
+
+		        template<std::size_t... RecordCoords>
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
+		            typename Base::ArrayIndex,
+		            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset<size_type>
+		        {
+		            constexpr std::size_t flatFieldIndex =
+		#ifdef __NVCC__
+		                *& // mess with nvcc compiler state to workaround bug
+		#endif
+		                 Flattener::template flatIndex<RecordCoords...>;
+		            constexpr auto offset = static_cast<size_type>(flatOffsetOf<
+		                                                           typename Flattener::FlatRecordDim,
+		                                                           flatFieldIndex,
+		                                                           fieldAlignment == FieldAlignment::Align>);
+		            return {size_type{0}, offset};
+		        }
+		    };
+
+		    /// One mapping preserving the alignment of the field types by inserting padding.
+		    /// \see One
+		    template<typename ArrayExtents, typename RecordDim>
+		    using AlignedOne = One<ArrayExtents, RecordDim, FieldAlignment::Align, FlattenRecordDimInOrder>;
+
+		    /// One mapping preserving the alignment of the field types by inserting padding and permuting the field order to
+		    /// minimize this padding.
+		    /// \see One
+		    template<typename ArrayExtents, typename RecordDim>
+		    using MinAlignedOne = One<ArrayExtents, RecordDim, FieldAlignment::Align, FlattenRecordDimMinimizePadding>;
+
+		    /// One mapping packing the field types tightly, violating the types' alignment requirements.
+		    /// \see One
+		    template<typename ArrayExtents, typename RecordDim>
+		    using PackedOne = One<ArrayExtents, RecordDim, FieldAlignment::Pack, FlattenRecordDimInOrder>;
+
+		    /// Binds parameters to a \ref One mapping except for array and record dimension, producing a quoted
+		    /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
+		    template<FieldAlignment FieldAlignment, template<typename> typename FlattenRecordDim>
+		    struct BindOne
+		    {
+		        template<typename ArrayExtents, typename RecordDim>
+		        using fn = One<ArrayExtents, RecordDim, FieldAlignment, FlattenRecordDim>;
+		    };
+
+		    template<typename Mapping>
+		    inline constexpr bool isOne = false;
+
+		    template<
+		        typename ArrayExtents,
+		        typename RecordDim,
+		        FieldAlignment FieldAlignment,
+		        template<typename>
+		        typename FlattenRecordDim>
+		    inline constexpr bool isOne<One<ArrayExtents, RecordDim, FieldAlignment, FlattenRecordDim>> = true;
+		} // namespace llama::mapping
+		// ==
+		// == ./mapping/One.hpp ==
+		// ============================================================================
+
+
+	// #include <type_traits>    // amalgamate: file already included
+
+	namespace llama
+	{
+	#ifdef __cpp_lib_concepts
+	    template<typename TMapping, Blob BlobType, typename TAccessor>
+	#else
+	    template<typename TMapping, typename BlobType, typename TAccessor>
+	#endif
+	    struct View;
+
+	    namespace internal
+	    {
+	        template<typename Allocator, typename RecordDim>
+	        using AllocatorBlobType
+	            = decltype(std::declval<Allocator>()(std::integral_constant<std::size_t, alignOf<RecordDim>>{}, 0));
+
+	        template<typename Allocator, typename Mapping, std::size_t... Is>
+	        LLAMA_FN_HOST_ACC_INLINE auto makeBlobArray(
+	            const Allocator& alloc,
+	            const Mapping& mapping,
+	            std::integer_sequence<std::size_t, Is...>)
+	            -> Array<AllocatorBlobType<Allocator, typename Mapping::RecordDim>, Mapping::blobCount>
+	        {
+	            [[maybe_unused]] constexpr auto alignment
+	                = alignOf<typename Mapping::RecordDim>; // g++-12 warns that alignment is unused
+	            LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
+	            return {alloc(std::integral_constant<std::size_t, alignment>{}, mapping.blobSize(Is))...};
+	            LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
+	        } // NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
+	    } // namespace internal
+
+	    /// Same as \ref allocView but does not run field constructors.
+	#ifdef __cpp_lib_concepts
+	    template<typename Mapping, BlobAllocator Allocator = bloballoc::Vector, typename Accessor = accessor::Default>
+	#else
+	    template<typename Mapping, typename Allocator = bloballoc::Vector, typename Accessor = accessor::Default>
+	#endif
+	    LLAMA_FN_HOST_ACC_INLINE auto allocViewUninitialized(
+	        Mapping mapping = {},
+	        const Allocator& alloc = {},
+	        Accessor accessor = {})
+	    {
+	        auto blobs = internal::makeBlobArray(alloc, mapping, std::make_index_sequence<Mapping::blobCount>{});
+	        return View<Mapping, internal::AllocatorBlobType<Allocator, typename Mapping::RecordDim>, Accessor>{
+	            std::move(mapping),
+	            std::move(blobs),
+	            std::move(accessor)};
+	    }
+
+	    namespace internal
+	    {
+	        template<typename Mapping, typename RecordCoord, typename = void>
+	        struct IsComputed : std::false_type
+	        {
+	        };
+
+	        template<typename Mapping, typename RecordCoord>
+	        struct IsComputed<Mapping, RecordCoord, std::void_t<decltype(Mapping::isComputed(RecordCoord{}))>>
+	            : std::bool_constant<Mapping::isComputed(RecordCoord{})>
+	        {
+	        };
+	    } // namespace internal
+
+	    /// Returns true if the field accessed via the given mapping and record coordinate is a computed value.
+	    template<typename Mapping, typename RecordCoord>
+	    inline constexpr bool isComputed = internal::IsComputed<Mapping, RecordCoord>::value;
+
+	#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ <= 4
+	    namespace internal
+	    {
+	        template<typename View>
+	        struct NvccWorkaroundLambda
+	        {
+	            using RecordDim = typename View::RecordDim;
+	            using ArrayIndex = typename View::ArrayIndex;
+
+	            template<typename RecordCoord>
+	            void operator()(RecordCoord rc) const
+	            {
+	                using FieldType = GetType<RecordDim, decltype(rc)>;
+	                using RefType = decltype(view(ai)(rc));
+	                // this handles physical and computed mappings
+	                if constexpr(std::is_lvalue_reference_v<RefType>)
+	                {
+	                    new(&view(ai)(rc)) FieldType;
+	                }
+	                else if constexpr(isProxyReference<RefType>)
+	                {
+	                    view(ai)(rc) = FieldType{};
+	                }
+	            }
+
+	            View& view;
+	            ArrayIndex ai;
+	        };
+	    } // namespace internal
+	#endif
+
+	    /// Runs the constructor of all fields reachable through the given view. Computed fields are constructed if they
+	    /// return l-value references. If the mapping is a computed
+	    template<typename Mapping, typename BlobType, typename Accessor>
+	    LLAMA_FN_HOST_ACC_INLINE void constructFields(View<Mapping, BlobType, Accessor>& view)
+	    {
+	        using View = View<Mapping, BlobType, Accessor>;
+	        using RecordDim = typename View::RecordDim;
+	        forEachADCoord(
+	            view.mapping().extents(),
+	            [&]([[maybe_unused]] typename View::ArrayIndex ai)
+	            {
+	                if constexpr(isRecordDim<RecordDim>)
+	                {
+	                    forEachLeafCoord<RecordDim>(
+	#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ <= 4
+	                        internal::NvccWorkaroundLambda<View>{view, ai}
+	#else
+	                        [&](auto rc)
+	                        {
+	                            using FieldType = GetType<RecordDim, decltype(rc)>;
+	                            using RefType = decltype(view(ai)(rc));
+	                            // this handles physical and computed mappings
+	                            if constexpr(isProxyReference<RefType>)
+	                            {
+	                                view(ai)(rc) = FieldType{};
+	                            }
+	                            else if constexpr(
+	                                std::is_lvalue_reference_v<
+	                                    RefType> && !std::is_const_v<std::remove_reference_t<RefType>>)
+	                            {
+	                                new(&view(ai)(rc)) FieldType;
+	                            }
+	                        }
+	#endif
+	                    );
+	                }
+	                else
+	                {
+	                    // this handles physical and computed mappings
+	                    using RefType = decltype(view(ai));
+	                    if constexpr(isProxyReference<RefType>)
+	                    {
+	                        view(ai) = RecordDim{};
+	                    }
+	                    else if constexpr(
+	                        std::is_lvalue_reference_v<RefType> && !std::is_const_v<std::remove_reference_t<RefType>>)
+	                    {
+	                        new(&view(ai)) RecordDim;
+	                    }
+	                }
+	            });
+	    }
+
+	    /// Creates a view based on the given mapping, e.g. \ref AoS or \ref :SoA. For allocating the view's underlying
+	    /// memory, the specified allocator callable is used (or the default one, which is \ref bloballoc::Vector). The
+	    /// allocator callable is called with the alignment and size of bytes to allocate for each blob of the mapping.
+	    /// The constructors are run for all fields by calling \ref constructFields. This function is the preferred way to
+	    /// create a \ref View. See also \ref allocViewUninitialized.
+	#ifdef __cpp_lib_concepts
+	    template<typename Mapping, BlobAllocator Allocator = bloballoc::Vector, typename Accessor = accessor::Default>
+	#else
+	    template<typename Mapping, typename Allocator = bloballoc::Vector, typename Accessor = accessor::Default>
+	#endif
+	    LLAMA_FN_HOST_ACC_INLINE auto allocView(Mapping mapping = {}, const Allocator& alloc = {}, Accessor accessor = {})
+	        -> View<Mapping, internal::AllocatorBlobType<Allocator, typename Mapping::RecordDim>, Accessor>
+	    {
+	        auto view = allocViewUninitialized(std::move(mapping), alloc, accessor);
+	        constructFields(view);
+	        return view;
+	    }
+
+	    /// Same as \ref allocViewStack but does not run field constructors.
+	    template<std::size_t Dim, typename RecordDim>
+	    LLAMA_FN_HOST_ACC_INLINE auto allocViewStackUninitialized() -> decltype(auto)
+	    {
+	        constexpr auto mapping = mapping::MinAlignedOne<ArrayExtentsNCube<int, Dim, 1>, RecordDim>{};
+	        return allocViewUninitialized(mapping, bloballoc::Array<mapping.blobSize(0)>{});
+	    }
+
+	    /// Allocates a \ref View holding a single record backed by stack memory (\ref bloballoc::Array).
+	    /// \tparam Dim Dimension of the \ref ArrayExtents of the \ref View.
+	    template<std::size_t Dim, typename RecordDim>
+	    LLAMA_FN_HOST_ACC_INLINE auto allocViewStack() -> decltype(auto)
+	    {
+	        auto view = allocViewStackUninitialized<Dim, RecordDim>();
+	        constructFields(view);
+	        return view;
+	    }
+
+	    template<typename View, typename BoundRecordCoord = RecordCoord<>, bool OwnView = false>
+	    struct RecordRef;
+
+	    /// A \ref RecordRef that owns and holds a single value.
+	    template<typename RecordDim>
+	    using One = RecordRef<decltype(allocViewStack<0, RecordDim>()), RecordCoord<>, true>;
+
+	    /// Is true, if T is an instance of \ref One.
+	    template<typename T>
+	    inline constexpr bool isOne = false;
+
+	    template<typename View, typename BoundRecordCoord>
+	    inline constexpr bool isOne<RecordRef<View, BoundRecordCoord, true>> = true;
+
+	    // TODO(bgruber): Higher dimensional iterators might not have good codegen. Multiple nested loops seem to be
+	    // superior to a single iterator over multiple dimensions. At least compilers are able to produce better code.
+	    // std::mdspan also discovered similar difficulties and there was a discussion in WG21 in Oulu 2016 to
+	    // remove/postpone iterators from the design. In std::mdspan's design, the iterator iterated over the co-domain.
+	    template<typename View>
+	    struct Iterator
+	    {
+	        using ArrayIndexIterator = llama::ArrayIndexIterator<typename View::ArrayExtents>;
+
+	        using iterator_category = std::random_access_iterator_tag;
+	        using value_type = One<typename View::RecordDim>;
+	        using difference_type = typename ArrayIndexIterator::difference_type;
+	        using pointer = internal::IndirectValue<RecordRef<View>>;
+	        using reference = RecordRef<View>;
+
+	        constexpr Iterator() = default;
+
+	        LLAMA_FN_HOST_ACC_INLINE constexpr Iterator(ArrayIndexIterator arrayIndex, View* view)
+	            : arrayIndex(arrayIndex)
+	            , view(view)
+	        {
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        constexpr auto operator++() -> Iterator&
+	        {
+	            ++arrayIndex;
+	            return *this;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        constexpr auto operator++(int) -> Iterator
+	        {
+	            auto tmp = *this;
+	            ++*this;
+	            return tmp;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        constexpr auto operator--() -> Iterator&
+	        {
+	            --arrayIndex;
+	            return *this;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        constexpr auto operator--(int) -> Iterator
+	        {
+	            auto tmp{*this};
+	            --*this;
+	            return tmp;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        constexpr auto operator*() const -> reference
+	        {
+	            return (*view)(*arrayIndex);
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        constexpr auto operator->() const -> pointer
+	        {
+	            return {**this};
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        constexpr auto operator[](difference_type i) const -> reference
+	        {
+	            return *(*this + i);
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        constexpr auto operator+=(difference_type n) -> Iterator&
+	        {
+	            arrayIndex += n;
+	            return *this;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        friend constexpr auto operator+(Iterator it, difference_type n) -> Iterator
+	        {
+	            it += n;
+	            return it;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        friend constexpr auto operator+(difference_type n, Iterator it) -> Iterator
+	        {
+	            return it + n;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        constexpr auto operator-=(difference_type n) -> Iterator&
+	        {
+	            arrayIndex -= n;
+	            return *this;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        friend constexpr auto operator-(Iterator it, difference_type n) -> Iterator
+	        {
+	            it -= n;
+	            return it;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        friend constexpr auto operator-(const Iterator& a, const Iterator& b) -> difference_type
+	        {
+	            assert(a.view == b.view);
+	            return static_cast<std::ptrdiff_t>(a.arrayIndex - b.arrayIndex);
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        friend constexpr auto operator==(const Iterator& a, const Iterator& b) -> bool
+	        {
+	            assert(a.view == b.view);
+	            return a.arrayIndex == b.arrayIndex;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        friend constexpr auto operator!=(const Iterator& a, const Iterator& b) -> bool
+	        {
+	            return !(a == b);
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        friend constexpr auto operator<(const Iterator& a, const Iterator& b) -> bool
+	        {
+	            assert(a.view == b.view);
+	            return a.arrayIndex < b.arrayIndex;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        friend constexpr auto operator>(const Iterator& a, const Iterator& b) -> bool
+	        {
+	            return b < a;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        friend constexpr auto operator<=(const Iterator& a, const Iterator& b) -> bool
+	        {
+	            return !(a > b);
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        friend constexpr auto operator>=(const Iterator& a, const Iterator& b) -> bool
+	        {
+	            return !(a < b);
+	        }
+
+	        ArrayIndexIterator arrayIndex;
+	        View* view;
+	    };
+
+	    /// Using a mapping, maps the given array index and record coordinate to a memory reference onto the given blobs.
+	    /// \return Either an l-value reference if the record coord maps to a physical field or a proxy reference if mapped
+	    /// to a computed field.
+	    template<typename Mapping, typename RecordCoord, typename Blobs>
+	    LLAMA_FN_HOST_ACC_INLINE auto mapToMemory(
+	        Mapping& mapping,
+	        typename Mapping::ArrayIndex ai,
+	        RecordCoord rc,
+	        Blobs& blobs) -> decltype(auto)
+	    {
+	        if constexpr(llama::isComputed<Mapping, RecordCoord>)
+	            return mapping.compute(ai, rc, blobs);
+	        else
+	        {
+	            const auto [nr, offset] = mapping.blobNrAndOffset(ai, rc);
+	            using Type = GetType<typename Mapping::RecordDim, RecordCoord>;
+	            LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
+	            return reinterpret_cast<CopyConst<std::remove_reference_t<decltype(blobs[nr][offset])>, Type>&>(
+	                blobs[nr][offset]);
+	            LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
+	        }
+	    }
+
+	    /// Central LLAMA class holding memory for storage and giving access to values stored there defined by a mapping. A
+	    /// view should be created using \ref allocView.
+	    /// \tparam TMapping The mapping used by the view to map accesses into memory.
+	    /// \tparam TBlobType The storage type used by the view holding memory.
+	    /// \tparam TAccessor The accessor to use when an access is made through this view.
+	#ifdef __cpp_lib_concepts
+	    template<typename TMapping, Blob TBlobType, typename TAccessor = accessor::Default>
+	#else
+	    template<typename TMapping, typename TBlobType, typename TAccessor = accessor::Default>
+	#endif
+	    struct LLAMA_DECLSPEC_EMPTY_BASES View
+	        : private TMapping
+	        , private TAccessor
+	#if CAN_USE_RANGES
+	        , std::ranges::view_base
+	#endif
+	    {
+	        static_assert(!std::is_const_v<TMapping>);
+	        using Mapping = TMapping;
+	        using BlobType = TBlobType;
+	        using ArrayExtents = typename Mapping::ArrayExtents;
+	        using ArrayIndex = typename Mapping::ArrayIndex;
+	        using RecordDim = typename Mapping::RecordDim;
+	        using Accessor = TAccessor;
+	        using iterator = Iterator<View>;
+	        using const_iterator = Iterator<const View>;
+	        using size_type = typename ArrayExtents::value_type;
+
+	        static_assert(
+	            std::is_same_v<Mapping, std::decay_t<Mapping>>,
+	            "Mapping must not be const qualified or a reference. Are you using decltype(...) as View template "
+	            "argument?");
+	        static_assert(
+	            std::is_same_v<ArrayExtents, std::decay_t<ArrayExtents>>,
+	            "Mapping::ArrayExtents must not be const qualified or a reference. Are you using decltype(...) as mapping "
+	            "template argument?");
+
+	        /// Performs default initialization of the blob array.
+	        // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init,hicpp-member-init)
+	        View() = default;
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        explicit View(Mapping mapping, Array<BlobType, Mapping::blobCount> storageBlobs = {}, Accessor accessor = {})
+	            : Mapping(std::move(mapping))
+	            , Accessor(std::move(accessor))
+	            , storageBlobs(std::move(storageBlobs))
+	        {
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE auto mapping() -> Mapping&
+	        {
+	            return static_cast<Mapping&>(*this);
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE auto mapping() const -> const Mapping&
+	        {
+	            return static_cast<const Mapping&>(*this);
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE auto accessor() -> Accessor&
+	        {
+	            return static_cast<Accessor&>(*this);
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE auto accessor() const -> const Accessor&
+	        {
+	            return static_cast<const Accessor&>(*this);
+	        }
+
+	#if !(defined(_MSC_VER) && defined(__NVCC__))
+	        template<typename V>
+	        auto operator()(llama::ArrayIndex<V, ArrayIndex::rank>) const
+	        {
+	            static_assert(!sizeof(V), "Passed ArrayIndex with SizeType different than Mapping::ArrayExtent");
+	        }
+	#endif
+
+	        /// Retrieves the \ref RecordRef at the given \ref ArrayIndex index.
+	        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayIndex ai) const -> decltype(auto)
+	        {
+	            if constexpr(isRecordDim<RecordDim>)
+	            {
+	                LLAMA_FORCE_INLINE_RECURSIVE
+	                return RecordRef<const View>{ai, *this};
+	            }
+	            else
+	            {
+	                LLAMA_FORCE_INLINE_RECURSIVE
+	                return access(ai, RecordCoord<>{});
+	            }
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayIndex ai) -> decltype(auto)
+	        {
+	            if constexpr(isRecordDim<RecordDim>)
+	            {
+	                LLAMA_FORCE_INLINE_RECURSIVE
+	                return RecordRef<View>{ai, *this};
+	            }
+	            else
+	            {
+	                LLAMA_FORCE_INLINE_RECURSIVE
+	                return access(ai, RecordCoord<>{});
+	            }
+	        }
+
+	        /// Retrieves the \ref RecordRef at the \ref ArrayIndex index constructed from the passed component
+	        /// indices.
+	        template<
+	            typename... Indices,
+	            std::enable_if_t<std::conjunction_v<std::is_convertible<Indices, size_type>...>, int> = 0>
+	        LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) const -> decltype(auto)
+	        {
+	            static_assert(
+	                sizeof...(Indices) == ArrayIndex::rank,
+	                "Please specify as many indices as you have array dimensions");
+	            LLAMA_FORCE_INLINE_RECURSIVE
+	            return (*this)(ArrayIndex{static_cast<typename ArrayIndex::value_type>(indices)...});
+	        }
+
+	        template<
+	            typename... Indices,
+	            std::enable_if_t<std::conjunction_v<std::is_convertible<Indices, size_type>...>, int> = 0>
+	        LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) -> decltype(auto)
+	        {
+	            static_assert(
+	                sizeof...(Indices) == ArrayIndex::rank,
+	                "Please specify as many indices as you have array dimensions");
+	            LLAMA_FORCE_INLINE_RECURSIVE
+	            return (*this)(ArrayIndex{static_cast<typename ArrayIndex::value_type>(indices)...});
+	        }
+
+	        /// Retrieves the \ref RecordRef at the \ref ArrayIndex index constructed from the passed component
+	        /// indices.
+	        LLAMA_FN_HOST_ACC_INLINE auto operator[](ArrayIndex ai) const -> decltype(auto)
+	        {
+	            LLAMA_FORCE_INLINE_RECURSIVE
+	            return (*this)(ai);
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE auto operator[](ArrayIndex ai) -> decltype(auto)
+	        {
+	            LLAMA_FORCE_INLINE_RECURSIVE
+	            return (*this)(ai);
+	        }
+
+	#if !(defined(_MSC_VER) && defined(__NVCC__))
+	        template<typename V>
+	        auto operator[](llama::ArrayIndex<V, ArrayIndex::rank>) const
+	        {
+	            static_assert(!sizeof(V), "Passed ArrayIndex with SizeType different than Mapping::ArrayExtent");
+	        }
+	#endif
+
+	        /// Retrieves the \ref RecordRef at the 1D \ref ArrayIndex index constructed from the passed index.
+	        LLAMA_FN_HOST_ACC_INLINE auto operator[](size_type index) const -> decltype(auto)
+	        {
+	            LLAMA_FORCE_INLINE_RECURSIVE
+	            return (*this)(index);
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE auto operator[](size_type index) -> decltype(auto)
+	        {
+	            LLAMA_FORCE_INLINE_RECURSIVE
+	            return (*this)(index);
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        auto begin() -> iterator
+	        {
+	            return {ArrayIndexRange<ArrayExtents>{mapping().extents()}.begin(), this};
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        auto begin() const -> const_iterator
+	        {
+	            return {ArrayIndexRange<ArrayExtents>{mapping().extents()}.begin(), this};
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        auto end() -> iterator
+	        {
+	            return {ArrayIndexRange<ArrayExtents>{mapping().extents()}.end(), this};
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        auto end() const -> const_iterator
+	        {
+	            return {ArrayIndexRange<ArrayExtents>{mapping().extents()}.end(), this};
+	        }
+
+	        Array<BlobType, Mapping::blobCount> storageBlobs;
+
+	    private:
+	        template<typename TView, typename TBoundRecordCoord, bool OwnView>
+	        friend struct RecordRef;
+
+	        template<std::size_t... Coords>
+	        LLAMA_FN_HOST_ACC_INLINE auto access(ArrayIndex ai, RecordCoord<Coords...> rc = {}) const -> decltype(auto)
+	        {
+	            return accessor()(mapToMemory(mapping(), ai, rc, storageBlobs));
+	        }
+
+	        template<std::size_t... Coords>
+	        LLAMA_FN_HOST_ACC_INLINE auto access(ArrayIndex ai, RecordCoord<Coords...> rc = {}) -> decltype(auto)
+	        {
+	            return accessor()(mapToMemory(mapping(), ai, rc, storageBlobs));
+	        }
+	    };
+
+	    template<typename View>
+	    inline constexpr auto isView = false;
+
+	    template<typename Mapping, typename BlobType, typename Accessor>
+	    inline constexpr auto isView<View<Mapping, BlobType, Accessor>> = true;
+
+	    namespace internal
+	    {
+	        template<typename Blobs, typename TransformBlobFunc, std::size_t... Is>
+	        LLAMA_FN_HOST_ACC_INLINE auto makeTransformedBlobArray(
+	            Blobs& storageBlobs,
+	            const TransformBlobFunc& transformBlob,
+	            std::integer_sequence<std::size_t, Is...>)
+	        {
+	            return llama::Array{transformBlob(storageBlobs[Is])...};
+	        }
+	    } // namespace internal
+
+	    /// Applies the given transformation to the blobs of a view and creates a new view with the transformed blobs and
+	    /// the same mapping and accessor as the old view.
+	    template<typename View, typename TransformBlobFunc, typename = std::enable_if_t<isView<std::decay_t<View>>>>
+	    LLAMA_FN_HOST_ACC_INLINE auto transformBlobs(View& view, const TransformBlobFunc& transformBlob)
+	    {
+	        constexpr auto blobCount = std::decay_t<View>::Mapping::blobCount;
+	        auto blobs = internal::makeTransformedBlobArray(
+	            view.storageBlobs,
+	            transformBlob,
+	            std::make_index_sequence<blobCount>{});
+	        return llama::View<typename View::Mapping, typename decltype(blobs)::value_type, typename View::Accessor>{
+	            view.mapping(),
+	            std::move(blobs),
+	            view.accessor()};
+	    }
+
+	    /// Creates a shallow copy of a view. This copy must not outlive the view, since it references its blob array.
+	    /// \tparam NewBlobType The blob type of the shallow copy. Must be a non owning pointer like type.
+	    /// \return A new view with the same mapping as view, where each blob refers to the blob in view.
+	    template<
+	        typename View,
+	        typename NewBlobType = CopyConst<View, std::byte>*,
+	        typename = std::enable_if_t<isView<std::decay_t<View>>>>
+	    LLAMA_FN_HOST_ACC_INLINE auto shallowCopy(View& view)
+	    {
+	        if constexpr(std::is_same_v<typename std::decay_t<View>::BlobType, NewBlobType>)
+	            return view;
+	        else
+	            return transformBlobs(
+	                view,
+	                [](auto& blob)
+	                {
+	                    LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
+	                    return static_cast<NewBlobType>(&blob[0]);
+	                    LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
+	                });
+	    }
+
+	    // Creates a new view from an existing view with the given accessor.
+	    // \param view A view which's mapping and blobs are copied into a new view with the different accessor. If you no
+	    // longer need the old view, consider moving it into the argument of this function.
+	    template<typename NewAccessor, typename Mapping, typename BlobType, typename OldAccessor>
+	    LLAMA_FN_HOST_ACC_INLINE auto withAccessor(View<Mapping, BlobType, OldAccessor> view, NewAccessor newAccessor = {})
+	    {
+	        return View<Mapping, BlobType, NewAccessor>{
+	            std::move(view.mapping()),
+	            std::move(view.storageBlobs),
+	            std::move(newAccessor)};
+	    }
+
+	    // Creates a new view from an existing view with the given mapping.
+	    // \param view A view which's accessor and blobs are copied into a new view with the different mapping. If you no
+	    // longer need the old view, consider moving it into the argument of this function.
+	    template<typename NewMapping, typename Mapping, typename BlobType, typename Accessor>
+	    LLAMA_FN_HOST_ACC_INLINE auto withMapping(View<Mapping, BlobType, Accessor> view, NewMapping newMapping = {})
+	    {
+	        static_assert(Mapping::blobCount == NewMapping::blobCount);
+	        for(std::size_t i = 0; i < Mapping::blobCount; i++)
+	        {
+	            assert(view.mapping().blobSize(i) == newMapping.blobSize(i));
+	        }
+
+	        return View<NewMapping, BlobType, Accessor>{
+	            std::move(newMapping),
+	            std::move(view.storageBlobs),
+	            std::move(view.accessor())};
+	    }
+
+	    /// Like a \ref View, but array indices are shifted.
+	    /// @tparam TStoredParentView Type of the underlying view. May be cv qualified and/or a reference type.
+	    template<typename TStoredParentView>
+	    struct SubView
+	    {
+	        using StoredParentView = TStoredParentView;
+	        using ParentView = std::remove_const_t<std::remove_reference_t<StoredParentView>>; ///< type of the parent view
+	        using Mapping = typename ParentView::Mapping; ///< mapping of the parent view
+	        using ArrayExtents = typename Mapping::ArrayExtents; ///< array extents of the parent view
+	        using ArrayIndex = typename Mapping::ArrayIndex; ///< array index of the parent view
+
+	        using size_type = typename ArrayExtents::value_type;
+
+	        /// Creates a SubView given a parent \ref View and offset.
+	        template<typename StoredParentViewFwd>
+	        LLAMA_FN_HOST_ACC_INLINE SubView(StoredParentViewFwd&& parentView, ArrayIndex offset)
+	            : parentView(std::forward<StoredParentViewFwd>(parentView))
+	            , offset(offset)
+	        {
+	        }
+
+	        /// Same as \ref View::operator()(ArrayIndex), but shifted by the offset of this \ref SubView.
+	        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayIndex ai) const -> decltype(auto)
+	        {
+	            LLAMA_FORCE_INLINE_RECURSIVE
+	            return parentView(ArrayIndex{ai + offset});
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayIndex ai) -> decltype(auto)
+	        {
+	            LLAMA_FORCE_INLINE_RECURSIVE
+	            return parentView(ArrayIndex{ai + offset});
+	        }
+
+	        /// Same as corresponding operator in \ref View, but shifted by the offset of this \ref SubView.
+	        template<typename... Indices>
+	        LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) const -> decltype(auto)
+	        {
+	            static_assert(
+	                sizeof...(Indices) == ArrayIndex::rank,
+	                "Please specify as many indices as you have array dimensions");
+	            static_assert(
+	                std::conjunction_v<std::is_convertible<Indices, size_type>...>,
+	                "Indices must be convertible to ArrayExtents::size_type");
+	            LLAMA_FORCE_INLINE_RECURSIVE
+	            return parentView(
+	                ArrayIndex{ArrayIndex{static_cast<typename ArrayIndex::value_type>(indices)...} + offset});
+	        }
+
+	        template<typename... Indices>
+	        LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) -> decltype(auto)
+	        {
+	            static_assert(
+	                sizeof...(Indices) == ArrayIndex::rank,
+	                "Please specify as many indices as you have array dimensions");
+	            static_assert(
+	                std::conjunction_v<std::is_convertible<Indices, size_type>...>,
+	                "Indices must be convertible to ArrayExtents::size_type");
+	            LLAMA_FORCE_INLINE_RECURSIVE
+	            return parentView(
+	                ArrayIndex{ArrayIndex{static_cast<typename ArrayIndex::value_type>(indices)...} + offset});
+	        }
+
+	        template<std::size_t... Coords>
+	        LLAMA_FN_HOST_ACC_INLINE auto operator()(RecordCoord<Coords...> rc = {}) const -> decltype(auto)
+	        {
+	            return parentView(ArrayIndex{} + offset, rc);
+	        }
+
+	        template<std::size_t... Coords>
+	        LLAMA_FN_HOST_ACC_INLINE auto operator()(RecordCoord<Coords...> rc = {}) -> decltype(auto)
+	        {
+	            return parentView(ArrayIndex{} + offset, rc);
+	        }
+
+	        StoredParentView parentView;
+	        const ArrayIndex offset; ///< offset by which this view's \ref ArrayIndex indices are shifted when passed to
+	                                 ///< the parent view.
+	    };
+
+	    /// SubView vview(view); will store a reference to view.
+	    /// SubView vview(std::move(view)); will store the view.
+	    template<typename TStoredParentView>
+	    SubView(TStoredParentView&&, typename std::remove_reference_t<TStoredParentView>::Mapping::ArrayIndex)
+	        -> SubView<TStoredParentView>;
+	} // namespace llama
+	// ==
+	// == ./View.hpp ==
+	// ============================================================================
+
+	// ============================================================================
+	// == ./mapping/AoSoA.hpp ==
+	// ==
+	// SPDX-License-Identifier: GPL-3.0-or-later
+
+	// #pragma once
+	// #include "Common.hpp"    // amalgamate: file already expanded
+
+	// #include <limits>    // amalgamate: file already included
+
+	namespace llama::mapping
+	{
+	    /// The maximum number of vector lanes that can be used to fetch each leaf type in the record dimension into a
+	    /// vector register of the given size in bits.
+	    template<typename RecordDim, std::size_t VectorRegisterBits>
+	    inline constexpr std::size_t maxLanes = []() constexpr
+	    {
+	        auto max = std::numeric_limits<std::size_t>::max();
+	        forEachLeafCoord<RecordDim>(
+	            [&](auto rc)
+	            {
+	                using AttributeType = GetType<RecordDim, decltype(rc)>;
+	                max = std::min(max, VectorRegisterBits / (sizeof(AttributeType) * CHAR_BIT));
+	            });
+	        return max;
+	    }
+	    ();
+
+	    /// Array of struct of arrays mapping. Used to create a \ref View via \ref allocView.
+	    /// \tparam Lanes The size of the inner arrays of this array of struct of arrays.
+	    /// \tparam FlattenRecordDim Defines how the record dimension's fields should be flattened. See \ref
+	    /// FlattenRecordDimInOrder, \ref FlattenRecordDimIncreasingAlignment, \ref FlattenRecordDimDecreasingAlignment and
+	    /// \ref FlattenRecordDimMinimizePadding.
+	    template<
+	        typename TArrayExtents,
+	        typename TRecordDim,
+	        typename TArrayExtents::value_type Lanes,
+	        typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
+	        template<typename> typename FlattenRecordDim = FlattenRecordDimInOrder>
+	    struct AoSoA : MappingBase<TArrayExtents, TRecordDim>
+	    {
+	    private:
+	        using Base = MappingBase<TArrayExtents, TRecordDim>;
+	        using size_type = typename Base::size_type;
+
+	    public:
+	        inline static constexpr typename TArrayExtents::value_type lanes = Lanes;
+	        using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
+	        using Flattener = FlattenRecordDim<TRecordDim>;
+	        inline static constexpr std::size_t blobCount = 1;
+
+	        using Base::Base;
+
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(size_type) const -> size_type
+	        {
+	            const auto rs = static_cast<size_type>(sizeOf<TRecordDim>);
+	            return roundUpToMultiple(LinearizeArrayDimsFunctor{}.size(Base::extents()) * rs, Lanes * rs);
+	        }
+
+	        template<std::size_t... RecordCoords>
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
+	            typename Base::ArrayIndex ai,
+	            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset<size_type>
+	        {
+	            constexpr std::size_t flatFieldIndex =
+	#ifdef __NVCC__
+	                *& // mess with nvcc compiler state to workaround bug
+	#endif
+	                 Flattener::template flatIndex<RecordCoords...>;
+	            const auto flatArrayIndex = LinearizeArrayDimsFunctor{}(ai, Base::extents());
+	            const auto blockIndex = flatArrayIndex / Lanes;
+	            const auto laneIndex = flatArrayIndex % Lanes;
+	            const auto offset = static_cast<size_type>(sizeOf<TRecordDim> * Lanes) * blockIndex
+	                + static_cast<size_type>(flatOffsetOf<typename Flattener::FlatRecordDim, flatFieldIndex, false>)
+	                    * Lanes
+	                + static_cast<size_type>(sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>)) * laneIndex;
+	            return {0, offset};
+	        }
+	    };
+
+	    /// Binds parameters to an \ref AoSoA mapping except for array and record dimension, producing a quoted meta
+	    /// function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
+	    template<std::size_t Lanes, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
+	    struct BindAoSoA
+	    {
+	        template<typename ArrayExtents, typename RecordDim>
+	        using fn = AoSoA<ArrayExtents, RecordDim, Lanes, LinearizeArrayDimsFunctor>;
+	    };
+
+	    template<typename Mapping>
+	    inline constexpr bool isAoSoA = false;
+
+	    template<typename AD, typename RD, typename AD::value_type L>
+	    inline constexpr bool isAoSoA<AoSoA<AD, RD, L>> = true;
+
+	} // namespace llama::mapping
+	// ==
+	// == ./mapping/AoSoA.hpp ==
+	// ============================================================================
+
+	// ============================================================================
+	// == ./mapping/SoA.hpp ==
+	// ==
+	// Copyright 2018 Alexander Matthes
+	// SPDX-License-Identifier: GPL-3.0-or-later
+
+	// #pragma once
+	// #include "Common.hpp"    // amalgamate: file already expanded
+
+	// #include <limits>    // amalgamate: file already included
+
+	namespace llama::mapping
+	{
+	    enum class Blobs
+	    {
+	        Single,
+	        OnePerField
+	    };
+
+	    enum class SubArrayAlignment
+	    {
+	        Pack,
+	        Align
+	    };
+
+	    /// Struct of array mapping. Used to create a \ref View via \ref allocView. We recommend to use multiple blobs when
+	    /// the array extents are dynamic and an aligned single blob version when they are static.
+	    /// \tparam TBlobs If OnePerField, every element of the record dimension is mapped to its own blob.
+	    /// \tparam TSubArrayAlignment Only relevant when TBlobs == Single, ignored otherwise. If Align, aligns the sub
+	    /// arrays created within the single blob by inserting padding. If the array extents are dynamic, this may add some
+	    /// overhead to the mapping logic.
+	    /// \tparam TLinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
+	    /// how big the linear domain gets.
+	    /// \tparam FlattenRecordDimSingleBlob Defines how the record dimension's fields should be flattened if Blobs is
+	    /// Single. See \ref FlattenRecordDimInOrder, \ref FlattenRecordDimIncreasingAlignment, \ref
+	    /// FlattenRecordDimDecreasingAlignment and \ref FlattenRecordDimMinimizePadding.
+	    template<
+	        typename TArrayExtents,
+	        typename TRecordDim,
+	        Blobs TBlobs = Blobs::OnePerField,
+	        SubArrayAlignment TSubArrayAlignment
+	        = TBlobs == Blobs::Single ? SubArrayAlignment::Align : SubArrayAlignment::Pack,
+	        typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
+	        template<typename> typename FlattenRecordDimSingleBlob = FlattenRecordDimInOrder>
+	    struct SoA : MappingBase<TArrayExtents, TRecordDim>
+	    {
+	    private:
+	        using Base = MappingBase<TArrayExtents, TRecordDim>;
+	        using size_type = typename TArrayExtents::value_type;
+
+	    public:
+	        inline static constexpr Blobs blobs = TBlobs;
+	        inline static constexpr SubArrayAlignment subArrayAlignment = TSubArrayAlignment;
+	        using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
+	        using Flattener = FlattenRecordDimSingleBlob<TRecordDim>;
+	        inline static constexpr std::size_t blobCount
+	            = blobs == Blobs::OnePerField ? boost::mp11::mp_size<FlatRecordDim<TRecordDim>>::value : 1;
+
+	#ifndef __NVCC__
+	        using Base::Base;
+	#else
+	        constexpr SoA() = default;
+
+	        LLAMA_FN_HOST_ACC_INLINE constexpr explicit SoA(TArrayExtents extents, TRecordDim = {}) : Base(extents)
+	        {
+	        }
+	#endif
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        constexpr auto blobSize([[maybe_unused]] size_type blobIndex) const -> size_type
+	        {
+	            const auto flatSize = LinearizeArrayDimsFunctor{}.size(Base::extents());
+	            if constexpr(blobs == Blobs::OnePerField)
+	            {
+	                constexpr auto typeSizes = []() constexpr
+	                {
+	                    Array<size_type, blobCount> r{};
+	                    forEachLeafCoord<TRecordDim>([&r, i = 0](auto rc) mutable constexpr {
+	                        r[i++] = sizeof(GetType<TRecordDim, decltype(rc)>);
+	                    });
+	                    return r;
+	                }
+	                ();
+	                return flatSize * typeSizes[blobIndex];
+	            }
+	            else if constexpr(subArrayAlignment == SubArrayAlignment::Align)
+	            {
+	                size_type size = 0;
+	                using namespace boost::mp11;
+	                using FRD = typename Flattener::FlatRecordDim;
+	                mp_for_each<mp_transform<mp_identity, FRD>>(
+	                    [&](auto ti)
+	                    {
+	                        using FieldType = typename decltype(ti)::type;
+	                        size = roundUpToMultiple(size, static_cast<size_type>(alignof(FieldType)));
+	                        size += static_cast<size_type>(sizeof(FieldType)) * flatSize;
+	                    });
+	                return size;
+	            }
+	            else
+	            {
+	                return flatSize * static_cast<size_type>(sizeOf<TRecordDim>);
+	            }
+	        }
+
+	        template<std::size_t... RecordCoords>
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
+	            typename Base::ArrayIndex ad,
+	            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset<size_type>
+	        {
+	            if constexpr(blobs == Blobs::OnePerField)
+	            {
+	                constexpr auto blob = flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>;
+	                const auto offset = LinearizeArrayDimsFunctor{}(ad, Base::extents())
+	                    * static_cast<size_type>(sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>));
+	                return {blob, offset};
+	            }
+	            else
+	            {
+	                const auto subArrayOffset = LinearizeArrayDimsFunctor{}(ad, Base::extents())
+	                    * static_cast<size_type>(sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>));
+	                constexpr std::size_t flatFieldIndex =
+	#ifdef __NVCC__
+	                    *& // mess with nvcc compiler state to workaround bug
+	#endif
+	                     Flattener::template flatIndex<RecordCoords...>;
+	                const auto flatSize = LinearizeArrayDimsFunctor{}.size(Base::extents());
+	                using FRD = typename Flattener::FlatRecordDim;
+	                if constexpr(subArrayAlignment == SubArrayAlignment::Align)
+	                {
+	                    // TODO(bgruber): we can take a shortcut here if we know that flatSize is a multiple of all type's
+	                    // alignment. We can also precompute a table of sub array starts (and maybe store it), or rely on
+	                    // the compiler pulling it out of loops.
+	                    using namespace boost::mp11;
+	                    size_type offset = 0;
+	                    mp_for_each<mp_transform<mp_identity, mp_take_c<FRD, flatFieldIndex>>>(
+	                        [&](auto ti)
+	                        {
+	                            using FieldType = typename decltype(ti)::type;
+	                            offset = roundUpToMultiple(offset, static_cast<size_type>(alignof(FieldType)));
+	                            offset += static_cast<size_type>(sizeof(FieldType)) * flatSize;
+	                        });
+	                    offset = roundUpToMultiple(offset, static_cast<size_type>(alignof(mp_at_c<FRD, flatFieldIndex>)));
+	                    offset += subArrayOffset;
+	                    return {0, offset};
+	                }
+	                else
+	                {
+	                    const auto offset
+	                        = subArrayOffset + static_cast<size_type>(flatOffsetOf<FRD, flatFieldIndex, false>) * flatSize;
+	                    return {0, offset};
+	                }
+	            }
+	        }
+	    };
+
+	    // we can drop this when inherited ctors also inherit deduction guides
+	    template<typename TArrayExtents, typename TRecordDim>
+	    SoA(TArrayExtents, TRecordDim) -> SoA<TArrayExtents, TRecordDim>;
+
+	    /// Struct of array mapping storing the entire layout in a single blob. The starts of the sub arrays are aligned by
+	    /// inserting padding. \see SoA
+	    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
+	    using AlignedSingleBlobSoA
+	        = SoA<ArrayExtents, RecordDim, Blobs::Single, SubArrayAlignment::Align, LinearizeArrayDimsFunctor>;
+
+	    /// Struct of array mapping storing the entire layout in a single blob. The sub arrays are tightly packed,
+	    /// violating the type's alignment requirements. \see SoA
+	    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
+	    using PackedSingleBlobSoA
+	        = SoA<ArrayExtents, RecordDim, Blobs::Single, SubArrayAlignment::Pack, LinearizeArrayDimsFunctor>;
+
+	    /// Struct of array mapping storing each attribute of the record dimension in a separate blob.
+	    /// \see SoA
+	    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
+	    using MultiBlobSoA
+	        = SoA<ArrayExtents, RecordDim, Blobs::OnePerField, SubArrayAlignment::Pack, LinearizeArrayDimsFunctor>;
+
+	    /// Binds parameters to an \ref SoA mapping except for array and record dimension, producing a quoted
+	    /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
+	    template<
+	        Blobs Blobs = Blobs::OnePerField,
+	        SubArrayAlignment SubArrayAlignment = SubArrayAlignment::Pack,
+	        typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
+	    struct BindSoA
+	    {
+	        template<typename ArrayExtents, typename RecordDim>
+	        using fn = SoA<ArrayExtents, RecordDim, Blobs, SubArrayAlignment, LinearizeArrayDimsFunctor>;
+	    };
+
+	    template<typename Mapping>
+	    inline constexpr bool isSoA = false;
+
+	    template<
+	        typename ArrayExtents,
+	        typename RecordDim,
+	        Blobs Blobs,
+	        SubArrayAlignment SubArrayAlignment,
+	        typename LinearizeArrayDimsFunctor>
+	    inline constexpr bool
+	        isSoA<SoA<ArrayExtents, RecordDim, Blobs, SubArrayAlignment, LinearizeArrayDimsFunctor>> = true;
+	} // namespace llama::mapping
+	// ==
+	// == ./mapping/SoA.hpp ==
+	// ============================================================================
+
+
+#include <cstring>
+#include <numeric>
+
+namespace llama
+{
+    namespace internal
+    {
+        template<typename RecordDim>
+        void assertTrivialCopyable()
+        {
+            forEachLeafCoord<RecordDim>(
+                [](auto rc)
+                {
+                    static_assert(
+                        std::is_trivially_copyable_v<GetType<RecordDim, decltype(rc)>>,
+                        "All types in the record dimension must be trivially copyable");
+                });
+        }
+
+        using memcopyFunc = void* (*) (void*, const void*, std::size_t);
+
+        inline void parallelMemcpy(
+            std::byte* dst,
+            const std::byte* src,
+            std::size_t size,
+            std::size_t threadId = 0,
+            std::size_t threadCount = 1,
+            memcopyFunc singleThreadMemcpy = std::memcpy)
+        {
+            const auto sizePerThread = size / threadCount;
+            const auto sizeLastThread = sizePerThread + size % threadCount;
+            const auto sizeThisThread = threadId == threadCount - 1 ? sizeLastThread : sizePerThread;
+            singleThreadMemcpy(dst + threadId * sizePerThread, src + threadId * sizePerThread, sizeThisThread);
+        }
+    } // namespace internal
+
+    /// Direct memcpy from source view blobs to destination view blobs. Both views need to have the same mappings with
+    /// the same array dimensions.
+    /// @param threadId Optional. Zero-based id of calling thread for multi-threaded invocations.
+    /// @param threadCount Optional. Thread count in case of multi-threaded invocation.
+    template<typename Mapping, typename SrcBlob, typename DstBlob>
+    void blobMemcpy(
+        const View<Mapping, SrcBlob>& srcView,
+        View<Mapping, DstBlob>& dstView,
+        std::size_t threadId = 0,
+        std::size_t threadCount = 1)
+    {
+        internal::assertTrivialCopyable<typename Mapping::RecordDim>();
+
+        // TODO(bgruber): we do not verify if the mappings have other runtime state than the array dimensions
+        if(srcView.mapping().extents() != dstView.mapping().extents())
+            throw std::runtime_error{"Array dimensions sizes are different"};
+
+        // TODO(bgruber): this is maybe not the best parallel copying strategy
+        for(std::size_t i = 0; i < Mapping::blobCount; i++)
+            internal::parallelMemcpy(
+                &dstView.storageBlobs[i][0],
+                &srcView.storageBlobs[i][0],
+                dstView.mapping().blobSize(i),
+                threadId,
+                threadCount);
+    }
+
+    /// Field-wise copy from source to destination view. Both views need to have the same array and record dimensions.
+    /// @param threadId Optional. Thread id in case of multi-threaded copy.
+    /// @param threadCount Optional. Thread count in case of multi-threaded copy.
+    template<typename SrcMapping, typename SrcBlob, typename DstMapping, typename DstBlob>
+    void fieldWiseCopy(
+        const View<SrcMapping, SrcBlob>& srcView,
+        View<DstMapping, DstBlob>& dstView,
+        std::size_t threadId = 0,
+        std::size_t threadCount = 1)
+    {
+        // TODO(bgruber): think if we can remove this restriction
+        static_assert(
+            std::is_same_v<typename SrcMapping::RecordDim, typename DstMapping::RecordDim>,
+            "The source and destination record dimensions must be the same");
+
+        if(srcView.mapping().extents() != dstView.mapping().extents())
+            throw std::runtime_error{"Array dimensions sizes are different"};
+
+        auto copyOne = [&](auto ai) LLAMA_LAMBDA_INLINE
+        {
+            forEachLeafCoord<typename DstMapping::RecordDim>([&](auto rc) LLAMA_LAMBDA_INLINE
+                                                             { dstView(ai)(rc) = srcView(ai)(rc); });
+        };
+
+        constexpr auto dims = SrcMapping::ArrayExtents::rank;
+        const auto extents = srcView.mapping().extents().toArray();
+        const auto workPerThread = (extents[0] + threadCount - 1) / threadCount;
+        const auto start = threadId * workPerThread;
+        const auto end = std::min((threadId + 1) * workPerThread, static_cast<std::size_t>(extents[0]));
+        for(auto i = start; i < end; i++)
+        {
+            using SrcSizeType = typename SrcMapping::ArrayExtents::value_type;
+            if constexpr(dims > 1)
+                forEachADCoord(
+                    ArrayIndex<SrcSizeType, dims - 1>{popFront(extents)},
+                    copyOne,
+                    static_cast<SrcSizeType>(i));
+            else
+                copyOne(ArrayIndex<SrcSizeType, dims>{static_cast<std::size_t>(i)});
+        }
+    }
+
+    namespace internal
+    {
+        template<typename Mapping>
+        inline constexpr std::size_t aosoaLanes = 0;
+
+        template<
+            typename ArrayExtents,
+            typename RecordDim,
+            mapping::Blobs Blobs,
+            mapping::SubArrayAlignment SubArrayAlignment,
+            typename LinearizeArrayDimsFunctor>
+        inline constexpr std::size_t aosoaLanes<
+            mapping::SoA<ArrayExtents, RecordDim, Blobs, SubArrayAlignment, LinearizeArrayDimsFunctor>> = std::
+            numeric_limits<std::size_t>::max();
+
+        template<typename ArrayExtents, typename RecordDim, std::size_t Lanes, typename LinearizeArrayDimsFunctor>
+        inline constexpr std::size_t
+            aosoaLanes<mapping::AoSoA<ArrayExtents, RecordDim, Lanes, LinearizeArrayDimsFunctor>> = Lanes;
+    } // namespace internal
+
+    /// AoSoA copy strategy which transfers data in common blocks. SoA mappings are also allowed for at most 1
+    /// argument.
+    /// @param threadId Optional. Zero-based id of calling thread for multi-threaded invocations.
+    /// @param threadCount Optional. Thread count in case of multi-threaded invocation.
+    template<typename SrcMapping, typename SrcBlob, typename DstMapping, typename DstBlob>
+    void aosoaCommonBlockCopy(
+        const View<SrcMapping, SrcBlob>& srcView,
+        View<DstMapping, DstBlob>& dstView,
+        bool readOpt,
+        std::size_t threadId = 0,
+        std::size_t threadCount = 1)
+    {
+        // TODO(bgruber): think if we can remove this restriction
+        static_assert(
+            std::is_same_v<typename SrcMapping::RecordDim, typename DstMapping::RecordDim>,
+            "The source and destination record dimensions must be the same");
+        static_assert(
+            std::is_same_v<
+                typename SrcMapping::LinearizeArrayDimsFunctor,
+                typename DstMapping::LinearizeArrayDimsFunctor>,
+            "Source and destination mapping need to use the same array dimensions linearizer");
+        using RecordDim = typename SrcMapping::RecordDim;
+        internal::assertTrivialCopyable<RecordDim>();
+
+        [[maybe_unused]] static constexpr bool isSrcMB = SrcMapping::blobCount > 1;
+        [[maybe_unused]] static constexpr bool isDstMB = DstMapping::blobCount > 1;
+        static constexpr auto lanesSrc = internal::aosoaLanes<SrcMapping>;
+        static constexpr auto lanesDst = internal::aosoaLanes<DstMapping>;
+
+        if(srcView.mapping().extents() != dstView.mapping().extents())
+            throw std::runtime_error{"Array dimensions sizes are different"};
+
+        static constexpr auto srcIsAoSoA = lanesSrc != std::numeric_limits<std::size_t>::max();
+        static constexpr auto dstIsAoSoA = lanesDst != std::numeric_limits<std::size_t>::max();
+
+        static_assert(srcIsAoSoA || dstIsAoSoA, "At least one of the mappings must be an AoSoA mapping");
+        static_assert(
+            !srcIsAoSoA || std::tuple_size_v<decltype(srcView.storageBlobs)> == 1,
+            "Implementation assumes AoSoA with single blob");
+        static_assert(
+            !dstIsAoSoA || std::tuple_size_v<decltype(dstView.storageBlobs)> == 1,
+            "Implementation assumes AoSoA with single blob");
+
+        const auto flatSize = product(dstView.mapping().extents());
+
+        // TODO(bgruber): implement the following by adding additional copy loops for the remaining elements
+        if(!srcIsAoSoA && flatSize % lanesDst != 0)
+            throw std::runtime_error{"Source SoA mapping's total array elements must be evenly divisible by the "
+                                     "destination AoSoA Lane count."};
+        if(!dstIsAoSoA && flatSize % lanesSrc != 0)
+            throw std::runtime_error{"Destination SoA mapping's total array elements must be evenly divisible by the "
+                                     "source AoSoA Lane count."};
+
+        // the same as AoSoA::blobNrAndOffset but takes a flat array index
+        auto mapAoSoA = [](std::size_t flatArrayIndex, auto rc, std::size_t Lanes) LLAMA_LAMBDA_INLINE
+        {
+            const auto blockIndex = flatArrayIndex / Lanes;
+            const auto laneIndex = flatArrayIndex % Lanes;
+            const auto offset = (sizeOf<RecordDim> * Lanes) * blockIndex + offsetOf<RecordDim, decltype(rc)> * Lanes
+                + sizeof(GetType<RecordDim, decltype(rc)>) * laneIndex;
+            return offset;
+        };
+        // the same as SoA::blobNrAndOffset but takes a flat array index
+        auto mapSoA = [&](std::size_t flatArrayIndex, auto rc, bool mb) LLAMA_LAMBDA_INLINE
+        {
+            const auto blob = mb * flatRecordCoord<RecordDim, decltype(rc)>;
+            const auto offset = !mb * offsetOf<RecordDim, decltype(rc)> * flatSize
+                + sizeof(GetType<RecordDim, decltype(rc)>) * flatArrayIndex;
+            return NrAndOffset{blob, offset};
+        };
+
+        auto mapSrc = [&](std::size_t flatArrayIndex, auto rc) LLAMA_LAMBDA_INLINE
+        {
+            if constexpr(srcIsAoSoA)
+                return &srcView.storageBlobs[0][0] + mapAoSoA(flatArrayIndex, rc, lanesSrc);
+            else
+            {
+                const auto [blob, off] = mapSoA(flatArrayIndex, rc, isSrcMB);
+                return &srcView.storageBlobs[blob][off];
+            }
+        };
+        auto mapDst = [&](std::size_t flatArrayIndex, auto rc) LLAMA_LAMBDA_INLINE
+        {
+            if constexpr(dstIsAoSoA)
+                return &dstView.storageBlobs[0][0] + mapAoSoA(flatArrayIndex, rc, lanesDst);
+            else
+            {
+                const auto [blob, off] = mapSoA(flatArrayIndex, rc, isDstMB);
+                return &dstView.storageBlobs[blob][off];
+            }
+        };
+
+        static constexpr auto l = []
+        {
+            if constexpr(srcIsAoSoA && dstIsAoSoA)
+                return std::gcd(lanesSrc, lanesDst);
+            return std::min(lanesSrc, lanesDst);
+        }();
+        if(readOpt)
+        {
+            // optimized for linear reading
+            constexpr auto srcL = srcIsAoSoA ? lanesSrc : l;
+            const auto elementsPerThread = flatSize / srcL / threadCount * srcL;
+            {
+                const auto start = threadId * elementsPerThread;
+                const auto stop = threadId == threadCount - 1 ? flatSize : (threadId + 1) * elementsPerThread;
+
+                auto copyLBlock = [&](const std::byte*& threadSrc, std::size_t dstIndex, auto rc) LLAMA_LAMBDA_INLINE
+                {
+                    constexpr auto bytes = l * sizeof(GetType<RecordDim, decltype(rc)>);
+                    std::memcpy(mapDst(dstIndex, rc), threadSrc, bytes);
+                    threadSrc += bytes;
+                };
+                if constexpr(srcIsAoSoA)
+                {
+                    auto* threadSrc = mapSrc(start, RecordCoord<>{});
+                    for(std::size_t i = start; i < stop; i += lanesSrc)
+                        forEachLeafCoord<RecordDim>(
+                            [&](auto rc) LLAMA_LAMBDA_INLINE
+                            {
+                                for(std::size_t j = 0; j < lanesSrc; j += l)
+                                    copyLBlock(threadSrc, i + j, rc);
+                            });
+                }
+                else
+                {
+                    forEachLeafCoord<RecordDim>(
+                        [&](auto rc) LLAMA_LAMBDA_INLINE
+                        {
+                            auto* threadSrc = mapSrc(start, rc);
+                            for(std::size_t i = start; i < stop; i += l)
+                                copyLBlock(threadSrc, i, rc);
+                        });
+                }
+            }
+        }
+        else
+        {
+            // optimized for linear writing
+            constexpr auto dstL = dstIsAoSoA ? lanesDst : l;
+            const auto elementsPerThread = flatSize / dstL / threadCount * dstL;
+            {
+                const auto start = threadId * elementsPerThread;
+                const auto stop = threadId == threadCount - 1 ? flatSize : (threadId + 1) * elementsPerThread;
+
+                auto copyLBlock = [&](std::byte*& threadDst, std::size_t srcIndex, auto rc) LLAMA_LAMBDA_INLINE
+                {
+                    constexpr auto bytes = l * sizeof(GetType<RecordDim, decltype(rc)>);
+                    std::memcpy(threadDst, mapSrc(srcIndex, rc), bytes);
+                    threadDst += bytes;
+                };
+                if constexpr(dstIsAoSoA)
+                {
+                    auto* threadDst = mapDst(start, RecordCoord<>{});
+                    for(std::size_t i = start; i < stop; i += lanesDst)
+                        forEachLeafCoord<RecordDim>(
+                            [&](auto rc) LLAMA_LAMBDA_INLINE
+                            {
+                                for(std::size_t j = 0; j < lanesDst; j += l)
+                                    copyLBlock(threadDst, i + j, rc);
+                            });
+                }
+                else
+                {
+                    forEachLeafCoord<RecordDim>(
+                        [&](auto rc) LLAMA_LAMBDA_INLINE
+                        {
+                            auto* threadDst = mapDst(start, rc);
+                            for(std::size_t i = start; i < stop; i += l)
+                                copyLBlock(threadDst, i, rc);
+                        });
+                }
+            }
+        }
+    }
+
+    /// @brief Generic implementation of \ref copy defaulting to \ref fieldWiseCopy. LLAMA provides several
+    /// specializations of this construct for specific mappings. Users are encouraged to also specialize this template
+    /// with better copy algorithms for further combinations of mappings, if they can and want to provide a better
+    /// implementation.
+    template<typename SrcMapping, typename DstMapping, typename SFINAE = void>
+    struct Copy
+    {
+        template<typename SrcView, typename DstView>
+        void operator()(const SrcView& srcView, DstView& dstView, std::size_t threadId, std::size_t threadCount) const
+        {
+            fieldWiseCopy(srcView, dstView, threadId, threadCount);
+        }
+    };
+
+    template<typename Mapping>
+    struct Copy<Mapping, Mapping>
+    {
+        template<typename SrcView, typename DstView>
+        void operator()(const SrcView& srcView, DstView& dstView, std::size_t threadId, std::size_t threadCount) const
+        {
+            blobMemcpy(srcView, dstView, threadId, threadCount);
+        }
+    };
+
+    template<
+        typename ArrayExtents,
+        typename RecordDim,
+        typename LinearizeArrayDims,
+        std::size_t LanesSrc,
+        std::size_t LanesDst>
+    struct Copy<
+        mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayDims>,
+        mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayDims>,
+        std::enable_if_t<LanesSrc != LanesDst>>
+    {
+        template<typename SrcBlob, typename DstBlob>
+        void operator()(
+            const View<mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayDims>, SrcBlob>& srcView,
+            View<mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayDims>, DstBlob>& dstView,
+            std::size_t threadId,
+            std::size_t threadCount)
+        {
+            constexpr auto readOpt = true; // TODO(bgruber): how to choose?
+            aosoaCommonBlockCopy(srcView, dstView, readOpt, threadId, threadCount);
+        }
+    };
+
+    template<
+        typename ArrayExtents,
+        typename RecordDim,
+        typename LinearizeArrayDims,
+        std::size_t LanesSrc,
+        mapping::Blobs DstBlobs,
+        mapping::SubArrayAlignment DstSubArrayAlignment>
+    struct Copy<
+        mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayDims>,
+        mapping::SoA<ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayDims>>
+    {
+        template<typename SrcBlob, typename DstBlob>
+        void operator()(
+            const View<mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayDims>, SrcBlob>& srcView,
+            View<mapping::SoA<ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayDims>, DstBlob>&
+                dstView,
+            std::size_t threadId,
+            std::size_t threadCount)
+        {
+            constexpr auto readOpt = true; // TODO(bgruber): how to choose?
+            aosoaCommonBlockCopy(srcView, dstView, readOpt, threadId, threadCount);
+        }
+    };
+
+    template<
+        typename ArrayExtents,
+        typename RecordDim,
+        typename LinearizeArrayDims,
+        std::size_t LanesDst,
+        mapping::Blobs SrcBlobs,
+        mapping::SubArrayAlignment SrcSubArrayAlignment>
+    struct Copy<
+        mapping::SoA<ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayDims>,
+        mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayDims>>
+    {
+        template<typename SrcBlob, typename DstBlob>
+        void operator()(
+            const View<
+                mapping::SoA<ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayDims>,
+                SrcBlob>& srcView,
+            View<mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayDims>, DstBlob>& dstView,
+            std::size_t threadId,
+            std::size_t threadCount)
+        {
+            constexpr auto readOpt = true; // TODO(bgruber): how to choose?
+            aosoaCommonBlockCopy(srcView, dstView, readOpt, threadId, threadCount);
+        }
+    };
+
+    /// Copy data from source view to destination view. Both views need to have the same array and record
+    /// dimensions. Delegates to \ref Copy to choose an implementation.
+    /// @param threadId Optional. Zero-based id of calling thread for multi-threaded invocations.
+    /// @param threadCount Optional. Thread count in case of multi-threaded invocation.
+    template<typename SrcMapping, typename SrcBlob, typename DstMapping, typename DstBlob>
+    void copy(
+        const View<SrcMapping, SrcBlob>& srcView,
+        View<DstMapping, DstBlob>& dstView,
+        std::size_t threadId = 0,
+        std::size_t threadCount = 1)
+    {
+        Copy<SrcMapping, DstMapping>{}(srcView, dstView, threadId, threadCount);
+    }
+} // namespace llama
+// ==
+// == ./Copy.hpp ==
+// ============================================================================
+
+// ============================================================================
+// == ./Proofs.hpp ==
+// ==
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+// #pragma once
+// #include "ArrayIndexRange.hpp"    // amalgamate: file already expanded
+// #include "Core.hpp"    // amalgamate: file already expanded
+
+namespace llama
+{
+    namespace internal
+    {
+        constexpr auto divRoundUp(std::size_t dividend, std::size_t divisor) -> std::size_t
+        {
+            return (dividend + divisor - 1) / divisor;
+        }
+    } // namespace internal
+
+// FIXME(bgruber): this test is actually not correct, because __cpp_constexpr_dynamic_alloc only guarantees constexpr
+// std::allocator
+#ifdef __cpp_constexpr_dynamic_alloc
+    namespace internal
+    {
+        template<typename T>
+        struct DynArray
+        {
+            constexpr DynArray() = default;
+
+            constexpr explicit DynArray(std::size_t n) : data(new T[n]{})
+            {
+            }
+
+            DynArray(const DynArray&) = delete;
+            DynArray(DynArray&&) = delete;
+            auto operator=(const DynArray&) -> DynArray& = delete;
+            auto operator=(DynArray&&) -> DynArray& = delete;
+
+            constexpr ~DynArray()
+            {
+                delete[] data;
+            }
+
+            constexpr void resize(std::size_t n)
+            {
+                delete[] data;
+                data = new T[n]{};
+            }
+
+            T* data = nullptr; // TODO(bgruber): replace by std::unique_ptr in C++23
+        };
+    } // namespace internal
+
+    /// Proofs by exhaustion of the array and record dimensions, that all values mapped to memory do not overlap.
+    // Unfortunately, this only works for smallish array dimensions, because of compiler limits on constexpr evaluation
+    // depth.
+    template<typename Mapping>
+    constexpr auto mapsNonOverlappingly(const Mapping& m) -> bool
+    {
+        internal::DynArray<internal::DynArray<std::uint64_t>> blobByteMapped(m.blobCount);
+        for(std::size_t i = 0; i < m.blobCount; i++)
+            blobByteMapped.data[i].resize(internal::divRoundUp(m.blobSize(i), 64));
+
+        auto testAndSet = [&](auto blob, auto offset) constexpr
+        {
+            const auto bit = std::uint64_t{1} << (offset % 64);
+            if(blobByteMapped.data[blob].data[offset / 64] & bit)
+                return true;
+            blobByteMapped.data[blob].data[offset / 64] |= bit;
+            return false;
+        };
+
+        bool collision = false;
+        forEachLeafCoord<typename Mapping::RecordDim>([&](auto rc) constexpr {
+            if(collision)
+                return;
+            for(auto ai : ArrayIndexRange{m.extents()})
+            {
+                using Type = GetType<typename Mapping::RecordDim, decltype(rc)>;
+                const auto [blob, offset] = m.blobNrAndOffset(ai, rc);
+                for(std::size_t b = 0; b < sizeof(Type); b++)
+                    if(testAndSet(blob, offset + b))
+                    {
+                        collision = true;
+                        break;
+                    }
+            }
+        });
+        return !collision;
+    }
+#endif
+
+    /// Proofs by exhaustion of the array and record dimensions, that at least PieceLength elements are always stored
+    /// contiguously.
+    // Unfortunately, this only works for smallish array dimensions, because of compiler limits on constexpr evaluation
+    // depth.
+    template<std::size_t PieceLength, typename Mapping>
+    constexpr auto mapsPiecewiseContiguous(const Mapping& m) -> bool
+    {
+        bool collision = false;
+        forEachLeafCoord<typename Mapping::RecordDim>([&](auto rc) constexpr {
+            std::size_t flatIndex = 0;
+            std::size_t lastBlob = std::numeric_limits<std::size_t>::max();
+            std::size_t lastOffset = std::numeric_limits<std::size_t>::max();
+            for(auto ai : ArrayIndexRange{m.extents()})
+            {
+                using Type = GetType<typename Mapping::RecordDim, decltype(rc)>;
+                const auto [blob, offset] = m.blobNrAndOffset(ai, rc);
+                if(flatIndex % PieceLength != 0 && (lastBlob != blob || lastOffset + sizeof(Type) != offset))
+                {
+                    collision = true;
+                    break;
+                }
+                lastBlob = blob;
+                lastOffset = offset;
+                flatIndex++;
+            }
+        });
+        return !collision;
+    }
+} // namespace llama
+// ==
+// == ./Proofs.hpp ==
+// ============================================================================
+
+// ============================================================================
 // == ./llama.hpp ==
 // ==
 // Copyright 2018 Alexander Matthes
@@ -5497,732 +4975,7 @@ namespace llama
 // #include "ArrayExtents.hpp"    // amalgamate: file already expanded
 // #include "ArrayIndexRange.hpp"    // amalgamate: file already expanded
 // #include "BlobAllocators.hpp"    // amalgamate: file already expanded
-	// ============================================================================
-	// == ./Copy.hpp ==
-	// ==
-	// SPDX-License-Identifier: GPL-3.0-or-later
-
-	// #pragma once
-	// #include "View.hpp"    // amalgamate: file already expanded
-		// ============================================================================
-		// == ./mapping/AoSoA.hpp ==
-		// ==
-		// SPDX-License-Identifier: GPL-3.0-or-later
-
-		// #pragma once
-		// #include "Common.hpp"    // amalgamate: file already expanded
-
-		// #include <limits>    // amalgamate: file already included
-
-		namespace llama::mapping
-		{
-		    /// The maximum number of vector lanes that can be used to fetch each leaf type in the record dimension into a
-		    /// vector register of the given size in bits.
-		    template<typename RecordDim, std::size_t VectorRegisterBits>
-		    inline constexpr std::size_t maxLanes = []() constexpr
-		    {
-		        auto max = std::numeric_limits<std::size_t>::max();
-		        forEachLeafCoord<RecordDim>(
-		            [&](auto rc)
-		            {
-		                using AttributeType = GetType<RecordDim, decltype(rc)>;
-		                max = std::min(max, VectorRegisterBits / (sizeof(AttributeType) * CHAR_BIT));
-		            });
-		        return max;
-		    }
-		    ();
-
-		    /// Array of struct of arrays mapping. Used to create a \ref View via \ref allocView.
-		    /// \tparam Lanes The size of the inner arrays of this array of struct of arrays.
-		    /// \tparam FlattenRecordDim Defines how the record dimension's fields should be flattened. See \ref
-		    /// FlattenRecordDimInOrder, \ref FlattenRecordDimIncreasingAlignment, \ref FlattenRecordDimDecreasingAlignment and
-		    /// \ref FlattenRecordDimMinimizePadding.
-		    template<
-		        typename TArrayExtents,
-		        typename TRecordDim,
-		        typename TArrayExtents::value_type Lanes,
-		        typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
-		        template<typename> typename FlattenRecordDim = FlattenRecordDimInOrder>
-		    struct AoSoA : MappingBase<TArrayExtents, TRecordDim>
-		    {
-		    private:
-		        using Base = MappingBase<TArrayExtents, TRecordDim>;
-		        using size_type = typename Base::size_type;
-
-		    public:
-		        inline static constexpr typename TArrayExtents::value_type lanes = Lanes;
-		        using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
-		        using Flattener = FlattenRecordDim<TRecordDim>;
-		        inline static constexpr std::size_t blobCount = 1;
-
-		        using Base::Base;
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(size_type) const -> size_type
-		        {
-		            const auto rs = static_cast<size_type>(sizeOf<TRecordDim>);
-		            return roundUpToMultiple(LinearizeArrayDimsFunctor{}.size(Base::extents()) * rs, Lanes * rs);
-		        }
-
-		        template<std::size_t... RecordCoords>
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
-		            typename Base::ArrayIndex ai,
-		            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset<size_type>
-		        {
-		            constexpr std::size_t flatFieldIndex =
-		#ifdef __NVCC__
-		                *& // mess with nvcc compiler state to workaround bug
-		#endif
-		                 Flattener::template flatIndex<RecordCoords...>;
-		            const auto flatArrayIndex = LinearizeArrayDimsFunctor{}(ai, Base::extents());
-		            const auto blockIndex = flatArrayIndex / Lanes;
-		            const auto laneIndex = flatArrayIndex % Lanes;
-		            const auto offset = static_cast<size_type>(sizeOf<TRecordDim> * Lanes) * blockIndex
-		                + static_cast<size_type>(flatOffsetOf<typename Flattener::FlatRecordDim, flatFieldIndex, false>)
-		                    * Lanes
-		                + static_cast<size_type>(sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>)) * laneIndex;
-		            return {0, offset};
-		        }
-		    };
-
-		    /// Binds parameters to an \ref AoSoA mapping except for array and record dimension, producing a quoted meta
-		    /// function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
-		    template<std::size_t Lanes, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
-		    struct BindAoSoA
-		    {
-		        template<typename ArrayExtents, typename RecordDim>
-		        using fn = AoSoA<ArrayExtents, RecordDim, Lanes, LinearizeArrayDimsFunctor>;
-		    };
-
-		    template<typename Mapping>
-		    inline constexpr bool isAoSoA = false;
-
-		    template<typename AD, typename RD, typename AD::value_type L>
-		    inline constexpr bool isAoSoA<AoSoA<AD, RD, L>> = true;
-
-		} // namespace llama::mapping
-		// ==
-		// == ./mapping/AoSoA.hpp ==
-		// ============================================================================
-
-		// ============================================================================
-		// == ./mapping/SoA.hpp ==
-		// ==
-		// Copyright 2018 Alexander Matthes
-		// SPDX-License-Identifier: GPL-3.0-or-later
-
-		// #pragma once
-		// #include "Common.hpp"    // amalgamate: file already expanded
-
-		// #include <limits>    // amalgamate: file already included
-
-		namespace llama::mapping
-		{
-		    enum class Blobs
-		    {
-		        Single,
-		        OnePerField
-		    };
-
-		    enum class SubArrayAlignment
-		    {
-		        Pack,
-		        Align
-		    };
-
-		    /// Struct of array mapping. Used to create a \ref View via \ref allocView.
-		    /// \tparam TBlobs If OnePerField, every element of the record dimension is mapped to its own blob.
-		    /// \tparam TSubArrayAlignment Only relevant when TBlobs == Single, ignored otherwise. If Align, aligns the sub
-		    /// arrays created within the single blob by inserting padding.
-		    /// \tparam TLinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
-		    /// how big the linear domain gets.
-		    /// \tparam FlattenRecordDimSingleBlob Defines how the record dimension's fields should be flattened if Blobs is
-		    /// Single. See \ref FlattenRecordDimInOrder, \ref FlattenRecordDimIncreasingAlignment, \ref
-		    /// FlattenRecordDimDecreasingAlignment and \ref FlattenRecordDimMinimizePadding.
-		    template<
-		        typename TArrayExtents,
-		        typename TRecordDim,
-		        Blobs TBlobs = Blobs::OnePerField,
-		        SubArrayAlignment TSubArrayAlignment = SubArrayAlignment::Pack,
-		        typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
-		        template<typename> typename FlattenRecordDimSingleBlob = FlattenRecordDimInOrder>
-		    struct SoA : MappingBase<TArrayExtents, TRecordDim>
-		    {
-		    private:
-		        using Base = MappingBase<TArrayExtents, TRecordDim>;
-		        using size_type = typename TArrayExtents::value_type;
-
-		    public:
-		        inline static constexpr Blobs blobs = TBlobs;
-		        inline static constexpr SubArrayAlignment subArrayAlignment = TSubArrayAlignment;
-		        using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
-		        using Flattener = FlattenRecordDimSingleBlob<TRecordDim>;
-		        inline static constexpr std::size_t blobCount
-		            = blobs == Blobs::OnePerField ? boost::mp11::mp_size<FlatRecordDim<TRecordDim>>::value : 1;
-
-		#ifndef __NVCC__
-		        using Base::Base;
-		#else
-		        constexpr SoA() = default;
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr explicit SoA(TArrayExtents extents, TRecordDim = {}) : Base(extents)
-		        {
-		        }
-		#endif
-
-		        LLAMA_FN_HOST_ACC_INLINE
-		        constexpr auto blobSize([[maybe_unused]] size_type blobIndex) const -> size_type
-		        {
-		            const auto flatSize = LinearizeArrayDimsFunctor{}.size(Base::extents());
-		            if constexpr(blobs == Blobs::OnePerField)
-		            {
-		                constexpr auto typeSizes = []() constexpr
-		                {
-		                    Array<size_type, blobCount> r{};
-		                    forEachLeafCoord<TRecordDim>([&r, i = 0](auto rc) mutable constexpr {
-		                        r[i++] = sizeof(GetType<TRecordDim, decltype(rc)>);
-		                    });
-		                    return r;
-		                }
-		                ();
-		                return flatSize * typeSizes[blobIndex];
-		            }
-		            else if constexpr(subArrayAlignment == SubArrayAlignment::Align)
-		            {
-		                size_type size = 0;
-		                using namespace boost::mp11;
-		                using FRD = typename Flattener::FlatRecordDim;
-		                mp_for_each<mp_transform<mp_identity, FRD>>(
-		                    [&](auto ti)
-		                    {
-		                        using FieldType = typename decltype(ti)::type;
-		                        size = roundUpToMultiple(size, static_cast<size_type>(alignof(FieldType)));
-		                        size += static_cast<size_type>(sizeof(FieldType)) * flatSize;
-		                    });
-		                return size;
-		            }
-		            else
-		            {
-		                return flatSize * static_cast<size_type>(sizeOf<TRecordDim>);
-		            }
-		        }
-
-		        template<std::size_t... RecordCoords>
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
-		            typename Base::ArrayIndex ad,
-		            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset<size_type>
-		        {
-		            if constexpr(blobs == Blobs::OnePerField)
-		            {
-		                constexpr auto blob = flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>;
-		                const auto offset = LinearizeArrayDimsFunctor{}(ad, Base::extents())
-		                    * static_cast<size_type>(sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>));
-		                return {blob, offset};
-		            }
-		            else
-		            {
-		                const auto subArrayOffset = LinearizeArrayDimsFunctor{}(ad, Base::extents())
-		                    * static_cast<size_type>(sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>));
-		                constexpr std::size_t flatFieldIndex =
-		#ifdef __NVCC__
-		                    *& // mess with nvcc compiler state to workaround bug
-		#endif
-		                     Flattener::template flatIndex<RecordCoords...>;
-		                const auto flatSize = LinearizeArrayDimsFunctor{}.size(Base::extents());
-		                using FRD = typename Flattener::FlatRecordDim;
-		                if constexpr(subArrayAlignment == SubArrayAlignment::Align)
-		                {
-		                    // TODO(bgruber): we can take a shortcut here if we know that flatSize is a multiple of all type's
-		                    // alignment. We can also precompute a table of sub array starts (and maybe store it), or rely on
-		                    // the compiler pulling it out of loops.
-		                    using namespace boost::mp11;
-		                    size_type offset = 0;
-		                    mp_for_each<mp_transform<mp_identity, mp_take_c<FRD, flatFieldIndex>>>(
-		                        [&](auto ti)
-		                        {
-		                            using FieldType = typename decltype(ti)::type;
-		                            offset = roundUpToMultiple(offset, static_cast<size_type>(alignof(FieldType)));
-		                            offset += static_cast<size_type>(sizeof(FieldType)) * flatSize;
-		                        });
-		                    offset = roundUpToMultiple(offset, static_cast<size_type>(alignof(mp_at_c<FRD, flatFieldIndex>)));
-		                    offset += subArrayOffset;
-		                    return {0, offset};
-		                }
-		                else
-		                {
-		                    const auto offset
-		                        = subArrayOffset + static_cast<size_type>(flatOffsetOf<FRD, flatFieldIndex, false>) * flatSize;
-		                    return {0, offset};
-		                }
-		            }
-		        }
-		    };
-
-		    // we can drop this when inherited ctors also inherit deduction guides
-		    template<typename TArrayExtents, typename TRecordDim>
-		    SoA(TArrayExtents, TRecordDim) -> SoA<TArrayExtents, TRecordDim>;
-
-		    /// Struct of array mapping storing the entire layout in a single blob. The starts of the sub arrays are aligned by
-		    /// inserting padding. \see SoA
-		    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
-		    using AlignedSingleBlobSoA
-		        = SoA<ArrayExtents, RecordDim, Blobs::Single, SubArrayAlignment::Align, LinearizeArrayDimsFunctor>;
-
-		    /// Struct of array mapping storing the entire layout in a single blob. The sub arrays are tightly packed,
-		    /// violating the type's alignment requirements. \see SoA
-		    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
-		    using PackedSingleBlobSoA
-		        = SoA<ArrayExtents, RecordDim, Blobs::Single, SubArrayAlignment::Pack, LinearizeArrayDimsFunctor>;
-
-		    /// Struct of array mapping storing each attribute of the record dimension in a separate blob.
-		    /// \see SoA
-		    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
-		    using MultiBlobSoA
-		        = SoA<ArrayExtents, RecordDim, Blobs::OnePerField, SubArrayAlignment::Pack, LinearizeArrayDimsFunctor>;
-
-		    /// Binds parameters to an \ref SoA mapping except for array and record dimension, producing a quoted
-		    /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
-		    template<
-		        Blobs Blobs = Blobs::OnePerField,
-		        SubArrayAlignment SubArrayAlignment = SubArrayAlignment::Pack,
-		        typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
-		    struct BindSoA
-		    {
-		        template<typename ArrayExtents, typename RecordDim>
-		        using fn = SoA<ArrayExtents, RecordDim, Blobs, SubArrayAlignment, LinearizeArrayDimsFunctor>;
-		    };
-
-		    template<typename Mapping>
-		    inline constexpr bool isSoA = false;
-
-		    template<
-		        typename ArrayExtents,
-		        typename RecordDim,
-		        Blobs Blobs,
-		        SubArrayAlignment SubArrayAlignment,
-		        typename LinearizeArrayDimsFunctor>
-		    inline constexpr bool
-		        isSoA<SoA<ArrayExtents, RecordDim, Blobs, SubArrayAlignment, LinearizeArrayDimsFunctor>> = true;
-		} // namespace llama::mapping
-		// ==
-		// == ./mapping/SoA.hpp ==
-		// ============================================================================
-
-
-	#include <cstring>
-	#include <numeric>
-
-	namespace llama
-	{
-	    namespace internal
-	    {
-	        template<typename RecordDim>
-	        void assertTrivialCopyable()
-	        {
-	            forEachLeafCoord<RecordDim>(
-	                [](auto rc)
-	                {
-	                    static_assert(
-	                        std::is_trivially_copyable_v<GetType<RecordDim, decltype(rc)>>,
-	                        "All types in the record dimension must be trivially copyable");
-	                });
-	        }
-
-	        using memcopyFunc = void* (*) (void*, const void*, std::size_t);
-
-	        inline void parallelMemcpy(
-	            std::byte* dst,
-	            const std::byte* src,
-	            std::size_t size,
-	            std::size_t threadId = 0,
-	            std::size_t threadCount = 1,
-	            memcopyFunc singleThreadMemcpy = std::memcpy)
-	        {
-	            const auto sizePerThread = size / threadCount;
-	            const auto sizeLastThread = sizePerThread + size % threadCount;
-	            const auto sizeThisThread = threadId == threadCount - 1 ? sizeLastThread : sizePerThread;
-	            singleThreadMemcpy(dst + threadId * sizePerThread, src + threadId * sizePerThread, sizeThisThread);
-	        }
-	    } // namespace internal
-
-	    /// Direct memcpy from source view blobs to destination view blobs. Both views need to have the same mappings with
-	    /// the same array dimensions.
-	    /// @param threadId Optional. Zero-based id of calling thread for multi-threaded invocations.
-	    /// @param threadCount Optional. Thread count in case of multi-threaded invocation.
-	    template<typename Mapping, typename SrcBlob, typename DstBlob>
-	    void blobMemcpy(
-	        const View<Mapping, SrcBlob>& srcView,
-	        View<Mapping, DstBlob>& dstView,
-	        std::size_t threadId = 0,
-	        std::size_t threadCount = 1)
-	    {
-	        internal::assertTrivialCopyable<typename Mapping::RecordDim>();
-
-	        // TODO(bgruber): we do not verify if the mappings have other runtime state than the array dimensions
-	        if(srcView.mapping().extents() != dstView.mapping().extents())
-	            throw std::runtime_error{"Array dimensions sizes are different"};
-
-	        // TODO(bgruber): this is maybe not the best parallel copying strategy
-	        for(std::size_t i = 0; i < Mapping::blobCount; i++)
-	            internal::parallelMemcpy(
-	                &dstView.storageBlobs[i][0],
-	                &srcView.storageBlobs[i][0],
-	                dstView.mapping().blobSize(i),
-	                threadId,
-	                threadCount);
-	    }
-
-	    /// Field-wise copy from source to destination view. Both views need to have the same array and record dimensions.
-	    /// @param threadId Optional. Thread id in case of multi-threaded copy.
-	    /// @param threadCount Optional. Thread count in case of multi-threaded copy.
-	    template<typename SrcMapping, typename SrcBlob, typename DstMapping, typename DstBlob>
-	    void fieldWiseCopy(
-	        const View<SrcMapping, SrcBlob>& srcView,
-	        View<DstMapping, DstBlob>& dstView,
-	        std::size_t threadId = 0,
-	        std::size_t threadCount = 1)
-	    {
-	        // TODO(bgruber): think if we can remove this restriction
-	        static_assert(
-	            std::is_same_v<typename SrcMapping::RecordDim, typename DstMapping::RecordDim>,
-	            "The source and destination record dimensions must be the same");
-
-	        if(srcView.mapping().extents() != dstView.mapping().extents())
-	            throw std::runtime_error{"Array dimensions sizes are different"};
-
-	        auto copyOne = [&](auto ai) LLAMA_LAMBDA_INLINE
-	        {
-	            forEachLeafCoord<typename DstMapping::RecordDim>([&](auto rc) LLAMA_LAMBDA_INLINE
-	                                                             { dstView(ai)(rc) = srcView(ai)(rc); });
-	        };
-
-	        constexpr auto dims = SrcMapping::ArrayExtents::rank;
-	        const auto extents = srcView.mapping().extents().toArray();
-	        const auto workPerThread = (extents[0] + threadCount - 1) / threadCount;
-	        const auto start = threadId * workPerThread;
-	        const auto end = std::min((threadId + 1) * workPerThread, static_cast<std::size_t>(extents[0]));
-	        for(auto i = start; i < end; i++)
-	        {
-	            using SrcSizeType = typename SrcMapping::ArrayExtents::value_type;
-	            if constexpr(dims > 1)
-	                forEachADCoord(
-	                    ArrayIndex<SrcSizeType, dims - 1>{popFront(extents)},
-	                    copyOne,
-	                    static_cast<SrcSizeType>(i));
-	            else
-	                copyOne(ArrayIndex<SrcSizeType, dims>{static_cast<std::size_t>(i)});
-	        }
-	    }
-
-	    namespace internal
-	    {
-	        template<typename Mapping>
-	        inline constexpr std::size_t aosoaLanes = 0;
-
-	        template<
-	            typename ArrayExtents,
-	            typename RecordDim,
-	            mapping::Blobs Blobs,
-	            mapping::SubArrayAlignment SubArrayAlignment,
-	            typename LinearizeArrayDimsFunctor>
-	        inline constexpr std::size_t aosoaLanes<
-	            mapping::SoA<ArrayExtents, RecordDim, Blobs, SubArrayAlignment, LinearizeArrayDimsFunctor>> = std::
-	            numeric_limits<std::size_t>::max();
-
-	        template<typename ArrayExtents, typename RecordDim, std::size_t Lanes, typename LinearizeArrayDimsFunctor>
-	        inline constexpr std::size_t
-	            aosoaLanes<mapping::AoSoA<ArrayExtents, RecordDim, Lanes, LinearizeArrayDimsFunctor>> = Lanes;
-	    } // namespace internal
-
-	    /// AoSoA copy strategy which transfers data in common blocks. SoA mappings are also allowed for at most 1
-	    /// argument.
-	    /// @param threadId Optional. Zero-based id of calling thread for multi-threaded invocations.
-	    /// @param threadCount Optional. Thread count in case of multi-threaded invocation.
-	    template<typename SrcMapping, typename SrcBlob, typename DstMapping, typename DstBlob>
-	    void aosoaCommonBlockCopy(
-	        const View<SrcMapping, SrcBlob>& srcView,
-	        View<DstMapping, DstBlob>& dstView,
-	        bool readOpt,
-	        std::size_t threadId = 0,
-	        std::size_t threadCount = 1)
-	    {
-	        // TODO(bgruber): think if we can remove this restriction
-	        static_assert(
-	            std::is_same_v<typename SrcMapping::RecordDim, typename DstMapping::RecordDim>,
-	            "The source and destination record dimensions must be the same");
-	        static_assert(
-	            std::is_same_v<
-	                typename SrcMapping::LinearizeArrayDimsFunctor,
-	                typename DstMapping::LinearizeArrayDimsFunctor>,
-	            "Source and destination mapping need to use the same array dimensions linearizer");
-	        using RecordDim = typename SrcMapping::RecordDim;
-	        internal::assertTrivialCopyable<RecordDim>();
-
-	        [[maybe_unused]] static constexpr bool isSrcMB = SrcMapping::blobCount > 1;
-	        [[maybe_unused]] static constexpr bool isDstMB = DstMapping::blobCount > 1;
-	        static constexpr auto lanesSrc = internal::aosoaLanes<SrcMapping>;
-	        static constexpr auto lanesDst = internal::aosoaLanes<DstMapping>;
-
-	        if(srcView.mapping().extents() != dstView.mapping().extents())
-	            throw std::runtime_error{"Array dimensions sizes are different"};
-
-	        static constexpr auto srcIsAoSoA = lanesSrc != std::numeric_limits<std::size_t>::max();
-	        static constexpr auto dstIsAoSoA = lanesDst != std::numeric_limits<std::size_t>::max();
-
-	        static_assert(srcIsAoSoA || dstIsAoSoA, "At least one of the mappings must be an AoSoA mapping");
-	        static_assert(
-	            !srcIsAoSoA || std::tuple_size_v<decltype(srcView.storageBlobs)> == 1,
-	            "Implementation assumes AoSoA with single blob");
-	        static_assert(
-	            !dstIsAoSoA || std::tuple_size_v<decltype(dstView.storageBlobs)> == 1,
-	            "Implementation assumes AoSoA with single blob");
-
-	        const auto flatSize = product(dstView.mapping().extents());
-
-	        // TODO(bgruber): implement the following by adding additional copy loops for the remaining elements
-	        if(!srcIsAoSoA && flatSize % lanesDst != 0)
-	            throw std::runtime_error{"Source SoA mapping's total array elements must be evenly divisible by the "
-	                                     "destination AoSoA Lane count."};
-	        if(!dstIsAoSoA && flatSize % lanesSrc != 0)
-	            throw std::runtime_error{"Destination SoA mapping's total array elements must be evenly divisible by the "
-	                                     "source AoSoA Lane count."};
-
-	        // the same as AoSoA::blobNrAndOffset but takes a flat array index
-	        auto mapAoSoA = [](std::size_t flatArrayIndex, auto rc, std::size_t Lanes) LLAMA_LAMBDA_INLINE
-	        {
-	            const auto blockIndex = flatArrayIndex / Lanes;
-	            const auto laneIndex = flatArrayIndex % Lanes;
-	            const auto offset = (sizeOf<RecordDim> * Lanes) * blockIndex + offsetOf<RecordDim, decltype(rc)> * Lanes
-	                + sizeof(GetType<RecordDim, decltype(rc)>) * laneIndex;
-	            return offset;
-	        };
-	        // the same as SoA::blobNrAndOffset but takes a flat array index
-	        auto mapSoA = [&](std::size_t flatArrayIndex, auto rc, bool mb) LLAMA_LAMBDA_INLINE
-	        {
-	            const auto blob = mb * flatRecordCoord<RecordDim, decltype(rc)>;
-	            const auto offset = !mb * offsetOf<RecordDim, decltype(rc)> * flatSize
-	                + sizeof(GetType<RecordDim, decltype(rc)>) * flatArrayIndex;
-	            return NrAndOffset{blob, offset};
-	        };
-
-	        auto mapSrc = [&](std::size_t flatArrayIndex, auto rc) LLAMA_LAMBDA_INLINE
-	        {
-	            if constexpr(srcIsAoSoA)
-	                return &srcView.storageBlobs[0][0] + mapAoSoA(flatArrayIndex, rc, lanesSrc);
-	            else
-	            {
-	                const auto [blob, off] = mapSoA(flatArrayIndex, rc, isSrcMB);
-	                return &srcView.storageBlobs[blob][off];
-	            }
-	        };
-	        auto mapDst = [&](std::size_t flatArrayIndex, auto rc) LLAMA_LAMBDA_INLINE
-	        {
-	            if constexpr(dstIsAoSoA)
-	                return &dstView.storageBlobs[0][0] + mapAoSoA(flatArrayIndex, rc, lanesDst);
-	            else
-	            {
-	                const auto [blob, off] = mapSoA(flatArrayIndex, rc, isDstMB);
-	                return &dstView.storageBlobs[blob][off];
-	            }
-	        };
-
-	        static constexpr auto l = []
-	        {
-	            if constexpr(srcIsAoSoA && dstIsAoSoA)
-	                return std::gcd(lanesSrc, lanesDst);
-	            return std::min(lanesSrc, lanesDst);
-	        }();
-	        if(readOpt)
-	        {
-	            // optimized for linear reading
-	            constexpr auto srcL = srcIsAoSoA ? lanesSrc : l;
-	            const auto elementsPerThread = flatSize / srcL / threadCount * srcL;
-	            {
-	                const auto start = threadId * elementsPerThread;
-	                const auto stop = threadId == threadCount - 1 ? flatSize : (threadId + 1) * elementsPerThread;
-
-	                auto copyLBlock = [&](const std::byte*& threadSrc, std::size_t dstIndex, auto rc) LLAMA_LAMBDA_INLINE
-	                {
-	                    constexpr auto bytes = l * sizeof(GetType<RecordDim, decltype(rc)>);
-	                    std::memcpy(mapDst(dstIndex, rc), threadSrc, bytes);
-	                    threadSrc += bytes;
-	                };
-	                if constexpr(srcIsAoSoA)
-	                {
-	                    auto* threadSrc = mapSrc(start, RecordCoord<>{});
-	                    for(std::size_t i = start; i < stop; i += lanesSrc)
-	                        forEachLeafCoord<RecordDim>(
-	                            [&](auto rc) LLAMA_LAMBDA_INLINE
-	                            {
-	                                for(std::size_t j = 0; j < lanesSrc; j += l)
-	                                    copyLBlock(threadSrc, i + j, rc);
-	                            });
-	                }
-	                else
-	                {
-	                    forEachLeafCoord<RecordDim>(
-	                        [&](auto rc) LLAMA_LAMBDA_INLINE
-	                        {
-	                            auto* threadSrc = mapSrc(start, rc);
-	                            for(std::size_t i = start; i < stop; i += l)
-	                                copyLBlock(threadSrc, i, rc);
-	                        });
-	                }
-	            }
-	        }
-	        else
-	        {
-	            // optimized for linear writing
-	            constexpr auto dstL = dstIsAoSoA ? lanesDst : l;
-	            const auto elementsPerThread = flatSize / dstL / threadCount * dstL;
-	            {
-	                const auto start = threadId * elementsPerThread;
-	                const auto stop = threadId == threadCount - 1 ? flatSize : (threadId + 1) * elementsPerThread;
-
-	                auto copyLBlock = [&](std::byte*& threadDst, std::size_t srcIndex, auto rc) LLAMA_LAMBDA_INLINE
-	                {
-	                    constexpr auto bytes = l * sizeof(GetType<RecordDim, decltype(rc)>);
-	                    std::memcpy(threadDst, mapSrc(srcIndex, rc), bytes);
-	                    threadDst += bytes;
-	                };
-	                if constexpr(dstIsAoSoA)
-	                {
-	                    auto* threadDst = mapDst(start, RecordCoord<>{});
-	                    for(std::size_t i = start; i < stop; i += lanesDst)
-	                        forEachLeafCoord<RecordDim>(
-	                            [&](auto rc) LLAMA_LAMBDA_INLINE
-	                            {
-	                                for(std::size_t j = 0; j < lanesDst; j += l)
-	                                    copyLBlock(threadDst, i + j, rc);
-	                            });
-	                }
-	                else
-	                {
-	                    forEachLeafCoord<RecordDim>(
-	                        [&](auto rc) LLAMA_LAMBDA_INLINE
-	                        {
-	                            auto* threadDst = mapDst(start, rc);
-	                            for(std::size_t i = start; i < stop; i += l)
-	                                copyLBlock(threadDst, i, rc);
-	                        });
-	                }
-	            }
-	        }
-	    }
-
-	    /// @brief Generic implementation of \ref copy defaulting to \ref fieldWiseCopy. LLAMA provides several
-	    /// specializations of this construct for specific mappings. Users are encouraged to also specialize this template
-	    /// with better copy algorithms for further combinations of mappings, if they can and want to provide a better
-	    /// implementation.
-	    template<typename SrcMapping, typename DstMapping, typename SFINAE = void>
-	    struct Copy
-	    {
-	        template<typename SrcView, typename DstView>
-	        void operator()(const SrcView& srcView, DstView& dstView, std::size_t threadId, std::size_t threadCount) const
-	        {
-	            fieldWiseCopy(srcView, dstView, threadId, threadCount);
-	        }
-	    };
-
-	    template<typename Mapping>
-	    struct Copy<Mapping, Mapping>
-	    {
-	        template<typename SrcView, typename DstView>
-	        void operator()(const SrcView& srcView, DstView& dstView, std::size_t threadId, std::size_t threadCount) const
-	        {
-	            blobMemcpy(srcView, dstView, threadId, threadCount);
-	        }
-	    };
-
-	    template<
-	        typename ArrayExtents,
-	        typename RecordDim,
-	        typename LinearizeArrayDims,
-	        std::size_t LanesSrc,
-	        std::size_t LanesDst>
-	    struct Copy<
-	        mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayDims>,
-	        mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayDims>,
-	        std::enable_if_t<LanesSrc != LanesDst>>
-	    {
-	        template<typename SrcBlob, typename DstBlob>
-	        void operator()(
-	            const View<mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayDims>, SrcBlob>& srcView,
-	            View<mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayDims>, DstBlob>& dstView,
-	            std::size_t threadId,
-	            std::size_t threadCount)
-	        {
-	            constexpr auto readOpt = true; // TODO(bgruber): how to choose?
-	            aosoaCommonBlockCopy(srcView, dstView, readOpt, threadId, threadCount);
-	        }
-	    };
-
-	    template<
-	        typename ArrayExtents,
-	        typename RecordDim,
-	        typename LinearizeArrayDims,
-	        std::size_t LanesSrc,
-	        mapping::Blobs DstBlobs,
-	        mapping::SubArrayAlignment DstSubArrayAlignment>
-	    struct Copy<
-	        mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayDims>,
-	        mapping::SoA<ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayDims>>
-	    {
-	        template<typename SrcBlob, typename DstBlob>
-	        void operator()(
-	            const View<mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayDims>, SrcBlob>& srcView,
-	            View<mapping::SoA<ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayDims>, DstBlob>&
-	                dstView,
-	            std::size_t threadId,
-	            std::size_t threadCount)
-	        {
-	            constexpr auto readOpt = true; // TODO(bgruber): how to choose?
-	            aosoaCommonBlockCopy(srcView, dstView, readOpt, threadId, threadCount);
-	        }
-	    };
-
-	    template<
-	        typename ArrayExtents,
-	        typename RecordDim,
-	        typename LinearizeArrayDims,
-	        std::size_t LanesDst,
-	        mapping::Blobs SrcBlobs,
-	        mapping::SubArrayAlignment SrcSubArrayAlignment>
-	    struct Copy<
-	        mapping::SoA<ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayDims>,
-	        mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayDims>>
-	    {
-	        template<typename SrcBlob, typename DstBlob>
-	        void operator()(
-	            const View<
-	                mapping::SoA<ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayDims>,
-	                SrcBlob>& srcView,
-	            View<mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayDims>, DstBlob>& dstView,
-	            std::size_t threadId,
-	            std::size_t threadCount)
-	        {
-	            constexpr auto readOpt = true; // TODO(bgruber): how to choose?
-	            aosoaCommonBlockCopy(srcView, dstView, readOpt, threadId, threadCount);
-	        }
-	    };
-
-	    /// Copy data from source view to destination view. Both views need to have the same array and record
-	    /// dimensions. Delegates to \ref Copy to choose an implementation.
-	    /// @param threadId Optional. Zero-based id of calling thread for multi-threaded invocations.
-	    /// @param threadCount Optional. Thread count in case of multi-threaded invocation.
-	    template<typename SrcMapping, typename SrcBlob, typename DstMapping, typename DstBlob>
-	    void copy(
-	        const View<SrcMapping, SrcBlob>& srcView,
-	        View<DstMapping, DstBlob>& dstView,
-	        std::size_t threadId = 0,
-	        std::size_t threadCount = 1)
-	    {
-	        Copy<SrcMapping, DstMapping>{}(srcView, dstView, threadId, threadCount);
-	    }
-	} // namespace llama
-	// ==
-	// == ./Copy.hpp ==
-	// ============================================================================
-
+// #include "Copy.hpp"    // amalgamate: file already expanded
 // #include "Core.hpp"    // amalgamate: file already expanded
 	// ============================================================================
 	// == ./DumpMapping.hpp ==
@@ -6233,7 +4986,357 @@ namespace llama
 	#if __has_include(<fmt/format.h>)
 	// #    include "ArrayIndexRange.hpp"    // amalgamate: file already expanded
 	// #    include "Core.hpp"    // amalgamate: file already expanded
-	// #    include "StructName.hpp"    // amalgamate: file already expanded
+		// ============================================================================
+		// == ./StructName.hpp ==
+		// ==
+		// SPDX-License-Identifier: GPL-3.0-or-later
+
+		// #pragma once
+		// #include "Core.hpp"    // amalgamate: file already expanded
+
+		#include <string_view>
+
+		namespace llama
+		{
+		    namespace internal
+		    {
+		        // TODO(bgruber): just use std::copy which became constexpr in C++20
+		        template<typename In, typename Out>
+		        constexpr auto constexprCopy(In f, In l, Out d) -> Out
+		        {
+		            while(f != l)
+		                *d++ = *f++;
+		            return d;
+		        }
+
+		        // TODO(bgruber): just use std::search which became constexpr in C++20
+		        // from: https://en.cppreference.com/w/cpp/algorithm/search
+		        template<class ForwardIt1, class ForwardIt2>
+		        constexpr auto constexprSearch(ForwardIt1 first, ForwardIt1 last, ForwardIt2 sFirst, ForwardIt2 sLast)
+		            -> ForwardIt1
+		        {
+		            while(true)
+		            {
+		                ForwardIt1 it = first;
+		                for(ForwardIt2 sIt = sFirst;; ++it, ++sIt)
+		                {
+		                    if(sIt == sLast)
+		                        return first;
+		                    if(it == last)
+		                        return last;
+		                    if(!(*it == *sIt))
+		                        break;
+		                }
+		                ++first;
+		            }
+		        }
+
+		        // TODO(bgruber): just use std::remove_copy which became constexpr in C++20
+		        // from: https://en.cppreference.com/w/cpp/algorithm/remove_copy
+		        template<class InputIt, class OutputIt, class T>
+		        constexpr auto constexprRemoveCopy(InputIt first, InputIt last, OutputIt d_first, const T& value) -> OutputIt
+		        {
+		            for(; first != last; ++first)
+		            {
+		                if(!(*first == value))
+		                {
+		                    *d_first++ = *first;
+		                }
+		            }
+		            return d_first;
+		        }
+
+		        // TODO(bgruber): just use std::count which became constexpr in C++20
+		        // from: https://en.cppreference.com/w/cpp/algorithm/count
+		        template<class InputIt, class T>
+		        auto constexprCount(InputIt first, InputIt last, const T& value) ->
+		            typename std::iterator_traits<InputIt>::difference_type
+		        {
+		            typename std::iterator_traits<InputIt>::difference_type ret = 0;
+		            for(; first != last; ++first)
+		            {
+		                if(*first == value)
+		                {
+		                    ret++;
+		                }
+		            }
+		            return ret;
+		        }
+
+		        template<typename T>
+		        constexpr auto typeNameAsArray()
+		        {
+		            // adapted from Matthew Rodusek:
+		            // https://bitwizeshift.github.io/posts/2021/03/09/getting-an-unmangled-type-name-at-compile-time/
+		            //
+		            // Boost Software License - Version 1.0 - August 17th, 2003
+		            //
+		            // Permission is hereby granted, free of charge, to any person or organization
+		            // obtaining a copy of the software and accompanying documentation covered by
+		            // this license (the "Software") to use, reproduce, display, distribute,
+		            // execute, and transmit the Software, and to prepare derivative works of the
+		            // Software, and to permit third-parties to whom the Software is furnished to
+		            // do so, all subject to the following:
+		            //
+		            // The copyright notices in the Software and this entire statement, including
+		            // the above license grant, this restriction and the following disclaimer,
+		            // must be included in all copies of the Software, in whole or in part, and
+		            // all derivative works of the Software, unless such copies or derivative
+		            // works are solely in the form of machine-executable object code generated by
+		            // a source language processor.
+		            //
+		            // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+		            // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+		            // FITNESS FOR A PARTICULAR PURPOSE, TITLE AND NON-INFRINGEMENT. IN NO EVENT
+		            // SHALL THE COPYRIGHT HOLDERS OR ANYONE DISTRIBUTING THE SOFTWARE BE LIABLE
+		            // FOR ANY DAMAGES OR OTHER LIABILITY, WHETHER IN CONTRACT, TORT OR OTHERWISE,
+		            // ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+		            // DEALINGS IN THE SOFTWARE.
+
+		#if defined(__clang__)
+		            constexpr auto prefix = std::string_view{"[T = "};
+		            constexpr auto suffix = std::string_view{"]"};
+		            constexpr auto function = std::string_view{__PRETTY_FUNCTION__};
+		#elif defined(__GNUC__)
+		            constexpr auto prefix = std::string_view{"with T = "};
+		            constexpr auto suffix = std::string_view{"]"};
+		            constexpr auto function = std::string_view{__PRETTY_FUNCTION__};
+		#elif defined(_MSC_VER)
+		            constexpr auto prefix = std::string_view{"typeNameAsArray<"};
+		            constexpr auto suffix = std::string_view{">(void)"};
+		            constexpr auto function = std::string_view{__FUNCSIG__};
+		#else
+		#    warning Unsupported compiler
+		            constexpr auto prefix = std::string_view{};
+		            constexpr auto suffix = std::string_view{};
+		            constexpr auto function = std::string_view{};
+		#endif
+
+		            constexpr auto start = function.find(prefix) + prefix.size();
+		            constexpr auto end = function.rfind(suffix);
+		            static_assert(start <= end);
+
+		            constexpr auto name = function.substr(start, (end - start));
+
+		            constexpr auto arrAndSize = [&]() constexpr
+		            {
+		                Array<char, name.size()> nameArray{};
+		                constexprCopy(name.begin(), name.end(), nameArray.begin());
+
+		#ifdef _MSC_VER
+		                // MSVC 19.32 runs into a syntax error if we just capture nameArray. Passing it as argument is a
+		                // workaround. Applies to the following lambdas.
+
+		                // strip "struct " and "class ".
+		                auto removeAllOccurences = [](auto& nameArray, std::size_t size, std::string_view str) constexpr
+		                {
+		                    auto e = nameArray.begin() + size;
+		                    while(true)
+		                    {
+		                        auto it = constexprSearch(nameArray.begin(), e, str.begin(), str.end());
+		                        if(it == e)
+		                            break;
+		                        constexprCopy(it + str.size(), e, it);
+		                        e -= str.size();
+		                    }
+		                    return e - nameArray.begin();
+		                };
+
+		                auto size1 = removeAllOccurences(nameArray, nameArray.size(), std::string_view{"struct "});
+		                auto size2 = removeAllOccurences(nameArray, size1, std::string_view{"class "});
+		#else
+		                auto size2 = nameArray.size();
+		#endif
+
+		                auto size3Func = [&](auto& nameArray) constexpr
+		                {
+		                    // remove spaces between closing template angle brackets and after commas
+		                    auto e = nameArray.begin() + size2;
+		                    for(auto b = nameArray.begin(); b < e - 2; b++)
+		                    {
+		                        if((b[0] == '>' && b[1] == ' ' && b[2] == '>') || (b[0] == ',' && b[1] == ' '))
+		                        {
+		                            constexprCopy(b + 2, e, b + 1);
+		                            e--;
+		                        }
+		                    }
+		                    return e - nameArray.begin();
+		                };
+		                auto size3 = size3Func(nameArray);
+
+		                return std::pair{nameArray, size3};
+		            }
+		            ();
+
+		            Array<char, arrAndSize.second> a{};
+		            constexprCopy(arrAndSize.first.begin(), arrAndSize.first.begin() + arrAndSize.second, a.begin());
+		            return a;
+		        }
+
+		        template<typename T>
+		        inline constexpr auto typeNameStorage = typeNameAsArray<T>();
+		    } // namespace internal
+
+		    template<typename T>
+		    inline constexpr auto qualifiedTypeName = []
+		    {
+		        constexpr auto& value = internal::typeNameStorage<T>;
+		        return std::string_view{value.data(), value.size()};
+		    }();
+
+		    namespace internal
+		    {
+		        constexpr auto isIdentChar(char c) -> bool
+		        {
+		            if(c >= 'A' && c <= 'Z')
+		                return true;
+		            if(c >= 'a' && c <= 'z')
+		                return true;
+		            if(c >= '0' && c <= '9')
+		                return true;
+		            if(c == '_')
+		                return true;
+		            return false;
+		        }
+
+		        template<typename T>
+		        inline constexpr auto structNameStorage = []() constexpr
+		        {
+		            // strip namespace qualifiers before type names
+		            constexpr auto arrAndSize = []() constexpr
+		            {
+		                auto s = internal::typeNameStorage<T>;
+		                auto e = s.end();
+		                auto b = s.begin();
+		                while(true)
+		                {
+		                    // find iterator to after "::"
+		                    auto l = b;
+		                    while(l + 1 < e && !(l[0] == ':' && l[1] == ':'))
+		                        l++;
+		                    if(l + 1 == e)
+		                        break;
+		                    l += 2;
+
+		                    // find iterator to first identifier char before "::"
+		                    auto f = l - 3; // start at first char before "::"
+		                    while(s.begin() < f && isIdentChar(f[-1]))
+		                        f--;
+
+		                    // cut out [f:l[
+		                    constexprCopy(l, e, f);
+		                    e -= (l - f);
+		                    b = f;
+		                }
+
+		                return std::pair{s, e - s.begin()};
+		            }
+		            ();
+
+		            Array<char, arrAndSize.second> a{};
+		            constexprCopy(arrAndSize.first.begin(), arrAndSize.first.begin() + arrAndSize.second, a.begin());
+		            return a;
+		        }
+		        ();
+		    } // namespace internal
+
+		    template<typename T>
+		    constexpr auto structName(T = {}) -> std::string_view
+		    {
+		        constexpr auto& value = internal::structNameStorage<T>;
+		        return std::string_view{&value[0], value.size()};
+		    }
+
+		    namespace internal
+		    {
+		        constexpr auto intToStrSize(std::size_t s)
+		        {
+		            std::size_t len = 0;
+		            do
+		            {
+		                len++;
+		                s /= 10;
+		            } while(s != 0);
+		            return len;
+		        }
+
+		        template<typename RecordDim, std::size_t... Coords>
+		        LLAMA_ACC inline constexpr auto recordCoordTagsStorage = []() constexpr
+		        {
+		            using Tags = GetTags<RecordDim, RecordCoord<Coords...>>;
+
+		            // precompute char array size
+		            constexpr auto size = [&]() constexpr
+		            {
+		                std::size_t s = 0;
+		                boost::mp11::mp_for_each<Tags>(
+		                    [&](auto tag)
+		                    {
+		                        if(s != 0)
+		                            s++; // for the '.'s
+		                        using Tag = decltype(tag);
+		                        if constexpr(isRecordCoord<Tag>)
+		                            s += intToStrSize(s);
+		                        else
+		                            s += structName(tag).size();
+		                    });
+		                return s;
+		            }
+		            ();
+		            llama::Array<char, size> a{};
+		            auto w = a.begin();
+
+		            boost::mp11::mp_for_each<Tags>([&](auto tag) constexpr {
+		                if(w != a.begin())
+		                {
+		                    *w = '.';
+		                    w++;
+		                }
+		                using Tag = decltype(tag);
+		                if constexpr(isRecordCoord<Tag>)
+		                {
+		                    // handle array indices
+		                    static_assert(Tag::size == 1);
+		                    // convert to string
+		                    auto n = Tag::front;
+		                    w += intToStrSize(n) - 1;
+		                    do
+		                    {
+		                        *w = '0' + n % 10;
+		                        w--;
+		                        n /= 10;
+		                    } while(n != 0);
+		                }
+		                else
+		                {
+		                    constexpr auto sn = structName(tag);
+		                    constexprCopy(sn.begin(), sn.end(), w);
+		                    w += sn.size();
+		                }
+		            });
+		            return a;
+		        }
+		        ();
+		    } // namespace internal
+
+		    /// Returns the tags interspersed by '.' represented by the given record coord in the given record dimension.
+		    template<typename RecordDim, std::size_t... Coords>
+		    constexpr auto recordCoordTags(RecordCoord<Coords...> = {}) -> std::string_view
+		    {
+		        constexpr auto& value = internal::recordCoordTagsStorage<RecordDim, Coords...>;
+		        return std::string_view{&value[0], value.size()};
+		    }
+
+		    template<typename RecordDim>
+		    constexpr auto recordCoordTags(RecordCoord<>) -> std::string_view
+		    {
+		        return {};
+		    }
+		} // namespace llama
+		// ==
+		// == ./StructName.hpp ==
+		// ============================================================================
+
 	// #    include "View.hpp"    // amalgamate: file already expanded
 
 	#    include <boost/functional/hash.hpp>
@@ -6739,7 +5842,1032 @@ namespace llama
 // #include "HasRanges.hpp"    // amalgamate: file already expanded
 // #include "Meta.hpp"    // amalgamate: file already expanded
 // #include "ProxyRefOpMixin.hpp"    // amalgamate: file already expanded
-// #include "RecordRef.hpp"    // amalgamate: file already expanded
+	// ============================================================================
+	// == ./RecordRef.hpp ==
+	// ==
+	// Copyright 2018 Alexander Matthes
+	// SPDX-License-Identifier: GPL-3.0-or-later
+
+	// #pragma once
+	// #include "Concepts.hpp"    // amalgamate: file already expanded
+	// #include "HasRanges.hpp"    // amalgamate: file already expanded
+	// #include "ProxyRefOpMixin.hpp"    // amalgamate: file already expanded
+	// #include "StructName.hpp"    // amalgamate: file already expanded
+	// #include "View.hpp"    // amalgamate: file already expanded
+
+	#include <iosfwd>
+	// #include <type_traits>    // amalgamate: file already included
+
+	namespace llama
+	{
+	    template<typename View, typename BoundRecordCoord, bool OwnView>
+	    struct RecordRef;
+
+	    template<typename View>
+	    inline constexpr auto isRecordRef = false;
+
+	    template<typename View, typename BoundRecordCoord, bool OwnView>
+	    inline constexpr auto isRecordRef<RecordRef<View, BoundRecordCoord, OwnView>> = true;
+
+	    /// Returns a \ref One with the same record dimension as the given record ref, with values copyied from rr.
+	    template<typename View, typename BoundRecordCoord, bool OwnView>
+	    LLAMA_FN_HOST_ACC_INLINE auto copyRecord(const RecordRef<View, BoundRecordCoord, OwnView>& rr)
+	    {
+	        using RecordDim = typename RecordRef<View, BoundRecordCoord, OwnView>::AccessibleRecordDim;
+	        One<RecordDim> temp;
+	        temp = rr;
+	        return temp;
+	    }
+
+	    namespace internal
+	    {
+	        template<
+	            typename Functor,
+	            typename LeftRecord,
+	            typename RightView,
+	            typename RightBoundRecordDim,
+	            bool RightOwnView>
+	        LLAMA_FN_HOST_ACC_INLINE auto recordRefArithOperator(
+	            LeftRecord& left,
+	            const RecordRef<RightView, RightBoundRecordDim, RightOwnView>& right) -> LeftRecord&
+	        {
+	            using RightRecord = RecordRef<RightView, RightBoundRecordDim, RightOwnView>;
+	            // if the record dimension left and right is the same, a single loop is enough and no tag check is needed.
+	            // this safes a lot of compilation time.
+	            using LARD = typename LeftRecord::AccessibleRecordDim;
+	            using RARD = typename RightRecord::AccessibleRecordDim;
+	            if constexpr(std::is_same_v<LARD, RARD>)
+	            {
+	                forEachLeafCoord<LARD>([&](auto rc) LLAMA_LAMBDA_INLINE { Functor{}(left(rc), right(rc)); });
+	            }
+	            else
+	            {
+	                forEachLeafCoord<LARD>(
+	                    [&](auto leftRC) LLAMA_LAMBDA_INLINE
+	                    {
+	                        using LeftInnerCoord = decltype(leftRC);
+	                        forEachLeafCoord<RARD>(
+	                            [&](auto rightRC) LLAMA_LAMBDA_INLINE
+	                            {
+	                                using RightInnerCoord = decltype(rightRC);
+	                                if constexpr(hasSameTags<LARD, LeftInnerCoord, RARD, RightInnerCoord>)
+	                                {
+	                                    Functor{}(left(leftRC), right(rightRC));
+	                                }
+	                            });
+	                    });
+	            }
+	            return left;
+	        }
+
+	        template<typename Functor, typename LeftRecord, typename T>
+	        LLAMA_FN_HOST_ACC_INLINE auto recordRefArithOperator(LeftRecord& left, const T& right) -> LeftRecord&
+	        {
+	            forEachLeafCoord<typename LeftRecord::AccessibleRecordDim>([&](auto leftRC) LLAMA_LAMBDA_INLINE
+	                                                                       { Functor{}(left(leftRC), right); });
+	            return left;
+	        }
+
+	        template<
+	            typename Functor,
+	            typename LeftRecord,
+	            typename RightView,
+	            typename RightBoundRecordDim,
+	            bool RightOwnView>
+	        LLAMA_FN_HOST_ACC_INLINE auto recordRefRelOperator(
+	            const LeftRecord& left,
+	            const RecordRef<RightView, RightBoundRecordDim, RightOwnView>& right) -> bool
+	        {
+	            using RightRecord = RecordRef<RightView, RightBoundRecordDim, RightOwnView>;
+	            bool result = true;
+	            // if the record dimension left and right is the same, a single loop is enough and no tag check is needed.
+	            // this safes a lot of compilation time.
+	            using LARD = typename LeftRecord::AccessibleRecordDim;
+	            using RARD = typename RightRecord::AccessibleRecordDim;
+	            if constexpr(std::is_same_v<LARD, RARD>)
+	            {
+	                forEachLeafCoord<LARD>([&](auto rc) LLAMA_LAMBDA_INLINE { result &= Functor{}(left(rc), right(rc)); });
+	            }
+	            else
+	            {
+	                forEachLeafCoord<LARD>(
+	                    [&](auto leftRC) LLAMA_LAMBDA_INLINE
+	                    {
+	                        using LeftInnerCoord = decltype(leftRC);
+	                        forEachLeafCoord<RARD>(
+	                            [&](auto rightRC) LLAMA_LAMBDA_INLINE
+	                            {
+	                                using RightInnerCoord = decltype(rightRC);
+	                                if constexpr(hasSameTags<LARD, LeftInnerCoord, RARD, RightInnerCoord>)
+	                                {
+	                                    result &= Functor{}(left(leftRC), right(rightRC));
+	                                }
+	                            });
+	                    });
+	            }
+	            return result;
+	        }
+
+	        template<typename Functor, typename LeftRecord, typename T>
+	        LLAMA_FN_HOST_ACC_INLINE auto recordRefRelOperator(const LeftRecord& left, const T& right) -> bool
+	        {
+	            bool result = true;
+	            forEachLeafCoord<typename LeftRecord::AccessibleRecordDim>([&](auto leftRC) LLAMA_LAMBDA_INLINE
+	                                                                       { result &= Functor{}(left(leftRC), right); });
+	            return result;
+	        }
+
+	        struct Assign
+	        {
+	            template<typename A, typename B>
+	            LLAMA_FN_HOST_ACC_INLINE auto operator()(A&& a, const B& b) const -> decltype(auto)
+	            {
+	                return std::forward<A>(a) = b;
+	            }
+	        };
+
+	        struct PlusAssign
+	        {
+	            template<typename A, typename B>
+	            LLAMA_FN_HOST_ACC_INLINE auto operator()(A&& a, const B& b) const -> decltype(auto)
+	            {
+	                return std::forward<A>(a) += b;
+	            }
+	        };
+
+	        struct MinusAssign
+	        {
+	            template<typename A, typename B>
+	            LLAMA_FN_HOST_ACC_INLINE auto operator()(A&& a, const B& b) const -> decltype(auto)
+	            {
+	                return std::forward<A>(a) -= b;
+	            }
+	        };
+
+	        struct MultiplyAssign
+	        {
+	            template<typename A, typename B>
+	            LLAMA_FN_HOST_ACC_INLINE auto operator()(A&& a, const B& b) const -> decltype(auto)
+	            {
+	                return std::forward<A>(a) *= b;
+	            }
+	        };
+
+	        struct DivideAssign
+	        {
+	            template<typename A, typename B>
+	            LLAMA_FN_HOST_ACC_INLINE auto operator()(A&& a, const B& b) const -> decltype(auto)
+	            {
+	                return std::forward<A>(a) /= b;
+	            }
+	        };
+
+	        struct ModuloAssign
+	        {
+	            template<typename A, typename B>
+	            LLAMA_FN_HOST_ACC_INLINE auto operator()(A&& a, const B& b) const -> decltype(auto)
+	            {
+	                return std::forward<A>(a) %= b;
+	            }
+	        };
+
+	        template<
+	            typename ProxyReference,
+	            typename T,
+	            std::enable_if_t<!isRecordRef<std::decay_t<ProxyReference>>, int> = 0>
+	        LLAMA_FN_HOST_ACC_INLINE auto asTupleImpl(ProxyReference&& leaf, T) -> ProxyReference
+	        {
+	            return leaf;
+	        }
+
+	        template<
+	            typename TWithOptionalConst,
+	            typename T,
+	            std::enable_if_t<!isRecordRef<std::decay_t<TWithOptionalConst>>, int> = 0>
+	        LLAMA_FN_HOST_ACC_INLINE auto asTupleImpl(TWithOptionalConst& leaf, T)
+	            -> std::reference_wrapper<TWithOptionalConst>
+	        {
+	            return leaf;
+	        }
+
+	        template<typename RecordRef, typename T, std::size_t N, std::size_t... Is>
+	        LLAMA_FN_HOST_ACC_INLINE auto asTupleImplForArray(RecordRef&& vd, T (&&)[N], std::index_sequence<Is...>)
+	        {
+	            return std::make_tuple(asTupleImpl(vd(RecordCoord<Is>{}), T{})...);
+	        }
+
+	        template<typename RecordRef, typename T, std::size_t N>
+	        LLAMA_FN_HOST_ACC_INLINE auto asTupleImpl(RecordRef&& vd, T (&&a)[N])
+	        {
+	            return asTupleImplForArray(std::forward<RecordRef>(vd), std::move(a), std::make_index_sequence<N>{});
+	        }
+
+	        template<typename RecordRef, typename... Fields>
+	        LLAMA_FN_HOST_ACC_INLINE auto asTupleImpl(RecordRef&& vd, Record<Fields...>)
+	        {
+	            return std::make_tuple(asTupleImpl(vd(GetFieldTag<Fields>{}), GetFieldType<Fields>{})...);
+	        }
+
+	        template<
+	            typename ProxyReference,
+	            typename T,
+	            std::enable_if_t<!isRecordRef<std::decay_t<ProxyReference>>, int> = 0>
+	        LLAMA_FN_HOST_ACC_INLINE auto asFlatTupleImpl(ProxyReference&& leaf, T) -> std::tuple<ProxyReference>
+	        {
+	            static_assert(!std::is_reference_v<ProxyReference>);
+	            return {std::move(leaf)}; // NOLINT(bugprone-move-forwarding-reference)
+	        }
+
+	        template<
+	            typename TWithOptionalConst,
+	            typename T,
+	            std::enable_if_t<!isRecordRef<std::decay_t<TWithOptionalConst>>, int> = 0>
+	        LLAMA_FN_HOST_ACC_INLINE auto asFlatTupleImpl(TWithOptionalConst& leaf, T) -> std::tuple<TWithOptionalConst&>
+	        {
+	            return {leaf};
+	        }
+
+	        template<typename RecordRef, typename T, std::size_t N, std::size_t... Is>
+	        LLAMA_FN_HOST_ACC_INLINE auto asFlatTupleImplForArray(RecordRef&& vd, T (&&)[N], std::index_sequence<Is...>)
+	        {
+	            return std::tuple_cat(asFlatTupleImpl(vd(RecordCoord<Is>{}), T{})...);
+	        }
+
+	        template<typename RecordRef, typename T, std::size_t N>
+	        LLAMA_FN_HOST_ACC_INLINE auto asFlatTupleImpl(RecordRef&& vd, T (&&a)[N])
+	        {
+	            return asFlatTupleImplForArray(std::forward<RecordRef>(vd), std::move(a), std::make_index_sequence<N>{});
+	        }
+
+	        template<typename RecordRef, typename... Fields>
+	        LLAMA_FN_HOST_ACC_INLINE auto asFlatTupleImpl(RecordRef&& vd, Record<Fields...>)
+	        {
+	            return std::tuple_cat(asFlatTupleImpl(vd(GetFieldTag<Fields>{}), GetFieldType<Fields>{})...);
+	        }
+
+	        template<typename T, typename = void>
+	        inline constexpr auto isTupleLike = false;
+
+	        // get<I>(t) and std::tuple_size<T> must be available
+	        using std::get; // make sure a get<0>() can be found, so the compiler can compile the trait
+	        template<typename T>
+	        inline constexpr auto
+	            isTupleLike<T, std::void_t<decltype(get<0>(std::declval<T>())), std::tuple_size<T>>> = true;
+
+	        template<typename... Ts>
+	        inline constexpr auto dependentFalse = false;
+
+	        template<typename Tuple1, typename Tuple2, std::size_t... Is>
+	        LLAMA_FN_HOST_ACC_INLINE void assignTuples(Tuple1&& dst, Tuple2&& src, std::index_sequence<Is...>);
+
+	        template<typename T1, typename T2>
+	        LLAMA_FN_HOST_ACC_INLINE void assignTupleElement(T1&& dst, T2&& src)
+	        {
+	            if constexpr(isTupleLike<std::decay_t<T1>> && isTupleLike<std::decay_t<T2>>)
+	            {
+	                static_assert(std::tuple_size_v<std::decay_t<T1>> == std::tuple_size_v<std::decay_t<T2>>);
+	                assignTuples(dst, src, std::make_index_sequence<std::tuple_size_v<std::decay_t<T1>>>{});
+	            }
+	            else if constexpr(!isTupleLike<std::decay_t<T1>> && !isTupleLike<std::decay_t<T2>>)
+	                std::forward<T1>(dst) = std::forward<T2>(src);
+	            else
+	                static_assert(
+	                    dependentFalse<T1, T2>,
+	                    "Elements to assign are not tuple/tuple or non-tuple/non-tuple.");
+	        }
+
+	        template<typename Tuple1, typename Tuple2, std::size_t... Is>
+	        LLAMA_FN_HOST_ACC_INLINE void assignTuples(Tuple1&& dst, Tuple2&& src, std::index_sequence<Is...>)
+	        {
+	            static_assert(std::tuple_size_v<std::decay_t<Tuple1>> == std::tuple_size_v<std::decay_t<Tuple2>>);
+	            using std::get;
+	            (assignTupleElement(get<Is>(std::forward<Tuple1>(dst)), get<Is>(std::forward<Tuple2>(src))), ...);
+	        }
+
+	        template<typename T, typename Tuple, std::size_t... Is>
+	        LLAMA_FN_HOST_ACC_INLINE auto makeFromTuple(Tuple&& src, std::index_sequence<Is...>)
+	        {
+	            using std::get;
+	            return T{get<Is>(src)...}; // no forward of src, since we call get multiple times on it
+	        }
+
+	        template<typename T, typename SFINAE, typename... Args>
+	        inline constexpr auto isDirectListInitializableImpl = false;
+
+	        template<typename T, typename... Args>
+	        inline constexpr auto
+	            isDirectListInitializableImpl<T, std::void_t<decltype(T{std::declval<Args>()...})>, Args...> = true;
+
+	        template<typename T, typename... Args>
+	        inline constexpr auto isDirectListInitializable = isDirectListInitializableImpl<T, void, Args...>;
+
+	        template<typename T, typename Tuple>
+	        inline constexpr auto isDirectListInitializableFromTuple = false;
+
+	        template<typename T, template<typename...> typename Tuple, typename... Args>
+	        inline constexpr auto
+	            isDirectListInitializableFromTuple<T, Tuple<Args...>> = isDirectListInitializable<T, Args...>;
+
+	        template<typename T, typename Simd, typename RecordCoord>
+	        LLAMA_FN_HOST_ACC_INLINE void loadSimdRecord(const T& srcRef, Simd& dstSimd, RecordCoord rc);
+
+	        template<typename Simd, typename T, typename RecordCoord>
+	        LLAMA_FN_HOST_ACC_INLINE void storeSimdRecord(const Simd& srcSimd, T&& dstRef, RecordCoord rc);
+	    } // namespace internal
+
+	    /// Record reference type returned by \ref View after resolving an array dimensions coordinate or partially
+	    /// resolving a \ref RecordCoord. A record reference does not hold data itself, it just binds enough information
+	    /// (array dimensions coord and partial record coord) to retrieve it later from a \ref View. Records references
+	    /// should not be created by the user. They are returned from various access functions in \ref View and RecordRef
+	    /// itself.
+	    template<typename TView, typename TBoundRecordCoord, bool OwnView>
+	    struct RecordRef : private TView::Mapping::ArrayIndex
+	    {
+	        using View = TView; ///< View this record reference points into.
+	        using BoundRecordCoord
+	            = TBoundRecordCoord; ///< Record coords into View::RecordDim which are already bound by this RecordRef.
+
+	    private:
+	        using ArrayIndex = typename View::Mapping::ArrayIndex;
+	        using RecordDim = typename View::Mapping::RecordDim;
+
+	        std::conditional_t<OwnView, View, View&> view;
+
+	    public:
+	        /// Subtree of the record dimension of View starting at BoundRecordCoord. If BoundRecordCoord is
+	        /// `RecordCoord<>` (default) AccessibleRecordDim is the same as `Mapping::RecordDim`.
+	        using AccessibleRecordDim = GetType<RecordDim, BoundRecordCoord>;
+
+	        /// Creates an empty RecordRef. Only available for if the view is owned. Used by llama::One.
+	        LLAMA_FN_HOST_ACC_INLINE RecordRef()
+	            /* requires(OwnView) */
+	            : ArrayIndex{}
+	            , view{allocViewStack<0, RecordDim>()}
+	        {
+	            static_assert(OwnView, "The default constructor of RecordRef is only available if it owns the view.");
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        RecordRef(ArrayIndex ai, std::conditional_t<OwnView, View&&, View&> view)
+	            : ArrayIndex{ai}
+	            , view{static_cast<decltype(view)>(view)}
+	        {
+	        }
+
+	        RecordRef(const RecordRef&) = default;
+
+	        // NOLINTNEXTLINE(cert-oop54-cpp)
+	        LLAMA_FN_HOST_ACC_INLINE auto operator=(const RecordRef& other) -> RecordRef&
+	        {
+	            // NOLINTNEXTLINE(cppcoreguidelines-c-copy-assignment-signature,misc-unconventional-assign-operator)
+	            return this->operator=<RecordRef>(other);
+	        }
+
+	        RecordRef(RecordRef&&) noexcept = default;
+	        auto operator=(RecordRef&&) noexcept -> RecordRef& = default;
+
+	        ~RecordRef() = default;
+
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto arrayIndex() const -> ArrayIndex
+	        {
+	            return static_cast<const ArrayIndex&>(*this);
+	        }
+
+	        /// Create a RecordRef from a different RecordRef. Only available for if the view is owned. Used by
+	        /// llama::One.
+	        template<typename OtherView, typename OtherBoundRecordCoord, bool OtherOwnView>
+	        // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
+	        LLAMA_FN_HOST_ACC_INLINE RecordRef(const RecordRef<OtherView, OtherBoundRecordCoord, OtherOwnView>& recordRef)
+	            /* requires(OwnView) */
+	            : RecordRef()
+	        {
+	            static_assert(
+	                OwnView,
+	                "The copy constructor of RecordRef from a different RecordRef is only available if it owns "
+	                "the "
+	                "view.");
+	            *this = recordRef;
+	        }
+
+	        // TODO(bgruber): unify with previous in C++20 and use explicit(cond)
+	        /// Create a RecordRef from a scalar. Only available for if the view is owned. Used by llama::One.
+	        template<typename T, typename = std::enable_if_t<!isRecordRef<T>>>
+	        LLAMA_FN_HOST_ACC_INLINE explicit RecordRef(const T& scalar)
+	            /* requires(OwnView) */
+	            : RecordRef()
+	        {
+	            static_assert(
+	                OwnView,
+	                "The constructor of RecordRef from a scalar is only available if it owns the view.");
+	            *this = scalar;
+	        }
+
+	        /// Access a record in the record dimension underneath the current record reference using a \ref RecordCoord.
+	        /// If the access resolves to a leaf, an l-value reference to a variable inside the \ref View storage is
+	        /// returned, otherwise another RecordRef.
+	        template<std::size_t... Coord>
+	        LLAMA_FN_HOST_ACC_INLINE auto operator()(RecordCoord<Coord...>) const -> decltype(auto)
+	        {
+	            using AbsolutCoord = Cat<BoundRecordCoord, RecordCoord<Coord...>>;
+	            using AccessedType = GetType<RecordDim, AbsolutCoord>;
+	            if constexpr(isRecordDim<AccessedType>)
+	            {
+	                LLAMA_FORCE_INLINE_RECURSIVE
+	                return RecordRef<const View, AbsolutCoord>{arrayIndex(), this->view};
+	            }
+	            else
+	            {
+	                LLAMA_FORCE_INLINE_RECURSIVE
+	                return this->view.access(arrayIndex(), AbsolutCoord{});
+	            }
+	        }
+
+	        // FIXME(bgruber): remove redundancy
+	        template<std::size_t... Coord>
+	        LLAMA_FN_HOST_ACC_INLINE auto operator()(RecordCoord<Coord...>) -> decltype(auto)
+	        {
+	            using AbsolutCoord = Cat<BoundRecordCoord, RecordCoord<Coord...>>;
+	            using AccessedType = GetType<RecordDim, AbsolutCoord>;
+	            if constexpr(isRecordDim<AccessedType>)
+	            {
+	                LLAMA_FORCE_INLINE_RECURSIVE
+	                return RecordRef<View, AbsolutCoord>{arrayIndex(), this->view};
+	            }
+	            else
+	            {
+	                LLAMA_FORCE_INLINE_RECURSIVE
+	                return this->view.access(arrayIndex(), AbsolutCoord{});
+	            }
+	        }
+
+	        /// Access a record in the record dimension underneath the current record reference using a series of tags. If
+	        /// the access resolves to a leaf, an l-value reference to a variable inside the \ref View storage is returned,
+	        /// otherwise another RecordRef.
+	        template<typename... Tags>
+	        LLAMA_FN_HOST_ACC_INLINE auto operator()(Tags...) const -> decltype(auto)
+	        {
+	            using RecordCoord = GetCoordFromTags<AccessibleRecordDim, Tags...>;
+
+	            LLAMA_FORCE_INLINE_RECURSIVE
+	            return operator()(RecordCoord{});
+	        }
+
+	        // FIXME(bgruber): remove redundancy
+	        template<typename... Tags>
+	        LLAMA_FN_HOST_ACC_INLINE auto operator()(Tags...) -> decltype(auto)
+	        {
+	            using RecordCoord = GetCoordFromTags<AccessibleRecordDim, Tags...>;
+
+	            LLAMA_FORCE_INLINE_RECURSIVE
+	            return operator()(RecordCoord{});
+	        }
+
+	        template<typename T>
+	        LLAMA_FN_HOST_ACC_INLINE auto operator=(const T& other) -> RecordRef&
+	        {
+	            // NOLINTNEXTLINE(cppcoreguidelines-c-copy-assignment-signature,misc-unconventional-assign-operator)
+	            return internal::recordRefArithOperator<internal::Assign>(*this, other);
+	        }
+
+	        template<typename T>
+	        LLAMA_FN_HOST_ACC_INLINE auto operator+=(const T& other) -> RecordRef&
+	        {
+	            return internal::recordRefArithOperator<internal::PlusAssign>(*this, other);
+	        }
+
+	        template<typename T>
+	        LLAMA_FN_HOST_ACC_INLINE auto operator-=(const T& other) -> RecordRef&
+	        {
+	            return internal::recordRefArithOperator<internal::MinusAssign>(*this, other);
+	        }
+
+	        template<typename T>
+	        LLAMA_FN_HOST_ACC_INLINE auto operator*=(const T& other) -> RecordRef&
+	        {
+	            return internal::recordRefArithOperator<internal::MultiplyAssign>(*this, other);
+	        }
+
+	        template<typename T>
+	        LLAMA_FN_HOST_ACC_INLINE auto operator/=(const T& other) -> RecordRef&
+	        {
+	            return internal::recordRefArithOperator<internal::DivideAssign>(*this, other);
+	        }
+
+	        template<typename T>
+	        LLAMA_FN_HOST_ACC_INLINE auto operator%=(const T& other) -> RecordRef&
+	        {
+	            return internal::recordRefArithOperator<internal::ModuloAssign>(*this, other);
+	        }
+
+	        template<typename T>
+	        LLAMA_FN_HOST_ACC_INLINE friend auto operator+(const RecordRef& vd, const T& t)
+	        {
+	            return copyRecord(vd) += t;
+	        }
+
+	        template<typename T, typename = std::enable_if_t<!isRecordRef<T>>>
+	        LLAMA_FN_HOST_ACC_INLINE friend auto operator+(const T& t, const RecordRef& vd)
+	        {
+	            return vd + t;
+	        }
+
+	        template<typename T>
+	        LLAMA_FN_HOST_ACC_INLINE friend auto operator-(const RecordRef& vd, const T& t)
+	        {
+	            return copyRecord(vd) -= t;
+	        }
+
+	        template<typename T>
+	        LLAMA_FN_HOST_ACC_INLINE friend auto operator*(const RecordRef& vd, const T& t)
+	        {
+	            return copyRecord(vd) *= t;
+	        }
+
+	        template<typename T, typename = std::enable_if_t<!isRecordRef<T>>>
+	        LLAMA_FN_HOST_ACC_INLINE friend auto operator*(const T& t, const RecordRef& vd)
+	        {
+	            return vd * t;
+	        }
+
+	        template<typename T>
+	        LLAMA_FN_HOST_ACC_INLINE friend auto operator/(const RecordRef& vd, const T& t)
+	        {
+	            return copyRecord(vd) /= t;
+	        }
+
+	        template<typename T>
+	        LLAMA_FN_HOST_ACC_INLINE friend auto operator%(const RecordRef& vd, const T& t)
+	        {
+	            return copyRecord(vd) %= t;
+	        }
+
+	        template<typename T>
+	        LLAMA_FN_HOST_ACC_INLINE friend auto operator==(const RecordRef& vd, const T& t) -> bool
+	        {
+	            return internal::recordRefRelOperator<std::equal_to<>>(vd, t);
+	        }
+
+	        template<typename T, typename = std::enable_if_t<!isRecordRef<T>>>
+	        LLAMA_FN_HOST_ACC_INLINE friend auto operator==(const T& t, const RecordRef& vd) -> bool
+	        {
+	            return vd == t;
+	        }
+
+	        template<typename T>
+	        LLAMA_FN_HOST_ACC_INLINE friend auto operator!=(const RecordRef& vd, const T& t) -> bool
+	        {
+	            return internal::recordRefRelOperator<std::not_equal_to<>>(vd, t);
+	        }
+
+	        template<typename T, typename = std::enable_if_t<!isRecordRef<T>>>
+	        LLAMA_FN_HOST_ACC_INLINE friend auto operator!=(const T& t, const RecordRef& vd) -> bool
+	        {
+	            return vd != t;
+	        }
+
+	        template<typename T>
+	        LLAMA_FN_HOST_ACC_INLINE friend auto operator<(const RecordRef& vd, const T& t) -> bool
+	        {
+	            return internal::recordRefRelOperator<std::less<>>(vd, t);
+	        }
+
+	        template<typename T, typename = std::enable_if_t<!isRecordRef<T>>>
+	        LLAMA_FN_HOST_ACC_INLINE friend auto operator<(const T& t, const RecordRef& vd) -> bool
+	        {
+	            return vd > t;
+	        }
+
+	        template<typename T>
+	        LLAMA_FN_HOST_ACC_INLINE friend auto operator<=(const RecordRef& vd, const T& t) -> bool
+	        {
+	            return internal::recordRefRelOperator<std::less_equal<>>(vd, t);
+	        }
+
+	        template<typename T, typename = std::enable_if_t<!isRecordRef<T>>>
+	        LLAMA_FN_HOST_ACC_INLINE friend auto operator<=(const T& t, const RecordRef& vd) -> bool
+	        {
+	            return vd >= t;
+	        }
+
+	        template<typename T>
+	        LLAMA_FN_HOST_ACC_INLINE friend auto operator>(const RecordRef& vd, const T& t) -> bool
+	        {
+	            return internal::recordRefRelOperator<std::greater<>>(vd, t);
+	        }
+
+	        template<typename T, typename = std::enable_if_t<!isRecordRef<T>>>
+	        LLAMA_FN_HOST_ACC_INLINE friend auto operator>(const T& t, const RecordRef& vd) -> bool
+	        {
+	            return vd < t;
+	        }
+
+	        template<typename T>
+	        LLAMA_FN_HOST_ACC_INLINE friend auto operator>=(const RecordRef& vd, const T& t) -> bool
+	        {
+	            return internal::recordRefRelOperator<std::greater_equal<>>(vd, t);
+	        }
+
+	        template<typename T, typename = std::enable_if_t<!isRecordRef<T>>>
+	        LLAMA_FN_HOST_ACC_INLINE friend auto operator>=(const T& t, const RecordRef& vd) -> bool
+	        {
+	            return vd <= t;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE auto asTuple()
+	        {
+	            return internal::asTupleImpl(*this, AccessibleRecordDim{});
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE auto asTuple() const
+	        {
+	            return internal::asTupleImpl(*this, AccessibleRecordDim{});
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE auto asFlatTuple()
+	        {
+	            return internal::asFlatTupleImpl(*this, AccessibleRecordDim{});
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE auto asFlatTuple() const
+	        {
+	            return internal::asFlatTupleImpl(*this, AccessibleRecordDim{});
+	        }
+
+	        template<std::size_t I>
+	        LLAMA_FN_HOST_ACC_INLINE auto get() -> decltype(auto)
+	        {
+	            return operator()(RecordCoord<I>{});
+	        }
+
+	        template<std::size_t I>
+	        LLAMA_FN_HOST_ACC_INLINE auto get() const -> decltype(auto)
+	        {
+	            return operator()(RecordCoord<I>{});
+	        }
+
+	        template<typename TupleLike>
+	        LLAMA_FN_HOST_ACC_INLINE auto loadAs() -> TupleLike
+	        {
+	            static_assert(
+	                internal::isDirectListInitializableFromTuple<TupleLike, decltype(asFlatTuple())>,
+	                "TupleLike must be constructible from as many values as this RecordRef recursively represents "
+	                "like "
+	                "this: TupleLike{values...}");
+	            return internal::makeFromTuple<TupleLike>(
+	                asFlatTuple(),
+	                std::make_index_sequence<std::tuple_size_v<decltype(asFlatTuple())>>{});
+	        }
+
+	        template<typename TupleLike>
+	        LLAMA_FN_HOST_ACC_INLINE auto loadAs() const -> TupleLike
+	        {
+	            static_assert(
+	                internal::isDirectListInitializableFromTuple<TupleLike, decltype(asFlatTuple())>,
+	                "TupleLike must be constructible from as many values as this RecordRef recursively represents "
+	                "like "
+	                "this: TupleLike{values...}");
+	            return internal::makeFromTuple<TupleLike>(
+	                asFlatTuple(),
+	                std::make_index_sequence<std::tuple_size_v<decltype(asFlatTuple())>>{});
+	        }
+
+	        struct Loader
+	        {
+	            RecordRef& vd;
+
+	            template<typename T>
+	            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
+	            LLAMA_FN_HOST_ACC_INLINE operator T()
+	            {
+	                return vd.loadAs<T>();
+	            }
+	        };
+
+	        struct LoaderConst
+	        {
+	            const RecordRef& vd;
+
+	            template<typename T>
+	            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
+	            LLAMA_FN_HOST_ACC_INLINE operator T() const
+	            {
+	                return vd.loadAs<T>();
+	            }
+	        };
+
+	        LLAMA_FN_HOST_ACC_INLINE auto load() -> Loader
+	        {
+	            return {*this};
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE auto load() const -> LoaderConst
+	        {
+	            return {*this};
+	        }
+
+	        template<typename TupleLike>
+	        LLAMA_FN_HOST_ACC_INLINE void store(const TupleLike& t)
+	        {
+	            internal::assignTuples(asTuple(), t, std::make_index_sequence<std::tuple_size_v<TupleLike>>{});
+	        }
+
+	        // swap for equal RecordRef
+	        LLAMA_FN_HOST_ACC_INLINE friend void swap(
+	            std::conditional_t<OwnView, RecordRef&, RecordRef> a,
+	            std::conditional_t<OwnView, RecordRef&, RecordRef> b) noexcept
+	        {
+	            forEachLeafCoord<AccessibleRecordDim>(
+	                [&](auto rc) LLAMA_LAMBDA_INLINE
+	                {
+	                    using std::swap;
+	                    swap(a(rc), b(rc));
+	                });
+	        }
+
+	        // FIXME(bgruber): the SIMD load/store functions need to navigate back from a record ref to the contained view
+	        // to find subsequent elements. This is not a great design for now and the SIMD load/store functions should
+	        // probably take iterators to records.
+	        template<typename T, typename Simd, typename RecordCoord>
+	        friend LLAMA_FN_HOST_ACC_INLINE void internal::loadSimdRecord(const T& srcRef, Simd& dstSimd, RecordCoord rc);
+	        template<typename Simd, typename T, typename RecordCoord>
+	        friend LLAMA_FN_HOST_ACC_INLINE void internal::storeSimdRecord(
+	            const Simd& srcSimd,
+	            T&& dstRef,
+	            RecordCoord rc);
+	    };
+
+	    // swap for heterogeneous RecordRef
+	    template<
+	        typename ViewA,
+	        typename BoundRecordDimA,
+	        bool OwnViewA,
+	        typename ViewB,
+	        typename BoundRecordDimB,
+	        bool OwnViewB>
+	    LLAMA_FN_HOST_ACC_INLINE auto swap(
+	        RecordRef<ViewA, BoundRecordDimA, OwnViewA>& a,
+	        RecordRef<ViewB, BoundRecordDimB, OwnViewB>& b) noexcept
+	        -> std::enable_if_t<std::is_same_v<
+	            typename RecordRef<ViewA, BoundRecordDimA, OwnViewA>::AccessibleRecordDim,
+	            typename RecordRef<ViewB, BoundRecordDimB, OwnViewB>::AccessibleRecordDim>>
+	    {
+	        using LeftRecord = RecordRef<ViewA, BoundRecordDimA, OwnViewA>;
+	        forEachLeafCoord<typename LeftRecord::AccessibleRecordDim>(
+	            [&](auto rc) LLAMA_LAMBDA_INLINE
+	            {
+	                using std::swap;
+	                swap(a(rc), b(rc));
+	            });
+	    }
+
+	    template<typename View, typename BoundRecordCoord, bool OwnView>
+	    auto operator<<(std::ostream& os, const RecordRef<View, BoundRecordCoord, OwnView>& vr) -> std::ostream&
+	    {
+	        using RecordDim = typename RecordRef<View, BoundRecordCoord, OwnView>::AccessibleRecordDim;
+	        os << "{";
+	        if constexpr(std::is_array_v<RecordDim>)
+	        {
+	            boost::mp11::mp_for_each<boost::mp11::mp_iota_c<std::extent_v<RecordDim>>>(
+	                [&](auto ic)
+	                {
+	                    constexpr std::size_t i = decltype(ic)::value;
+	                    if(i > 0)
+	                        os << ", ";
+	                    os << '[' << i << ']' << ": " << vr(RecordCoord<i>{});
+	                });
+	        }
+	        else
+	        {
+	            boost::mp11::mp_for_each<boost::mp11::mp_iota<boost::mp11::mp_size<RecordDim>>>(
+	                [&](auto ic)
+	                {
+	                    constexpr std::size_t i = decltype(ic)::value;
+	                    if(i > 0)
+	                        os << ", ";
+	                    using Field = boost::mp11::mp_at_c<RecordDim, i>;
+	                    os << structName<GetFieldTag<Field>>() << ": " << vr(RecordCoord<i>{});
+	                });
+	        }
+	        os << "}";
+	        return os;
+	    }
+
+	    template<typename RecordRefFwd, typename Functor>
+	    LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeaf(RecordRefFwd&& vr, Functor&& functor)
+	    {
+	        using RecordRef = std::remove_reference_t<RecordRefFwd>;
+	        LLAMA_FORCE_INLINE_RECURSIVE
+	        forEachLeafCoord<typename RecordRef::AccessibleRecordDim>(
+	            [functor = std::forward<Functor>(functor), &vr = vr](auto rc)
+	                LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(constexpr mutable) { std::forward<Functor>(functor)(vr(rc)); });
+	    }
+
+	    namespace internal
+	    {
+	        // gets the value type for a given T, where T models a reference type. T is either an l-value reference, a
+	        // proxy reference or a RecordRef
+	        template<typename T, typename = void>
+	        struct ValueOf
+	        {
+	            static_assert(sizeof(T) == 0, "T does not model a reference");
+	        };
+
+	        template<typename T>
+	        struct ValueOf<T, std::enable_if_t<isRecordRef<T>>>
+	        {
+	            using type = One<typename T::AccessibleRecordDim>;
+	        };
+
+	#ifdef __cpp_lib_concepts
+	        template<ProxyReference T>
+	#else
+	        template<typename T>
+	#endif
+	        struct ValueOf<T, std::enable_if_t<isProxyReference<T>>>
+	        {
+	            using type = typename T::value_type;
+	        };
+
+	        template<typename T>
+	        struct ValueOf<T&>
+	        {
+	            using type = T;
+	        };
+	    } // namespace internal
+
+	    /// Scope guard type. ScopedUpdate takes a copy of a value through a reference and stores it internally during
+	    /// construction. The stored value is written back when ScopedUpdate is destroyed. ScopedUpdate tries to act like
+	    /// the stored value as much as possible, exposing member functions of the stored value and acting like a proxy
+	    /// reference if the stored value is a primitive type.
+	    template<typename Reference, typename = void>
+	    struct ScopedUpdate : internal::ValueOf<Reference>::type
+	    {
+	        using value_type = typename internal::ValueOf<Reference>::type;
+
+	        /// Loads a copy of the value referenced by r. Stores r and the loaded value.
+	        LLAMA_FN_HOST_ACC_INLINE explicit ScopedUpdate(Reference r) : value_type(r), ref(r)
+	        {
+	        }
+
+	        ScopedUpdate(const ScopedUpdate&) = delete;
+	        auto operator=(const ScopedUpdate&) -> ScopedUpdate& = delete;
+
+	        ScopedUpdate(ScopedUpdate&&) noexcept = default;
+	        auto operator=(ScopedUpdate&&) noexcept -> ScopedUpdate& = default;
+
+	        using value_type::operator=;
+
+	        /// Stores the internally stored value back to the referenced value.
+	        LLAMA_FN_HOST_ACC_INLINE ~ScopedUpdate()
+	        {
+	            ref = static_cast<value_type&>(*this);
+	        }
+
+	        /// Get access to the stored value.
+	        LLAMA_FN_HOST_ACC_INLINE auto get() -> value_type&
+	        {
+	            return *this;
+	        }
+
+	        /// Get access to the stored value.
+	        LLAMA_FN_HOST_ACC_INLINE auto get() const -> const value_type&
+	        {
+	            return *this;
+	        }
+
+	    private:
+	        Reference ref;
+	    };
+
+	    template<typename Reference>
+	    struct ScopedUpdate<
+	        Reference,
+	        std::enable_if_t<std::is_fundamental_v<typename internal::ValueOf<Reference>::type>>>
+	        : ProxyRefOpMixin<ScopedUpdate<Reference>, typename internal::ValueOf<Reference>::type>
+	    {
+	        using value_type = typename internal::ValueOf<Reference>::type;
+
+	        LLAMA_FN_HOST_ACC_INLINE explicit ScopedUpdate(Reference r) : value(r), ref(r)
+	        {
+	        }
+
+	        ScopedUpdate(const ScopedUpdate&) = delete;
+	        auto operator=(const ScopedUpdate&) -> ScopedUpdate& = delete;
+
+	        ScopedUpdate(ScopedUpdate&&) noexcept = default;
+	        auto operator=(ScopedUpdate&&) noexcept -> ScopedUpdate& = default;
+
+	        LLAMA_FN_HOST_ACC_INLINE auto get() -> value_type&
+	        {
+	            return value;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE auto get() const -> const value_type&
+	        {
+	            return value;
+	        }
+
+	        // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
+	        LLAMA_FN_HOST_ACC_INLINE operator const value_type&() const
+	        {
+	            return value;
+	        }
+
+	        // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
+	        LLAMA_FN_HOST_ACC_INLINE operator value_type&()
+	        {
+	            return value;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE auto operator=(value_type v) -> ScopedUpdate&
+	        {
+	            value = v;
+	            return *this;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE ~ScopedUpdate()
+	        {
+	            ref = value;
+	        }
+
+	    private:
+	        value_type value;
+	        Reference ref;
+	    };
+
+	    namespace internal
+	    {
+	        template<typename T, typename = void>
+	        struct ReferenceTo
+	        {
+	            using type = T&;
+	        };
+
+	        template<typename T>
+	        struct ReferenceTo<T, std::enable_if_t<isRecordRef<T> && !isOne<T>>>
+	        {
+	            using type = T;
+	        };
+
+	#ifdef __cpp_lib_concepts
+	        template<ProxyReference T>
+	#else
+	        template<typename T>
+	#endif
+	        struct ReferenceTo<T, std::enable_if_t<isProxyReference<T>>>
+	        {
+	            using type = T;
+	        };
+	    } // namespace internal
+
+	    template<typename T>
+	    ScopedUpdate(T) -> ScopedUpdate<typename internal::ReferenceTo<std::remove_reference_t<T>>::type>;
+	} // namespace llama
+
+	template<typename View, typename BoundRecordCoord, bool OwnView>
+	struct std::tuple_size<llama::RecordRef<View, BoundRecordCoord, OwnView>> // NOLINT(cert-dcl58-cpp)
+	    : boost::mp11::mp_size<typename llama::RecordRef<View, BoundRecordCoord, OwnView>::AccessibleRecordDim>
+	{
+	};
+
+	template<std::size_t I, typename View, typename BoundRecordCoord, bool OwnView>
+	struct std::tuple_element<I, llama::RecordRef<View, BoundRecordCoord, OwnView>> // NOLINT(cert-dcl58-cpp)
+	{
+	    using type = decltype(std::declval<llama::RecordRef<View, BoundRecordCoord, OwnView>>().template get<I>());
+	};
+
+	template<std::size_t I, typename View, typename BoundRecordCoord, bool OwnView>
+	struct std::tuple_element<I, const llama::RecordRef<View, BoundRecordCoord, OwnView>> // NOLINT(cert-dcl58-cpp)
+	{
+	    using type = decltype(std::declval<const llama::RecordRef<View, BoundRecordCoord, OwnView>>().template get<I>());
+	};
+
+	#if CAN_USE_RANGES
+	template<
+	    typename ViewA,
+	    typename BoundA,
+	    bool OwnA,
+	    typename ViewB,
+	    typename BoundB,
+	    bool OwnB,
+	    template<class>
+	    class TQual,
+	    template<class>
+	    class UQual>
+	struct std::
+	    basic_common_reference<llama::RecordRef<ViewA, BoundA, OwnA>, llama::RecordRef<ViewB, BoundB, OwnB>, TQual, UQual>
+	{
+	    using type = std::enable_if_t<
+	        std::is_same_v<
+	            typename llama::RecordRef<ViewA, BoundA, OwnA>::AccessibleRecordDim,
+	            typename llama::RecordRef<ViewB, BoundB, OwnB>::AccessibleRecordDim>,
+	        llama::One<typename ViewA::RecordDim>>;
+	};
+	#endif
+	// ==
+	// == ./RecordRef.hpp ==
+	// ============================================================================
+
 	// ============================================================================
 	// == ./Simd.hpp ==
 	// ==
@@ -10315,130 +10443,5 @@ namespace llama
 #endif
 // ==
 // == ./llama.hpp ==
-// ============================================================================
-
-// ============================================================================
-// == ./Proofs.hpp ==
-// ==
-// SPDX-License-Identifier: GPL-3.0-or-later
-
-// #pragma once
-// #include "ArrayIndexRange.hpp"    // amalgamate: file already expanded
-// #include "Core.hpp"    // amalgamate: file already expanded
-
-namespace llama
-{
-    namespace internal
-    {
-        constexpr auto divRoundUp(std::size_t dividend, std::size_t divisor) -> std::size_t
-        {
-            return (dividend + divisor - 1) / divisor;
-        }
-    } // namespace internal
-
-// FIXME(bgruber): this test is actually not correct, because __cpp_constexpr_dynamic_alloc only guarantees constexpr
-// std::allocator
-#ifdef __cpp_constexpr_dynamic_alloc
-    namespace internal
-    {
-        template<typename T>
-        struct DynArray
-        {
-            constexpr DynArray() = default;
-
-            constexpr explicit DynArray(std::size_t n) : data(new T[n]{})
-            {
-            }
-
-            DynArray(const DynArray&) = delete;
-            DynArray(DynArray&&) = delete;
-            auto operator=(const DynArray&) -> DynArray& = delete;
-            auto operator=(DynArray&&) -> DynArray& = delete;
-
-            constexpr ~DynArray()
-            {
-                delete[] data;
-            }
-
-            constexpr void resize(std::size_t n)
-            {
-                delete[] data;
-                data = new T[n]{};
-            }
-
-            T* data = nullptr; // TODO(bgruber): replace by std::unique_ptr in C++23
-        };
-    } // namespace internal
-
-    /// Proofs by exhaustion of the array and record dimensions, that all values mapped to memory do not overlap.
-    // Unfortunately, this only works for smallish array dimensions, because of compiler limits on constexpr evaluation
-    // depth.
-    template<typename Mapping>
-    constexpr auto mapsNonOverlappingly(const Mapping& m) -> bool
-    {
-        internal::DynArray<internal::DynArray<std::uint64_t>> blobByteMapped(m.blobCount);
-        for(std::size_t i = 0; i < m.blobCount; i++)
-            blobByteMapped.data[i].resize(internal::divRoundUp(m.blobSize(i), 64));
-
-        auto testAndSet = [&](auto blob, auto offset) constexpr
-        {
-            const auto bit = std::uint64_t{1} << (offset % 64);
-            if(blobByteMapped.data[blob].data[offset / 64] & bit)
-                return true;
-            blobByteMapped.data[blob].data[offset / 64] |= bit;
-            return false;
-        };
-
-        bool collision = false;
-        forEachLeafCoord<typename Mapping::RecordDim>([&](auto rc) constexpr {
-            if(collision)
-                return;
-            for(auto ai : ArrayIndexRange{m.extents()})
-            {
-                using Type = GetType<typename Mapping::RecordDim, decltype(rc)>;
-                const auto [blob, offset] = m.blobNrAndOffset(ai, rc);
-                for(std::size_t b = 0; b < sizeof(Type); b++)
-                    if(testAndSet(blob, offset + b))
-                    {
-                        collision = true;
-                        break;
-                    }
-            }
-        });
-        return !collision;
-    }
-#endif
-
-    /// Proofs by exhaustion of the array and record dimensions, that at least PieceLength elements are always stored
-    /// contiguously.
-    // Unfortunately, this only works for smallish array dimensions, because of compiler limits on constexpr evaluation
-    // depth.
-    template<std::size_t PieceLength, typename Mapping>
-    constexpr auto mapsPiecewiseContiguous(const Mapping& m) -> bool
-    {
-        bool collision = false;
-        forEachLeafCoord<typename Mapping::RecordDim>([&](auto rc) constexpr {
-            std::size_t flatIndex = 0;
-            std::size_t lastBlob = std::numeric_limits<std::size_t>::max();
-            std::size_t lastOffset = std::numeric_limits<std::size_t>::max();
-            for(auto ai : ArrayIndexRange{m.extents()})
-            {
-                using Type = GetType<typename Mapping::RecordDim, decltype(rc)>;
-                const auto [blob, offset] = m.blobNrAndOffset(ai, rc);
-                if(flatIndex % PieceLength != 0 && (lastBlob != blob || lastOffset + sizeof(Type) != offset))
-                {
-                    collision = true;
-                    break;
-                }
-                lastBlob = blob;
-                lastOffset = offset;
-                flatIndex++;
-            }
-        });
-        return !collision;
-    }
-} // namespace llama
-// ==
-// == ./Proofs.hpp ==
 // ============================================================================
 
