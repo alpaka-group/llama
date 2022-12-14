@@ -11,6 +11,12 @@ if (NOT TARGET llama::llama)
 	find_package(llama REQUIRED)
 endif()
 find_package(alpaka 0.9.0 REQUIRED)
+if (alpaka_ACC_GPU_CUDA_ENABLE AND (CMAKE_CUDA_COMPILER_ID STREQUAL "NVIDIA") AND
+	(CMAKE_CUDA_COMPILER_VERSION VERSION_LESS 11.6))
+	# nvcc <= 11.5 chokes on `pis(tag::Pos{}, tag::X{})` inside `pPInteraction()` and segfauls
+	message(WARNING "nvcc < 11.6 fails to compile the alpaka n-body example, so it is disabled.")
+	return()
+endif()
 alpaka_add_executable(${PROJECT_NAME} nbody.cpp ../../common/Stopwatch.hpp)
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 target_link_libraries(${PROJECT_NAME} PRIVATE llama::llama fmt::fmt alpaka::alpaka xsimd)

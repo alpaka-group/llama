@@ -192,12 +192,6 @@ catch(const std::exception& e)
 
 auto main() -> int
 {
-#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ >= 3 && __CUDACC_VER_MINOR__ < 4
-// nvcc 11.3 fails to generate the template signature for llama::View, if it has a forward declaration with a default
-// argument (which we need for the default accessor)
-#    warning "alpaka nbody example disabled for nvcc 11.3, because it generates invalid C++ code for the host compiler"
-    return -1;
-#else
     std::cout << problemSize / 1000 / 1000 << "M values "
               << "(" << problemSize * sizeof(float) / 1024 << "kiB)\n";
 
@@ -224,5 +218,4 @@ plot $data using 2:xtic(1) ti "compute kernel"
 )";
     std::cout << "Plot with: ./vectoradd_alpaka.sh\n";
     return 0;
-#endif
 }
