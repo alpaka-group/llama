@@ -10,9 +10,52 @@
 #include "AlpakaStream.h"
 
 #include <numeric>
+#ifdef ALPAKA_ACC_GPU_CUDA_ENABLED
+#    include <cuda_runtime.h>
+#endif
 
-constexpr auto blockSize = 1024;
-constexpr auto dotBlockSize = 256;
+namespace
+{
+    constexpr auto blockSize = 1024;
+    constexpr auto dotBlockSize = 256;
+
+    struct StreamingAccessor
+    {
+        template<typename T>
+        // NOLINTNEXTLINE(cppcoreguidelines-special-member-functions,hicpp-special-member-functions)
+        struct Reference : llama::ProxyRefOpMixin<Reference<T>, T>
+        {
+            T& ref;
+
+            // NOLINTNEXTLINE(cert-oop54-cpp)
+            LLAMA_ACC LLAMA_FORCE_INLINE auto operator=(const Reference& r) -> Reference&
+            {
+                *this = static_cast<T>(r);
+                return *this;
+            }
+
+            LLAMA_ACC LLAMA_FORCE_INLINE auto operator=(T t) -> Reference&
+            {
+                __stcs(&ref, t);
+                return *this;
+            }
+
+            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
+            LLAMA_ACC LLAMA_FORCE_INLINE operator T() const
+            {
+                return __ldcs(&ref);
+            }
+        };
+
+        template<typename T>
+        LLAMA_ACC LLAMA_FORCE_INLINE auto operator()(T& ref) const -> Reference<T>
+        {
+            return Reference<T>{{}, ref};
+        }
+    };
+    // using Accessor = StreamingAccessor;
+    using Accessor = llama::accessor::Default;
+} // namespace
 
 template<typename T>
 AlpakaStream<T>::AlpakaStream(Idx arraySize, Idx deviceIndex)
@@ -90,8 +133,10 @@ void AlpakaStream<T>::copy()
     const auto workdiv = WorkDiv{arraySize / blockSize, blockSize, 1};
     // auto const workdiv = alpaka::getValidWorkDiv(devAcc, arraySize);
 
-    auto viewA = llama::View{mapping, llama::Array{alpaka::getPtrNative(d_a)}};
-    auto viewC = llama::View{mapping, llama::Array{alpaka::getPtrNative(d_c)}};
+    auto viewA
+        = llama::View{mapping, llama::Array{reinterpret_cast<std::byte*>(alpaka::getPtrNative(d_a))}, Accessor{}};
+    auto viewC
+        = llama::View{mapping, llama::Array{reinterpret_cast<std::byte*>(alpaka::getPtrNative(d_c))}, Accessor{}};
 
     alpaka::exec<Acc>(queue, workdiv, CopyKernel{}, viewA, viewC);
     alpaka::wait(queue);
@@ -114,8 +159,10 @@ void AlpakaStream<T>::mul()
     const auto workdiv = WorkDiv{arraySize / blockSize, blockSize, 1};
     // auto const workdiv = alpaka::getValidWorkDiv(devAcc, arraySize);
 
-    auto viewB = llama::View{mapping, llama::Array{alpaka::getPtrNative(d_b)}};
-    auto viewC = llama::View{mapping, llama::Array{alpaka::getPtrNative(d_c)}};
+    auto viewB
+        = llama::View{mapping, llama::Array{reinterpret_cast<std::byte*>(alpaka::getPtrNative(d_b))}, Accessor{}};
+    auto viewC
+        = llama::View{mapping, llama::Array{reinterpret_cast<std::byte*>(alpaka::getPtrNative(d_c))}, Accessor{}};
 
     alpaka::exec<Acc>(queue, workdiv, MulKernel{}, viewB, viewC);
     alpaka::wait(queue);
@@ -137,9 +184,12 @@ void AlpakaStream<T>::add()
     const auto workdiv = WorkDiv{arraySize / blockSize, blockSize, 1};
     // auto const workdiv = alpaka::getValidWorkDiv(devAcc, arraySize);
 
-    auto viewA = llama::View{mapping, llama::Array{alpaka::getPtrNative(d_a)}};
-    auto viewB = llama::View{mapping, llama::Array{alpaka::getPtrNative(d_b)}};
-    auto viewC = llama::View{mapping, llama::Array{alpaka::getPtrNative(d_c)}};
+    auto viewA
+        = llama::View{mapping, llama::Array{reinterpret_cast<std::byte*>(alpaka::getPtrNative(d_a))}, Accessor{}};
+    auto viewB
+        = llama::View{mapping, llama::Array{reinterpret_cast<std::byte*>(alpaka::getPtrNative(d_b))}, Accessor{}};
+    auto viewC
+        = llama::View{mapping, llama::Array{reinterpret_cast<std::byte*>(alpaka::getPtrNative(d_c))}, Accessor{}};
 
     alpaka::exec<Acc>(queue, workdiv, AddKernel{}, viewA, viewB, viewC);
     alpaka::wait(queue);
@@ -162,9 +212,12 @@ void AlpakaStream<T>::triad()
     const auto workdiv = WorkDiv{arraySize / blockSize, blockSize, 1};
     // auto const workdiv = alpaka::getValidWorkDiv(devAcc, arraySize);
 
-    auto viewA = llama::View{mapping, llama::Array{alpaka::getPtrNative(d_a)}};
-    auto viewB = llama::View{mapping, llama::Array{alpaka::getPtrNative(d_b)}};
-    auto viewC = llama::View{mapping, llama::Array{alpaka::getPtrNative(d_c)}};
+    auto viewA
+        = llama::View{mapping, llama::Array{reinterpret_cast<std::byte*>(alpaka::getPtrNative(d_a))}, Accessor{}};
+    auto viewB
+        = llama::View{mapping, llama::Array{reinterpret_cast<std::byte*>(alpaka::getPtrNative(d_b))}, Accessor{}};
+    auto viewC
+        = llama::View{mapping, llama::Array{reinterpret_cast<std::byte*>(alpaka::getPtrNative(d_c))}, Accessor{}};
 
     alpaka::exec<Acc>(queue, workdiv, TriadKernel{}, viewA, viewB, viewC);
     alpaka::wait(queue);
@@ -187,9 +240,12 @@ void AlpakaStream<T>::nstream()
     const auto workdiv = WorkDiv{arraySize / blockSize, blockSize, 1};
     // auto const workdiv = alpaka::getValidWorkDiv(devAcc, arraySize);
 
-    auto viewA = llama::View{mapping, llama::Array{alpaka::getPtrNative(d_a)}};
-    auto viewB = llama::View{mapping, llama::Array{alpaka::getPtrNative(d_b)}};
-    auto viewC = llama::View{mapping, llama::Array{alpaka::getPtrNative(d_c)}};
+    auto viewA
+        = llama::View{mapping, llama::Array{reinterpret_cast<std::byte*>(alpaka::getPtrNative(d_a))}, Accessor{}};
+    auto viewB
+        = llama::View{mapping, llama::Array{reinterpret_cast<std::byte*>(alpaka::getPtrNative(d_b))}, Accessor{}};
+    auto viewC
+        = llama::View{mapping, llama::Array{reinterpret_cast<std::byte*>(alpaka::getPtrNative(d_c))}, Accessor{}};
 
     alpaka::exec<Acc>(queue, workdiv, NstreamKernel{}, viewA, viewB, viewC);
     alpaka::wait(queue);
@@ -233,9 +289,11 @@ auto AlpakaStream<T>::dot() -> T
     const auto workdiv = WorkDiv{dotBlockSize, blockSize, 1};
     // auto const workdiv = alpaka::getValidWorkDiv(devAcc, dotBlockSize * blockSize);
 
-    auto viewA = llama::View{mapping, llama::Array{alpaka::getPtrNative(d_a)}};
-    auto viewB = llama::View{mapping, llama::Array{alpaka::getPtrNative(d_b)}};
-    auto viewSum = llama::View{mapping, llama::Array{alpaka::getPtrNative(d_sum)}};
+    auto viewA
+        = llama::View{mapping, llama::Array{reinterpret_cast<std::byte*>(alpaka::getPtrNative(d_a))}, Accessor{}};
+    auto viewB
+        = llama::View{mapping, llama::Array{reinterpret_cast<std::byte*>(alpaka::getPtrNative(d_b))}, Accessor{}};
+    auto viewSum = llama::View{mapping, llama::Array{reinterpret_cast<std::byte*>(alpaka::getPtrNative(d_sum))}};
 
     alpaka::exec<Acc>(queue, workdiv, DotKernel{}, viewA, viewB, viewSum, arraySize);
     alpaka::wait(queue);

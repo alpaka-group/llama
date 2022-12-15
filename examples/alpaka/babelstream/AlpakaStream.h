@@ -17,7 +17,7 @@
 #include <vector>
 
 // NOLINTNEXTLINE(readability-identifier-naming)
-inline constexpr auto IMPLEMENTATION_STRING = "alpaka";
+inline constexpr auto IMPLEMENTATION_STRING = "alpaka/LLAMA";
 
 using Dim = alpaka::DimInt<1>;
 using Idx = int;
