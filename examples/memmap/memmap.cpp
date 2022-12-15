@@ -51,7 +51,7 @@ auto main(int argc, const char* argv[]) -> int
 
     // memory map the teapot geometry file
     auto file = boost::iostreams::mapped_file_source(argv[1]);
-    const char* content = file.data();
+    const auto* content = reinterpret_cast<const std::byte*>(file.data());
     const auto size = file.size();
 
     // binary STL header is 80 bytes, followed by uint32 triangle count, followed by vertex data without padding
