@@ -1,7 +1,25 @@
 #include "common.hpp"
 
+#include <memory>
+#include <vector>
+
 using ArrayExtents = llama::ArrayExtents<int, 16>;
 using Mapping = llama::mapping::AoS<ArrayExtents, Vec3I>;
+
+TEST_CASE("blob.concept")
+{
+#ifdef __cpp_lib_concepts
+    STATIC_REQUIRE(llama::Blob<llama::Array<std::byte, 10>>);
+    STATIC_REQUIRE(llama::Blob<llama::Array<unsigned char, 10>>);
+    STATIC_REQUIRE(!llama::Blob<llama::Array<char, 10>>);
+    STATIC_REQUIRE(!llama::Blob<llama::Array<double, 10>>);
+
+    STATIC_REQUIRE(llama::Blob<std::vector<std::byte>>);
+    STATIC_REQUIRE(llama::Blob<std::unique_ptr<std::byte[]>>);
+    STATIC_REQUIRE(llama::Blob<std::shared_ptr<std::byte[]>>);
+    STATIC_REQUIRE(llama::Blob<std::byte*>);
+#endif
+}
 
 TEST_CASE("bloballocators.Array")
 {
