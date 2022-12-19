@@ -65,7 +65,7 @@ namespace
     struct DoubleFunctor
     {
         template<typename RecordCoord>
-        void operator()(RecordCoord rc)
+        LLAMA_FN_HOST_ACC_INLINE void operator()(RecordCoord rc)
         {
             ref(rc) *= 2;
         }

@@ -180,8 +180,16 @@ namespace llama
     };
 
     template<typename... Args>
-    ArrayExtents(Args... args)
-        -> ArrayExtents<typename internal::IndexTypeFromArgs<std::size_t, Args...>::type, (Args{}, dyn)...>;
+    ArrayExtents(Args...) -> ArrayExtents<
+        typename internal::IndexTypeFromArgs<std::size_t, Args...>::type,
+    // we just use Args to repeat dyn as often as Args is big
+#ifdef __NVCC__
+        (static_cast<std::void_t<Args>>(0),
+         dyn.operator typename internal::IndexTypeFromArgs<std::size_t, Args...>::type())...
+#else
+        (Args{}, dyn)...
+#endif
+        >;
 
     static_assert(std::is_trivially_default_constructible_v<ArrayExtents<std::size_t, 1>>);
     static_assert(std::is_trivially_copy_constructible_v<ArrayExtents<std::size_t, 1>>);
@@ -235,15 +243,21 @@ namespace llama
         Func&& func,
         OuterIndices... outerIndices)
     {
+        LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
         if constexpr(Dim > 0)
+        {
             for(SizeType i = 0; i < adSize[0]; i++)
                 forEachADCoord(
                     ArrayIndex<SizeType, Dim - 1>{popFront(adSize)},
                     std::forward<Func>(func),
                     outerIndices...,
                     i);
+        }
         else
+        {
             std::forward<Func>(func)(ArrayIndex<SizeType, sizeof...(outerIndices)>{outerIndices...});
+        }
+        LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
     }
 
     template<typename SizeType, SizeType... Sizes, typename Func>

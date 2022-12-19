@@ -1,5 +1,9 @@
 #include "common.hpp"
 
+#ifdef __NVCC__
+#    pragma message("LLAMA tree mapping tests disabled for nvcc. Too many compiler bugs.")
+#else
+
 namespace tree = llama::mapping::tree;
 
 namespace tag
@@ -776,14 +780,14 @@ TEST_CASE("mapping.Tree")
     using Mapping = tree::Mapping<ArrayExtents, Particle, decltype(treeOperationList)>;
     const Mapping mapping(extents, treeOperationList);
 
-#ifndef __NVCOMPILER
+#    ifndef __NVCOMPILER
     auto raw = prettyPrintType(mapping.basicTree);
-#    ifdef _WIN32
+#        ifdef _WIN32
     tree::internal::replaceAll(raw, "__int64", "long");
-#    endif
-#    ifdef _LIBCPP_VERSION
+#        endif
+#        ifdef _LIBCPP_VERSION
     tree::internal::replaceAll(raw, "std::__1::", "std::");
-#    endif
+#        endif
     const auto* const ref = R"(llama::mapping::tree::Node<
     llama::NoName,
     llama::Tuple<
@@ -920,15 +924,15 @@ TEST_CASE("mapping.Tree")
     unsigned long
 >)";
     CHECK(raw == ref);
-#endif
+#    endif
 
     auto raw2 = prettyPrintType(mapping.resultTree);
-#ifdef _WIN32
+#    ifdef _WIN32
     tree::internal::replaceAll(raw2, "__int64", "long");
-#endif
-#ifdef _LIBCPP_VERSION
+#    endif
+#    ifdef _LIBCPP_VERSION
     tree::internal::replaceAll(raw2, "std::__1::", "std::");
-#endif
+#    endif
     const auto* const ref2 = R"(llama::mapping::tree::Node<
     llama::NoName,
     llama::Tuple<
@@ -1090,3 +1094,5 @@ TEST_CASE("treeCoordToString")
     CHECK(
         tree::treeCoordToString(tree::createTreeCoord<llama::RecordCoord<3, 1>>(ai)) == "[ 6:0, 7:0, 8:3, 0:1, 0:0 ]");
 }
+
+#endif

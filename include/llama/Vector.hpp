@@ -68,19 +68,28 @@ namespace llama
 
         // TODO(bgruber): assign
 
+    private:
+        LLAMA_FN_HOST_ACC_INLINE void outOfRange([[maybe_unused]] size_type i) const
+        {
+#if __CUDA_ARCH__
+            assert(false && "Index out of range");
+#else
+            throw std::out_of_range{"Index " + std::to_string(i) + "out of range [0:" + std::to_string(m_size) + "["};
+#endif
+        }
+
+    public:
         LLAMA_FN_HOST_ACC_INLINE auto at(size_type i) -> decltype(auto)
         {
             if(i >= m_size)
-                throw std::out_of_range{
-                    "Index " + std::to_string(i) + "out of range [0:" + std::to_string(m_size) + "["};
+                outOfRange(i);
             return m_view(i);
         }
 
         LLAMA_FN_HOST_ACC_INLINE auto at(size_type i) const -> decltype(auto)
         {
             if(i >= m_size)
-                throw std::out_of_range{
-                    "Index " + std::to_string(i) + "out of range [0:" + std::to_string(m_size) + "["};
+                outOfRange(i);
             return m_view(i);
         }
 

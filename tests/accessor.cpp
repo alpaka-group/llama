@@ -130,7 +130,7 @@ namespace
         float offset;
 
         template<typename T>
-        auto operator()(T& ref) -> decltype(auto)
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(T& ref) -> decltype(auto)
         {
             if constexpr(std::is_same_v<T, float>)
                 return ref + offset;
