@@ -233,7 +233,7 @@ namespace llama::mapping
                     {
                         // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg,hicpp-vararg)
                         printf(
-                            "%*.s %*lu %*lu\n",
+                            "%*.s %*lu\n",
                             columnWidth,
                             fieldNameZT,
                             columnWidth,

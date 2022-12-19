@@ -649,7 +649,7 @@ namespace
     };
 
     template<std::size_t I, typename T>
-    auto get(const MyPos<T>& p)
+    LLAMA_FN_HOST_ACC_INLINE auto get(const MyPos<T>& p)
     {
         if constexpr(I == 0)
             return p.a;
@@ -658,7 +658,7 @@ namespace
     }
 
     template<std::size_t I, typename T>
-    auto get(const MyVel<T>& p)
+    LLAMA_FN_HOST_ACC_INLINE auto get(const MyVel<T>& p)
     {
         if constexpr(I == 0)
             return p.x;
@@ -669,7 +669,7 @@ namespace
     }
 
     template<std::size_t I, typename T>
-    auto get(const MyStruct<T>& p)
+    LLAMA_FN_HOST_ACC_INLINE auto get(const MyStruct<T>& p)
     {
         if constexpr(I == 0)
             return p.pos;

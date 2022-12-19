@@ -28,15 +28,17 @@ namespace llama::bloballoc
     struct Array
     {
         template<std::size_t Alignment>
+        struct alignas(Alignment) AlignedArray : llama::Array<std::byte, BytesToReserve>
+        {
+        };
+
+        template<std::size_t Alignment>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(
             std::integral_constant<std::size_t, Alignment>,
             [[maybe_unused]] std::size_t count) const
         {
             assert(count == BytesToReserve);
-            struct alignas(Alignment) AlignedArray : llama::Array<std::byte, BytesToReserve>
-            {
-            };
-            return AlignedArray{};
+            return AlignedArray<Alignment>{};
         }
     };
 #ifdef __cpp_lib_concepts

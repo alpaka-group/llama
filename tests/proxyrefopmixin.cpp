@@ -7,17 +7,17 @@ namespace
     {
         using value_type = T;
 
-        explicit FakeProxyRef(T& r) : r(r)
+        LLAMA_FN_HOST_ACC_INLINE explicit FakeProxyRef(T& r) : r(r)
         {
         }
 
         // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
-        operator T() const
+        LLAMA_FN_HOST_ACC_INLINE operator T() const
         {
             return r;
         }
 
-        auto operator=(T t) -> FakeProxyRef&
+        LLAMA_FN_HOST_ACC_INLINE auto operator=(T t) -> FakeProxyRef&
         {
             r = t;
             return *this;

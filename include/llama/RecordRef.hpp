@@ -734,7 +734,12 @@ namespace llama
                 [&](auto rc) LLAMA_LAMBDA_INLINE
                 {
                     using std::swap;
+                    LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
+                    // FIXME(bgruber): swap is constexpr in C++20, so nvcc rightfully complains that we call a __host__
+                    // function here. But we must call ADL swap, so we can pick up any swap() for any user defined type
+                    // in the record dimension. Let's see if this ever hits us. Moving to C++20 will solve it.
                     swap(a(rc), b(rc));
+                    LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
                 });
         }
 

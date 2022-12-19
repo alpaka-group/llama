@@ -147,16 +147,12 @@ TEST_CASE("recorddim.record_with_nontrivial_ctor")
     CHECK(e.value == 42);
 }
 
+#    ifndef __NVCC__
 namespace
 {
     struct UniqueInt
     {
         int value = counter++;
-
-        explicit operator int() const
-        {
-            return value;
-        }
 
     private:
         inline static int counter = 0;
@@ -173,6 +169,7 @@ TEST_CASE("recorddim.record_with_nontrivial_ctor2")
     CHECK(view(llama::ArrayIndex{2})(Tag{}).value == 2);
     CHECK(view(llama::ArrayIndex{15})(Tag{}).value == 15);
 }
+#    endif
 
 TEST_CASE("recorddim.uninitialized_trivial")
 {

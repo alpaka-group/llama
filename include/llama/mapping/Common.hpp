@@ -234,13 +234,25 @@ namespace llama::mapping
 
     namespace internal
     {
+        template<auto I>
+        struct S;
+
         template<typename CountType>
         LLAMA_FN_HOST_ACC_INLINE void atomicInc(CountType& i)
         {
 #ifdef __CUDA_ARCH__
             // if you get an error here that there is no overload of atomicAdd, your CMAKE_CUDA_ARCHITECTURE might be
             // too low or you need to use a smaller CountType for the Trace or Heatmap mapping.
-            atomicAdd(&i, CountType{1});
+            if constexpr(boost::mp11::mp_contains<
+                             boost::mp11::mp_list<int, unsigned int, unsigned long long int>,
+                             CountType>::value)
+                atomicAdd(&i, CountType{1});
+            else if constexpr(sizeof(CountType) == sizeof(unsigned int))
+                atomicAdd(reinterpret_cast<unsigned int*>(&i), 1u);
+            else if constexpr(sizeof(CountType) == sizeof(unsigned long long int))
+                atomicAdd(reinterpret_cast<unsigned long long int*>(&i), 1ull);
+            else
+                static_assert(sizeof(CountType) == 0, "There is no CUDA atomicAdd for your CountType");
 #elif defined(__cpp_lib_atomic_ref)
             ++std::atomic_ref<CountType>{i};
 #else

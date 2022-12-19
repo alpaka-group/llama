@@ -193,11 +193,28 @@ namespace llama
         friend constexpr auto operator<(const ArrayIndexIterator& a, const ArrayIndexIterator& b) noexcept -> bool
         {
             assert(a.extents == b.extents);
+#ifdef __NVCC__
+            // from: https://en.cppreference.com/w/cpp/algorithm/lexicographical_compare
+            auto first1 = std::begin(a.current);
+            auto last1 = std::end(a.current);
+            auto first2 = std::begin(b.current);
+            auto last2 = std::end(b.current);
+            for(; (first1 != last1) && (first2 != last2); ++first1, (void) ++first2)
+            {
+                if(*first1 < *first2)
+                    return true;
+                if(*first2 < *first1)
+                    return false;
+            }
+
+            return (first1 == last1) && (first2 != last2);
+#else
             return std::lexicographical_compare(
                 std::begin(a.current),
                 std::end(a.current),
                 std::begin(b.current),
                 std::end(b.current));
+#endif
         }
 
         LLAMA_FN_HOST_ACC_INLINE

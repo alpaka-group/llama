@@ -55,6 +55,7 @@
 #include "RecordRef.hpp"
 #include "Simd.hpp"
 #include "StructName.hpp"
+#include "Tuple.hpp"
 #include "Vector.hpp"
 #include "View.hpp"
 #include "macros.hpp"
