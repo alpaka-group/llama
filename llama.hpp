@@ -764,8 +764,16 @@
 	    };
 
 	    template<typename... Args>
-	    ArrayExtents(Args... args)
-	        -> ArrayExtents<typename internal::IndexTypeFromArgs<std::size_t, Args...>::type, (Args{}, dyn)...>;
+	    ArrayExtents(Args...) -> ArrayExtents<
+	        typename internal::IndexTypeFromArgs<std::size_t, Args...>::type,
+	    // we just use Args to repeat dyn as often as Args is big
+	#ifdef __NVCC__
+	        (static_cast<std::void_t<Args>>(0),
+	         dyn.operator typename internal::IndexTypeFromArgs<std::size_t, Args...>::type())...
+	#else
+	        (Args{}, dyn)...
+	#endif
+	        >;
 
 	    static_assert(std::is_trivially_default_constructible_v<ArrayExtents<std::size_t, 1>>);
 	    static_assert(std::is_trivially_copy_constructible_v<ArrayExtents<std::size_t, 1>>);
@@ -819,15 +827,21 @@
 	        Func&& func,
 	        OuterIndices... outerIndices)
 	    {
+	        LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
 	        if constexpr(Dim > 0)
+	        {
 	            for(SizeType i = 0; i < adSize[0]; i++)
 	                forEachADCoord(
 	                    ArrayIndex<SizeType, Dim - 1>{popFront(adSize)},
 	                    std::forward<Func>(func),
 	                    outerIndices...,
 	                    i);
+	        }
 	        else
+	        {
 	            std::forward<Func>(func)(ArrayIndex<SizeType, sizeof...(outerIndices)>{outerIndices...});
+	        }
+	        LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
 	    }
 
 	    template<typename SizeType, SizeType... Sizes, typename Func>
@@ -1352,11 +1366,13 @@
 	    template<typename RecordDim, typename Functor, std::size_t... Coords>
 	    LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeafCoord(Functor&& functor, RecordCoord<Coords...> baseCoord)
 	    {
+	        LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
 	        LLAMA_FORCE_INLINE_RECURSIVE
 	        internal::mpForEachInlined(
 	            LeafRecordCoords<GetType<RecordDim, RecordCoord<Coords...>>>{},
 	            [&](auto innerCoord) LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(constexpr)
 	            { std::forward<Functor>(functor)(cat(baseCoord, innerCoord)); });
+	        LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
 	    }
 
 	    /// Iterates over the record dimension tree and calls a functor on each element.
@@ -2011,11 +2027,28 @@ namespace llama
         friend constexpr auto operator<(const ArrayIndexIterator& a, const ArrayIndexIterator& b) noexcept -> bool
         {
             assert(a.extents == b.extents);
+#ifdef __NVCC__
+            // from: https://en.cppreference.com/w/cpp/algorithm/lexicographical_compare
+            auto first1 = std::begin(a.current);
+            auto last1 = std::end(a.current);
+            auto first2 = std::begin(b.current);
+            auto last2 = std::end(b.current);
+            for(; (first1 != last1) && (first2 != last2); ++first1, (void) ++first2)
+            {
+                if(*first1 < *first2)
+                    return true;
+                if(*first2 < *first1)
+                    return false;
+            }
+
+            return (first1 == last1) && (first2 != last2);
+#else
             return std::lexicographical_compare(
                 std::begin(a.current),
                 std::end(a.current),
                 std::begin(b.current),
                 std::end(b.current));
+#endif
         }
 
         LLAMA_FN_HOST_ACC_INLINE
@@ -2506,15 +2539,17 @@ namespace llama
 	    struct Array
 	    {
 	        template<std::size_t Alignment>
+	        struct alignas(Alignment) AlignedArray : llama::Array<std::byte, BytesToReserve>
+	        {
+	        };
+
+	        template<std::size_t Alignment>
 	        LLAMA_FN_HOST_ACC_INLINE auto operator()(
 	            std::integral_constant<std::size_t, Alignment>,
 	            [[maybe_unused]] std::size_t count) const
 	        {
 	            assert(count == BytesToReserve);
-	            struct alignas(Alignment) AlignedArray : llama::Array<std::byte, BytesToReserve>
-	            {
-	            };
-	            return AlignedArray{};
+	            return AlignedArray<Alignment>{};
 	        }
 	    };
 	#ifdef __cpp_lib_concepts
@@ -2911,13 +2946,25 @@ namespace llama
 
 		    namespace internal
 		    {
+		        template<auto I>
+		        struct S;
+
 		        template<typename CountType>
 		        LLAMA_FN_HOST_ACC_INLINE void atomicInc(CountType& i)
 		        {
 		#ifdef __CUDA_ARCH__
 		            // if you get an error here that there is no overload of atomicAdd, your CMAKE_CUDA_ARCHITECTURE might be
 		            // too low or you need to use a smaller CountType for the Trace or Heatmap mapping.
-		            atomicAdd(&i, CountType{1});
+		            if constexpr(boost::mp11::mp_contains<
+		                             boost::mp11::mp_list<int, unsigned int, unsigned long long int>,
+		                             CountType>::value)
+		                atomicAdd(&i, CountType{1});
+		            else if constexpr(sizeof(CountType) == sizeof(unsigned int))
+		                atomicAdd(reinterpret_cast<unsigned int*>(&i), 1u);
+		            else if constexpr(sizeof(CountType) == sizeof(unsigned long long int))
+		                atomicAdd(reinterpret_cast<unsigned long long int*>(&i), 1ull);
+		            else
+		                static_assert(sizeof(CountType) == 0, "There is no CUDA atomicAdd for your CountType");
 		#elif defined(__cpp_lib_atomic_ref)
 		            ++std::atomic_ref<CountType>{i};
 		#else
@@ -4893,7 +4940,12 @@ namespace llama
                 [&](auto rc) LLAMA_LAMBDA_INLINE
                 {
                     using std::swap;
+                    LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
+                    // FIXME(bgruber): swap is constexpr in C++20, so nvcc rightfully complains that we call a __host__
+                    // function here. But we must call ADL swap, so we can pick up any swap() for any user defined type
+                    // in the record dimension. Let's see if this ever hits us. Moving to C++20 will solve it.
                     swap(a(rc), b(rc));
+                    LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
                 });
         }
 
@@ -7269,6 +7321,7 @@ namespace llama
 	// ============================================================================
 
 // #include "StructName.hpp"    // amalgamate: file already expanded
+// #include "Tuple.hpp"    // amalgamate: file already expanded
 	// ============================================================================
 	// == ./Vector.hpp ==
 	// ==
@@ -7341,19 +7394,28 @@ namespace llama
 
 	        // TODO(bgruber): assign
 
+	    private:
+	        LLAMA_FN_HOST_ACC_INLINE void outOfRange([[maybe_unused]] size_type i) const
+	        {
+	#if __CUDA_ARCH__
+	            assert(false && "Index out of range");
+	#else
+	            throw std::out_of_range{"Index " + std::to_string(i) + "out of range [0:" + std::to_string(m_size) + "["};
+	#endif
+	        }
+
+	    public:
 	        LLAMA_FN_HOST_ACC_INLINE auto at(size_type i) -> decltype(auto)
 	        {
 	            if(i >= m_size)
-	                throw std::out_of_range{
-	                    "Index " + std::to_string(i) + "out of range [0:" + std::to_string(m_size) + "["};
+	                outOfRange(i);
 	            return m_view(i);
 	        }
 
 	        LLAMA_FN_HOST_ACC_INLINE auto at(size_type i) const -> decltype(auto)
 	        {
 	            if(i >= m_size)
-	                throw std::out_of_range{
-	                    "Index " + std::to_string(i) + "out of range [0:" + std::to_string(m_size) + "["};
+	                outOfRange(i);
 	            return m_view(i);
 	        }
 
@@ -7835,6 +7897,7 @@ namespace llama
 
 		            using QualifiedStoredIntegral = CopyConst<Blobs, StoredIntegral>;
 		            using DstType = GetType<TRecordDim, RecordCoord<RecordCoords...>>;
+		            LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
 		            return internal::BitPackedIntRef<DstType, QualifiedStoredIntegral*, VHBits, size_type>{
 		                reinterpret_cast<QualifiedStoredIntegral*>(&blobs[blob][0]),
 		                bitOffset,
@@ -7844,6 +7907,7 @@ namespace llama
 		                reinterpret_cast<QualifiedStoredIntegral*>(&blobs[blob][0] + blobSize(blob))
 		#endif
 		            };
+		            LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
 		        }
 		    };
 
@@ -9571,7 +9635,7 @@ namespace llama
 	                    {
 	                        // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg,hicpp-vararg)
 	                        printf(
-	                            "%*.s %*lu %*lu\n",
+	                            "%*.s %*lu\n",
 	                            columnWidth,
 	                            fieldNameZT,
 	                            columnWidth,
