@@ -102,6 +102,7 @@ var annotated_dup =
           [ "ByteswapProjection", "structllama_1_1mapping_1_1internal_1_1ByteswapProjection.html", "structllama_1_1mapping_1_1internal_1_1ByteswapProjection" ],
           [ "ChangeTypeProjection", "structllama_1_1mapping_1_1internal_1_1ChangeTypeProjection.html", "structllama_1_1mapping_1_1internal_1_1ChangeTypeProjection" ],
           [ "MakeProjectionPair", "structllama_1_1mapping_1_1internal_1_1MakeProjectionPair.html", "structllama_1_1mapping_1_1internal_1_1MakeProjectionPair" ],
+          [ "S", "structllama_1_1mapping_1_1internal_1_1S.html", null ],
           [ "NullReference", "structllama_1_1mapping_1_1internal_1_1NullReference.html", "structllama_1_1mapping_1_1internal_1_1NullReference" ],
           [ "UnaryFunctionTraits", "structllama_1_1mapping_1_1internal_1_1UnaryFunctionTraits.html", null ],
           [ "UnaryFunctionTraits< Ret(*)(Arg)>", "structllama_1_1mapping_1_1internal_1_1UnaryFunctionTraits_3_01Ret_07_5_08_07Arg_08_4.html", "structllama_1_1mapping_1_1internal_1_1UnaryFunctionTraits_3_01Ret_07_5_08_07Arg_08_4" ],

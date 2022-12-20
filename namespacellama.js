@@ -67,7 +67,7 @@ var namespacellama =
     [ "allocViewUninitialized", "namespacellama.html#a1a76478259d35873449cc44e27dd5abc", null ],
     [ "aosoaCommonBlockCopy", "namespacellama.html#abaefce711ff5d4566ea761ef08fab469", null ],
     [ "Array", "namespacellama.html#a690689d38b43930430e58bb7fe17aca7", null ],
-    [ "ArrayExtents", "namespacellama.html#ab5bdb087aec71d514d126ab243db4b63", null ],
+    [ "ArrayExtents", "namespacellama.html#a3fccafcd85a44696a4d5e6659927b634", null ],
     [ "ArrayIndex", "namespacellama.html#a0d0fda5486eb5976f940a638f0cdd9d4", null ],
     [ "blobMemcpy", "namespacellama.html#a22c65b7815a74750d6b589d95d19d703", null ],
     [ "cat", "namespacellama.html#ae442e49eb3d8d604de1ef8ef3c7fb1d7", null ],

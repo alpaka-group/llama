@@ -6,6 +6,9 @@ var hierarchy =
     [ "llama::Array< T, N >", "structllama_1_1Array.html", null ],
     [ "llama::bloballoc::Array< BytesToReserve >", "structllama_1_1bloballoc_1_1Array.html", null ],
     [ "llama::Array< BlobType, Mapping::blobCount >", "structllama_1_1Array.html", null ],
+    [ "llama::Array< std::byte, BytesToReserve >", "structllama_1_1Array.html", [
+      [ "llama::bloballoc::Array< BytesToReserve >::AlignedArray< Alignment >", "structllama_1_1bloballoc_1_1Array_1_1AlignedArray.html", null ]
+    ] ],
     [ "llama::Array< std::size_t,((Sizes==dyn)+...+0)>", "structllama_1_1Array.html", [
       [ "llama::ArrayExtents< T, Sizes >", "structllama_1_1ArrayExtents.html", [
         [ "llama::ArrayIndexRange< ArrayExtents >", "structllama_1_1ArrayIndexRange.html", null ]
@@ -206,6 +209,7 @@ var hierarchy =
     [ "llama::internal::ReplacePlaceholdersImpl< boost::mp11::mp_arg< I >, Args... >", "structllama_1_1internal_1_1ReplacePlaceholdersImpl_3_01boost_1_1mp11_1_1mp__arg_3_01I_01_4_00_01Args_8_8_8_01_4.html", null ],
     [ "llama::internal::ReplacePlaceholdersImpl< E< Ts... >, Args... >", "structllama_1_1internal_1_1ReplacePlaceholdersImpl_3_01E_3_01Ts_8_8_8_01_4_00_01Args_8_8_8_01_4.html", null ],
     [ "llama::accessor::Restrict", "structllama_1_1accessor_1_1Restrict.html", null ],
+    [ "llama::mapping::internal::S< I >", "structllama_1_1mapping_1_1internal_1_1S.html", null ],
     [ "llama::bloballoc::SharedPtr", "structllama_1_1bloballoc_1_1SharedPtr.html", null ],
     [ "llama::internal::SimdizeNImpl< RecordDim, N, MakeSizedSimd >", "structllama_1_1internal_1_1SimdizeNImpl.html", null ],
     [ "llama::internal::SimdizeNImpl< RecordDim, 1, MakeSizedSimd >", "structllama_1_1internal_1_1SimdizeNImpl_3_01RecordDim_00_011_00_01MakeSizedSimd_01_4.html", null ],

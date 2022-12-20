@@ -16,6 +16,7 @@ var dir_1edeeca147c2d4fb57fec1b01c02fb14 =
     ] ],
     [ "BlobAllocators.hpp", "BlobAllocators_8hpp.html", [
       [ "Array", "structllama_1_1bloballoc_1_1Array.html", "structllama_1_1bloballoc_1_1Array" ],
+      [ "AlignedArray", "structllama_1_1bloballoc_1_1Array_1_1AlignedArray.html", null ],
       [ "UniquePtr", "structllama_1_1bloballoc_1_1UniquePtr.html", "structllama_1_1bloballoc_1_1UniquePtr" ],
       [ "SharedPtr", "structllama_1_1bloballoc_1_1SharedPtr.html", "structllama_1_1bloballoc_1_1SharedPtr" ],
       [ "AlignedAllocator", "structllama_1_1bloballoc_1_1AlignedAllocator.html", "structllama_1_1bloballoc_1_1AlignedAllocator" ],

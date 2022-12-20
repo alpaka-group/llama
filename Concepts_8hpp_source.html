@@ -103,7 +103,7 @@ $(document).ready(function(){initNavTree('Concepts_8hpp_source.html',''); initRe
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <span class="comment">// clang-format off</span></div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> M&gt;</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    concept Mapping = requires(M m) {</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        <span class="keyword">typename</span> <a class="code" href="namespacellama.html#ab5bdb087aec71d514d126ab243db4b63">M::ArrayExtents</a>;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        <span class="keyword">typename</span> <a class="code" href="namespacellama.html#a3fccafcd85a44696a4d5e6659927b634">M::ArrayExtents</a>;</div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        <span class="keyword">typename</span> <a class="code" href="namespacellama.html#a0d0fda5486eb5976f940a638f0cdd9d4">M::ArrayIndex</a>;</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <span class="keyword">typename</span> M::RecordDim;</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        { m.extents() } -&gt; std::same_as&lt;typename M::ArrayExtents&gt;;</div>
@@ -226,9 +226,9 @@ $(document).ready(function(){initNavTree('Concepts_8hpp_source.html',''); initRe
 <div class="ttc" id="anamespacellama_html"><div class="ttname"><a href="namespacellama.html">llama</a></div><div class="ttdef"><b>Definition:</b> <a href="Accessors_8hpp_source.html#l00009">Accessors.hpp:10</a></div></div>
 <div class="ttc" id="anamespacellama_html_a06e1dd12e96257f3aaf7a1ea6b9eead8"><div class="ttname"><a href="namespacellama.html#a06e1dd12e96257f3aaf7a1ea6b9eead8">llama::isProxyReference</a></div><div class="ttdeci">constexpr bool isProxyReference</div><div class="ttdef"><b>Definition:</b> <a href="Concepts_8hpp_source.html#l00132">Concepts.hpp:132</a></div></div>
 <div class="ttc" id="anamespacellama_html_a0d0fda5486eb5976f940a638f0cdd9d4"><div class="ttname"><a href="namespacellama.html#a0d0fda5486eb5976f940a638f0cdd9d4">llama::ArrayIndex</a></div><div class="ttdeci">ArrayIndex(Args...) -&gt; ArrayIndex&lt; typename internal::IndexTypeFromArgs&lt; std::size_t, Args... &gt;::type, sizeof...(Args)&gt;</div></div>
+<div class="ttc" id="anamespacellama_html_a3fccafcd85a44696a4d5e6659927b634"><div class="ttname"><a href="namespacellama.html#a3fccafcd85a44696a4d5e6659927b634">llama::ArrayExtents</a></div><div class="ttdeci">ArrayExtents(Args...) -&gt; ArrayExtents&lt; typename internal::IndexTypeFromArgs&lt; std::size_t, Args... &gt;::type,(Args{}, dyn)... &gt;</div></div>
 <div class="ttc" id="anamespacellama_html_a690689d38b43930430e58bb7fe17aca7"><div class="ttname"><a href="namespacellama.html#a690689d38b43930430e58bb7fe17aca7">llama::Array</a></div><div class="ttdeci">Array(First, Args... args) -&gt; Array&lt; First, sizeof...(Args)+1 &gt;</div></div>
 <div class="ttc" id="anamespacellama_html_a9676a3903b134df116791bcae533d6c6"><div class="ttname"><a href="namespacellama.html#a9676a3903b134df116791bcae533d6c6">llama::isComputed</a></div><div class="ttdeci">constexpr bool isComputed</div><div class="ttdoc">Returns true if the field accessed via the given mapping and record coordinate is a computed value.</div><div class="ttdef"><b>Definition:</b> <a href="View_8hpp_source.html#l00082">View.hpp:82</a></div></div>
-<div class="ttc" id="anamespacellama_html_ab5bdb087aec71d514d126ab243db4b63"><div class="ttname"><a href="namespacellama.html#ab5bdb087aec71d514d126ab243db4b63">llama::ArrayExtents</a></div><div class="ttdeci">ArrayExtents(Args... args) -&gt; ArrayExtents&lt; typename internal::IndexTypeFromArgs&lt; std::size_t, Args... &gt;::type,(Args{}, dyn)... &gt;</div></div>
 <div class="ttc" id="astructllama_1_1internal_1_1IsProxyReferenceImpl_html"><div class="ttname"><a href="structllama_1_1internal_1_1IsProxyReferenceImpl.html">llama::internal::IsProxyReferenceImpl</a></div><div class="ttdef"><b>Definition:</b> <a href="Concepts_8hpp_source.html#l00113">Concepts.hpp:114</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
@@ -236,7 +236,7 @@ $(document).ready(function(){initNavTree('Concepts_8hpp_source.html',''); initRe
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="Concepts_8hpp.html">Concepts.hpp</a></li>
-    <li class="footer">Generated on Thu Dec 15 2022 22:10:23 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Dec 20 2022 17:22:25 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
