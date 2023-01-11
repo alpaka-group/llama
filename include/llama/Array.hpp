@@ -42,12 +42,12 @@ namespace llama
 
         LLAMA_FN_HOST_ACC_INLINE constexpr auto end() -> T*
         {
-            return &element[N];
+            return &element[0] + N;
         }
 
         LLAMA_FN_HOST_ACC_INLINE constexpr auto end() const -> const T*
         {
-            return &element[N];
+            return &element[0] + N;
         }
 
         LLAMA_FN_HOST_ACC_INLINE constexpr auto front() -> T&
