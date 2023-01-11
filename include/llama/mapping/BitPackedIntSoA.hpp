@@ -43,7 +43,7 @@ namespace llama::mapping
 
             LLAMA_FN_HOST_ACC_INLINE static constexpr auto makeMask(StoredIntegral bits) -> StoredIntegral
             {
-                return bits == sizeof(StoredIntegral) * CHAR_BIT ? ~StoredIntegral{0}
+                return bits >= sizeof(StoredIntegral) * CHAR_BIT ? ~StoredIntegral{0}
                                                                  : (StoredIntegral{1} << bits) - 1u;
             }
 
@@ -93,8 +93,9 @@ namespace llama::mapping
                 }
                 if constexpr(std::is_signed_v<Integral>)
                 {
-                    if(v & (StoredIntegral{1} << (VHBits::value() - 1)))
-                        v |= ~StoredIntegral{0} << VHBits::value(); // sign extend
+                    // perform sign extension
+                    if((v & (StoredIntegral{1} << (VHBits::value() - 1))) && VHBits::value() < bitsPerStoredIntegral)
+                        v |= ~StoredIntegral{0} << VHBits::value();
                 }
                 return static_cast<Integral>(v);
             }
@@ -116,11 +117,14 @@ namespace llama::mapping
 
                 auto* p = ptr + bitOffset / bitsPerStoredIntegral;
                 const auto innerBitOffset = bitOffset % bitsPerStoredIntegral;
-                const auto clearMask = ~(mask << innerBitOffset);
-                assert(p < endPtr);
-                auto mem = p[0] & clearMask; // clear previous bits
-                mem |= valueBits << innerBitOffset; // write new bits
-                p[0] = mem;
+
+                {
+                    const auto clearMask = ~(mask << innerBitOffset);
+                    assert(p < endPtr);
+                    auto mem = p[0] & clearMask; // clear previous bits
+                    mem |= valueBits << innerBitOffset; // write new bits
+                    p[0] = mem;
+                }
 
                 const auto innerBitEndOffset = innerBitOffset + VHBits::value();
                 if(innerBitEndOffset > bitsPerStoredIntegral)
@@ -144,24 +148,9 @@ namespace llama::mapping
         template<typename RecordDim>
         using LargestIntegral = boost::mp11::mp_max_element<FlatRecordDim<RecordDim>, HasLargerSize>;
 
-        template<typename T, typename SFINAE = void>
-        struct MakeUnsigned : std::make_unsigned<T>
-        {
-        };
-
-        template<>
-        struct MakeUnsigned<bool>
-        {
-            using type = std::uint8_t;
-        };
-
-        template<typename T>
-        struct MakeUnsigned<T, std::enable_if_t<std::is_enum_v<T>>> : std::make_unsigned<std::underlying_type_t<T>>
-        {
-        };
-
         template<typename RecordDim>
-        using StoredUnsignedFor = typename MakeUnsigned<LargestIntegral<RecordDim>>::type;
+        using StoredUnsignedFor = std::
+            conditional_t<(sizeof(LargestIntegral<RecordDim>) > sizeof(std::uint32_t)), std::uint64_t, std::uint32_t>;
     } // namespace internal
 
     /// Struct of array mapping using bit packing to reduce size/precision of integral data types. If your record
@@ -214,6 +203,12 @@ namespace llama::mapping
             , VHBits{bits}
         {
             static_assert(VHBits::value() > 0);
+            boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, FlatRecordDim<TRecordDim>>>(
+                [&](auto t)
+                {
+                    using FieldType = typename decltype(t)::type;
+                    static_assert(static_cast<std::size_t>(VHBits::value()) <= sizeof(FieldType) * CHAR_BIT);
+                });
         }
 
         template<typename B = Bits, std::enable_if_t<!isConstant<B>, int> = 0>
@@ -221,7 +216,24 @@ namespace llama::mapping
             : Base(extents)
             , VHBits{bits}
         {
-            assert(this->bits() > 0);
+#ifdef __CUDA_ARCH__
+            assert(VHBits::value() > 0);
+#else
+            if(VHBits::value() <= 0)
+                throw std::invalid_argument("BitPackedIntSoA Bits must not be zero");
+#endif
+            boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, FlatRecordDim<TRecordDim>>>(
+                [&](auto t)
+                {
+                    using FieldType = typename decltype(t)::type;
+#ifdef __CUDA_ARCH__
+                    assert(VHBits::value() <= sizeof(FieldType) * CHAR_BIT);
+#else
+                    if(static_cast<std::size_t>(VHBits::value()) > sizeof(FieldType) * CHAR_BIT)
+                        throw std::invalid_argument(
+                            "BitPackedIntSoA Bits must not be larger than any field type in the record dimension");
+#endif
+                });
         }
 
         LLAMA_FN_HOST_ACC_INLINE
