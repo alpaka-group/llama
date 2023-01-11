@@ -41,6 +41,12 @@ namespace llama::mapping
             // NOLINTNEXTLINE(bugprone-misplaced-widening-cast)
             static constexpr auto bitsPerStoredIntegral = static_cast<SizeType>(sizeof(StoredIntegral) * CHAR_BIT);
 
+            LLAMA_FN_HOST_ACC_INLINE static constexpr auto makeMask(StoredIntegral bits) -> StoredIntegral
+            {
+                return bits == sizeof(StoredIntegral) * CHAR_BIT ? ~StoredIntegral{0}
+                                                                 : (StoredIntegral{1} << bits) - 1u;
+            }
+
         public:
             using value_type = Integral;
 
@@ -74,14 +80,14 @@ namespace llama::mapping
                 const auto innerBitEndOffset = innerBitOffset + VHBits::value();
                 if(innerBitEndOffset <= bitsPerStoredIntegral)
                 {
-                    const auto mask = (StoredIntegral{1} << VHBits::value()) - 1u;
+                    const auto mask = makeMask(VHBits::value());
                     v &= mask;
                 }
                 else
                 {
                     const auto excessBits = innerBitEndOffset - bitsPerStoredIntegral;
                     const auto bitsLoaded = bitsPerStoredIntegral - innerBitOffset;
-                    const auto mask = (StoredIntegral{1} << excessBits) - 1u;
+                    const auto mask = makeMask(excessBits);
                     assert(p + 1 < endPtr);
                     v |= (p[1] & mask) << bitsLoaded;
                 }
@@ -97,13 +103,13 @@ namespace llama::mapping
             {
                 // NOLINTNEXTLINE(bugprone-signed-char-misuse,cert-str34-c)
                 const auto unsignedValue = static_cast<StoredIntegral>(value);
-                const auto mask = (StoredIntegral{1} << VHBits::value()) - 1u;
+                const auto mask = makeMask(VHBits::value());
                 StoredIntegral valueBits;
                 if constexpr(!std::is_signed_v<Integral>)
                     valueBits = unsignedValue & mask;
                 else
                 {
-                    const auto magnitudeMask = (StoredIntegral{1} << (VHBits::value() - 1)) - 1u;
+                    const auto magnitudeMask = makeMask(VHBits::value() - 1);
                     const auto isSigned = value < 0;
                     valueBits = (StoredIntegral{isSigned} << (VHBits::value() - 1)) | (unsignedValue & magnitudeMask);
                 }
@@ -121,7 +127,7 @@ namespace llama::mapping
                 {
                     const auto excessBits = innerBitEndOffset - bitsPerStoredIntegral;
                     const auto bitsWritten = bitsPerStoredIntegral - innerBitOffset;
-                    const auto clearMask = ~((StoredIntegral{1} << excessBits) - 1u);
+                    const auto clearMask = ~makeMask(excessBits);
                     assert(p + 1 < endPtr);
                     auto mem = p[1] & clearMask; // clear previous bits
                     mem |= valueBits >> bitsWritten; // write new bits
