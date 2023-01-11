@@ -198,6 +198,17 @@ TEST_CASE("mapping.BitPackedIntSoA.Size")
         sizeof(llama::mapping::BitPackedIntSoA<llama::ArrayExtents<unsigned, 16>, SInts>{{}, 7}) == sizeof(unsigned));
 }
 
+TEST_CASE("mapping.BitPackedIntSoA.FullBitWidth.16")
+{
+    // this could detect bugs when shifting integers by their bit-width
+    auto view = llama::allocView(
+        llama::mapping::BitPackedIntSoA<llama::ArrayExtents<>, std::uint16_t, llama::Constant<16>>{});
+
+    constexpr std::uint16_t value = 0xAABB;
+    view() = value;
+    CHECK(view() == value);
+}
+
 TEST_CASE("mapping.BitPackedIntSoA.FullBitWidth.32")
 {
     // this could detect bugs when shifting integers by their bit-width
@@ -218,4 +229,10 @@ TEST_CASE("mapping.BitPackedIntSoA.FullBitWidth.64")
     constexpr std::uint64_t value = 0xAABBCCDDEEFF8899;
     view() = value;
     CHECK(view() == value);
+}
+
+TEST_CASE("mapping.BitPackedIntSoA.ValidateBitsSmallerThanFieldType")
+{
+    // 11 bits are larger than the uint8_t field type
+    CHECK_THROWS(llama::mapping::BitPackedIntSoA<llama::ArrayExtents<std::size_t, 16>, UInts, unsigned>{{}, 11});
 }
