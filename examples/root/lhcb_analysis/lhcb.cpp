@@ -9,13 +9,15 @@
 #include <TStyle.h>
 #include <TSystem.h>
 #include <chrono>
+#include <filesystem>
 #include <fmt/core.h>
 #include <llama/llama.hpp>
+#include <omp.h>
 #include <string>
 
 namespace
 {
-    constexpr double kKaonMassMeV = 493.677;
+    constexpr auto analysisRepetitions = 100;
 
     // clang-format off
     struct H1isMuon{};
@@ -63,6 +65,7 @@ namespace
 
     namespace RE = ROOT::Experimental;
 
+    template<typename Mapping>
     auto convertRNTupleToLLAMA(const std::string& path)
     {
         auto begin = std::chrono::steady_clock::now();
@@ -77,9 +80,7 @@ namespace
         //            fmt::print("PrintInfo error: {}", e.what());
         //        }
 
-        auto ae = llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>{ntuple->GetNEntries()};
-        auto mapping = llama::mapping::AoS{ae, RecordDim{}};
-        auto view = llama::allocView(mapping);
+        auto view = llama::allocViewUninitialized(Mapping{typename Mapping::ArrayExtents{ntuple->GetNEntries()}});
 
         auto viewH1IsMuon = ntuple->GetView<int>("H1_isMuon");
         auto viewH2IsMuon = ntuple->GetView<int>("H2_isMuon");
@@ -110,6 +111,11 @@ namespace
             event(H2isMuon{}) = viewH2IsMuon(i);
             event(H3isMuon{}) = viewH3IsMuon(i);
 
+            // a few sanity checks in case we mess up with the bitpacking
+            assert(event(H1isMuon{}) != viewH1IsMuon(i));
+            assert(event(H2isMuon{}) != viewH2IsMuon(i));
+            assert(event(H3isMuon{}) != viewH3IsMuon(i));
+
             event(H1PX{}) = viewH1PX(i);
             event(H1PY{}) = viewH1PY(i);
             event(H1PZ{}) = viewH1PZ(i);
@@ -131,87 +137,277 @@ namespace
 
         const auto duration
             = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - begin).count();
-        fmt::print("RNTuple -> LLAMA view: {}μs\n", duration);
 
-        return view;
+        return std::tuple{view, duration};
     }
 
-    auto GetP2(double px, double py, double pz) -> double
+    auto getP2(double px, double py, double pz) -> double
     {
         return px * px + py * py + pz * pz;
     }
 
-    auto GetKE(double px, double py, double pz) -> double
+    constexpr double kaonMassMeV = 493.677;
+
+    auto getKE(double px, double py, double pz) -> double
     {
-        const double p2 = GetP2(px, py, pz);
-        return std::sqrt(p2 + kKaonMassMeV * kKaonMassMeV);
+        const double p2 = getP2(px, py, pz);
+        return std::sqrt(p2 + kaonMassMeV * kaonMassMeV);
     }
 
     template<typename View>
-    auto analysis(View& view)
+    auto analysis(View& view, const std::string& mappingName)
     {
-        auto hMass = TH1D("B_mass", "", 500, 5050, 5500);
+        auto hists = std::vector<TH1D>(omp_get_max_threads(), TH1D("B_mass", mappingName.c_str(), 500, 5050, 5500));
 
         auto begin = std::chrono::steady_clock::now();
-        for(auto i = 0; i < view.mapping().extents()[0]; i++)
+        const RE::NTupleSize_t n = view.mapping().extents()[0];
+#pragma omp parallel for
+        for(RE::NTupleSize_t i = 0; i < n; i++)
         {
             auto&& event = view[i];
             if(event(H1isMuon{}) || event(H2isMuon{}) || event(H3isMuon{}))
                 continue;
 
-            constexpr double prob_k_cut = 0.5;
-            if(event(H1ProbK{}) < prob_k_cut || event(H2ProbK{}) < prob_k_cut || event(H3ProbK{}) < prob_k_cut)
+            constexpr double probKCut = 0.5;
+            if(event(H1ProbK{}) < probKCut || event(H2ProbK{}) < probKCut || event(H3ProbK{}) < probKCut)
                 continue;
 
-            constexpr double prob_pi_cut = 0.5;
-            if(event(H1ProbPi{}) > prob_pi_cut || event(H2ProbPi{}) > prob_pi_cut || event(H3ProbPi{}) > prob_pi_cut)
+            constexpr double probPiCut = 0.5;
+            if(event(H1ProbPi{}) > probPiCut || event(H2ProbPi{}) > probPiCut || event(H3ProbPi{}) > probPiCut)
                 continue;
 
-            const double b_px = event(H1PX{}) + event(H2PX{}) + event(H3PX{});
-            const double b_py = event(H1PY{}) + event(H2PY{}) + event(H3PY{});
-            const double b_pz = event(H1PZ{}) + event(H2PZ{}) + event(H3PZ{});
-            const double b_p2 = GetP2(b_px, b_py, b_pz);
-            const double k1_E = GetKE(event(H1PX{}), event(H1PY{}), event(H1PZ{}));
-            const double k2_E = GetKE(event(H2PX{}), event(H2PY{}), event(H2PZ{}));
-            const double k3_E = GetKE(event(H3PX{}), event(H3PY{}), event(H3PZ{}));
-            const double b_E = k1_E + k2_E + k3_E;
-            const double b_mass = std::sqrt(b_E * b_E - b_p2);
-            hMass.Fill(b_mass);
+            const double h1px = event(H1PX{});
+            const double h1py = event(H1PY{});
+            const double h1pz = event(H1PZ{});
+            const double h2px = event(H2PX{});
+            const double h2py = event(H2PY{});
+            const double h2pz = event(H2PZ{});
+            const double h3px = event(H3PX{});
+            const double h3py = event(H3PY{});
+            const double h3pz = event(H3PZ{});
+
+            const double bpx = h1px + h2px + h3px;
+            const double bpy = h1py + h2py + h3py;
+            const double bpz = h1pz + h2pz + h3pz;
+            const double bp2 = getP2(bpx, bpy, bpz);
+            const double k1e = getKE(h1px, h1py, h1pz);
+            const double k2e = getKE(h2px, h2py, h2pz);
+            const double k3e = getKE(h3px, h3py, h3pz);
+            const double be = k1e + k2e + k3e;
+            const double bmass = std::sqrt(be * be - bp2);
+
+            hists[omp_get_thread_num()].Fill(bmass);
         }
         const auto duration
-            = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - begin).count();
-        fmt::print("Analysis: {}μs\n", duration);
+            = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - begin);
 
-        return hMass;
+        for(std::size_t i = 1; i < hists.size(); i++)
+            hists[0].Add(&hists[i]);
+
+        return std::tuple{hists[0], duration};
     }
 
-    void show(TH1D& h)
+    const auto histogramFolder = std::string("lhcb/histograms");
+    const auto layoutsFolder = std::string("lhcb/layouts");
+    const auto heatmapFolder = std::string("lhcb/heatmaps");
+
+    void save(TH1D& h, const std::string& mappingName)
     {
-        auto app = TApplication("", nullptr, nullptr);
-        gStyle->SetTextFont(42);
+        const auto file = std::filesystem::path(histogramFolder + "/" + mappingName + ".png");
+        std::filesystem::create_directories(file.parent_path());
         auto c = TCanvas("c", "", 800, 700);
         h.GetXaxis()->SetTitle("m_{KKK} [MeV/c^{2}]");
         h.DrawCopy();
-        c.Modified();
-        c.Update();
-        static_cast<TRootCanvas*>(c.GetCanvasImp())
-            ->Connect("CloseWindow()", "TApplication", gApplication, "Terminate()");
-        app.Run();
+        c.Print(file.c_str());
+        // c.Modified();
+        // c.Update();
+        // auto app = TApplication("", nullptr, nullptr);
+        // static_cast<TRootCanvas*>(c.GetCanvasImp())
+        //     ->Connect("CloseWindow()", "TApplication", gApplication, "Terminate()");
+        // app.Run(true);
+    }
+
+    // reference results from single threaded run
+    constexpr auto expectedEntries = 23895;
+    constexpr auto expectedMean = 5262.231219944131;
+    constexpr auto expectedStdDev = 75.02283561602752;
+
+    using AoS = llama::mapping::AoS<llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>, RecordDim>;
+    using AoSoA8 = llama::mapping::AoSoA<llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>, RecordDim, 8>;
+    using AoSoA16 = llama::mapping::AoSoA<llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>, RecordDim, 16>;
+    using SoAASB = llama::mapping::AlignedSingleBlobSoA<llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>, RecordDim>;
+    using SoAMB = llama::mapping::MultiBlobSoA<llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>, RecordDim>;
+
+    using AoSHeatmap = llama::mapping::Heatmap<AoS>;
+
+    using boost::mp11::mp_list;
+
+    using AoS_Floats = llama::mapping::ChangeType<
+        llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>,
+        RecordDim,
+        llama::mapping::BindAoS<>::fn,
+        mp_list<mp_list<double, float>>>;
+
+    using SoAMB_Floats = llama::mapping::ChangeType<
+        llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>,
+        RecordDim,
+        llama::mapping::BindSoA<llama::mapping::Blobs::OnePerField>::fn,
+        mp_list<mp_list<double, float>>>;
+
+    // This mapping is built upon the observation that HxisMuon is accessed densely, H1PropK 10x less often, H2PropK
+    // another 10x less often, and everything else super sparse (around every 300th element).
+    using Custom = llama::mapping::Split<
+        llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>,
+        RecordDim,
+        mp_list<mp_list<H1isMuon>, mp_list<H2isMuon>, mp_list<H3isMuon>>,
+        // llama::mapping::PackedAoS,
+        llama::mapping::BindBitPackedIntAoS<llama::Constant<1>, llama::mapping::SignBit::Discard>::fn,
+        llama::mapping::BindSplit<
+            mp_list<mp_list<H1ProbK>, mp_list<H2ProbK>>,
+            llama::mapping::PackedAoS,
+            llama::mapping::PackedAoS,
+            true>::fn,
+        true>;
+
+    template<int Exp, int Man>
+    using MakeBitpacked = llama::mapping::Split<
+        llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>,
+        RecordDim,
+        mp_list<mp_list<H1isMuon>, mp_list<H2isMuon>, mp_list<H3isMuon>>,
+        llama::mapping::BindBitPackedIntSoA<llama::Constant<1>, llama::mapping::SignBit::Discard>::fn,
+        llama::mapping::BindBitPackedFloatSoA<llama::Constant<Exp>, llama::Constant<Man>>::template fn,
+        true>;
+
+    template<typename Mapping>
+    auto totalBlobSizes(const Mapping& m) -> std::size_t
+    {
+        std::size_t total = 0;
+        for(std::size_t i = 0; i < Mapping::blobCount; i++)
+            total += m.blobSize(i);
+        return total;
+    }
+
+    template<typename Mapping>
+    void saveLayout(const std::filesystem::path& layoutFile)
+    {
+        std::filesystem::create_directories(layoutFile.parent_path());
+        std::ofstream{layoutFile} << llama::toSvg(Mapping{typename Mapping::ArrayExtents{10}});
+    }
+
+    template<typename View>
+    void saveHeatmap(const View& v, const std::filesystem::path& heatmapFile)
+    {
+        std::filesystem::create_directories(heatmapFile.parent_path());
+        const auto& m = v.mapping();
+        m.writeGnuplotDataFileBinary(v.storageBlobs, std::ofstream{heatmapFile});
+        std::ofstream{heatmapFile.parent_path() / "plot.sh"} << View::Mapping::gnuplotScriptBinary;
+    }
+
+    template<typename View>
+    void clearHeatmap(View& v)
+    {
+        const auto bc = View::Mapping::blobCount;
+        for(int i = bc / 2; i < bc; i++)
+            std::memset(&v.storageBlobs[i][0], 0, v.mapping().blobSize(i));
+    }
+
+    template<typename Mapping>
+    void testAnalysis(const std::string& inputFile, const std::string& mappingName)
+    {
+        saveLayout<Mapping>(layoutsFolder + "/" + mappingName + ".svg");
+
+        auto [view, conversionTime] = convertRNTupleToLLAMA<Mapping>(inputFile);
+        if constexpr(llama::mapping::isHeatmap<Mapping>)
+        {
+            saveHeatmap(view, heatmapFolder + "/conversion.bin");
+            clearHeatmap(view);
+        }
+
+        TH1D hist{};
+        std::chrono::microseconds totalAnalysisTime{};
+        for(int i = 0; i < analysisRepetitions; i++)
+        {
+            auto [h, analysisTime] = analysis(view, mappingName);
+            if(i == 0)
+                hist = h;
+            totalAnalysisTime += analysisTime;
+        }
+        if constexpr(llama::mapping::isHeatmap<Mapping>)
+            saveHeatmap(view, heatmapFolder + "/analysis.bin");
+        save(hist, mappingName);
+        const auto mean = hist.GetMean();
+        const auto absError = std::abs(mean - expectedMean);
+        fmt::print(
+            "{:16} {:>15.1f} {:>12.1f} {:>10.1f} {:>7} {:>6.1f} {:>6.1f} {:>6.1f} {:>6.3f}\n",
+            "\"" + mappingName + "\"",
+            conversionTime / 1000.0,
+            totalAnalysisTime.count() / analysisRepetitions / 1000.0,
+            totalBlobSizes(view.mapping()) / 1024.0 / 1024.0,
+            hist.GetEntries(),
+            mean,
+            hist.GetStdDev(),
+            std::abs(mean - expectedMean),
+            absError / expectedMean);
     }
 } // namespace
 
-int main(int argc, const char* argv[])
+auto main(int argc, const char* argv[]) -> int
 {
     if(argc != 2)
     {
-        fmt::print("Please specify RNTuple input file!");
+        fmt::print("Please specify location of the LHCB B2HHH RNTuple input file!");
         return 1;
     }
 
     const auto& inputFile = argv[1];
-    auto view = convertRNTupleToLLAMA(inputFile);
-    auto hist = analysis(view);
-    show(hist);
+
+    gErrorIgnoreLevel = kWarning + 1; // TODO(bgruber): supress warnings that the RNTuple still uses a pre-released
+                                      // format. Remove this once RNTuple hits production.
+
+    fmt::print(
+        "{:16} {:>15} {:>12} {:>10} {:>7} {:>6} {:>6} {:>6} {:>6}\n",
+        "Mapping",
+        "RNT->LLAMA(ms)",
+        "Analysis(ms)",
+        "Size(MiB)",
+        "Entries",
+        "Mean",
+        "StdDev",
+        "ErrAbs",
+        "ErrRel");
+
+    testAnalysis<AoS>(inputFile, "AoS");
+    testAnalysis<AoSHeatmap>(inputFile, "AoS Heatmap");
+    testAnalysis<AoSoA8>(inputFile, "AoSoA8");
+    testAnalysis<AoSoA16>(inputFile, "AoSoA16");
+    testAnalysis<SoAASB>(inputFile, "SoA SB A");
+    testAnalysis<SoAMB>(inputFile, "SoA MB");
+
+    testAnalysis<AoS_Floats>(inputFile, "AoS (float)");
+    testAnalysis<SoAMB_Floats>(inputFile, "SoA MB (float)");
+
+    testAnalysis<Custom>(inputFile, "Custom");
+
+    constexpr auto fullExp = 11;
+    constexpr auto fullMan = 52;
+    testAnalysis<MakeBitpacked<fullExp, fullMan>>(inputFile, fmt::format("BP SoA {}e{}", fullMan, fullExp));
+
+    using namespace boost::mp11;
+    mp_for_each<mp_reverse<mp_drop_c<mp_iota_c<fullExp>, 1>>>(
+        [&](auto ic)
+        {
+            constexpr auto exp = decltype(ic)::value;
+            testAnalysis<MakeBitpacked<exp, fullMan>>(inputFile, fmt::format("BP SoA {}e{}", fullMan, exp));
+        });
+    mp_for_each<mp_reverse<mp_drop_c<mp_iota_c<fullMan>, 1>>>(
+        [&](auto ic)
+        {
+            constexpr auto man = decltype(ic)::value;
+            testAnalysis<MakeBitpacked<fullExp, man>>(inputFile, fmt::format("BP SoA {}e{}", man, fullExp));
+        });
+
+    // we typically observe wrong results at exp < 6, and man < 16
+    testAnalysis<MakeBitpacked<6, 16>>(inputFile, "BP SoA 16e6");
 
     return 0;
 }
