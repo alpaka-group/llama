@@ -59,15 +59,15 @@ TEST_CASE("mapping.ByteSplit.ChangeType.SoA")
 
 TEST_CASE("mapping.ByteSplit.Split.BitPackedIntSoA")
 {
-    auto view = llama::allocView(llama::mapping::Bytesplit<
-                                 llama::ArrayExtentsDynamic<int, 1>,
-                                 Vec3I,
-                                 llama::mapping::BindSplit<
-                                     llama::RecordCoord<1>,
-                                     llama::mapping::BitPackedIntSoA,
-                                     llama::mapping::BindAoS<>::fn,
-                                     true>::fn>{
-        std::tuple{std::tuple{llama::ArrayExtents{128}, 23}, std::tuple{llama::ArrayExtents{128}}}});
+    auto view = llama::allocView(
+        llama::mapping::Bytesplit<
+            llama::ArrayExtentsDynamic<int, 1>,
+            Vec3I,
+            llama::mapping::BindSplit<
+                llama::RecordCoord<1>,
+                llama::mapping::BitPackedIntSoA,
+                llama::mapping::BindAoS<>::fn,
+                true>::fn>{std::tuple{std::tuple{llama::ArrayExtents{128}, 8}, std::tuple{llama::ArrayExtents{128}}}});
     iotaFillView(view);
     iotaCheckView(view);
 }

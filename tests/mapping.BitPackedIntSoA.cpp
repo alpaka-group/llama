@@ -173,10 +173,6 @@ TEMPLATE_TEST_CASE("mapping.BitPackedIntSoA.Enum", "", Grades, GradesClass)
 {
     using Enum = TestType;
 
-    using StoredIntegral =
-        typename llama::mapping::internal::MakeUnsigned<llama::mapping::internal::LargestIntegral<Enum>>::type;
-    STATIC_REQUIRE(std::is_same_v<StoredIntegral, unsigned>);
-
     auto view = llama::allocView(
         llama::mapping::BitPackedIntSoA<llama::ArrayExtentsDynamic<std::size_t, 1>, Enum, llama::Constant<3>>{{6}});
     view(0) = Enum::A;
@@ -202,8 +198,18 @@ TEST_CASE("mapping.BitPackedIntSoA.Size")
         sizeof(llama::mapping::BitPackedIntSoA<llama::ArrayExtents<unsigned, 16>, SInts>{{}, 7}) == sizeof(unsigned));
 }
 
+TEST_CASE("mapping.BitPackedIntSoA.FullBitWidth.32")
+{
+    // this could detect bugs when shifting integers by their bit-width
+    auto view = llama::allocView(
+        llama::mapping::BitPackedIntSoA<llama::ArrayExtents<>, std::uint32_t, llama::Constant<32>>{});
 
-TEST_CASE("mapping.BitPackedIntSoA.FullBitWidth")
+    constexpr std::uint32_t value = 0xAABBCCDD;
+    view() = value;
+    CHECK(view() == value);
+}
+
+TEST_CASE("mapping.BitPackedIntSoA.FullBitWidth.64")
 {
     // this could detect bugs when shifting integers by their bit-width
     auto view = llama::allocView(
