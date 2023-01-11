@@ -201,3 +201,15 @@ TEST_CASE("mapping.BitPackedIntSoA.Size")
     STATIC_REQUIRE(
         sizeof(llama::mapping::BitPackedIntSoA<llama::ArrayExtents<unsigned, 16>, SInts>{{}, 7}) == sizeof(unsigned));
 }
+
+
+TEST_CASE("mapping.BitPackedIntSoA.FullBitWidth")
+{
+    // this could detect bugs when shifting integers by their bit-width
+    auto view = llama::allocView(
+        llama::mapping::BitPackedIntSoA<llama::ArrayExtents<>, std::uint64_t, llama::Constant<64>>{});
+
+    constexpr std::uint64_t value = 0xAABBCCDDEEFF8899;
+    view() = value;
+    CHECK(view() == value);
+}
