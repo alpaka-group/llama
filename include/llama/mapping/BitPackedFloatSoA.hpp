@@ -98,12 +98,13 @@ namespace llama::mapping
         /// A proxy type representing a reference to a reduced precision floating-point value, stored in a buffer at a
         /// specified bit offset.
         /// @tparam Float Floating-point data type which can be loaded and store through this reference.
-        /// @tparam StoredIntegralPointer Pointer to integral type used for storing the bits.
-        template<typename Float, typename StoredIntegralPointer, typename VHExp, typename VHMan, typename SizeType>
+        /// @tparam StoredIntegralCV Integral type used for storing the bits with CV qualifiers.
+        /// @tparam SizeType Type used to store sizes and offsets.
+        template<typename Float, typename StoredIntegralCV, typename VHExp, typename VHMan, typename SizeType>
         struct LLAMA_DECLSPEC_EMPTY_BASES BitPackedFloatRef
             : private VHExp
             , private VHMan
-            , ProxyRefOpMixin<BitPackedFloatRef<Float, StoredIntegralPointer, VHExp, VHMan, SizeType>, Float>
+            , ProxyRefOpMixin<BitPackedFloatRef<Float, StoredIntegralCV, VHExp, VHMan, SizeType>, Float>
         {
         private:
             static_assert(
@@ -117,7 +118,7 @@ namespace llama::mapping
 
             BitPackedIntRef<
                 FloatBits,
-                StoredIntegralPointer,
+                StoredIntegralCV,
                 decltype(integBits(std::declval<VHExp>(), std::declval<VHMan>())),
                 SizeType>
                 intref;
@@ -126,24 +127,16 @@ namespace llama::mapping
             using value_type = Float;
 
             LLAMA_FN_HOST_ACC_INLINE constexpr BitPackedFloatRef(
-                StoredIntegralPointer p,
+                StoredIntegralCV* p,
                 SizeType bitOffset,
                 VHExp vhExp,
-                VHMan vhMan
-#ifndef NDEBUG
-                ,
-                StoredIntegralPointer endPtr
-#endif
-                )
+                VHMan vhMan)
                 : VHExp{vhExp}
                 , VHMan{vhMan}
                 , intref{
                       p,
                       bitOffset,
                       integBits(vhExp, vhMan),
-#ifndef NDEBUG
-                      endPtr
-#endif
                   }
             {
             }
@@ -267,16 +260,11 @@ namespace llama::mapping
             using QualifiedStoredIntegral = CopyConst<Blobs, StoredIntegral>;
             using DstType = GetType<TRecordDim, RecordCoord<RecordCoords...>>;
             LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-            return internal::BitPackedFloatRef<DstType, QualifiedStoredIntegral*, VHExp, VHMan, size_type>{
+            return internal::BitPackedFloatRef<DstType, QualifiedStoredIntegral, VHExp, VHMan, size_type>{
                 reinterpret_cast<QualifiedStoredIntegral*>(&blobs[blob][0]),
                 bitOffset,
                 static_cast<const VHExp&>(*this),
-                static_cast<const VHMan&>(*this)
-#ifndef NDEBUG
-                    ,
-                reinterpret_cast<QualifiedStoredIntegral*>(&blobs[blob][0] + blobSize(blob))
-#endif
-            };
+                static_cast<const VHMan&>(*this)};
             LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
         }
     };
