@@ -236,3 +236,43 @@ TEST_CASE("mapping.BitPackedIntSoA.ValidateBitsSmallerThanFieldType")
     // 11 bits are larger than the uint8_t field type
     CHECK_THROWS(llama::mapping::BitPackedIntSoA<llama::ArrayExtents<std::size_t, 16>, UInts, unsigned>{{}, 11});
 }
+
+TEMPLATE_TEST_CASE(
+    "mapping.BitPackedIntSoA.bitpack",
+    "",
+    std::int8_t,
+    std::int16_t,
+    std::int32_t,
+    std::int64_t,
+    std::uint8_t,
+    std::uint16_t,
+    std::uint32_t,
+    std::uint64_t)
+{
+    using Integral = TestType;
+    boost::mp11::mp_for_each<boost::mp11::mp_list<std::uint32_t, std::uint64_t>>(
+        [](auto si)
+        {
+            using StoredIntegral = decltype(si);
+            std::vector<StoredIntegral> blob(sizeof(Integral) * 32);
+
+            // 5 bits are required to store values from 0..31, +1 for sign bit
+            for(StoredIntegral bitCount = 5 + 1; bitCount <= sizeof(Integral) * CHAR_BIT; bitCount++)
+            {
+                for(Integral i = 0; i < 32; i++)
+                    llama::mapping::internal::bitpack<Integral>(
+                        blob.data(),
+                        static_cast<StoredIntegral>(i * bitCount),
+                        bitCount,
+                        i);
+
+                for(Integral i = 0; i < 32; i++)
+                    CHECK(
+                        llama::mapping::internal::bitunpack<Integral>(
+                            blob.data(),
+                            static_cast<StoredIntegral>(i * bitCount),
+                            bitCount)
+                        == i);
+            }
+        });
+}

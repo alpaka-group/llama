@@ -13,17 +13,116 @@ namespace llama::mapping
 {
     namespace internal
     {
+        template<typename Integral>
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto makeMask(Integral bits) -> Integral
+        {
+            return bits >= sizeof(Integral) * CHAR_BIT ? ~Integral{0} : (Integral{1} << bits) - 1u;
+        }
+
+        template<typename Integral, typename StoredIntegral>
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto bitunpack(
+            const StoredIntegral* ptr,
+            StoredIntegral bitOffset,
+            StoredIntegral bitCount) -> Integral
+        {
+            constexpr auto bitsPerStoredIntegral = static_cast<StoredIntegral>(sizeof(StoredIntegral) * CHAR_BIT);
+            assert(bitCount > 0 && bitCount <= bitsPerStoredIntegral);
+#ifdef __clang__
+            // this is necessary to silence the clang static analyzer
+            __builtin_assume(bitCount > 0 && bitCount <= bitsPerStoredIntegral);
+#endif
+
+            const auto* p = ptr + bitOffset / bitsPerStoredIntegral;
+            const auto innerBitOffset = bitOffset % bitsPerStoredIntegral;
+            //            assert(p < endPtr);
+            auto v = p[0] >> innerBitOffset;
+
+            const auto innerBitEndOffset = innerBitOffset + bitCount;
+            if(innerBitEndOffset <= bitsPerStoredIntegral)
+            {
+                const auto mask = makeMask(bitCount);
+                v &= mask;
+            }
+            else
+            {
+                const auto excessBits = innerBitEndOffset - bitsPerStoredIntegral;
+                const auto bitsLoaded = bitsPerStoredIntegral - innerBitOffset;
+                const auto mask = makeMask(excessBits);
+                //                assert(p + 1 < endPtr);
+                v |= (p[1] & mask) << bitsLoaded;
+            }
+            if constexpr(std::is_signed_v<Integral>)
+            {
+                // perform sign extension
+                if((v & (StoredIntegral{1} << (bitCount - 1))) && bitCount < bitsPerStoredIntegral)
+                    v |= ~StoredIntegral{0} << bitCount;
+            }
+            return static_cast<Integral>(v);
+        }
+
+        template<typename Integral, typename StoredIntegral>
+        LLAMA_FN_HOST_ACC_INLINE constexpr void bitpack(
+            StoredIntegral* ptr,
+            StoredIntegral bitOffset,
+            StoredIntegral bitCount,
+            Integral value)
+        {
+            constexpr auto bitsPerStoredIntegral = static_cast<StoredIntegral>(sizeof(StoredIntegral) * CHAR_BIT);
+            assert(bitCount > 0 && bitCount <= bitsPerStoredIntegral);
+#ifdef __clang__
+            // this is necessary to silence the clang static analyzer
+            __builtin_assume(bitCount > 0 && bitCount <= bitsPerStoredIntegral);
+#endif
+
+            // NOLINTNEXTLINE(bugprone-signed-char-misuse,cert-str34-c)
+            const auto unsignedValue = static_cast<StoredIntegral>(value);
+            const auto mask = makeMask(bitCount);
+            StoredIntegral valueBits;
+            if constexpr(!std::is_signed_v<Integral>)
+                valueBits = unsignedValue & mask;
+            else
+            {
+                const auto magnitudeMask = makeMask(bitCount - 1);
+                const auto isSigned = value < 0;
+                valueBits = (StoredIntegral{isSigned} << (bitCount - 1)) | (unsignedValue & magnitudeMask);
+            }
+
+            auto* p = ptr + bitOffset / bitsPerStoredIntegral;
+            const auto innerBitOffset = bitOffset % bitsPerStoredIntegral;
+
+            {
+                const auto clearMask = ~(mask << innerBitOffset);
+                //                assert(p < endPtr);
+                auto mem = p[0] & clearMask; // clear previous bits
+                mem |= valueBits << innerBitOffset; // write new bits
+                p[0] = mem;
+            }
+
+            const auto innerBitEndOffset = innerBitOffset + bitCount;
+            if(innerBitEndOffset > bitsPerStoredIntegral)
+            {
+                const auto excessBits = innerBitEndOffset - bitsPerStoredIntegral;
+                const auto bitsWritten = bitsPerStoredIntegral - innerBitOffset;
+                const auto clearMask = ~makeMask(excessBits);
+                //                assert(p + 1 < endPtr);
+                auto mem = p[1] & clearMask; // clear previous bits
+                mem |= valueBits >> bitsWritten; // write new bits
+                p[1] = mem;
+            }
+        }
+
         /// A proxy type representing a reference to a reduced precision integral value, stored in a buffer at a
         /// specified bit offset.
         /// @tparam Integral Integral data type which can be loaded and store through this reference.
-        /// @tparam StoredIntegralPointer Pointer to integral type used for storing the bits.
-        template<typename Integral, typename StoredIntegralPointer, typename VHBits, typename SizeType>
+        /// @tparam StoredIntegralCV Integral type used for storing the bits with CV qualifiers.
+        /// @tparam SizeType Type used to store sizes and offsets.
+        template<typename Integral, typename StoredIntegralCV, typename VHBits, typename SizeType>
         struct BitPackedIntRef
             : private VHBits
-            , ProxyRefOpMixin<BitPackedIntRef<Integral, StoredIntegralPointer, VHBits, SizeType>, Integral>
+            , ProxyRefOpMixin<BitPackedIntRef<Integral, StoredIntegralCV, VHBits, SizeType>, Integral>
         {
         private:
-            using StoredIntegral = std::remove_const_t<std::remove_pointer_t<StoredIntegralPointer>>;
+            using StoredIntegral = std::remove_cv_t<StoredIntegralCV>;
 
             static_assert(std::is_integral_v<StoredIntegral>);
             static_assert(std::is_unsigned_v<StoredIntegral>);
@@ -32,112 +131,38 @@ namespace llama::mapping
                 "The integral type used for the storage must be at least as big as the type of the values to "
                 "retrieve");
 
-            StoredIntegralPointer ptr;
+            StoredIntegralCV* ptr;
             SizeType bitOffset;
-#ifndef NDEBUG
-            StoredIntegralPointer endPtr;
-#endif
-
-            // NOLINTNEXTLINE(bugprone-misplaced-widening-cast)
-            static constexpr auto bitsPerStoredIntegral = static_cast<SizeType>(sizeof(StoredIntegral) * CHAR_BIT);
-
-            LLAMA_FN_HOST_ACC_INLINE static constexpr auto makeMask(StoredIntegral bits) -> StoredIntegral
-            {
-                return bits >= sizeof(StoredIntegral) * CHAR_BIT ? ~StoredIntegral{0}
-                                                                 : (StoredIntegral{1} << bits) - 1u;
-            }
 
         public:
             using value_type = Integral;
 
             LLAMA_FN_HOST_ACC_INLINE constexpr BitPackedIntRef(
-                StoredIntegralPointer ptr,
+                StoredIntegralCV* ptr,
                 SizeType bitOffset,
-                VHBits vhBits
-#ifndef NDEBUG
-                ,
-                StoredIntegralPointer endPtr
-#endif
-                )
+                VHBits vhBits)
                 : VHBits{vhBits}
                 , ptr{ptr}
                 , bitOffset{bitOffset}
-
-#ifndef NDEBUG
-                , endPtr{endPtr}
-#endif
             {
             }
 
             // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
             LLAMA_FN_HOST_ACC_INLINE constexpr operator Integral() const
             {
-                auto* p = ptr + bitOffset / bitsPerStoredIntegral;
-                const auto innerBitOffset = bitOffset % bitsPerStoredIntegral;
-                assert(p < endPtr);
-                auto v = p[0] >> innerBitOffset;
-
-                const auto innerBitEndOffset = innerBitOffset + VHBits::value();
-                if(innerBitEndOffset <= bitsPerStoredIntegral)
-                {
-                    const auto mask = makeMask(VHBits::value());
-                    v &= mask;
-                }
-                else
-                {
-                    const auto excessBits = innerBitEndOffset - bitsPerStoredIntegral;
-                    const auto bitsLoaded = bitsPerStoredIntegral - innerBitOffset;
-                    const auto mask = makeMask(excessBits);
-                    assert(p + 1 < endPtr);
-                    v |= (p[1] & mask) << bitsLoaded;
-                }
-                if constexpr(std::is_signed_v<Integral>)
-                {
-                    // perform sign extension
-                    if((v & (StoredIntegral{1} << (VHBits::value() - 1))) && VHBits::value() < bitsPerStoredIntegral)
-                        v |= ~StoredIntegral{0} << VHBits::value();
-                }
-                return static_cast<Integral>(v);
+                return bitunpack<Integral>(
+                    ptr,
+                    static_cast<StoredIntegral>(bitOffset),
+                    static_cast<StoredIntegral>(VHBits::value()));
             }
 
             LLAMA_FN_HOST_ACC_INLINE constexpr auto operator=(Integral value) -> BitPackedIntRef&
             {
-                // NOLINTNEXTLINE(bugprone-signed-char-misuse,cert-str34-c)
-                const auto unsignedValue = static_cast<StoredIntegral>(value);
-                const auto mask = makeMask(VHBits::value());
-                StoredIntegral valueBits;
-                if constexpr(!std::is_signed_v<Integral>)
-                    valueBits = unsignedValue & mask;
-                else
-                {
-                    const auto magnitudeMask = makeMask(VHBits::value() - 1);
-                    const auto isSigned = value < 0;
-                    valueBits = (StoredIntegral{isSigned} << (VHBits::value() - 1)) | (unsignedValue & magnitudeMask);
-                }
-
-                auto* p = ptr + bitOffset / bitsPerStoredIntegral;
-                const auto innerBitOffset = bitOffset % bitsPerStoredIntegral;
-
-                {
-                    const auto clearMask = ~(mask << innerBitOffset);
-                    assert(p < endPtr);
-                    auto mem = p[0] & clearMask; // clear previous bits
-                    mem |= valueBits << innerBitOffset; // write new bits
-                    p[0] = mem;
-                }
-
-                const auto innerBitEndOffset = innerBitOffset + VHBits::value();
-                if(innerBitEndOffset > bitsPerStoredIntegral)
-                {
-                    const auto excessBits = innerBitEndOffset - bitsPerStoredIntegral;
-                    const auto bitsWritten = bitsPerStoredIntegral - innerBitOffset;
-                    const auto clearMask = ~makeMask(excessBits);
-                    assert(p + 1 < endPtr);
-                    auto mem = p[1] & clearMask; // clear previous bits
-                    mem |= valueBits >> bitsWritten; // write new bits
-                    p[1] = mem;
-                }
-
+                bitpack<Integral>(
+                    ptr,
+                    static_cast<StoredIntegral>(bitOffset),
+                    static_cast<StoredIntegral>(VHBits::value()),
+                    value);
                 return *this;
             }
         };
@@ -262,15 +287,10 @@ namespace llama::mapping
             using QualifiedStoredIntegral = CopyConst<Blobs, StoredIntegral>;
             using DstType = GetType<TRecordDim, RecordCoord<RecordCoords...>>;
             LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-            return internal::BitPackedIntRef<DstType, QualifiedStoredIntegral*, VHBits, size_type>{
+            return internal::BitPackedIntRef<DstType, QualifiedStoredIntegral, VHBits, size_type>{
                 reinterpret_cast<QualifiedStoredIntegral*>(&blobs[blob][0]),
                 bitOffset,
-                static_cast<const VHBits&>(*this)
-#ifndef NDEBUG
-                    ,
-                reinterpret_cast<QualifiedStoredIntegral*>(&blobs[blob][0] + blobSize(blob))
-#endif
-            };
+                static_cast<const VHBits&>(*this)};
             LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
         }
     };
