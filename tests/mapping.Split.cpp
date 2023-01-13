@@ -9,17 +9,15 @@ TEST_CASE("mapping.Split.partitionRecordDim.OneMemberRecord")
 {
     using RecordDim = llama::Record<llama::Field<int, int>>;
     using R = decltype(llama::mapping::internal::partitionRecordDim(RecordDim{}, llama::RecordCoord<0>{}));
-    STATIC_REQUIRE(std::is_same_v<boost::mp11::mp_first<R>, RecordDim>);
-    STATIC_REQUIRE(std::is_same_v<boost::mp11::mp_second<R>, llama::Record<>>);
+    STATIC_REQUIRE(std::is_same_v<mp_first<R>, RecordDim>);
+    STATIC_REQUIRE(std::is_same_v<mp_second<R>, llama::Record<>>);
 }
 
 TEST_CASE("mapping.Split.partitionRecordDim.Vec3I.RC")
 {
     using R = decltype(llama::mapping::internal::partitionRecordDim(Vec3I{}, llama::RecordCoord<1>{}));
-    STATIC_REQUIRE(std::is_same_v<boost::mp11::mp_first<R>, llama::Record<llama::Field<tag::Y, int>>>);
-    STATIC_REQUIRE(
-        std::
-            is_same_v<boost::mp11::mp_second<R>, llama::Record<llama::Field<tag::X, int>, llama::Field<tag::Z, int>>>);
+    STATIC_REQUIRE(std::is_same_v<mp_first<R>, llama::Record<llama::Field<tag::Y, int>>>);
+    STATIC_REQUIRE(std::is_same_v<mp_second<R>, llama::Record<llama::Field<tag::X, int>, llama::Field<tag::Z, int>>>);
 }
 
 template<typename S>
@@ -29,38 +27,33 @@ TEST_CASE("mapping.Split.ReplaceTagListsByCoords")
 {
     // single selector
     STATIC_REQUIRE(std::is_same_v<TestReplace<llama::RecordCoord<2, 2>>, llama::RecordCoord<2, 2>>);
-    STATIC_REQUIRE(std::is_same_v<TestReplace<boost::mp11::mp_list<tag::Vel, tag::Z>>, llama::RecordCoord<2, 2>>);
+    STATIC_REQUIRE(std::is_same_v<TestReplace<mp_list<tag::Vel, tag::Z>>, llama::RecordCoord<2, 2>>);
 
     // list of selectors with single item
-    STATIC_REQUIRE(std::is_same_v<
-                   TestReplace<boost::mp11::mp_list<llama::RecordCoord<2, 2>>>,
-                   boost::mp11::mp_list<llama::RecordCoord<2, 2>>>);
-    STATIC_REQUIRE(std::is_same_v<
-                   TestReplace<boost::mp11::mp_list<boost::mp11::mp_list<tag::Vel, tag::Z>>>,
-                   boost::mp11::mp_list<llama::RecordCoord<2, 2>>>);
+    STATIC_REQUIRE(std::is_same_v<TestReplace<mp_list<llama::RecordCoord<2, 2>>>, mp_list<llama::RecordCoord<2, 2>>>);
+    STATIC_REQUIRE(std::is_same_v<TestReplace<mp_list<mp_list<tag::Vel, tag::Z>>>, mp_list<llama::RecordCoord<2, 2>>>);
 
     // list of selectors with multiple items
     STATIC_REQUIRE(std::is_same_v<
-                   TestReplace<boost::mp11::mp_list<llama::RecordCoord<1>, llama::RecordCoord<2, 2>>>,
-                   boost::mp11::mp_list<llama::RecordCoord<1>, llama::RecordCoord<2, 2>>>);
-    STATIC_REQUIRE(
-        std::is_same_v<
-            TestReplace<boost::mp11::mp_list<boost::mp11::mp_list<tag::Mass>, boost::mp11::mp_list<tag::Vel, tag::Z>>>,
-            boost::mp11::mp_list<llama::RecordCoord<1>, llama::RecordCoord<2, 2>>>);
+                   TestReplace<mp_list<llama::RecordCoord<1>, llama::RecordCoord<2, 2>>>,
+                   mp_list<llama::RecordCoord<1>, llama::RecordCoord<2, 2>>>);
     STATIC_REQUIRE(std::is_same_v<
-                   TestReplace<boost::mp11::mp_list<llama::RecordCoord<1>, boost::mp11::mp_list<tag::Vel, tag::Z>>>,
-                   boost::mp11::mp_list<llama::RecordCoord<1>, llama::RecordCoord<2, 2>>>);
+                   TestReplace<mp_list<mp_list<tag::Mass>, mp_list<tag::Vel, tag::Z>>>,
+                   mp_list<llama::RecordCoord<1>, llama::RecordCoord<2, 2>>>);
+    STATIC_REQUIRE(std::is_same_v<
+                   TestReplace<mp_list<llama::RecordCoord<1>, mp_list<tag::Vel, tag::Z>>>,
+                   mp_list<llama::RecordCoord<1>, llama::RecordCoord<2, 2>>>);
 }
 
 TEST_CASE("mapping.Split.partitionRecordDim.Particle")
 {
     using R = decltype(llama::mapping::internal::partitionRecordDim(Particle{}, llama::RecordCoord<2, 1>{}));
     STATIC_REQUIRE(std::is_same_v<
-                   boost::mp11::mp_first<R>,
+                   mp_first<R>,
                    llama::Record<llama::Field<tag::Vel, llama::Record<llama::Field<tag::Y, double>>>>>);
     STATIC_REQUIRE(
         std::is_same_v<
-            boost::mp11::mp_second<R>,
+            mp_second<R>,
             llama::Record<
                 llama::Field<tag::Pos, Vec3D>,
                 llama::Field<tag::Mass, float>,
@@ -72,13 +65,12 @@ TEST_CASE("mapping.Split.partitionRecordDim.Particle.List")
 {
     using R = decltype(llama::mapping::internal::partitionRecordDim(
         Particle{},
-        boost::mp11::mp_list<llama::RecordCoord<0>, llama::RecordCoord<2>>{}));
-    STATIC_REQUIRE(std::is_same_v<
-                   boost::mp11::mp_first<R>,
-                   llama::Record<llama::Field<tag::Pos, Vec3D>, llama::Field<tag::Vel, Vec3D>>>);
-    STATIC_REQUIRE(std::is_same_v<
-                   boost::mp11::mp_second<R>,
-                   llama::Record<llama::Field<tag::Mass, float>, llama::Field<tag::Flags, bool[4]>>>);
+        mp_list<llama::RecordCoord<0>, llama::RecordCoord<2>>{}));
+    STATIC_REQUIRE(
+        std::is_same_v<mp_first<R>, llama::Record<llama::Field<tag::Pos, Vec3D>, llama::Field<tag::Vel, Vec3D>>>);
+    STATIC_REQUIRE(
+        std::
+            is_same_v<mp_second<R>, llama::Record<llama::Field<tag::Mass, float>, llama::Field<tag::Flags, bool[4]>>>);
 }
 
 TEST_CASE("mapping.Split.SoA_SingleBlob.AoS_Packed.1Buffer")
@@ -121,16 +113,13 @@ TEST_CASE("mapping.Split.AoSoA8.AoS_Packed.One.SoA_SingleBlob.4Buffer")
     auto mapping = llama::mapping::Split<
         ArrayExtents,
         Particle,
-        boost::mp11::mp_list<tag::Vel>,
+        mp_list<tag::Vel>,
         llama::mapping::BindAoSoA<8>::fn,
         llama::mapping::BindSplit<
-            boost::mp11::mp_list<tag::Mass>,
+            mp_list<tag::Mass>,
             llama::mapping::PackedOne,
-            llama::mapping::BindSplit<
-                boost::mp11::mp_list<tag::Pos>,
-                llama::mapping::PackedAoS,
-                llama::mapping::PackedSingleBlobSoA,
-                true>::fn,
+            llama::mapping::
+                BindSplit<mp_list<tag::Pos>, llama::mapping::PackedAoS, llama::mapping::PackedSingleBlobSoA, true>::fn,
             true>::fn,
         true>{extents};
 
@@ -176,7 +165,7 @@ TEST_CASE("mapping.Split.Multilist.SoA.One")
     auto mapping = llama::mapping::Split<
         ArrayExtents,
         Particle,
-        boost::mp11::mp_list<llama::RecordCoord<0>, llama::RecordCoord<2>>,
+        mp_list<llama::RecordCoord<0>, llama::RecordCoord<2>>,
         llama::mapping::BindSoA<>::fn,
         llama::mapping::AlignedOne,
         true>{extents};

@@ -93,7 +93,7 @@ namespace
         using ArrayExtents = TArrayExtents;
         using ArrayIndex = typename ArrayExtents::Index;
         using RecordDim = TRecordDim;
-        static constexpr std::size_t blobCount = boost::mp11::mp_size<llama::FlatRecordDim<RecordDim>>::value;
+        static constexpr std::size_t blobCount = mp_size<llama::FlatRecordDim<RecordDim>>::value;
 
         constexpr CompressedBoolMapping() = default;
 

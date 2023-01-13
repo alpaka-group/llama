@@ -51,7 +51,7 @@ TEMPLATE_LIST_TEST_CASE("mapping.concepts", "", SizeTypes)
                        llama::ArrayExtentsDynamic<TestType, 2>,
                        Particle,
                        llama::mapping::BindAoS<>::fn,
-                       boost::mp11::mp_list<boost::mp11::mp_list<bool, int>>>>);
+                       mp_list<mp_list<bool, int>>>>);
 #    endif
 }
 #endif
@@ -69,11 +69,8 @@ TEMPLATE_LIST_TEST_CASE("mapping.traits", "", SizeTypes)
     using Null = llama::mapping::Null<llama::ArrayExtentsDynamic<TestType, 2>, Particle>;
     using BS
         = llama::mapping::Bytesplit<llama::ArrayExtentsDynamic<TestType, 2>, Particle, llama::mapping::BindAoS<>::fn>;
-    using CT = llama::mapping::ChangeType<
-        llama::ArrayExtentsDynamic<TestType, 2>,
-        Particle,
-        llama::mapping::BindAoS<>::fn,
-        boost::mp11::mp_list<>>;
+    using CT = llama::mapping::
+        ChangeType<llama::ArrayExtentsDynamic<TestType, 2>, Particle, llama::mapping::BindAoS<>::fn, mp_list<>>;
     using BPI = llama::mapping::BitPackedIntSoA<llama::ArrayExtentsDynamic<TestType, 2>, Vec3I>;
     using BPF = llama::mapping::BitPackedFloatSoA<llama::ArrayExtentsDynamic<TestType, 2>, Vec3D>;
     using FAC = llama::mapping::FieldAccessCount<AAoS>;
@@ -355,10 +352,9 @@ TEST_CASE("mapping.LinearizeArrayDimsMorton")
 TEST_CASE("mapping.FlattenRecordDimInOrder")
 {
     using F = llama::mapping::FlattenRecordDimInOrder<Particle>;
-    STATIC_REQUIRE(
-        std::is_same_v<
-            F::FlatRecordDim,
-            boost::mp11::mp_list<double, double, double, float, double, double, double, bool, bool, bool, bool>>);
+    STATIC_REQUIRE(std::is_same_v<
+                   F::FlatRecordDim,
+                   mp_list<double, double, double, float, double, double, double, bool, bool, bool, bool>>);
     STATIC_REQUIRE(F::flatIndex<0, 0> == 0);
     STATIC_REQUIRE(F::flatIndex<0, 1> == 1);
     STATIC_REQUIRE(F::flatIndex<0, 2> == 2);
@@ -375,10 +371,9 @@ TEST_CASE("mapping.FlattenRecordDimInOrder")
 TEST_CASE("mapping.FlattenRecordDimIncreasingAlignment")
 {
     using F = llama::mapping::FlattenRecordDimIncreasingAlignment<Particle>;
-    STATIC_REQUIRE(
-        std::is_same_v<
-            F::FlatRecordDim,
-            boost::mp11::mp_list<bool, bool, bool, bool, float, double, double, double, double, double, double>>);
+    STATIC_REQUIRE(std::is_same_v<
+                   F::FlatRecordDim,
+                   mp_list<bool, bool, bool, bool, float, double, double, double, double, double, double>>);
     STATIC_REQUIRE(F::flatIndex<0, 0> == 5);
     STATIC_REQUIRE(F::flatIndex<0, 1> == 6);
     STATIC_REQUIRE(F::flatIndex<0, 2> == 7);
@@ -395,10 +390,9 @@ TEST_CASE("mapping.FlattenRecordDimIncreasingAlignment")
 TEST_CASE("mapping.FlattenRecordDimDecreasingAlignment")
 {
     using F = llama::mapping::FlattenRecordDimDecreasingAlignment<Particle>;
-    STATIC_REQUIRE(
-        std::is_same_v<
-            F::FlatRecordDim,
-            boost::mp11::mp_list<double, double, double, double, double, double, float, bool, bool, bool, bool>>);
+    STATIC_REQUIRE(std::is_same_v<
+                   F::FlatRecordDim,
+                   mp_list<double, double, double, double, double, double, float, bool, bool, bool, bool>>);
     STATIC_REQUIRE(F::flatIndex<0, 0> == 0);
     STATIC_REQUIRE(F::flatIndex<0, 1> == 1);
     STATIC_REQUIRE(F::flatIndex<0, 2> == 2);

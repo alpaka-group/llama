@@ -11,7 +11,7 @@ TEST_CASE("mapping.ChangeType.AoS")
         llama::ArrayExtents<std::size_t, 128>,
         Vec3D,
         llama::mapping::BindAoS<llama::mapping::FieldAlignment::Pack>::fn,
-        boost::mp11::mp_list<>>{{}};
+        mp_list<>>{{}};
     CHECK(mapping.blobSize(0) == 3072);
     auto view = llama::allocView(mapping);
     iotaFillView(view);
@@ -24,7 +24,7 @@ TEST_CASE("mapping.ChangeType.AoS.doubleToFloat")
         llama::ArrayExtents<std::size_t, 128>,
         Vec3D,
         llama::mapping::BindAoS<llama::mapping::FieldAlignment::Pack>::fn,
-        boost::mp11::mp_list<boost::mp11::mp_list<double, float>>>{{}};
+        mp_list<mp_list<double, float>>>{{}};
     CHECK(mapping.blobSize(0) == 1536);
     auto view = llama::allocView(mapping);
     iotaFillView(view);
@@ -37,7 +37,7 @@ TEST_CASE("mapping.ChangeType.AoS.Coord1ToFloat")
         llama::ArrayExtents<std::size_t, 128>,
         Vec3D,
         llama::mapping::BindAoS<llama::mapping::FieldAlignment::Pack>::fn,
-        boost::mp11::mp_list<boost::mp11::mp_list<llama::RecordCoord<1>, float>>>{{}};
+        mp_list<mp_list<llama::RecordCoord<1>, float>>>{{}};
     CHECK(mapping.blobSize(0) == 2560);
     auto view = llama::allocView(mapping);
     iotaFillView(view);
@@ -50,8 +50,8 @@ TEST_CASE("mapping.ChangeType.AoS.CoordsAndTypes")
         llama::ArrayExtents<std::size_t, 128>,
         Vec3D,
         llama::mapping::BindAoS<llama::mapping::FieldAlignment::Pack>::fn,
-        boost::mp11::
-            mp_list<boost::mp11::mp_list<double, float>, boost::mp11::mp_list<llama::RecordCoord<1>, double>>>{{}};
+
+        mp_list<mp_list<double, float>, mp_list<llama::RecordCoord<1>, double>>>{{}};
     CHECK(mapping.blobSize(0) == 2048);
     auto view = llama::allocView(mapping);
     iotaFillView(view);
@@ -67,10 +67,7 @@ TEST_CASE("mapping.ChangeType.SoA.particle.types")
         llama::ArrayExtents<std::size_t, 128>,
         Particle,
         llama::mapping::BindAoS<llama::mapping::FieldAlignment::Pack>::fn,
-        boost::mp11::mp_list<
-            boost::mp11::mp_list<double, float>,
-            boost::mp11::mp_list<float, std::int16_t>,
-            boost::mp11::mp_list<bool, std::int32_t>>>{{}};
+        mp_list<mp_list<double, float>, mp_list<float, std::int16_t>, mp_list<bool, std::int32_t>>>{{}};
     CHECK(mapping.blobSize(0) == 128 * (6 * sizeof(float) + 1 * sizeof(std::int16_t) + 4 * sizeof(std::int32_t)));
     auto view = llama::allocView(mapping);
     iotaFillView(view);
@@ -106,7 +103,7 @@ TEST_CASE("mapping.ChangeType.ProxyRef.SwapAndAssign")
         llama::ArrayExtents<std::size_t, 128>,
         Vec3D,
         llama::mapping::BindAoS<llama::mapping::FieldAlignment::Pack>::fn,
-        boost::mp11::mp_list<>>{{}};
+        mp_list<>>{{}};
     auto view = llama::allocView(mapping);
 
     view(0) = 1.0;

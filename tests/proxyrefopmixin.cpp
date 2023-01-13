@@ -259,6 +259,6 @@ TEST_CASE("proxyrefopmixin.ChangeType")
                                  llama::ArrayExtents<std::size_t, 4>,
                                  Vec3D,
                                  llama::mapping::BindAoS<llama::mapping::FieldAlignment::Pack>::fn,
-                                 boost::mp11::mp_list<boost::mp11::mp_list<double, float>>>{{}});
+                                 mp_list<mp_list<double, float>>>{{}});
     testProxyRef(view(2)(tag::X{}));
 }
