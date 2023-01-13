@@ -390,7 +390,7 @@ namespace llama
         Record<Children...>> = (flatFieldCount<GetFieldType<Children>> + ... + 0);
 
     template<typename Child, std::size_t N>
-    inline constexpr std::size_t flatFieldCount<Child[N]> = flatFieldCount<Child> * N;
+    inline constexpr std::size_t flatFieldCount<Child[N]> = flatFieldCount<Child>* N;
 
     namespace internal
     {

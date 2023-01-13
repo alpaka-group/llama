@@ -10,13 +10,43 @@ TEST_CASE("mapping.Split.partitionRecordDim.OneMemberRecord")
     STATIC_REQUIRE(std::is_same_v<boost::mp11::mp_second<R>, llama::Record<>>);
 }
 
-TEST_CASE("mapping.Split.partitionRecordDim.Vec3I")
+TEST_CASE("mapping.Split.partitionRecordDim.Vec3I.RC")
 {
     using R = decltype(llama::mapping::internal::partitionRecordDim(Vec3I{}, llama::RecordCoord<1>{}));
     STATIC_REQUIRE(std::is_same_v<boost::mp11::mp_first<R>, llama::Record<llama::Field<tag::Y, int>>>);
     STATIC_REQUIRE(
         std::
             is_same_v<boost::mp11::mp_second<R>, llama::Record<llama::Field<tag::X, int>, llama::Field<tag::Z, int>>>);
+}
+
+template<typename S>
+using TestReplace = typename llama::mapping::internal::ReplaceTagListsByCoords<Particle, S>::type;
+
+TEST_CASE("mapping.Split.ReplaceTagListsByCoords")
+{
+    // single selector
+    STATIC_REQUIRE(std::is_same_v<TestReplace<llama::RecordCoord<2, 2>>, llama::RecordCoord<2, 2>>);
+    STATIC_REQUIRE(std::is_same_v<TestReplace<boost::mp11::mp_list<tag::Vel, tag::Z>>, llama::RecordCoord<2, 2>>);
+
+    // list of selectors with single item
+    STATIC_REQUIRE(std::is_same_v<
+                   TestReplace<boost::mp11::mp_list<llama::RecordCoord<2, 2>>>,
+                   boost::mp11::mp_list<llama::RecordCoord<2, 2>>>);
+    STATIC_REQUIRE(std::is_same_v<
+                   TestReplace<boost::mp11::mp_list<boost::mp11::mp_list<tag::Vel, tag::Z>>>,
+                   boost::mp11::mp_list<llama::RecordCoord<2, 2>>>);
+
+    // list of selectors with multiple items
+    STATIC_REQUIRE(std::is_same_v<
+                   TestReplace<boost::mp11::mp_list<llama::RecordCoord<1>, llama::RecordCoord<2, 2>>>,
+                   boost::mp11::mp_list<llama::RecordCoord<1>, llama::RecordCoord<2, 2>>>);
+    STATIC_REQUIRE(
+        std::is_same_v<
+            TestReplace<boost::mp11::mp_list<boost::mp11::mp_list<tag::Mass>, boost::mp11::mp_list<tag::Vel, tag::Z>>>,
+            boost::mp11::mp_list<llama::RecordCoord<1>, llama::RecordCoord<2, 2>>>);
+    STATIC_REQUIRE(std::is_same_v<
+                   TestReplace<boost::mp11::mp_list<llama::RecordCoord<1>, boost::mp11::mp_list<tag::Vel, tag::Z>>>,
+                   boost::mp11::mp_list<llama::RecordCoord<1>, llama::RecordCoord<2, 2>>>);
 }
 
 TEST_CASE("mapping.Split.partitionRecordDim.Particle")
@@ -81,20 +111,20 @@ TEST_CASE("mapping.Split.SoA_SingleBlob.AoS_Packed.1Buffer")
 
 TEST_CASE("mapping.Split.AoSoA8.AoS_Packed.One.SoA_SingleBlob.4Buffer")
 {
-    // split out momentum as AoSoA8, mass into a single value, position into AoS, and the flags into SoA, makes 4
+    // split out velocity as AoSoA8, mass into a single value, position into AoS, and the flags into SoA, makes 4
     // buffers
     using ArrayExtents = llama::ArrayExtents<int, llama::dyn>;
     auto extents = ArrayExtents{32};
     auto mapping = llama::mapping::Split<
         ArrayExtents,
         Particle,
-        llama::RecordCoord<2>,
+        boost::mp11::mp_list<tag::Vel>,
         llama::mapping::BindAoSoA<8>::fn,
         llama::mapping::BindSplit<
-            llama::RecordCoord<1>,
+            boost::mp11::mp_list<tag::Mass>,
             llama::mapping::PackedOne,
             llama::mapping::BindSplit<
-                llama::RecordCoord<0>,
+                boost::mp11::mp_list<tag::Pos>,
                 llama::mapping::PackedAoS,
                 llama::mapping::PackedSingleBlobSoA,
                 true>::fn,
