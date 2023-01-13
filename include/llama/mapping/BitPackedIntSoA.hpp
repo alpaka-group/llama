@@ -25,7 +25,9 @@ namespace llama::mapping
             StoredIntegral bitOffset,
             StoredIntegral bitCount) -> Integral
         {
+            constexpr auto bitsPerIntegral = static_cast<StoredIntegral>(sizeof(Integral) * CHAR_BIT);
             constexpr auto bitsPerStoredIntegral = static_cast<StoredIntegral>(sizeof(StoredIntegral) * CHAR_BIT);
+            static_assert(bitsPerIntegral <= bitsPerStoredIntegral);
             assert(bitCount > 0 && bitCount <= bitsPerStoredIntegral);
 #ifdef __clang__
             // this is necessary to silence the clang static analyzer
@@ -67,7 +69,9 @@ namespace llama::mapping
             StoredIntegral bitCount,
             Integral value)
         {
+            constexpr auto bitsPerIntegral = static_cast<StoredIntegral>(sizeof(Integral) * CHAR_BIT);
             constexpr auto bitsPerStoredIntegral = static_cast<StoredIntegral>(sizeof(StoredIntegral) * CHAR_BIT);
+            static_assert(bitsPerIntegral <= bitsPerStoredIntegral);
             assert(bitCount > 0 && bitCount <= bitsPerStoredIntegral);
 #ifdef __clang__
             // this is necessary to silence the clang static analyzer
@@ -123,14 +127,6 @@ namespace llama::mapping
         {
         private:
             using StoredIntegral = std::remove_cv_t<StoredIntegralCV>;
-
-            static_assert(std::is_integral_v<StoredIntegral>);
-            static_assert(std::is_unsigned_v<StoredIntegral>);
-            static_assert(
-                sizeof(StoredIntegral) >= sizeof(Integral),
-                "The integral type used for the storage must be at least as big as the type of the values to "
-                "retrieve");
-
             StoredIntegralCV* ptr;
             SizeType bitOffset;
 
@@ -182,10 +178,10 @@ namespace llama::mapping
     /// dimension contains non-integral types, split them off using the \ref Split mapping first.
     /// \tparam Bits If Bits is llama::Constant<N>, the compile-time N specifies the number of bits to use. If Bits is
     /// an integral type T, the number of bits is specified at runtime, passed to the constructor and stored as type T.
-    /// Must not be zero.
+    /// Must not be zero and must not be bigger than the bits of TStoredIntegral.
     /// \tparam TLinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
     /// how big the linear domain gets. \tparam TStoredIntegral Integral type used as storage of reduced precision
-    /// integers.
+    /// integers. Must be std::uint32_t or std::uint64_t.
     template<
         typename TArrayExtents,
         typename TRecordDim,
@@ -196,6 +192,16 @@ namespace llama::mapping
         : MappingBase<TArrayExtents, TRecordDim>
         , private llama::internal::BoxedValue<Bits>
     {
+        using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
+        using StoredIntegral = TStoredIntegral;
+        static constexpr std::size_t blobCount = boost::mp11::mp_size<FlatRecordDim<TRecordDim>>::value;
+
+        static_assert(std::is_integral_v<StoredIntegral>);
+        static_assert(std::is_unsigned_v<StoredIntegral>);
+
+        // We could allow more integer types as storage type, but that needs to be thought through carefully
+        static_assert(std::is_same_v<StoredIntegral, std::uint32_t> || std::is_same_v<StoredIntegral, std::uint64_t>);
+
     private:
         using Base = MappingBase<TArrayExtents, TRecordDim>;
         using VHBits = llama::internal::BoxedValue<Bits>;
@@ -208,11 +214,14 @@ namespace llama::mapping
             boost::mp11::mp_all_of<FlatRecordDim<TRecordDim>, IsAllowedFieldType>::value,
             "All record dimension field types must be integral");
 
-    public:
-        using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
-        using StoredIntegral = TStoredIntegral;
-        static constexpr std::size_t blobCount = boost::mp11::mp_size<FlatRecordDim<TRecordDim>>::value;
+        template<typename T>
+        using IsFieldTypeSmallerOrEqualStorageIntegral = boost::mp11::mp_bool<sizeof(T) <= sizeof(StoredIntegral)>;
 
+        static_assert(
+            boost::mp11::mp_all_of<FlatRecordDim<TRecordDim>, IsFieldTypeSmallerOrEqualStorageIntegral>::value,
+            "The integral type used for storage must be at least as big as the type of the values to retrieve");
+
+    public:
         LLAMA_FN_HOST_ACC_INLINE
         constexpr auto bits() const -> size_type
         {
@@ -232,7 +241,9 @@ namespace llama::mapping
                 [&](auto t)
                 {
                     using FieldType = typename decltype(t)::type;
-                    static_assert(static_cast<std::size_t>(VHBits::value()) <= sizeof(FieldType) * CHAR_BIT);
+                    static_assert(
+                        static_cast<std::size_t>(VHBits::value()) <= sizeof(FieldType) * CHAR_BIT,
+                        "Storage bits must not be greater than bits of field type");
                 });
         }
 
