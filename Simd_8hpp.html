@@ -178,12 +178,12 @@ Typedefs</h2></td></tr>
 <tr class="memitem:adf54146d2fef06baf9d512e22793f41a"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , template&lt; typename &gt; typename MakeSimd&gt; </td></tr>
 <tr class="memitem:adf54146d2fef06baf9d512e22793f41a"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#adf54146d2fef06baf9d512e22793f41a">llama::Simdize</a> = TransformLeaves&lt; RecordDim, MakeSimd &gt;</td></tr>
 <tr class="separator:adf54146d2fef06baf9d512e22793f41a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaf87c7bd7e5e13c9d7194ce488146686"><td class="memTemplParams" colspan="2">template&lt;typename T , std::size_t N, template&lt; typename, auto &gt; typename MakeSizedSimd&gt; </td></tr>
-<tr class="memitem:aaf87c7bd7e5e13c9d7194ce488146686"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#aaf87c7bd7e5e13c9d7194ce488146686">llama::SimdN</a> = typename std::conditional_t&lt; isRecordDim&lt; T &gt;, std::conditional_t&lt; N==1, boost::mp11::mp_identity&lt; One&lt; T &gt; &gt;, boost::mp11::mp_identity&lt; One&lt; SimdizeN&lt; T, N, MakeSizedSimd &gt; &gt;&gt; &gt;, std::conditional_t&lt; N==1, boost::mp11::mp_identity&lt; T &gt;, boost::mp11::mp_identity&lt; SimdizeN&lt; T, N, MakeSizedSimd &gt; &gt;&gt; &gt;::type</td></tr>
-<tr class="separator:aaf87c7bd7e5e13c9d7194ce488146686"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acbffc3150313c513f88f7c008aa51694"><td class="memTemplParams" colspan="2">template&lt;typename T , template&lt; typename &gt; typename MakeSimd&gt; </td></tr>
-<tr class="memitem:acbffc3150313c513f88f7c008aa51694"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#acbffc3150313c513f88f7c008aa51694">llama::Simd</a> = typename std::conditional_t&lt; isRecordDim&lt; T &gt;, boost::mp11::mp_identity&lt; One&lt; Simdize&lt; T, MakeSimd &gt; &gt;&gt;, boost::mp11::mp_identity&lt; Simdize&lt; T, MakeSimd &gt; &gt;&gt;::type</td></tr>
-<tr class="separator:acbffc3150313c513f88f7c008aa51694"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f1e01829ca6b6d3a50720fdbcc99adf"><td class="memTemplParams" colspan="2">template&lt;typename T , std::size_t N, template&lt; typename, auto &gt; typename MakeSizedSimd&gt; </td></tr>
+<tr class="memitem:a2f1e01829ca6b6d3a50720fdbcc99adf"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a2f1e01829ca6b6d3a50720fdbcc99adf">llama::SimdN</a> = typename std::conditional_t&lt; isRecordDim&lt; T &gt;, std::conditional_t&lt; N==1, mp_identity&lt; One&lt; T &gt; &gt;, mp_identity&lt; One&lt; SimdizeN&lt; T, N, MakeSizedSimd &gt; &gt;&gt; &gt;, std::conditional_t&lt; N==1, mp_identity&lt; T &gt;, mp_identity&lt; SimdizeN&lt; T, N, MakeSizedSimd &gt; &gt;&gt; &gt;::type</td></tr>
+<tr class="separator:a2f1e01829ca6b6d3a50720fdbcc99adf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf42387a56b588d4a261b9ab869e33ee"><td class="memTemplParams" colspan="2">template&lt;typename T , template&lt; typename &gt; typename MakeSimd&gt; </td></tr>
+<tr class="memitem:adf42387a56b588d4a261b9ab869e33ee"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#adf42387a56b588d4a261b9ab869e33ee">llama::Simd</a> = typename std::conditional_t&lt; isRecordDim&lt; T &gt;, mp_identity&lt; One&lt; Simdize&lt; T, MakeSimd &gt; &gt;&gt;, mp_identity&lt; Simdize&lt; T, MakeSimd &gt; &gt;&gt;::type</td></tr>
+<tr class="separator:adf42387a56b588d4a261b9ab869e33ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -227,7 +227,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="Simd_8hpp.html">Simd.hpp</a></li>
-    <li class="footer">Generated on Fri Jan 13 2023 14:18:57 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Fri Jan 13 2023 17:03:51 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

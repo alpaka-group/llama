@@ -155,7 +155,7 @@ Static Public Attributes</h2></td></tr>
 <tr class="separator:af4defff48ee41e3b1140061d6610e4f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a93611594bec185f89dc46ba44c384811"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="namespacellama_1_1mapping.html#abf047d4798871c30b501074a70374086">SubArrayAlignment</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1SoA.html#a93611594bec185f89dc46ba44c384811">subArrayAlignment</a> = TSubArrayAlignment</td></tr>
 <tr class="separator:a93611594bec185f89dc46ba44c384811"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa98be08bc24fee8f9d632f475d950b22"><td class="memItemLeft" align="right" valign="top">static constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1SoA.html#aa98be08bc24fee8f9d632f475d950b22">blobCount</a> = <a class="el" href="structllama_1_1mapping_1_1SoA.html#af4defff48ee41e3b1140061d6610e4f3">blobs</a> == <a class="el" href="namespacellama_1_1mapping.html#a79bb2d70c1866c3090d5810dd0c92cb3aa8d7ca911df4c0991253a7aaaa4e3708">Blobs::OnePerField</a> ? boost::mp11::mp_size&lt;<a class="el" href="namespacellama.html#a1fddf1f638927edfb8da8e3c78da4e1c">FlatRecordDim</a>&lt;TRecordDim&gt;&gt;::value : 1</td></tr>
+<tr class="memitem:aa98be08bc24fee8f9d632f475d950b22"><td class="memItemLeft" align="right" valign="top">static constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1SoA.html#aa98be08bc24fee8f9d632f475d950b22">blobCount</a> = <a class="el" href="structllama_1_1mapping_1_1SoA.html#af4defff48ee41e3b1140061d6610e4f3">blobs</a> == <a class="el" href="namespacellama_1_1mapping.html#a79bb2d70c1866c3090d5810dd0c92cb3aa8d7ca911df4c0991253a7aaaa4e3708">Blobs::OnePerField</a> ? mp_size&lt;<a class="el" href="namespacellama.html#a1fddf1f638927edfb8da8e3c78da4e1c">FlatRecordDim</a>&lt;TRecordDim&gt;&gt;::value : 1</td></tr>
 <tr class="separator:aa98be08bc24fee8f9d632f475d950b22"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -250,7 +250,7 @@ template&lt;std::size_t... RecordCoords&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00128">128</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="SoA_8hpp_source.html#l00126">126</a> of file <a class="el" href="SoA_8hpp_source.html">SoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -298,7 +298,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , Blobs TBlobs = Blobs:
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr std::size_t <a class="el" href="structllama_1_1mapping_1_1SoA.html">llama::mapping::SoA</a>&lt; TArrayExtents, TRecordDim, TBlobs, TSubArrayAlignment, TLinearizeArrayDimsFunctor, FlattenRecordDimSingleBlob &gt;::blobCount = <a class="el" href="structllama_1_1mapping_1_1SoA.html#af4defff48ee41e3b1140061d6610e4f3">blobs</a> == <a class="el" href="namespacellama_1_1mapping.html#a79bb2d70c1866c3090d5810dd0c92cb3aa8d7ca911df4c0991253a7aaaa4e3708">Blobs::OnePerField</a> ? boost::mp11::mp_size&lt;<a class="el" href="namespacellama.html#a1fddf1f638927edfb8da8e3c78da4e1c">FlatRecordDim</a>&lt;TRecordDim&gt;&gt;::value : 1</td>
+          <td class="memname">constexpr std::size_t <a class="el" href="structllama_1_1mapping_1_1SoA.html">llama::mapping::SoA</a>&lt; TArrayExtents, TRecordDim, TBlobs, TSubArrayAlignment, TLinearizeArrayDimsFunctor, FlattenRecordDimSingleBlob &gt;::blobCount = <a class="el" href="structllama_1_1mapping_1_1SoA.html#af4defff48ee41e3b1140061d6610e4f3">blobs</a> == <a class="el" href="namespacellama_1_1mapping.html#a79bb2d70c1866c3090d5810dd0c92cb3aa8d7ca911df4c0991253a7aaaa4e3708">Blobs::OnePerField</a> ? mp_size&lt;<a class="el" href="namespacellama.html#a1fddf1f638927edfb8da8e3c78da4e1c">FlatRecordDim</a>&lt;TRecordDim&gt;&gt;::value : 1</td>
         </tr>
       </table>
   </td>
@@ -373,7 +373,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , Blobs TBlobs = Blobs:
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1SoA.html">SoA</a></li>
-    <li class="footer">Generated on Fri Jan 13 2023 14:18:57 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Fri Jan 13 2023 17:03:51 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

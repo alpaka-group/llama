@@ -367,7 +367,7 @@ $(document).ready(function(){initNavTree('StructName_8hpp_source.html',''); init
 <div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;            constexpr <span class="keyword">auto</span> size = [&amp;]() constexpr</div>
 <div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;            {</div>
 <div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;                std::size_t s = 0;</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;                boost::mp11::mp_for_each&lt;Tags&gt;(</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;                mp_for_each&lt;Tags&gt;(</div>
 <div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;                    [&amp;](<span class="keyword">auto</span> tag)</div>
 <div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;                    {</div>
 <div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;                        <span class="keywordflow">if</span>(s != 0)</div>
@@ -384,7 +384,7 @@ $(document).ready(function(){initNavTree('StructName_8hpp_source.html',''); init
 <div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;            <a class="code" href="structllama_1_1Array.html">llama::Array&lt;char, size&gt;</a> a{};</div>
 <div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;            <span class="keyword">auto</span> w = a.<a class="code" href="structllama_1_1Array.html#a23daa97b399455f659f57512aaf59eb2">begin</a>();</div>
 <div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160; </div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;            boost::mp11::mp_for_each&lt;Tags&gt;([&amp;](<span class="keyword">auto</span> tag) constexpr {</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;            mp_for_each&lt;Tags&gt;([&amp;](<span class="keyword">auto</span> tag) constexpr {</div>
 <div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;                <span class="keywordflow">if</span>(w != a.begin())</div>
 <div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;                {</div>
 <div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;                    *w = <span class="stringliteral">&#39;.&#39;</span>;</div>
@@ -445,7 +445,7 @@ $(document).ready(function(){initNavTree('StructName_8hpp_source.html',''); init
 <div class="ttc" id="anamespacellama_html"><div class="ttname"><a href="namespacellama.html">llama</a></div><div class="ttdef"><b>Definition:</b> <a href="Accessors_8hpp_source.html#l00009">Accessors.hpp:10</a></div></div>
 <div class="ttc" id="anamespacellama_html_a06d7068ee2176f6a3bbd750665ac5af0"><div class="ttname"><a href="namespacellama.html#a06d7068ee2176f6a3bbd750665ac5af0">llama::qualifiedTypeName</a></div><div class="ttdeci">constexpr auto qualifiedTypeName</div><div class="ttdef"><b>Definition:</b> <a href="StructName_8hpp_source.html#l00191">StructName.hpp:191</a></div></div>
 <div class="ttc" id="anamespacellama_html_a3d23cdc7e16d96e5d627ef1b15e6c4af"><div class="ttname"><a href="namespacellama.html#a3d23cdc7e16d96e5d627ef1b15e6c4af">llama::recordCoordTags</a></div><div class="ttdeci">constexpr auto recordCoordTags(RecordCoord&lt; Coords... &gt;={}) -&gt; std::string_view</div><div class="ttdoc">Returns the tags interspersed by '.' represented by the given record coord in the given record dimens...</div><div class="ttdef"><b>Definition:</b> <a href="StructName_8hpp_source.html#l00334">StructName.hpp:334</a></div></div>
-<div class="ttc" id="anamespacellama_html_a4a4fd33218cce7b2e592486d80f2ae90"><div class="ttname"><a href="namespacellama.html#a4a4fd33218cce7b2e592486d80f2ae90">llama::GetTags</a></div><div class="ttdeci">typename internal::GetTagsImpl&lt; RecordDim, RecordCoord &gt;::type GetTags</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00130">Core.hpp:130</a></div></div>
+<div class="ttc" id="anamespacellama_html_a4a4fd33218cce7b2e592486d80f2ae90"><div class="ttname"><a href="namespacellama.html#a4a4fd33218cce7b2e592486d80f2ae90">llama::GetTags</a></div><div class="ttdeci">typename internal::GetTagsImpl&lt; RecordDim, RecordCoord &gt;::type GetTags</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00128">Core.hpp:128</a></div></div>
 <div class="ttc" id="anamespacellama_html_a8def4cdbf850f818833a38d67e6ebf34"><div class="ttname"><a href="namespacellama.html#a8def4cdbf850f818833a38d67e6ebf34">llama::structName</a></div><div class="ttdeci">constexpr auto structName(T={}) -&gt; std::string_view</div><div class="ttdef"><b>Definition:</b> <a href="StructName_8hpp_source.html#l00254">StructName.hpp:254</a></div></div>
 <div class="ttc" id="astructllama_1_1Array_html"><div class="ttname"><a href="structllama_1_1Array.html">llama::Array</a></div><div class="ttdef"><b>Definition:</b> <a href="Array_8hpp_source.html#l00018">Array.hpp:19</a></div></div>
 <div class="ttc" id="astructllama_1_1Array_html_a23daa97b399455f659f57512aaf59eb2"><div class="ttname"><a href="structllama_1_1Array.html#a23daa97b399455f659f57512aaf59eb2">llama::Array::begin</a></div><div class="ttdeci">constexpr auto begin() -&gt; T *</div><div class="ttdef"><b>Definition:</b> <a href="Array_8hpp_source.html#l00033">Array.hpp:33</a></div></div>
@@ -458,7 +458,7 @@ $(document).ready(function(){initNavTree('StructName_8hpp_source.html',''); init
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="StructName_8hpp.html">StructName.hpp</a></li>
-    <li class="footer">Generated on Fri Jan 13 2023 14:18:57 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Fri Jan 13 2023 17:03:51 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

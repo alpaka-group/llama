@@ -121,12 +121,12 @@ $(document).ready(function(){initNavTree('Concepts_8hpp_source.html',''); initRe
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keyword">struct </span>MakeIsPhysical</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    {</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> RC&gt;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <span class="keyword">using</span> fn = boost::mp11::mp_bool&lt;PhysicalField&lt;M, RC&gt;&gt;;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <span class="keyword">using</span> fn = mp_bool&lt;PhysicalField&lt;M, RC&gt;&gt;;</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    };</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> M&gt;</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keyword">inline</span> constexpr <span class="keywordtype">bool</span> allFieldsArePhysical</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        = boost::mp11::mp_all_of&lt;LeafRecordCoords&lt;typename M::RecordDim&gt;, MakeIsPhysical&lt;M&gt;::template fn&gt;::value;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        = mp_all_of&lt;LeafRecordCoords&lt;typename M::RecordDim&gt;, MakeIsPhysical&lt;M&gt;::template fn&gt;::value;</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> M&gt;</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    concept PhysicalMapping = Mapping&lt;M&gt; &amp;&amp; allFieldsArePhysical&lt;M&gt;;</div>
@@ -156,12 +156,12 @@ $(document).ready(function(){initNavTree('Concepts_8hpp_source.html',''); initRe
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keyword">struct </span>MakeIsComputed</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    {</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> RC&gt;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <span class="keyword">using</span> fn = boost::mp11::mp_bool&lt;ComputedField&lt;M, RC&gt;&gt;;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <span class="keyword">using</span> fn = mp_bool&lt;ComputedField&lt;M, RC&gt;&gt;;</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    };</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> M&gt;</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keyword">inline</span> constexpr <span class="keywordtype">bool</span> allFieldsAreComputed</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        = boost::mp11::mp_all_of&lt;LeafRecordCoords&lt;typename M::RecordDim&gt;, MakeIsComputed&lt;M&gt;::template fn&gt;::value;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        = mp_all_of&lt;LeafRecordCoords&lt;typename M::RecordDim&gt;, MakeIsComputed&lt;M&gt;::template fn&gt;::value;</div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> M&gt;</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    concept FullyComputedMapping = Mapping&lt;M&gt; &amp;&amp; allFieldsAreComputed&lt;M&gt;;</div>
@@ -169,10 +169,10 @@ $(document).ready(function(){initNavTree('Concepts_8hpp_source.html',''); initRe
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="keyword">template</span>&lt;</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <span class="keyword">typename</span> M,</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <span class="keyword">typename</span> LeafCoords = LeafRecordCoords&lt;typename M::RecordDim&gt;,</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        std::size_t PhysicalCount = boost::mp11::mp_count_if&lt;LeafCoords, MakeIsPhysical&lt;M&gt;::template fn&gt;::value,</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        std::size_t ComputedCount = boost::mp11::mp_count_if&lt;LeafCoords, MakeIsComputed&lt;M&gt;::template fn&gt;::value&gt;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        std::size_t PhysicalCount = mp_count_if&lt;LeafCoords, MakeIsPhysical&lt;M&gt;::template fn&gt;::value,</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        std::size_t ComputedCount = mp_count_if&lt;LeafCoords, MakeIsComputed&lt;M&gt;::template fn&gt;::value&gt;</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keyword">inline</span> constexpr <span class="keywordtype">bool</span> allFieldsArePhysicalOrComputed</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        = (PhysicalCount + ComputedCount) &gt;= boost::mp11::mp_size&lt;LeafCoords&gt;::value&amp;&amp; PhysicalCount &gt; 0</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        = (PhysicalCount + ComputedCount) &gt;= mp_size&lt;LeafCoords&gt;::value&amp;&amp; PhysicalCount &gt; 0</div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        &amp;&amp; ComputedCount &gt; 0; <span class="comment">// == instead of &gt;= would be better, but it&#39;s not easy to count correctly,</span></div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;                              <span class="comment">// because we cannot check whether the call to blobNrOrOffset()</span></div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;                              <span class="comment">// or compute() is actually valid</span></div>
@@ -236,7 +236,7 @@ $(document).ready(function(){initNavTree('Concepts_8hpp_source.html',''); initRe
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="Concepts_8hpp.html">Concepts.hpp</a></li>
-    <li class="footer">Generated on Fri Jan 13 2023 14:18:56 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Fri Jan 13 2023 17:03:51 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

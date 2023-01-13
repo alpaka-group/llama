@@ -6,7 +6,7 @@ var namespacellama_1_1mapping_1_1tree =
     [ "Leaf", "structllama_1_1mapping_1_1tree_1_1Leaf.html", "structllama_1_1mapping_1_1tree_1_1Leaf" ],
     [ "Node", "structllama_1_1mapping_1_1tree_1_1Node.html", "structllama_1_1mapping_1_1tree_1_1Node" ],
     [ "TreeCoordElement", "structllama_1_1mapping_1_1tree_1_1TreeCoordElement.html", "structllama_1_1mapping_1_1tree_1_1TreeCoordElement" ],
-    [ "TreeCoord", "namespacellama_1_1mapping_1_1tree.html#ad5b9ef0bed3b8a2e014b6583d780180d", null ],
+    [ "TreeCoord", "namespacellama_1_1mapping_1_1tree.html#a8cfac6c9a829981805009c577975f508", null ],
     [ "TreeFromDimensions", "namespacellama_1_1mapping_1_1tree.html#ad1ecec8e7fd7fc84ab0a83df9b680310", null ],
     [ "TreeFromRecordDim", "namespacellama_1_1mapping_1_1tree.html#aa2770ac2c1d1a9d930488072572cc47f", null ],
     [ "createTree", "namespacellama_1_1mapping_1_1tree.html#adaaaf6bd620fdbc2042f2c1d68cd96ea", null ],
@@ -18,5 +18,6 @@ var namespacellama_1_1mapping_1_1tree =
     [ "toString", "namespacellama_1_1mapping_1_1tree.html#a5503563f0cb04a716a430965e75ac4fe", null ],
     [ "toString", "namespacellama_1_1mapping_1_1tree.html#af40cd3f4270779042374da6f52ad6e81", null ],
     [ "treeCoordToString", "namespacellama_1_1mapping_1_1tree.html#a5db1654176ea82f4ed22c4c247133dab", null ],
-    [ "one", "namespacellama_1_1mapping_1_1tree.html#afbd4ba87d1acf92e1418324f097a68c8", null ]
+    [ "one", "namespacellama_1_1mapping_1_1tree.html#afbd4ba87d1acf92e1418324f097a68c8", null ],
+    [ "one< mp_size_t< 1 > >", "namespacellama_1_1mapping_1_1tree.html#a68ee4cf81bdbbb90a0279a4c9bc8c629", null ]
 ];

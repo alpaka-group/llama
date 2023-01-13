@@ -2,8 +2,8 @@ var RecordCoord_8hpp =
 [
     [ "RecordCoord", "structllama_1_1RecordCoord.html", "structllama_1_1RecordCoord" ],
     [ "RecordCoord<>", "structllama_1_1RecordCoord_3_4.html", "structllama_1_1RecordCoord_3_4" ],
-    [ "Cat", "RecordCoord_8hpp.html#a21d2f247af9c167ca2238eaa09f1bada", null ],
-    [ "PopFront", "RecordCoord_8hpp.html#a25d8302ec14d00c68dd886d296a1373d", null ],
+    [ "Cat", "RecordCoord_8hpp.html#aca92a835e40a98002ba3b05c050d00cf", null ],
+    [ "PopFront", "RecordCoord_8hpp.html#a51dcbb30751c7c23e97d434736a0acc4", null ],
     [ "RecordCoordFromList", "RecordCoord_8hpp.html#ad95912a49a83091fde091a4e2d9a4118", null ],
     [ "cat", "RecordCoord_8hpp.html#ae442e49eb3d8d604de1ef8ef3c7fb1d7", null ],
     [ "operator!=", "RecordCoord_8hpp.html#a6b6c9452091052f330217e1dbb448b96", null ],
