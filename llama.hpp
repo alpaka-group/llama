@@ -1435,16 +1435,25 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(
 	            : GetCoordFromTagsImpl<Record<Fields...>, RecordCoord<>, Tags...>
 	        {
 	        };
+
 	        template<typename ChildType, std::size_t Count, typename... Tags>
 	        struct GetCoordFromTagsImpl<ChildType[Count], RecordCoord<>, mp_list<Tags...>>
 	            : GetCoordFromTagsImpl<ChildType[Count], RecordCoord<>, Tags...>
 	        {
 	        };
+
+	        // pass through a RecordCoord
+	        template<typename... Fields, std::size_t... RCs>
+	        struct GetCoordFromTagsImpl<Record<Fields...>, RecordCoord<>, RecordCoord<RCs...>>
+	        {
+	            using type = RecordCoord<RCs...>;
+	        };
 	    } // namespace internal
 
-	    /// Converts a series of tags, or a list of tags, navigating down a record dimension into a \ref RecordCoord.
-	    template<typename RecordDim, typename... Tags>
-	    using GetCoordFromTags = typename internal::GetCoordFromTagsImpl<RecordDim, RecordCoord<>, Tags...>::type;
+	    /// Converts a series of tags, or a list of tags, navigating down a record dimension into a \ref RecordCoord. A
+	    /// RecordCoord will be passed through unmodified.
+	    template<typename RecordDim, typename... TagsOrTagList>
+	    using GetCoordFromTags = typename internal::GetCoordFromTagsImpl<RecordDim, RecordCoord<>, TagsOrTagList...>::type;
 
 	    namespace internal
 	    {
@@ -7482,6 +7491,7 @@ namespace llama::mapping
         template<typename... Fields, typename... RCs>
         auto partitionRecordDim(Record<Fields...>, mp_list<RCs...>)
         {
+            static_assert((isRecordCoord<RCs> && ...));
             using Initial = mp_list<Record<>, Record<Fields...>>; // initially, nothing selected for mapping 1
             return mp_fold<mp_list<GetTags<Record<Fields...>, RCs>...>, Initial, PartitionFoldOp>{};
         }
@@ -7496,29 +7506,48 @@ namespace llama::mapping
         template<typename RC, typename RecordCoordForMapping1>
         inline constexpr bool isSelected = recordCoordCommonPrefixIsSame<RecordCoordForMapping1, RC>;
 
-        template<typename RC>
-        struct IsSelectedPredicate
+        template<typename RC, typename... RecordCoordsForMapping1>
+        inline constexpr bool isSelected<
+            RC,
+            mp_list<RecordCoordsForMapping1...>> = (isSelected<RC, RecordCoordsForMapping1> || ...);
+
+        template<typename RecordDim, typename Selector>
+        struct ReplaceTagListsByCoords;
+
+        template<typename RecordDim, std::size_t... RCs>
+        struct ReplaceTagListsByCoords<RecordDim, RecordCoord<RCs...>>
         {
-            template<typename RecordCoordForMapping1>
-            using fn = mp_bool<isSelected<RC, RecordCoordForMapping1>>;
+            using type = RecordCoord<RCs...>;
         };
 
-        template<typename RC, typename... RecordCoordsForMapping1>
-        inline constexpr bool isSelected<RC, mp_list<RecordCoordsForMapping1...>> = mp_any_of_q<
-            mp_list<RecordCoordsForMapping1...>,
-            IsSelectedPredicate<RC>>::value;
+        template<typename RecordDim, typename... Args>
+        struct ReplaceTagListsByCoords<RecordDim, mp_list<Args...>>
+        {
+            static auto f()
+            {
+                if constexpr(((mp_is_list<Args>::value || isRecordCoord<Args>) &&...))
+                    // Args is a pack of tag lists/record coords
+                    return mp_list<GetCoordFromTags<RecordDim, Args>...>{};
+                else
+                    // Args is a single tag lists
+                    return GetCoordFromTags<RecordDim, Args...>{};
+            }
+
+            using type = decltype(f());
+        };
     } // namespace internal
 
     /// Mapping which splits off a part of the record dimension and maps it differently then the rest.
-    /// \tparam TRecordCoordForMapping1 A \ref RecordCoord or a list of RecordCoords selecting the part of the record
-    /// dimension to be mapped differently.
+    /// \tparam TSelectorForMapping1 Selects a part of the record dimension to be mapped by MappingTemplate1. Can be a
+    /// \ref RecordCoord, a type list of RecordCoords, a type list of tags (selecting one field), or a type list of
+    /// type list of tags (selecting one field per sub list). dimension to be mapped differently.
     /// \tparam MappingTemplate1 The mapping used for the selected part of the record dimension.
     /// \tparam MappingTemplate2 The mapping used for the not selected part of the record dimension.
     /// \tparam SeparateBlobs If true, both pieces of the record dimension are mapped to separate blobs.
     template<
         typename TArrayExtents,
         typename TRecordDim,
-        typename TRecordCoordForMapping1,
+        typename TSelectorForMapping1,
         template<typename...>
         typename MappingTemplate1,
         template<typename...>
@@ -7526,12 +7555,17 @@ namespace llama::mapping
         bool SeparateBlobs = false>
     struct Split
     {
+        static_assert(isRecord<TRecordDim>, "Cannot split a scalar record dim");
+
         using ArrayExtents = TArrayExtents;
         using ArrayIndex = typename ArrayExtents::Index;
         using RecordDim = TRecordDim;
 
-        using RecordCoordForMapping1 = TRecordCoordForMapping1;
-        using RecordDimPartitions = typename internal::PartionedRecordDim<RecordDim, RecordCoordForMapping1>::type;
+        using SelectorForMapping1 = TSelectorForMapping1;
+        using NormalizedSelectorForMapping1 =
+            typename internal::ReplaceTagListsByCoords<RecordDim, SelectorForMapping1>::type;
+        using RecordDimPartitions =
+            typename internal::PartionedRecordDim<RecordDim, NormalizedSelectorForMapping1>::type;
         using RecordDim1 = mp_first<RecordDimPartitions>;
         using RecordDim2 = mp_second<RecordDimPartitions>;
 
@@ -7591,7 +7625,7 @@ namespace llama::mapping
         {
             using Tags = GetTags<RecordDim, RecordCoord<RecordCoords...>>;
 
-            if constexpr(internal::isSelected<RecordCoord<RecordCoords...>, RecordCoordForMapping1>)
+            if constexpr(internal::isSelected<RecordCoord<RecordCoords...>, NormalizedSelectorForMapping1>)
                 return mapping1.blobNrAndOffset(ai, GetCoordFromTags<RecordDim1, Tags>{});
             else
             {
@@ -7611,7 +7645,7 @@ namespace llama::mapping
         static constexpr auto isComputed(RecordCoord<RecordCoords...>) -> bool
         {
             using Tags = GetTags<RecordDim, RecordCoord<RecordCoords...>>;
-            if constexpr(internal::isSelected<RecordCoord<RecordCoords...>, RecordCoordForMapping1>)
+            if constexpr(internal::isSelected<RecordCoord<RecordCoords...>, NormalizedSelectorForMapping1>)
                 return llama::isComputed<Mapping1, GetCoordFromTags<RecordDim1, Tags>>;
             else
                 return llama::isComputed<Mapping2, GetCoordFromTags<RecordDim2, Tags>>;
@@ -7622,7 +7656,7 @@ namespace llama::mapping
             const
         {
             using Tags = GetTags<RecordDim, RecordCoord<RecordCoords...>>;
-            if constexpr(internal::isSelected<RecordCoord<RecordCoords...>, RecordCoordForMapping1>)
+            if constexpr(internal::isSelected<RecordCoord<RecordCoords...>, NormalizedSelectorForMapping1>)
                 return mapping1.compute(ai, GetCoordFromTags<RecordDim1, Tags>{}, blobs);
             else
             {
@@ -7639,7 +7673,7 @@ namespace llama::mapping
     /// Binds parameters to a \ref Split mapping except for array and record dimension, producing a quoted
     /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
     template<
-        typename RecordCoordsForMapping1,
+        typename SelectorForMapping1,
         template<typename...>
         typename MappingTemplate1,
         template<typename...>
@@ -7648,13 +7682,8 @@ namespace llama::mapping
     struct BindSplit
     {
         template<typename ArrayExtents, typename RecordDim>
-        using fn = Split<
-            ArrayExtents,
-            RecordDim,
-            RecordCoordsForMapping1,
-            MappingTemplate1,
-            MappingTemplate2,
-            SeparateBlobs>;
+        using fn
+            = Split<ArrayExtents, RecordDim, SelectorForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs>;
     };
 
     template<typename Mapping>
@@ -7663,19 +7692,14 @@ namespace llama::mapping
     template<
         typename ArrayExtents,
         typename RecordDim,
-        typename RecordCoordsForMapping1,
+        typename SelectorForMapping1,
         template<typename...>
         typename MappingTemplate1,
         template<typename...>
         typename MappingTemplate2,
         bool SeparateBlobs>
-    inline constexpr bool isSplit<Split<
-        ArrayExtents,
-        RecordDim,
-        RecordCoordsForMapping1,
-        MappingTemplate1,
-        MappingTemplate2,
-        SeparateBlobs>> = true;
+    inline constexpr bool isSplit<
+        Split<ArrayExtents, RecordDim, SelectorForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs>> = true;
 } // namespace llama::mapping
 // ==
 // == ./mapping/Split.hpp ==
