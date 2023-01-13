@@ -52,7 +52,7 @@ namespace llama::mapping
         using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
         using Flattener = FlattenRecordDimSingleBlob<TRecordDim>;
         inline static constexpr std::size_t blobCount
-            = blobs == Blobs::OnePerField ? boost::mp11::mp_size<FlatRecordDim<TRecordDim>>::value : 1;
+            = blobs == Blobs::OnePerField ? mp_size<FlatRecordDim<TRecordDim>>::value : 1;
 
 #ifndef __NVCC__
         using Base::Base;
@@ -84,7 +84,6 @@ namespace llama::mapping
             else if constexpr(subArrayAlignment == SubArrayAlignment::Align)
             {
                 size_type size = 0;
-                using namespace boost::mp11;
                 using FRD = typename Flattener::FlatRecordDim;
                 mp_for_each<mp_transform<mp_identity, FRD>>(
                     [&](auto ti)
@@ -104,7 +103,6 @@ namespace llama::mapping
     private:
         LLAMA_FN_HOST_ACC_INLINE static constexpr auto computeSubArrayOffsets()
         {
-            using namespace boost::mp11;
             using FRD = typename Flattener::FlatRecordDim;
             constexpr auto staticFlatSize = LinearizeArrayDimsFunctor{}.size(TArrayExtents{});
             constexpr auto subArrays = mp_size<FRD>::value;
@@ -129,7 +127,6 @@ namespace llama::mapping
             typename Base::ArrayIndex ai,
             RecordCoord<RecordCoords...> = {}) const -> NrAndOffset<size_type>
         {
-            using namespace boost::mp11;
             const auto elementOffset = LinearizeArrayDimsFunctor{}(ai, Base::extents())
                 * static_cast<size_type>(sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>));
             if constexpr(blobs == Blobs::OnePerField)

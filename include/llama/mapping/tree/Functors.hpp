@@ -62,7 +62,7 @@ namespace llama::mapping::tree::functor
             auto children = tupleTransform(
                 node.childs,
                 [&](auto element) { return basicToResultImpl(element, LLAMA_COPY(node.count) * arraySize); });
-            return Node<Identifier, decltype(children), boost::mp11::mp_size_t<1>>{{}, children};
+            return Node<Identifier, decltype(children), mp_size_t<1>>{{}, children};
         }
 
         template<typename Identifier, typename Type, typename CountType>
@@ -85,7 +85,7 @@ namespace llama::mapping::tree::functor
             else
             {
                 const auto& branch = get<BasicCoord::FirstElement::childIndex>(nodeOrLeaf.childs);
-                auto first = TreeCoordElement<BasicCoord::FirstElement::childIndex, boost::mp11::mp_size_t<0>>{};
+                auto first = TreeCoordElement<BasicCoord::FirstElement::childIndex, mp_size_t<0>>{};
 
                 return tupleCat(
                     Tuple{first},
@@ -245,5 +245,5 @@ namespace llama::mapping::tree::functor
     };
 
     template<typename TreeCoord, std::size_t Amount>
-    using MoveRTDownFixed = MoveRTDown<TreeCoord, boost::mp11::mp_size_t<Amount>>;
+    using MoveRTDownFixed = MoveRTDown<TreeCoord, mp_size_t<Amount>>;
 } // namespace llama::mapping::tree::functor

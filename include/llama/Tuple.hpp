@@ -116,7 +116,7 @@ namespace llama
     LLAMA_FN_HOST_ACC_INLINE constexpr auto get(Tuple<Elements...>& tuple) -> auto&
     {
         using Base [[maybe_unused]] // clang claims Base is unused ...
-        = internal::TupleLeaf<sizeof...(Elements) - I, boost::mp11::mp_at_c<llama::Tuple<Elements...>, I>>;
+        = internal::TupleLeaf<sizeof...(Elements) - I, mp_at_c<llama::Tuple<Elements...>, I>>;
         return tuple.Base::value();
     }
 
@@ -124,7 +124,7 @@ namespace llama
     LLAMA_FN_HOST_ACC_INLINE constexpr auto get(const Tuple<Elements...>& tuple) -> const auto&
     {
         using Base [[maybe_unused]] // clang claims Base is unused ...
-        = internal::TupleLeaf<sizeof...(Elements) - I, boost::mp11::mp_at_c<llama::Tuple<Elements...>, I>>;
+        = internal::TupleLeaf<sizeof...(Elements) - I, mp_at_c<llama::Tuple<Elements...>, I>>;
         return tuple.Base::value();
     }
 } // namespace llama
@@ -159,7 +159,6 @@ namespace llama
     LLAMA_FN_HOST_ACC_INLINE constexpr auto operator==(const Tuple<ElementsA...>& a, const Tuple<ElementsB...>& b)
         -> bool
     {
-        using namespace boost::mp11;
         if constexpr(sizeof...(ElementsA) == sizeof...(ElementsB))
             if constexpr(mp_apply<mp_all, mp_transform<std::is_same, mp_list<ElementsA...>, mp_list<ElementsB...>>>::
                              value)

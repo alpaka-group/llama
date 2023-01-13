@@ -31,22 +31,17 @@ namespace llama::mapping
             static auto recordDimType()
             {
                 if constexpr(isRecordCoord<Key>)
-                    return boost::mp11::mp_identity<GetType<RecordDim, Key>>{};
+                    return mp_identity<GetType<RecordDim, Key>>{};
                 else
-                    return boost::mp11::mp_identity<Key>{};
+                    return mp_identity<Key>{};
             }
 
-            template<
-                typename Pair,
-                typename Key = boost::mp11::mp_first<Pair>,
-                typename StoredT = boost::mp11::mp_second<Pair>>
-            using fn = boost::mp11::
-                mp_list<Key, ChangeTypeProjection<typename decltype(recordDimType<Key>())::type, StoredT>>;
+            template<typename Pair, typename Key = mp_first<Pair>, typename StoredT = mp_second<Pair>>
+            using fn = mp_list<Key, ChangeTypeProjection<typename decltype(recordDimType<Key>())::type, StoredT>>;
         };
 
         template<typename RecordDim, typename ReplacementMap>
-        using MakeProjectionMap
-            = boost::mp11::mp_transform<MakeProjectionPair<RecordDim>::template fn, ReplacementMap>;
+        using MakeProjectionMap = mp_transform<MakeProjectionPair<RecordDim>::template fn, ReplacementMap>;
     } // namespace internal
 
     /// Mapping that changes the type in the record domain for a different one in storage. Conversions happen during

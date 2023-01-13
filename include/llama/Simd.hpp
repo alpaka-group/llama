@@ -56,8 +56,8 @@ namespace llama
     constexpr auto chooseSimdLanes(BinaryReductionFunction reduce) -> std::size_t
     {
         using FRD = FlatRecordDim<RecordDim>;
-        std::size_t lanes = simdLanes<MakeSimd<boost::mp11::mp_first<FRD>>>;
-        boost::mp11::mp_for_each<boost::mp11::mp_transform<std::add_pointer_t, boost::mp11::mp_drop_c<FRD, 1>>>(
+        std::size_t lanes = simdLanes<MakeSimd<mp_first<FRD>>>;
+        mp_for_each<mp_transform<std::add_pointer_t, mp_drop_c<FRD, 1>>>(
             [&](auto* t)
             {
                 using T = std::remove_reference_t<decltype(*t)>;
@@ -129,22 +129,14 @@ namespace llama
     template<typename T, std::size_t N, template<typename, /* std::integral */ auto> typename MakeSizedSimd>
     using SimdN = typename std::conditional_t<
         isRecordDim<T>,
-        std::conditional_t<
-            N == 1,
-            boost::mp11::mp_identity<One<T>>,
-            boost::mp11::mp_identity<One<SimdizeN<T, N, MakeSizedSimd>>>>,
-        std::conditional_t<
-            N == 1,
-            boost::mp11::mp_identity<T>,
-            boost::mp11::mp_identity<SimdizeN<T, N, MakeSizedSimd>>>>::type;
+        std::conditional_t<N == 1, mp_identity<One<T>>, mp_identity<One<SimdizeN<T, N, MakeSizedSimd>>>>,
+        std::conditional_t<N == 1, mp_identity<T>, mp_identity<SimdizeN<T, N, MakeSizedSimd>>>>::type;
 
     /// Creates a SIMD version of the given type. Of T is a record dimension, creates a \ref One where each field is a
     /// SIMD type of the original field type.
     template<typename T, template<typename> typename MakeSimd>
-    using Simd = typename std::conditional_t<
-        isRecordDim<T>,
-        boost::mp11::mp_identity<One<Simdize<T, MakeSimd>>>,
-        boost::mp11::mp_identity<Simdize<T, MakeSimd>>>::type;
+    using Simd = typename std::
+        conditional_t<isRecordDim<T>, mp_identity<One<Simdize<T, MakeSimd>>>, mp_identity<Simdize<T, MakeSimd>>>::type;
 
     namespace internal
     {
@@ -162,8 +154,8 @@ namespace llama
     inline constexpr std::size_t simdLanes<Simd, std::enable_if_t<isRecordRef<Simd>>> = []
     {
         using FRD = FlatRecordDim<typename Simd::AccessibleRecordDim>;
-        using FirstFieldType = boost::mp11::mp_first<FRD>;
-        static_assert(boost::mp11::mp_all_of_q<FRD, internal::SizeEqualTo<simdLanes<FirstFieldType>>>::value);
+        using FirstFieldType = mp_first<FRD>;
+        static_assert(mp_all_of_q<FRD, internal::SizeEqualTo<simdLanes<FirstFieldType>>>::value);
         return simdLanes<FirstFieldType>;
     }();
 

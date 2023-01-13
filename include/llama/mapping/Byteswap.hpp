@@ -50,11 +50,11 @@ namespace llama::mapping
         };
 
         template<typename T>
-        using MakeByteswapProjectionPair = boost::mp11::mp_list<T, ByteswapProjection<T>>;
+        using MakeByteswapProjectionPair = mp_list<T, ByteswapProjection<T>>;
 
         template<typename RecordDim>
         using MakeByteswapProjectionMap
-            = boost::mp11::mp_transform<MakeByteswapProjectionPair, boost::mp11::mp_unique<FlatRecordDim<RecordDim>>>;
+            = mp_transform<MakeByteswapProjectionPair, mp_unique<FlatRecordDim<RecordDim>>>;
     } // namespace internal
 
     /// Mapping that swaps the byte order of all values when loading/storing.

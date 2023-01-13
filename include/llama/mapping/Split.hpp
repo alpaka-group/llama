@@ -10,7 +10,6 @@ namespace llama::mapping
         template<typename... Fields, std::size_t FirstCoord, std::size_t... Coords>
         auto partitionRecordDim(Record<Fields...>, RecordCoord<FirstCoord, Coords...>)
         {
-            using namespace boost::mp11;
             using Rec = Record<Fields...>;
             if constexpr(sizeof...(Coords) == 0)
             {
@@ -32,22 +31,21 @@ namespace llama::mapping
         template<typename Acc, typename TagList>
         struct PartitionFoldOpImpl
         {
-            using Part1Before = boost::mp11::mp_first<Acc>;
-            using Part2Before = boost::mp11::mp_second<Acc>;
+            using Part1Before = mp_first<Acc>;
+            using Part2Before = mp_second<Acc>;
             using R = decltype(partitionRecordDim(Part2Before{}, GetCoordFromTags<Part2Before, TagList>{}));
-            using Part1After = boost::mp11::mp_first<R>;
-            using Part2After = boost::mp11::mp_second<R>;
+            using Part1After = mp_first<R>;
+            using Part2After = mp_second<R>;
 
-            using type = boost::mp11::mp_list<MergedRecordDims<Part1Before, Part1After>, Part2After>;
+            using type = mp_list<MergedRecordDims<Part1Before, Part1After>, Part2After>;
         };
 
         template<typename Acc, typename TagList>
         using PartitionFoldOp = typename PartitionFoldOpImpl<Acc, TagList>::type;
 
         template<typename... Fields, typename... RCs>
-        auto partitionRecordDim(Record<Fields...>, boost::mp11::mp_list<RCs...>)
+        auto partitionRecordDim(Record<Fields...>, mp_list<RCs...>)
         {
-            using namespace boost::mp11;
             using Initial = mp_list<Record<>, Record<Fields...>>; // initially, nothing selected for mapping 1
             return mp_fold<mp_list<GetTags<Record<Fields...>, RCs>...>, Initial, PartitionFoldOp>{};
         }
@@ -66,12 +64,13 @@ namespace llama::mapping
         struct IsSelectedPredicate
         {
             template<typename RecordCoordForMapping1>
-            using fn = boost::mp11::mp_bool<isSelected<RC, RecordCoordForMapping1>>;
+            using fn = mp_bool<isSelected<RC, RecordCoordForMapping1>>;
         };
 
         template<typename RC, typename... RecordCoordsForMapping1>
-        inline constexpr bool isSelected<RC, boost::mp11::mp_list<RecordCoordsForMapping1...>> = boost::mp11::
-            mp_any_of_q<boost::mp11::mp_list<RecordCoordsForMapping1...>, IsSelectedPredicate<RC>>::value;
+        inline constexpr bool isSelected<RC, mp_list<RecordCoordsForMapping1...>> = mp_any_of_q<
+            mp_list<RecordCoordsForMapping1...>,
+            IsSelectedPredicate<RC>>::value;
     } // namespace internal
 
     /// Mapping which splits off a part of the record dimension and maps it differently then the rest.
@@ -97,8 +96,8 @@ namespace llama::mapping
 
         using RecordCoordForMapping1 = TRecordCoordForMapping1;
         using RecordDimPartitions = typename internal::PartionedRecordDim<RecordDim, RecordCoordForMapping1>::type;
-        using RecordDim1 = boost::mp11::mp_first<RecordDimPartitions>;
-        using RecordDim2 = boost::mp11::mp_second<RecordDimPartitions>;
+        using RecordDim1 = mp_first<RecordDimPartitions>;
+        using RecordDim2 = mp_second<RecordDimPartitions>;
 
         using Mapping1 = MappingTemplate1<ArrayExtents, RecordDim1>;
         using Mapping2 = MappingTemplate2<ArrayExtents, RecordDim2>;
