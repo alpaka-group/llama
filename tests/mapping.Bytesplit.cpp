@@ -1,6 +1,6 @@
 #include "common.hpp"
 
-//#include <bit>
+// #include <bit>
 
 TEST_CASE("mapping.ByteSplit.AoS")
 {
@@ -65,7 +65,7 @@ TEST_CASE("mapping.ByteSplit.Split.BitPackedIntSoA")
             Vec3I,
             llama::mapping::BindSplit<
                 llama::RecordCoord<1>,
-                llama::mapping::BitPackedIntSoA,
+                llama::mapping::BindBitPackedIntSoA<>::fn,
                 llama::mapping::BindAoS<>::fn,
                 true>::fn>{std::tuple{std::tuple{llama::ArrayExtents{128}, 8}, std::tuple{llama::ArrayExtents{128}}}});
     iotaFillView(view);

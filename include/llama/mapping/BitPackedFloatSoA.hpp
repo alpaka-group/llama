@@ -120,7 +120,8 @@ namespace llama::mapping
                 FloatBits,
                 StoredIntegralCV,
                 decltype(integBits(std::declval<VHExp>(), std::declval<VHMan>())),
-                SizeType>
+                SizeType,
+                SignBit::Discard>
                 intref;
 
         public:
