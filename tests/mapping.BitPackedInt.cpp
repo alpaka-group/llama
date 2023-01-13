@@ -363,7 +363,7 @@ TEMPLATE_TEST_CASE(
     std::uint64_t)
 {
     using Integral = TestType;
-    boost::mp11::mp_for_each<boost::mp11::mp_list<std::uint32_t, std::uint64_t>>(
+    mp_for_each<mp_list<std::uint32_t, std::uint64_t>>(
         [](auto si)
         {
             using StoredIntegral = decltype(si);
@@ -428,7 +428,7 @@ TEMPLATE_TEST_CASE(
     std::uint64_t)
 {
     using Integral = TestType;
-    boost::mp11::mp_for_each<boost::mp11::mp_list<std::uint32_t, std::uint64_t>>(
+    mp_for_each<mp_list<std::uint32_t, std::uint64_t>>(
         [](auto si)
         {
             using StoredIntegral = decltype(si);
@@ -469,7 +469,7 @@ TEMPLATE_TEST_CASE(
     std::uint64_t)
 {
     using Integral = TestType;
-    boost::mp11::mp_for_each<boost::mp11::mp_list<std::uint32_t, std::uint64_t>>(
+    mp_for_each<mp_list<std::uint32_t, std::uint64_t>>(
         []<typename StoredIntegral>(StoredIntegral)
         {
             if constexpr(sizeof(StoredIntegral) >= sizeof(TestType))

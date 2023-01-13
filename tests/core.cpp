@@ -204,10 +204,9 @@ TEST_CASE("GetCoordFromTags")
 
 TEST_CASE("GetCoordFromTags.List")
 {
-    STATIC_REQUIRE(std::is_same_v<llama::GetCoordFromTags<Particle, boost::mp11::mp_list<>>, llama::RecordCoord<>>);
-    STATIC_REQUIRE(std::is_same_v<
-                   llama::GetCoordFromTags<Particle, boost::mp11::mp_list<tag::Vel, tag::Z>>,
-                   llama::RecordCoord<2, 2>>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetCoordFromTags<Particle, mp_list<>>, llama::RecordCoord<>>);
+    STATIC_REQUIRE(
+        std::is_same_v<llama::GetCoordFromTags<Particle, mp_list<tag::Vel, tag::Z>>, llama::RecordCoord<2, 2>>);
 }
 
 TEST_CASE("GetCoordFromTags.RecordCoord")
@@ -243,10 +242,10 @@ TEST_CASE("GetType")
 TEST_CASE("GetTags")
 {
     // clang-format off
-    STATIC_REQUIRE(std::is_same_v<llama::GetTags<Particle, llama::RecordCoord<0, 0>>, boost::mp11::mp_list<tag::Pos, tag::X >>);
-    STATIC_REQUIRE(std::is_same_v<llama::GetTags<Particle, llama::RecordCoord<0   >>, boost::mp11::mp_list<tag::Pos         >>);
-    STATIC_REQUIRE(std::is_same_v<llama::GetTags<Particle, llama::RecordCoord<    >>, boost::mp11::mp_list<                 >>);
-    STATIC_REQUIRE(std::is_same_v<llama::GetTags<Particle, llama::RecordCoord<2, 1>>, boost::mp11::mp_list<tag::Vel, tag::Y >>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetTags<Particle, llama::RecordCoord<0, 0>>, mp_list<tag::Pos, tag::X >>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetTags<Particle, llama::RecordCoord<0   >>, mp_list<tag::Pos         >>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetTags<Particle, llama::RecordCoord<    >>, mp_list<                 >>);
+    STATIC_REQUIRE(std::is_same_v<llama::GetTags<Particle, llama::RecordCoord<2, 1>>, mp_list<tag::Vel, tag::Y >>);
     // clang-format on
 }
 
@@ -264,7 +263,7 @@ TEST_CASE("LeafRecordCoords")
 {
     STATIC_REQUIRE(std::is_same_v<
                    llama::LeafRecordCoords<Particle>,
-                   boost::mp11::mp_list<
+                   mp_list<
                        llama::RecordCoord<0, 0>,
                        llama::RecordCoord<0, 1>,
                        llama::RecordCoord<0, 2>,
@@ -331,10 +330,9 @@ TEST_CASE("hasSameTags")
 
 TEST_CASE("FlatRecordDim")
 {
-    STATIC_REQUIRE(
-        std::is_same_v<
-            llama::FlatRecordDim<Particle>,
-            boost::mp11::mp_list<double, double, double, float, double, double, double, bool, bool, bool, bool>>);
+    STATIC_REQUIRE(std::is_same_v<
+                   llama::FlatRecordDim<Particle>,
+                   mp_list<double, double, double, float, double, double, double, bool, bool, bool, bool>>);
 }
 
 TEST_CASE("flatRecordCoord")

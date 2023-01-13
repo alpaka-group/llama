@@ -23,7 +23,7 @@ namespace
     }
 
     // Do not test all combinations as this exlodes the unit test compile and runtime.
-    using AoSMappings = boost::mp11::mp_list<
+    using AoSMappings = mp_list<
         llama::mapping::
             AoS<ArrayExtents, RecordDim, llama::mapping::FieldAlignment::Pack, llama::mapping::LinearizeArrayDimsCpp>,
         // llama::mapping::AoS<ArrayExtents, RecordDim, llama::mapping::FieldAlignment::Pack,
@@ -35,7 +35,7 @@ namespace
             llama::mapping::FieldAlignment::Align,
             llama::mapping::LinearizeArrayDimsFortran>>;
 
-    using OtherMappings = boost::mp11::mp_list<
+    using OtherMappings = mp_list<
         llama::mapping::SoA<
             ArrayExtents,
             RecordDim,
@@ -65,27 +65,26 @@ namespace
         // llama::mapping::AoSoA<ArrayExtents, RecordDim, 8, llama::mapping::LinearizeArrayDimsCpp>,
         llama::mapping::AoSoA<ArrayExtents, RecordDim, 8, llama::mapping::LinearizeArrayDimsFortran>>;
 
-    using AllMappings = boost::mp11::mp_append<AoSMappings, OtherMappings>;
+    using AllMappings = mp_append<AoSMappings, OtherMappings>;
 
-    using AllMappingsProduct = boost::mp11::mp_product<boost::mp11::mp_list, AllMappings, AllMappings>;
+    using AllMappingsProduct = mp_product<mp_list, AllMappings, AllMappings>;
 
     template<typename List>
     using BothAreSoAOrHaveDifferentLinearizer = std::bool_constant<
-        (llama::mapping::isSoA<boost::mp11::mp_first<List>> && llama::mapping::isSoA<boost::mp11::mp_second<List>>)
+        (llama::mapping::isSoA<mp_first<List>> && llama::mapping::isSoA<mp_second<List>>)
         || !std::is_same_v<
-            typename boost::mp11::mp_first<List>::LinearizeArrayDimsFunctor,
-            typename boost::mp11::mp_second<List>::LinearizeArrayDimsFunctor>>;
+            typename mp_first<List>::LinearizeArrayDimsFunctor,
+            typename mp_second<List>::LinearizeArrayDimsFunctor>>;
 
-    using AoSoAMappingsProduct = boost::mp11::mp_remove_if<
-        boost::mp11::mp_product<boost::mp11::mp_list, OtherMappings, OtherMappings>,
-        BothAreSoAOrHaveDifferentLinearizer>;
+    using AoSoAMappingsProduct
+        = mp_remove_if<mp_product<mp_list, OtherMappings, OtherMappings>, BothAreSoAOrHaveDifferentLinearizer>;
 } // namespace
 
 // NOLINTNEXTLINE(cert-err58-cpp)
 TEMPLATE_LIST_TEST_CASE("copy", "", AllMappingsProduct)
 {
-    using SrcMapping = boost::mp11::mp_first<TestType>;
-    using DstMapping = boost::mp11::mp_second<TestType>;
+    using SrcMapping = mp_first<TestType>;
+    using DstMapping = mp_second<TestType>;
     testCopy<SrcMapping, DstMapping>([](const auto& srcView, auto& dstView) { llama::copy(srcView, dstView); });
 }
 
@@ -98,8 +97,8 @@ TEMPLATE_LIST_TEST_CASE("blobMemcpy", "", AllMappings)
 // NOLINTNEXTLINE(cert-err58-cpp)
 TEMPLATE_LIST_TEST_CASE("fieldWiseCopy", "", AllMappingsProduct)
 {
-    using SrcMapping = boost::mp11::mp_first<TestType>;
-    using DstMapping = boost::mp11::mp_second<TestType>;
+    using SrcMapping = mp_first<TestType>;
+    using DstMapping = mp_second<TestType>;
     testCopy<SrcMapping, DstMapping>([](const auto& srcView, auto& dstView)
                                      { llama::fieldWiseCopy(srcView, dstView); });
 }
@@ -107,8 +106,8 @@ TEMPLATE_LIST_TEST_CASE("fieldWiseCopy", "", AllMappingsProduct)
 // NOLINTNEXTLINE(cert-err58-cpp)
 TEMPLATE_LIST_TEST_CASE("aosoaCommonBlockCopy.readOpt", "", AoSoAMappingsProduct)
 {
-    using SrcMapping = boost::mp11::mp_first<TestType>;
-    using DstMapping = boost::mp11::mp_second<TestType>;
+    using SrcMapping = mp_first<TestType>;
+    using DstMapping = mp_second<TestType>;
     testCopy<SrcMapping, DstMapping>([](const auto& srcView, auto& dstView)
                                      { llama::aosoaCommonBlockCopy(srcView, dstView, true); });
 }
@@ -116,8 +115,8 @@ TEMPLATE_LIST_TEST_CASE("aosoaCommonBlockCopy.readOpt", "", AoSoAMappingsProduct
 // NOLINTNEXTLINE(cert-err58-cpp)
 TEMPLATE_LIST_TEST_CASE("aosoaCommonBlockCopy.writeOpt", "", AoSoAMappingsProduct)
 {
-    using SrcMapping = boost::mp11::mp_first<TestType>;
-    using DstMapping = boost::mp11::mp_second<TestType>;
+    using SrcMapping = mp_first<TestType>;
+    using DstMapping = mp_second<TestType>;
     testCopy<SrcMapping, DstMapping>([](const auto& srcView, auto& dstView)
                                      { llama::aosoaCommonBlockCopy(srcView, dstView, false); });
 }

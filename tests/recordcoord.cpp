@@ -7,9 +7,8 @@
 
 TEST_CASE("RecordCoord.List")
 {
-    STATIC_REQUIRE(std::is_same_v<typename llama::RecordCoord<>::List, boost::mp11::mp_list_c<std::size_t>>);
-    STATIC_REQUIRE(
-        std::is_same_v<typename llama::RecordCoord<1, 2, 3>::List, boost::mp11::mp_list_c<std::size_t, 1, 2, 3>>);
+    STATIC_REQUIRE(std::is_same_v<typename llama::RecordCoord<>::List, mp_list_c<std::size_t>>);
+    STATIC_REQUIRE(std::is_same_v<typename llama::RecordCoord<1, 2, 3>::List, mp_list_c<std::size_t, 1, 2, 3>>);
 }
 
 TEST_CASE("RecordCoord.front")

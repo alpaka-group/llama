@@ -100,8 +100,8 @@ TEST_CASE("view.non-memory-owning")
             CHECK(v <= storage.get() + blobSize);
         }
     };
-    test(boost::mp11::mp_identity<std::byte>{});
-    test(boost::mp11::mp_identity<const std::byte>{});
+    test(mp_identity<std::byte>{});
+    test(mp_identity<const std::byte>{});
 }
 
 TEST_CASE("view.subscript")
@@ -276,7 +276,7 @@ TEST_CASE("view.indexing")
     auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{16, 16}, Particle{}});
     view(0u, 0u)(tag::Mass{}) = 42.0f;
 
-    using integrals = boost::mp11::mp_list<
+    using integrals = mp_list<
         char,
         unsigned char,
         signed char,
@@ -287,10 +287,10 @@ TEST_CASE("view.indexing")
         long, // NOLINT(google-runtime-int)
         unsigned long>; // NOLINT(google-runtime-int)
 
-    boost::mp11::mp_for_each<integrals>(
+    mp_for_each<integrals>(
         [&](auto i)
         {
-            boost::mp11::mp_for_each<integrals>(
+            mp_for_each<integrals>(
                 [&](auto j)
                 {
                     const float& w = view(i, j)(tag::Mass{});
@@ -299,10 +299,10 @@ TEST_CASE("view.indexing")
         });
 
     llama::SubView subView{view, {0, 0}};
-    boost::mp11::mp_for_each<integrals>(
+    mp_for_each<integrals>(
         [&](auto i)
         {
-            boost::mp11::mp_for_each<integrals>(
+            mp_for_each<integrals>(
                 [&](auto j)
                 {
                     const float& w = subView(i, j)(tag::Mass{});

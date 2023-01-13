@@ -37,9 +37,7 @@ TEST_CASE("mapping.ByteSplit.ChangeType.SoA")
     using Mapping = llama::mapping::Bytesplit<
         llama::ArrayExtentsDynamic<std::size_t, 1>,
         Vec3I,
-        llama::mapping::BindChangeType<
-            llama::mapping::BindSoA<>::fn,
-            boost::mp11::mp_list<boost::mp11::mp_list<std::byte, unsigned char>>>::fn>;
+        llama::mapping::BindChangeType<llama::mapping::BindSoA<>::fn, mp_list<mp_list<std::byte, unsigned char>>>::fn>;
 
     STATIC_REQUIRE(std::is_same_v<Mapping::RecordDim, Vec3I>);
     STATIC_REQUIRE(std::is_same_v<

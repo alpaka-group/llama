@@ -291,7 +291,7 @@ TEST_CASE("dump.ParticleUnaligned.Split.Multilist.SoA.One")
     dump(llama::mapping::Split<
          ArrayExtents,
          Particle,
-         boost::mp11::mp_list<llama::RecordCoord<0>, llama::RecordCoord<2>>,
+         mp_list<llama::RecordCoord<0>, llama::RecordCoord<2>>,
          llama::mapping::BindSoA<>::fn,
          llama::mapping::AlignedOne,
          true>{extents});

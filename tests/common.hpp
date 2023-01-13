@@ -12,9 +12,12 @@
 #include <string>
 #include <typeinfo>
 
+// make boost::mp11 directly available in all testing code
+using namespace boost::mp11; // NOLINT(google-global-names-in-headers)
+
 // NOLINTNEXTLINE(google-runtime-int)
-using SizeTypes = boost::mp11::mp_list<int, unsigned, long, unsigned long, long long, unsigned long long>;
-static_assert(boost::mp11::mp_contains<SizeTypes, std::size_t>::value);
+using SizeTypes = mp_list<int, unsigned, long, unsigned long, long long, unsigned long long>;
+static_assert(mp_contains<SizeTypes, std::size_t>::value);
 
 // clang-format off
 namespace tag
@@ -195,7 +198,7 @@ struct ModulusMapping : TArrayExtents
     using ArrayExtents = TArrayExtents;
     using ArrayIndex = typename ArrayExtents::Index;
     using RecordDim = TRecordDim;
-    static constexpr std::size_t blobCount = boost::mp11::mp_size<llama::FlatRecordDim<RecordDim>>::value;
+    static constexpr std::size_t blobCount = mp_size<llama::FlatRecordDim<RecordDim>>::value;
 
     LLAMA_FN_HOST_ACC_INLINE
     constexpr explicit ModulusMapping(ArrayExtents extents, RecordDim = {}) : ArrayExtents(extents)
