@@ -55,6 +55,10 @@ var namespacellama_1_1mapping =
       [ "Pack", "namespacellama_1_1mapping.html#aeead2d9c8929b8c0aff18aad054a0710a4492081ca02b059f9e8af4ddaf0f7292", null ],
       [ "Align", "namespacellama_1_1mapping.html#aeead2d9c8929b8c0aff18aad054a0710ad12fbc9a2ba3b0b91a4190959b4c966b", null ]
     ] ],
+    [ "SignBit", "namespacellama_1_1mapping.html#a839eb914ca2bc41f5db9ca6e016b18f9", [
+      [ "Keep", "namespacellama_1_1mapping.html#a839eb914ca2bc41f5db9ca6e016b18f9a02bce93bff905887ad2233110bf9c49e", null ],
+      [ "Discard", "namespacellama_1_1mapping.html#a839eb914ca2bc41f5db9ca6e016b18f9ad94b42030b9785fd754d5c1754961269", null ]
+    ] ],
     [ "SubArrayAlignment", "namespacellama_1_1mapping.html#abf047d4798871c30b501074a70374086", [
       [ "Pack", "namespacellama_1_1mapping.html#abf047d4798871c30b501074a70374086a4492081ca02b059f9e8af4ddaf0f7292", null ],
       [ "Align", "namespacellama_1_1mapping.html#abf047d4798871c30b501074a70374086ad12fbc9a2ba3b0b91a4190959b4c966b", null ]
@@ -69,7 +73,7 @@ var namespacellama_1_1mapping =
     [ "isBitPackedFloatSoA", "namespacellama_1_1mapping.html#af9c9d24fc8ce05a939c4bdb3ca8ae133", null ],
     [ "isBitPackedFloatSoA< BitPackedFloatSoA< Ts... > >", "namespacellama_1_1mapping.html#a89403fec542ad934c779be84c857e970", null ],
     [ "isBitPackedIntSoA", "namespacellama_1_1mapping.html#a6663b77c0af63f5b4ac7d7d1ca0eaf9e", null ],
-    [ "isBitPackedIntSoA< BitPackedIntSoA< Ts... > >", "namespacellama_1_1mapping.html#aac4694ed01d9ac98b71fb296eacbe1f3", null ],
+    [ "isBitPackedIntSoA< BitPackedIntSoA< ArrayExtents, RecordDim, Bits, LinearizeArrayDimsFunctor, StoredIntegral, SignBit > >", "namespacellama_1_1mapping.html#a10b4d4773203b964709e70b26075a080", null ],
     [ "isBytesplit", "namespacellama_1_1mapping.html#a3e1dc6fefae9503d7e22ed80ea689098", null ],
     [ "isBytesplit< Bytesplit< TArrayExtents, TRecordDim, InnerMapping > >", "namespacellama_1_1mapping.html#a660e6891f37e1339cf157ea1fe8f4b86", null ],
     [ "isByteswap", "namespacellama_1_1mapping.html#af3bf715d9af3ff57725630f67437007b", null ],

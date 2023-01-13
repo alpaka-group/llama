@@ -1,5 +1,11 @@
 var NAVTREEINDEX4 =
 {
+"structllama_1_1RecordRef.html#a67adea4a6bb0440a9c3fe3287f897e95":[2,0,1,23,44],
+"structllama_1_1RecordRef.html#a6ae7838c73c7b3ecef0926ac33126584":[2,0,1,23,6],
+"structllama_1_1RecordRef.html#a6e3f77a18819a49ab694345faffab318":[2,0,1,23,25],
+"structllama_1_1RecordRef.html#a72a33b30f3a6b9484e4d68f85aa2f24b":[2,0,1,23,17],
+"structllama_1_1RecordRef.html#a7442df4e1f6171629c7fc484a7fcaaac":[2,0,1,23,7],
+"structllama_1_1RecordRef.html#a77847e3b3e62b78dd42938b079e5e4c7":[2,0,1,23,19],
 "structllama_1_1RecordRef.html#a8a7f083b4a3f84e6adba206117bb5979":[2,0,1,23,40],
 "structllama_1_1RecordRef.html#a9a7f0b8d765f985f5d0c287574339abe":[2,0,1,23,29],
 "structllama_1_1RecordRef.html#a9bc0da67e993fb64667e84e9a4efd36c":[2,0,1,23,21],
@@ -243,11 +249,5 @@ var NAVTREEINDEX4 =
 "structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoorb006549913676b1d5139a1b53818a5b4.html":[2,0,1,2,16],
 "structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoorfe79fdbf9645e3871343e16a1c302dbb.html":[2,0,1,2,18],
 "structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoorfe79fdbf9645e3871343e16a1c302dbb.html#a81ed3a25433318d1117b1d595f3eb3ac":[2,0,1,2,18,0],
-"structllama_1_1internal_1_1GetTagImpl.html":[2,0,1,2,9],
-"structllama_1_1internal_1_1GetTagImpl.html#a2d8b0d388554046b6b9ff99337212b39":[2,0,1,2,9,0],
-"structllama_1_1internal_1_1GetTagImpl_3_01RecordDim_00_01RecordCoord_3_4_01_4.html":[2,0,1,2,10],
-"structllama_1_1internal_1_1GetTagImpl_3_01RecordDim_00_01RecordCoord_3_4_01_4.html#a650a81512a8126a08af236327452e5d8":[2,0,1,2,10,0],
-"structllama_1_1internal_1_1GetTagsImpl.html":[2,0,1,2,5],
-"structllama_1_1internal_1_1GetTagsImpl_3_01ChildType_0fCount_0e_00_01RecordCoord_3_01FirstCoord_00_01Coords_8_8_8_01_4_01_4.html":[2,0,1,2,7],
-"structllama_1_1internal_1_1GetTagsImpl_3_01ChildType_0fCount_0e_00_01RecordCoord_3_01FirstCoord_00_01Coords_8_8_8_01_4_01_4.html#a29933e2fc0b4e02b4c7eff74ccf4d355":[2,0,1,2,7,1]
+"structllama_1_1internal_1_1GetTagImpl.html":[2,0,1,2,9]
 };

@@ -5,12 +5,13 @@ var searchData=
   ['default_164',['Default',['../structllama_1_1accessor_1_1Default.html',1,'llama::accessor']]],
   ['dependentfalse_165',['dependentFalse',['../namespacellama_1_1internal.html#a99f936c1db4c84570feff6ea76a4934a',1,'llama::internal']]],
   ['difference_5ftype_166',['difference_type',['../structllama_1_1ArrayIndexIterator.html#afd99e3fda129714e52502e5ae3ac8bdd',1,'llama::ArrayIndexIterator::difference_type()'],['../structllama_1_1Iterator.html#a1c4827ad584ac0c5cd8eadd3465adb33',1,'llama::Iterator::difference_type()']]],
-  ['divceil_167',['divCeil',['../namespacellama.html#a516c8260631ec1b61a52f0e56dc58ac7',1,'llama']]],
-  ['divideassign_168',['DivideAssign',['../structllama_1_1internal_1_1DivideAssign.html',1,'llama::internal']]],
-  ['divroundup_169',['divRoundUp',['../namespacellama_1_1internal.html#a158338076284b27d9f1875797789bd59',1,'llama::internal']]],
-  ['dot_170',['dot',['../namespacellama.html#a672915c49821a718f5dfa5d4540c4192',1,'llama']]],
-  ['dummy_171',['dummy',['../structllama_1_1internal_1_1TransformLeavesWithCoordImpl_3_01RecordCoord_3_01Is_8_8_8_01_4_00_01C1fa9eea95bd347b217962f0d40f323c8.html#a90604f1217d9acf3b7a5afd329893f0c',1,'llama::internal::TransformLeavesWithCoordImpl&lt; RecordCoord&lt; Is... &gt;, Child[N], TypeFunctor &gt;']]],
-  ['dumpmapping_2ehpp_172',['DumpMapping.hpp',['../DumpMapping_8hpp.html',1,'']]],
-  ['dyn_173',['dyn',['../namespacellama.html#a1f5816e83615dc84a55b3c2e6f2a0237',1,'llama']]],
-  ['dyn_174',['Dyn',['../structllama_1_1internal_1_1Dyn.html',1,'llama::internal']]]
+  ['discard_167',['Discard',['../namespacellama_1_1mapping.html#a839eb914ca2bc41f5db9ca6e016b18f9ad94b42030b9785fd754d5c1754961269',1,'llama::mapping']]],
+  ['divceil_168',['divCeil',['../namespacellama.html#a516c8260631ec1b61a52f0e56dc58ac7',1,'llama']]],
+  ['divideassign_169',['DivideAssign',['../structllama_1_1internal_1_1DivideAssign.html',1,'llama::internal']]],
+  ['divroundup_170',['divRoundUp',['../namespacellama_1_1internal.html#a158338076284b27d9f1875797789bd59',1,'llama::internal']]],
+  ['dot_171',['dot',['../namespacellama.html#a672915c49821a718f5dfa5d4540c4192',1,'llama']]],
+  ['dummy_172',['dummy',['../structllama_1_1internal_1_1TransformLeavesWithCoordImpl_3_01RecordCoord_3_01Is_8_8_8_01_4_00_01C1fa9eea95bd347b217962f0d40f323c8.html#a90604f1217d9acf3b7a5afd329893f0c',1,'llama::internal::TransformLeavesWithCoordImpl&lt; RecordCoord&lt; Is... &gt;, Child[N], TypeFunctor &gt;']]],
+  ['dumpmapping_2ehpp_173',['DumpMapping.hpp',['../DumpMapping_8hpp.html',1,'']]],
+  ['dyn_174',['dyn',['../namespacellama.html#a1f5816e83615dc84a55b3c2e6f2a0237',1,'llama']]],
+  ['dyn_175',['Dyn',['../structllama_1_1internal_1_1Dyn.html',1,'llama::internal']]]
 ];

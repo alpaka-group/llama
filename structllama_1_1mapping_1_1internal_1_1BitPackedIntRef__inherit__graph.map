@@ -1,5 +1,5 @@
-<map id="llama::mapping::internal::BitPackedIntRef&lt; Integral, StoredIntegralCV, VHBits, SizeType &gt;" name="llama::mapping::internal::BitPackedIntRef&lt; Integral, StoredIntegralCV, VHBits, SizeType &gt;">
-<area shape="rect" id="node1" title=" " alt="" coords="261,21,463,91"/>
-<area shape="rect" id="node2" title=" " alt="" coords="76,5,143,32"/>
-<area shape="rect" id="node3" href="$structllama_1_1ProxyRefOpMixin.html" title=" " alt="" coords="5,57,213,127"/>
+<map id="llama::mapping::internal::BitPackedIntRef&lt; Integral, StoredIntegralCV, VHBits, SizeType, SignBit &gt;" name="llama::mapping::internal::BitPackedIntRef&lt; Integral, StoredIntegralCV, VHBits, SizeType, SignBit &gt;">
+<area shape="rect" id="node1" title=" " alt="" coords="279,21,480,91"/>
+<area shape="rect" id="node2" title=" " alt="" coords="85,5,151,32"/>
+<area shape="rect" id="node3" href="$structllama_1_1ProxyRefOpMixin.html" title=" " alt="" coords="5,57,231,127"/>
 </map>

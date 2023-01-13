@@ -217,6 +217,13 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
+<tr class="memitem:a839eb914ca2bc41f5db9ca6e016b18f9"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a839eb914ca2bc41f5db9ca6e016b18f9">SignBit</a> { <br />
+&#160;&#160;<a class="el" href="namespacellama_1_1mapping.html#a839eb914ca2bc41f5db9ca6e016b18f9a02bce93bff905887ad2233110bf9c49e">Keep</a>
+, <br />
+&#160;&#160;<a class="el" href="namespacellama_1_1mapping.html#a839eb914ca2bc41f5db9ca6e016b18f9ad94b42030b9785fd754d5c1754961269">Discard</a>
+<br />
+ }</td></tr>
+<tr class="separator:a839eb914ca2bc41f5db9ca6e016b18f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeead2d9c8929b8c0aff18aad054a0710"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#aeead2d9c8929b8c0aff18aad054a0710">FieldAlignment</a> { <br />
 &#160;&#160;<a class="el" href="namespacellama_1_1mapping.html#aeead2d9c8929b8c0aff18aad054a0710a4492081ca02b059f9e8af4ddaf0f7292">Pack</a>
 , <br />
@@ -277,9 +284,9 @@ Variables</h2></td></tr>
 <tr class="memitem:a6663b77c0af63f5b4ac7d7d1ca0eaf9e"><td class="memTemplParams" colspan="2">template&lt;typename Mapping &gt; </td></tr>
 <tr class="memitem:a6663b77c0af63f5b4ac7d7d1ca0eaf9e"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a6663b77c0af63f5b4ac7d7d1ca0eaf9e">isBitPackedIntSoA</a> = false</td></tr>
 <tr class="separator:a6663b77c0af63f5b4ac7d7d1ca0eaf9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac4694ed01d9ac98b71fb296eacbe1f3"><td class="memTemplParams" colspan="2">template&lt;typename... Ts&gt; </td></tr>
-<tr class="memitem:aac4694ed01d9ac98b71fb296eacbe1f3"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#aac4694ed01d9ac98b71fb296eacbe1f3">isBitPackedIntSoA&lt; BitPackedIntSoA&lt; Ts... &gt; &gt;</a> = true</td></tr>
-<tr class="separator:aac4694ed01d9ac98b71fb296eacbe1f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10b4d4773203b964709e70b26075a080"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim , typename Bits , typename LinearizeArrayDimsFunctor , typename StoredIntegral , SignBit SignBit&gt; </td></tr>
+<tr class="memitem:a10b4d4773203b964709e70b26075a080"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a10b4d4773203b964709e70b26075a080">isBitPackedIntSoA&lt; BitPackedIntSoA&lt; ArrayExtents, RecordDim, Bits, LinearizeArrayDimsFunctor, StoredIntegral, SignBit &gt; &gt;</a> = true</td></tr>
+<tr class="separator:a10b4d4773203b964709e70b26075a080"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3e1dc6fefae9503d7e22ed80ea689098"><td class="memTemplParams" colspan="2">template&lt;typename Mapping &gt; </td></tr>
 <tr class="memitem:a3e1dc6fefae9503d7e22ed80ea689098"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a3e1dc6fefae9503d7e22ed80ea689098">isBytesplit</a> = false</td></tr>
 <tr class="separator:a3e1dc6fefae9503d7e22ed80ea689098"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -636,6 +643,34 @@ template&lt;typename ArrayExtents , typename RecordDim , typename LinearizeArray
 
 </div>
 </div>
+<a id="a839eb914ca2bc41f5db9ca6e016b18f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a839eb914ca2bc41f5db9ca6e016b18f9">&#9670;&nbsp;</a></span>SignBit</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespacellama_1_1mapping.html#a839eb914ca2bc41f5db9ca6e016b18f9">llama::mapping::SignBit</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a839eb914ca2bc41f5db9ca6e016b18f9a02bce93bff905887ad2233110bf9c49e"></a>Keep&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a839eb914ca2bc41f5db9ca6e016b18f9ad94b42030b9785fd754d5c1754961269"></a>Discard&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00014">14</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
+
+</div>
+</div>
 <a id="abf047d4798871c30b501074a70374086"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abf047d4798871c30b501074a70374086">&#9670;&nbsp;</a></span>SubArrayAlignment</h2>
 
@@ -872,7 +907,7 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00293">293</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00294">294</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -898,7 +933,7 @@ template&lt;typename... Ts&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00296">296</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00297">297</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -924,23 +959,23 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00330">330</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00343">343</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
 
 </div>
 </div>
-<a id="aac4694ed01d9ac98b71fb296eacbe1f3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aac4694ed01d9ac98b71fb296eacbe1f3">&#9670;&nbsp;</a></span>isBitPackedIntSoA&lt; BitPackedIntSoA&lt; Ts... &gt; &gt;</h2>
+<a id="a10b4d4773203b964709e70b26075a080"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a10b4d4773203b964709e70b26075a080">&#9670;&nbsp;</a></span>isBitPackedIntSoA&lt; BitPackedIntSoA&lt; ArrayExtents, RecordDim, Bits, LinearizeArrayDimsFunctor, StoredIntegral, SignBit &gt; &gt;</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename... Ts&gt; </div>
+template&lt;typename ArrayExtents , typename RecordDim , typename Bits , typename LinearizeArrayDimsFunctor , typename StoredIntegral , SignBit SignBit&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr bool <a class="el" href="namespacellama_1_1mapping.html#a6663b77c0af63f5b4ac7d7d1ca0eaf9e">llama::mapping::isBitPackedIntSoA</a>&lt; <a class="el" href="structllama_1_1mapping_1_1BitPackedIntSoA.html">BitPackedIntSoA</a>&lt; Ts... &gt; &gt; = true</td>
+          <td class="memname">constexpr bool <a class="el" href="namespacellama_1_1mapping.html#a6663b77c0af63f5b4ac7d7d1ca0eaf9e">llama::mapping::isBitPackedIntSoA</a>&lt; <a class="el" href="structllama_1_1mapping_1_1BitPackedIntSoA.html">BitPackedIntSoA</a>&lt; <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, Bits, LinearizeArrayDimsFunctor, StoredIntegral, <a class="el" href="namespacellama_1_1mapping.html#a839eb914ca2bc41f5db9ca6e016b18f9">SignBit</a> &gt; &gt; = true</td>
         </tr>
       </table>
   </td>
@@ -950,7 +985,7 @@ template&lt;typename... Ts&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00333">333</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00352">352</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -1572,7 +1607,7 @@ template&lt;typename RecordDim , std::size_t VectorRegisterBits&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li>
-    <li class="footer">Generated on Fri Jan 13 2023 18:28:17 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Fri Jan 13 2023 19:49:57 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
