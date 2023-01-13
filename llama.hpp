@@ -694,6 +694,9 @@ namespace llama
 
 	namespace llama
 	{
+	    // make mp11 directly available in the llama namespace
+	    using namespace boost::mp11;
+
 	    namespace internal
 	    {
 	        template<typename FromList, template<auto...> class ToList>
@@ -714,9 +717,9 @@ namespace llama
 	            using type = E;
 	        };
 	        template<std::size_t I, typename... Args>
-	        struct ReplacePlaceholdersImpl<boost::mp11::mp_arg<I>, Args...>
+	        struct ReplacePlaceholdersImpl<mp_arg<I>, Args...>
 	        {
-	            using type = boost::mp11::mp_at_c<boost::mp11::mp_list<Args...>, I>;
+	            using type = mp_at_c<mp_list<Args...>, I>;
 	        };
 
 	        template<template<typename...> typename E, typename... Ts, typename... Args>
@@ -863,7 +866,6 @@ namespace llama
         template<std::size_t I>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto get() const -> value_type
         {
-            using namespace boost::mp11;
             using TypeList = mp_list_c<T, Sizes...>;
             constexpr auto extent = mp_at_c<TypeList, I>::value;
             if constexpr(extent != dyn)
@@ -875,7 +877,7 @@ namespace llama
 
         LLAMA_FN_HOST_ACC_INLINE constexpr auto operator[](T i) const -> value_type
         {
-            return boost::mp11::mp_with_index<rank>(i, [&](auto ic) { return get<decltype(ic)::value>(); });
+            return mp_with_index<rank>(i, [&](auto ic) { return get<decltype(ic)::value>(); });
         }
 
     private:
@@ -1068,18 +1070,18 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(
 		    template<std::size_t... Coords>
 		    struct RecordCoord
 		    {
-		        /// The list of integral coordinates as `boost::mp11::mp_list`.
-		        using List = boost::mp11::mp_list_c<std::size_t, Coords...>;
+		        /// The list of integral coordinates as `mp_list`.
+		        using List = mp_list_c<std::size_t, Coords...>;
 
-		        static constexpr std::size_t front = boost::mp11::mp_front<List>::value;
-		        static constexpr std::size_t back = boost::mp11::mp_back<List>::value;
+		        static constexpr std::size_t front = mp_front<List>::value;
+		        static constexpr std::size_t back = mp_back<List>::value;
 		        static constexpr std::size_t size = sizeof...(Coords);
 		    };
 
 		    template<>
 		    struct RecordCoord<>
 		    {
-		        using List = boost::mp11::mp_list_c<std::size_t>;
+		        using List = mp_list_c<std::size_t>;
 
 		        static constexpr std::size_t size = 0;
 		    };
@@ -1154,7 +1156,7 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(
 
 		    /// Concatenate a set of \ref RecordCoord%s.
 		    template<typename... RecordCoords>
-		    using Cat = RecordCoordFromList<boost::mp11::mp_append<typename RecordCoords::List...>>;
+		    using Cat = RecordCoordFromList<mp_append<typename RecordCoords::List...>>;
 
 		    /// Concatenate a set of \ref RecordCoord%s instances.
 		    template<typename... RecordCoords>
@@ -1165,7 +1167,7 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(
 
 		    /// RecordCoord without first coordinate component.
 		    template<typename RecordCoord>
-		    using PopFront = RecordCoordFromList<boost::mp11::mp_pop_front<typename RecordCoord::List>>;
+		    using PopFront = RecordCoordFromList<mp_pop_front<typename RecordCoord::List>>;
 
 		    namespace internal
 		    {
@@ -1256,7 +1258,7 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(
 	#if __cpp_concepts
 	        // Cannot use a fold expression here, because clang/nvcc/icx cannot handle more than 256 arguments.
 	        // If you get an error here, then you passed a type which is not llama::Field as argument to Record
-	        requires(boost::mp11::mp_all<boost::mp11::mp_bool<isField<Fields>>...>::value)
+	        requires(mp_all<mp_bool<isField<Fields>>...>::value)
 	#endif
 	    struct Record
 	    {
@@ -1291,11 +1293,11 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(
 
 	    /// Get the tag from a \ref Field.
 	    template<typename Field>
-	    using GetFieldTag = boost::mp11::mp_first<Field>;
+	    using GetFieldTag = mp_first<Field>;
 
 	    /// Get the type from a \ref Field.
 	    template<typename Field>
-	    using GetFieldType = boost::mp11::mp_second<Field>;
+	    using GetFieldType = mp_second<Field>;
 
 	    template<typename T>
 	    inline constexpr auto isRecord = false;
@@ -1311,25 +1313,23 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(
 	        template<typename... Fields, std::size_t FirstCoord, std::size_t... Coords>
 	        struct GetTagsImpl<Record<Fields...>, RecordCoord<FirstCoord, Coords...>>
 	        {
-	            using Field = boost::mp11::mp_at_c<boost::mp11::mp_list<Fields...>, FirstCoord>;
+	            using Field = mp_at_c<mp_list<Fields...>, FirstCoord>;
 	            using ChildTag = GetFieldTag<Field>;
 	            using ChildType = GetFieldType<Field>;
-	            using type
-	                = boost::mp11::mp_push_front<typename GetTagsImpl<ChildType, RecordCoord<Coords...>>::type, ChildTag>;
+	            using type = mp_push_front<typename GetTagsImpl<ChildType, RecordCoord<Coords...>>::type, ChildTag>;
 	        };
 
 	        template<typename ChildType, std::size_t Count, std::size_t FirstCoord, std::size_t... Coords>
 	        struct GetTagsImpl<ChildType[Count], RecordCoord<FirstCoord, Coords...>>
 	        {
 	            using ChildTag = RecordCoord<FirstCoord>;
-	            using type
-	                = boost::mp11::mp_push_front<typename GetTagsImpl<ChildType, RecordCoord<Coords...>>::type, ChildTag>;
+	            using type = mp_push_front<typename GetTagsImpl<ChildType, RecordCoord<Coords...>>::type, ChildTag>;
 	        };
 
 	        template<typename T>
 	        struct GetTagsImpl<T, RecordCoord<>>
 	        {
-	            using type = boost::mp11::mp_list<>;
+	            using type = mp_list<>;
 	        };
 	    } // namespace internal
 
@@ -1343,7 +1343,7 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(
 	        template<typename RecordDim, typename RecordCoord>
 	        struct GetTagImpl
 	        {
-	            using type = boost::mp11::mp_back<GetTags<RecordDim, RecordCoord>>;
+	            using type = mp_back<GetTags<RecordDim, RecordCoord>>;
 	        };
 
 	        template<typename RecordDim>
@@ -1383,25 +1383,25 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(
 	            template<typename Field>
 	            using HasTag = std::is_same<GetFieldTag<Field>, Tag>;
 
-	            static constexpr auto value = boost::mp11::mp_find_if<FieldList, HasTag>::value;
+	            static constexpr auto value = mp_find_if<FieldList, HasTag>::value;
 	        };
 
 	        template<typename RecordDim, typename RecordCoord, typename... Tags>
 	        struct GetCoordFromTagsImpl
 	        {
-	            static_assert(boost::mp11::mp_size<RecordDim>::value != 0, "Tag combination is not valid");
+	            static_assert(mp_size<RecordDim>::value != 0, "Tag combination is not valid");
 	        };
 
 	        template<typename... Fields, std::size_t... ResultCoords, typename FirstTag, typename... Tags>
 	        struct GetCoordFromTagsImpl<Record<Fields...>, RecordCoord<ResultCoords...>, FirstTag, Tags...>
 	        {
-	            static constexpr auto tagIndex = FindFieldByTag<boost::mp11::mp_list<Fields...>, FirstTag>::value;
+	            static constexpr auto tagIndex = FindFieldByTag<mp_list<Fields...>, FirstTag>::value;
 	            static_assert(
 	                tagIndex < sizeof...(Fields),
 	                "FirstTag was not found inside this Record. Does your record dimension contain the tag you access "
 	                "with?");
 
-	            using ChildType = GetFieldType<boost::mp11::mp_at_c<Record<Fields...>, tagIndex>>;
+	            using ChildType = GetFieldType<mp_at_c<Record<Fields...>, tagIndex>>;
 
 	            using type =
 	                typename GetCoordFromTagsImpl<ChildType, RecordCoord<ResultCoords..., tagIndex>, Tags...>::type;
@@ -1431,12 +1431,12 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(
 
 	        // unpack a list of tags
 	        template<typename... Fields, typename... Tags>
-	        struct GetCoordFromTagsImpl<Record<Fields...>, RecordCoord<>, boost::mp11::mp_list<Tags...>>
+	        struct GetCoordFromTagsImpl<Record<Fields...>, RecordCoord<>, mp_list<Tags...>>
 	            : GetCoordFromTagsImpl<Record<Fields...>, RecordCoord<>, Tags...>
 	        {
 	        };
 	        template<typename ChildType, std::size_t Count, typename... Tags>
-	        struct GetCoordFromTagsImpl<ChildType[Count], RecordCoord<>, boost::mp11::mp_list<Tags...>>
+	        struct GetCoordFromTagsImpl<ChildType[Count], RecordCoord<>, mp_list<Tags...>>
 	            : GetCoordFromTagsImpl<ChildType[Count], RecordCoord<>, Tags...>
 	        {
 	        };
@@ -1457,7 +1457,7 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(
 	        template<typename... Children, std::size_t HeadCoord, std::size_t... TailCoords>
 	        struct GetTypeImpl<Record<Children...>, RecordCoord<HeadCoord, TailCoords...>>
 	        {
-	            using ChildType = GetFieldType<boost::mp11::mp_at_c<Record<Children...>, HeadCoord>>;
+	            using ChildType = GetFieldType<mp_at_c<Record<Children...>, HeadCoord>>;
 	            using type = typename GetTypeImpl<ChildType, RecordCoord<TailCoords...>>::type;
 	        };
 
@@ -1488,7 +1488,7 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(
 	        template<typename T, std::size_t... RCs>
 	        struct LeafRecordCoordsImpl<T, RecordCoord<RCs...>>
 	        {
-	            using type = boost::mp11::mp_list<RecordCoord<RCs...>>;
+	            using type = mp_list<RecordCoord<RCs...>>;
 	        };
 
 	        template<typename... Fields, std::size_t... RCs>
@@ -1497,7 +1497,7 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(
 	            template<std::size_t... Is>
 	            static auto help(std::index_sequence<Is...>)
 	            {
-	                return boost::mp11::mp_append<
+	                return mp_append<
 	                    typename LeafRecordCoordsImpl<GetFieldType<Fields>, RecordCoord<RCs..., Is>>::type...>{};
 	            }
 	            using type = decltype(help(std::make_index_sequence<sizeof...(Fields)>{}));
@@ -1509,8 +1509,7 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(
 	            template<std::size_t... Is>
 	            static auto help(std::index_sequence<Is...>)
 	            {
-	                return boost::mp11::mp_append<
-	                    typename LeafRecordCoordsImpl<Child, RecordCoord<RCs..., Is>>::type...>{};
+	                return mp_append<typename LeafRecordCoordsImpl<Child, RecordCoord<RCs..., Is>>::type...>{};
 	            }
 	            using type = decltype(help(std::make_index_sequence<N>{}));
 	        };
@@ -1565,18 +1564,18 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(
 	        template<typename T>
 	        struct FlattenRecordDimImpl
 	        {
-	            using type = boost::mp11::mp_list<T>;
+	            using type = mp_list<T>;
 	        };
 
 	        template<typename... Fields>
 	        struct FlattenRecordDimImpl<Record<Fields...>>
 	        {
-	            using type = boost::mp11::mp_append<typename FlattenRecordDimImpl<GetFieldType<Fields>>::type...>;
+	            using type = mp_append<typename FlattenRecordDimImpl<GetFieldType<Fields>>::type...>;
 	        };
 	        template<typename Child, std::size_t N>
 	        struct FlattenRecordDimImpl<Child[N]>
 	        {
-	            using type = boost::mp11::mp_repeat_c<typename FlattenRecordDimImpl<Child>::type, N>;
+	            using type = mp_repeat_c<typename FlattenRecordDimImpl<Child>::type, N>;
 	        };
 	    } // namespace internal
 
@@ -1609,7 +1608,7 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(
 	        inline constexpr std::size_t flatFieldCountBefore<
 	            I,
 	            Record<
-	                Children...>> = flatFieldCountBefore<I - 1, Record<Children...>> + flatFieldCount<GetFieldType<boost::mp11::mp_at_c<Record<Children...>, I - 1>>>;
+	                Children...>> = flatFieldCountBefore<I - 1, Record<Children...>> + flatFieldCount<GetFieldType<mp_at_c<Record<Children...>, I - 1>>>;
 	    } // namespace internal
 
 	    /// The equivalent zero based index into a flat record dimension (\ref FlatRecordDim) of the given hierarchical
@@ -1629,7 +1628,7 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(
 	                          flatFieldCountBefore<
 	                              I,
 	                              Record<
-	                                  Children...>> + flatRecordCoord<GetFieldType<boost::mp11::mp_at_c<Record<Children...>, I>>, RecordCoord<Is...>>;
+	                                  Children...>> + flatRecordCoord<GetFieldType<mp_at_c<Record<Children...>, I>>, RecordCoord<Is...>>;
 
 	    template<typename Child, std::size_t N, std::size_t I, std::size_t... Is>
 	    inline constexpr std::size_t flatRecordCoord<Child[N], RecordCoord<I, Is...>> = flatFieldCount<Child>* I
@@ -1640,8 +1639,6 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(
 	        template<typename TypeList>
 	        constexpr auto flatAlignOfImpl()
 	        {
-	            using namespace boost::mp11;
-
 	            std::size_t maxAlign = 0;
 	            mp_for_each<mp_transform<mp_identity, TypeList>>([&](auto e) constexpr {
 	                using T = typename decltype(e)::type;
@@ -1684,8 +1681,6 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(
 	        template<typename TypeList, bool Align, bool IncludeTailPadding>
 	        constexpr auto sizeOfImpl() -> std::size_t
 	        {
-	            using namespace boost::mp11;
-
 	            std::size_t size = 0;
 	            std::size_t maxAlign = 0; // NOLINT(misc-const-correctness)
 	            mp_for_each<mp_transform<mp_identity, TypeList>>([&](auto e) constexpr {
@@ -1741,9 +1736,9 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(
 	            else
 	            {
 	                std::size_t offset // NOLINT(misc-const-correctness)
-	                    = flatOffsetOf<TypeList, I - 1, Align> + sizeof(boost::mp11::mp_at_c<TypeList, I - 1>);
+	                    = flatOffsetOf<TypeList, I - 1, Align> + sizeof(mp_at_c<TypeList, I - 1>);
 	                if constexpr(Align)
-	                    offset = roundUpToMultiple(offset, alignof(boost::mp11::mp_at_c<TypeList, I>));
+	                    offset = roundUpToMultiple(offset, alignof(mp_at_c<TypeList, I>));
 	                return offset;
 	            }
 	        }
@@ -1820,9 +1815,8 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(
 	            static void f(std::index_sequence<Js...>)
 	            {
 	                static_assert(
-	                    boost::mp11::mp_same<
-	                        typename TransformLeavesWithCoordImpl<RecordCoord<Is..., Js>, Child, TypeFunctor>::type...>::
-	                        value,
+	                    mp_same<typename TransformLeavesWithCoordImpl<RecordCoord<Is..., Js>, Child, TypeFunctor>::
+	                                type...>::value,
 	                    "Leave transformations beneath an array node must return the same type");
 	            }
 	            using dummy = decltype(f(std::make_index_sequence<N>{}));
@@ -1856,16 +1850,14 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(
 	        // computing a real set union of the two tag list lists
 
 	        template<typename A, typename B>
-	        auto mergeRecordDimsImpl(boost::mp11::mp_identity<A> a, boost::mp11::mp_identity<B>)
+	        auto mergeRecordDimsImpl(mp_identity<A> a, mp_identity<B>)
 	        {
 	            static_assert(std::is_same_v<A, B>, "Cannot merge record and non-record or fields with different types");
 	            return a;
 	        }
 
 	        template<typename A, std::size_t NA, typename B, std::size_t NB>
-	        auto mergeRecordDimsImpl(
-	            [[maybe_unused]] boost::mp11::mp_identity<A[NA]> a,
-	            [[maybe_unused]] boost::mp11::mp_identity<B[NB]> b)
+	        auto mergeRecordDimsImpl([[maybe_unused]] mp_identity<A[NA]> a, [[maybe_unused]] mp_identity<B[NB]> b)
 	        {
 	            static_assert(std::is_same_v<A, B>, "Cannot merge arrays of different type");
 	            if constexpr(NA < NB)
@@ -1875,7 +1867,7 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(
 	        }
 
 	        template<typename... FieldsA>
-	        auto mergeRecordDimsImpl(boost::mp11::mp_identity<Record<FieldsA...>> a, boost::mp11::mp_identity<Record<>>)
+	        auto mergeRecordDimsImpl(mp_identity<Record<FieldsA...>> a, mp_identity<Record<>>)
 	        {
 	            return a;
 	        }
@@ -1885,11 +1877,8 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(
 	            typename FieldB,
 	            typename... FieldsB,
 	            auto Pos = FindFieldByTag<Record<FieldsA...>, GetFieldTag<FieldB>>::value>
-	        auto mergeRecordDimsImpl(
-	            boost::mp11::mp_identity<Record<FieldsA...>>,
-	            boost::mp11::mp_identity<Record<FieldB, FieldsB...>>)
+	        auto mergeRecordDimsImpl(mp_identity<Record<FieldsA...>>, mp_identity<Record<FieldB, FieldsB...>>)
 	        {
-	            using namespace boost::mp11;
 	            if constexpr(Pos == sizeof...(FieldsA))
 	            {
 	                return mergeRecordDimsImpl(
@@ -1912,9 +1901,8 @@ struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(
 
 	    /// Creates a merged record dimension, where duplicated, nested fields are unified.
 	    template<typename RecordDimA, typename RecordDimB>
-	    using MergedRecordDims = typename decltype(internal::mergeRecordDimsImpl(
-	        boost::mp11::mp_identity<RecordDimA>{},
-	        boost::mp11::mp_identity<RecordDimB>{}))::type;
+	    using MergedRecordDims =
+	        typename decltype(internal::mergeRecordDimsImpl(mp_identity<RecordDimA>{}, mp_identity<RecordDimB>{}))::type;
 
 	    /// Alias for ToT, adding `const` if FromT is const qualified.
 	    template<typename FromT, typename ToT>
@@ -2306,12 +2294,12 @@ namespace llama
 	    struct MakeIsPhysical
 	    {
 	        template<typename RC>
-	        using fn = boost::mp11::mp_bool<PhysicalField<M, RC>>;
+	        using fn = mp_bool<PhysicalField<M, RC>>;
 	    };
 
 	    template<typename M>
 	    inline constexpr bool allFieldsArePhysical
-	        = boost::mp11::mp_all_of<LeafRecordCoords<typename M::RecordDim>, MakeIsPhysical<M>::template fn>::value;
+	        = mp_all_of<LeafRecordCoords<typename M::RecordDim>, MakeIsPhysical<M>::template fn>::value;
 
 	    template <typename M>
 	    concept PhysicalMapping = Mapping<M> && allFieldsArePhysical<M>;
@@ -2341,12 +2329,12 @@ namespace llama
 	    struct MakeIsComputed
 	    {
 	        template<typename RC>
-	        using fn = boost::mp11::mp_bool<ComputedField<M, RC>>;
+	        using fn = mp_bool<ComputedField<M, RC>>;
 	    };
 
 	    template<typename M>
 	    inline constexpr bool allFieldsAreComputed
-	        = boost::mp11::mp_all_of<LeafRecordCoords<typename M::RecordDim>, MakeIsComputed<M>::template fn>::value;
+	        = mp_all_of<LeafRecordCoords<typename M::RecordDim>, MakeIsComputed<M>::template fn>::value;
 
 	    template <typename M>
 	    concept FullyComputedMapping = Mapping<M> && allFieldsAreComputed<M>;
@@ -2354,10 +2342,10 @@ namespace llama
 	    template<
 	        typename M,
 	        typename LeafCoords = LeafRecordCoords<typename M::RecordDim>,
-	        std::size_t PhysicalCount = boost::mp11::mp_count_if<LeafCoords, MakeIsPhysical<M>::template fn>::value,
-	        std::size_t ComputedCount = boost::mp11::mp_count_if<LeafCoords, MakeIsComputed<M>::template fn>::value>
+	        std::size_t PhysicalCount = mp_count_if<LeafCoords, MakeIsPhysical<M>::template fn>::value,
+	        std::size_t ComputedCount = mp_count_if<LeafCoords, MakeIsComputed<M>::template fn>::value>
 	    inline constexpr bool allFieldsArePhysicalOrComputed
-	        = (PhysicalCount + ComputedCount) >= boost::mp11::mp_size<LeafCoords>::value&& PhysicalCount > 0
+	        = (PhysicalCount + ComputedCount) >= mp_size<LeafCoords>::value&& PhysicalCount > 0
 	        && ComputedCount > 0; // == instead of >= would be better, but it's not easy to count correctly,
 	                              // because we cannot check whether the call to blobNrOrOffset()
 	                              // or compute() is actually valid
@@ -2882,7 +2870,7 @@ namespace llama::bloballoc
 	            constexpr auto size = [&]() constexpr
 	            {
 	                std::size_t s = 0;
-	                boost::mp11::mp_for_each<Tags>(
+	                mp_for_each<Tags>(
 	                    [&](auto tag)
 	                    {
 	                        if(s != 0)
@@ -2899,7 +2887,7 @@ namespace llama::bloballoc
 	            llama::Array<char, size> a{};
 	            auto w = a.begin();
 
-	            boost::mp11::mp_for_each<Tags>([&](auto tag) constexpr {
+	            mp_for_each<Tags>([&](auto tag) constexpr {
 	                if(w != a.begin())
 	                {
 	                    *w = '.';
@@ -3257,23 +3245,20 @@ namespace llama::bloballoc
 			    {
 			    private:
 			        using FlatOrigRecordDim = llama::FlatRecordDim<RecordDim>;
-			        using FlatSortedRecordDim = boost::mp11::mp_sort<FlatOrigRecordDim, Less>;
+			        using FlatSortedRecordDim = mp_sort<FlatOrigRecordDim, Less>;
 
 			        template<typename A, typename B>
-			        using LessWithIndices
-			            = Less<boost::mp11::mp_at<FlatOrigRecordDim, A>, boost::mp11::mp_at<FlatOrigRecordDim, B>>;
+			        using LessWithIndices = Less<mp_at<FlatOrigRecordDim, A>, mp_at<FlatOrigRecordDim, B>>;
 
 			        // A permutation from new FlatSortedRecordDim index to old FlatOrigRecordDim index
-			        using PermutedIndices
-			            = boost::mp11::mp_sort<boost::mp11::mp_iota<boost::mp11::mp_size<FlatOrigRecordDim>>, LessWithIndices>;
+			        using PermutedIndices = mp_sort<mp_iota<mp_size<FlatOrigRecordDim>>, LessWithIndices>;
 
 			        template<typename A, typename B>
-			        using LessInvertPermutation = std::bool_constant<(
-			            boost::mp11::mp_at<PermutedIndices, A>::value < boost::mp11::mp_at<PermutedIndices, B>::value)>;
+			        using LessInvertPermutation
+			            = std::bool_constant<(mp_at<PermutedIndices, A>::value < mp_at<PermutedIndices, B>::value)>;
 
 			        // A permutation from old FlatOrigRecordDim index to new FlatSortedRecordDim index
-			        using InversePermutedIndices = boost::mp11::
-			            mp_sort<boost::mp11::mp_iota<boost::mp11::mp_size<FlatOrigRecordDim>>, LessInvertPermutation>;
+			        using InversePermutedIndices = mp_sort<mp_iota<mp_size<FlatOrigRecordDim>>, LessInvertPermutation>;
 
 			    public:
 			        using FlatRecordDim = FlatSortedRecordDim;
@@ -3282,7 +3267,7 @@ namespace llama::bloballoc
 			        static constexpr std::size_t flatIndex = []() constexpr
 			        {
 			            constexpr auto indexBefore = flatRecordCoord<RecordDim, RecordCoord<RecordCoords...>>;
-			            constexpr auto indexAfter = boost::mp11::mp_at_c<InversePermutedIndices, indexBefore>::value;
+			            constexpr auto indexAfter = mp_at_c<InversePermutedIndices, indexBefore>::value;
 			            return indexAfter;
 			        }
 			        ();
@@ -3320,9 +3305,7 @@ namespace llama::bloballoc
 			#ifdef __CUDA_ARCH__
 			            // if you get an error here that there is no overload of atomicAdd, your CMAKE_CUDA_ARCHITECTURE might be
 			            // too low or you need to use a smaller CountType for the Trace or Heatmap mapping.
-			            if constexpr(boost::mp11::mp_contains<
-			                             boost::mp11::mp_list<int, unsigned int, unsigned long long int>,
-			                             CountType>::value)
+			            if constexpr(mp_contains<mp_list<int, unsigned int, unsigned long long int>, CountType>::value)
 			                atomicAdd(&i, CountType{1});
 			            else if constexpr(sizeof(CountType) == sizeof(unsigned int))
 			                atomicAdd(reinterpret_cast<unsigned int*>(&i), 1u);
@@ -4995,7 +4978,7 @@ namespace llama
         os << "{";
         if constexpr(std::is_array_v<RecordDim>)
         {
-            boost::mp11::mp_for_each<boost::mp11::mp_iota_c<std::extent_v<RecordDim>>>(
+            mp_for_each<mp_iota_c<std::extent_v<RecordDim>>>(
                 [&](auto ic)
                 {
                     constexpr std::size_t i = decltype(ic)::value;
@@ -5006,13 +4989,13 @@ namespace llama
         }
         else
         {
-            boost::mp11::mp_for_each<boost::mp11::mp_iota<boost::mp11::mp_size<RecordDim>>>(
+            mp_for_each<mp_iota<mp_size<RecordDim>>>(
                 [&](auto ic)
                 {
                     constexpr std::size_t i = decltype(ic)::value;
                     if(i > 0)
                         os << ", ";
-                    using Field = boost::mp11::mp_at_c<RecordDim, i>;
+                    using Field = mp_at_c<RecordDim, i>;
                     os << structName<GetFieldTag<Field>>() << ": " << vr(RecordCoord<i>{});
                 });
         }
@@ -5418,7 +5401,7 @@ struct std::
 	        using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
 	        using Flattener = FlattenRecordDimSingleBlob<TRecordDim>;
 	        inline static constexpr std::size_t blobCount
-	            = blobs == Blobs::OnePerField ? boost::mp11::mp_size<FlatRecordDim<TRecordDim>>::value : 1;
+	            = blobs == Blobs::OnePerField ? mp_size<FlatRecordDim<TRecordDim>>::value : 1;
 
 	#ifndef __NVCC__
 	        using Base::Base;
@@ -5450,7 +5433,6 @@ struct std::
 	            else if constexpr(subArrayAlignment == SubArrayAlignment::Align)
 	            {
 	                size_type size = 0;
-	                using namespace boost::mp11;
 	                using FRD = typename Flattener::FlatRecordDim;
 	                mp_for_each<mp_transform<mp_identity, FRD>>(
 	                    [&](auto ti)
@@ -5470,7 +5452,6 @@ struct std::
 	    private:
 	        LLAMA_FN_HOST_ACC_INLINE static constexpr auto computeSubArrayOffsets()
 	        {
-	            using namespace boost::mp11;
 	            using FRD = typename Flattener::FlatRecordDim;
 	            constexpr auto staticFlatSize = LinearizeArrayDimsFunctor{}.size(TArrayExtents{});
 	            constexpr auto subArrays = mp_size<FRD>::value;
@@ -5495,7 +5476,6 @@ struct std::
 	            typename Base::ArrayIndex ai,
 	            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset<size_type>
 	        {
-	            using namespace boost::mp11;
 	            const auto elementOffset = LinearizeArrayDimsFunctor{}(ai, Base::extents())
 	                * static_cast<size_type>(sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>));
 	            if constexpr(blobs == Blobs::OnePerField)
@@ -5652,8 +5632,8 @@ namespace llama
     constexpr auto chooseSimdLanes(BinaryReductionFunction reduce) -> std::size_t
     {
         using FRD = FlatRecordDim<RecordDim>;
-        std::size_t lanes = simdLanes<MakeSimd<boost::mp11::mp_first<FRD>>>;
-        boost::mp11::mp_for_each<boost::mp11::mp_transform<std::add_pointer_t, boost::mp11::mp_drop_c<FRD, 1>>>(
+        std::size_t lanes = simdLanes<MakeSimd<mp_first<FRD>>>;
+        mp_for_each<mp_transform<std::add_pointer_t, mp_drop_c<FRD, 1>>>(
             [&](auto* t)
             {
                 using T = std::remove_reference_t<decltype(*t)>;
@@ -5725,22 +5705,14 @@ namespace llama
     template<typename T, std::size_t N, template<typename, /* std::integral */ auto> typename MakeSizedSimd>
     using SimdN = typename std::conditional_t<
         isRecordDim<T>,
-        std::conditional_t<
-            N == 1,
-            boost::mp11::mp_identity<One<T>>,
-            boost::mp11::mp_identity<One<SimdizeN<T, N, MakeSizedSimd>>>>,
-        std::conditional_t<
-            N == 1,
-            boost::mp11::mp_identity<T>,
-            boost::mp11::mp_identity<SimdizeN<T, N, MakeSizedSimd>>>>::type;
+        std::conditional_t<N == 1, mp_identity<One<T>>, mp_identity<One<SimdizeN<T, N, MakeSizedSimd>>>>,
+        std::conditional_t<N == 1, mp_identity<T>, mp_identity<SimdizeN<T, N, MakeSizedSimd>>>>::type;
 
     /// Creates a SIMD version of the given type. Of T is a record dimension, creates a \ref One where each field is a
     /// SIMD type of the original field type.
     template<typename T, template<typename> typename MakeSimd>
-    using Simd = typename std::conditional_t<
-        isRecordDim<T>,
-        boost::mp11::mp_identity<One<Simdize<T, MakeSimd>>>,
-        boost::mp11::mp_identity<Simdize<T, MakeSimd>>>::type;
+    using Simd = typename std::
+        conditional_t<isRecordDim<T>, mp_identity<One<Simdize<T, MakeSimd>>>, mp_identity<Simdize<T, MakeSimd>>>::type;
 
     namespace internal
     {
@@ -5758,8 +5730,8 @@ namespace llama
     inline constexpr std::size_t simdLanes<Simd, std::enable_if_t<isRecordRef<Simd>>> = []
     {
         using FRD = FlatRecordDim<typename Simd::AccessibleRecordDim>;
-        using FirstFieldType = boost::mp11::mp_first<FRD>;
-        static_assert(boost::mp11::mp_all_of_q<FRD, internal::SizeEqualTo<simdLanes<FirstFieldType>>>::value);
+        using FirstFieldType = mp_first<FRD>;
+        static_assert(mp_all_of_q<FRD, internal::SizeEqualTo<simdLanes<FirstFieldType>>>::value);
         return simdLanes<FirstFieldType>;
     }();
 
@@ -6133,10 +6105,10 @@ namespace llama::mapping
         };
 
         template<typename A, typename B>
-        using HasLargerSize = boost::mp11::mp_bool<sizeof(A) < sizeof(B)>;
+        using HasLargerSize = mp_bool<sizeof(A) < sizeof(B)>;
 
         template<typename RecordDim>
-        using LargestIntegral = boost::mp11::mp_max_element<FlatRecordDim<RecordDim>, HasLargerSize>;
+        using LargestIntegral = mp_max_element<FlatRecordDim<RecordDim>, HasLargerSize>;
 
         template<typename RecordDim>
         using StoredUnsignedFor = std::
@@ -6163,7 +6135,7 @@ namespace llama::mapping
     {
         using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
         using StoredIntegral = TStoredIntegral;
-        static constexpr std::size_t blobCount = boost::mp11::mp_size<FlatRecordDim<TRecordDim>>::value;
+        static constexpr std::size_t blobCount = mp_size<FlatRecordDim<TRecordDim>>::value;
 
         static_assert(std::is_integral_v<StoredIntegral>);
         static_assert(std::is_unsigned_v<StoredIntegral>);
@@ -6177,17 +6149,17 @@ namespace llama::mapping
         using size_type = typename TArrayExtents::value_type;
 
         template<typename T>
-        using IsAllowedFieldType = boost::mp11::mp_or<std::is_integral<T>, std::is_enum<T>>;
+        using IsAllowedFieldType = mp_or<std::is_integral<T>, std::is_enum<T>>;
 
         static_assert(
-            boost::mp11::mp_all_of<FlatRecordDim<TRecordDim>, IsAllowedFieldType>::value,
+            mp_all_of<FlatRecordDim<TRecordDim>, IsAllowedFieldType>::value,
             "All record dimension field types must be integral");
 
         template<typename T>
-        using IsFieldTypeSmallerOrEqualStorageIntegral = boost::mp11::mp_bool<sizeof(T) <= sizeof(StoredIntegral)>;
+        using IsFieldTypeSmallerOrEqualStorageIntegral = mp_bool<sizeof(T) <= sizeof(StoredIntegral)>;
 
         static_assert(
-            boost::mp11::mp_all_of<FlatRecordDim<TRecordDim>, IsFieldTypeSmallerOrEqualStorageIntegral>::value,
+            mp_all_of<FlatRecordDim<TRecordDim>, IsFieldTypeSmallerOrEqualStorageIntegral>::value,
             "The integral type used for storage must be at least as big as the type of the values to retrieve");
 
     public:
@@ -6206,7 +6178,7 @@ namespace llama::mapping
             , VHBits{bits}
         {
             static_assert(VHBits::value() > 0);
-            boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, FlatRecordDim<TRecordDim>>>(
+            mp_for_each<mp_transform<mp_identity, FlatRecordDim<TRecordDim>>>(
                 [&](auto t)
                 {
                     using FieldType = typename decltype(t)::type;
@@ -6227,7 +6199,7 @@ namespace llama::mapping
             if(VHBits::value() <= 0)
                 throw std::invalid_argument("BitPackedIntSoA Bits must not be zero");
 #endif
-            boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, FlatRecordDim<TRecordDim>>>(
+            mp_for_each<mp_transform<mp_identity, FlatRecordDim<TRecordDim>>>(
                 [&](auto t)
                 {
                     using FieldType = typename decltype(t)::type;
@@ -6335,7 +6307,6 @@ namespace llama::mapping
         template<typename ProjectionMap, typename Coord, typename RecordDimType>
         auto projectionOrVoidImpl()
         {
-            using namespace boost::mp11;
             if constexpr(mp_map_contains<ProjectionMap, Coord>::value)
                 return mp_identity<mp_second<mp_map_find<ProjectionMap, Coord>>>{};
             else if constexpr(mp_map_contains<ProjectionMap, RecordDimType>::value)
@@ -6355,7 +6326,7 @@ namespace llama::mapping
             {
                 using Projection = ProjectionOrVoid<ProjectionMap, Coord, RecordDimType>;
                 if constexpr(std::is_void_v<Projection>)
-                    return boost::mp11::mp_identity<RecordDimType>{};
+                    return mp_identity<RecordDimType>{};
                 else
                 {
                     using LoadFunc = UnaryFunctionTraits<decltype(&Projection::load)>;
@@ -6365,7 +6336,7 @@ namespace llama::mapping
                     static_assert(std::is_same_v<typename StoreFunc::ArgumentType, RecordDimType>);
                     static_assert(std::is_same_v<typename LoadFunc::ArgumentType, typename StoreFunc::ReturnType>);
 
-                    return boost::mp11::mp_identity<typename StoreFunc::ReturnType>{};
+                    return mp_identity<typename StoreFunc::ReturnType>{};
                 }
             }
 
@@ -7050,7 +7021,7 @@ namespace llama::mapping
 
                 value_type v;
                 auto* p = reinterpret_cast<std::byte*>(&v);
-                boost::mp11::mp_for_each<boost::mp11::mp_iota_c<sizeof(value_type)>>(
+                mp_for_each<mp_iota_c<sizeof(value_type)>>(
                     [&](auto ic)
                     {
                         constexpr auto i = decltype(ic)::value;
@@ -7069,7 +7040,7 @@ namespace llama::mapping
 #endif
 
                 auto* p = reinterpret_cast<std::byte*>(&v);
-                boost::mp11::mp_for_each<boost::mp11::mp_iota_c<sizeof(value_type)>>(
+                mp_for_each<mp_iota_c<sizeof(value_type)>>(
                     [&](auto ic)
                     {
                         constexpr auto i = decltype(ic)::value;
@@ -7162,11 +7133,11 @@ namespace llama::mapping
         };
 
         template<typename T>
-        using MakeByteswapProjectionPair = boost::mp11::mp_list<T, ByteswapProjection<T>>;
+        using MakeByteswapProjectionPair = mp_list<T, ByteswapProjection<T>>;
 
         template<typename RecordDim>
         using MakeByteswapProjectionMap
-            = boost::mp11::mp_transform<MakeByteswapProjectionPair, boost::mp11::mp_unique<FlatRecordDim<RecordDim>>>;
+            = mp_transform<MakeByteswapProjectionPair, mp_unique<FlatRecordDim<RecordDim>>>;
     } // namespace internal
 
     /// Mapping that swaps the byte order of all values when loading/storing.
@@ -7475,7 +7446,6 @@ namespace llama::mapping
         template<typename... Fields, std::size_t FirstCoord, std::size_t... Coords>
         auto partitionRecordDim(Record<Fields...>, RecordCoord<FirstCoord, Coords...>)
         {
-            using namespace boost::mp11;
             using Rec = Record<Fields...>;
             if constexpr(sizeof...(Coords) == 0)
             {
@@ -7497,22 +7467,21 @@ namespace llama::mapping
         template<typename Acc, typename TagList>
         struct PartitionFoldOpImpl
         {
-            using Part1Before = boost::mp11::mp_first<Acc>;
-            using Part2Before = boost::mp11::mp_second<Acc>;
+            using Part1Before = mp_first<Acc>;
+            using Part2Before = mp_second<Acc>;
             using R = decltype(partitionRecordDim(Part2Before{}, GetCoordFromTags<Part2Before, TagList>{}));
-            using Part1After = boost::mp11::mp_first<R>;
-            using Part2After = boost::mp11::mp_second<R>;
+            using Part1After = mp_first<R>;
+            using Part2After = mp_second<R>;
 
-            using type = boost::mp11::mp_list<MergedRecordDims<Part1Before, Part1After>, Part2After>;
+            using type = mp_list<MergedRecordDims<Part1Before, Part1After>, Part2After>;
         };
 
         template<typename Acc, typename TagList>
         using PartitionFoldOp = typename PartitionFoldOpImpl<Acc, TagList>::type;
 
         template<typename... Fields, typename... RCs>
-        auto partitionRecordDim(Record<Fields...>, boost::mp11::mp_list<RCs...>)
+        auto partitionRecordDim(Record<Fields...>, mp_list<RCs...>)
         {
-            using namespace boost::mp11;
             using Initial = mp_list<Record<>, Record<Fields...>>; // initially, nothing selected for mapping 1
             return mp_fold<mp_list<GetTags<Record<Fields...>, RCs>...>, Initial, PartitionFoldOp>{};
         }
@@ -7531,12 +7500,13 @@ namespace llama::mapping
         struct IsSelectedPredicate
         {
             template<typename RecordCoordForMapping1>
-            using fn = boost::mp11::mp_bool<isSelected<RC, RecordCoordForMapping1>>;
+            using fn = mp_bool<isSelected<RC, RecordCoordForMapping1>>;
         };
 
         template<typename RC, typename... RecordCoordsForMapping1>
-        inline constexpr bool isSelected<RC, boost::mp11::mp_list<RecordCoordsForMapping1...>> = boost::mp11::
-            mp_any_of_q<boost::mp11::mp_list<RecordCoordsForMapping1...>, IsSelectedPredicate<RC>>::value;
+        inline constexpr bool isSelected<RC, mp_list<RecordCoordsForMapping1...>> = mp_any_of_q<
+            mp_list<RecordCoordsForMapping1...>,
+            IsSelectedPredicate<RC>>::value;
     } // namespace internal
 
     /// Mapping which splits off a part of the record dimension and maps it differently then the rest.
@@ -7562,8 +7532,8 @@ namespace llama::mapping
 
         using RecordCoordForMapping1 = TRecordCoordForMapping1;
         using RecordDimPartitions = typename internal::PartionedRecordDim<RecordDim, RecordCoordForMapping1>::type;
-        using RecordDim1 = boost::mp11::mp_first<RecordDimPartitions>;
-        using RecordDim2 = boost::mp11::mp_second<RecordDimPartitions>;
+        using RecordDim1 = mp_first<RecordDimPartitions>;
+        using RecordDim2 = mp_second<RecordDimPartitions>;
 
         using Mapping1 = MappingTemplate1<ArrayExtents, RecordDim1>;
         using Mapping2 = MappingTemplate2<ArrayExtents, RecordDim2>;
@@ -7845,7 +7815,7 @@ namespace llama::mapping
 		    LLAMA_FN_HOST_ACC_INLINE constexpr auto get(Tuple<Elements...>& tuple) -> auto&
 		    {
 		        using Base [[maybe_unused]] // clang claims Base is unused ...
-		        = internal::TupleLeaf<sizeof...(Elements) - I, boost::mp11::mp_at_c<llama::Tuple<Elements...>, I>>;
+		        = internal::TupleLeaf<sizeof...(Elements) - I, mp_at_c<llama::Tuple<Elements...>, I>>;
 		        return tuple.Base::value();
 		    }
 
@@ -7853,7 +7823,7 @@ namespace llama::mapping
 		    LLAMA_FN_HOST_ACC_INLINE constexpr auto get(const Tuple<Elements...>& tuple) -> const auto&
 		    {
 		        using Base [[maybe_unused]] // clang claims Base is unused ...
-		        = internal::TupleLeaf<sizeof...(Elements) - I, boost::mp11::mp_at_c<llama::Tuple<Elements...>, I>>;
+		        = internal::TupleLeaf<sizeof...(Elements) - I, mp_at_c<llama::Tuple<Elements...>, I>>;
 		        return tuple.Base::value();
 		    }
 		} // namespace llama
@@ -7888,7 +7858,6 @@ namespace llama::mapping
 		    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator==(const Tuple<ElementsA...>& a, const Tuple<ElementsB...>& b)
 		        -> bool
 		    {
-		        using namespace boost::mp11;
 		        if constexpr(sizeof...(ElementsA) == sizeof...(ElementsB))
 		            if constexpr(mp_apply<mp_all, mp_transform<std::is_same, mp_list<ElementsA...>, mp_list<ElementsB...>>>::
 		                             value)
@@ -8003,7 +7972,7 @@ namespace llama::mapping
 	    inline constexpr auto one = 1;
 
 	    template<>
-	    inline constexpr auto one<boost::mp11::mp_size_t<1>> = boost::mp11::mp_size_t<1>{};
+	    inline constexpr auto one<mp_size_t<1>> = mp_size_t<1>{};
 
 	    template<typename TIdentifier, typename TType, typename CountType = std::size_t>
 	    struct Leaf
@@ -8027,12 +7996,12 @@ namespace llama::mapping
 	    template<std::size_t ChildIndex = 0, typename ArrayIndexType = std::size_t>
 	    struct TreeCoordElement
 	    {
-	        static constexpr boost::mp11::mp_size_t<ChildIndex> childIndex = {};
+	        static constexpr mp_size_t<ChildIndex> childIndex = {};
 	        const ArrayIndexType arrayIndex = {};
 	    };
 
 	    template<std::size_t... Coords>
-	    using TreeCoord = Tuple<TreeCoordElement<Coords, boost::mp11::mp_size_t<0>>...>;
+	    using TreeCoord = Tuple<TreeCoordElement<Coords, mp_size_t<0>>...>;
 
 	    namespace internal
 	    {
@@ -8061,7 +8030,7 @@ namespace llama::mapping
 	        template<typename Tag, typename RecordDim, typename CountType>
 	        struct CreateTreeElement
 	        {
-	            using type = Leaf<Tag, RecordDim, boost::mp11::mp_size_t<1>>;
+	            using type = Leaf<Tag, RecordDim, mp_size_t<1>>;
 	        };
 
 	        template<typename Tag, typename... Fields, typename CountType>
@@ -8069,9 +8038,7 @@ namespace llama::mapping
 	        {
 	            using type = Node<
 	                Tag,
-	                Tuple<
-	                    typename CreateTreeElement<GetFieldTag<Fields>, GetFieldType<Fields>, boost::mp11::mp_size_t<1>>::
-	                        type...>,
+	                Tuple<typename CreateTreeElement<GetFieldTag<Fields>, GetFieldType<Fields>, mp_size_t<1>>::type...>,
 	                CountType>;
 	        };
 
@@ -8081,8 +8048,7 @@ namespace llama::mapping
 	            template<std::size_t... Is>
 	            static auto createChildren(std::index_sequence<Is...>)
 	            {
-	                return Tuple<
-	                    typename CreateTreeElement<RecordCoord<Is>, ChildType, boost::mp11::mp_size_t<1>>::type...>{};
+	                return Tuple<typename CreateTreeElement<RecordCoord<Is>, ChildType, mp_size_t<1>>::type...>{};
 	            }
 
 	            using type = Node<Tag, decltype(createChildren(std::make_index_sequence<Count>{})), CountType>;
@@ -8141,8 +8107,8 @@ namespace llama::mapping
 	            return Tuple{
 	                TreeCoordElement<(ADIndices == ArrayIndex::rank - 1 ? FirstRecordCoord : 0)>{static_cast<std::size_t>(
 	                    ai[ADIndices])}..., // TODO(bgruber): we should keep the integer type from the array index
-	                TreeCoordElement<RecordCoords, boost::mp11::mp_size_t<0>>{}...,
-	                TreeCoordElement<0, boost::mp11::mp_size_t<0>>{}};
+	                TreeCoordElement<RecordCoords, mp_size_t<0>>{}...,
+	                TreeCoordElement<0, mp_size_t<0>>{}};
 	        }
 	    } // namespace internal
 
@@ -8310,7 +8276,7 @@ namespace llama::mapping::tree
 	            auto children = tupleTransform(
 	                node.childs,
 	                [&](auto element) { return basicToResultImpl(element, LLAMA_COPY(node.count) * arraySize); });
-	            return Node<Identifier, decltype(children), boost::mp11::mp_size_t<1>>{{}, children};
+	            return Node<Identifier, decltype(children), mp_size_t<1>>{{}, children};
 	        }
 
 	        template<typename Identifier, typename Type, typename CountType>
@@ -8333,7 +8299,7 @@ namespace llama::mapping::tree
 	            else
 	            {
 	                const auto& branch = get<BasicCoord::FirstElement::childIndex>(nodeOrLeaf.childs);
-	                auto first = TreeCoordElement<BasicCoord::FirstElement::childIndex, boost::mp11::mp_size_t<0>>{};
+	                auto first = TreeCoordElement<BasicCoord::FirstElement::childIndex, mp_size_t<0>>{};
 
 	                return tupleCat(
 	                    Tuple{first},
@@ -8493,7 +8459,7 @@ namespace llama::mapping::tree
 	    };
 
 	    template<typename TreeCoord, std::size_t Amount>
-	    using MoveRTDownFixed = MoveRTDown<TreeCoord, boost::mp11::mp_size_t<Amount>>;
+	    using MoveRTDownFixed = MoveRTDown<TreeCoord, mp_size_t<Amount>>;
 	} // namespace llama::mapping::tree::functor
 	// ==
 	// == ./mapping/tree/Functors.hpp ==
@@ -8516,10 +8482,10 @@ namespace llama::mapping::tree
         template<typename Tree, typename... Operations>
         struct MergeFunctors<Tree, Tuple<Operations...>>
         {
-            boost::mp11::mp_first<Tuple<Operations...>> operation = {};
+            mp_first<Tuple<Operations...>> operation = {};
             using ResultTree = decltype(operation.basicToResult(Tree()));
             ResultTree treeAfterOp;
-            MergeFunctors<ResultTree, boost::mp11::mp_drop_c<Tuple<Operations...>, 1>> next = {};
+            MergeFunctors<ResultTree, mp_drop_c<Tuple<Operations...>, 1>> next = {};
 
             MergeFunctors() = default;
 
@@ -8614,7 +8580,7 @@ namespace llama::mapping::tree
         template<typename Identifier, typename Type, typename CountType>
         LLAMA_FN_HOST_ACC_INLINE auto getTreeBlobSize(const Node<Identifier, Type, CountType>& node) -> std::size_t
         {
-            constexpr std::size_t childCount = boost::mp11::mp_size<std::decay_t<decltype(node.childs)>>::value;
+            constexpr std::size_t childCount = mp_size<std::decay_t<decltype(node.childs)>>::value;
             return getChildrenBlobSize(node.childs, std::make_index_sequence<childCount>{}, LLAMA_COPY(node.count));
         }
 
@@ -8759,22 +8725,17 @@ namespace llama::mapping
             static auto recordDimType()
             {
                 if constexpr(isRecordCoord<Key>)
-                    return boost::mp11::mp_identity<GetType<RecordDim, Key>>{};
+                    return mp_identity<GetType<RecordDim, Key>>{};
                 else
-                    return boost::mp11::mp_identity<Key>{};
+                    return mp_identity<Key>{};
             }
 
-            template<
-                typename Pair,
-                typename Key = boost::mp11::mp_first<Pair>,
-                typename StoredT = boost::mp11::mp_second<Pair>>
-            using fn = boost::mp11::
-                mp_list<Key, ChangeTypeProjection<typename decltype(recordDimType<Key>())::type, StoredT>>;
+            template<typename Pair, typename Key = mp_first<Pair>, typename StoredT = mp_second<Pair>>
+            using fn = mp_list<Key, ChangeTypeProjection<typename decltype(recordDimType<Key>())::type, StoredT>>;
         };
 
         template<typename RecordDim, typename ReplacementMap>
-        using MakeProjectionMap
-            = boost::mp11::mp_transform<MakeProjectionPair<RecordDim>::template fn, ReplacementMap>;
+        using MakeProjectionMap = mp_transform<MakeProjectionPair<RecordDim>::template fn, ReplacementMap>;
     } // namespace internal
 
     /// Mapping that changes the type in the record domain for a different one in storage. Conversions happen during
@@ -8995,10 +8956,8 @@ namespace llama::mapping
         };
 
         template<typename RecordDim>
-        using StoredIntegralFor = std::conditional_t<
-            boost::mp11::mp_contains<FlatRecordDim<RecordDim>, double>::value,
-            std::uint64_t,
-            std::uint32_t>;
+        using StoredIntegralFor
+            = std::conditional_t<mp_contains<FlatRecordDim<RecordDim>, double>::value, std::uint64_t, std::uint32_t>;
     } // namespace internal
 
     /// Struct of array mapping using bit packing to reduce size/precision of floating-point data types. The bit layout
@@ -9034,7 +8993,7 @@ namespace llama::mapping
     public:
         using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
         using StoredIntegral = TStoredIntegral;
-        static constexpr std::size_t blobCount = boost::mp11::mp_size<FlatRecordDim<TRecordDim>>::value;
+        static constexpr std::size_t blobCount = mp_size<FlatRecordDim<TRecordDim>>::value;
 
         LLAMA_FN_HOST_ACC_INLINE
         constexpr auto exponentBits() const -> size_type
