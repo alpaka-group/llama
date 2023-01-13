@@ -1,17 +1,16 @@
 var searchData=
 [
-  ['r_1436',['R',['../structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html#af901d14f4c982ea08477ef47b03c1791',1,'llama::mapping::internal::PartitionFoldOpImpl']]],
-  ['recordcoordformapping1_1437',['RecordCoordForMapping1',['../structllama_1_1mapping_1_1Split.html#aa1685637aa8562aa3f02b83fa0c9aefa',1,'llama::mapping::Split']]],
-  ['recordcoordfromlist_1438',['RecordCoordFromList',['../namespacellama.html#ad95912a49a83091fde091a4e2d9a4118',1,'llama']]],
-  ['recorddim_1439',['RecordDim',['../structllama_1_1mapping_1_1Bytesplit.html#a55d94f8aecd74f3e73d246c3515651e8',1,'llama::mapping::Bytesplit::RecordDim()'],['../structllama_1_1mapping_1_1MappingBase.html#a230ce8319dfa063ac4692dcd4034c462',1,'llama::mapping::MappingBase::RecordDim()'],['../structllama_1_1mapping_1_1Projection.html#a8e07d10e24daa52a2ccb859995ab3796',1,'llama::mapping::Projection::RecordDim()'],['../structllama_1_1mapping_1_1Split.html#a81fa856bbf801a7b0fda73d72f542a9f',1,'llama::mapping::Split::RecordDim()'],['../structllama_1_1mapping_1_1Trace.html#a813199b41c2a1c6fcae45e73621254dc',1,'llama::mapping::Trace::RecordDim()'],['../structllama_1_1mapping_1_1tree_1_1Mapping.html#a918b6b31180de12b1cc42bcb340411a5',1,'llama::mapping::tree::Mapping::RecordDim()'],['../structllama_1_1Vector.html#a9cb6cd05cc9474af335517ef3889cfb4',1,'llama::Vector::RecordDim()'],['../structllama_1_1View.html#a0e311e171359b386b0e86b16738d1d8d',1,'llama::View::RecordDim()']]],
-  ['recorddim1_1440',['RecordDim1',['../structllama_1_1mapping_1_1Split.html#af802577d23eb244298413fef23a9c312',1,'llama::mapping::Split']]],
-  ['recorddim2_1441',['RecordDim2',['../structllama_1_1mapping_1_1Split.html#a2748eeaf95be8ab007c689ed4e839df6',1,'llama::mapping::Split']]],
-  ['recorddimpartitions_1442',['RecordDimPartitions',['../structllama_1_1mapping_1_1Split.html#a849e0614d787032ba9430fb961410d86',1,'llama::mapping::Split']]],
-  ['reference_1443',['reference',['../structllama_1_1ArrayIndexIterator.html#a29a20a406c9fb9e4a2c9033d01969ac4',1,'llama::ArrayIndexIterator::reference()'],['../structllama_1_1Iterator.html#a90e4c2c83c2d5a27bf91631c60085ae6',1,'llama::Iterator::reference()']]],
-  ['replacebybytearray_1444',['ReplaceByByteArray',['../namespacellama_1_1mapping_1_1internal.html#afb46513e82a723e018572be98ef08d18',1,'llama::mapping::internal']]],
-  ['replaceplaceholders_1445',['ReplacePlaceholders',['../namespacellama.html#a533ad08f0a1fa09005088a13a6b59040',1,'llama']]],
-  ['replacetypesbyprojectionresults_1446',['ReplaceTypesByProjectionResults',['../namespacellama_1_1mapping_1_1internal.html#ae5b63f36aa71a978887002ad2a5e6f50',1,'llama::mapping::internal']]],
-  ['resttuple_1447',['RestTuple',['../structllama_1_1Tuple_3_01TFirstElement_00_01RestElements_8_8_8_01_4.html#a9d44ece6524f1a59ce9ae1bfb87d1efa',1,'llama::Tuple&lt; TFirstElement, RestElements... &gt;']]],
-  ['resulttree_1448',['ResultTree',['../structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctors_3_01Tree_00_01Tuple_3_01Operations_8_8_8_01_4_01_4.html#a40455feecb37c12d9319fe73acf29674',1,'llama::mapping::tree::internal::MergeFunctors&lt; Tree, Tuple&lt; Operations... &gt; &gt;::ResultTree()'],['../structllama_1_1mapping_1_1tree_1_1Mapping.html#acb96520922aa3b98fd2ed8b14e7d8e04',1,'llama::mapping::tree::Mapping::ResultTree()']]],
-  ['returntype_1449',['ReturnType',['../structllama_1_1mapping_1_1internal_1_1UnaryFunctionTraits_3_01Ret_07_5_08_07Arg_08_4.html#ad24fb11cf0ac668f70e35bfbd1272f34',1,'llama::mapping::internal::UnaryFunctionTraits&lt; Ret(*)(Arg)&gt;']]]
+  ['packedaos_1432',['PackedAoS',['../namespacellama_1_1mapping.html#a13966d60fbfd913a741577a3aaf8cf3e',1,'llama::mapping']]],
+  ['packedone_1433',['PackedOne',['../namespacellama_1_1mapping.html#ac5bacdd00bf2d0b905938bbf33cb0baf',1,'llama::mapping']]],
+  ['packedsingleblobsoa_1434',['PackedSingleBlobSoA',['../namespacellama_1_1mapping.html#a4f5184f74fae747c64fe4453f9d3111d',1,'llama::mapping']]],
+  ['parentview_1435',['ParentView',['../structllama_1_1SubView.html#a68b627423bc53908fd8a08ca8602148d',1,'llama::SubView']]],
+  ['part1after_1436',['Part1After',['../structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html#a4831ff06df024fabf183a6fd99694de9',1,'llama::mapping::internal::PartitionFoldOpImpl']]],
+  ['part1before_1437',['Part1Before',['../structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html#a381a3bdceda7cbbf6549db6133fba91f',1,'llama::mapping::internal::PartitionFoldOpImpl']]],
+  ['part2after_1438',['Part2After',['../structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html#a52c0fa86dc470c28a7b0cd23577907cf',1,'llama::mapping::internal::PartitionFoldOpImpl']]],
+  ['part2before_1439',['Part2Before',['../structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html#a09c853470059296efd1ad1f819566f7b',1,'llama::mapping::internal::PartitionFoldOpImpl']]],
+  ['partitionfoldop_1440',['PartitionFoldOp',['../namespacellama_1_1mapping_1_1internal.html#a580e552437b8ec7bdbbfbd737ecc175d',1,'llama::mapping::internal']]],
+  ['pointer_1441',['pointer',['../structllama_1_1ArrayIndexIterator.html#ae9bac80dbbaa4896e146b58fdefdf4a2',1,'llama::ArrayIndexIterator::pointer()'],['../structllama_1_1Iterator.html#affb1d5d1049931f294f463805f5010bc',1,'llama::Iterator::pointer()']]],
+  ['popfront_1442',['PopFront',['../namespacellama.html#a51dcbb30751c7c23e97d434736a0acc4',1,'llama']]],
+  ['projectionmap_1443',['ProjectionMap',['../structllama_1_1mapping_1_1Projection.html#a1e5e2a679aa7c64196360208dcd0bc49',1,'llama::mapping::Projection']]],
+  ['projectionorvoid_1444',['ProjectionOrVoid',['../namespacellama_1_1mapping_1_1internal.html#a721bad784cc6cc05c977c736c6536a96',1,'llama::mapping::internal']]]
 ];

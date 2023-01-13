@@ -40,6 +40,7 @@ var annotated_dup =
         [ "GetCoordFromTagsImpl< RecordDim, RecordCoord >", "structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01RecordDim_00_01RecordCoord_01_4.html", "structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01RecordDim_00_01RecordCoord_01_4" ],
         [ "GetCoordFromTagsImpl< Record< Fields... >, RecordCoord<>, mp_list< Tags... > >", "structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoorb006549913676b1d5139a1b53818a5b4.html", null ],
         [ "GetCoordFromTagsImpl< ChildType[Count], RecordCoord<>, mp_list< Tags... > >", "structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01ChildType_0fCount_0e_00_01RecordCoord_3_4_0013246d85cb9afa4ef03a045cfb732088.html", null ],
+        [ "GetCoordFromTagsImpl< Record< Fields... >, RecordCoord<>, RecordCoord< RCs... > >", "structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoorfe79fdbf9645e3871343e16a1c302dbb.html", "structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoorfe79fdbf9645e3871343e16a1c302dbb" ],
         [ "GetTypeImpl", "structllama_1_1internal_1_1GetTypeImpl.html", "structllama_1_1internal_1_1GetTypeImpl" ],
         [ "GetTypeImpl< Record< Children... >, RecordCoord< HeadCoord, TailCoords... > >", "structllama_1_1internal_1_1GetTypeImpl_3_01Record_3_01Children_8_8_8_01_4_00_01RecordCoord_3_01Hd335281b58bf9419f48b7fc65f5657ab.html", "structllama_1_1internal_1_1GetTypeImpl_3_01Record_3_01Children_8_8_8_01_4_00_01RecordCoord_3_01Hd335281b58bf9419f48b7fc65f5657ab" ],
         [ "GetTypeImpl< ChildType[N], RecordCoord< HeadCoord, TailCoords... > >", "structllama_1_1internal_1_1GetTypeImpl_3_01ChildType_0fN_0e_00_01RecordCoord_3_01HeadCoord_00_01TailCoords_8_8_8_01_4_01_4.html", "structllama_1_1internal_1_1GetTypeImpl_3_01ChildType_0fN_0e_00_01RecordCoord_3_01HeadCoord_00_01TailCoords_8_8_8_01_4_01_4" ],
@@ -107,7 +108,9 @@ var annotated_dup =
           [ "ProjectionReference", "structllama_1_1mapping_1_1internal_1_1ProjectionReference.html", "structllama_1_1mapping_1_1internal_1_1ProjectionReference" ],
           [ "PartitionFoldOpImpl", "structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html", "structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl" ],
           [ "PartionedRecordDim", "structllama_1_1mapping_1_1internal_1_1PartionedRecordDim.html", "structllama_1_1mapping_1_1internal_1_1PartionedRecordDim" ],
-          [ "IsSelectedPredicate", "structllama_1_1mapping_1_1internal_1_1IsSelectedPredicate.html", "structllama_1_1mapping_1_1internal_1_1IsSelectedPredicate" ],
+          [ "ReplaceTagListsByCoords", "structllama_1_1mapping_1_1internal_1_1ReplaceTagListsByCoords.html", null ],
+          [ "ReplaceTagListsByCoords< RecordDim, RecordCoord< RCs... > >", "structllama_1_1mapping_1_1internal_1_1ReplaceTagListsByCoords_3_01RecordDim_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html", "structllama_1_1mapping_1_1internal_1_1ReplaceTagListsByCoords_3_01RecordDim_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4" ],
+          [ "ReplaceTagListsByCoords< RecordDim, mp_list< Args... > >", "structllama_1_1mapping_1_1internal_1_1ReplaceTagListsByCoords_3_01RecordDim_00_01mp__list_3_01Args_8_8_8_01_4_01_4.html", "structllama_1_1mapping_1_1internal_1_1ReplaceTagListsByCoords_3_01RecordDim_00_01mp__list_3_01Args_8_8_8_01_4_01_4" ],
           [ "TraceReference", "structllama_1_1mapping_1_1internal_1_1TraceReference.html", "structllama_1_1mapping_1_1internal_1_1TraceReference" ]
         ] ],
         [ "tree", "namespacellama_1_1mapping_1_1tree.html", [

@@ -337,9 +337,9 @@ Variables</h2></td></tr>
 <tr class="memitem:aabd645ad645fb163c9c63781b08ed50a"><td class="memTemplParams" colspan="2">template&lt;typename Mapping &gt; </td></tr>
 <tr class="memitem:aabd645ad645fb163c9c63781b08ed50a"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#aabd645ad645fb163c9c63781b08ed50a">isSplit</a> = false</td></tr>
 <tr class="separator:aabd645ad645fb163c9c63781b08ed50a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a29822b876ecb74d42916a6c93877a384"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim , typename RecordCoordsForMapping1 , template&lt; typename... &gt; typename MappingTemplate1, template&lt; typename... &gt; typename MappingTemplate2, bool SeparateBlobs&gt; </td></tr>
-<tr class="memitem:a29822b876ecb74d42916a6c93877a384"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a29822b876ecb74d42916a6c93877a384">isSplit&lt; Split&lt; ArrayExtents, RecordDim, RecordCoordsForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt; &gt;</a> = true</td></tr>
-<tr class="separator:a29822b876ecb74d42916a6c93877a384"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a990d4d3fa6208c7df73c636dd60ec6a7"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim , typename SelectorForMapping1 , template&lt; typename... &gt; typename MappingTemplate1, template&lt; typename... &gt; typename MappingTemplate2, bool SeparateBlobs&gt; </td></tr>
+<tr class="memitem:a990d4d3fa6208c7df73c636dd60ec6a7"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a990d4d3fa6208c7df73c636dd60ec6a7">isSplit&lt; Split&lt; ArrayExtents, RecordDim, SelectorForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt; &gt;</a> = true</td></tr>
+<tr class="separator:a990d4d3fa6208c7df73c636dd60ec6a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a033ccad2b2e578270aeaa7e96e066d57"><td class="memTemplParams" colspan="2">template&lt;typename Mapping &gt; </td></tr>
 <tr class="memitem:a033ccad2b2e578270aeaa7e96e066d57"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a033ccad2b2e578270aeaa7e96e066d57">isTrace</a> = false</td></tr>
 <tr class="separator:a033ccad2b2e578270aeaa7e96e066d57"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1444,23 +1444,23 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00225">225</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00245">245</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a29822b876ecb74d42916a6c93877a384"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a29822b876ecb74d42916a6c93877a384">&#9670;&nbsp;</a></span>isSplit&lt; Split&lt; ArrayExtents, RecordDim, RecordCoordsForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt; &gt;</h2>
+<a id="a990d4d3fa6208c7df73c636dd60ec6a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a990d4d3fa6208c7df73c636dd60ec6a7">&#9670;&nbsp;</a></span>isSplit&lt; Split&lt; ArrayExtents, RecordDim, SelectorForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt; &gt;</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename ArrayExtents , typename RecordDim , typename RecordCoordsForMapping1 , template&lt; typename... &gt; typename MappingTemplate1, template&lt; typename... &gt; typename MappingTemplate2, bool SeparateBlobs&gt; </div>
+template&lt;typename ArrayExtents , typename RecordDim , typename SelectorForMapping1 , template&lt; typename... &gt; typename MappingTemplate1, template&lt; typename... &gt; typename MappingTemplate2, bool SeparateBlobs&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr bool <a class="el" href="namespacellama_1_1mapping.html#aabd645ad645fb163c9c63781b08ed50a">llama::mapping::isSplit</a>&lt; <a class="el" href="structllama_1_1mapping_1_1Split.html">Split</a>&lt; <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, RecordCoordsForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt; &gt; = true</td>
+          <td class="memname">constexpr bool <a class="el" href="namespacellama_1_1mapping.html#aabd645ad645fb163c9c63781b08ed50a">llama::mapping::isSplit</a>&lt; <a class="el" href="structllama_1_1mapping_1_1Split.html">Split</a>&lt; <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, SelectorForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt; &gt; = true</td>
         </tr>
       </table>
   </td>
@@ -1470,7 +1470,7 @@ template&lt;typename ArrayExtents , typename RecordDim , typename RecordCoordsFo
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00236">236</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00256">256</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
 
 </div>
 </div>
@@ -1559,7 +1559,7 @@ template&lt;typename RecordDim , std::size_t VectorRegisterBits&gt; </div>
 <div class="line">        <span class="keywordflow">return</span> max;</div>
 <div class="line">    }</div>
 <div class="line">    ()</div>
-<div class="ttc" id="anamespacellama_html_acdfb627d325de5ab6c18cdc842cd7350"><div class="ttname"><a href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">llama::GetType</a></div><div class="ttdeci">typename internal::GetTypeImpl&lt; RecordDim, RecordCoordOrTags... &gt;::type GetType</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00270">Core.hpp:270</a></div></div>
+<div class="ttc" id="anamespacellama_html_acdfb627d325de5ab6c18cdc842cd7350"><div class="ttname"><a href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">llama::GetType</a></div><div class="ttdeci">typename internal::GetTypeImpl&lt; RecordDim, RecordCoordOrTags... &gt;::type GetType</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00279">Core.hpp:279</a></div></div>
 </div><!-- fragment --><p>The maximum number of vector lanes that can be used to fetch each leaf type in the record dimension into a vector register of the given size in bits. </p>
 
 <p class="definition">Definition at line <a class="el" href="AoSoA_8hpp_source.html#l00014">14</a> of file <a class="el" href="AoSoA_8hpp_source.html">AoSoA.hpp</a>.</p>
@@ -1572,7 +1572,7 @@ template&lt;typename RecordDim , std::size_t VectorRegisterBits&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li>
-    <li class="footer">Generated on Fri Jan 13 2023 17:03:51 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Fri Jan 13 2023 18:28:17 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

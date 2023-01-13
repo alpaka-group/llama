@@ -89,7 +89,7 @@ var namespacellama_1_1mapping =
     [ "isSoA", "namespacellama_1_1mapping.html#a131edc0148d778b3ebe27f58df87ffc1", null ],
     [ "isSoA< SoA< ArrayExtents, RecordDim, Blobs, SubArrayAlignment, LinearizeArrayDimsFunctor > >", "namespacellama_1_1mapping.html#ac76f06ca10faa7056adfcd823c4face4", null ],
     [ "isSplit", "namespacellama_1_1mapping.html#aabd645ad645fb163c9c63781b08ed50a", null ],
-    [ "isSplit< Split< ArrayExtents, RecordDim, RecordCoordsForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs > >", "namespacellama_1_1mapping.html#a29822b876ecb74d42916a6c93877a384", null ],
+    [ "isSplit< Split< ArrayExtents, RecordDim, SelectorForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs > >", "namespacellama_1_1mapping.html#a990d4d3fa6208c7df73c636dd60ec6a7", null ],
     [ "isTrace", "namespacellama_1_1mapping.html#a033ccad2b2e578270aeaa7e96e066d57", null ],
     [ "isTrace< Trace< Mapping, CountType, MyCodeHandlesProxyReferences > >", "namespacellama_1_1mapping.html#a59f794bd5f87ee22946c743a4abaa90f", null ],
     [ "maxLanes", "namespacellama_1_1mapping.html#abde584824d91d31ec24b7c326632a3c3", null ]

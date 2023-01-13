@@ -98,7 +98,7 @@ $(document).ready(function(){initNavTree('functions_type.html',''); initResizabl
 : <a class="el" href="structllama_1_1mapping_1_1Bytesplit.html#ab942705376994560a1052eeba7a62b17">llama::mapping::Bytesplit&lt; TArrayExtents, TRecordDim, InnerMapping &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1MappingBase.html#ab0dff4b5449fbc61e63ef6c8ae427c70">llama::mapping::MappingBase&lt; TArrayExtents, TRecordDim &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1Projection.html#a561ee92f75381d34b3ec7a0b8a936538">llama::mapping::Projection&lt; TArrayExtents, TRecordDim, InnerMapping, TProjectionMap &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1Split.html#ad24dc5da3a73d393951ac4c3ed9c779f">llama::mapping::Split&lt; TArrayExtents, TRecordDim, TRecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1Split.html#a05c352cd24e3efacdee67e5668e6fd2a">llama::mapping::Split&lt; TArrayExtents, TRecordDim, TSelectorForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#a18be9f1a4fc4f99d932eca8ba09c406d">llama::mapping::tree::Mapping&lt; TArrayExtents, TRecordDim, TreeOperationList &gt;</a>
 , <a class="el" href="structllama_1_1SubView.html#a31880888cee4cdd0109b6dff400d6c71">llama::SubView&lt; TStoredParentView &gt;</a>
 , <a class="el" href="structllama_1_1View.html#a1fadf5a169e81c3171929c6fd53d2313">llama::View&lt; TMapping, TBlobType, TAccessor &gt;</a>
@@ -108,7 +108,7 @@ $(document).ready(function(){initNavTree('functions_type.html',''); initResizabl
 , <a class="el" href="structllama_1_1mapping_1_1MappingBase.html#a9e8dbadc1023c973d1d8a10a773e4786">llama::mapping::MappingBase&lt; TArrayExtents, TRecordDim &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1PermuteArrayIndex.html#a79398c2e7bd2508aeb5b004c754ffacd">llama::mapping::PermuteArrayIndex&lt; Mapping, Permutation &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1Projection.html#ac1431cba9bc7acd543d3320b2415dbcb">llama::mapping::Projection&lt; TArrayExtents, TRecordDim, InnerMapping, TProjectionMap &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1Split.html#ae36557646737d350af186d61aac179ed">llama::mapping::Split&lt; TArrayExtents, TRecordDim, TRecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1Split.html#a597a062d9e7e38fb5af83182665b457c">llama::mapping::Split&lt; TArrayExtents, TRecordDim, TSelectorForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#aaa2f0af194a2bddb45e11522f11b0221">llama::mapping::tree::Mapping&lt; TArrayExtents, TRecordDim, TreeOperationList &gt;</a>
 , <a class="el" href="structllama_1_1SubView.html#a3c73491a68a1201927b6ccdfbf4c82a8">llama::SubView&lt; TStoredParentView &gt;</a>
 , <a class="el" href="structllama_1_1View.html#af5a48c9b55ae1eb5872d7fb3f664d902">llama::View&lt; TMapping, TBlobType, TAccessor &gt;</a>
@@ -201,8 +201,7 @@ $(document).ready(function(){initNavTree('functions_type.html',''); initResizabl
 , <a class="el" href="structllama_1_1mapping_1_1BindOne.html#aa6df0e9d6e23a2d6404a3c0181ed6c6e">llama::mapping::BindOne&lt; FieldAlignment, FlattenRecordDim &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1BindProjection.html#ab0fddc09cd47662763c804f607282f52">llama::mapping::BindProjection&lt; InnerMapping, ProjectionMap &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1BindSoA.html#aac8996f8b3f46f3969385128f7a5544d">llama::mapping::BindSoA&lt; Blobs, SubArrayAlignment, LinearizeArrayDimsFunctor &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1BindSplit.html#aaccc26387d3120116c1f2788bf2589f1">llama::mapping::BindSplit&lt; RecordCoordsForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1internal_1_1IsSelectedPredicate.html#a107ed951fa2e8358ef0830cc69ef02c7">llama::mapping::internal::IsSelectedPredicate&lt; RC &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1BindSplit.html#a73005c55d6ee5af3aaa67ce7e224b2f2">llama::mapping::BindSplit&lt; SelectorForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1internal_1_1MakeProjectionPair.html#ad9696dbf839dd91e64d4e44a7296cf92">llama::mapping::internal::MakeProjectionPair&lt; RecordDim &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1internal_1_1MakeReplacerProj.html#a904b3f0f95a0fdcd1fd443faa861cff8">llama::mapping::internal::MakeReplacerProj&lt; ProjectionMap &gt;</a>
 </li>
@@ -263,13 +262,20 @@ $(document).ready(function(){initNavTree('functions_type.html',''); initResizabl
 , <a class="el" href="structllama_1_1View.html#ab78c51e95a88b07395d0311107f31ba3">llama::View&lt; TMapping, TBlobType, TAccessor &gt;</a>
 </li>
 <li>Mapping1
-: <a class="el" href="structllama_1_1mapping_1_1Split.html#a956788c4f49f486461e2f4c2ddb8fccc">llama::mapping::Split&lt; TArrayExtents, TRecordDim, TRecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
+: <a class="el" href="structllama_1_1mapping_1_1Split.html#ac70c11ba46bc16d8dc004e07bd916431">llama::mapping::Split&lt; TArrayExtents, TRecordDim, TSelectorForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
 </li>
 <li>Mapping2
-: <a class="el" href="structllama_1_1mapping_1_1Split.html#a4df1c0421ef15dc5043bdd072167cb3e">llama::mapping::Split&lt; TArrayExtents, TRecordDim, TRecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
+: <a class="el" href="structllama_1_1mapping_1_1Split.html#a7f8c880946e1f571e2421e7cb8bb9b6b">llama::mapping::Split&lt; TArrayExtents, TRecordDim, TSelectorForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
 </li>
 <li>MergedFunctors
 : <a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#a497d204c1f51e5c9213fe50f4fe6199c">llama::mapping::tree::Mapping&lt; TArrayExtents, TRecordDim, TreeOperationList &gt;</a>
+</li>
+</ul>
+
+
+<h3><a id="index_n"></a>- n -</h3><ul>
+<li>NormalizedSelectorForMapping1
+: <a class="el" href="structllama_1_1mapping_1_1Split.html#a9da900cbe7bbfc5887de6c016b8728d7">llama::mapping::Split&lt; TArrayExtents, TRecordDim, TSelectorForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
 </li>
 </ul>
 
@@ -311,27 +317,24 @@ $(document).ready(function(){initNavTree('functions_type.html',''); initResizabl
 <li>R
 : <a class="el" href="structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html#af901d14f4c982ea08477ef47b03c1791">llama::mapping::internal::PartitionFoldOpImpl&lt; Acc, TagList &gt;</a>
 </li>
-<li>RecordCoordForMapping1
-: <a class="el" href="structllama_1_1mapping_1_1Split.html#aa1685637aa8562aa3f02b83fa0c9aefa">llama::mapping::Split&lt; TArrayExtents, TRecordDim, TRecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
-</li>
 <li>RecordDim
 : <a class="el" href="structllama_1_1mapping_1_1Bytesplit.html#a55d94f8aecd74f3e73d246c3515651e8">llama::mapping::Bytesplit&lt; TArrayExtents, TRecordDim, InnerMapping &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1MappingBase.html#a230ce8319dfa063ac4692dcd4034c462">llama::mapping::MappingBase&lt; TArrayExtents, TRecordDim &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1Projection.html#a8e07d10e24daa52a2ccb859995ab3796">llama::mapping::Projection&lt; TArrayExtents, TRecordDim, InnerMapping, TProjectionMap &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1Split.html#a81fa856bbf801a7b0fda73d72f542a9f">llama::mapping::Split&lt; TArrayExtents, TRecordDim, TRecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1Split.html#ad02eb9f592deae654b8cbd8e2ed8f44c">llama::mapping::Split&lt; TArrayExtents, TRecordDim, TSelectorForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1Trace.html#a813199b41c2a1c6fcae45e73621254dc">llama::mapping::Trace&lt; Mapping, TCountType, MyCodeHandlesProxyReferences &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#a918b6b31180de12b1cc42bcb340411a5">llama::mapping::tree::Mapping&lt; TArrayExtents, TRecordDim, TreeOperationList &gt;</a>
 , <a class="el" href="structllama_1_1Vector.html#a9cb6cd05cc9474af335517ef3889cfb4">llama::Vector&lt; Mapping &gt;</a>
 , <a class="el" href="structllama_1_1View.html#a0e311e171359b386b0e86b16738d1d8d">llama::View&lt; TMapping, TBlobType, TAccessor &gt;</a>
 </li>
 <li>RecordDim1
-: <a class="el" href="structllama_1_1mapping_1_1Split.html#af802577d23eb244298413fef23a9c312">llama::mapping::Split&lt; TArrayExtents, TRecordDim, TRecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
+: <a class="el" href="structllama_1_1mapping_1_1Split.html#a4eb538b875302b37f43d43c2bfe767b4">llama::mapping::Split&lt; TArrayExtents, TRecordDim, TSelectorForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
 </li>
 <li>RecordDim2
-: <a class="el" href="structllama_1_1mapping_1_1Split.html#a2748eeaf95be8ab007c689ed4e839df6">llama::mapping::Split&lt; TArrayExtents, TRecordDim, TRecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
+: <a class="el" href="structllama_1_1mapping_1_1Split.html#ad5a8c4aef96eda2d8aabf87e244d574a">llama::mapping::Split&lt; TArrayExtents, TRecordDim, TSelectorForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
 </li>
 <li>RecordDimPartitions
-: <a class="el" href="structllama_1_1mapping_1_1Split.html#a849e0614d787032ba9430fb961410d86">llama::mapping::Split&lt; TArrayExtents, TRecordDim, TRecordCoordForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
+: <a class="el" href="structllama_1_1mapping_1_1Split.html#af7694807849f872cc9a5d7f2dfe63c1d">llama::mapping::Split&lt; TArrayExtents, TRecordDim, TSelectorForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
 </li>
 <li>reference
 : <a class="el" href="structllama_1_1ArrayIndexIterator.html#a29a20a406c9fb9e4a2c9033d01969ac4">llama::ArrayIndexIterator&lt; ArrayExtents &gt;</a>
@@ -351,6 +354,9 @@ $(document).ready(function(){initNavTree('functions_type.html',''); initResizabl
 
 
 <h3><a id="index_s"></a>- s -</h3><ul>
+<li>SelectorForMapping1
+: <a class="el" href="structllama_1_1mapping_1_1Split.html#a8bce85de48fc51888c598cf1cf16640b">llama::mapping::Split&lt; TArrayExtents, TRecordDim, TSelectorForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
+</li>
 <li>shared_ptr
 : <a class="el" href="structllama_1_1bloballoc_1_1SharedPtr.html#a5080b68a3c4da3051afa37f04871e837">llama::bloballoc::SharedPtr</a>
 </li>
@@ -377,6 +383,7 @@ $(document).ready(function(){initNavTree('functions_type.html',''); initResizabl
 , <a class="el" href="structllama_1_1internal_1_1FlattenRecordDimImpl_3_01Record_3_01Fields_8_8_8_01_4_01_4.html#adce0e20f2dbf53325962269bc0d321e2">llama::internal::FlattenRecordDimImpl&lt; Record&lt; Fields... &gt; &gt;</a>
 , <a class="el" href="structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01ChildType_0fCount_0e_00_01RecordCoord_3_01Rea82f6370a44084538dfd07ee1f739c70.html#af8ccb0169d45233b03bee608f3ba266b">llama::internal::GetCoordFromTagsImpl&lt; ChildType[Count], RecordCoord&lt; ResultCoords... &gt;, FirstTag, Tags... &gt;</a>
 , <a class="el" href="structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoor9dc4730dbf0b2c94fd53092536b251f3.html#ad70d55152fed64d1733912813f8bc7e8">llama::internal::GetCoordFromTagsImpl&lt; Record&lt; Fields... &gt;, RecordCoord&lt; ResultCoords... &gt;, FirstTag, Tags... &gt;</a>
+, <a class="el" href="structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoorfe79fdbf9645e3871343e16a1c302dbb.html#a81ed3a25433318d1117b1d595f3eb3ac">llama::internal::GetCoordFromTagsImpl&lt; Record&lt; Fields... &gt;, RecordCoord&lt;&gt;, RecordCoord&lt; RCs... &gt; &gt;</a>
 , <a class="el" href="structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01RecordDim_00_01RecordCoord_01_4.html#aa9ec4f749532d35c9f32a6dfa8486428">llama::internal::GetCoordFromTagsImpl&lt; RecordDim, RecordCoord &gt;</a>
 , <a class="el" href="structllama_1_1internal_1_1GetTagImpl.html#a2d8b0d388554046b6b9ff99337212b39">llama::internal::GetTagImpl&lt; RecordDim, RecordCoord &gt;</a>
 , <a class="el" href="structllama_1_1internal_1_1GetTagImpl_3_01RecordDim_00_01RecordCoord_3_4_01_4.html#a650a81512a8126a08af236327452e5d8">llama::internal::GetTagImpl&lt; RecordDim, RecordCoord&lt;&gt; &gt;</a>
@@ -409,6 +416,8 @@ $(document).ready(function(){initNavTree('functions_type.html',''); initResizabl
 , <a class="el" href="structllama_1_1internal_1_1ValueOf_3_01T_00_01std_1_1enable__if__t_3_01isRecordRef_3_01T_01_4_01_4_01_4.html#a7d727db59cc6f903bc617222329061f8">llama::internal::ValueOf&lt; T, std::enable_if_t&lt; isRecordRef&lt; T &gt; &gt; &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1internal_1_1PartionedRecordDim.html#a486051aac95e0cf8f9ad00fca4ea1273">llama::mapping::internal::PartionedRecordDim&lt; RecordDim, RecordCoordForMapping1 &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html#a6129165ebc31902aef1c48b468ddef24">llama::mapping::internal::PartitionFoldOpImpl&lt; Acc, TagList &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1internal_1_1ReplaceTagListsByCoords_3_01RecordDim_00_01mp__list_3_01Args_8_8_8_01_4_01_4.html#a6ae0875971c97bfa21cfba027b8e4347">llama::mapping::internal::ReplaceTagListsByCoords&lt; RecordDim, mp_list&lt; Args... &gt; &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1internal_1_1ReplaceTagListsByCoords_3_01RecordDim_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html#a2c814eb0b34b2bb8eb0af9687279b611">llama::mapping::internal::ReplaceTagListsByCoords&lt; RecordDim, RecordCoord&lt; RCs... &gt; &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeElement.html#ad42f5ce7a61ccadf4865031ebeb331ac">llama::mapping::tree::internal::CreateTreeElement&lt; Tag, RecordDim, CountType &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeElement_3_01Tag_00_01ChildType_0fCount_0e_00_01CountType_01_4.html#aaab9523b8d90c8f9d4a360590939440e">llama::mapping::tree::internal::CreateTreeElement&lt; Tag, ChildType[Count], CountType &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeElement_3_01Tag_00_01Record_3_01Fields_8_8_8_01_4_00_01CountType_01_4.html#a166a11a91963d8262fe470f710abf407">llama::mapping::tree::internal::CreateTreeElement&lt; Tag, Record&lt; Fields... &gt;, CountType &gt;</a>
@@ -462,7 +471,7 @@ $(document).ready(function(){initNavTree('functions_type.html',''); initResizabl
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri Jan 13 2023 17:03:51 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Fri Jan 13 2023 18:28:17 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Low-Level Abstraction of Memory Access: llama::mapping::internal::IsSelectedPredicate&lt; RC &gt; Struct Template Reference</title>
+<title>Low-Level Abstraction of Memory Access: llama::mapping::internal::ReplaceTagListsByCoords&lt; RecordDim, RecordCoord&lt; RCs... &gt; &gt; Struct Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -63,7 +63,7 @@ $(function() {
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
-$(document).ready(function(){initNavTree('structllama_1_1mapping_1_1internal_1_1IsSelectedPredicate.html',''); initResizable(); });
+$(document).ready(function(){initNavTree('structllama_1_1mapping_1_1internal_1_1ReplaceTagListsByCoords_3_01RecordDim_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html',''); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -84,9 +84,9 @@ $(document).ready(function(){initNavTree('structllama_1_1mapping_1_1internal_1_1
 <div class="header">
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
-<a href="structllama_1_1mapping_1_1internal_1_1IsSelectedPredicate-members.html">List of all members</a>  </div>
+<a href="structllama_1_1mapping_1_1internal_1_1ReplaceTagListsByCoords_3_01RecordDim_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">llama::mapping::internal::IsSelectedPredicate&lt; RC &gt; Struct Template Reference</div>  </div>
+<div class="title">llama::mapping::internal::ReplaceTagListsByCoords&lt; RecordDim, RecordCoord&lt; RCs... &gt; &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -94,34 +94,31 @@ $(document).ready(function(){initNavTree('structllama_1_1mapping_1_1internal_1_1
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a107ed951fa2e8358ef0830cc69ef02c7"><td class="memTemplParams" colspan="2">template&lt;typename RecordCoordForMapping1 &gt; </td></tr>
-<tr class="memitem:a107ed951fa2e8358ef0830cc69ef02c7"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1internal_1_1IsSelectedPredicate.html#a107ed951fa2e8358ef0830cc69ef02c7">fn</a> = mp_bool&lt; <a class="el" href="namespacellama_1_1mapping_1_1internal.html#a80b85cc773de0f9db4d011d6823ba687">isSelected</a>&lt; RC, RecordCoordForMapping1 &gt; &gt;</td></tr>
-<tr class="separator:a107ed951fa2e8358ef0830cc69ef02c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c814eb0b34b2bb8eb0af9687279b611"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1internal_1_1ReplaceTagListsByCoords_3_01RecordDim_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html#a2c814eb0b34b2bb8eb0af9687279b611">type</a> = <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RCs... &gt;</td></tr>
+<tr class="separator:a2c814eb0b34b2bb8eb0af9687279b611"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename RC&gt;<br />
-struct llama::mapping::internal::IsSelectedPredicate&lt; RC &gt;</h3>
+<div class="textblock"><h3>template&lt;typename RecordDim, std::size_t... RCs&gt;<br />
+struct llama::mapping::internal::ReplaceTagListsByCoords&lt; RecordDim, RecordCoord&lt; RCs... &gt; &gt;</h3>
 
 
-<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00064">64</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00073">73</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="a107ed951fa2e8358ef0830cc69ef02c7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a107ed951fa2e8358ef0830cc69ef02c7">&#9670;&nbsp;</a></span>fn</h2>
+<a id="a2c814eb0b34b2bb8eb0af9687279b611"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c814eb0b34b2bb8eb0af9687279b611">&#9670;&nbsp;</a></span>type</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename RC &gt; </div>
-<div class="memtemplate">
-template&lt;typename RecordCoordForMapping1 &gt; </div>
+template&lt;typename RecordDim , std::size_t... RCs&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1internal_1_1IsSelectedPredicate.html">llama::mapping::internal::IsSelectedPredicate</a>&lt; RC &gt;::<a class="el" href="structllama_1_1mapping_1_1internal_1_1IsSelectedPredicate.html#a107ed951fa2e8358ef0830cc69ef02c7">fn</a> =  mp_bool&lt;<a class="el" href="namespacellama_1_1mapping_1_1internal.html#a80b85cc773de0f9db4d011d6823ba687">isSelected</a>&lt;RC, RecordCoordForMapping1&gt; &gt;</td>
+          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1internal_1_1ReplaceTagListsByCoords.html">llama::mapping::internal::ReplaceTagListsByCoords</a>&lt; RecordDim, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RCs... &gt; &gt;::<a class="el" href="structllama_1_1mapping_1_1internal_1_1ReplaceTagListsByCoords_3_01RecordDim_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html#a2c814eb0b34b2bb8eb0af9687279b611">type</a> =  <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt;RCs...&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00067">67</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Split_8hpp_source.html#l00075">75</a> of file <a class="el" href="Split_8hpp_source.html">Split.hpp</a>.</p>
 
 </div>
 </div>
@@ -133,8 +130,8 @@ template&lt;typename RecordCoordForMapping1 &gt; </div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping_1_1internal.html">internal</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1internal_1_1IsSelectedPredicate.html">IsSelectedPredicate</a></li>
-    <li class="footer">Generated on Fri Jan 13 2023 17:03:51 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping_1_1internal.html">internal</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1internal_1_1ReplaceTagListsByCoords_3_01RecordDim_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html">ReplaceTagListsByCoords&lt; RecordDim, RecordCoord&lt; RCs... &gt; &gt;</a></li>
+    <li class="footer">Generated on Fri Jan 13 2023 18:28:17 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

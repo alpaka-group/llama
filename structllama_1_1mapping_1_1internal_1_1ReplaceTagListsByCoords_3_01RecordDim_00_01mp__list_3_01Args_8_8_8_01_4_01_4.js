@@ -1,0 +1,5 @@
+var structllama_1_1mapping_1_1internal_1_1ReplaceTagListsByCoords_3_01RecordDim_00_01mp__list_3_01Args_8_8_8_01_4_01_4 =
+[
+    [ "type", "structllama_1_1mapping_1_1internal_1_1ReplaceTagListsByCoords_3_01RecordDim_00_01mp__list_3_01Args_8_8_8_01_4_01_4.html#a6ae0875971c97bfa21cfba027b8e4347", null ],
+    [ "f", "structllama_1_1mapping_1_1internal_1_1ReplaceTagListsByCoords_3_01RecordDim_00_01mp__list_3_01Args_8_8_8_01_4_01_4.html#ad81d397d27ee18beac31b6c7a0eb95dc", null ]
+];

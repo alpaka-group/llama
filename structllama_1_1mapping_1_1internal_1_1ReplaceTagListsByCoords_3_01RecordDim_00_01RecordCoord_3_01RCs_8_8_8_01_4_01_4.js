@@ -1,0 +1,4 @@
+var structllama_1_1mapping_1_1internal_1_1ReplaceTagListsByCoords_3_01RecordDim_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4 =
+[
+    [ "type", "structllama_1_1mapping_1_1internal_1_1ReplaceTagListsByCoords_3_01RecordDim_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html#a2c814eb0b34b2bb8eb0af9687279b611", null ]
+];

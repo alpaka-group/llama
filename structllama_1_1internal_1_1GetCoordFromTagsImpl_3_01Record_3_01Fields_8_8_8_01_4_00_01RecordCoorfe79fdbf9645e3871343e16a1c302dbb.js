@@ -1,0 +1,4 @@
+var structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoorfe79fdbf9645e3871343e16a1c302dbb =
+[
+    [ "type", "structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoorfe79fdbf9645e3871343e16a1c302dbb.html#a81ed3a25433318d1117b1d595f3eb3ac", null ]
+];
