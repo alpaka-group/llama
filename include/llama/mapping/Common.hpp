@@ -180,23 +180,20 @@ namespace llama::mapping
     {
     private:
         using FlatOrigRecordDim = llama::FlatRecordDim<RecordDim>;
-        using FlatSortedRecordDim = boost::mp11::mp_sort<FlatOrigRecordDim, Less>;
+        using FlatSortedRecordDim = mp_sort<FlatOrigRecordDim, Less>;
 
         template<typename A, typename B>
-        using LessWithIndices
-            = Less<boost::mp11::mp_at<FlatOrigRecordDim, A>, boost::mp11::mp_at<FlatOrigRecordDim, B>>;
+        using LessWithIndices = Less<mp_at<FlatOrigRecordDim, A>, mp_at<FlatOrigRecordDim, B>>;
 
         // A permutation from new FlatSortedRecordDim index to old FlatOrigRecordDim index
-        using PermutedIndices
-            = boost::mp11::mp_sort<boost::mp11::mp_iota<boost::mp11::mp_size<FlatOrigRecordDim>>, LessWithIndices>;
+        using PermutedIndices = mp_sort<mp_iota<mp_size<FlatOrigRecordDim>>, LessWithIndices>;
 
         template<typename A, typename B>
-        using LessInvertPermutation = std::bool_constant<(
-            boost::mp11::mp_at<PermutedIndices, A>::value < boost::mp11::mp_at<PermutedIndices, B>::value)>;
+        using LessInvertPermutation
+            = std::bool_constant<(mp_at<PermutedIndices, A>::value < mp_at<PermutedIndices, B>::value)>;
 
         // A permutation from old FlatOrigRecordDim index to new FlatSortedRecordDim index
-        using InversePermutedIndices = boost::mp11::
-            mp_sort<boost::mp11::mp_iota<boost::mp11::mp_size<FlatOrigRecordDim>>, LessInvertPermutation>;
+        using InversePermutedIndices = mp_sort<mp_iota<mp_size<FlatOrigRecordDim>>, LessInvertPermutation>;
 
     public:
         using FlatRecordDim = FlatSortedRecordDim;
@@ -205,7 +202,7 @@ namespace llama::mapping
         static constexpr std::size_t flatIndex = []() constexpr
         {
             constexpr auto indexBefore = flatRecordCoord<RecordDim, RecordCoord<RecordCoords...>>;
-            constexpr auto indexAfter = boost::mp11::mp_at_c<InversePermutedIndices, indexBefore>::value;
+            constexpr auto indexAfter = mp_at_c<InversePermutedIndices, indexBefore>::value;
             return indexAfter;
         }
         ();
@@ -243,9 +240,7 @@ namespace llama::mapping
 #ifdef __CUDA_ARCH__
             // if you get an error here that there is no overload of atomicAdd, your CMAKE_CUDA_ARCHITECTURE might be
             // too low or you need to use a smaller CountType for the Trace or Heatmap mapping.
-            if constexpr(boost::mp11::mp_contains<
-                             boost::mp11::mp_list<int, unsigned int, unsigned long long int>,
-                             CountType>::value)
+            if constexpr(mp_contains<mp_list<int, unsigned int, unsigned long long int>, CountType>::value)
                 atomicAdd(&i, CountType{1});
             else if constexpr(sizeof(CountType) == sizeof(unsigned int))
                 atomicAdd(reinterpret_cast<unsigned int*>(&i), 1u);

@@ -134,7 +134,6 @@ namespace llama
         template<std::size_t I>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto get() const -> value_type
         {
-            using namespace boost::mp11;
             using TypeList = mp_list_c<T, Sizes...>;
             constexpr auto extent = mp_at_c<TypeList, I>::value;
             if constexpr(extent != dyn)
@@ -146,7 +145,7 @@ namespace llama
 
         LLAMA_FN_HOST_ACC_INLINE constexpr auto operator[](T i) const -> value_type
         {
-            return boost::mp11::mp_with_index<rank>(i, [&](auto ic) { return get<decltype(ic)::value>(); });
+            return mp_with_index<rank>(i, [&](auto ic) { return get<decltype(ic)::value>(); });
         }
 
     private:

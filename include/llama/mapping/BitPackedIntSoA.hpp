@@ -164,10 +164,10 @@ namespace llama::mapping
         };
 
         template<typename A, typename B>
-        using HasLargerSize = boost::mp11::mp_bool<sizeof(A) < sizeof(B)>;
+        using HasLargerSize = mp_bool<sizeof(A) < sizeof(B)>;
 
         template<typename RecordDim>
-        using LargestIntegral = boost::mp11::mp_max_element<FlatRecordDim<RecordDim>, HasLargerSize>;
+        using LargestIntegral = mp_max_element<FlatRecordDim<RecordDim>, HasLargerSize>;
 
         template<typename RecordDim>
         using StoredUnsignedFor = std::
@@ -194,7 +194,7 @@ namespace llama::mapping
     {
         using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
         using StoredIntegral = TStoredIntegral;
-        static constexpr std::size_t blobCount = boost::mp11::mp_size<FlatRecordDim<TRecordDim>>::value;
+        static constexpr std::size_t blobCount = mp_size<FlatRecordDim<TRecordDim>>::value;
 
         static_assert(std::is_integral_v<StoredIntegral>);
         static_assert(std::is_unsigned_v<StoredIntegral>);
@@ -208,17 +208,17 @@ namespace llama::mapping
         using size_type = typename TArrayExtents::value_type;
 
         template<typename T>
-        using IsAllowedFieldType = boost::mp11::mp_or<std::is_integral<T>, std::is_enum<T>>;
+        using IsAllowedFieldType = mp_or<std::is_integral<T>, std::is_enum<T>>;
 
         static_assert(
-            boost::mp11::mp_all_of<FlatRecordDim<TRecordDim>, IsAllowedFieldType>::value,
+            mp_all_of<FlatRecordDim<TRecordDim>, IsAllowedFieldType>::value,
             "All record dimension field types must be integral");
 
         template<typename T>
-        using IsFieldTypeSmallerOrEqualStorageIntegral = boost::mp11::mp_bool<sizeof(T) <= sizeof(StoredIntegral)>;
+        using IsFieldTypeSmallerOrEqualStorageIntegral = mp_bool<sizeof(T) <= sizeof(StoredIntegral)>;
 
         static_assert(
-            boost::mp11::mp_all_of<FlatRecordDim<TRecordDim>, IsFieldTypeSmallerOrEqualStorageIntegral>::value,
+            mp_all_of<FlatRecordDim<TRecordDim>, IsFieldTypeSmallerOrEqualStorageIntegral>::value,
             "The integral type used for storage must be at least as big as the type of the values to retrieve");
 
     public:
@@ -237,7 +237,7 @@ namespace llama::mapping
             , VHBits{bits}
         {
             static_assert(VHBits::value() > 0);
-            boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, FlatRecordDim<TRecordDim>>>(
+            mp_for_each<mp_transform<mp_identity, FlatRecordDim<TRecordDim>>>(
                 [&](auto t)
                 {
                     using FieldType = typename decltype(t)::type;
@@ -258,7 +258,7 @@ namespace llama::mapping
             if(VHBits::value() <= 0)
                 throw std::invalid_argument("BitPackedIntSoA Bits must not be zero");
 #endif
-            boost::mp11::mp_for_each<boost::mp11::mp_transform<boost::mp11::mp_identity, FlatRecordDim<TRecordDim>>>(
+            mp_for_each<mp_transform<mp_identity, FlatRecordDim<TRecordDim>>>(
                 [&](auto t)
                 {
                     using FieldType = typename decltype(t)::type;

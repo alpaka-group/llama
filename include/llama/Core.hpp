@@ -47,7 +47,7 @@ namespace llama
 #if __cpp_concepts
         // Cannot use a fold expression here, because clang/nvcc/icx cannot handle more than 256 arguments.
         // If you get an error here, then you passed a type which is not llama::Field as argument to Record
-        requires(boost::mp11::mp_all<boost::mp11::mp_bool<isField<Fields>>...>::value)
+        requires(mp_all<mp_bool<isField<Fields>>...>::value)
 #endif
     struct Record
     {
@@ -82,11 +82,11 @@ namespace llama
 
     /// Get the tag from a \ref Field.
     template<typename Field>
-    using GetFieldTag = boost::mp11::mp_first<Field>;
+    using GetFieldTag = mp_first<Field>;
 
     /// Get the type from a \ref Field.
     template<typename Field>
-    using GetFieldType = boost::mp11::mp_second<Field>;
+    using GetFieldType = mp_second<Field>;
 
     template<typename T>
     inline constexpr auto isRecord = false;
@@ -102,25 +102,23 @@ namespace llama
         template<typename... Fields, std::size_t FirstCoord, std::size_t... Coords>
         struct GetTagsImpl<Record<Fields...>, RecordCoord<FirstCoord, Coords...>>
         {
-            using Field = boost::mp11::mp_at_c<boost::mp11::mp_list<Fields...>, FirstCoord>;
+            using Field = mp_at_c<mp_list<Fields...>, FirstCoord>;
             using ChildTag = GetFieldTag<Field>;
             using ChildType = GetFieldType<Field>;
-            using type
-                = boost::mp11::mp_push_front<typename GetTagsImpl<ChildType, RecordCoord<Coords...>>::type, ChildTag>;
+            using type = mp_push_front<typename GetTagsImpl<ChildType, RecordCoord<Coords...>>::type, ChildTag>;
         };
 
         template<typename ChildType, std::size_t Count, std::size_t FirstCoord, std::size_t... Coords>
         struct GetTagsImpl<ChildType[Count], RecordCoord<FirstCoord, Coords...>>
         {
             using ChildTag = RecordCoord<FirstCoord>;
-            using type
-                = boost::mp11::mp_push_front<typename GetTagsImpl<ChildType, RecordCoord<Coords...>>::type, ChildTag>;
+            using type = mp_push_front<typename GetTagsImpl<ChildType, RecordCoord<Coords...>>::type, ChildTag>;
         };
 
         template<typename T>
         struct GetTagsImpl<T, RecordCoord<>>
         {
-            using type = boost::mp11::mp_list<>;
+            using type = mp_list<>;
         };
     } // namespace internal
 
@@ -134,7 +132,7 @@ namespace llama
         template<typename RecordDim, typename RecordCoord>
         struct GetTagImpl
         {
-            using type = boost::mp11::mp_back<GetTags<RecordDim, RecordCoord>>;
+            using type = mp_back<GetTags<RecordDim, RecordCoord>>;
         };
 
         template<typename RecordDim>
@@ -174,25 +172,25 @@ namespace llama
             template<typename Field>
             using HasTag = std::is_same<GetFieldTag<Field>, Tag>;
 
-            static constexpr auto value = boost::mp11::mp_find_if<FieldList, HasTag>::value;
+            static constexpr auto value = mp_find_if<FieldList, HasTag>::value;
         };
 
         template<typename RecordDim, typename RecordCoord, typename... Tags>
         struct GetCoordFromTagsImpl
         {
-            static_assert(boost::mp11::mp_size<RecordDim>::value != 0, "Tag combination is not valid");
+            static_assert(mp_size<RecordDim>::value != 0, "Tag combination is not valid");
         };
 
         template<typename... Fields, std::size_t... ResultCoords, typename FirstTag, typename... Tags>
         struct GetCoordFromTagsImpl<Record<Fields...>, RecordCoord<ResultCoords...>, FirstTag, Tags...>
         {
-            static constexpr auto tagIndex = FindFieldByTag<boost::mp11::mp_list<Fields...>, FirstTag>::value;
+            static constexpr auto tagIndex = FindFieldByTag<mp_list<Fields...>, FirstTag>::value;
             static_assert(
                 tagIndex < sizeof...(Fields),
                 "FirstTag was not found inside this Record. Does your record dimension contain the tag you access "
                 "with?");
 
-            using ChildType = GetFieldType<boost::mp11::mp_at_c<Record<Fields...>, tagIndex>>;
+            using ChildType = GetFieldType<mp_at_c<Record<Fields...>, tagIndex>>;
 
             using type =
                 typename GetCoordFromTagsImpl<ChildType, RecordCoord<ResultCoords..., tagIndex>, Tags...>::type;
@@ -222,12 +220,12 @@ namespace llama
 
         // unpack a list of tags
         template<typename... Fields, typename... Tags>
-        struct GetCoordFromTagsImpl<Record<Fields...>, RecordCoord<>, boost::mp11::mp_list<Tags...>>
+        struct GetCoordFromTagsImpl<Record<Fields...>, RecordCoord<>, mp_list<Tags...>>
             : GetCoordFromTagsImpl<Record<Fields...>, RecordCoord<>, Tags...>
         {
         };
         template<typename ChildType, std::size_t Count, typename... Tags>
-        struct GetCoordFromTagsImpl<ChildType[Count], RecordCoord<>, boost::mp11::mp_list<Tags...>>
+        struct GetCoordFromTagsImpl<ChildType[Count], RecordCoord<>, mp_list<Tags...>>
             : GetCoordFromTagsImpl<ChildType[Count], RecordCoord<>, Tags...>
         {
         };
@@ -248,7 +246,7 @@ namespace llama
         template<typename... Children, std::size_t HeadCoord, std::size_t... TailCoords>
         struct GetTypeImpl<Record<Children...>, RecordCoord<HeadCoord, TailCoords...>>
         {
-            using ChildType = GetFieldType<boost::mp11::mp_at_c<Record<Children...>, HeadCoord>>;
+            using ChildType = GetFieldType<mp_at_c<Record<Children...>, HeadCoord>>;
             using type = typename GetTypeImpl<ChildType, RecordCoord<TailCoords...>>::type;
         };
 
@@ -279,7 +277,7 @@ namespace llama
         template<typename T, std::size_t... RCs>
         struct LeafRecordCoordsImpl<T, RecordCoord<RCs...>>
         {
-            using type = boost::mp11::mp_list<RecordCoord<RCs...>>;
+            using type = mp_list<RecordCoord<RCs...>>;
         };
 
         template<typename... Fields, std::size_t... RCs>
@@ -288,7 +286,7 @@ namespace llama
             template<std::size_t... Is>
             static auto help(std::index_sequence<Is...>)
             {
-                return boost::mp11::mp_append<
+                return mp_append<
                     typename LeafRecordCoordsImpl<GetFieldType<Fields>, RecordCoord<RCs..., Is>>::type...>{};
             }
             using type = decltype(help(std::make_index_sequence<sizeof...(Fields)>{}));
@@ -300,8 +298,7 @@ namespace llama
             template<std::size_t... Is>
             static auto help(std::index_sequence<Is...>)
             {
-                return boost::mp11::mp_append<
-                    typename LeafRecordCoordsImpl<Child, RecordCoord<RCs..., Is>>::type...>{};
+                return mp_append<typename LeafRecordCoordsImpl<Child, RecordCoord<RCs..., Is>>::type...>{};
             }
             using type = decltype(help(std::make_index_sequence<N>{}));
         };
@@ -356,18 +353,18 @@ namespace llama
         template<typename T>
         struct FlattenRecordDimImpl
         {
-            using type = boost::mp11::mp_list<T>;
+            using type = mp_list<T>;
         };
 
         template<typename... Fields>
         struct FlattenRecordDimImpl<Record<Fields...>>
         {
-            using type = boost::mp11::mp_append<typename FlattenRecordDimImpl<GetFieldType<Fields>>::type...>;
+            using type = mp_append<typename FlattenRecordDimImpl<GetFieldType<Fields>>::type...>;
         };
         template<typename Child, std::size_t N>
         struct FlattenRecordDimImpl<Child[N]>
         {
-            using type = boost::mp11::mp_repeat_c<typename FlattenRecordDimImpl<Child>::type, N>;
+            using type = mp_repeat_c<typename FlattenRecordDimImpl<Child>::type, N>;
         };
     } // namespace internal
 
@@ -400,7 +397,7 @@ namespace llama
         inline constexpr std::size_t flatFieldCountBefore<
             I,
             Record<
-                Children...>> = flatFieldCountBefore<I - 1, Record<Children...>> + flatFieldCount<GetFieldType<boost::mp11::mp_at_c<Record<Children...>, I - 1>>>;
+                Children...>> = flatFieldCountBefore<I - 1, Record<Children...>> + flatFieldCount<GetFieldType<mp_at_c<Record<Children...>, I - 1>>>;
     } // namespace internal
 
     /// The equivalent zero based index into a flat record dimension (\ref FlatRecordDim) of the given hierarchical
@@ -420,7 +417,7 @@ namespace llama
                           flatFieldCountBefore<
                               I,
                               Record<
-                                  Children...>> + flatRecordCoord<GetFieldType<boost::mp11::mp_at_c<Record<Children...>, I>>, RecordCoord<Is...>>;
+                                  Children...>> + flatRecordCoord<GetFieldType<mp_at_c<Record<Children...>, I>>, RecordCoord<Is...>>;
 
     template<typename Child, std::size_t N, std::size_t I, std::size_t... Is>
     inline constexpr std::size_t flatRecordCoord<Child[N], RecordCoord<I, Is...>> = flatFieldCount<Child>* I
@@ -431,8 +428,6 @@ namespace llama
         template<typename TypeList>
         constexpr auto flatAlignOfImpl()
         {
-            using namespace boost::mp11;
-
             std::size_t maxAlign = 0;
             mp_for_each<mp_transform<mp_identity, TypeList>>([&](auto e) constexpr {
                 using T = typename decltype(e)::type;
@@ -475,8 +470,6 @@ namespace llama
         template<typename TypeList, bool Align, bool IncludeTailPadding>
         constexpr auto sizeOfImpl() -> std::size_t
         {
-            using namespace boost::mp11;
-
             std::size_t size = 0;
             std::size_t maxAlign = 0; // NOLINT(misc-const-correctness)
             mp_for_each<mp_transform<mp_identity, TypeList>>([&](auto e) constexpr {
@@ -532,9 +525,9 @@ namespace llama
             else
             {
                 std::size_t offset // NOLINT(misc-const-correctness)
-                    = flatOffsetOf<TypeList, I - 1, Align> + sizeof(boost::mp11::mp_at_c<TypeList, I - 1>);
+                    = flatOffsetOf<TypeList, I - 1, Align> + sizeof(mp_at_c<TypeList, I - 1>);
                 if constexpr(Align)
-                    offset = roundUpToMultiple(offset, alignof(boost::mp11::mp_at_c<TypeList, I>));
+                    offset = roundUpToMultiple(offset, alignof(mp_at_c<TypeList, I>));
                 return offset;
             }
         }
@@ -611,9 +604,8 @@ namespace llama
             static void f(std::index_sequence<Js...>)
             {
                 static_assert(
-                    boost::mp11::mp_same<
-                        typename TransformLeavesWithCoordImpl<RecordCoord<Is..., Js>, Child, TypeFunctor>::type...>::
-                        value,
+                    mp_same<typename TransformLeavesWithCoordImpl<RecordCoord<Is..., Js>, Child, TypeFunctor>::
+                                type...>::value,
                     "Leave transformations beneath an array node must return the same type");
             }
             using dummy = decltype(f(std::make_index_sequence<N>{}));
@@ -647,16 +639,14 @@ namespace llama
         // computing a real set union of the two tag list lists
 
         template<typename A, typename B>
-        auto mergeRecordDimsImpl(boost::mp11::mp_identity<A> a, boost::mp11::mp_identity<B>)
+        auto mergeRecordDimsImpl(mp_identity<A> a, mp_identity<B>)
         {
             static_assert(std::is_same_v<A, B>, "Cannot merge record and non-record or fields with different types");
             return a;
         }
 
         template<typename A, std::size_t NA, typename B, std::size_t NB>
-        auto mergeRecordDimsImpl(
-            [[maybe_unused]] boost::mp11::mp_identity<A[NA]> a,
-            [[maybe_unused]] boost::mp11::mp_identity<B[NB]> b)
+        auto mergeRecordDimsImpl([[maybe_unused]] mp_identity<A[NA]> a, [[maybe_unused]] mp_identity<B[NB]> b)
         {
             static_assert(std::is_same_v<A, B>, "Cannot merge arrays of different type");
             if constexpr(NA < NB)
@@ -666,7 +656,7 @@ namespace llama
         }
 
         template<typename... FieldsA>
-        auto mergeRecordDimsImpl(boost::mp11::mp_identity<Record<FieldsA...>> a, boost::mp11::mp_identity<Record<>>)
+        auto mergeRecordDimsImpl(mp_identity<Record<FieldsA...>> a, mp_identity<Record<>>)
         {
             return a;
         }
@@ -676,11 +666,8 @@ namespace llama
             typename FieldB,
             typename... FieldsB,
             auto Pos = FindFieldByTag<Record<FieldsA...>, GetFieldTag<FieldB>>::value>
-        auto mergeRecordDimsImpl(
-            boost::mp11::mp_identity<Record<FieldsA...>>,
-            boost::mp11::mp_identity<Record<FieldB, FieldsB...>>)
+        auto mergeRecordDimsImpl(mp_identity<Record<FieldsA...>>, mp_identity<Record<FieldB, FieldsB...>>)
         {
-            using namespace boost::mp11;
             if constexpr(Pos == sizeof...(FieldsA))
             {
                 return mergeRecordDimsImpl(
@@ -703,9 +690,8 @@ namespace llama
 
     /// Creates a merged record dimension, where duplicated, nested fields are unified.
     template<typename RecordDimA, typename RecordDimB>
-    using MergedRecordDims = typename decltype(internal::mergeRecordDimsImpl(
-        boost::mp11::mp_identity<RecordDimA>{},
-        boost::mp11::mp_identity<RecordDimB>{}))::type;
+    using MergedRecordDims =
+        typename decltype(internal::mergeRecordDimsImpl(mp_identity<RecordDimA>{}, mp_identity<RecordDimB>{}))::type;
 
     /// Alias for ToT, adding `const` if FromT is const qualified.
     template<typename FromT, typename ToT>

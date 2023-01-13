@@ -786,7 +786,7 @@ namespace llama
         os << "{";
         if constexpr(std::is_array_v<RecordDim>)
         {
-            boost::mp11::mp_for_each<boost::mp11::mp_iota_c<std::extent_v<RecordDim>>>(
+            mp_for_each<mp_iota_c<std::extent_v<RecordDim>>>(
                 [&](auto ic)
                 {
                     constexpr std::size_t i = decltype(ic)::value;
@@ -797,13 +797,13 @@ namespace llama
         }
         else
         {
-            boost::mp11::mp_for_each<boost::mp11::mp_iota<boost::mp11::mp_size<RecordDim>>>(
+            mp_for_each<mp_iota<mp_size<RecordDim>>>(
                 [&](auto ic)
                 {
                     constexpr std::size_t i = decltype(ic)::value;
                     if(i > 0)
                         os << ", ";
-                    using Field = boost::mp11::mp_at_c<RecordDim, i>;
+                    using Field = mp_at_c<RecordDim, i>;
                     os << structName<GetFieldTag<Field>>() << ": " << vr(RecordCoord<i>{});
                 });
         }

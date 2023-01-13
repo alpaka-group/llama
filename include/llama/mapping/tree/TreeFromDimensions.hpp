@@ -15,7 +15,7 @@ namespace llama::mapping::tree
     inline constexpr auto one = 1;
 
     template<>
-    inline constexpr auto one<boost::mp11::mp_size_t<1>> = boost::mp11::mp_size_t<1>{};
+    inline constexpr auto one<mp_size_t<1>> = mp_size_t<1>{};
 
     template<typename TIdentifier, typename TType, typename CountType = std::size_t>
     struct Leaf
@@ -39,12 +39,12 @@ namespace llama::mapping::tree
     template<std::size_t ChildIndex = 0, typename ArrayIndexType = std::size_t>
     struct TreeCoordElement
     {
-        static constexpr boost::mp11::mp_size_t<ChildIndex> childIndex = {};
+        static constexpr mp_size_t<ChildIndex> childIndex = {};
         const ArrayIndexType arrayIndex = {};
     };
 
     template<std::size_t... Coords>
-    using TreeCoord = Tuple<TreeCoordElement<Coords, boost::mp11::mp_size_t<0>>...>;
+    using TreeCoord = Tuple<TreeCoordElement<Coords, mp_size_t<0>>...>;
 
     namespace internal
     {
@@ -73,7 +73,7 @@ namespace llama::mapping::tree
         template<typename Tag, typename RecordDim, typename CountType>
         struct CreateTreeElement
         {
-            using type = Leaf<Tag, RecordDim, boost::mp11::mp_size_t<1>>;
+            using type = Leaf<Tag, RecordDim, mp_size_t<1>>;
         };
 
         template<typename Tag, typename... Fields, typename CountType>
@@ -81,9 +81,7 @@ namespace llama::mapping::tree
         {
             using type = Node<
                 Tag,
-                Tuple<
-                    typename CreateTreeElement<GetFieldTag<Fields>, GetFieldType<Fields>, boost::mp11::mp_size_t<1>>::
-                        type...>,
+                Tuple<typename CreateTreeElement<GetFieldTag<Fields>, GetFieldType<Fields>, mp_size_t<1>>::type...>,
                 CountType>;
         };
 
@@ -93,8 +91,7 @@ namespace llama::mapping::tree
             template<std::size_t... Is>
             static auto createChildren(std::index_sequence<Is...>)
             {
-                return Tuple<
-                    typename CreateTreeElement<RecordCoord<Is>, ChildType, boost::mp11::mp_size_t<1>>::type...>{};
+                return Tuple<typename CreateTreeElement<RecordCoord<Is>, ChildType, mp_size_t<1>>::type...>{};
             }
 
             using type = Node<Tag, decltype(createChildren(std::make_index_sequence<Count>{})), CountType>;
@@ -153,8 +150,8 @@ namespace llama::mapping::tree
             return Tuple{
                 TreeCoordElement<(ADIndices == ArrayIndex::rank - 1 ? FirstRecordCoord : 0)>{static_cast<std::size_t>(
                     ai[ADIndices])}..., // TODO(bgruber): we should keep the integer type from the array index
-                TreeCoordElement<RecordCoords, boost::mp11::mp_size_t<0>>{}...,
-                TreeCoordElement<0, boost::mp11::mp_size_t<0>>{}};
+                TreeCoordElement<RecordCoords, mp_size_t<0>>{}...,
+                TreeCoordElement<0, mp_size_t<0>>{}};
         }
     } // namespace internal
 

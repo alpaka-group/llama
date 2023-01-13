@@ -279,7 +279,7 @@ namespace llama
             constexpr auto size = [&]() constexpr
             {
                 std::size_t s = 0;
-                boost::mp11::mp_for_each<Tags>(
+                mp_for_each<Tags>(
                     [&](auto tag)
                     {
                         if(s != 0)
@@ -296,7 +296,7 @@ namespace llama
             llama::Array<char, size> a{};
             auto w = a.begin();
 
-            boost::mp11::mp_for_each<Tags>([&](auto tag) constexpr {
+            mp_for_each<Tags>([&](auto tag) constexpr {
                 if(w != a.begin())
                 {
                     *w = '.';

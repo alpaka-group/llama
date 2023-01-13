@@ -26,7 +26,6 @@ namespace llama::mapping
         template<typename ProjectionMap, typename Coord, typename RecordDimType>
         auto projectionOrVoidImpl()
         {
-            using namespace boost::mp11;
             if constexpr(mp_map_contains<ProjectionMap, Coord>::value)
                 return mp_identity<mp_second<mp_map_find<ProjectionMap, Coord>>>{};
             else if constexpr(mp_map_contains<ProjectionMap, RecordDimType>::value)
@@ -46,7 +45,7 @@ namespace llama::mapping
             {
                 using Projection = ProjectionOrVoid<ProjectionMap, Coord, RecordDimType>;
                 if constexpr(std::is_void_v<Projection>)
-                    return boost::mp11::mp_identity<RecordDimType>{};
+                    return mp_identity<RecordDimType>{};
                 else
                 {
                     using LoadFunc = UnaryFunctionTraits<decltype(&Projection::load)>;
@@ -56,7 +55,7 @@ namespace llama::mapping
                     static_assert(std::is_same_v<typename StoreFunc::ArgumentType, RecordDimType>);
                     static_assert(std::is_same_v<typename LoadFunc::ArgumentType, typename StoreFunc::ReturnType>);
 
-                    return boost::mp11::mp_identity<typename StoreFunc::ReturnType>{};
+                    return mp_identity<typename StoreFunc::ReturnType>{};
                 }
             }
 

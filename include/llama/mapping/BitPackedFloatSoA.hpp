@@ -166,10 +166,8 @@ namespace llama::mapping
         };
 
         template<typename RecordDim>
-        using StoredIntegralFor = std::conditional_t<
-            boost::mp11::mp_contains<FlatRecordDim<RecordDim>, double>::value,
-            std::uint64_t,
-            std::uint32_t>;
+        using StoredIntegralFor
+            = std::conditional_t<mp_contains<FlatRecordDim<RecordDim>, double>::value, std::uint64_t, std::uint32_t>;
     } // namespace internal
 
     /// Struct of array mapping using bit packing to reduce size/precision of floating-point data types. The bit layout
@@ -205,7 +203,7 @@ namespace llama::mapping
     public:
         using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
         using StoredIntegral = TStoredIntegral;
-        static constexpr std::size_t blobCount = boost::mp11::mp_size<FlatRecordDim<TRecordDim>>::value;
+        static constexpr std::size_t blobCount = mp_size<FlatRecordDim<TRecordDim>>::value;
 
         LLAMA_FN_HOST_ACC_INLINE
         constexpr auto exponentBits() const -> size_type

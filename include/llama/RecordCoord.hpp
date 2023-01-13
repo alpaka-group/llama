@@ -16,18 +16,18 @@ namespace llama
     template<std::size_t... Coords>
     struct RecordCoord
     {
-        /// The list of integral coordinates as `boost::mp11::mp_list`.
-        using List = boost::mp11::mp_list_c<std::size_t, Coords...>;
+        /// The list of integral coordinates as `mp_list`.
+        using List = mp_list_c<std::size_t, Coords...>;
 
-        static constexpr std::size_t front = boost::mp11::mp_front<List>::value;
-        static constexpr std::size_t back = boost::mp11::mp_back<List>::value;
+        static constexpr std::size_t front = mp_front<List>::value;
+        static constexpr std::size_t back = mp_back<List>::value;
         static constexpr std::size_t size = sizeof...(Coords);
     };
 
     template<>
     struct RecordCoord<>
     {
-        using List = boost::mp11::mp_list_c<std::size_t>;
+        using List = mp_list_c<std::size_t>;
 
         static constexpr std::size_t size = 0;
     };
@@ -102,7 +102,7 @@ namespace llama
 
     /// Concatenate a set of \ref RecordCoord%s.
     template<typename... RecordCoords>
-    using Cat = RecordCoordFromList<boost::mp11::mp_append<typename RecordCoords::List...>>;
+    using Cat = RecordCoordFromList<mp_append<typename RecordCoords::List...>>;
 
     /// Concatenate a set of \ref RecordCoord%s instances.
     template<typename... RecordCoords>
@@ -113,7 +113,7 @@ namespace llama
 
     /// RecordCoord without first coordinate component.
     template<typename RecordCoord>
-    using PopFront = RecordCoordFromList<boost::mp11::mp_pop_front<typename RecordCoord::List>>;
+    using PopFront = RecordCoordFromList<mp_pop_front<typename RecordCoord::List>>;
 
     namespace internal
     {

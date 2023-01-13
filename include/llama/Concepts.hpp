@@ -33,12 +33,12 @@ namespace llama
     struct MakeIsPhysical
     {
         template<typename RC>
-        using fn = boost::mp11::mp_bool<PhysicalField<M, RC>>;
+        using fn = mp_bool<PhysicalField<M, RC>>;
     };
 
     template<typename M>
     inline constexpr bool allFieldsArePhysical
-        = boost::mp11::mp_all_of<LeafRecordCoords<typename M::RecordDim>, MakeIsPhysical<M>::template fn>::value;
+        = mp_all_of<LeafRecordCoords<typename M::RecordDim>, MakeIsPhysical<M>::template fn>::value;
 
     template <typename M>
     concept PhysicalMapping = Mapping<M> && allFieldsArePhysical<M>;
@@ -68,12 +68,12 @@ namespace llama
     struct MakeIsComputed
     {
         template<typename RC>
-        using fn = boost::mp11::mp_bool<ComputedField<M, RC>>;
+        using fn = mp_bool<ComputedField<M, RC>>;
     };
 
     template<typename M>
     inline constexpr bool allFieldsAreComputed
-        = boost::mp11::mp_all_of<LeafRecordCoords<typename M::RecordDim>, MakeIsComputed<M>::template fn>::value;
+        = mp_all_of<LeafRecordCoords<typename M::RecordDim>, MakeIsComputed<M>::template fn>::value;
 
     template <typename M>
     concept FullyComputedMapping = Mapping<M> && allFieldsAreComputed<M>;
@@ -81,10 +81,10 @@ namespace llama
     template<
         typename M,
         typename LeafCoords = LeafRecordCoords<typename M::RecordDim>,
-        std::size_t PhysicalCount = boost::mp11::mp_count_if<LeafCoords, MakeIsPhysical<M>::template fn>::value,
-        std::size_t ComputedCount = boost::mp11::mp_count_if<LeafCoords, MakeIsComputed<M>::template fn>::value>
+        std::size_t PhysicalCount = mp_count_if<LeafCoords, MakeIsPhysical<M>::template fn>::value,
+        std::size_t ComputedCount = mp_count_if<LeafCoords, MakeIsComputed<M>::template fn>::value>
     inline constexpr bool allFieldsArePhysicalOrComputed
-        = (PhysicalCount + ComputedCount) >= boost::mp11::mp_size<LeafCoords>::value&& PhysicalCount > 0
+        = (PhysicalCount + ComputedCount) >= mp_size<LeafCoords>::value&& PhysicalCount > 0
         && ComputedCount > 0; // == instead of >= would be better, but it's not easy to count correctly,
                               // because we cannot check whether the call to blobNrOrOffset()
                               // or compute() is actually valid

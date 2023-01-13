@@ -22,10 +22,10 @@ namespace llama::mapping::tree
         template<typename Tree, typename... Operations>
         struct MergeFunctors<Tree, Tuple<Operations...>>
         {
-            boost::mp11::mp_first<Tuple<Operations...>> operation = {};
+            mp_first<Tuple<Operations...>> operation = {};
             using ResultTree = decltype(operation.basicToResult(Tree()));
             ResultTree treeAfterOp;
-            MergeFunctors<ResultTree, boost::mp11::mp_drop_c<Tuple<Operations...>, 1>> next = {};
+            MergeFunctors<ResultTree, mp_drop_c<Tuple<Operations...>, 1>> next = {};
 
             MergeFunctors() = default;
 
@@ -120,7 +120,7 @@ namespace llama::mapping::tree
         template<typename Identifier, typename Type, typename CountType>
         LLAMA_FN_HOST_ACC_INLINE auto getTreeBlobSize(const Node<Identifier, Type, CountType>& node) -> std::size_t
         {
-            constexpr std::size_t childCount = boost::mp11::mp_size<std::decay_t<decltype(node.childs)>>::value;
+            constexpr std::size_t childCount = mp_size<std::decay_t<decltype(node.childs)>>::value;
             return getChildrenBlobSize(node.childs, std::make_index_sequence<childCount>{}, LLAMA_COPY(node.count));
         }
 

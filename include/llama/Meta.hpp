@@ -52,6 +52,9 @@ namespace boost::mp11
 
 namespace llama
 {
+    // make mp11 directly available in the llama namespace
+    using namespace boost::mp11;
+
     namespace internal
     {
         template<typename FromList, template<auto...> class ToList>
@@ -72,9 +75,9 @@ namespace llama
             using type = E;
         };
         template<std::size_t I, typename... Args>
-        struct ReplacePlaceholdersImpl<boost::mp11::mp_arg<I>, Args...>
+        struct ReplacePlaceholdersImpl<mp_arg<I>, Args...>
         {
-            using type = boost::mp11::mp_at_c<boost::mp11::mp_list<Args...>, I>;
+            using type = mp_at_c<mp_list<Args...>, I>;
         };
 
         template<template<typename...> typename E, typename... Ts, typename... Args>

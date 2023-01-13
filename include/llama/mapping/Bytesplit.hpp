@@ -76,7 +76,7 @@ namespace llama::mapping
 
                 value_type v;
                 auto* p = reinterpret_cast<std::byte*>(&v);
-                boost::mp11::mp_for_each<boost::mp11::mp_iota_c<sizeof(value_type)>>(
+                mp_for_each<mp_iota_c<sizeof(value_type)>>(
                     [&](auto ic)
                     {
                         constexpr auto i = decltype(ic)::value;
@@ -95,7 +95,7 @@ namespace llama::mapping
 #endif
 
                 auto* p = reinterpret_cast<std::byte*>(&v);
-                boost::mp11::mp_for_each<boost::mp11::mp_iota_c<sizeof(value_type)>>(
+                mp_for_each<mp_iota_c<sizeof(value_type)>>(
                     [&](auto ic)
                     {
                         constexpr auto i = decltype(ic)::value;
