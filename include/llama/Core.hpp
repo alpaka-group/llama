@@ -224,16 +224,25 @@ namespace llama
             : GetCoordFromTagsImpl<Record<Fields...>, RecordCoord<>, Tags...>
         {
         };
+
         template<typename ChildType, std::size_t Count, typename... Tags>
         struct GetCoordFromTagsImpl<ChildType[Count], RecordCoord<>, mp_list<Tags...>>
             : GetCoordFromTagsImpl<ChildType[Count], RecordCoord<>, Tags...>
         {
         };
+
+        // pass through a RecordCoord
+        template<typename... Fields, std::size_t... RCs>
+        struct GetCoordFromTagsImpl<Record<Fields...>, RecordCoord<>, RecordCoord<RCs...>>
+        {
+            using type = RecordCoord<RCs...>;
+        };
     } // namespace internal
 
-    /// Converts a series of tags, or a list of tags, navigating down a record dimension into a \ref RecordCoord.
-    template<typename RecordDim, typename... Tags>
-    using GetCoordFromTags = typename internal::GetCoordFromTagsImpl<RecordDim, RecordCoord<>, Tags...>::type;
+    /// Converts a series of tags, or a list of tags, navigating down a record dimension into a \ref RecordCoord. A
+    /// RecordCoord will be passed through unmodified.
+    template<typename RecordDim, typename... TagsOrTagList>
+    using GetCoordFromTags = typename internal::GetCoordFromTagsImpl<RecordDim, RecordCoord<>, TagsOrTagList...>::type;
 
     namespace internal
     {
@@ -381,7 +390,7 @@ namespace llama
         Record<Children...>> = (flatFieldCount<GetFieldType<Children>> + ... + 0);
 
     template<typename Child, std::size_t N>
-    inline constexpr std::size_t flatFieldCount<Child[N]> = flatFieldCount<Child>* N;
+    inline constexpr std::size_t flatFieldCount<Child[N]> = flatFieldCount<Child> * N;
 
     namespace internal
     {
