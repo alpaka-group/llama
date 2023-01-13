@@ -218,8 +218,11 @@ TEST_CASE("mapping.Split.BitPacked")
         Vec3I,
         llama::RecordCoord<0>,
         llama::mapping::BindBitPackedIntSoA<llama::Constant<3>>::fn,
-        llama::mapping::
-            BindSplit<llama::RecordCoord<0>, llama::mapping::BitPackedIntSoA, llama::mapping::PackedAoS, true>::fn,
+        llama::mapping::BindSplit<
+            llama::RecordCoord<0>,
+            llama::mapping::BindBitPackedIntSoA<>::fn,
+            llama::mapping::PackedAoS,
+            true>::fn,
         true>{std::tuple{extents}, std::tuple{std::tuple{extents, 5}, std::tuple{extents}}};
 
     STATIC_REQUIRE(mapping.blobCount == 3);

@@ -273,11 +273,11 @@ TEMPLATE_TEST_CASE(
             {
                 std::vector<StoredIntegral> blob(sizeof(Integral) * 32);
 
-                // 5 bits are required to store values from 0..31, +1 for sign bit
-                for(StoredIntegral bitCount = 5 + 1; bitCount <= sizeof(Integral) * CHAR_BIT; bitCount++)
+                // positive numbers: 5 bits are required to store values from 0..31, +1 for sign bit
+                for(StoredIntegral bitCount = 5; bitCount <= sizeof(Integral) * CHAR_BIT; bitCount++)
                 {
                     for(Integral i = 0; i < 32; i++)
-                        llama::mapping::internal::bitpack<Integral>(
+                        llama::mapping::internal::bitpack<Integral, false>(
                             blob.data(),
                             static_cast<StoredIntegral>(i * bitCount),
                             bitCount,
@@ -285,11 +285,33 @@ TEMPLATE_TEST_CASE(
 
                     for(Integral i = 0; i < 32; i++)
                         CHECK(
-                            llama::mapping::internal::bitunpack<Integral>(
+                            llama::mapping::internal::bitunpack<Integral, false>(
                                 blob.data(),
                                 static_cast<StoredIntegral>(i * bitCount),
                                 bitCount)
                             == i);
+                }
+
+                if constexpr(std::is_signed_v<Integral>)
+                {
+                    // negative numbers: 5 bits are required to store values from -32..-1, +1 for sign bit
+                    for(StoredIntegral bitCount = 5 + 1; bitCount <= sizeof(Integral) * CHAR_BIT; bitCount++)
+                    {
+                        for(Integral i = 0; i < 32; i++)
+                            llama::mapping::internal::bitpack<Integral, true>(
+                                blob.data(),
+                                static_cast<StoredIntegral>(i * bitCount),
+                                bitCount,
+                                i - 32);
+
+                        for(Integral i = 0; i < 32; i++)
+                            CHECK(
+                                llama::mapping::internal::bitunpack<Integral, true>(
+                                    blob.data(),
+                                    static_cast<StoredIntegral>(i * bitCount),
+                                    bitCount)
+                                == i - 32);
+                    }
                 }
             }
         });

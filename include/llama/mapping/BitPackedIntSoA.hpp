@@ -11,6 +11,12 @@
 
 namespace llama::mapping
 {
+    enum class SignBit
+    {
+        Keep,
+        Discard
+    };
+
     namespace internal
     {
         template<typename Integral>
@@ -19,7 +25,7 @@ namespace llama::mapping
             return bits >= sizeof(Integral) * CHAR_BIT ? ~Integral{0} : (Integral{1} << bits) - 1u;
         }
 
-        template<typename Integral, typename StoredIntegral>
+        template<typename Integral, bool KeepSignBit, typename StoredIntegral>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto bitunpack(
             const StoredIntegral* ptr,
             StoredIntegral bitOffset,
@@ -53,7 +59,7 @@ namespace llama::mapping
                 //                assert(p + 1 < endPtr);
                 v |= (p[1] & mask) << bitsLoaded;
             }
-            if constexpr(std::is_signed_v<Integral>)
+            if constexpr(std::is_signed_v<Integral> && KeepSignBit)
             {
                 // perform sign extension
                 if((v & (StoredIntegral{1} << (bitCount - 1))) && bitCount < bitsPerStoredIntegral)
@@ -62,7 +68,7 @@ namespace llama::mapping
             return static_cast<Integral>(v);
         }
 
-        template<typename Integral, typename StoredIntegral>
+        template<typename Integral, bool KeepSignBit, typename StoredIntegral>
         LLAMA_FN_HOST_ACC_INLINE constexpr void bitpack(
             StoredIntegral* ptr,
             StoredIntegral bitOffset,
@@ -82,13 +88,15 @@ namespace llama::mapping
             const auto unsignedValue = static_cast<StoredIntegral>(value);
             const auto mask = makeMask(bitCount);
             StoredIntegral valueBits;
-            if constexpr(!std::is_signed_v<Integral>)
-                valueBits = unsignedValue & mask;
-            else
+            if constexpr(std::is_signed_v<Integral> && KeepSignBit)
             {
                 const auto magnitudeMask = makeMask(bitCount - 1);
                 const auto isSigned = value < 0;
                 valueBits = (StoredIntegral{isSigned} << (bitCount - 1)) | (unsignedValue & magnitudeMask);
+            }
+            else
+            {
+                valueBits = unsignedValue & mask;
             }
 
             auto* p = ptr + bitOffset / bitsPerStoredIntegral;
@@ -120,10 +128,10 @@ namespace llama::mapping
         /// @tparam Integral Integral data type which can be loaded and store through this reference.
         /// @tparam StoredIntegralCV Integral type used for storing the bits with CV qualifiers.
         /// @tparam SizeType Type used to store sizes and offsets.
-        template<typename Integral, typename StoredIntegralCV, typename VHBits, typename SizeType>
+        template<typename Integral, typename StoredIntegralCV, typename VHBits, typename SizeType, SignBit SignBit>
         struct BitPackedIntRef
             : private VHBits
-            , ProxyRefOpMixin<BitPackedIntRef<Integral, StoredIntegralCV, VHBits, SizeType>, Integral>
+            , ProxyRefOpMixin<BitPackedIntRef<Integral, StoredIntegralCV, VHBits, SizeType, SignBit>, Integral>
         {
         private:
             using StoredIntegral = std::remove_cv_t<StoredIntegralCV>;
@@ -146,7 +154,7 @@ namespace llama::mapping
             // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
             LLAMA_FN_HOST_ACC_INLINE constexpr operator Integral() const
             {
-                return bitunpack<Integral>(
+                return bitunpack<Integral, SignBit == SignBit::Keep>(
                     ptr,
                     static_cast<StoredIntegral>(bitOffset),
                     static_cast<StoredIntegral>(VHBits::value()));
@@ -154,7 +162,7 @@ namespace llama::mapping
 
             LLAMA_FN_HOST_ACC_INLINE constexpr auto operator=(Integral value) -> BitPackedIntRef&
             {
-                bitpack<Integral>(
+                bitpack<Integral, SignBit == SignBit::Keep>(
                     ptr,
                     static_cast<StoredIntegral>(bitOffset),
                     static_cast<StoredIntegral>(VHBits::value()),
@@ -180,14 +188,18 @@ namespace llama::mapping
     /// an integral type T, the number of bits is specified at runtime, passed to the constructor and stored as type T.
     /// Must not be zero and must not be bigger than the bits of TStoredIntegral.
     /// \tparam TLinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
-    /// how big the linear domain gets. \tparam TStoredIntegral Integral type used as storage of reduced precision
-    /// integers. Must be std::uint32_t or std::uint64_t.
+    /// how big the linear domain gets.
+    /// \tparam TStoredIntegral Integral type used as storage of reduced precision integers. Must be std::uint32_t or
+    /// std::uint64_t.
+    /// @tparam SignBit When set to SignBit::Discard, discards the sign bit when storing signed integers. All
+    /// numbers will be read back positive.
     template<
         typename TArrayExtents,
         typename TRecordDim,
         typename Bits = typename TArrayExtents::value_type,
         typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
-        typename TStoredIntegral = internal::StoredUnsignedFor<TRecordDim>>
+        typename TStoredIntegral = internal::StoredUnsignedFor<TRecordDim>,
+        SignBit SignBit = SignBit::Keep>
     struct BitPackedIntSoA
         : MappingBase<TArrayExtents, TRecordDim>
         , private llama::internal::BoxedValue<Bits>
@@ -298,7 +310,7 @@ namespace llama::mapping
             using QualifiedStoredIntegral = CopyConst<Blobs, StoredIntegral>;
             using DstType = GetType<TRecordDim, RecordCoord<RecordCoords...>>;
             LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-            return internal::BitPackedIntRef<DstType, QualifiedStoredIntegral, VHBits, size_type>{
+            return internal::BitPackedIntRef<DstType, QualifiedStoredIntegral, VHBits, size_type, SignBit>{
                 reinterpret_cast<QualifiedStoredIntegral*>(&blobs[blob][0]),
                 bitOffset,
                 static_cast<const VHBits&>(*this)};
@@ -309,16 +321,17 @@ namespace llama::mapping
     /// Binds parameters to a \ref BitPackedIntSoA mapping except for array and record dimension, producing a quoted
     /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
     template<
-        typename Bits = unsigned,
+        typename Bits = void,
         typename LinearizeArrayDimsFunctor = mapping::LinearizeArrayDimsCpp,
-        typename StoredIntegral = void>
+        typename StoredIntegral = void,
+        SignBit SignBit = SignBit::Keep>
     struct BindBitPackedIntSoA
     {
         template<typename ArrayExtents, typename RecordDim>
         using fn = BitPackedIntSoA<
             ArrayExtents,
             RecordDim,
-            Bits,
+            std::conditional_t<!std::is_void_v<Bits>, Bits, typename ArrayExtents::value_type>,
             LinearizeArrayDimsFunctor,
             std::conditional_t<
                 !std::is_void_v<StoredIntegral>,
@@ -329,6 +342,13 @@ namespace llama::mapping
     template<typename Mapping>
     inline constexpr bool isBitPackedIntSoA = false;
 
-    template<typename... Ts>
-    inline constexpr bool isBitPackedIntSoA<BitPackedIntSoA<Ts...>> = true;
+    template<
+        typename ArrayExtents,
+        typename RecordDim,
+        typename Bits,
+        typename LinearizeArrayDimsFunctor,
+        typename StoredIntegral,
+        SignBit SignBit>
+    inline constexpr bool isBitPackedIntSoA<
+        BitPackedIntSoA<ArrayExtents, RecordDim, Bits, LinearizeArrayDimsFunctor, StoredIntegral, SignBit>> = true;
 } // namespace llama::mapping
