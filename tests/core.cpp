@@ -286,8 +286,7 @@ TEST_CASE("hasSameTags")
             llama::RecordCoord<0>, // Local A
             VelRecord, // RD B
             llama::RecordCoord<1> // Local B
-            >
-        == false);
+            > == false);
 
     STATIC_REQUIRE(
         llama::hasSameTags<
@@ -295,8 +294,7 @@ TEST_CASE("hasSameTags")
             llama::RecordCoord<0>, // Local A
             VelRecord, // RD B
             llama::RecordCoord<0> // Local B
-            >
-        == true);
+            > == true);
 
     STATIC_REQUIRE(
         llama::hasSameTags<
@@ -304,8 +302,7 @@ TEST_CASE("hasSameTags")
             llama::RecordCoord<0, 0>, // Local A
             Other, // RD B
             llama::RecordCoord<0, 0> // Local B
-            >
-        == false);
+            > == false);
 
     STATIC_REQUIRE(
         llama::hasSameTags<
@@ -313,8 +310,7 @@ TEST_CASE("hasSameTags")
             llama::RecordCoord<0, 2>, // Local A
             Other, // RD B
             llama::RecordCoord<0, 0> // Local B
-            >
-        == true);
+            > == true);
 
     STATIC_REQUIRE(
         llama::hasSameTags<
@@ -322,8 +318,7 @@ TEST_CASE("hasSameTags")
             llama::RecordCoord<3, 0>, // Local A
             Other, // RD B
             llama::RecordCoord<0, 0> // Local B
-            >
-        == false);
+            > == false);
 }
 
 TEST_CASE("FlatRecordDim")
@@ -441,22 +436,22 @@ TEST_CASE("qualifiedTypeName")
     CHECK(llama::qualifiedTypeName<unsigned int> == "unsigned int");
     CHECK(llama::qualifiedTypeName<std::remove_const<int>> == "std::remove_const<int>");
     CHECK(
-        llama::qualifiedTypeName<std::remove_const<std::add_const<std::common_type<int, char>>>>
-        == "std::remove_const<std::add_const<std::common_type<int,char>>>");
+        llama::qualifiedTypeName<std::remove_const<std::add_const<
+            std::common_type<int, char>>>> == "std::remove_const<std::add_const<std::common_type<int,char>>>");
     CHECK(
-        llama::qualifiedTypeName<Vec3D>
-        == "llama::Record<llama::Field<tag::X,double>,llama::Field<tag::Y,double>,llama::Field<tag::Z,double>>");
+        llama::qualifiedTypeName<
+            Vec3D> == "llama::Record<llama::Field<tag::X,double>,llama::Field<tag::Y,double>,llama::Field<tag::Z,double>>");
 
     CHECK(llama::qualifiedTypeName<pmacc::multiMask> == "pmacc::multiMask");
     CHECK(llama::qualifiedTypeName<pmacc::localCellIdx> == "pmacc::localCellIdx");
 #if defined(__NVCOMPILER) || defined(_MSC_VER) || (defined(__clang__) && __clang_major__ < 12)
     CHECK(
-        llama::qualifiedTypeName<picongpu::position<picongpu::position_pic>>
-        == "picongpu::position<picongpu::position_pic,pmacc::pmacc_isAlias>");
+        llama::qualifiedTypeName<picongpu::position<
+            picongpu::position_pic>> == "picongpu::position<picongpu::position_pic,pmacc::pmacc_isAlias>");
 #else
     CHECK(
-        llama::qualifiedTypeName<picongpu::position<picongpu::position_pic>>
-        == "picongpu::position<picongpu::position_pic>");
+        llama::qualifiedTypeName<
+            picongpu::position<picongpu::position_pic>> == "picongpu::position<picongpu::position_pic>");
 #endif
     CHECK(llama::qualifiedTypeName<picongpu::momentum> == "picongpu::momentum");
     CHECK(llama::qualifiedTypeName<picongpu::weighting> == "picongpu::weighting");
