@@ -95,7 +95,7 @@ $(document).ready(function(){initNavTree('structllama_1_1mapping_1_1BindBitPacke
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:a5218c97a48031af81b8168f7a5c1c13c"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim &gt; </td></tr>
-<tr class="memitem:a5218c97a48031af81b8168f7a5c1c13c"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BindBitPackedIntSoA.html#a5218c97a48031af81b8168f7a5c1c13c">fn</a> = <a class="el" href="structllama_1_1mapping_1_1BitPackedIntSoA.html">BitPackedIntSoA</a>&lt; <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, Bits, LinearizeArrayDimsFunctor, std::conditional_t&lt; !std::is_void_v&lt; StoredIntegral &gt;, StoredIntegral, <a class="el" href="namespacellama_1_1mapping_1_1internal.html#a2bd577e3648ac7819c4773138b256344">internal::StoredUnsignedFor</a>&lt; RecordDim &gt; &gt;&gt;</td></tr>
+<tr class="memitem:a5218c97a48031af81b8168f7a5c1c13c"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BindBitPackedIntSoA.html#a5218c97a48031af81b8168f7a5c1c13c">fn</a> = <a class="el" href="structllama_1_1mapping_1_1BitPackedIntSoA.html">BitPackedIntSoA</a>&lt; <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, Bits, LinearizeArrayDimsFunctor, std::conditional_t&lt; !std::is_void_v&lt; StoredIntegral &gt;, StoredIntegral, <a class="el" href="namespacellama_1_1mapping_1_1internal.html#a9c9a33a5cf5e402d9887b0071b30ede0">internal::StoredUnsignedFor</a>&lt; RecordDim &gt; &gt;&gt;</td></tr>
 <tr class="separator:a5218c97a48031af81b8168f7a5c1c13c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -104,7 +104,7 @@ struct llama::mapping::BindBitPackedIntSoA&lt; Bits, LinearizeArrayDimsFunctor, 
 
 <p>Binds parameters to a <a class="el" href="structllama_1_1mapping_1_1BitPackedIntSoA.html">BitPackedIntSoA</a> mapping except for array and record dimension, producing a quoted meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping. </p>
 
-<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00266">266</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00315">315</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="a5218c97a48031af81b8168f7a5c1c13c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5218c97a48031af81b8168f7a5c1c13c">&#9670;&nbsp;</a></span>fn</h2>
@@ -117,12 +117,12 @@ template&lt;typename Bits  = unsigned, typename LinearizeArrayDimsFunctor  = map
 template&lt;typename ArrayExtents , typename RecordDim &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1BindBitPackedIntSoA.html">llama::mapping::BindBitPackedIntSoA</a>&lt; Bits, LinearizeArrayDimsFunctor, StoredIntegral &gt;::<a class="el" href="structllama_1_1mapping_1_1BindBitPackedIntSoA.html#a5218c97a48031af81b8168f7a5c1c13c">fn</a> =  <a class="el" href="structllama_1_1mapping_1_1BitPackedIntSoA.html">BitPackedIntSoA</a>&lt; <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, Bits, LinearizeArrayDimsFunctor, std::conditional_t&lt; !std::is_void_v&lt;StoredIntegral&gt;, StoredIntegral, <a class="el" href="namespacellama_1_1mapping_1_1internal.html#a2bd577e3648ac7819c4773138b256344">internal::StoredUnsignedFor</a>&lt;RecordDim&gt; &gt;&gt;</td>
+          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1BindBitPackedIntSoA.html">llama::mapping::BindBitPackedIntSoA</a>&lt; Bits, LinearizeArrayDimsFunctor, StoredIntegral &gt;::<a class="el" href="structllama_1_1mapping_1_1BindBitPackedIntSoA.html#a5218c97a48031af81b8168f7a5c1c13c">fn</a> =  <a class="el" href="structllama_1_1mapping_1_1BitPackedIntSoA.html">BitPackedIntSoA</a>&lt; <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, Bits, LinearizeArrayDimsFunctor, std::conditional_t&lt; !std::is_void_v&lt;StoredIntegral&gt;, StoredIntegral, <a class="el" href="namespacellama_1_1mapping_1_1internal.html#a9c9a33a5cf5e402d9887b0071b30ede0">internal::StoredUnsignedFor</a>&lt;RecordDim&gt; &gt;&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00269">269</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00318">318</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -135,7 +135,7 @@ template&lt;typename ArrayExtents , typename RecordDim &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1BindBitPackedIntSoA.html">BindBitPackedIntSoA</a></li>
-    <li class="footer">Generated on Tue Jan 10 2023 20:38:01 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Fri Jan 13 2023 14:18:57 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

@@ -86,6 +86,7 @@ $(document).ready(function(){initNavTree('BitPackedIntSoA_8hpp.html',''); initRe
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
+<a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">BitPackedIntSoA.hpp File Reference</div>  </div>
@@ -141,13 +142,7 @@ $(document).ready(function(){initNavTree('BitPackedIntSoA_8hpp.html',''); initRe
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html">llama::mapping::internal::BitPackedIntRef&lt; Integral, StoredIntegralPointer, VHBits, SizeType &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1internal_1_1MakeUnsigned.html">llama::mapping::internal::MakeUnsigned&lt; T, SFINAE &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1internal_1_1MakeUnsigned_3_01bool_01_4.html">llama::mapping::internal::MakeUnsigned&lt; bool &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1internal_1_1MakeUnsigned_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__enum__v_3_01T_01_4_01_4_01_4.html">llama::mapping::internal::MakeUnsigned&lt; T, std::enable_if_t&lt; std::is_enum_v&lt; T &gt; &gt; &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html">llama::mapping::internal::BitPackedIntRef&lt; Integral, StoredIntegralCV, VHBits, SizeType &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BitPackedIntSoA.html">llama::mapping::BitPackedIntSoA&lt; TArrayExtents, TRecordDim, Bits, TLinearizeArrayDimsFunctor, TStoredIntegral &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -171,9 +166,21 @@ Typedefs</h2></td></tr>
 <tr class="memitem:a702eab9c841dbc5d1fa483dd875d243e"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim &gt; </td></tr>
 <tr class="memitem:a702eab9c841dbc5d1fa483dd875d243e"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a702eab9c841dbc5d1fa483dd875d243e">llama::mapping::internal::LargestIntegral</a> = boost::mp11::mp_max_element&lt; FlatRecordDim&lt; RecordDim &gt;, HasLargerSize &gt;</td></tr>
 <tr class="separator:a702eab9c841dbc5d1fa483dd875d243e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2bd577e3648ac7819c4773138b256344"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim &gt; </td></tr>
-<tr class="memitem:a2bd577e3648ac7819c4773138b256344"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a2bd577e3648ac7819c4773138b256344">llama::mapping::internal::StoredUnsignedFor</a> = typename MakeUnsigned&lt; LargestIntegral&lt; RecordDim &gt; &gt;::type</td></tr>
-<tr class="separator:a2bd577e3648ac7819c4773138b256344"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c9a33a5cf5e402d9887b0071b30ede0"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim &gt; </td></tr>
+<tr class="memitem:a9c9a33a5cf5e402d9887b0071b30ede0"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a9c9a33a5cf5e402d9887b0071b30ede0">llama::mapping::internal::StoredUnsignedFor</a> = std::conditional_t&lt;(sizeof(LargestIntegral&lt; RecordDim &gt;) &gt; sizeof(std::uint32_t)), std::uint64_t, std::uint32_t &gt;</td></tr>
+<tr class="separator:a9c9a33a5cf5e402d9887b0071b30ede0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a1a664b935ea0dec203a00a0298ebb423"><td class="memTemplParams" colspan="2">template&lt;typename Integral &gt; </td></tr>
+<tr class="memitem:a1a664b935ea0dec203a00a0298ebb423"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a1a664b935ea0dec203a00a0298ebb423">llama::mapping::internal::makeMask</a> (Integral bits) -&gt; Integral</td></tr>
+<tr class="separator:a1a664b935ea0dec203a00a0298ebb423"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab632f57b7ce2a6c815764e10258f867f"><td class="memTemplParams" colspan="2">template&lt;typename Integral , typename StoredIntegral &gt; </td></tr>
+<tr class="memitem:ab632f57b7ce2a6c815764e10258f867f"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#ab632f57b7ce2a6c815764e10258f867f">llama::mapping::internal::bitunpack</a> (const StoredIntegral *ptr, StoredIntegral bitOffset, StoredIntegral bitCount) -&gt; Integral</td></tr>
+<tr class="separator:ab632f57b7ce2a6c815764e10258f867f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5ce519dd3fb13cf85a71fcc054ae668"><td class="memTemplParams" colspan="2">template&lt;typename Integral , typename StoredIntegral &gt; </td></tr>
+<tr class="memitem:aa5ce519dd3fb13cf85a71fcc054ae668"><td class="memTemplItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#aa5ce519dd3fb13cf85a71fcc054ae668">llama::mapping::internal::bitpack</a> (StoredIntegral *ptr, StoredIntegral bitOffset, StoredIntegral bitCount, Integral value)</td></tr>
+<tr class="separator:aa5ce519dd3fb13cf85a71fcc054ae668"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -190,7 +197,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc.html">mapping</a></li><li class="navelem"><a class="el" href="BitPackedIntSoA_8hpp.html">BitPackedIntSoA.hpp</a></li>
-    <li class="footer">Generated on Tue Jan 10 2023 20:38:01 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Fri Jan 13 2023 14:18:57 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

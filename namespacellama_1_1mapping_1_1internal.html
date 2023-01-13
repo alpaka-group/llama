@@ -104,12 +104,6 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html">BitPackedIntRef</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1internal_1_1MakeUnsigned.html">MakeUnsigned</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1internal_1_1MakeUnsigned_3_01bool_01_4.html">MakeUnsigned&lt; bool &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1internal_1_1MakeUnsigned_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__enum__v_3_01T_01_4_01_4_01_4.html">MakeUnsigned&lt; T, std::enable_if_t&lt; std::is_enum_v&lt; T &gt; &gt; &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1internal_1_1ByteswapProjection.html">ByteswapProjection</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1internal_1_1ChangeTypeProjection.html">ChangeTypeProjection</a></td></tr>
@@ -148,9 +142,9 @@ Typedefs</h2></td></tr>
 <tr class="memitem:a702eab9c841dbc5d1fa483dd875d243e"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim &gt; </td></tr>
 <tr class="memitem:a702eab9c841dbc5d1fa483dd875d243e"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a702eab9c841dbc5d1fa483dd875d243e">LargestIntegral</a> = boost::mp11::mp_max_element&lt; <a class="el" href="namespacellama.html#a1fddf1f638927edfb8da8e3c78da4e1c">FlatRecordDim</a>&lt; RecordDim &gt;, <a class="el" href="namespacellama_1_1mapping_1_1internal.html#a0f20341d5c6d9555b6bf0728dd6990a6">HasLargerSize</a> &gt;</td></tr>
 <tr class="separator:a702eab9c841dbc5d1fa483dd875d243e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2bd577e3648ac7819c4773138b256344"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim &gt; </td></tr>
-<tr class="memitem:a2bd577e3648ac7819c4773138b256344"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a2bd577e3648ac7819c4773138b256344">StoredUnsignedFor</a> = typename <a class="el" href="structllama_1_1mapping_1_1internal_1_1MakeUnsigned.html">MakeUnsigned</a>&lt; <a class="el" href="namespacellama_1_1mapping_1_1internal.html#a702eab9c841dbc5d1fa483dd875d243e">LargestIntegral</a>&lt; RecordDim &gt; &gt;::type</td></tr>
-<tr class="separator:a2bd577e3648ac7819c4773138b256344"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c9a33a5cf5e402d9887b0071b30ede0"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim &gt; </td></tr>
+<tr class="memitem:a9c9a33a5cf5e402d9887b0071b30ede0"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a9c9a33a5cf5e402d9887b0071b30ede0">StoredUnsignedFor</a> = std::conditional_t&lt;(sizeof(<a class="el" href="namespacellama_1_1mapping_1_1internal.html#a702eab9c841dbc5d1fa483dd875d243e">LargestIntegral</a>&lt; RecordDim &gt;) &gt; sizeof(std::uint32_t)), std::uint64_t, std::uint32_t &gt;</td></tr>
+<tr class="separator:a9c9a33a5cf5e402d9887b0071b30ede0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afb46513e82a723e018572be98ef08d18"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:afb46513e82a723e018572be98ef08d18"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#afb46513e82a723e018572be98ef08d18">ReplaceByByteArray</a> = std::byte[sizeof(T)]</td></tr>
 <tr class="separator:afb46513e82a723e018572be98ef08d18"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -193,6 +187,15 @@ Functions</h2></td></tr>
 <tr class="memitem:af82bc84df6926cd1cd56cd929c035aeb"><td class="memTemplParams" colspan="2">template&lt;auto E, auto M&gt; </td></tr>
 <tr class="memitem:af82bc84df6926cd1cd56cd929c035aeb"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#af82bc84df6926cd1cd56cd929c035aeb">integBits</a> (<a class="el" href="structllama_1_1internal_1_1BoxedValue.html">llama::internal::BoxedValue</a>&lt; <a class="el" href="namespacellama.html#a0af0304a902bcb5c5c90377ad751033a">Constant</a>&lt; E &gt;&gt;, <a class="el" href="structllama_1_1internal_1_1BoxedValue.html">llama::internal::BoxedValue</a>&lt; <a class="el" href="namespacellama.html#a0af0304a902bcb5c5c90377ad751033a">Constant</a>&lt; M &gt;&gt;)</td></tr>
 <tr class="separator:af82bc84df6926cd1cd56cd929c035aeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a664b935ea0dec203a00a0298ebb423"><td class="memTemplParams" colspan="2">template&lt;typename Integral &gt; </td></tr>
+<tr class="memitem:a1a664b935ea0dec203a00a0298ebb423"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a1a664b935ea0dec203a00a0298ebb423">makeMask</a> (Integral bits) -&gt; Integral</td></tr>
+<tr class="separator:a1a664b935ea0dec203a00a0298ebb423"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab632f57b7ce2a6c815764e10258f867f"><td class="memTemplParams" colspan="2">template&lt;typename Integral , typename StoredIntegral &gt; </td></tr>
+<tr class="memitem:ab632f57b7ce2a6c815764e10258f867f"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#ab632f57b7ce2a6c815764e10258f867f">bitunpack</a> (const StoredIntegral *ptr, StoredIntegral bitOffset, StoredIntegral bitCount) -&gt; Integral</td></tr>
+<tr class="separator:ab632f57b7ce2a6c815764e10258f867f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5ce519dd3fb13cf85a71fcc054ae668"><td class="memTemplParams" colspan="2">template&lt;typename Integral , typename StoredIntegral &gt; </td></tr>
+<tr class="memitem:aa5ce519dd3fb13cf85a71fcc054ae668"><td class="memTemplItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#aa5ce519dd3fb13cf85a71fcc054ae668">bitpack</a> (StoredIntegral *ptr, StoredIntegral bitOffset, StoredIntegral bitCount, Integral value)</td></tr>
+<tr class="separator:aa5ce519dd3fb13cf85a71fcc054ae668"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3034f6c7d4a89945dce1c19d6f6ed58e"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a3034f6c7d4a89945dce1c19d6f6ed58e"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a3034f6c7d4a89945dce1c19d6f6ed58e">byteswap</a> (T t) -&gt; T</td></tr>
 <tr class="separator:a3034f6c7d4a89945dce1c19d6f6ed58e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -230,7 +233,7 @@ template&lt;typename A , typename B &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00136">136</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00167">167</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -248,7 +251,7 @@ template&lt;typename RecordDim &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00139">139</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00170">170</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -446,12 +449,12 @@ template&lt;typename RecordDim &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00176">176</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00169">169</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a2bd577e3648ac7819c4773138b256344"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2bd577e3648ac7819c4773138b256344">&#9670;&nbsp;</a></span>StoredUnsignedFor</h2>
+<a id="a9c9a33a5cf5e402d9887b0071b30ede0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c9a33a5cf5e402d9887b0071b30ede0">&#9670;&nbsp;</a></span>StoredUnsignedFor</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -459,12 +462,12 @@ template&lt;typename RecordDim &gt; </div>
 template&lt;typename RecordDim &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="namespacellama_1_1mapping_1_1internal.html#a2bd577e3648ac7819c4773138b256344">llama::mapping::internal::StoredUnsignedFor</a> = typedef typename <a class="el" href="structllama_1_1mapping_1_1internal_1_1MakeUnsigned.html">MakeUnsigned</a>&lt;<a class="el" href="namespacellama_1_1mapping_1_1internal.html#a702eab9c841dbc5d1fa483dd875d243e">LargestIntegral</a>&lt;RecordDim&gt; &gt;::type</td>
+          <td class="memname">using <a class="el" href="namespacellama_1_1mapping_1_1internal.html#a9c9a33a5cf5e402d9887b0071b30ede0">llama::mapping::internal::StoredUnsignedFor</a> = typedef std:: conditional_t&lt;(sizeof(<a class="el" href="namespacellama_1_1mapping_1_1internal.html#a702eab9c841dbc5d1fa483dd875d243e">LargestIntegral</a>&lt;RecordDim&gt;) &gt; sizeof(std::uint32_t)), std::uint64_t, std::uint32_t&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00158">158</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00173">173</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -496,6 +499,105 @@ template&lt;typename CountType &gt; </div>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="Common_8hpp_source.html#l00241">241</a> of file <a class="el" href="Common_8hpp_source.html">Common.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aa5ce519dd3fb13cf85a71fcc054ae668"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5ce519dd3fb13cf85a71fcc054ae668">&#9670;&nbsp;</a></span>bitpack()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Integral , typename StoredIntegral &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr void llama::mapping::internal::bitpack </td>
+          <td>(</td>
+          <td class="paramtype">StoredIntegral *&#160;</td>
+          <td class="paramname"><em>ptr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">StoredIntegral&#160;</td>
+          <td class="paramname"><em>bitOffset</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">StoredIntegral&#160;</td>
+          <td class="paramname"><em>bitCount</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Integral&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00066">66</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ab632f57b7ce2a6c815764e10258f867f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab632f57b7ce2a6c815764e10258f867f">&#9670;&nbsp;</a></span>bitunpack()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Integral , typename StoredIntegral &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto llama::mapping::internal::bitunpack </td>
+          <td>(</td>
+          <td class="paramtype">const StoredIntegral *&#160;</td>
+          <td class="paramname"><em>ptr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">StoredIntegral&#160;</td>
+          <td class="paramname"><em>bitOffset</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">StoredIntegral&#160;</td>
+          <td class="paramname"><em>bitCount</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> -&gt; Integral
+        </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00023">23</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -607,6 +709,37 @@ template&lt;auto E, auto M&gt; </div>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00091">91</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a1a664b935ea0dec203a00a0298ebb423"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a664b935ea0dec203a00a0298ebb423">&#9670;&nbsp;</a></span>makeMask()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Integral &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto llama::mapping::internal::makeMask </td>
+          <td>(</td>
+          <td class="paramtype">Integral&#160;</td>
+          <td class="paramname"><em>bits</em></td><td>)</td>
+          <td> -&gt; Integral
+        </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00017">17</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -787,7 +920,7 @@ template&lt;typename RC , typename RecordCoordForMapping1 &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping_1_1internal.html">internal</a></li>
-    <li class="footer">Generated on Tue Jan 10 2023 20:38:01 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Fri Jan 13 2023 14:18:57 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

@@ -1,5 +1,11 @@
 var NAVTREEINDEX5 =
 {
+"structllama_1_1internal_1_1GetTagsImpl_3_01T_00_01RecordCoord_3_4_01_4.html":[2,0,1,2,8],
+"structllama_1_1internal_1_1GetTagsImpl_3_01T_00_01RecordCoord_3_4_01_4.html#ad42393346f9fc681d889f6eba51e05f4":[2,0,1,2,8,0],
+"structllama_1_1internal_1_1GetTypeImpl.html":[2,0,1,2,18],
+"structllama_1_1internal_1_1GetTypeImpl.html#a0306d23b9f90a8eecb3155dc5bceea51":[2,0,1,2,18,0],
+"structllama_1_1internal_1_1GetTypeImpl_3_01ChildType_0fN_0e_00_01RecordCoord_3_01HeadCoord_00_01TailCoords_8_8_8_01_4_01_4.html":[2,0,1,2,20],
+"structllama_1_1internal_1_1GetTypeImpl_3_01ChildType_0fN_0e_00_01RecordCoord_3_01HeadCoord_00_01TailCoords_8_8_8_01_4_01_4.html#ab9c3a8dc49e6eabb5dff849b9710446c":[2,0,1,2,20,0],
 "structllama_1_1internal_1_1GetTypeImpl_3_01Record_3_01Children_8_8_8_01_4_00_01RecordCoord_3_01Hd335281b58bf9419f48b7fc65f5657ab.html":[2,0,1,2,19],
 "structllama_1_1internal_1_1GetTypeImpl_3_01Record_3_01Children_8_8_8_01_4_00_01RecordCoord_3_01Hd335281b58bf9419f48b7fc65f5657ab.html#a20d230f3fb7208ab88e3e55a73936293":[2,0,1,2,19,1],
 "structllama_1_1internal_1_1GetTypeImpl_3_01Record_3_01Children_8_8_8_01_4_00_01RecordCoord_3_01Hd335281b58bf9419f48b7fc65f5657ab.html#abf3e13c2433911563d020538d2a04f4b":[2,0,1,2,19,0],
@@ -243,11 +249,5 @@ var NAVTREEINDEX5 =
 "structllama_1_1mapping_1_1Split.html#a5ab35fbcc04128c2db0ad4433679e4ac":[2,0,1,3,31,9],
 "structllama_1_1mapping_1_1Split.html#a706055e06d01c2c96a494eb4242acc20":[2,0,1,3,31,6],
 "structllama_1_1mapping_1_1Split.html#a80ce285861d17034eaa05f5e6d9a6304":[2,0,1,3,31,18],
-"structllama_1_1mapping_1_1Split.html#a81fa856bbf801a7b0fda73d72f542a9f":[2,0,1,3,31,5],
-"structllama_1_1mapping_1_1Split.html#a83e860ca537e5daa705ac3160edb1b1b":[2,0,1,3,31,15],
-"structllama_1_1mapping_1_1Split.html#a849e0614d787032ba9430fb961410d86":[2,0,1,3,31,8],
-"structllama_1_1mapping_1_1Split.html#a90d2ba343ef2c7125ac63e60bba7c4a3":[2,0,1,3,31,19],
-"structllama_1_1mapping_1_1Split.html#a91a2b97645c76bc3c3599aa109db3756":[2,0,1,3,31,14],
-"structllama_1_1mapping_1_1Split.html#a956788c4f49f486461e2f4c2ddb8fccc":[2,0,1,3,31,2],
-"structllama_1_1mapping_1_1Split.html#aa058374fcdd996f86c54dcb34ab51f5c":[2,0,1,3,31,17]
+"structllama_1_1mapping_1_1Split.html#a81fa856bbf801a7b0fda73d72f542a9f":[2,0,1,3,31,5]
 };

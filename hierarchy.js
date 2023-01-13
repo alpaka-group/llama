@@ -139,14 +139,9 @@ var hierarchy =
     [ "llama::mapping::LinearizeArrayDimsMorton", "structllama_1_1mapping_1_1LinearizeArrayDimsMorton.html", null ],
     [ "llama::RecordRef< TView, TBoundRecordCoord, OwnView >::Loader", "structllama_1_1RecordRef_1_1Loader.html", null ],
     [ "llama::RecordRef< TView, TBoundRecordCoord, OwnView >::LoaderConst", "structllama_1_1RecordRef_1_1LoaderConst.html", null ],
-    [ "std::make_unsigned", null, [
-      [ "llama::mapping::internal::MakeUnsigned< T, SFINAE >", "structllama_1_1mapping_1_1internal_1_1MakeUnsigned.html", null ],
-      [ "llama::mapping::internal::MakeUnsigned< T, std::enable_if_t< std::is_enum_v< T > > >", "structllama_1_1mapping_1_1internal_1_1MakeUnsigned_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__enum__v_3_01T_01_4_01_4_01_4.html", null ]
-    ] ],
     [ "llama::internal::MakePassSecond< F >", "structllama_1_1internal_1_1MakePassSecond.html", null ],
     [ "llama::mapping::internal::MakeProjectionPair< RecordDim >", "structllama_1_1mapping_1_1internal_1_1MakeProjectionPair.html", null ],
     [ "llama::mapping::internal::MakeReplacerProj< ProjectionMap >", "structllama_1_1mapping_1_1internal_1_1MakeReplacerProj.html", null ],
-    [ "llama::mapping::internal::MakeUnsigned< bool >", "structllama_1_1mapping_1_1internal_1_1MakeUnsigned_3_01bool_01_4.html", null ],
     [ "Mapping", null, [
       [ "llama::mapping::Heatmap< Mapping, Granularity, TCountType >", "structllama_1_1mapping_1_1Heatmap.html", null ],
       [ "llama::mapping::PermuteArrayIndex< Mapping, Permutation >", "structllama_1_1mapping_1_1PermuteArrayIndex.html", null ],
@@ -174,11 +169,11 @@ var hierarchy =
     [ "llama::mapping::internal::PartitionFoldOpImpl< Acc, TagList >", "structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html", null ],
     [ "llama::internal::PlusAssign", "structllama_1_1internal_1_1PlusAssign.html", null ],
     [ "llama::ProxyRefOpMixin< Derived, ValueType >", "structllama_1_1ProxyRefOpMixin.html", null ],
-    [ "llama::ProxyRefOpMixin< BitPackedFloatRef< Float, StoredIntegralPointer, VHExp, VHMan, SizeType >, Float >", "structllama_1_1ProxyRefOpMixin.html", [
-      [ "llama::mapping::internal::BitPackedFloatRef< Float, StoredIntegralPointer, VHExp, VHMan, SizeType >", "structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html", null ]
+    [ "llama::ProxyRefOpMixin< BitPackedFloatRef< Float, StoredIntegralCV, VHExp, VHMan, SizeType >, Float >", "structllama_1_1ProxyRefOpMixin.html", [
+      [ "llama::mapping::internal::BitPackedFloatRef< Float, StoredIntegralCV, VHExp, VHMan, SizeType >", "structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html", null ]
     ] ],
-    [ "llama::ProxyRefOpMixin< BitPackedIntRef< Integral, StoredIntegralPointer, VHBits, SizeType >, Integral >", "structllama_1_1ProxyRefOpMixin.html", [
-      [ "llama::mapping::internal::BitPackedIntRef< Integral, StoredIntegralPointer, VHBits, SizeType >", "structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html", null ]
+    [ "llama::ProxyRefOpMixin< BitPackedIntRef< Integral, StoredIntegralCV, VHBits, SizeType >, Integral >", "structllama_1_1ProxyRefOpMixin.html", [
+      [ "llama::mapping::internal::BitPackedIntRef< Integral, StoredIntegralCV, VHBits, SizeType >", "structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html", null ]
     ] ],
     [ "llama::ProxyRefOpMixin< NullReference< T >, T >", "structllama_1_1ProxyRefOpMixin.html", [
       [ "llama::mapping::internal::NullReference< T >", "structllama_1_1mapping_1_1internal_1_1NullReference.html", null ]
@@ -272,13 +267,13 @@ var hierarchy =
     [ "llama::bloballoc::Vector", "structllama_1_1bloballoc_1_1Vector.html", null ],
     [ "llama::Vector< Mapping >", "structllama_1_1Vector.html", null ],
     [ "VHBits", null, [
-      [ "llama::mapping::internal::BitPackedIntRef< Integral, StoredIntegralPointer, VHBits, SizeType >", "structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html", null ]
+      [ "llama::mapping::internal::BitPackedIntRef< Integral, StoredIntegralCV, VHBits, SizeType >", "structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html", null ]
     ] ],
     [ "VHExp", null, [
-      [ "llama::mapping::internal::BitPackedFloatRef< Float, StoredIntegralPointer, VHExp, VHMan, SizeType >", "structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html", null ]
+      [ "llama::mapping::internal::BitPackedFloatRef< Float, StoredIntegralCV, VHExp, VHMan, SizeType >", "structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html", null ]
     ] ],
     [ "VHMan", null, [
-      [ "llama::mapping::internal::BitPackedFloatRef< Float, StoredIntegralPointer, VHExp, VHMan, SizeType >", "structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html", null ]
+      [ "llama::mapping::internal::BitPackedFloatRef< Float, StoredIntegralCV, VHExp, VHMan, SizeType >", "structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html", null ]
     ] ],
     [ "llama::mapping::tree::internal::WrapInNNodes< Leaf, Count >", "structllama_1_1mapping_1_1tree_1_1internal_1_1WrapInNNodes.html", null ],
     [ "llama::mapping::tree::internal::WrapInNNodes< Leaf, 0 >", "structllama_1_1mapping_1_1tree_1_1internal_1_1WrapInNNodes_3_01Leaf_00_010_01_4.html", null ]

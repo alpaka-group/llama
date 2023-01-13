@@ -1,6 +1,6 @@
-<map id="llama::mapping::internal::BitPackedFloatRef&lt; Float, StoredIntegralPointer, VHExp, VHMan, SizeType &gt;" name="llama::mapping::internal::BitPackedFloatRef&lt; Float, StoredIntegralPointer, VHExp, VHMan, SizeType &gt;">
-<area shape="rect" id="node1" title=" " alt="" coords="272,34,491,105"/>
-<area shape="rect" id="node2" title=" " alt="" coords="82,5,147,32"/>
-<area shape="rect" id="node3" title=" " alt="" coords="80,56,149,83"/>
-<area shape="rect" id="node4" href="$structllama_1_1ProxyRefOpMixin.html" title=" " alt="" coords="5,107,224,178"/>
+<map id="llama::mapping::internal::BitPackedFloatRef&lt; Float, StoredIntegralCV, VHExp, VHMan, SizeType &gt;" name="llama::mapping::internal::BitPackedFloatRef&lt; Float, StoredIntegralCV, VHExp, VHMan, SizeType &gt;">
+<area shape="rect" id="node1" title=" " alt="" coords="263,34,463,105"/>
+<area shape="rect" id="node2" title=" " alt="" coords="77,5,143,32"/>
+<area shape="rect" id="node3" title=" " alt="" coords="75,56,145,83"/>
+<area shape="rect" id="node4" href="$structllama_1_1ProxyRefOpMixin.html" title=" " alt="" coords="5,107,215,178"/>
 </map>

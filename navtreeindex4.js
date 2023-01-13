@@ -1,5 +1,11 @@
 var NAVTREEINDEX4 =
 {
+"structllama_1_1RecordRef.html#ab077f9791b5239c3a72a8fdc63ef1ffa":[2,0,1,23,14],
+"structllama_1_1RecordRef.html#ab23a922fe11baad4daf96828b861e954":[2,0,1,23,51],
+"structllama_1_1RecordRef.html#ab919c94e030e63d8d3220fe055280c5f":[2,0,1,23,37],
+"structllama_1_1RecordRef.html#abafb5f446c0f5d3b4c3e0f82b68c2cf8":[2,0,1,23,23],
+"structllama_1_1RecordRef.html#abb91048bea97fc6da18e8d73d083591d":[2,0,1,23,15],
+"structllama_1_1RecordRef.html#abd56de3b1bc2549540a41e80f28bfcd7":[2,0,1,23,22],
 "structllama_1_1RecordRef.html#ac3fb0845d41aba3b8e0412a663491aa2":[2,0,1,23,3],
 "structllama_1_1RecordRef.html#ac9965a14a4632a3ac4d2ea35e722dca9":[2,0,1,23,4],
 "structllama_1_1RecordRef.html#aca12c149f6cc3257adfcee9743aace4a":[2,0,1,23,35],
@@ -243,11 +249,5 @@ var NAVTREEINDEX4 =
 "structllama_1_1internal_1_1GetTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoord_3_01Fir6e3f04ac1206e0b3d3bf8dfbb0ac429a.html#a4dd8ee60e85fdff633569b6e9da2e9e5":[2,0,1,2,6,2],
 "structllama_1_1internal_1_1GetTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoord_3_01Fir6e3f04ac1206e0b3d3bf8dfbb0ac429a.html#a5983bacdbded6a1b2f4dd691df440aeb":[2,0,1,2,6,1],
 "structllama_1_1internal_1_1GetTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoord_3_01Fir6e3f04ac1206e0b3d3bf8dfbb0ac429a.html#a62e30b0f8e1b2a3b5967ffe1725d2e38":[2,0,1,2,6,3],
-"structllama_1_1internal_1_1GetTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoord_3_01Fir6e3f04ac1206e0b3d3bf8dfbb0ac429a.html#a9c7167cf08f4223bd26c58f5673f8a72":[2,0,1,2,6,0],
-"structllama_1_1internal_1_1GetTagsImpl_3_01T_00_01RecordCoord_3_4_01_4.html":[2,0,1,2,8],
-"structllama_1_1internal_1_1GetTagsImpl_3_01T_00_01RecordCoord_3_4_01_4.html#ad42393346f9fc681d889f6eba51e05f4":[2,0,1,2,8,0],
-"structllama_1_1internal_1_1GetTypeImpl.html":[2,0,1,2,18],
-"structllama_1_1internal_1_1GetTypeImpl.html#a0306d23b9f90a8eecb3155dc5bceea51":[2,0,1,2,18,0],
-"structllama_1_1internal_1_1GetTypeImpl_3_01ChildType_0fN_0e_00_01RecordCoord_3_01HeadCoord_00_01TailCoords_8_8_8_01_4_01_4.html":[2,0,1,2,20],
-"structllama_1_1internal_1_1GetTypeImpl_3_01ChildType_0fN_0e_00_01RecordCoord_3_01HeadCoord_00_01TailCoords_8_8_8_01_4_01_4.html#ab9c3a8dc49e6eabb5dff849b9710446c":[2,0,1,2,20,0]
+"structllama_1_1internal_1_1GetTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoord_3_01Fir6e3f04ac1206e0b3d3bf8dfbb0ac429a.html#a9c7167cf08f4223bd26c58f5673f8a72":[2,0,1,2,6,0]
 };
