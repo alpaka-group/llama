@@ -243,6 +243,7 @@ TEST_CASE("mapping.BitPackedIntSoA.ValidateBitsSmallerThanStorageIntegral")
                  llama::ArrayExtents<std::size_t, 16>,
                  std::uint32_t,
                  unsigned,
+                 llama::mapping::SignBit::Keep,
                  llama::mapping::LinearizeArrayDimsCpp,
                  std::uint32_t>{{}, 40});
 }
@@ -250,6 +251,11 @@ TEST_CASE("mapping.BitPackedIntSoA.ValidateBitsSmallerThanStorageIntegral")
 TEST_CASE("mapping.BitPackedIntSoA.ValidateBitsNotZero")
 {
     CHECK_THROWS(llama::mapping::BitPackedIntSoA<llama::ArrayExtents<std::size_t, 16>, UInts, unsigned>{{}, 0});
+}
+
+TEST_CASE("mapping.BitPackedIntSoA.ValidateBitsAtLeast2WithSignBit")
+{
+    CHECK_THROWS(llama::mapping::BitPackedIntSoA<llama::ArrayExtents<std::size_t, 16>, SInts, unsigned>{{}, 1});
 }
 
 TEMPLATE_TEST_CASE(
@@ -277,7 +283,7 @@ TEMPLATE_TEST_CASE(
                 for(StoredIntegral bitCount = 5; bitCount <= sizeof(Integral) * CHAR_BIT; bitCount++)
                 {
                     for(Integral i = 0; i < 32; i++)
-                        llama::mapping::internal::bitpack<Integral, false>(
+                        llama::mapping::internal::bitpack<false>(
                             blob.data(),
                             static_cast<StoredIntegral>(i * bitCount),
                             bitCount,
@@ -285,7 +291,7 @@ TEMPLATE_TEST_CASE(
 
                     for(Integral i = 0; i < 32; i++)
                         CHECK(
-                            llama::mapping::internal::bitunpack<Integral, false>(
+                            llama::mapping::internal::bitunpack<false, Integral>(
                                 blob.data(),
                                 static_cast<StoredIntegral>(i * bitCount),
                                 bitCount)
@@ -298,7 +304,7 @@ TEMPLATE_TEST_CASE(
                     for(StoredIntegral bitCount = 5 + 1; bitCount <= sizeof(Integral) * CHAR_BIT; bitCount++)
                     {
                         for(Integral i = 0; i < 32; i++)
-                            llama::mapping::internal::bitpack<Integral, true>(
+                            llama::mapping::internal::bitpack<true>(
                                 blob.data(),
                                 static_cast<StoredIntegral>(i * bitCount),
                                 bitCount,
@@ -306,12 +312,95 @@ TEMPLATE_TEST_CASE(
 
                         for(Integral i = 0; i < 32; i++)
                             CHECK(
-                                llama::mapping::internal::bitunpack<Integral, true>(
+                                llama::mapping::internal::bitunpack<true, Integral>(
                                     blob.data(),
                                     static_cast<StoredIntegral>(i * bitCount),
                                     bitCount)
                                 == i - 32);
                     }
+                }
+            }
+        });
+}
+
+TEMPLATE_TEST_CASE(
+    "mapping.BitPackedIntSoA.bitpack.1bit",
+    "",
+    std::int8_t,
+    std::int16_t,
+    std::int32_t,
+    std::int64_t,
+    std::uint8_t,
+    std::uint16_t,
+    std::uint32_t,
+    std::uint64_t)
+{
+    using Integral = TestType;
+    boost::mp11::mp_for_each<boost::mp11::mp_list<std::uint32_t, std::uint64_t>>(
+        [](auto si)
+        {
+            using StoredIntegral = decltype(si);
+            if constexpr(sizeof(StoredIntegral) >= sizeof(TestType))
+            {
+                constexpr auto bitsToWrite = 127;
+                std::vector<StoredIntegral> blob(
+                    llama::divCeil(std::size_t{bitsToWrite}, sizeof(StoredIntegral) * CHAR_BIT));
+
+                for(Integral i = 0; i < bitsToWrite; i++)
+                    llama::mapping::internal::bitpack<false>(
+                        blob.data(),
+                        static_cast<StoredIntegral>(i),
+                        StoredIntegral{1},
+                        static_cast<Integral>(i % 2));
+
+                for(Integral i = 0; i < bitsToWrite; i++)
+                    CHECK(
+                        llama::mapping::internal::bitunpack<false, Integral>(
+                            blob.data(),
+                            static_cast<StoredIntegral>(i),
+                            StoredIntegral{1})
+                        == static_cast<Integral>(i % 2));
+            }
+        });
+}
+
+TEMPLATE_TEST_CASE(
+    "mapping.BitPackedIntSoA.bitpack.1bit.fastpath",
+    "",
+    std::int8_t,
+    std::int16_t,
+    std::int32_t,
+    std::int64_t,
+    std::uint8_t,
+    std::uint16_t,
+    std::uint32_t,
+    std::uint64_t)
+{
+    using Integral = TestType;
+    boost::mp11::mp_for_each<boost::mp11::mp_list<std::uint32_t, std::uint64_t>>(
+        []<typename StoredIntegral>(StoredIntegral)
+        {
+            if constexpr(sizeof(StoredIntegral) >= sizeof(TestType))
+            {
+                constexpr auto bitsToWrite = 127;
+                std::vector<StoredIntegral> blob(
+                    llama::divCeil(std::size_t{bitsToWrite}, sizeof(StoredIntegral) * CHAR_BIT));
+
+                for(Integral i = 0; i < bitsToWrite; i++)
+                    llama::mapping::internal::bitpack1(
+                        blob.data(),
+                        static_cast<StoredIntegral>(i),
+                        static_cast<Integral>(i % 2));
+
+                for(Integral i = 0; i < bitsToWrite; i++)
+                {
+                    CAPTURE(i);
+                    [[maybe_unused]] auto r
+                        = llama::mapping::internal::bitunpack1<Integral>(blob.data(), static_cast<StoredIntegral>(i));
+                    assert(r == static_cast<Integral>(i % 2));
+                    CHECK(
+                        llama::mapping::internal::bitunpack1<Integral>(blob.data(), static_cast<StoredIntegral>(i))
+                        == static_cast<Integral>(i % 2));
                 }
             }
         });
