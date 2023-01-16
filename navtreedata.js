@@ -44,7 +44,7 @@ var NAVTREE =
         [ "All", "functions.html", "functions_dup" ],
         [ "Functions", "functions_func.html", "functions_func" ],
         [ "Variables", "functions_vars.html", null ],
-        [ "Typedefs", "functions_type.html", null ],
+        [ "Typedefs", "functions_type.html", "functions_type" ],
         [ "Related Functions", "functions_rela.html", null ]
       ] ]
     ] ],
@@ -61,12 +61,13 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "",
-"RecordRef_8hpp.html#a39d130ecf8dc32be0c10f142df6a0d42",
-"namespacellama.html#a42df604d705148baf4262104f6541560",
-"namespacellama_1_1mapping_1_1internal.html#aba890e1438c2aa2377a341c67f84fbda",
-"structllama_1_1RecordRef.html#a461a173618f8a9f833ddf28a1620927d",
-"structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoor9dc4730dbf0b2c94fd53092536b251f3.html#ad70d55152fed64d1733912813f8bc7e8",
-"structllama_1_1mapping_1_1Projection.html#ac1431cba9bc7acd543d3320b2415dbcb"
+"RecordRef_8hpp.html#a1c4645c16b714dadebd6372a6a521855",
+"namespacellama.html#a1a76478259d35873449cc44e27dd5abc",
+"namespacellama_1_1mapping.html#af9c9d24fc8ce05a939c4bdb3ca8ae133",
+"structllama_1_1RecordRef.html#a00162d3e10237d687c7130d695c6da4c",
+"structllama_1_1internal_1_1Dyn.html#a82a4528bd328f16198f5697cc120688d",
+"structllama_1_1mapping_1_1Null.html#a1001f2ea347217a3452a27acab51a3a4",
+"toString_8hpp.html#a5503563f0cb04a716a430965e75ac4fe"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

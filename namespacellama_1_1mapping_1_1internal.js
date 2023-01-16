@@ -5,6 +5,7 @@ var namespacellama_1_1mapping_1_1internal =
     [ "FloatBitTraits< double >", "structllama_1_1mapping_1_1internal_1_1FloatBitTraits_3_01double_01_4.html", "structllama_1_1mapping_1_1internal_1_1FloatBitTraits_3_01double_01_4" ],
     [ "BitPackedFloatRef", "structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html", "structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef" ],
     [ "BitPackedIntRef", "structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html", "structllama_1_1mapping_1_1internal_1_1BitPackedIntRef" ],
+    [ "BitPackedIntCommon", "structllama_1_1mapping_1_1internal_1_1BitPackedIntCommon.html", "structllama_1_1mapping_1_1internal_1_1BitPackedIntCommon" ],
     [ "ByteswapProjection", "structllama_1_1mapping_1_1internal_1_1ByteswapProjection.html", "structllama_1_1mapping_1_1internal_1_1ByteswapProjection" ],
     [ "ChangeTypeProjection", "structllama_1_1mapping_1_1internal_1_1ChangeTypeProjection.html", "structllama_1_1mapping_1_1internal_1_1ChangeTypeProjection" ],
     [ "MakeProjectionPair", "structllama_1_1mapping_1_1internal_1_1MakeProjectionPair.html", "structllama_1_1mapping_1_1internal_1_1MakeProjectionPair" ],

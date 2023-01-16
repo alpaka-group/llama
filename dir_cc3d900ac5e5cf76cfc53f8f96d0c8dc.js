@@ -4,7 +4,7 @@ var dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc =
     [ "AoS.hpp", "AoS_8hpp.html", "AoS_8hpp" ],
     [ "AoSoA.hpp", "AoSoA_8hpp.html", "AoSoA_8hpp" ],
     [ "BitPackedFloatSoA.hpp", "BitPackedFloatSoA_8hpp.html", "BitPackedFloatSoA_8hpp" ],
-    [ "BitPackedIntSoA.hpp", "BitPackedIntSoA_8hpp.html", "BitPackedIntSoA_8hpp" ],
+    [ "BitPackedInt.hpp", "BitPackedInt_8hpp.html", "BitPackedInt_8hpp" ],
     [ "Bytesplit.hpp", "Bytesplit_8hpp.html", "Bytesplit_8hpp" ],
     [ "Byteswap.hpp", "Byteswap_8hpp.html", "Byteswap_8hpp" ],
     [ "ChangeType.hpp", "ChangeType_8hpp.html", "ChangeType_8hpp" ],

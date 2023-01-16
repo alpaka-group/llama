@@ -1,5 +1,9 @@
 var hierarchy =
 [
+    [ "internal:: BitPackedIntCommon", null, [
+      [ "llama::mapping::BitPackedIntAoS< TArrayExtents, TRecordDim, Bits, SignBit, TLinearizeArrayDimsFunctor, FlattenRecordDim, TStoredIntegral >", "structllama_1_1mapping_1_1BitPackedIntAoS.html", null ],
+      [ "llama::mapping::BitPackedIntSoA< TArrayExtents, TRecordDim, Bits, SignBit, TLinearizeArrayDimsFunctor, TStoredIntegral >", "structllama_1_1mapping_1_1BitPackedIntSoA.html", null ]
+    ] ],
     [ "llama::mapping::AccessCounts< CountType >", "structllama_1_1mapping_1_1AccessCounts.html", null ],
     [ "llama::mapping::AccessCounts< Count >", "structllama_1_1mapping_1_1AccessCounts.html", null ],
     [ "llama::bloballoc::AlignedAllocator< T, Alignment >", "structllama_1_1bloballoc_1_1AlignedAllocator.html", null ],
@@ -28,6 +32,7 @@ var hierarchy =
     [ "llama::mapping::BindAoS< Alignment, LinearizeArrayDimsFunctor >", "structllama_1_1mapping_1_1BindAoS.html", null ],
     [ "llama::mapping::BindAoSoA< Lanes, LinearizeArrayDimsFunctor >", "structllama_1_1mapping_1_1BindAoSoA.html", null ],
     [ "llama::mapping::BindBitPackedFloatSoA< ExponentBits, MantissaBits, LinearizeArrayDimsFunctor, StoredIntegral >", "structllama_1_1mapping_1_1BindBitPackedFloatSoA.html", null ],
+    [ "llama::mapping::BindBitPackedIntAoS< Bits, SignBit, LinearizeArrayDimsFunctor, FlattenRecordDim, StoredIntegral >", "structllama_1_1mapping_1_1BindBitPackedIntAoS.html", null ],
     [ "llama::mapping::BindBitPackedIntSoA< Bits, SignBit, LinearizeArrayDimsFunctor, StoredIntegral >", "structllama_1_1mapping_1_1BindBitPackedIntSoA.html", null ],
     [ "llama::mapping::BindBytesplit< InnerMapping >", "structllama_1_1mapping_1_1BindBytesplit.html", null ],
     [ "llama::mapping::BindByteswap< InnerMapping >", "structllama_1_1mapping_1_1BindByteswap.html", null ],
@@ -41,10 +46,10 @@ var hierarchy =
       [ "llama::internal::IsComputed< Mapping, RecordCoord, std::void_t< decltype(Mapping::isComputed(RecordCoord{}))> >", "structllama_1_1internal_1_1IsComputed_3_01Mapping_00_01RecordCoord_00_01std_1_1void__t_3_01declt31ec39d02aa75d5ea3308109fe018112.html", null ]
     ] ],
     [ "llama::internal::BoxedValue< T, I >", "structllama_1_1internal_1_1BoxedValue.html", null ],
-    [ "llama::internal::BoxedValue< Constant< V >, I >", "structllama_1_1internal_1_1BoxedValue_3_01Constant_3_01V_01_4_00_01I_01_4.html", null ],
-    [ "llama::internal::BoxedValue< typename TArrayExtents::value_type >", "structllama_1_1internal_1_1BoxedValue.html", [
-      [ "llama::mapping::BitPackedIntSoA< TArrayExtents, TRecordDim, Bits, SignBit, TLinearizeArrayDimsFunctor, TStoredIntegral >", "structllama_1_1mapping_1_1BitPackedIntSoA.html", null ]
+    [ "llama::internal::BoxedValue< Bits >", "structllama_1_1internal_1_1BoxedValue.html", [
+      [ "llama::mapping::internal::BitPackedIntCommon< TArrayExtents, TRecordDim, Bits, SignBit, TLinearizeArrayDimsFunctor, TStoredIntegral >", "structllama_1_1mapping_1_1internal_1_1BitPackedIntCommon.html", null ]
     ] ],
+    [ "llama::internal::BoxedValue< Constant< V >, I >", "structllama_1_1internal_1_1BoxedValue_3_01Constant_3_01V_01_4_00_01I_01_4.html", null ],
     [ "llama::internal::BoxedValue< typename TArrayExtents::value_type, 0 >", "structllama_1_1internal_1_1BoxedValue.html", [
       [ "llama::mapping::BitPackedFloatSoA< TArrayExtents, TRecordDim, ExponentBits, MantissaBits, TLinearizeArrayDimsFunctor, TStoredIntegral >", "structllama_1_1mapping_1_1BitPackedFloatSoA.html", null ]
     ] ],
@@ -221,10 +226,10 @@ var hierarchy =
         [ "llama::mapping::AoS< TArrayExtents, TRecordDim, TFieldAlignment, TLinearizeArrayDimsFunctor, FlattenRecordDim >", "structllama_1_1mapping_1_1AoS.html", null ],
         [ "llama::mapping::AoSoA< TArrayExtents, TRecordDim, Lanes, TLinearizeArrayDimsFunctor, FlattenRecordDim >", "structllama_1_1mapping_1_1AoSoA.html", null ],
         [ "llama::mapping::BitPackedFloatSoA< TArrayExtents, TRecordDim, ExponentBits, MantissaBits, TLinearizeArrayDimsFunctor, TStoredIntegral >", "structllama_1_1mapping_1_1BitPackedFloatSoA.html", null ],
-        [ "llama::mapping::BitPackedIntSoA< TArrayExtents, TRecordDim, Bits, SignBit, TLinearizeArrayDimsFunctor, TStoredIntegral >", "structllama_1_1mapping_1_1BitPackedIntSoA.html", null ],
         [ "llama::mapping::Null< TArrayExtents, TRecordDim >", "structllama_1_1mapping_1_1Null.html", null ],
         [ "llama::mapping::One< TArrayExtents, TRecordDim, TFieldAlignment, FlattenRecordDim >", "structllama_1_1mapping_1_1One.html", null ],
-        [ "llama::mapping::SoA< TArrayExtents, TRecordDim, TBlobs, TSubArrayAlignment, TLinearizeArrayDimsFunctor, FlattenRecordDimSingleBlob >", "structllama_1_1mapping_1_1SoA.html", null ]
+        [ "llama::mapping::SoA< TArrayExtents, TRecordDim, TBlobs, TSubArrayAlignment, TLinearizeArrayDimsFunctor, FlattenRecordDimSingleBlob >", "structllama_1_1mapping_1_1SoA.html", null ],
+        [ "llama::mapping::internal::BitPackedIntCommon< TArrayExtents, TRecordDim, Bits, SignBit, TLinearizeArrayDimsFunctor, TStoredIntegral >", "structllama_1_1mapping_1_1internal_1_1BitPackedIntCommon.html", null ]
       ] ],
       [ "llama::mapping::tree::Mapping< TArrayExtents, TRecordDim, TreeOperationList >", "structllama_1_1mapping_1_1tree_1_1Mapping.html", null ]
     ] ],
