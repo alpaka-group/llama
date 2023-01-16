@@ -62,7 +62,7 @@
 #include "mapping/AoS.hpp"
 #include "mapping/AoSoA.hpp"
 #include "mapping/BitPackedFloatSoA.hpp"
-#include "mapping/BitPackedIntSoA.hpp"
+#include "mapping/BitPackedInt.hpp"
 #include "mapping/Bytesplit.hpp"
 #include "mapping/Byteswap.hpp"
 #include "mapping/ChangeType.hpp"

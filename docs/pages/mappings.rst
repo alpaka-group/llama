@@ -328,11 +328,11 @@ In this example, all fields of type :cpp:`double`, and the field at coordinate R
 The load/store functions are called on loading and storing through a proxy reference returned from the mapping.
 
 
-BitPackedIntSoA
----------------
+BitPackedIntAoS/BitPackedIntSoA
+-------------------------------
 
-The BitPackedIntSoA mapping is a fully computed mapping that bitpacks integral values to reduce size and precision.
-The bits are stored as struct of arrays.
+The BitPackedIntSoA and BitPackedIntAoS mappings are fully computed mappings that bitpack integral values to reduce size and precision.
+The bits are stored as array of structs and struct of arrays, respectively.
 The number of bits used per integral is configurable.
 All field types in the record dimension must be integral.
 

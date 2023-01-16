@@ -138,6 +138,8 @@ Mappings
 .. doxygenstruct:: llama::mapping::AoSoA
    :members:
 .. doxygenvariable:: llama::mapping::maxLanes
+.. doxygenstruct:: llama::mapping::BitPackedIntAoS
+   :members:
 .. doxygenstruct:: llama::mapping::BitPackedIntSoA
    :members:
 .. doxygenstruct:: llama::mapping::BitPackedFloatSoA
