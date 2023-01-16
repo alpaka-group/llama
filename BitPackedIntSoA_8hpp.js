@@ -11,8 +11,10 @@ var BitPackedIntSoA_8hpp =
       [ "Discard", "BitPackedIntSoA_8hpp.html#a839eb914ca2bc41f5db9ca6e016b18f9ad94b42030b9785fd754d5c1754961269", null ]
     ] ],
     [ "bitpack", "BitPackedIntSoA_8hpp.html#ad115ee9119d7de237794ca580354674d", null ],
+    [ "bitpack1", "BitPackedIntSoA_8hpp.html#a5605e68a1e83d19528124a03c6c701fa", null ],
     [ "bitunpack", "BitPackedIntSoA_8hpp.html#aba890e1438c2aa2377a341c67f84fbda", null ],
+    [ "bitunpack1", "BitPackedIntSoA_8hpp.html#a0d8c6b372599715f83af10565523dcfa", null ],
     [ "makeMask", "BitPackedIntSoA_8hpp.html#a1a664b935ea0dec203a00a0298ebb423", null ],
     [ "isBitPackedIntSoA", "BitPackedIntSoA_8hpp.html#a6663b77c0af63f5b4ac7d7d1ca0eaf9e", null ],
-    [ "isBitPackedIntSoA< BitPackedIntSoA< ArrayExtents, RecordDim, Bits, LinearizeArrayDimsFunctor, StoredIntegral, SignBit > >", "BitPackedIntSoA_8hpp.html#a10b4d4773203b964709e70b26075a080", null ]
+    [ "isBitPackedIntSoA< BitPackedIntSoA< ArrayExtents, RecordDim, Bits, SignBit, LinearizeArrayDimsFunctor, StoredIntegral > >", "BitPackedIntSoA_8hpp.html#a422eada4e2d7e79a8415552fc5bfb264", null ]
 ];

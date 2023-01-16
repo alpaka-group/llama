@@ -1,5 +1,10 @@
 var NAVTREEINDEX4 =
 {
+"structllama_1_1RecordRef.html#a461a173618f8a9f833ddf28a1620927d":[2,0,1,23,45],
+"structllama_1_1RecordRef.html#a4ae3ca824c39d05ae2d94d1ab655565b":[2,0,1,23,53],
+"structllama_1_1RecordRef.html#a4db77e1b7709685c7eb45c7f6c86fb48":[2,0,1,23,36],
+"structllama_1_1RecordRef.html#a50d350658c5c5184ef0f2e25e2aaace9":[2,0,1,23,31],
+"structllama_1_1RecordRef.html#a517bee54eb43b63ede727940f71cd9ae":[2,0,1,23,47],
 "structllama_1_1RecordRef.html#a67adea4a6bb0440a9c3fe3287f897e95":[2,0,1,23,44],
 "structllama_1_1RecordRef.html#a6ae7838c73c7b3ecef0926ac33126584":[2,0,1,23,6],
 "structllama_1_1RecordRef.html#a6e3f77a18819a49ab694345faffab318":[2,0,1,23,25],
@@ -244,10 +249,5 @@ var NAVTREEINDEX4 =
 "structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01RecordDim_00_01RecordCoord_01_4.html#aa9ec4f749532d35c9f32a6dfa8486428":[2,0,1,2,15,0],
 "structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoor9dc4730dbf0b2c94fd53092536b251f3.html":[2,0,1,2,13],
 "structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoor9dc4730dbf0b2c94fd53092536b251f3.html#a6b98211f990f0d4dec6efa042c16c3c7":[2,0,1,2,13,0],
-"structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoor9dc4730dbf0b2c94fd53092536b251f3.html#ac06a88c25005e549fabd1cb3c41d8c4e":[2,0,1,2,13,2],
-"structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoor9dc4730dbf0b2c94fd53092536b251f3.html#ad70d55152fed64d1733912813f8bc7e8":[2,0,1,2,13,1],
-"structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoorb006549913676b1d5139a1b53818a5b4.html":[2,0,1,2,16],
-"structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoorfe79fdbf9645e3871343e16a1c302dbb.html":[2,0,1,2,18],
-"structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoorfe79fdbf9645e3871343e16a1c302dbb.html#a81ed3a25433318d1117b1d595f3eb3ac":[2,0,1,2,18,0],
-"structllama_1_1internal_1_1GetTagImpl.html":[2,0,1,2,9]
+"structllama_1_1internal_1_1GetCoordFromTagsImpl_3_01Record_3_01Fields_8_8_8_01_4_00_01RecordCoor9dc4730dbf0b2c94fd53092536b251f3.html#ac06a88c25005e549fabd1cb3c41d8c4e":[2,0,1,2,13,2]
 };

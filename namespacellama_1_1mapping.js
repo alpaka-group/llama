@@ -73,7 +73,7 @@ var namespacellama_1_1mapping =
     [ "isBitPackedFloatSoA", "namespacellama_1_1mapping.html#af9c9d24fc8ce05a939c4bdb3ca8ae133", null ],
     [ "isBitPackedFloatSoA< BitPackedFloatSoA< Ts... > >", "namespacellama_1_1mapping.html#a89403fec542ad934c779be84c857e970", null ],
     [ "isBitPackedIntSoA", "namespacellama_1_1mapping.html#a6663b77c0af63f5b4ac7d7d1ca0eaf9e", null ],
-    [ "isBitPackedIntSoA< BitPackedIntSoA< ArrayExtents, RecordDim, Bits, LinearizeArrayDimsFunctor, StoredIntegral, SignBit > >", "namespacellama_1_1mapping.html#a10b4d4773203b964709e70b26075a080", null ],
+    [ "isBitPackedIntSoA< BitPackedIntSoA< ArrayExtents, RecordDim, Bits, SignBit, LinearizeArrayDimsFunctor, StoredIntegral > >", "namespacellama_1_1mapping.html#a422eada4e2d7e79a8415552fc5bfb264", null ],
     [ "isBytesplit", "namespacellama_1_1mapping.html#a3e1dc6fefae9503d7e22ed80ea689098", null ],
     [ "isBytesplit< Bytesplit< TArrayExtents, TRecordDim, InnerMapping > >", "namespacellama_1_1mapping.html#a660e6891f37e1339cf157ea1fe8f4b86", null ],
     [ "isByteswap", "namespacellama_1_1mapping.html#af3bf715d9af3ff57725630f67437007b", null ],

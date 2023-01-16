@@ -145,9 +145,9 @@ $(document).ready(function(){initNavTree('BitPackedIntSoA_8hpp.html',''); initRe
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html">llama::mapping::internal::BitPackedIntRef&lt; Integral, StoredIntegralCV, VHBits, SizeType, SignBit &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BitPackedIntSoA.html">llama::mapping::BitPackedIntSoA&lt; TArrayExtents, TRecordDim, Bits, TLinearizeArrayDimsFunctor, TStoredIntegral, SignBit &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BitPackedIntSoA.html">llama::mapping::BitPackedIntSoA&lt; TArrayExtents, TRecordDim, Bits, SignBit, TLinearizeArrayDimsFunctor, TStoredIntegral &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BindBitPackedIntSoA.html">llama::mapping::BindBitPackedIntSoA&lt; Bits, LinearizeArrayDimsFunctor, StoredIntegral, SignBit &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BindBitPackedIntSoA.html">llama::mapping::BindBitPackedIntSoA&lt; Bits, SignBit, LinearizeArrayDimsFunctor, StoredIntegral &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -186,21 +186,27 @@ Functions</h2></td></tr>
 <tr class="memitem:a1a664b935ea0dec203a00a0298ebb423"><td class="memTemplParams" colspan="2">template&lt;typename Integral &gt; </td></tr>
 <tr class="memitem:a1a664b935ea0dec203a00a0298ebb423"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a1a664b935ea0dec203a00a0298ebb423">llama::mapping::internal::makeMask</a> (Integral bits) -&gt; Integral</td></tr>
 <tr class="separator:a1a664b935ea0dec203a00a0298ebb423"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba890e1438c2aa2377a341c67f84fbda"><td class="memTemplParams" colspan="2">template&lt;typename Integral , bool KeepSignBit, typename StoredIntegral &gt; </td></tr>
+<tr class="memitem:aba890e1438c2aa2377a341c67f84fbda"><td class="memTemplParams" colspan="2">template&lt;bool KeepSignBit, typename Integral , typename StoredIntegral &gt; </td></tr>
 <tr class="memitem:aba890e1438c2aa2377a341c67f84fbda"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#aba890e1438c2aa2377a341c67f84fbda">llama::mapping::internal::bitunpack</a> (const StoredIntegral *ptr, StoredIntegral bitOffset, StoredIntegral bitCount) -&gt; Integral</td></tr>
 <tr class="separator:aba890e1438c2aa2377a341c67f84fbda"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad115ee9119d7de237794ca580354674d"><td class="memTemplParams" colspan="2">template&lt;typename Integral , bool KeepSignBit, typename StoredIntegral &gt; </td></tr>
+<tr class="memitem:ad115ee9119d7de237794ca580354674d"><td class="memTemplParams" colspan="2">template&lt;bool KeepSignBit, typename StoredIntegral , typename Integral &gt; </td></tr>
 <tr class="memitem:ad115ee9119d7de237794ca580354674d"><td class="memTemplItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#ad115ee9119d7de237794ca580354674d">llama::mapping::internal::bitpack</a> (StoredIntegral *ptr, StoredIntegral bitOffset, StoredIntegral bitCount, Integral value)</td></tr>
 <tr class="separator:ad115ee9119d7de237794ca580354674d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d8c6b372599715f83af10565523dcfa"><td class="memTemplParams" colspan="2">template&lt;typename Integral , typename StoredIntegral &gt; </td></tr>
+<tr class="memitem:a0d8c6b372599715f83af10565523dcfa"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a0d8c6b372599715f83af10565523dcfa">llama::mapping::internal::bitunpack1</a> (const StoredIntegral *ptr, StoredIntegral bitOffset) -&gt; Integral</td></tr>
+<tr class="separator:a0d8c6b372599715f83af10565523dcfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5605e68a1e83d19528124a03c6c701fa"><td class="memTemplParams" colspan="2">template&lt;typename StoredIntegral , typename Integral &gt; </td></tr>
+<tr class="memitem:a5605e68a1e83d19528124a03c6c701fa"><td class="memTemplItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping_1_1internal.html#a5605e68a1e83d19528124a03c6c701fa">llama::mapping::internal::bitpack1</a> (StoredIntegral *ptr, StoredIntegral bitOffset, Integral value)</td></tr>
+<tr class="separator:a5605e68a1e83d19528124a03c6c701fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:a6663b77c0af63f5b4ac7d7d1ca0eaf9e"><td class="memTemplParams" colspan="2">template&lt;typename Mapping &gt; </td></tr>
 <tr class="memitem:a6663b77c0af63f5b4ac7d7d1ca0eaf9e"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a6663b77c0af63f5b4ac7d7d1ca0eaf9e">llama::mapping::isBitPackedIntSoA</a> = false</td></tr>
 <tr class="separator:a6663b77c0af63f5b4ac7d7d1ca0eaf9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a10b4d4773203b964709e70b26075a080"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim , typename Bits , typename LinearizeArrayDimsFunctor , typename StoredIntegral , SignBit SignBit&gt; </td></tr>
-<tr class="memitem:a10b4d4773203b964709e70b26075a080"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a10b4d4773203b964709e70b26075a080">llama::mapping::isBitPackedIntSoA&lt; BitPackedIntSoA&lt; ArrayExtents, RecordDim, Bits, LinearizeArrayDimsFunctor, StoredIntegral, SignBit &gt; &gt;</a> = true</td></tr>
-<tr class="separator:a10b4d4773203b964709e70b26075a080"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a422eada4e2d7e79a8415552fc5bfb264"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim , typename Bits , SignBit SignBit, typename LinearizeArrayDimsFunctor , typename StoredIntegral &gt; </td></tr>
+<tr class="memitem:a422eada4e2d7e79a8415552fc5bfb264"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a422eada4e2d7e79a8415552fc5bfb264">llama::mapping::isBitPackedIntSoA&lt; BitPackedIntSoA&lt; ArrayExtents, RecordDim, Bits, SignBit, LinearizeArrayDimsFunctor, StoredIntegral &gt; &gt;</a> = true</td></tr>
+<tr class="separator:a422eada4e2d7e79a8415552fc5bfb264"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -208,7 +214,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc.html">mapping</a></li><li class="navelem"><a class="el" href="BitPackedIntSoA_8hpp.html">BitPackedIntSoA.hpp</a></li>
-    <li class="footer">Generated on Fri Jan 13 2023 19:49:57 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Mon Jan 16 2023 11:06:48 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

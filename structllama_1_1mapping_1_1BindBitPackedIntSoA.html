@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Low-Level Abstraction of Memory Access: llama::mapping::BindBitPackedIntSoA&lt; Bits, LinearizeArrayDimsFunctor, StoredIntegral, SignBit &gt; Struct Template Reference</title>
+<title>Low-Level Abstraction of Memory Access: llama::mapping::BindBitPackedIntSoA&lt; Bits, SignBit, LinearizeArrayDimsFunctor, StoredIntegral &gt; Struct Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -86,7 +86,7 @@ $(document).ready(function(){initNavTree('structllama_1_1mapping_1_1BindBitPacke
 <a href="#pub-types">Public Types</a> &#124;
 <a href="structllama_1_1mapping_1_1BindBitPackedIntSoA-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">llama::mapping::BindBitPackedIntSoA&lt; Bits, LinearizeArrayDimsFunctor, StoredIntegral, SignBit &gt; Struct Template Reference</div>  </div>
+<div class="title">llama::mapping::BindBitPackedIntSoA&lt; Bits, SignBit, LinearizeArrayDimsFunctor, StoredIntegral &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -94,35 +94,35 @@ $(document).ready(function(){initNavTree('structllama_1_1mapping_1_1BindBitPacke
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a35766dc4657ee36d2a0cf595142bf441"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim &gt; </td></tr>
-<tr class="memitem:a35766dc4657ee36d2a0cf595142bf441"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BindBitPackedIntSoA.html#a35766dc4657ee36d2a0cf595142bf441">fn</a> = <a class="el" href="structllama_1_1mapping_1_1BitPackedIntSoA.html">BitPackedIntSoA</a>&lt; <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, std::conditional_t&lt;!std::is_void_v&lt; Bits &gt;, Bits, typename <a class="el" href="structllama_1_1ArrayExtents.html#a26ddad4db80efe93143b86c766b9a69f">ArrayExtents::value_type</a> &gt;, LinearizeArrayDimsFunctor, std::conditional_t&lt; !std::is_void_v&lt; StoredIntegral &gt;, StoredIntegral, <a class="el" href="namespacellama_1_1mapping_1_1internal.html#a9c9a33a5cf5e402d9887b0071b30ede0">internal::StoredUnsignedFor</a>&lt; RecordDim &gt; &gt;&gt;</td></tr>
-<tr class="separator:a35766dc4657ee36d2a0cf595142bf441"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c775cd15c555a4978da14655a1c2031"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim &gt; </td></tr>
+<tr class="memitem:a1c775cd15c555a4978da14655a1c2031"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BindBitPackedIntSoA.html#a1c775cd15c555a4978da14655a1c2031">fn</a> = <a class="el" href="structllama_1_1mapping_1_1BitPackedIntSoA.html">BitPackedIntSoA</a>&lt; <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, std::conditional_t&lt;!std::is_void_v&lt; Bits &gt;, Bits, typename <a class="el" href="structllama_1_1ArrayExtents.html#a26ddad4db80efe93143b86c766b9a69f">ArrayExtents::value_type</a> &gt;, <a class="el" href="namespacellama_1_1mapping.html#a839eb914ca2bc41f5db9ca6e016b18f9">SignBit</a>, LinearizeArrayDimsFunctor, std::conditional_t&lt; !std::is_void_v&lt; StoredIntegral &gt;, StoredIntegral, <a class="el" href="namespacellama_1_1mapping_1_1internal.html#a9c9a33a5cf5e402d9887b0071b30ede0">internal::StoredUnsignedFor</a>&lt; RecordDim &gt; &gt;&gt;</td></tr>
+<tr class="separator:a1c775cd15c555a4978da14655a1c2031"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename Bits = void, typename LinearizeArrayDimsFunctor = mapping::LinearizeArrayDimsCpp, typename StoredIntegral = void, SignBit SignBit = SignBit::Keep&gt;<br />
-struct llama::mapping::BindBitPackedIntSoA&lt; Bits, LinearizeArrayDimsFunctor, StoredIntegral, SignBit &gt;</h3>
+<div class="textblock"><h3>template&lt;typename Bits = void, SignBit SignBit = SignBit::Keep, typename LinearizeArrayDimsFunctor = mapping::LinearizeArrayDimsCpp, typename StoredIntegral = void&gt;<br />
+struct llama::mapping::BindBitPackedIntSoA&lt; Bits, SignBit, LinearizeArrayDimsFunctor, StoredIntegral &gt;</h3>
 
 <p>Binds parameters to a <a class="el" href="structllama_1_1mapping_1_1BitPackedIntSoA.html">BitPackedIntSoA</a> mapping except for array and record dimension, producing a quoted meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping. </p>
 
-<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00328">328</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00377">377</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="a35766dc4657ee36d2a0cf595142bf441"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a35766dc4657ee36d2a0cf595142bf441">&#9670;&nbsp;</a></span>fn</h2>
+<a id="a1c775cd15c555a4978da14655a1c2031"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c775cd15c555a4978da14655a1c2031">&#9670;&nbsp;</a></span>fn</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Bits  = void, typename LinearizeArrayDimsFunctor  = mapping::LinearizeArrayDimsCpp, typename StoredIntegral  = void, SignBit SignBit = SignBit::Keep&gt; </div>
+template&lt;typename Bits  = void, SignBit SignBit = SignBit::Keep, typename LinearizeArrayDimsFunctor  = mapping::LinearizeArrayDimsCpp, typename StoredIntegral  = void&gt; </div>
 <div class="memtemplate">
 template&lt;typename ArrayExtents , typename RecordDim &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1BindBitPackedIntSoA.html">llama::mapping::BindBitPackedIntSoA</a>&lt; Bits, LinearizeArrayDimsFunctor, StoredIntegral, <a class="el" href="namespacellama_1_1mapping.html#a839eb914ca2bc41f5db9ca6e016b18f9">SignBit</a> &gt;::<a class="el" href="structllama_1_1mapping_1_1BindBitPackedIntSoA.html#a35766dc4657ee36d2a0cf595142bf441">fn</a> =  <a class="el" href="structllama_1_1mapping_1_1BitPackedIntSoA.html">BitPackedIntSoA</a>&lt; <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, std::conditional_t&lt;!std::is_void_v&lt;Bits&gt;, Bits, typename <a class="el" href="structllama_1_1ArrayExtents.html#a26ddad4db80efe93143b86c766b9a69f">ArrayExtents::value_type</a>&gt;, LinearizeArrayDimsFunctor, std::conditional_t&lt; !std::is_void_v&lt;StoredIntegral&gt;, StoredIntegral, <a class="el" href="namespacellama_1_1mapping_1_1internal.html#a9c9a33a5cf5e402d9887b0071b30ede0">internal::StoredUnsignedFor</a>&lt;RecordDim&gt; &gt;&gt;</td>
+          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1BindBitPackedIntSoA.html">llama::mapping::BindBitPackedIntSoA</a>&lt; Bits, <a class="el" href="namespacellama_1_1mapping.html#a839eb914ca2bc41f5db9ca6e016b18f9">SignBit</a>, LinearizeArrayDimsFunctor, StoredIntegral &gt;::<a class="el" href="structllama_1_1mapping_1_1BindBitPackedIntSoA.html#a1c775cd15c555a4978da14655a1c2031">fn</a> =  <a class="el" href="structllama_1_1mapping_1_1BitPackedIntSoA.html">BitPackedIntSoA</a>&lt; <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, std::conditional_t&lt;!std::is_void_v&lt;Bits&gt;, Bits, typename <a class="el" href="structllama_1_1ArrayExtents.html#a26ddad4db80efe93143b86c766b9a69f">ArrayExtents::value_type</a>&gt;, <a class="el" href="namespacellama_1_1mapping.html#a839eb914ca2bc41f5db9ca6e016b18f9">SignBit</a>, LinearizeArrayDimsFunctor, std::conditional_t&lt; !std::is_void_v&lt;StoredIntegral&gt;, StoredIntegral, <a class="el" href="namespacellama_1_1mapping_1_1internal.html#a9c9a33a5cf5e402d9887b0071b30ede0">internal::StoredUnsignedFor</a>&lt;RecordDim&gt; &gt;&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00331">331</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedIntSoA_8hpp_source.html#l00380">380</a> of file <a class="el" href="BitPackedIntSoA_8hpp_source.html">BitPackedIntSoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -135,7 +135,7 @@ template&lt;typename ArrayExtents , typename RecordDim &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1BindBitPackedIntSoA.html">BindBitPackedIntSoA</a></li>
-    <li class="footer">Generated on Fri Jan 13 2023 19:49:57 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Mon Jan 16 2023 11:06:48 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
