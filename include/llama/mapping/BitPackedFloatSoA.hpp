@@ -3,7 +3,7 @@
 #pragma once
 
 #include "../ProxyRefOpMixin.hpp"
-#include "BitPackedIntSoA.hpp"
+#include "BitPackedInt.hpp"
 #include "Common.hpp"
 
 #include <algorithm>
