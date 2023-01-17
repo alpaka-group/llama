@@ -428,6 +428,20 @@ TEST_CASE("CopyConst")
     STATIC_REQUIRE(std::is_same_v<llama::CopyConst<const int, const float>, const float>);
 }
 
+namespace
+{
+    struct AnonNs
+    {
+    };
+
+    namespace ns
+    {
+        struct AnonNs2
+        {
+        };
+    } // namespace ns
+} // namespace
+
 TEST_CASE("qualifiedTypeName")
 {
     CHECK(llama::qualifiedTypeName<int> == "int");
@@ -455,6 +469,20 @@ TEST_CASE("qualifiedTypeName")
 #endif
     CHECK(llama::qualifiedTypeName<picongpu::momentum> == "picongpu::momentum");
     CHECK(llama::qualifiedTypeName<picongpu::weighting> == "picongpu::weighting");
+
+#if defined(__clang__)
+    CHECK(llama::qualifiedTypeName<AnonNs> == "(anonymous namespace)::AnonNs");
+    CHECK(llama::qualifiedTypeName<ns::AnonNs2> == "(anonymous namespace)::ns::AnonNs2");
+#elif defined(__NVCOMPILER)
+    CHECK(llama::qualifiedTypeName<AnonNs> == "<unnamed>::AnonNs");
+    CHECK(llama::qualifiedTypeName<ns::AnonNs2> == "<unnamed>::ns::AnonNs2");
+#elif defined(__GNUG__)
+    CHECK(llama::qualifiedTypeName<AnonNs> == "{anonymous}::AnonNs");
+    CHECK(llama::qualifiedTypeName<ns::AnonNs2> == "{anonymous}::ns::AnonNs2");
+#elif defined(_MSC_VER)
+    CHECK(llama::qualifiedTypeName<AnonNs> == "`anonymous-namespace'::AnonNs");
+    CHECK(llama::qualifiedTypeName<ns::AnonNs2> == "`anonymous-namespace'::ns::AnonNs2");
+#endif
 }
 
 TEST_CASE("structName")
@@ -481,6 +509,9 @@ TEST_CASE("structName")
 #endif
     CHECK(llama::structName<picongpu::momentum>() == "momentum");
     CHECK(llama::structName<picongpu::weighting>() == "weighting");
+
+    CHECK(llama::structName<AnonNs>() == "AnonNs");
+    CHECK(llama::structName<ns::AnonNs2>() == "AnonNs2");
 }
 
 TEST_CASE("recordCoordTags.Particle")
