@@ -208,6 +208,14 @@ namespace llama::mapping
                     value);
                 return *this;
             }
+
+            LLAMA_FN_HOST_ACC_INLINE friend void swap(BitPackedIntRef a, BitPackedIntRef b) noexcept
+            {
+                const auto va = static_cast<Integral>(a);
+                const auto vb = static_cast<Integral>(b);
+                a = vb;
+                b = va;
+            }
         };
 
         template<typename A, typename B>
@@ -468,8 +476,8 @@ namespace llama::mapping
         constexpr auto blobSize(size_type /*blobIndex*/) const -> size_type
         {
             constexpr auto bitsPerStoredIntegral = static_cast<size_type>(sizeof(TStoredIntegral) * CHAR_BIT);
-            const auto bitsNeeded
-                = TLinearizeArrayDimsFunctor{}.size(Base::extents()) * VHBits::value() * flatFieldCount<TRecordDim>;
+            const auto bitsNeeded = TLinearizeArrayDimsFunctor{}.size(Base::extents())
+                * static_cast<size_type>(VHBits::value()) * static_cast<size_type>(flatFieldCount<TRecordDim>);
             return roundUpToMultiple(bitsNeeded, bitsPerStoredIntegral) / CHAR_BIT;
         }
 
@@ -480,9 +488,10 @@ namespace llama::mapping
             Blobs& blobs) const
         {
             constexpr auto flatFieldIndex = static_cast<size_type>(Flattener::template flatIndex<RecordCoords...>);
-            const auto bitOffset
-                = ((TLinearizeArrayDimsFunctor{}(ai, Base::extents()) * flatFieldCount<TRecordDim>) +flatFieldIndex)
-                * VHBits::value();
+            const auto bitOffset = ((TLinearizeArrayDimsFunctor{}(ai, Base::extents())
+                                     * static_cast<size_type>(flatFieldCount<TRecordDim>))
+                                    + flatFieldIndex)
+                * static_cast<size_type>(VHBits::value());
 
             using QualifiedStoredIntegral = CopyConst<Blobs, TStoredIntegral>;
             using DstType = GetType<TRecordDim, RecordCoord<RecordCoords...>>;

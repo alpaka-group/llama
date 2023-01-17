@@ -277,6 +277,20 @@ TEMPLATE_TEST_CASE(
 }
 
 TEMPLATE_TEST_CASE(
+    "mapping.BitPackedIntRef.swap",
+    "",
+    (llama::mapping::BitPackedIntSoA<llama::ArrayExtents<int, 2>, int, llama::Constant<3>>),
+    (llama::mapping::BitPackedIntAoS<llama::ArrayExtents<int, 2>, int, llama::Constant<3>>) )
+{
+    auto view = llama::allocView(TestType{});
+    view(0) = 1;
+    view(1) = 2;
+    swap(view(0), view(1));
+    CHECK(view(0) == 2);
+    CHECK(view(1) == 1);
+}
+
+TEMPLATE_TEST_CASE(
     "mapping.BitPackedInt.ValidateBitsSmallerThanFieldType",
     "",
     (llama::mapping::BitPackedIntSoA<llama::ArrayExtents<std::size_t, 16>, UInts, unsigned>),

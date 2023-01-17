@@ -203,3 +203,16 @@ TEST_CASE("mapping.BitPackedFloatSoA.Size")
         sizeof(llama::mapping::BitPackedFloatSoA<llama::ArrayExtents<unsigned, 16>, float>{{}, 7, 16})
         == 2 * sizeof(unsigned));
 }
+
+
+TEST_CASE("mapping.BitPackedFloatSoA.swap")
+{
+    auto view = llama::allocView(
+        llama::mapping::
+            BitPackedFloatSoA<llama::ArrayExtents<int, 2>, float, llama::Constant<5>, llama::Constant<5>>{});
+    view(0) = 1.0;
+    view(1) = 2.0;
+    swap(view(0), view(1));
+    CHECK(view(0) == 2.0);
+    CHECK(view(1) == 1.0);
+}
