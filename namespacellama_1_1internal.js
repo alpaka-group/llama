@@ -110,6 +110,7 @@ var namespacellama_1_1internal =
     [ "recordRefArithOperator", "namespacellama_1_1internal.html#a635c2eba497b5d93cbf2dd0b3046c5f8", null ],
     [ "recordRefRelOperator", "namespacellama_1_1internal.html#af28594c3cafe6d1ad2a3b4ce9f571e97", null ],
     [ "recordRefRelOperator", "namespacellama_1_1internal.html#a1ba0c9b09c6a1e76d0d8f9c3e2fbe3ba", null ],
+    [ "resizeArray", "namespacellama_1_1internal.html#a512bb7612671cad70ae1e21587c633a2", null ],
     [ "sizeOfImpl", "namespacellama_1_1internal.html#aeab53e4609fe07abfb6f5f2d532cd388", null ],
     [ "storeSimdRecord", "namespacellama_1_1internal.html#a39d130ecf8dc32be0c10f142df6a0d42", null ],
     [ "storeSimdRecord", "namespacellama_1_1internal.html#a383757e5ef0435ab24cc8570e355912f", null ],
