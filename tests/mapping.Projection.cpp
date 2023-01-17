@@ -44,6 +44,22 @@ TEST_CASE("mapping.Projection.AoS.DoubleToFloat")
     iotaCheckView(view);
 }
 
+TEST_CASE("mapping.Projection.swap")
+{
+    auto mapping = llama::mapping::Projection<
+        llama::ArrayExtents<int, 2>,
+        double,
+        llama::mapping::BindAoS<>::fn,
+        boost::mp11::mp_list<boost::mp11::mp_list<double, DoubleToFloat>>>{{}};
+
+    auto view = llama::allocView(mapping);
+    view(0) = 1.0;
+    view(1) = 2.0;
+    swap(view(0), view(1));
+    CHECK(view(0) == 2.0);
+    CHECK(view(1) == 1.0);
+}
+
 namespace
 {
     struct Sqrt

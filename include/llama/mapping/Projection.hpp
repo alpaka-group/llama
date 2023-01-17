@@ -99,6 +99,14 @@ namespace llama::mapping
                 LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
                 return *this;
             }
+
+            LLAMA_FN_HOST_ACC_INLINE friend void swap(ProjectionReference a, ProjectionReference b) noexcept
+            {
+                const auto va = static_cast<value_type>(a);
+                const auto vb = static_cast<value_type>(b);
+                a = vb;
+                b = va;
+            }
         };
     } // namespace internal
 
