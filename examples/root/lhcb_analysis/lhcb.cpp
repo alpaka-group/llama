@@ -15,6 +15,9 @@
 #include <omp.h>
 #include <string>
 
+// for multithreading, specify OpenMP thread affinity, e.g.:
+// OMP_NUM_THREADS=... OMP_PLACES=cores OMP_PROC_BIND=true llama-root-lhcb_analysis
+
 namespace
 {
     constexpr auto analysisRepetitions = 100;
@@ -154,6 +157,9 @@ namespace
         return std::sqrt(p2 + kaonMassMeV * kaonMassMeV);
     }
 
+    constexpr double probKCut = 0.5;
+    constexpr double probPiCut = 0.5;
+
     template<typename View>
     auto analysis(View& view, const std::string& mappingName)
     {
@@ -165,15 +171,25 @@ namespace
         for(RE::NTupleSize_t i = 0; i < n; i++)
         {
             auto&& event = view[i];
-            if(event(H1isMuon{}) || event(H2isMuon{}) || event(H3isMuon{}))
+            if(event(H1isMuon{}))
+                continue;
+            if(event(H2isMuon{}))
+                continue;
+            if(event(H3isMuon{}))
                 continue;
 
-            constexpr double probKCut = 0.5;
-            if(event(H1ProbK{}) < probKCut || event(H2ProbK{}) < probKCut || event(H3ProbK{}) < probKCut)
+            if(event(H1ProbK{}) < probKCut)
+                continue;
+            if(event(H2ProbK{}) < probKCut)
+                continue;
+            if(event(H3ProbK{}) < probKCut)
                 continue;
 
-            constexpr double probPiCut = 0.5;
-            if(event(H1ProbPi{}) > probPiCut || event(H2ProbPi{}) > probPiCut || event(H3ProbPi{}) > probPiCut)
+            if(event(H1ProbPi{}) > probPiCut)
+                continue;
+            if(event(H2ProbPi{}) > probPiCut)
+                continue;
+            if(event(H3ProbPi{}) > probPiCut)
                 continue;
 
             const double h1px = event(H1PX{});
@@ -254,18 +270,87 @@ namespace
         llama::mapping::BindSoA<llama::mapping::Blobs::OnePerField>::fn,
         mp_list<mp_list<double, float>>>;
 
-    // This mapping is built upon the observation that HxisMuon is accessed densely, H1PropK 10x less often, H2PropK
-    // another 10x less often, and everything else super sparse (around every 300th element).
-    using Custom = llama::mapping::Split<
+
+    // The CustomN mappings are built upon the observation that HxisMuon is accessed densely, H1PropK 10x less often,
+    // H2PropK another 10x less often, and everything else super sparse (around every 300th element).
+
+    using Custom1 = llama::mapping::Split<
+        llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>,
+        RecordDim,
+        mp_list<mp_list<H1isMuon>, mp_list<H2isMuon>, mp_list<H3isMuon>, mp_list<H1ProbK>>,
+        llama::mapping::AlignedAoS,
+        llama::mapping::AlignedAoS,
+        true>;
+
+    using Custom2 = llama::mapping::Split<
         llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>,
         RecordDim,
         mp_list<mp_list<H1isMuon>, mp_list<H2isMuon>, mp_list<H3isMuon>>,
-        // llama::mapping::PackedAoS,
+        llama::mapping::AlignedAoS,
+        llama::mapping::
+            BindSplit<mp_list<mp_list<H1ProbK>>, llama::mapping::AlignedAoS, llama::mapping::AlignedAoS, true>::fn,
+        true>;
+
+    using Custom3 = llama::mapping::Split<
+        llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>,
+        RecordDim,
+        mp_list<mp_list<H1isMuon>, mp_list<H2isMuon>, mp_list<H3isMuon>>,
+        llama::mapping::AlignedAoS,
+        llama::mapping::BindSplit<
+            mp_list<mp_list<H1ProbK>>,
+            llama::mapping::AlignedAoS,
+            llama::mapping::
+                BindSplit<mp_list<mp_list<H2ProbK>>, llama::mapping::AlignedAoS, llama::mapping::AlignedAoS, true>::fn,
+            true>::fn,
+        true>;
+
+    using Custom4 = llama::mapping::Split<
+        llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>,
+        RecordDim,
+        mp_list<mp_list<H1isMuon>, mp_list<H2isMuon>, mp_list<H3isMuon>>,
+        llama::mapping::AlignedAoS,
+        llama::mapping::BindSplit<
+            mp_list<mp_list<H1ProbK>, mp_list<H2ProbK>>,
+            llama::mapping::AlignedAoS,
+            llama::mapping::AlignedAoS,
+            true>::fn,
+        true>;
+
+    using Custom4Heatmap = llama::mapping::Heatmap<Custom4>;
+
+    using Custom5 = llama::mapping::Split<
+        llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>,
+        RecordDim,
+        mp_list<mp_list<H1isMuon>, mp_list<H2isMuon>, mp_list<H3isMuon>>,
         llama::mapping::BindBitPackedIntAoS<llama::Constant<1>, llama::mapping::SignBit::Discard>::fn,
         llama::mapping::BindSplit<
             mp_list<mp_list<H1ProbK>, mp_list<H2ProbK>>,
-            llama::mapping::PackedAoS,
-            llama::mapping::PackedAoS,
+            llama::mapping::AlignedAoS,
+            llama::mapping::AlignedAoS,
+            true>::fn,
+        true>;
+
+    using Custom6 = llama::mapping::Split<
+        llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>,
+        RecordDim,
+        mp_list<mp_list<H1isMuon>, mp_list<H2isMuon>, mp_list<H3isMuon>>,
+        llama::mapping::BindBitPackedIntAoS<llama::Constant<1>, llama::mapping::SignBit::Discard>::fn,
+        llama::mapping::BindSplit<
+            mp_list<mp_list<H1ProbK>, mp_list<H2ProbK>>,
+            llama::mapping::AlignedAoS,
+            llama::mapping::BindBitPackedFloatAoS<llama::Constant<6>, llama::Constant<16>>::template fn,
+            true>::fn,
+        true>;
+
+    using Custom7 = llama::mapping::Split<
+        llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>,
+        RecordDim,
+        mp_list<mp_list<H1isMuon>, mp_list<H2isMuon>, mp_list<H3isMuon>>,
+        llama::mapping::BindBitPackedIntAoS<llama::Constant<1>, llama::mapping::SignBit::Discard>::fn,
+        llama::mapping::BindSplit<
+            mp_list<mp_list<H1ProbK>, mp_list<H2ProbK>>,
+            llama::mapping::AlignedAoS,
+            llama::mapping::BindChangeType<llama::mapping::BindAoS<>::fn, mp_list<mp_list<double, float>>>::fn,
             true>::fn,
         true>;
 
@@ -311,7 +396,33 @@ namespace
             std::memset(&v.storageBlobs[i][0], 0, v.mapping().blobSize(i));
     }
 
-    template<typename Mapping>
+    template<typename View>
+    auto sortView(View& v)
+    {
+        auto begin = std::chrono::steady_clock::now();
+        auto filterResults = [](const auto& e)
+        {
+            return std::tuple{
+                e(H1isMuon{}),
+                e(H2isMuon{}),
+                e(H3isMuon{}),
+                e(H1ProbK{}) < probKCut,
+                e(H2ProbK{}) < probKCut,
+                e(H3ProbK{}) < probKCut,
+                e(H1ProbPi{}) > probPiCut,
+                e(H2ProbPi{}) > probPiCut,
+                e(H3ProbPi{}) > probPiCut};
+        };
+        std::sort(
+            v.begin(),
+            v.end(),
+            [&](const auto& a, const auto& b) { return filterResults(a) < filterResults(b); });
+        const auto duration
+            = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - begin);
+        return duration;
+    }
+
+    template<typename Mapping, bool Sort = false>
     void testAnalysis(const std::string& inputFile, const std::string& mappingName)
     {
         saveLayout<Mapping>(layoutsFolder + "/" + mappingName + ".svg");
@@ -319,9 +430,13 @@ namespace
         auto [view, conversionTime] = convertRNTupleToLLAMA<Mapping>(inputFile);
         if constexpr(llama::mapping::isHeatmap<Mapping>)
         {
-            saveHeatmap(view, heatmapFolder + "/conversion.bin");
+            saveHeatmap(view, heatmapFolder + "/" + mappingName + "_conversion.bin");
             clearHeatmap(view);
         }
+
+        std::chrono::microseconds sortTime{};
+        if constexpr(Sort)
+            sortTime = sortView(view);
 
         TH1D hist{};
         std::chrono::microseconds totalAnalysisTime{};
@@ -333,14 +448,15 @@ namespace
             totalAnalysisTime += analysisTime;
         }
         if constexpr(llama::mapping::isHeatmap<Mapping>)
-            saveHeatmap(view, heatmapFolder + "/analysis.bin");
+            saveHeatmap(view, heatmapFolder + "/" + mappingName + "_analysis.bin");
         save(hist, mappingName);
         const auto mean = hist.GetMean();
         const auto absError = std::abs(mean - expectedMean);
         fmt::print(
-            "{:16} {:>15.1f} {:>12.1f} {:>10.1f} {:>7} {:>6.1f} {:>6.1f} {:>6.1f} {:>6.3f}\n",
+            "{:16} {:>15.1f} {:>10.1f} {:>12.1f} {:>10.1f} {:>7} {:>6.1f} {:>6.1f} {:>6.1f} {:>6.3f}\n",
             "\"" + mappingName + "\"",
             conversionTime / 1000.0,
+            sortTime.count() / 1000.0,
             totalAnalysisTime.count() / analysisRepetitions / 1000.0,
             totalBlobSizes(view.mapping()) / 1024.0 / 1024.0,
             hist.GetEntries(),
@@ -365,9 +481,10 @@ auto main(int argc, const char* argv[]) -> int
                                       // format. Remove this once RNTuple hits production.
 
     fmt::print(
-        "{:16} {:>15} {:>12} {:>10} {:>7} {:>6} {:>6} {:>6} {:>6}\n",
+        "{:16} {:>15} {:>10} {:>12} {:>10} {:>7} {:>6} {:>6} {:>6} {:>6}\n",
         "Mapping",
         "RNT->LLAMA(ms)",
+        "Sort(ms)",
         "Analysis(ms)",
         "Size(MiB)",
         "Entries",
@@ -377,34 +494,47 @@ auto main(int argc, const char* argv[]) -> int
         "ErrRel");
 
     testAnalysis<AoS>(inputFile, "AoS");
+    // testAnalysis<AoS, true>(inputFile, "AoS");
     testAnalysis<AoSHeatmap>(inputFile, "AoS Heatmap");
     testAnalysis<AoSoA8>(inputFile, "AoSoA8");
     testAnalysis<AoSoA16>(inputFile, "AoSoA16");
     testAnalysis<SoAASB>(inputFile, "SoA SB A");
     testAnalysis<SoAMB>(inputFile, "SoA MB");
+    // testAnalysis<SoAMB, true>(inputFile, "SoA MB S");
 
-    testAnalysis<AoS_Floats>(inputFile, "AoS (float)");
-    testAnalysis<SoAMB_Floats>(inputFile, "SoA MB (float)");
+    testAnalysis<AoS_Floats>(inputFile, "AoS float");
+    testAnalysis<SoAMB_Floats>(inputFile, "SoA MB float");
+    // testAnalysis<SoAMB_Floats, true>(inputFile, "SoA MB S float");
 
-    testAnalysis<Custom>(inputFile, "Custom");
+    testAnalysis<Custom1>(inputFile, "Custom1");
+    testAnalysis<Custom2>(inputFile, "Custom2");
+    testAnalysis<Custom3>(inputFile, "Custom3");
+    testAnalysis<Custom4>(inputFile, "Custom4");
+    testAnalysis<Custom4Heatmap>(inputFile, "Custom4 Heatmap");
+    testAnalysis<Custom5>(inputFile, "Custom5");
+    testAnalysis<Custom5, true>(inputFile, "Custom5 S");
+    testAnalysis<Custom6>(inputFile, "Custom6");
+    testAnalysis<Custom6, true>(inputFile, "Custom6 S");
+    testAnalysis<Custom7>(inputFile, "Custom7");
+    testAnalysis<Custom7, true>(inputFile, "Custom7 S");
 
     constexpr auto fullExp = 11;
     constexpr auto fullMan = 52;
     testAnalysis<MakeBitpacked<fullExp, fullMan>>(inputFile, fmt::format("BP SoA {}e{}", fullMan, fullExp));
 
-    using namespace boost::mp11;
-    mp_for_each<mp_reverse<mp_drop_c<mp_iota_c<fullExp>, 1>>>(
-        [&](auto ic)
-        {
-            constexpr auto exp = decltype(ic)::value;
-            testAnalysis<MakeBitpacked<exp, fullMan>>(inputFile, fmt::format("BP SoA {}e{}", fullMan, exp));
-        });
-    mp_for_each<mp_reverse<mp_drop_c<mp_iota_c<fullMan>, 1>>>(
-        [&](auto ic)
-        {
-            constexpr auto man = decltype(ic)::value;
-            testAnalysis<MakeBitpacked<fullExp, man>>(inputFile, fmt::format("BP SoA {}e{}", man, fullExp));
-        });
+    // using namespace boost::mp11;
+    // mp_for_each<mp_reverse<mp_drop_c<mp_iota_c<fullExp>, 1>>>(
+    //     [&](auto ic)
+    //     {
+    //         constexpr auto exp = decltype(ic)::value;
+    //         testAnalysis<MakeBitpacked<exp, fullMan>>(inputFile, fmt::format("BP SoA {}e{}", fullMan, exp));
+    //     });
+    // mp_for_each<mp_reverse<mp_drop_c<mp_iota_c<fullMan>, 1>>>(
+    //     [&](auto ic)
+    //     {
+    //         constexpr auto man = decltype(ic)::value;
+    //         testAnalysis<MakeBitpacked<fullExp, man>>(inputFile, fmt::format("BP SoA {}e{}", man, fullExp));
+    //     });
 
     // we typically observe wrong results at exp < 6, and man < 16
     testAnalysis<MakeBitpacked<6, 16>>(inputFile, "BP SoA 16e6");
