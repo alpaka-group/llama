@@ -73,6 +73,14 @@ namespace llama
             return ret;
         }
 
+        template<std::size_t NewSize, typename T, std::size_t N>
+        constexpr auto resizeArray(Array<T, N> a)
+        {
+            Array<char, NewSize> r{};
+            constexprCopy(a.begin(), a.begin() + NewSize, r.begin());
+            return r;
+        }
+
         template<typename T>
         constexpr auto typeNameAsArray()
         {
@@ -178,9 +186,7 @@ namespace llama
             }
             ();
 
-            Array<char, arrAndSize.second> a{};
-            constexprCopy(arrAndSize.first.begin(), arrAndSize.first.begin() + arrAndSize.second, a.begin());
-            return a;
+            return resizeArray<arrAndSize.second>(arrAndSize.first);
         }
 
         template<typename T>
@@ -216,8 +222,27 @@ namespace llama
             constexpr auto arrAndSize = []() constexpr
             {
                 auto s = internal::typeNameStorage<T>;
-                auto e = s.end();
                 auto b = s.begin();
+                auto e = s.end();
+
+#if defined(__clang__)
+                constexpr auto anonNs = std::string_view{"(anonymous namespace)::"};
+#elif defined(__NVCOMPILER)
+                constexpr auto anonNs = std::string_view{"<unnamed>::"};
+#elif defined(__GNUG__)
+                constexpr auto anonNs = std::string_view{"{anonymous}::"};
+#elif defined(_MSC_VER)
+                constexpr auto anonNs = std::string_view{"`anonymous-namespace'::"};
+#else
+                constexpr auto anonNs = std::string_view{"@"}; // just anything we won't find
+#endif
+                std::size_t pos = 0;
+                while((pos = std::string_view(b, e - b).find(anonNs)) != std::string::npos)
+                {
+                    constexprCopy(b + pos + anonNs.size(), e, b + pos);
+                    e -= anonNs.size();
+                }
+
                 while(true)
                 {
                     // find iterator to after "::"
@@ -243,9 +268,7 @@ namespace llama
             }
             ();
 
-            Array<char, arrAndSize.second> a{};
-            constexprCopy(arrAndSize.first.begin(), arrAndSize.first.begin() + arrAndSize.second, a.begin());
-            return a;
+            return resizeArray<arrAndSize.second>(arrAndSize.first);
         }
         ();
     } // namespace internal
