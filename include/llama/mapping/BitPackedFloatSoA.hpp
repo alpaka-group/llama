@@ -164,6 +164,14 @@ namespace llama::mapping
                 intref = packedFloat;
                 return *this;
             }
+
+            LLAMA_FN_HOST_ACC_INLINE friend void swap(BitPackedFloatRef a, BitPackedFloatRef b) noexcept
+            {
+                const auto va = static_cast<Float>(a);
+                const auto vb = static_cast<Float>(b);
+                a = vb;
+                b = va;
+            }
         };
 
         template<typename RecordDim>
