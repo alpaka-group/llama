@@ -241,7 +241,6 @@ namespace llama::mapping
         {
             using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
             using StoredIntegral = TStoredIntegral;
-            static constexpr std::size_t blobCount = mp_size<FlatRecordDim<TRecordDim>>::value;
 
             static_assert(std::is_integral_v<StoredIntegral>);
             static_assert(std::is_unsigned_v<StoredIntegral>);
@@ -372,6 +371,8 @@ namespace llama::mapping
         using typename Base::size_type;
         using VHBits = typename Base::VHBits; // use plain using declaration with nvcc >= 11.8
 
+        static constexpr std::size_t blobCount = mp_size<FlatRecordDim<TRecordDim>>::value;
+
         LLAMA_FN_HOST_ACC_INLINE
         constexpr auto blobSize(size_type /*blobIndex*/) const -> size_type
         {
@@ -472,6 +473,7 @@ namespace llama::mapping
         using VHBits = typename Base::VHBits; // use plain using declaration with nvcc >= 11.8
 
         using Flattener = FlattenRecordDim<TRecordDim>;
+        static constexpr std::size_t blobCount = 1;
 
         LLAMA_FN_HOST_ACC_INLINE
         constexpr auto blobSize(size_type /*blobIndex*/) const -> size_type
