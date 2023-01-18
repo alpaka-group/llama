@@ -61,7 +61,7 @@
 #include "macros.hpp"
 #include "mapping/AoS.hpp"
 #include "mapping/AoSoA.hpp"
-#include "mapping/BitPackedFloatSoA.hpp"
+#include "mapping/BitPackedFloat.hpp"
 #include "mapping/BitPackedInt.hpp"
 #include "mapping/Bytesplit.hpp"
 #include "mapping/Byteswap.hpp"

@@ -140,13 +140,19 @@ TEMPLATE_TEST_CASE("mapping.BitPackedFloatSoA", "", float, double)
     }
 }
 
-TEST_CASE("mapping.BitPackedFloatSoA.ReducedPrecisionComputation")
+constexpr auto n = std::size_t{1000};
+TEMPLATE_TEST_CASE(
+    "mapping.BitPackedFloatSoA.ReducedPrecisionComputation",
+    "",
+    (llama::mapping::
+         BitPackedFloatAoS<llama::ArrayExtents<std::size_t, n>, Vec3D, llama::Constant<8>, llama::Constant<23>>),
+    (llama::mapping::
+         BitPackedFloatSoA<llama::ArrayExtents<std::size_t, n>, Vec3D, llama::Constant<8>, llama::Constant<23>>) )
 {
-    constexpr auto n = 1000;
     auto view = llama::allocView(llama::mapping::AoS<llama::ArrayExtents<std::size_t, n>, Vec3D>{{}});
     std::default_random_engine engine;
     std::uniform_real_distribution dist{0.0f, 1e20f};
-    for(auto i = 0; i < n; i++)
+    for(std::size_t i = 0; i < n; i++)
     {
         auto v = dist(engine);
         view(i) = v;
@@ -154,30 +160,72 @@ TEST_CASE("mapping.BitPackedFloatSoA.ReducedPrecisionComputation")
     }
 
     // copy into packed representation
-    auto packedView = llama::allocView(llama::mapping::BitPackedFloatSoA<
-                                       llama::ArrayExtents<std::size_t, n>,
-                                       Vec3D,
-                                       llama::Constant<8>,
-                                       llama::Constant<23>>{}); // basically
-                                                                // float
+    auto packedView = llama::allocView(TestType{});
     llama::copy(view, packedView);
 
     // compute on original representation
-    for(auto i = 0; i < n; i++)
+    for(std::size_t i = 0; i < n; i++)
     {
         auto&& z = view(i)(tag::Z{});
         z = std::sqrt(z);
     }
 
     // compute on packed representation
-    for(auto i = 0; i < n; i++)
+    for(std::size_t i = 0; i < n; i++)
     {
         auto&& z = packedView(i)(tag::Z{});
         z = std::sqrt(z);
     }
 
-    for(auto i = 0; i < n; i++)
+    for(std::size_t i = 0; i < n; i++)
         CHECK(view(i)(tag::Z{}) == Catch::Approx(packedView(i)(tag::Z{})));
+}
+
+TEST_CASE("mapping.BitPackedFloatAoS.blobs")
+{
+    using Mapping = llama::mapping::
+        BitPackedFloatAoS<llama::ArrayExtents<std::size_t, n>, Vec3D, llama::Constant<3>, llama::Constant<5>>;
+    STATIC_REQUIRE(Mapping::blobCount == 1);
+    auto mapping = Mapping{};
+    CHECK(
+        mapping.blobSize(0)
+        == llama::roundUpToMultiple(3 * n * (1 + 3 + 5), sizeof(Mapping::StoredIntegral) * CHAR_BIT) / CHAR_BIT);
+}
+
+TEST_CASE("mapping.BitPackedFloatSoA.blobs")
+{
+    using Mapping = llama::mapping::
+        BitPackedFloatSoA<llama::ArrayExtents<std::size_t, n>, Vec3D, llama::Constant<3>, llama::Constant<5>>;
+    STATIC_REQUIRE(Mapping::blobCount == 3);
+    auto mapping = Mapping{};
+    for(auto i = 0u; i < 3; i++)
+        CHECK(
+            mapping.blobSize(i)
+            == llama::roundUpToMultiple(n * (1 + 3 + 5), sizeof(Mapping::StoredIntegral) * CHAR_BIT) / CHAR_BIT);
+}
+
+TEST_CASE("mapping.BitPackedFloatAoS.Size")
+{
+    STATIC_REQUIRE(std::is_empty_v<llama::mapping::BitPackedFloatAoS<
+                       llama::ArrayExtents<std::size_t, 16>,
+                       float,
+                       llama::Constant<7>,
+                       llama::Constant<16>>>);
+    STATIC_REQUIRE(
+        sizeof(llama::mapping::
+                   BitPackedFloatAoS<llama::ArrayExtents<std::size_t, 16>, float, llama::Constant<7>, unsigned>{
+                       {},
+                       {},
+                       16})
+        == sizeof(unsigned));
+    STATIC_REQUIRE(
+        sizeof(
+            llama::mapping::
+                BitPackedFloatAoS<llama::ArrayExtents<std::size_t, 16>, float, unsigned, llama::Constant<16>>{{}, 7})
+        == sizeof(unsigned));
+    STATIC_REQUIRE(
+        sizeof(llama::mapping::BitPackedFloatAoS<llama::ArrayExtents<unsigned, 16>, float>{{}, 7, 16})
+        == 2 * sizeof(unsigned));
 }
 
 TEST_CASE("mapping.BitPackedFloatSoA.Size")
