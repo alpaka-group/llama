@@ -221,17 +221,20 @@ TEMPLATE_TEST_CASE(
     CHECK(view(5) == Enum::F);
 }
 
-TEST_CASE("mapping.BitPackedInt.Size")
+TEST_CASE("mapping.BitPackedIntAoS.Size")
+{
+    STATIC_REQUIRE(std::is_empty_v<
+                   llama::mapping::BitPackedIntAoS<llama::ArrayExtents<std::size_t, 16>, SInts, llama::Constant<7>>>);
+    STATIC_REQUIRE(
+        sizeof(llama::mapping::BitPackedIntAoS<llama::ArrayExtents<unsigned, 16>, SInts>{{}, 7}) == sizeof(unsigned));
+}
+
+TEST_CASE("mapping.BitPackedIntSoA.Size")
 {
     STATIC_REQUIRE(std::is_empty_v<
                    llama::mapping::BitPackedIntSoA<llama::ArrayExtents<std::size_t, 16>, SInts, llama::Constant<7>>>);
-    STATIC_REQUIRE(std::is_empty_v<
-                   llama::mapping::BitPackedIntAoS<llama::ArrayExtents<std::size_t, 16>, SInts, llama::Constant<7>>>);
-
     STATIC_REQUIRE(
         sizeof(llama::mapping::BitPackedIntSoA<llama::ArrayExtents<unsigned, 16>, SInts>{{}, 7}) == sizeof(unsigned));
-    STATIC_REQUIRE(
-        sizeof(llama::mapping::BitPackedIntAoS<llama::ArrayExtents<unsigned, 16>, SInts>{{}, 7}) == sizeof(unsigned));
 }
 
 TEMPLATE_TEST_CASE(
