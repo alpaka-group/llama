@@ -68,6 +68,7 @@ namespace llama::mapping
             = TransformLeavesWithCoord<RecordDim, MakeReplacerProj<ProjectionMap>::template fn>;
 
         template<typename Reference, typename Projection>
+        // NOLINTNEXTLINE(cppcoreguidelines-special-member-functions,hicpp-special-member-functions)
         struct ProjectionReference
             : ProxyRefOpMixin<
                   ProjectionReference<Reference, Projection>,
@@ -84,6 +85,15 @@ namespace llama::mapping
             {
             }
 
+            ProjectionReference(const ProjectionReference&) = default;
+
+            // NOLINTNEXTLINE(bugprone-unhandled-self-assignment,cert-oop54-cpp)
+            LLAMA_FN_HOST_ACC_INLINE constexpr auto operator=(const ProjectionReference& other) -> ProjectionReference&
+            {
+                *this = static_cast<value_type>(other);
+                return *this;
+            }
+
             // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
             LLAMA_FN_HOST_ACC_INLINE constexpr operator value_type() const
             {
@@ -98,14 +108,6 @@ namespace llama::mapping
                 storageRef = Projection::store(v);
                 LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
                 return *this;
-            }
-
-            LLAMA_FN_HOST_ACC_INLINE friend void swap(ProjectionReference a, ProjectionReference b) noexcept
-            {
-                const auto va = static_cast<value_type>(a);
-                const auto vb = static_cast<value_type>(b);
-                a = vb;
-                b = va;
             }
         };
     } // namespace internal

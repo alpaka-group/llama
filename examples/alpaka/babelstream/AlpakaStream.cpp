@@ -27,7 +27,7 @@ namespace
         {
             T& ref;
 
-            // NOLINTNEXTLINE(cert-oop54-cpp)
+            // NOLINTNEXTLINE(bugprone-unhandled-self-assignment,cert-oop54-cpp)
             LLAMA_ACC LLAMA_FORCE_INLINE auto operator=(const Reference& r) -> Reference&
             {
                 *this = static_cast<T>(r);

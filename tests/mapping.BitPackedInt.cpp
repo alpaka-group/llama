@@ -277,7 +277,7 @@ TEMPLATE_TEST_CASE(
 }
 
 TEMPLATE_TEST_CASE(
-    "mapping.BitPackedIntRef.swap",
+    "mapping.BitPackedIntRef.SwapAndAssign",
     "",
     (llama::mapping::BitPackedIntSoA<llama::ArrayExtents<int, 2>, int, llama::Constant<3>>),
     (llama::mapping::BitPackedIntAoS<llama::ArrayExtents<int, 2>, int, llama::Constant<3>>) )
@@ -288,6 +288,10 @@ TEMPLATE_TEST_CASE(
     swap(view(0), view(1));
     CHECK(view(0) == 2);
     CHECK(view(1) == 1);
+
+    view(0) = view(1);
+    CHECK(view(0) == 1.0);
+    CHECK(view(1) == 1.0);
 }
 
 TEMPLATE_TEST_CASE(

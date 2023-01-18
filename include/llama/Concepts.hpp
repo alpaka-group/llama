@@ -46,12 +46,15 @@ namespace llama
     template <typename R>
     concept LValueReference = std::is_lvalue_reference_v<R>;
 
+    template<typename R>
+    concept AdlTwoStepSwappable = requires(R a, R b) { swap(a, b); } || requires(R a, R b) { std::swap(a, b); };
+
     template <typename R>
-    concept ProxyReference = requires(R r) {
+    concept ProxyReference = std::is_copy_constructible_v<R> && std::is_copy_assignable_v<R> && requires(R r) {
         typename R::value_type;
         { static_cast<typename R::value_type>(r) } -> std::same_as<typename R::value_type>;
         { r = std::declval<typename R::value_type>() } -> std::same_as<R&>;
-    };
+    } && AdlTwoStepSwappable<R>;
 
     template <typename R>
     concept AnyReference = LValueReference<R> || ProxyReference<R>;
@@ -120,7 +123,8 @@ namespace llama
             std::void_t<
                 typename R::value_type,
                 decltype(static_cast<typename R::value_type>(std::declval<R&>())),
-                decltype(std::declval<R&>() = std::declval<typename R::value_type>())>> : std::true_type
+                decltype(std::declval<R&>() = std::declval<typename R::value_type>())>>
+            : std::bool_constant<std::is_copy_constructible_v<R> && std::is_copy_assignable_v<R>>
         {
         };
     } // namespace internal

@@ -28,7 +28,7 @@ namespace llama::mapping
             using value_type = Value;
 
             template<typename RefFwd>
-            LLAMA_FN_HOST_ACC_INLINE TraceReference(RefFwd&& r, AccessCounts<Count>* hits)
+            LLAMA_FN_HOST_ACC_INLINE constexpr TraceReference(RefFwd&& r, AccessCounts<Count>* hits)
                 : r(std::forward<RefFwd>(r))
                 , hits(hits)
             {

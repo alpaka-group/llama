@@ -32,7 +32,7 @@ namespace llama::accessor
         }
     };
 
-    /// Allows only read access by qualifying the references to memory with const. Only works on l-value references.
+    /// Allows only read access by qualifying the references to memory with const.
     struct Const
     {
         // for l-value references
@@ -43,20 +43,36 @@ namespace llama::accessor
         }
 
         template<typename Ref>
+        // NOLINTNEXTLINE(cppcoreguidelines-special-member-functions,hicpp-special-member-functions)
         struct Reference : ProxyRefOpMixin<Reference<Ref>, typename Ref::value_type>
         {
-            using value_type = typename Ref::value_type;
-
+        private:
             Ref ref;
 
+        public:
+            using value_type = typename Ref::value_type;
+
+            LLAMA_FN_HOST_ACC_INLINE constexpr explicit Reference(Ref ref) : ref{ref}
+            {
+            }
+
+            Reference(const Reference&) = default;
+
+            // NOLINTNEXTLINE(bugprone-unhandled-self-assignment,cert-oop54-cpp)
+            LLAMA_FN_HOST_ACC_INLINE constexpr auto operator=(const Reference& other) -> Reference&
+            {
+                *this = static_cast<value_type>(other);
+                return *this;
+            }
+
             // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
-            operator value_type() const
+            LLAMA_FN_HOST_ACC_INLINE operator value_type() const
             {
                 return static_cast<value_type>(ref);
             }
 
             template<typename T>
-            auto operator=(T) -> Reference&
+            LLAMA_FN_HOST_ACC_INLINE auto operator=(T) -> Reference&
             {
                 static_assert(sizeof(T) == 0, "You cannot write through a Const accessor");
                 return *this;
@@ -67,7 +83,7 @@ namespace llama::accessor
         template<typename ProxyReference, std::enable_if_t<llama::isProxyReference<ProxyReference>, int> = 0>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(ProxyReference r) const
         {
-            return Reference<ProxyReference>{{}, std::move(r)};
+            return Reference<ProxyReference>{std::move(r)};
         }
     };
 
