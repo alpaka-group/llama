@@ -6181,6 +6181,14 @@ namespace llama::mapping
                     value);
                 return *this;
             }
+
+            LLAMA_FN_HOST_ACC_INLINE friend void swap(BitPackedIntRef a, BitPackedIntRef b) noexcept
+            {
+                const auto va = static_cast<Integral>(a);
+                const auto vb = static_cast<Integral>(b);
+                a = vb;
+                b = va;
+            }
         };
 
         template<typename A, typename B>
@@ -6441,8 +6449,8 @@ namespace llama::mapping
         constexpr auto blobSize(size_type /*blobIndex*/) const -> size_type
         {
             constexpr auto bitsPerStoredIntegral = static_cast<size_type>(sizeof(TStoredIntegral) * CHAR_BIT);
-            const auto bitsNeeded
-                = TLinearizeArrayDimsFunctor{}.size(Base::extents()) * VHBits::value() * flatFieldCount<TRecordDim>;
+            const auto bitsNeeded = TLinearizeArrayDimsFunctor{}.size(Base::extents())
+                * static_cast<size_type>(VHBits::value()) * static_cast<size_type>(flatFieldCount<TRecordDim>);
             return roundUpToMultiple(bitsNeeded, bitsPerStoredIntegral) / CHAR_BIT;
         }
 
@@ -6453,9 +6461,10 @@ namespace llama::mapping
             Blobs& blobs) const
         {
             constexpr auto flatFieldIndex = static_cast<size_type>(Flattener::template flatIndex<RecordCoords...>);
-            const auto bitOffset
-                = ((TLinearizeArrayDimsFunctor{}(ai, Base::extents()) * flatFieldCount<TRecordDim>) +flatFieldIndex)
-                * VHBits::value();
+            const auto bitOffset = ((TLinearizeArrayDimsFunctor{}(ai, Base::extents())
+                                     * static_cast<size_type>(flatFieldCount<TRecordDim>))
+                                    + flatFieldIndex)
+                * static_cast<size_type>(VHBits::value());
 
             using QualifiedStoredIntegral = CopyConst<Blobs, TStoredIntegral>;
             using DstType = GetType<TRecordDim, RecordCoord<RecordCoords...>>;
@@ -6619,6 +6628,14 @@ namespace llama::mapping
                 storageRef = Projection::store(v);
                 LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
                 return *this;
+            }
+
+            LLAMA_FN_HOST_ACC_INLINE friend void swap(ProjectionReference a, ProjectionReference b) noexcept
+            {
+                const auto va = static_cast<value_type>(a);
+                const auto vb = static_cast<value_type>(b);
+                a = vb;
+                b = va;
             }
         };
     } // namespace internal
@@ -9208,6 +9225,14 @@ namespace llama::mapping
                     = repackFloat(unpackedFloat, Bits::mantissa, Bits::exponent, VHMan::value(), VHExp::value());
                 intref = packedFloat;
                 return *this;
+            }
+
+            LLAMA_FN_HOST_ACC_INLINE friend void swap(BitPackedFloatRef a, BitPackedFloatRef b) noexcept
+            {
+                const auto va = static_cast<Float>(a);
+                const auto vb = static_cast<Float>(b);
+                a = vb;
+                b = va;
             }
         };
 
