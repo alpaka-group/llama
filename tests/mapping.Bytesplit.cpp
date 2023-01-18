@@ -92,3 +92,21 @@ TEST_CASE("mapping.ByteSplit.SoA.verify")
             CHECK(view.storageBlobs[b][i] == (isNonZero ? static_cast<std::byte>(i) : std::byte{0}));
     }
 }
+
+
+TEST_CASE("mapping.ByteSplit.ProxyRef.SwapAndAssign")
+{
+    using Mapping
+        = llama::mapping::Bytesplit<llama::ArrayExtentsDynamic<std::size_t, 1>, Vec3I, llama::mapping::BindSoA<>::fn>;
+    auto view = llama::allocView(Mapping{{128}});
+
+    view(0) = 1.0;
+    view(1) = 2.0;
+    swap(view(0), view(1));
+    CHECK(view(0) == 2.0);
+    CHECK(view(1) == 1.0);
+
+    view(0) = view(1);
+    CHECK(view(0) == 1.0);
+    CHECK(view(1) == 1.0);
+}

@@ -150,6 +150,7 @@ namespace llama::mapping
         /// @tparam StoredIntegralCV Integral type used for storing the bits with CV qualifiers.
         /// @tparam SizeType Type used to store sizes and offsets.
         template<typename Integral, typename StoredIntegralCV, typename VHBits, typename SizeType, SignBit SignBit>
+        // NOLINTNEXTLINE(cppcoreguidelines-special-member-functions,hicpp-special-member-functions)
         struct BitPackedIntRef
             : private VHBits
             , ProxyRefOpMixin<BitPackedIntRef<Integral, StoredIntegralCV, VHBits, SizeType, SignBit>, Integral>
@@ -170,6 +171,15 @@ namespace llama::mapping
                 , ptr{ptr}
                 , bitOffset{bitOffset}
             {
+            }
+
+            BitPackedIntRef(const BitPackedIntRef&) = default;
+
+            // NOLINTNEXTLINE(bugprone-unhandled-self-assignment,cert-oop54-cpp)
+            LLAMA_FN_HOST_ACC_INLINE constexpr auto operator=(const BitPackedIntRef& other) -> BitPackedIntRef&
+            {
+                *this = static_cast<value_type>(other);
+                return *this;
             }
 
             // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
@@ -207,14 +217,6 @@ namespace llama::mapping
                     static_cast<StoredIntegral>(VHBits::value()),
                     value);
                 return *this;
-            }
-
-            LLAMA_FN_HOST_ACC_INLINE friend void swap(BitPackedIntRef a, BitPackedIntRef b) noexcept
-            {
-                const auto va = static_cast<Integral>(a);
-                const auto vb = static_cast<Integral>(b);
-                a = vb;
-                b = va;
             }
         };
 

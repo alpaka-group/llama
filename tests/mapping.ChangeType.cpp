@@ -96,3 +96,23 @@ TEST_CASE("mapping.ChangeType.SoA.particle.coords")
     iotaFillView(view);
     iotaCheckView(view);
 }
+
+TEST_CASE("mapping.ChangeType.ProxyRef.SwapAndAssign")
+{
+    auto mapping = llama::mapping::ChangeType<
+        llama::ArrayExtents<std::size_t, 128>,
+        Vec3D,
+        llama::mapping::BindAoS<llama::mapping::FieldAlignment::Pack>::fn,
+        boost::mp11::mp_list<>>{{}};
+    auto view = llama::allocView(mapping);
+
+    view(0) = 1.0;
+    view(1) = 2.0;
+    swap(view(0), view(1));
+    CHECK(view(0) == 2.0);
+    CHECK(view(1) == 1.0);
+
+    view(0) = view(1);
+    CHECK(view(0) == 1.0);
+    CHECK(view(1) == 1.0);
+}

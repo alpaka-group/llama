@@ -101,6 +101,7 @@ namespace llama::mapping
         /// @tparam StoredIntegralCV Integral type used for storing the bits with CV qualifiers.
         /// @tparam SizeType Type used to store sizes and offsets.
         template<typename Float, typename StoredIntegralCV, typename VHExp, typename VHMan, typename SizeType>
+        // NOLINTNEXTLINE(cppcoreguidelines-special-member-functions,hicpp-special-member-functions)
         struct LLAMA_DECLSPEC_EMPTY_BASES BitPackedFloatRef
             : private VHExp
             , private VHMan
@@ -142,6 +143,15 @@ namespace llama::mapping
             {
             }
 
+            BitPackedFloatRef(const BitPackedFloatRef&) = default;
+
+            // NOLINTNEXTLINE(bugprone-unhandled-self-assignment,cert-oop54-cpp)
+            LLAMA_FN_HOST_ACC_INLINE constexpr auto operator=(const BitPackedFloatRef& other) -> BitPackedFloatRef&
+            {
+                *this = static_cast<value_type>(other);
+                return *this;
+            }
+
             // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
             LLAMA_FN_HOST_ACC_INLINE constexpr operator Float() const
             {
@@ -163,14 +173,6 @@ namespace llama::mapping
                     = repackFloat(unpackedFloat, Bits::mantissa, Bits::exponent, VHMan::value(), VHExp::value());
                 intref = packedFloat;
                 return *this;
-            }
-
-            LLAMA_FN_HOST_ACC_INLINE friend void swap(BitPackedFloatRef a, BitPackedFloatRef b) noexcept
-            {
-                const auto va = static_cast<Float>(a);
-                const auto vb = static_cast<Float>(b);
-                a = vb;
-                b = va;
             }
         };
 

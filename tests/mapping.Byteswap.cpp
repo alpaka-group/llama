@@ -42,3 +42,19 @@ TEST_CASE("mapping.Byteswap.CheckBytes")
     CHECK(*reinterpret_cast<uint16_t*>(p + 2) == 0x3412);
     CHECK(*reinterpret_cast<uint32_t*>(p + 4) == 0x78563412);
 }
+
+TEST_CASE("mapping.Byteswap.ProxyRef.SwapAndAssign")
+{
+    auto view = llama::allocView(
+        llama::mapping::Byteswap<llama::ArrayExtents<std::size_t, 128>, double, llama::mapping::BindAoS<>::fn>{});
+
+    view(0) = 1.0;
+    view(1) = 2.0;
+    swap(view(0), view(1));
+    CHECK(view(0) == 2.0);
+    CHECK(view(1) == 1.0);
+
+    view(0) = view(1);
+    CHECK(view(0) == 1.0);
+    CHECK(view(1) == 1.0);
+}

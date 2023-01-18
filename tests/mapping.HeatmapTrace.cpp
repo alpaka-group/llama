@@ -238,22 +238,25 @@ Mass            10100        200
     run(llama::mapping::PackedSingleBlobSoA<llama::ArrayExtents<std::size_t, n>, ParticleHeatmap>{});
 }
 
-TEST_CASE("Trace.assign_ref_to_ref")
+TEST_CASE("Trace.ProxyRef.SwapAndAssign")
 {
-    auto view = llama::allocView(
-        llama::mapping::Trace{llama::mapping::AoS<llama::ArrayExtents<int, 42>, ParticleHeatmap>{{}}});
+    auto view = llama::allocView(llama::mapping::Trace{llama::mapping::AoS<llama::ArrayExtents<int, 42>, double>{{}}});
 
-    view(0) = 1;
+    view(0) = 1.0;
+    view(1) = 2.0;
+    swap(view(0), view(1));
+    CHECK(view(0) == 2.0);
+    CHECK(view(1) == 1.0);
 
-    // assign proxy ref to proxy ref
-    view(1) = view(0);
-    CHECK((view(1) == 1));
+    view(0) = view(1);
+    CHECK(view(0) == 1.0);
+    CHECK(view(1) == 1.0);
 
     // with some intermediate variables
     auto pr = view(1);
     auto pr2 = pr;
     view(2) = pr2;
-    CHECK((view(2) == 1));
+    CHECK(view(2) == 1);
 }
 
 

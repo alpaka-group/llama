@@ -139,5 +139,13 @@ namespace llama
             store(v);
             return old;
         }
+
+        LLAMA_FN_HOST_ACC_INLINE friend constexpr void swap(Derived a, Derived b) noexcept
+        {
+            const auto va = static_cast<ValueType>(a);
+            const auto vb = static_cast<ValueType>(b);
+            a = vb;
+            b = va;
+        }
     };
 } // namespace llama

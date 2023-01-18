@@ -371,7 +371,7 @@ namespace llama
 
         RecordRef(const RecordRef&) = default;
 
-        // NOLINTNEXTLINE(cert-oop54-cpp)
+        // NOLINTNEXTLINE(bugprone-unhandled-self-assignment,cert-oop54-cpp)
         LLAMA_FN_HOST_ACC_INLINE auto operator=(const RecordRef& other) -> RecordRef&
         {
             // NOLINTNEXTLINE(cppcoreguidelines-c-copy-assignment-signature,misc-unconventional-assign-operator)

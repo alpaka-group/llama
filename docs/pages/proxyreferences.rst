@@ -126,16 +126,27 @@ Proxy references in LLAMA fulfill the following concept:
 .. code-block:: C++
 
     template <typename R>
-    concept ProxyReference = requires(R r) {
+    concept ProxyReference = std::is_copy_constructible_v<R> && std::is_copy_assignable_v<R>
+        && requires(R r) {
         typename R::value_type;
         { static_cast<typename R::value_type>(r) } -> std::same_as<typename R::value_type>;
         { r = typename R::value_type{} } -> std::same_as<R&>;
-    };
+    } && AdlTwoStepSwappable<R>;
 
-That is, they provide a member type :cpp:`value_type`,
+That is, a proxy reference can be copied, which should make the original and the copy refer to the same element.
+It can be assigned to another proxy reference,
+which should transfer the referred value, not where the proxy reference is referring to!
+A proxy references provides a member type :cpp:`value_type`,
 which indicates the type of the values which can be loaded and stored through the proxy reference.
 Furthermore, a proxy reference can be converted to its value type (thus calling :cpp:`operator value_type ()`)
 or assigned an instance of its value type.
+Finally, two proxy references can be swapped using the ADL two-step idiom, swapping their referred values:
+
+.. code-block:: C++
+
+    using std::swap;
+    swap(pr1, pr2);
+
 
 Arithmetic on proxy references and ProxyRefOpMixin
 --------------------------------------------------

@@ -205,7 +205,7 @@ TEST_CASE("mapping.BitPackedFloatSoA.Size")
 }
 
 
-TEST_CASE("mapping.BitPackedFloatSoA.swap")
+TEST_CASE("mapping.BitPackedFloatSoA.ProxyRef.SwapAndAssign")
 {
     auto view = llama::allocView(
         llama::mapping::
@@ -214,5 +214,9 @@ TEST_CASE("mapping.BitPackedFloatSoA.swap")
     view(1) = 2.0;
     swap(view(0), view(1));
     CHECK(view(0) == 2.0);
+    CHECK(view(1) == 1.0);
+
+    view(0) = view(1);
+    CHECK(view(0) == 1.0);
     CHECK(view(1) == 1.0);
 }

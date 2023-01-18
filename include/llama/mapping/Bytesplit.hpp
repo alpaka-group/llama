@@ -49,6 +49,7 @@ namespace llama::mapping
         }
 
         template<typename RC, typename BlobArray>
+        // NOLINTNEXTLINE(cppcoreguidelines-special-member-functions,hicpp-special-member-functions)
         struct Reference : ProxyRefOpMixin<Reference<RC, BlobArray>, GetType<TRecordDim, RC>>
         {
         private:
@@ -59,15 +60,24 @@ namespace llama::mapping
         public:
             using value_type = GetType<TRecordDim, RC>;
 
-            LLAMA_FN_HOST_ACC_INLINE Reference(const Inner& innerMapping, ArrayIndex ai, BlobArray& blobs)
+            LLAMA_FN_HOST_ACC_INLINE constexpr Reference(const Inner& innerMapping, ArrayIndex ai, BlobArray& blobs)
                 : inner(innerMapping)
                 , ai(ai)
                 , blobs(blobs)
             {
             }
 
+            Reference(const Reference&) = default;
+
+            // NOLINTNEXTLINE(bugprone-unhandled-self-assignment,cert-oop54-cpp)
+            LLAMA_FN_HOST_ACC_INLINE constexpr auto operator=(const Reference& other) -> Reference&
+            {
+                *this = static_cast<value_type>(other);
+                return *this;
+            }
+
             // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
-            LLAMA_FN_HOST_ACC_INLINE operator value_type() const
+            LLAMA_FN_HOST_ACC_INLINE constexpr operator value_type() const
             {
 #ifdef _MSC_VER
                 // MSVC workaround. Without this, MSVC deduces the last template parameter of mapToMemory wrongly
@@ -87,7 +97,7 @@ namespace llama::mapping
                 return v;
             }
 
-            LLAMA_FN_HOST_ACC_INLINE auto operator=(value_type v) -> Reference&
+            LLAMA_FN_HOST_ACC_INLINE constexpr auto operator=(value_type v) -> Reference&
             {
 #ifdef _MSC_VER
                 // MSVC workaround. Without this, MSVC deduces the last template parameter of mapToMemory wrongly
