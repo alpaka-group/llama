@@ -1,6 +1,5 @@
 var NAVTREEINDEX4 =
 {
-"structllama_1_1RecordCoord_3_4.html#a88c46f2ba080197e2c49a2e4066b841a":[2,0,1,22,1],
 "structllama_1_1RecordRef.html":[2,0,1,23],
 "structllama_1_1RecordRef.html#a00162d3e10237d687c7130d695c6da4c":[2,0,1,23,55],
 "structllama_1_1RecordRef.html#a010b5195d6633f6b656542bd57d48185":[2,0,1,23,26],
@@ -249,5 +248,6 @@ var NAVTREEINDEX4 =
 "structllama_1_1internal_1_1DivideAssign.html":[2,0,1,2,50],
 "structllama_1_1internal_1_1DivideAssign.html#a4ef194014d4c19d8bba9c2c3a0b7d9e0":[2,0,1,2,50,0],
 "structllama_1_1internal_1_1Dyn.html":[2,0,1,2,2],
-"structllama_1_1internal_1_1Dyn.html#a4ff750056caf0e868aa00df251af2707":[2,0,1,2,2,3]
+"structllama_1_1internal_1_1Dyn.html#a4ff750056caf0e868aa00df251af2707":[2,0,1,2,2,3],
+"structllama_1_1internal_1_1Dyn.html#a7a2ad09d9c5172e0850d24dcda47eaac":[2,0,1,2,2,4]
 };
