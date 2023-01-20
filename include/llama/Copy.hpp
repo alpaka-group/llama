@@ -122,13 +122,14 @@ namespace llama
             mapping::Blobs Blobs,
             mapping::SubArrayAlignment SubArrayAlignment,
             typename LinearizeArrayDimsFunctor>
-        inline constexpr std::size_t aosoaLanes<
-            mapping::SoA<ArrayExtents, RecordDim, Blobs, SubArrayAlignment, LinearizeArrayDimsFunctor>> = std::
-            numeric_limits<std::size_t>::max();
+        inline constexpr std::size_t
+            aosoaLanes<mapping::SoA<ArrayExtents, RecordDim, Blobs, SubArrayAlignment, LinearizeArrayDimsFunctor>>
+            = std::numeric_limits<std::size_t>::max();
 
         template<typename ArrayExtents, typename RecordDim, std::size_t Lanes, typename LinearizeArrayDimsFunctor>
         inline constexpr std::size_t
-            aosoaLanes<mapping::AoSoA<ArrayExtents, RecordDim, Lanes, LinearizeArrayDimsFunctor>> = Lanes;
+            aosoaLanes<mapping::AoSoA<ArrayExtents, RecordDim, Lanes, LinearizeArrayDimsFunctor>>
+            = Lanes;
     } // namespace internal
 
     /// AoSoA copy strategy which transfers data in common blocks. SoA mappings are also allowed for at most 1

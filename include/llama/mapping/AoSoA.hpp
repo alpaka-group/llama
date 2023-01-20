@@ -21,8 +21,7 @@ namespace llama::mapping
                 max = std::min(max, VectorRegisterBits / (sizeof(AttributeType) * CHAR_BIT));
             });
         return max;
-    }
-    ();
+    }();
 
     /// Array of struct of arrays mapping. Used to create a \ref View via \ref allocView.
     /// \tparam Lanes The size of the inner arrays of this array of struct of arrays.

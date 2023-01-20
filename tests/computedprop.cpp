@@ -124,9 +124,9 @@ namespace
 
         constexpr auto blobSize(std::size_t) const -> std::size_t
         {
-            llama::forEachLeafCoord<RecordDim>([](auto rc) constexpr {
-                static_assert(std::is_same_v<llama::GetType<RecordDim, decltype(rc)>, bool>);
-            });
+            llama::forEachLeafCoord<RecordDim>(
+                [](auto rc) constexpr
+                { static_assert(std::is_same_v<llama::GetType<RecordDim, decltype(rc)>, bool>); });
             constexpr std::size_t wordBytes = sizeof(Word);
             return (LinearizeArrayDimsFunctor{}.size(extents()) + wordBytes - 1) / wordBytes;
         }

@@ -139,8 +139,8 @@ namespace llama
                                 view(ai)(rc) = FieldType{};
                             }
                             else if constexpr(
-                                std::is_lvalue_reference_v<
-                                    RefType> && !std::is_const_v<std::remove_reference_t<RefType>>)
+                                std::is_lvalue_reference_v<RefType>
+                                && !std::is_const_v<std::remove_reference_t<RefType>>)
                             {
                                 new(&view(ai)(rc)) FieldType;
                             }

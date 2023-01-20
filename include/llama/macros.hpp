@@ -48,7 +48,7 @@
 #endif
 
 #ifndef LLAMA_PRAGMA
-#    define LLAMA_PRAGMA(tokens) _Pragma(#    tokens)
+#    define LLAMA_PRAGMA(tokens) _Pragma(#tokens)
 #endif
 
 #ifndef LLAMA_UNROLL

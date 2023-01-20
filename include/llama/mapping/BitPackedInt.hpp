@@ -433,7 +433,8 @@ namespace llama::mapping
         typename LinearizeArrayDimsFunctor,
         typename StoredIntegral>
     inline constexpr bool isBitPackedIntSoA<
-        BitPackedIntSoA<ArrayExtents, RecordDim, Bits, SignBit, LinearizeArrayDimsFunctor, StoredIntegral>> = true;
+        BitPackedIntSoA<ArrayExtents, RecordDim, Bits, SignBit, LinearizeArrayDimsFunctor, StoredIntegral>>
+        = true;
 
     /// Array of struct mapping using bit packing to reduce size/precision of integral data types. If your record
     /// dimension contains non-integral types, split them off using the \ref Split mapping first.
@@ -547,5 +548,6 @@ namespace llama::mapping
         SignBit,
         LinearizeArrayDimsFunctor,
         FlattenRecordDim,
-        StoredIntegral>> = true;
+        StoredIntegral>>
+        = true;
 } // namespace llama::mapping

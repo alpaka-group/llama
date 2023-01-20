@@ -183,8 +183,7 @@ namespace llama
                 auto size3 = size3Func(nameArray);
 
                 return std::pair{nameArray, size3};
-            }
-            ();
+            }();
 
             return resizeArray<arrAndSize.second>(arrAndSize.first);
         }
@@ -265,12 +264,10 @@ namespace llama
                 }
 
                 return std::pair{s, e - s.begin()};
-            }
-            ();
+            }();
 
             return resizeArray<arrAndSize.second>(arrAndSize.first);
-        }
-        ();
+        }();
     } // namespace internal
 
     template<typename T>
@@ -314,42 +311,42 @@ namespace llama
                             s += structName(tag).size();
                     });
                 return s;
-            }
-            ();
+            }();
             llama::Array<char, size> a{};
             auto w = a.begin();
 
-            mp_for_each<Tags>([&](auto tag) constexpr {
-                if(w != a.begin())
+            mp_for_each<Tags>(
+                [&](auto tag) constexpr
                 {
-                    *w = '.';
-                    w++;
-                }
-                using Tag = decltype(tag);
-                if constexpr(isRecordCoord<Tag>)
-                {
-                    // handle array indices
-                    static_assert(Tag::size == 1);
-                    // convert to string
-                    auto n = Tag::front;
-                    w += intToStrSize(n) - 1;
-                    do
+                    if(w != a.begin())
                     {
-                        *w = '0' + n % 10;
-                        w--;
-                        n /= 10;
-                    } while(n != 0);
-                }
-                else
-                {
-                    constexpr auto sn = structName(tag);
-                    constexprCopy(sn.begin(), sn.end(), w);
-                    w += sn.size();
-                }
-            });
+                        *w = '.';
+                        w++;
+                    }
+                    using Tag = decltype(tag);
+                    if constexpr(isRecordCoord<Tag>)
+                    {
+                        // handle array indices
+                        static_assert(Tag::size == 1);
+                        // convert to string
+                        auto n = Tag::front;
+                        w += intToStrSize(n) - 1;
+                        do
+                        {
+                            *w = '0' + n % 10;
+                            w--;
+                            n /= 10;
+                        } while(n != 0);
+                    }
+                    else
+                    {
+                        constexpr auto sn = structName(tag);
+                        constexprCopy(sn.begin(), sn.end(), w);
+                        w += sn.size();
+                    }
+                });
             return a;
-        }
-        ();
+        }();
     } // namespace internal
 
     /// Returns the tags interspersed by '.' represented by the given record coord in the given record dimension.

@@ -69,21 +69,23 @@ namespace llama
         };
 
         bool collision = false;
-        forEachLeafCoord<typename Mapping::RecordDim>([&](auto rc) constexpr {
-            if(collision)
-                return;
-            for(auto ai : ArrayIndexRange{m.extents()})
+        forEachLeafCoord<typename Mapping::RecordDim>(
+            [&](auto rc) constexpr
             {
-                using Type = GetType<typename Mapping::RecordDim, decltype(rc)>;
-                const auto [blob, offset] = m.blobNrAndOffset(ai, rc);
-                for(std::size_t b = 0; b < sizeof(Type); b++)
-                    if(testAndSet(blob, offset + b))
-                    {
-                        collision = true;
-                        break;
-                    }
-            }
-        });
+                if(collision)
+                    return;
+                for(auto ai : ArrayIndexRange{m.extents()})
+                {
+                    using Type = GetType<typename Mapping::RecordDim, decltype(rc)>;
+                    const auto [blob, offset] = m.blobNrAndOffset(ai, rc);
+                    for(std::size_t b = 0; b < sizeof(Type); b++)
+                        if(testAndSet(blob, offset + b))
+                        {
+                            collision = true;
+                            break;
+                        }
+                }
+            });
         return !collision;
     }
 #endif
@@ -96,24 +98,26 @@ namespace llama
     constexpr auto mapsPiecewiseContiguous(const Mapping& m) -> bool
     {
         bool collision = false;
-        forEachLeafCoord<typename Mapping::RecordDim>([&](auto rc) constexpr {
-            std::size_t flatIndex = 0;
-            std::size_t lastBlob = std::numeric_limits<std::size_t>::max();
-            std::size_t lastOffset = std::numeric_limits<std::size_t>::max();
-            for(auto ai : ArrayIndexRange{m.extents()})
+        forEachLeafCoord<typename Mapping::RecordDim>(
+            [&](auto rc) constexpr
             {
-                using Type = GetType<typename Mapping::RecordDim, decltype(rc)>;
-                const auto [blob, offset] = m.blobNrAndOffset(ai, rc);
-                if(flatIndex % PieceLength != 0 && (lastBlob != blob || lastOffset + sizeof(Type) != offset))
+                std::size_t flatIndex = 0;
+                std::size_t lastBlob = std::numeric_limits<std::size_t>::max();
+                std::size_t lastOffset = std::numeric_limits<std::size_t>::max();
+                for(auto ai : ArrayIndexRange{m.extents()})
                 {
-                    collision = true;
-                    break;
+                    using Type = GetType<typename Mapping::RecordDim, decltype(rc)>;
+                    const auto [blob, offset] = m.blobNrAndOffset(ai, rc);
+                    if(flatIndex % PieceLength != 0 && (lastBlob != blob || lastOffset + sizeof(Type) != offset))
+                    {
+                        collision = true;
+                        break;
+                    }
+                    lastBlob = blob;
+                    lastOffset = offset;
+                    flatIndex++;
                 }
-                lastBlob = blob;
-                lastOffset = offset;
-                flatIndex++;
-            }
-        });
+            });
         return !collision;
     }
 } // namespace llama

@@ -204,8 +204,7 @@ namespace llama::mapping
             constexpr auto indexBefore = flatRecordCoord<RecordDim, RecordCoord<RecordCoords...>>;
             constexpr auto indexAfter = mp_at_c<InversePermutedIndices, indexBefore>::value;
             return indexAfter;
-        }
-        ();
+        }();
     };
 
     namespace internal

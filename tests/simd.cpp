@@ -97,7 +97,8 @@ TEST_CASE("simd.simdLanesWithLeastRegistersFor.stdsimd")
     STATIC_REQUIRE(
         llama::simdLanesWithLeastRegistersFor<
             ParticleSimd,
-            stdx::native_simd> == stdx::native_simd<double>::size()); // 11 registers with 4 lanes used each
+            stdx::native_simd>
+        == stdx::native_simd<double>::size()); // 11 registers with 4 lanes used each
 }
 
 TEST_CASE("simd.SimdN.stdsimd")

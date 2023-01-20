@@ -109,5 +109,6 @@ namespace llama::mapping
         template<typename>
         typename FlattenRecordDim>
     inline constexpr bool
-        isAoS<AoS<ArrayExtents, RecordDim, FieldAlignment, LinearizeArrayDimsFunctor, FlattenRecordDim>> = true;
+        isAoS<AoS<ArrayExtents, RecordDim, FieldAlignment, LinearizeArrayDimsFunctor, FlattenRecordDim>>
+        = true;
 } // namespace llama::mapping

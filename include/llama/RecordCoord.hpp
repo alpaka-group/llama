@@ -90,8 +90,7 @@ namespace llama
                     powerOf10 *= 10;
                 }
                 return acc;
-            }
-            ();
+            }();
             return RecordCoord<coord>{};
         }
     } // namespace literals

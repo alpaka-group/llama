@@ -77,7 +77,8 @@ namespace llama
             std::enable_if_t<
                 sizeof...(RestElements) == sizeof...(Ts)
                     && std::is_constructible_v<FirstElement, T> && (std::is_constructible_v<RestElements, Ts> && ...),
-                int> = 0>
+                int>
+            = 0>
         LLAMA_FN_HOST_ACC_INLINE constexpr explicit Tuple(T&& firstArg, Ts&&... restArgs)
             : Leaf{static_cast<FirstElement>(std::forward<T>(firstArg))}
             , RestTuple(std::forward<Ts>(restArgs)...)

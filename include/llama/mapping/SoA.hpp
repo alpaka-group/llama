@@ -73,12 +73,10 @@ namespace llama::mapping
                 constexpr auto typeSizes = []() constexpr
                 {
                     Array<size_type, blobCount> r{};
-                    forEachLeafCoord<TRecordDim>([&r, i = 0](auto rc) mutable constexpr {
-                        r[i++] = sizeof(GetType<TRecordDim, decltype(rc)>);
-                    });
+                    forEachLeafCoord<TRecordDim>([&r, i = 0](auto rc) mutable constexpr
+                                                 { r[i++] = sizeof(GetType<TRecordDim, decltype(rc)>); });
                     return r;
-                }
-                ();
+                }();
                 return flatSize * typeSizes[blobIndex];
             }
             else if constexpr(subArrayAlignment == SubArrayAlignment::Align)
@@ -225,6 +223,6 @@ namespace llama::mapping
         Blobs Blobs,
         SubArrayAlignment SubArrayAlignment,
         typename LinearizeArrayDimsFunctor>
-    inline constexpr bool
-        isSoA<SoA<ArrayExtents, RecordDim, Blobs, SubArrayAlignment, LinearizeArrayDimsFunctor>> = true;
+    inline constexpr bool isSoA<SoA<ArrayExtents, RecordDim, Blobs, SubArrayAlignment, LinearizeArrayDimsFunctor>>
+        = true;
 } // namespace llama::mapping

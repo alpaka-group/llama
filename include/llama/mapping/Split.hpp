@@ -62,9 +62,8 @@ namespace llama::mapping
         inline constexpr bool isSelected = recordCoordCommonPrefixIsSame<RecordCoordForMapping1, RC>;
 
         template<typename RC, typename... RecordCoordsForMapping1>
-        inline constexpr bool isSelected<
-            RC,
-            mp_list<RecordCoordsForMapping1...>> = (isSelected<RC, RecordCoordsForMapping1> || ...);
+        inline constexpr bool isSelected<RC, mp_list<RecordCoordsForMapping1...>>
+            = (isSelected<RC, RecordCoordsForMapping1> || ...);
 
         template<typename RecordDim, typename Selector>
         struct ReplaceTagListsByCoords;
@@ -253,6 +252,7 @@ namespace llama::mapping
         template<typename...>
         typename MappingTemplate2,
         bool SeparateBlobs>
-    inline constexpr bool isSplit<
-        Split<ArrayExtents, RecordDim, SelectorForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs>> = true;
+    inline constexpr bool
+        isSplit<Split<ArrayExtents, RecordDim, SelectorForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs>>
+        = true;
 } // namespace llama::mapping
