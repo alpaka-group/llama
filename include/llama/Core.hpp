@@ -45,8 +45,8 @@ namespace llama
     /// A type list of \ref Field%s which may be used to define a record dimension.
     template<typename... Fields>
 #if __cpp_concepts
-        // Cannot use a fold expression here, because clang/nvcc/icx cannot handle more than 256 arguments.
-        // If you get an error here, then you passed a type which is not llama::Field as argument to Record
+    // Cannot use a fold expression here, because clang/nvcc/icx cannot handle more than 256 arguments.
+    // If you get an error here, then you passed a type which is not llama::Field as argument to Record
         requires(mp_all<mp_bool<isField<Fields>>...>::value)
 #endif
     struct Record
@@ -161,8 +161,7 @@ namespace llama
             return true;
         else
             return std::is_same_v<GetTags<RecordDimA, LocalA>, GetTags<RecordDimB, LocalB>>;
-    }
-    ();
+    }();
 
     namespace internal
     {
@@ -386,11 +385,11 @@ namespace llama
     inline constexpr std::size_t flatFieldCount = 1;
 
     template<typename... Children>
-    inline constexpr std::size_t flatFieldCount<
-        Record<Children...>> = (flatFieldCount<GetFieldType<Children>> + ... + 0);
+    inline constexpr std::size_t flatFieldCount<Record<Children...>>
+        = (flatFieldCount<GetFieldType<Children>> + ... + 0);
 
     template<typename Child, std::size_t N>
-    inline constexpr std::size_t flatFieldCount<Child[N]> = flatFieldCount<Child>* N;
+    inline constexpr std::size_t flatFieldCount<Child[N]> = flatFieldCount<Child> * N;
 
     namespace internal
     {
@@ -403,10 +402,9 @@ namespace llama
         // recursive formulation to benefit from template instantiation memoization
         // this massively improves compilation time when this template is instantiated with a lot of different I
         template<std::size_t I, typename... Children>
-        inline constexpr std::size_t flatFieldCountBefore<
-            I,
-            Record<
-                Children...>> = flatFieldCountBefore<I - 1, Record<Children...>> + flatFieldCount<GetFieldType<mp_at_c<Record<Children...>, I - 1>>>;
+        inline constexpr std::size_t flatFieldCountBefore<I, Record<Children...>>
+            = flatFieldCountBefore<I - 1, Record<Children...>>
+            + flatFieldCount<GetFieldType<mp_at_c<Record<Children...>, I - 1>>>;
     } // namespace internal
 
     /// The equivalent zero based index into a flat record dimension (\ref FlatRecordDim) of the given hierarchical
@@ -418,19 +416,13 @@ namespace llama
     inline constexpr std::size_t flatRecordCoord<T, RecordCoord<>> = 0;
 
     template<typename... Children, std::size_t I, std::size_t... Is>
-    inline constexpr std::size_t flatRecordCoord<
-        Record<Children...>,
-        RecordCoord<
-            I,
-            Is...>> = internal::
-                          flatFieldCountBefore<
-                              I,
-                              Record<
-                                  Children...>> + flatRecordCoord<GetFieldType<mp_at_c<Record<Children...>, I>>, RecordCoord<Is...>>;
+    inline constexpr std::size_t flatRecordCoord<Record<Children...>, RecordCoord<I, Is...>>
+        = internal::flatFieldCountBefore<I, Record<Children...>>
+        + flatRecordCoord<GetFieldType<mp_at_c<Record<Children...>, I>>, RecordCoord<Is...>>;
 
     template<typename Child, std::size_t N, std::size_t I, std::size_t... Is>
-    inline constexpr std::size_t flatRecordCoord<Child[N], RecordCoord<I, Is...>> = flatFieldCount<Child>* I
-        + flatRecordCoord<Child, RecordCoord<Is...>>;
+    inline constexpr std::size_t flatRecordCoord<Child[N], RecordCoord<I, Is...>>
+        = flatFieldCount<Child> * I + flatRecordCoord<Child, RecordCoord<Is...>>;
 
     namespace internal
     {
@@ -438,10 +430,12 @@ namespace llama
         constexpr auto flatAlignOfImpl()
         {
             std::size_t maxAlign = 0;
-            mp_for_each<mp_transform<mp_identity, TypeList>>([&](auto e) constexpr {
-                using T = typename decltype(e)::type;
-                maxAlign = std::max(maxAlign, alignof(T));
-            });
+            mp_for_each<mp_transform<mp_identity, TypeList>>(
+                [&](auto e) constexpr
+                {
+                    using T = typename decltype(e)::type;
+                    maxAlign = std::max(maxAlign, alignof(T));
+                });
             return maxAlign;
         }
     } // namespace internal
@@ -481,16 +475,18 @@ namespace llama
         {
             std::size_t size = 0;
             std::size_t maxAlign = 0; // NOLINT(misc-const-correctness)
-            mp_for_each<mp_transform<mp_identity, TypeList>>([&](auto e) constexpr {
-                using T = typename decltype(e)::type;
-                if constexpr(Align)
+            mp_for_each<mp_transform<mp_identity, TypeList>>(
+                [&](auto e) constexpr
                 {
-                    size = roundUpToMultiple(size, alignof(T));
-                    maxAlign = std::max(maxAlign, alignof(T));
-                }
-                // NOLINTNEXTLINE(readability-misleading-indentation)
-                size += sizeof(T);
-            });
+                    using T = typename decltype(e)::type;
+                    if constexpr(Align)
+                    {
+                        size = roundUpToMultiple(size, alignof(T));
+                        maxAlign = std::max(maxAlign, alignof(T));
+                    }
+                    // NOLINTNEXTLINE(readability-misleading-indentation)
+                    size += sizeof(T);
+                });
 
             // final padding, so next struct can start right away
             if constexpr(Align && IncludeTailPadding)
@@ -513,10 +509,8 @@ namespace llama
 
     /// The size of a record dimension if its fields would be in a normal struct.
     template<typename... Fields, bool Align, bool IncludeTailPadding>
-    inline constexpr std::size_t sizeOf<Record<Fields...>, Align, IncludeTailPadding> = flatSizeOf<
-        FlatRecordDim<Record<Fields...>>,
-        Align,
-        IncludeTailPadding>;
+    inline constexpr std::size_t sizeOf<Record<Fields...>, Align, IncludeTailPadding>
+        = flatSizeOf<FlatRecordDim<Record<Fields...>>, Align, IncludeTailPadding>;
 
     /// The byte offset of an element in a type list ifs elements would be in a normal struct.
     template<typename TypeList, std::size_t I, bool Align>

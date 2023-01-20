@@ -265,8 +265,8 @@ namespace llama
         // get<I>(t) and std::tuple_size<T> must be available
         using std::get; // make sure a get<0>() can be found, so the compiler can compile the trait
         template<typename T>
-        inline constexpr auto
-            isTupleLike<T, std::void_t<decltype(get<0>(std::declval<T>())), std::tuple_size<T>>> = true;
+        inline constexpr auto isTupleLike<T, std::void_t<decltype(get<0>(std::declval<T>())), std::tuple_size<T>>>
+            = true;
 
         template<typename... Ts>
         inline constexpr auto dependentFalse = false;
@@ -310,7 +310,8 @@ namespace llama
 
         template<typename T, typename... Args>
         inline constexpr auto
-            isDirectListInitializableImpl<T, std::void_t<decltype(T{std::declval<Args>()...})>, Args...> = true;
+            isDirectListInitializableImpl<T, std::void_t<decltype(T{std::declval<Args>()...})>, Args...>
+            = true;
 
         template<typename T, typename... Args>
         inline constexpr auto isDirectListInitializable = isDirectListInitializableImpl<T, void, Args...>;
@@ -319,8 +320,8 @@ namespace llama
         inline constexpr auto isDirectListInitializableFromTuple = false;
 
         template<typename T, template<typename...> typename Tuple, typename... Args>
-        inline constexpr auto
-            isDirectListInitializableFromTuple<T, Tuple<Args...>> = isDirectListInitializable<T, Args...>;
+        inline constexpr auto isDirectListInitializableFromTuple<T, Tuple<Args...>>
+            = isDirectListInitializable<T, Args...>;
 
         template<typename T, typename Simd, typename RecordCoord>
         LLAMA_FN_HOST_ACC_INLINE void loadSimdRecord(const T& srcRef, Simd& dstSimd, RecordCoord rc);

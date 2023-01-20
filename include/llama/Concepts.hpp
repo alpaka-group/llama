@@ -104,7 +104,7 @@ namespace llama
     concept BlobAllocator = requires(BA ba, std::integral_constant<std::size_t, 16> alignment, std::size_t size) {
         { ba(alignment, size) } -> Blob;
     };
-        // clang-format on
+    // clang-format on
 #endif
 
     namespace internal

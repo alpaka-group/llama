@@ -89,8 +89,7 @@ TEST_CASE("ArrayIndexIterator.constexpr")
         ++it;
         b &= *it == llama::ArrayIndex{0, 2};
         return b;
-    }
-    ();
+    }();
     STATIC_REQUIRE(r);
 }
 
@@ -175,8 +174,7 @@ TEST_CASE("ArrayIndexRange.1D.constexpr")
         }
 
         return true;
-    }
-    ();
+    }();
     STATIC_REQUIRE(r);
 }
 
