@@ -194,8 +194,6 @@ This enables e.g. to easily add a velocity to a position like this:
 Tuple interface
 ---------------
 
-WARNING: This is an experimental feature and might completely change in the future.
-
 A struct in C++ can be modelled by a :cpp:`std::tuple` with the same types as the struct's members.
 A :cpp:`llama::RecordRef` behaves like a reference to a struct (i.e. the record) which is decomposed into it's members.
 We can therefore not form a single reference to such a record, but references to the individual members.
@@ -235,8 +233,6 @@ Keep in mind that the load and store functionality always reads/writes all eleme
 
 Structured bindings
 -------------------
-
-WARNING: This is an experimental feature and might completely change in the future.
 
 A :cpp:`llama::RecordRef` implements the C++ tuple interface itself to allow destructuring:
 

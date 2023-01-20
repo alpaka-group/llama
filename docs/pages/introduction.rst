@@ -17,8 +17,8 @@ However, efficient use of a system's memory and cache hierarchies is crucial as 
 General solutions or frameworks seem not to exist yet.
 First attempts are AoS/SoA container libraries like
 `SoAx <https://www.sciencedirect.com/science/article/pii/S0010465517303983>`_ or 
-`Intel's SDLT <https://software.intel.com/content/www/us/en/develop/documentation/cpp-compiler-developer-guide-and-reference/top/compiler-reference/libraries/introduction-to-the-simd-data-layout-templates.html>`_),
-Kokkos's views or the proposed `std::mdspan <http://wg21.link/p0009r10>`_).
+`Intel's SDLT <https://software.intel.com/content/www/us/en/develop/documentation/cpp-compiler-developer-guide-and-reference/top/compiler-reference/libraries/introduction-to-the-simd-data-layout-templates.html>`_,
+Kokkos's views or C\++23's `std::mdspan <http://wg21.link/p0009>`_.
 
 Let's consider an example.
 Accessing structural data in a struct of array (SoA) manner is most of the times faster than array of structs (AoS):
@@ -69,7 +69,7 @@ LLAMA tries to achieve the following goals:
   Deep copies are the focus, although LLAMA should include the possibility for zero copies and in-situ transformation of data layouts.
   Similar strategies could be adopted for message passing and copies between file systems and memory.
   (WIP)
-* To be compatible with many architectures, other software packages, compilers and third party libraries, LLAMA tries to stay within C++17.
+* To be compatible with many architectures, other software packages, compilers and third party libraries, LLAMA tries to stay within C++17/C++20.
   No separate description files or language is used.
 * LLAMA should work well with auto vectorization approaches of modern compilers, but also support explicit vectorization on top of LLAMA.
 

@@ -51,9 +51,6 @@ The subtree is selected either via a `RecordCoord` or a series of tags.
         // rc is RecordCoord <0, 1>{}
     }, color{}, g{});
 
-A more detailed example can be found in the
-`simpletest example <https://github.com/alpaka-group/llama/blob/master/examples/simpletest/simpletest.cpp>`_.
-
 
 View iterators
 --------------

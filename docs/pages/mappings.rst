@@ -173,10 +173,10 @@ This is commonly used in :cpp:`llama::One`, but also offers interesting applicat
 Split
 -----
 
-WARNING: This is an experimental feature and might completely change in the future.
-
-The Split mapping is a meta mapping in the sense, that it transforms the record dimension and delegates mapping to other mappings.
-Using a record coordinate, a subtree of the record dimension is selected and mapped using one mapping.
+The Split mapping is a meta mapping.
+It transforms the record dimension and delegates mapping to other mappings.
+Using a record coordinate, a tag list, or a list of record coordinates or a list of tag lists,
+a subtree of the record dimension is selected and mapped using one mapping.
 The remaining record dimension is mapped using a second mapping.
 
 .. code-block:: C++
@@ -199,14 +199,15 @@ A script for gnuplot visualizing the heatmap can be extracted.
     auto anyMapping = ...;
     llama::mapping::Heatmap mapping{anyMapping};
     ...
-    std::ofstream("plot.sh") << mapping.toGnuplotScript();
+    mapping.writeGnuplotDataFileBinary(view.storageBlobs, std::ofstream{"heatmap.data", std::ios::binary});
+    std::ofstream{"plot.sh"} << mapping.gnuplotScriptBinary;
 
 
 Trace
 -----
 
 The Trace mapping is a meta mapping that wraps over an inner mapping and counts all accesses made to the fields of the record dimension.
-A report is printed to the stdout when requested.
+A report is printed to stdout when requested.
 The mapping adds an additional blob to the blobs of the inner mapping used as storage for the access counts.
 
 .. code-block:: C++
@@ -214,19 +215,18 @@ The mapping adds an additional blob to the blobs of the inner mapping used as st
     auto anyMapping = ...;
     llama::mapping::Trace mapping{anyMapping};
     ...
-    mapping.printFieldHits(); // print report with read and writes to each field
+    mapping.printFieldHits(view.storageBlobs); // print report with read and writes to each field
 
 The Trace mapping uses proxy references to instrument reads and writes.
-If this is problematic, Trace can also be configured to return raw C++ references.
+If this is problematic, it can also be configured to return raw C++ references.
 In that case, only the number of memory location computations can be traced,
 but not how often the program reads/writes to those locations.
+Also, the data type used to count accesses is configurable.
 
 .. code-block:: C++
 
     auto anyMapping = ...;
-    llama::mapping::Trace<decltype(anyMapping), false> mapping{anyMapping};
-    ...
-    mapping.printFieldHits(); // print report with number of computed memory locations
+    llama::mapping::Trace<decltype(anyMapping), std::size_t, false> mapping{anyMapping};
 
 
 Null
@@ -343,14 +343,14 @@ All field types in the record dimension must be integral.
             mapping{bits, extents}; // use 7 bits for each integral in RecordDim
 
 
-BitPackedFloatSoA
------------------
+BitPackedFloatAoS/BitPackedFloatSoA
+-----------------------------------
 
-The BitPackedFloatSoA mapping is a fully computed mapping that bitpacks floating-point values to reduce size and precision.
-The bits are stored as struct of arrays.
+The BitPackedFloatAoS and BitPackedFloatSoA mappings are fully computed mapping that bitpack floating-point values to reduce size and precision.
+The bits are stored as array of structs and struct of arrays, respectively.
 The number of bits used to store the exponent and mantissa is configurable.
 All field types in the record dimension must be floating-point.
-This mappings require the C++ implementation to use `IEEE 754 <https://en.wikipedia.org/wiki/IEEE_754>`_ floating-point formats.
+These mappings require the C++ implementation to use `IEEE 754 <https://en.wikipedia.org/wiki/IEEE_754>`_ floating-point formats.
 
 .. code-block:: C++
 
@@ -501,4 +501,3 @@ LLAMA can create a graphical representation of a mapping instance as SVG image o
     std::ofstream{filename + ".svg" } << llama::toSvg (mapping);
     std::ofstream{filename + ".html"} << llama::toHtml(mapping);
 
-This feature requires to have libfmt installed.
