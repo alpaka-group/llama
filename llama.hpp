@@ -1860,12 +1860,15 @@
 		    template <typename R>
 		    concept LValueReference = std::is_lvalue_reference_v<R>;
 
+		    template<typename R>
+		    concept AdlTwoStepSwappable = requires(R a, R b) { swap(a, b); } || requires(R a, R b) { std::swap(a, b); };
+
 		    template <typename R>
-		    concept ProxyReference = requires(R r) {
+		    concept ProxyReference = std::is_copy_constructible_v<R> && std::is_copy_assignable_v<R> && requires(R r) {
 		        typename R::value_type;
 		        { static_cast<typename R::value_type>(r) } -> std::same_as<typename R::value_type>;
 		        { r = std::declval<typename R::value_type>() } -> std::same_as<R&>;
-		    };
+		    } && AdlTwoStepSwappable<R>;
 
 		    template <typename R>
 		    concept AnyReference = LValueReference<R> || ProxyReference<R>;
@@ -1934,7 +1937,8 @@
 		            std::void_t<
 		                typename R::value_type,
 		                decltype(static_cast<typename R::value_type>(std::declval<R&>())),
-		                decltype(std::declval<R&>() = std::declval<typename R::value_type>())>> : std::true_type
+		                decltype(std::declval<R&>() = std::declval<typename R::value_type>())>>
+		            : std::bool_constant<std::is_copy_constructible_v<R> && std::is_copy_assignable_v<R>>
 		        {
 		        };
 		    } // namespace internal
@@ -2115,6 +2119,14 @@
 		            ValueType old = v--;
 		            store(v);
 		            return old;
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE friend constexpr void swap(Derived a, Derived b) noexcept
+		        {
+		            const auto va = static_cast<ValueType>(a);
+		            const auto vb = static_cast<ValueType>(b);
+		            a = vb;
+		            b = va;
 		        }
 		    };
 		} // namespace llama
@@ -2536,7 +2548,7 @@
 			        }
 			    };
 
-			    /// Allows only read access by qualifying the references to memory with const. Only works on l-value references.
+			    /// Allows only read access by qualifying the references to memory with const.
 			    struct Const
 			    {
 			        // for l-value references
@@ -2547,20 +2559,36 @@
 			        }
 
 			        template<typename Ref>
+			        // NOLINTNEXTLINE(cppcoreguidelines-special-member-functions,hicpp-special-member-functions)
 			        struct Reference : ProxyRefOpMixin<Reference<Ref>, typename Ref::value_type>
 			        {
-			            using value_type = typename Ref::value_type;
-
+			        private:
 			            Ref ref;
 
+			        public:
+			            using value_type = typename Ref::value_type;
+
+			            LLAMA_FN_HOST_ACC_INLINE constexpr explicit Reference(Ref ref) : ref{ref}
+			            {
+			            }
+
+			            Reference(const Reference&) = default;
+
+			            // NOLINTNEXTLINE(bugprone-unhandled-self-assignment,cert-oop54-cpp)
+			            LLAMA_FN_HOST_ACC_INLINE constexpr auto operator=(const Reference& other) -> Reference&
+			            {
+			                *this = static_cast<value_type>(other);
+			                return *this;
+			            }
+
 			            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
-			            operator value_type() const
+			            LLAMA_FN_HOST_ACC_INLINE operator value_type() const
 			            {
 			                return static_cast<value_type>(ref);
 			            }
 
 			            template<typename T>
-			            auto operator=(T) -> Reference&
+			            LLAMA_FN_HOST_ACC_INLINE auto operator=(T) -> Reference&
 			            {
 			                static_assert(sizeof(T) == 0, "You cannot write through a Const accessor");
 			                return *this;
@@ -2571,7 +2599,7 @@
 			        template<typename ProxyReference, std::enable_if_t<llama::isProxyReference<ProxyReference>, int> = 0>
 			        LLAMA_FN_HOST_ACC_INLINE auto operator()(ProxyReference r) const
 			        {
-			            return Reference<ProxyReference>{{}, std::move(r)};
+			            return Reference<ProxyReference>{std::move(r)};
 			        }
 			    };
 
@@ -4584,7 +4612,7 @@
 
 	        RecordRef(const RecordRef&) = default;
 
-	        // NOLINTNEXTLINE(cert-oop54-cpp)
+	        // NOLINTNEXTLINE(bugprone-unhandled-self-assignment,cert-oop54-cpp)
 	        LLAMA_FN_HOST_ACC_INLINE auto operator=(const RecordRef& other) -> RecordRef&
 	        {
 	            // NOLINTNEXTLINE(cppcoreguidelines-c-copy-assignment-signature,misc-unconventional-assign-operator)
@@ -7926,6 +7954,7 @@ namespace llama
 		        /// @tparam StoredIntegralCV Integral type used for storing the bits with CV qualifiers.
 		        /// @tparam SizeType Type used to store sizes and offsets.
 		        template<typename Integral, typename StoredIntegralCV, typename VHBits, typename SizeType, SignBit SignBit>
+		        // NOLINTNEXTLINE(cppcoreguidelines-special-member-functions,hicpp-special-member-functions)
 		        struct BitPackedIntRef
 		            : private VHBits
 		            , ProxyRefOpMixin<BitPackedIntRef<Integral, StoredIntegralCV, VHBits, SizeType, SignBit>, Integral>
@@ -7946,6 +7975,15 @@ namespace llama
 		                , ptr{ptr}
 		                , bitOffset{bitOffset}
 		            {
+		            }
+
+		            BitPackedIntRef(const BitPackedIntRef&) = default;
+
+		            // NOLINTNEXTLINE(bugprone-unhandled-self-assignment,cert-oop54-cpp)
+		            LLAMA_FN_HOST_ACC_INLINE constexpr auto operator=(const BitPackedIntRef& other) -> BitPackedIntRef&
+		            {
+		                *this = static_cast<value_type>(other);
+		                return *this;
 		            }
 
 		            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
@@ -7984,14 +8022,6 @@ namespace llama
 		                    value);
 		                return *this;
 		            }
-
-		            LLAMA_FN_HOST_ACC_INLINE friend void swap(BitPackedIntRef a, BitPackedIntRef b) noexcept
-		            {
-		                const auto va = static_cast<Integral>(a);
-		                const auto vb = static_cast<Integral>(b);
-		                a = vb;
-		                b = va;
-		            }
 		        };
 
 		        template<typename A, typename B>
@@ -8017,7 +8047,6 @@ namespace llama
 		        {
 		            using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
 		            using StoredIntegral = TStoredIntegral;
-		            static constexpr std::size_t blobCount = mp_size<FlatRecordDim<TRecordDim>>::value;
 
 		            static_assert(std::is_integral_v<StoredIntegral>);
 		            static_assert(std::is_unsigned_v<StoredIntegral>);
@@ -8148,6 +8177,8 @@ namespace llama
 		        using typename Base::size_type;
 		        using VHBits = typename Base::VHBits; // use plain using declaration with nvcc >= 11.8
 
+		        static constexpr std::size_t blobCount = mp_size<FlatRecordDim<TRecordDim>>::value;
+
 		        LLAMA_FN_HOST_ACC_INLINE
 		        constexpr auto blobSize(size_type /*blobIndex*/) const -> size_type
 		        {
@@ -8248,6 +8279,7 @@ namespace llama
 		        using VHBits = typename Base::VHBits; // use plain using declaration with nvcc >= 11.8
 
 		        using Flattener = FlattenRecordDim<TRecordDim>;
+		        static constexpr std::size_t blobCount = 1;
 
 		        LLAMA_FN_HOST_ACC_INLINE
 		        constexpr auto blobSize(size_type /*blobIndex*/) const -> size_type
@@ -8428,6 +8460,7 @@ namespace llama
 	        /// @tparam StoredIntegralCV Integral type used for storing the bits with CV qualifiers.
 	        /// @tparam SizeType Type used to store sizes and offsets.
 	        template<typename Float, typename StoredIntegralCV, typename VHExp, typename VHMan, typename SizeType>
+	        // NOLINTNEXTLINE(cppcoreguidelines-special-member-functions,hicpp-special-member-functions)
 	        struct LLAMA_DECLSPEC_EMPTY_BASES BitPackedFloatRef
 	            : private VHExp
 	            , private VHMan
@@ -8469,6 +8502,15 @@ namespace llama
 	            {
 	            }
 
+	            BitPackedFloatRef(const BitPackedFloatRef&) = default;
+
+	            // NOLINTNEXTLINE(bugprone-unhandled-self-assignment,cert-oop54-cpp)
+	            LLAMA_FN_HOST_ACC_INLINE constexpr auto operator=(const BitPackedFloatRef& other) -> BitPackedFloatRef&
+	            {
+	                *this = static_cast<value_type>(other);
+	                return *this;
+	            }
+
 	            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
 	            LLAMA_FN_HOST_ACC_INLINE constexpr operator Float() const
 	            {
@@ -8490,14 +8532,6 @@ namespace llama
 	                    = repackFloat(unpackedFloat, Bits::mantissa, Bits::exponent, VHMan::value(), VHExp::value());
 	                intref = packedFloat;
 	                return *this;
-	            }
-
-	            LLAMA_FN_HOST_ACC_INLINE friend void swap(BitPackedFloatRef a, BitPackedFloatRef b) noexcept
-	            {
-	                const auto va = static_cast<Float>(a);
-	                const auto vb = static_cast<Float>(b);
-	                a = vb;
-	                b = va;
 	            }
 	        };
 
@@ -8689,6 +8723,7 @@ namespace llama
 	        }
 
 	        template<typename RC, typename BlobArray>
+	        // NOLINTNEXTLINE(cppcoreguidelines-special-member-functions,hicpp-special-member-functions)
 	        struct Reference : ProxyRefOpMixin<Reference<RC, BlobArray>, GetType<TRecordDim, RC>>
 	        {
 	        private:
@@ -8699,15 +8734,24 @@ namespace llama
 	        public:
 	            using value_type = GetType<TRecordDim, RC>;
 
-	            LLAMA_FN_HOST_ACC_INLINE Reference(const Inner& innerMapping, ArrayIndex ai, BlobArray& blobs)
+	            LLAMA_FN_HOST_ACC_INLINE constexpr Reference(const Inner& innerMapping, ArrayIndex ai, BlobArray& blobs)
 	                : inner(innerMapping)
 	                , ai(ai)
 	                , blobs(blobs)
 	            {
 	            }
 
+	            Reference(const Reference&) = default;
+
+	            // NOLINTNEXTLINE(bugprone-unhandled-self-assignment,cert-oop54-cpp)
+	            LLAMA_FN_HOST_ACC_INLINE constexpr auto operator=(const Reference& other) -> Reference&
+	            {
+	                *this = static_cast<value_type>(other);
+	                return *this;
+	            }
+
 	            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
-	            LLAMA_FN_HOST_ACC_INLINE operator value_type() const
+	            LLAMA_FN_HOST_ACC_INLINE constexpr operator value_type() const
 	            {
 	#ifdef _MSC_VER
 	                // MSVC workaround. Without this, MSVC deduces the last template parameter of mapToMemory wrongly
@@ -8727,7 +8771,7 @@ namespace llama
 	                return v;
 	            }
 
-	            LLAMA_FN_HOST_ACC_INLINE auto operator=(value_type v) -> Reference&
+	            LLAMA_FN_HOST_ACC_INLINE constexpr auto operator=(value_type v) -> Reference&
 	            {
 	#ifdef _MSC_VER
 	                // MSVC workaround. Without this, MSVC deduces the last template parameter of mapToMemory wrongly
@@ -8855,6 +8899,7 @@ namespace llama
 		            = TransformLeavesWithCoord<RecordDim, MakeReplacerProj<ProjectionMap>::template fn>;
 
 		        template<typename Reference, typename Projection>
+		        // NOLINTNEXTLINE(cppcoreguidelines-special-member-functions,hicpp-special-member-functions)
 		        struct ProjectionReference
 		            : ProxyRefOpMixin<
 		                  ProjectionReference<Reference, Projection>,
@@ -8871,6 +8916,15 @@ namespace llama
 		            {
 		            }
 
+		            ProjectionReference(const ProjectionReference&) = default;
+
+		            // NOLINTNEXTLINE(bugprone-unhandled-self-assignment,cert-oop54-cpp)
+		            LLAMA_FN_HOST_ACC_INLINE constexpr auto operator=(const ProjectionReference& other) -> ProjectionReference&
+		            {
+		                *this = static_cast<value_type>(other);
+		                return *this;
+		            }
+
 		            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
 		            LLAMA_FN_HOST_ACC_INLINE constexpr operator value_type() const
 		            {
@@ -8885,14 +8939,6 @@ namespace llama
 		                storageRef = Projection::store(v);
 		                LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
 		                return *this;
-		            }
-
-		            LLAMA_FN_HOST_ACC_INLINE friend void swap(ProjectionReference a, ProjectionReference b) noexcept
-		            {
-		                const auto va = static_cast<value_type>(a);
-		                const auto vb = static_cast<value_type>(b);
-		                a = vb;
-		                b = va;
 		            }
 		        };
 		    } // namespace internal
@@ -9831,7 +9877,7 @@ namespace llama
 	            using value_type = Value;
 
 	            template<typename RefFwd>
-	            LLAMA_FN_HOST_ACC_INLINE TraceReference(RefFwd&& r, AccessCounts<Count>* hits)
+	            LLAMA_FN_HOST_ACC_INLINE constexpr TraceReference(RefFwd&& r, AccessCounts<Count>* hits)
 	                : r(std::forward<RefFwd>(r))
 	                , hits(hits)
 	            {
