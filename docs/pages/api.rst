@@ -142,6 +142,8 @@ Mappings
    :members:
 .. doxygenstruct:: llama::mapping::BitPackedIntSoA
    :members:
+.. doxygenstruct:: llama::mapping::BitPackedFloatAoS
+   :members:
 .. doxygenstruct:: llama::mapping::BitPackedFloatSoA
    :members:
 .. doxygenstruct:: llama::mapping::Bytesplit

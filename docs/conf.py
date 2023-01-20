@@ -25,7 +25,7 @@ os.system( "doxygen Doxyfile > /dev/null" )
 # -- Project information -----------------------------------------------------
 
 project = u'LLAMA'
-copyright = u'2018, Alexander Matthes, 2022, Bernhard Manfred Gruber'
+copyright = u'2018, Alexander Matthes, 2023, Bernhard Manfred Gruber'
 author = u'Alexander Matthes, Bernhard Manfred Gruber'
 
 # The short X.Y version
