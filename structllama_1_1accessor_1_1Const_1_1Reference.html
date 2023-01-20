@@ -85,7 +85,6 @@ $(document).ready(function(){initNavTree('structllama_1_1accessor_1_1Const_1_1Re
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="structllama_1_1accessor_1_1Const_1_1Reference-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">llama::accessor::Const::Reference&lt; Ref &gt; Struct Template Reference</div>  </div>
@@ -123,6 +122,12 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a139c0c83b2138282005d5f03194b04ba"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1accessor_1_1Const_1_1Reference.html#a139c0c83b2138282005d5f03194b04ba">Reference</a> (Ref ref)</td></tr>
+<tr class="separator:a139c0c83b2138282005d5f03194b04ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1bf03b32f36ff4fd5ed702623dbca779"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1accessor_1_1Const_1_1Reference.html#a1bf03b32f36ff4fd5ed702623dbca779">Reference</a> (const <a class="el" href="structllama_1_1accessor_1_1Const_1_1Reference.html">Reference</a> &amp;)=default</td></tr>
+<tr class="separator:a1bf03b32f36ff4fd5ed702623dbca779"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae28d2bac2976d8b8822aa9ec0e983bfa"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1accessor_1_1Const_1_1Reference.html#ae28d2bac2976d8b8822aa9ec0e983bfa">operator=</a> (const <a class="el" href="structllama_1_1accessor_1_1Const_1_1Reference.html">Reference</a> &amp;other) -&gt; <a class="el" href="structllama_1_1accessor_1_1Const_1_1Reference.html">Reference</a> &amp;</td></tr>
+<tr class="separator:ae28d2bac2976d8b8822aa9ec0e983bfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a54245525bd23e9bbe3950b1809e2e8f4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1accessor_1_1Const_1_1Reference.html#a54245525bd23e9bbe3950b1809e2e8f4">operator value_type</a> () const</td></tr>
 <tr class="separator:a54245525bd23e9bbe3950b1809e2e8f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a987fcaf6929646d8f264947e2c4d81c5"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
@@ -157,18 +162,13 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aaf96151b0aface32e6510a9f15ee616c inherit pub_methods_structllama_1_1ProxyRefOpMixin"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a38d2f14e872312209bb5089dcb48b5a1 inherit pub_methods_structllama_1_1ProxyRefOpMixin"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1ProxyRefOpMixin.html#a38d2f14e872312209bb5089dcb48b5a1">operator--</a> (int) -&gt; Ref::value_type</td></tr>
 <tr class="separator:a38d2f14e872312209bb5089dcb48b5a1 inherit pub_methods_structllama_1_1ProxyRefOpMixin"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:aa38d2eeb28bbd3c49bea659eb3b29274"><td class="memItemLeft" align="right" valign="top">Ref&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1accessor_1_1Const_1_1Reference.html#aa38d2eeb28bbd3c49bea659eb3b29274">ref</a></td></tr>
-<tr class="separator:aa38d2eeb28bbd3c49bea659eb3b29274"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename Ref&gt;<br />
 struct llama::accessor::Const::Reference&lt; Ref &gt;</h3>
 
 
-<p class="definition">Definition at line <a class="el" href="Accessors_8hpp_source.html#l00046">46</a> of file <a class="el" href="Accessors_8hpp_source.html">Accessors.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Accessors_8hpp_source.html#l00047">47</a> of file <a class="el" href="Accessors_8hpp_source.html">Accessors.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="a9aff77012565388f68c699781429be7a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9aff77012565388f68c699781429be7a">&#9670;&nbsp;</a></span>value_type</h2>
@@ -184,7 +184,66 @@ template&lt;typename Ref &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Accessors_8hpp_source.html#l00048">48</a> of file <a class="el" href="Accessors_8hpp_source.html">Accessors.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Accessors_8hpp_source.html#l00053">53</a> of file <a class="el" href="Accessors_8hpp_source.html">Accessors.hpp</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a139c0c83b2138282005d5f03194b04ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a139c0c83b2138282005d5f03194b04ba">&#9670;&nbsp;</a></span>Reference() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Ref &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr <a class="el" href="structllama_1_1accessor_1_1Const_1_1Reference.html">llama::accessor::Const::Reference</a>&lt; Ref &gt;::<a class="el" href="structllama_1_1accessor_1_1Const_1_1Reference.html">Reference</a> </td>
+          <td>(</td>
+          <td class="paramtype">Ref&#160;</td>
+          <td class="paramname"><em>ref</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Accessors_8hpp_source.html#l00055">55</a> of file <a class="el" href="Accessors_8hpp_source.html">Accessors.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a1bf03b32f36ff4fd5ed702623dbca779"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1bf03b32f36ff4fd5ed702623dbca779">&#9670;&nbsp;</a></span>Reference() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Ref &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structllama_1_1accessor_1_1Const_1_1Reference.html">llama::accessor::Const::Reference</a>&lt; Ref &gt;::<a class="el" href="structllama_1_1accessor_1_1Const_1_1Reference.html">Reference</a> </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1accessor_1_1Const_1_1Reference.html">Reference</a>&lt; Ref &gt; &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -214,12 +273,43 @@ template&lt;typename Ref &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Accessors_8hpp_source.html#l00053">53</a> of file <a class="el" href="Accessors_8hpp_source.html">Accessors.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Accessors_8hpp_source.html#l00069">69</a> of file <a class="el" href="Accessors_8hpp_source.html">Accessors.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ae28d2bac2976d8b8822aa9ec0e983bfa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae28d2bac2976d8b8822aa9ec0e983bfa">&#9670;&nbsp;</a></span>operator=() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Ref &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto <a class="el" href="structllama_1_1accessor_1_1Const_1_1Reference.html">llama::accessor::Const::Reference</a>&lt; Ref &gt;::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1accessor_1_1Const_1_1Reference.html">Reference</a>&lt; Ref &gt; &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td> -&gt; <a class="el" href="structllama_1_1accessor_1_1Const_1_1Reference.html">Reference</a>&amp;
+            </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Accessors_8hpp_source.html#l00062">62</a> of file <a class="el" href="Accessors_8hpp_source.html">Accessors.hpp</a>.</p>
 
 </div>
 </div>
 <a id="a987fcaf6929646d8f264947e2c4d81c5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a987fcaf6929646d8f264947e2c4d81c5">&#9670;&nbsp;</a></span>operator=()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a987fcaf6929646d8f264947e2c4d81c5">&#9670;&nbsp;</a></span>operator=() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -247,26 +337,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Accessors_8hpp_source.html#l00059">59</a> of file <a class="el" href="Accessors_8hpp_source.html">Accessors.hpp</a>.</p>
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="aa38d2eeb28bbd3c49bea659eb3b29274"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa38d2eeb28bbd3c49bea659eb3b29274">&#9670;&nbsp;</a></span>ref</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Ref &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">Ref <a class="el" href="structllama_1_1accessor_1_1Const_1_1Reference.html">llama::accessor::Const::Reference</a>&lt; Ref &gt;::ref</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="Accessors_8hpp_source.html#l00050">50</a> of file <a class="el" href="Accessors_8hpp_source.html">Accessors.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Accessors_8hpp_source.html#l00075">75</a> of file <a class="el" href="Accessors_8hpp_source.html">Accessors.hpp</a>.</p>
 
 </div>
 </div>
@@ -279,7 +350,7 @@ template&lt;typename Ref &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1accessor.html">accessor</a></li><li class="navelem"><a class="el" href="structllama_1_1accessor_1_1Const.html">Const</a></li><li class="navelem"><a class="el" href="structllama_1_1accessor_1_1Const_1_1Reference.html">Reference</a></li>
-    <li class="footer">Generated on Fri Jan 20 2023 21:35:30 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Fri Jan 20 2023 21:47:22 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

@@ -7,6 +7,5 @@ var searchData=
   ['recordcoordcommonprefixisbigger_1360',['recordCoordCommonPrefixIsBigger',['../namespacellama.html#a8660330eb77e8654033787e86b8da6ed',1,'llama']]],
   ['recordcoordcommonprefixissame_1361',['recordCoordCommonPrefixIsSame',['../namespacellama.html#a50289a09b368b8f1c333e3d6feb49398',1,'llama']]],
   ['recordcoordtagsstorage_1362',['recordCoordTagsStorage',['../namespacellama_1_1internal.html#aadb89628e7b37c78df955928a1934c00',1,'llama::internal']]],
-  ['ref_1363',['ref',['../structllama_1_1accessor_1_1Const_1_1Reference.html#aa38d2eeb28bbd3c49bea659eb3b29274',1,'llama::accessor::Const::Reference']]],
-  ['resulttree_1364',['resultTree',['../structllama_1_1mapping_1_1tree_1_1Mapping.html#a05de6e64a1ae1d70c6ee6dd7e8387636',1,'llama::mapping::tree::Mapping']]]
+  ['resulttree_1363',['resultTree',['../structllama_1_1mapping_1_1tree_1_1Mapping.html#a05de6e64a1ae1d70c6ee6dd7e8387636',1,'llama::mapping::tree::Mapping']]]
 ];

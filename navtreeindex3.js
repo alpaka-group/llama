@@ -240,6 +240,7 @@ var NAVTREEINDEX3 =
 "structllama_1_1ProxyRefOpMixin.html#a9f835cd88e899ce34527bafba1751bb9":[2,0,1,20,1],
 "structllama_1_1ProxyRefOpMixin.html#aa5c01adb17955a5be25e835456d947fb":[2,0,1,20,9],
 "structllama_1_1ProxyRefOpMixin.html#aaf96151b0aface32e6510a9f15ee616c":[2,0,1,20,6],
+"structllama_1_1ProxyRefOpMixin.html#ac1a4bc2313d753d30a9560fe9364f959":[2,0,1,20,14],
 "structllama_1_1ProxyRefOpMixin.html#aea6caa1eeacdd3fab0a7d5d91b4364ac":[2,0,1,20,5],
 "structllama_1_1Record.html":[2,0,1,18],
 "structllama_1_1RecordCoord.html":[2,0,1,21],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "structllama_1_1RecordCoord.html#a685a368d5b00931fb77af19012b10b4b":[2,0,1,21,0],
 "structllama_1_1RecordCoord.html#a9eba3978f93a2195c99e8f459a291f9e":[2,0,1,21,2],
 "structllama_1_1RecordCoord_3_4.html":[2,0,1,22],
-"structllama_1_1RecordCoord_3_4.html#a2fbc9a92eb6d265b4f646333aa6df076":[2,0,1,22,0],
-"structllama_1_1RecordCoord_3_4.html#a88c46f2ba080197e2c49a2e4066b841a":[2,0,1,22,1]
+"structllama_1_1RecordCoord_3_4.html#a2fbc9a92eb6d265b4f646333aa6df076":[2,0,1,22,0]
 };

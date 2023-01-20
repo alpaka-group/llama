@@ -13,5 +13,6 @@ var structllama_1_1ProxyRefOpMixin =
     [ "operator<<=", "structllama_1_1ProxyRefOpMixin.html#a389ff0250f209c2643df1cc6bb996962", null ],
     [ "operator>>=", "structllama_1_1ProxyRefOpMixin.html#a461255210746b50f4b018054a2e00079", null ],
     [ "operator^=", "structllama_1_1ProxyRefOpMixin.html#a74fa44395646ece004b25ddc9058ab54", null ],
-    [ "operator|=", "structllama_1_1ProxyRefOpMixin.html#a1761f974bd6b1b26bd3406db9bc10900", null ]
+    [ "operator|=", "structllama_1_1ProxyRefOpMixin.html#a1761f974bd6b1b26bd3406db9bc10900", null ],
+    [ "swap", "structllama_1_1ProxyRefOpMixin.html#ac1a4bc2313d753d30a9560fe9364f959", null ]
 ];

@@ -1,4 +1,4 @@
 <map id="llama::internal::IsProxyReferenceImpl&lt; R, std::void_t&lt; typename R::value_type, decltype(static_cast&lt; typename R::value_type &gt;(std::declval&lt; R &amp; &gt;())), decltype(std::declval&lt; R &amp; &gt;()=std::declval&lt; typename R::value_type &gt;())&gt; &gt;" name="llama::internal::IsProxyReferenceImpl&lt; R, std::void_t&lt; typename R::value_type, decltype(static_cast&lt; typename R::value_type &gt;(std::declval&lt; R &amp; &gt;())), decltype(std::declval&lt; R &amp; &gt;()=std::declval&lt; typename R::value_type &gt;())&gt; &gt;">
-<area shape="rect" id="node1" title=" " alt="" coords="5,80,257,209"/>
-<area shape="rect" id="node2" title=" " alt="" coords="75,5,187,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="308,5,560,135"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,35,260,105"/>
 </map>
