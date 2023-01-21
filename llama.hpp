@@ -7794,7 +7794,7 @@ namespace llama
 // #include "mapping/AoS.hpp"    // amalgamate: file already expanded
 // #include "mapping/AoSoA.hpp"    // amalgamate: file already expanded
 	// ============================================================================
-	// == ./mapping/BitPackedFloatSoA.hpp ==
+	// == ./mapping/BitPackedFloat.hpp ==
 	// ==
 	// SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -8664,9 +8664,144 @@ namespace llama
 
 	    template<typename... Ts>
 	    inline constexpr bool isBitPackedFloatSoA<BitPackedFloatSoA<Ts...>> = true;
+
+	    template<
+	        typename TArrayExtents,
+	        typename TRecordDim,
+	        typename ExponentBits = typename TArrayExtents::value_type,
+	        typename MantissaBits = ExponentBits,
+	        typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
+	        template<typename> typename FlattenRecordDim = FlattenRecordDimInOrder,
+	        typename TStoredIntegral = internal::StoredIntegralFor<TRecordDim>>
+	    struct LLAMA_DECLSPEC_EMPTY_BASES BitPackedFloatAoS
+	        : MappingBase<TArrayExtents, TRecordDim>
+	        , llama::internal::BoxedValue<ExponentBits, 0>
+	        , llama::internal::BoxedValue<MantissaBits, 1>
+	    {
+	    private:
+	        using Base = MappingBase<TArrayExtents, TRecordDim>;
+	        using VHExp = llama::internal::BoxedValue<ExponentBits, 0>;
+	        using VHMan = llama::internal::BoxedValue<MantissaBits, 1>;
+	        using size_type = typename TArrayExtents::value_type;
+
+	    public:
+	        using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
+	        using StoredIntegral = TStoredIntegral;
+
+	        using Flattener = FlattenRecordDim<TRecordDim>;
+	        static constexpr std::size_t blobCount = 1;
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        constexpr auto exponentBits() const -> size_type
+	        {
+	            return static_cast<size_type>(VHExp::value());
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        constexpr auto mantissaBits() const -> size_type
+	        {
+	            return static_cast<size_type>(VHMan::value());
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        constexpr explicit BitPackedFloatAoS(
+	            TArrayExtents extents = {},
+	            ExponentBits exponentBits = {},
+	            MantissaBits mantissaBits = {},
+	            TRecordDim = {})
+	            : Base(extents)
+	            , VHExp{exponentBits}
+	            , VHMan{mantissaBits}
+	        {
+	            assert(this->exponentBits() > 0);
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        constexpr auto blobSize(size_type /*blobIndex*/) const -> size_type
+	        {
+	            constexpr auto bitsPerStoredIntegral = static_cast<size_type>(sizeof(StoredIntegral) * CHAR_BIT);
+	            const auto bitsNeeded = TLinearizeArrayDimsFunctor{}.size(Base::extents())
+	                * static_cast<size_type>(exponentBits() + mantissaBits() + 1)
+	                * static_cast<size_type>(flatFieldCount<TRecordDim>);
+	            return roundUpToMultiple(bitsNeeded, bitsPerStoredIntegral) / CHAR_BIT;
+	        }
+
+	        template<std::size_t... RecordCoords>
+	        static constexpr auto isComputed(RecordCoord<RecordCoords...>)
+	        {
+	            return true;
+	        }
+
+	        template<std::size_t... RecordCoords, typename Blobs>
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto compute(
+	            typename Base::ArrayIndex ai,
+	            RecordCoord<RecordCoords...>,
+	            Blobs& blobs) const
+	        {
+	            constexpr auto flatFieldIndex = static_cast<size_type>(Flattener::template flatIndex<RecordCoords...>);
+	            const auto bitOffset = ((TLinearizeArrayDimsFunctor{}(ai, Base::extents())
+	                                     * static_cast<size_type>(flatFieldCount<TRecordDim>))
+	                                    + flatFieldIndex)
+	                * static_cast<size_type>(exponentBits() + mantissaBits() + 1);
+
+	            using QualifiedStoredIntegral = CopyConst<Blobs, StoredIntegral>;
+	            using DstType = GetType<TRecordDim, RecordCoord<RecordCoords...>>;
+	            LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
+	            return internal::BitPackedFloatRef<DstType, QualifiedStoredIntegral, VHExp, VHMan, size_type>{
+	                reinterpret_cast<QualifiedStoredIntegral*>(&blobs[0][0]),
+	                bitOffset,
+	                static_cast<const VHExp&>(*this),
+	                static_cast<const VHMan&>(*this)};
+	            LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
+	        }
+	    };
+
+	    template<
+	        typename ExponentBits = unsigned,
+	        typename MantissaBits = ExponentBits,
+	        typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
+	        template<typename> typename FlattenRecordDim = FlattenRecordDimInOrder,
+	        typename StoredIntegral = void>
+	    struct BindBitPackedFloatAoS
+	    {
+	        template<typename ArrayExtents, typename RecordDim>
+	        using fn = BitPackedFloatAoS<
+	            ArrayExtents,
+	            RecordDim,
+	            ExponentBits,
+	            MantissaBits,
+	            LinearizeArrayDimsFunctor,
+	            FlattenRecordDim,
+	            std::conditional_t<
+	                !std::is_void_v<StoredIntegral>,
+	                StoredIntegral,
+	                internal::StoredIntegralFor<RecordDim>>>;
+	    };
+
+	    template<typename Mapping>
+	    inline constexpr bool isBitPackedFloatAoS = false;
+
+	    template<
+	        typename ArrayExtents,
+	        typename RecordDim,
+	        typename ExponentBits,
+	        typename MantissaBits,
+	        typename LinearizeArrayDimsFunctor,
+	        template<typename>
+	        typename FlattenRecordDim,
+	        typename StoredIntegral>
+	    inline constexpr bool isBitPackedFloatAoS<BitPackedFloatAoS<
+	        ArrayExtents,
+	        RecordDim,
+	        ExponentBits,
+	        MantissaBits,
+	        LinearizeArrayDimsFunctor,
+	        FlattenRecordDim,
+	        StoredIntegral>>
+	        = true;
 	} // namespace llama::mapping
 	// ==
-	// == ./mapping/BitPackedFloatSoA.hpp ==
+	// == ./mapping/BitPackedFloat.hpp ==
 	// ============================================================================
 
 // #include "mapping/BitPackedInt.hpp"    // amalgamate: file already expanded
