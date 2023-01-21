@@ -1,6 +1,5 @@
 var NAVTREEINDEX4 =
 {
-"structllama_1_1RecordCoord.html#a4520d6c79acf89f81c64c803a06450af":[2,0,1,21,1],
 "structllama_1_1RecordCoord.html#a685a368d5b00931fb77af19012b10b4b":[2,0,1,21,0],
 "structllama_1_1RecordCoord.html#a9eba3978f93a2195c99e8f459a291f9e":[2,0,1,21,2],
 "structllama_1_1RecordCoord_3_4.html":[2,0,1,22],
@@ -249,5 +248,6 @@ var NAVTREEINDEX4 =
 "structllama_1_1internal_1_1BoxedValue.html#a7a292b38343b52e1f26ced153584637f":[2,0,1,2,39,2],
 "structllama_1_1internal_1_1BoxedValue.html#a9221d8f114d4b7c993ebfa564f830920":[2,0,1,2,39,1],
 "structllama_1_1internal_1_1BoxedValue.html#ac6549d3a6ee2ef2af3238c711fadab58":[2,0,1,2,39,0],
-"structllama_1_1internal_1_1BoxedValue_3_01Constant_3_01V_01_4_00_01I_01_4.html":[2,0,1,2,40]
+"structllama_1_1internal_1_1BoxedValue_3_01Constant_3_01V_01_4_00_01I_01_4.html":[2,0,1,2,40],
+"structllama_1_1internal_1_1BoxedValue_3_01Constant_3_01V_01_4_00_01I_01_4.html#a0508bb05e49ee91ad0f2e9dcc94600eb":[2,0,1,2,40,1]
 };
