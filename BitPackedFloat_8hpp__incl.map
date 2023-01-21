@@ -1,4 +1,4 @@
-<map id="/home/runner/work/llama/llama/include/llama/mapping/BitPackedFloatSoA.hpp" name="/home/runner/work/llama/llama/include/llama/mapping/BitPackedFloatSoA.hpp">
+<map id="/home/runner/work/llama/llama/include/llama/mapping/BitPackedFloat.hpp" name="/home/runner/work/llama/llama/include/llama/mapping/BitPackedFloat.hpp">
 <area shape="rect" id="node1" title=" " alt="" coords="493,5,709,61"/>
 <area shape="rect" id="node2" href="$ProxyRefOpMixin_8hpp.html" title=" " alt="" coords="5,184,180,211"/>
 <area shape="rect" id="node4" href="$BitPackedInt_8hpp.html" title=" " alt="" coords="341,109,471,136"/>

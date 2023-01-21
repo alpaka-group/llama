@@ -115,6 +115,10 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BindBitPackedFloatSoA.html">BindBitPackedFloatSoA</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BitPackedFloatAoS.html">BitPackedFloatAoS</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BindBitPackedFloatAoS.html">BindBitPackedFloatAoS</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BitPackedIntSoA.html">BitPackedIntSoA</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BindBitPackedIntSoA.html">BindBitPackedIntSoA</a></td></tr>
@@ -285,6 +289,12 @@ Variables</h2></td></tr>
 <tr class="memitem:a89403fec542ad934c779be84c857e970"><td class="memTemplParams" colspan="2">template&lt;typename... Ts&gt; </td></tr>
 <tr class="memitem:a89403fec542ad934c779be84c857e970"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a89403fec542ad934c779be84c857e970">isBitPackedFloatSoA&lt; BitPackedFloatSoA&lt; Ts... &gt; &gt;</a> = true</td></tr>
 <tr class="separator:a89403fec542ad934c779be84c857e970"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c8b80aa8bfba10f6b647735746bb61b"><td class="memTemplParams" colspan="2">template&lt;typename Mapping &gt; </td></tr>
+<tr class="memitem:a2c8b80aa8bfba10f6b647735746bb61b"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a2c8b80aa8bfba10f6b647735746bb61b">isBitPackedFloatAoS</a> = false</td></tr>
+<tr class="separator:a2c8b80aa8bfba10f6b647735746bb61b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b8796654ca4115a2e4bb5a0e5ac0ca6"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim , typename ExponentBits , typename MantissaBits , typename LinearizeArrayDimsFunctor , template&lt; typename &gt; typename FlattenRecordDim, typename StoredIntegral &gt; </td></tr>
+<tr class="memitem:a4b8796654ca4115a2e4bb5a0e5ac0ca6"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a4b8796654ca4115a2e4bb5a0e5ac0ca6">isBitPackedFloatAoS&lt; BitPackedFloatAoS&lt; ArrayExtents, RecordDim, ExponentBits, MantissaBits, LinearizeArrayDimsFunctor, FlattenRecordDim, StoredIntegral &gt; &gt;</a> = true</td></tr>
+<tr class="separator:a4b8796654ca4115a2e4bb5a0e5ac0ca6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6663b77c0af63f5b4ac7d7d1ca0eaf9e"><td class="memTemplParams" colspan="2">template&lt;typename Mapping &gt; </td></tr>
 <tr class="memitem:a6663b77c0af63f5b4ac7d7d1ca0eaf9e"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a6663b77c0af63f5b4ac7d7d1ca0eaf9e">isBitPackedIntSoA</a> = false</td></tr>
 <tr class="separator:a6663b77c0af63f5b4ac7d7d1ca0eaf9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -895,6 +905,58 @@ template&lt;typename AD , typename RD , typename AD::value_type L&gt; </div>
 
 </div>
 </div>
+<a id="a2c8b80aa8bfba10f6b647735746bb61b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c8b80aa8bfba10f6b647735746bb61b">&#9670;&nbsp;</a></span>isBitPackedFloatAoS</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Mapping &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool llama::mapping::isBitPackedFloatAoS = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="BitPackedFloat_8hpp_source.html#l00423">423</a> of file <a class="el" href="BitPackedFloat_8hpp_source.html">BitPackedFloat.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a4b8796654ca4115a2e4bb5a0e5ac0ca6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b8796654ca4115a2e4bb5a0e5ac0ca6">&#9670;&nbsp;</a></span>isBitPackedFloatAoS&lt; BitPackedFloatAoS&lt; ArrayExtents, RecordDim, ExponentBits, MantissaBits, LinearizeArrayDimsFunctor, FlattenRecordDim, StoredIntegral &gt; &gt;</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ArrayExtents , typename RecordDim , typename ExponentBits , typename MantissaBits , typename LinearizeArrayDimsFunctor , template&lt; typename &gt; typename FlattenRecordDim, typename StoredIntegral &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool <a class="el" href="namespacellama_1_1mapping.html#a2c8b80aa8bfba10f6b647735746bb61b">llama::mapping::isBitPackedFloatAoS</a>&lt; <a class="el" href="structllama_1_1mapping_1_1BitPackedFloatAoS.html">BitPackedFloatAoS</a>&lt; <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, ExponentBits, MantissaBits, LinearizeArrayDimsFunctor, FlattenRecordDim, StoredIntegral &gt; &gt; = true</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="BitPackedFloat_8hpp_source.html#l00434">434</a> of file <a class="el" href="BitPackedFloat_8hpp_source.html">BitPackedFloat.hpp</a>.</p>
+
+</div>
+</div>
 <a id="af9c9d24fc8ce05a939c4bdb3ca8ae133"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af9c9d24fc8ce05a939c4bdb3ca8ae133">&#9670;&nbsp;</a></span>isBitPackedFloatSoA</h2>
 
@@ -917,7 +979,7 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00304">304</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedFloat_8hpp_source.html#l00304">304</a> of file <a class="el" href="BitPackedFloat_8hpp_source.html">BitPackedFloat.hpp</a>.</p>
 
 </div>
 </div>
@@ -943,7 +1005,7 @@ template&lt;typename... Ts&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BitPackedFloatSoA_8hpp_source.html#l00307">307</a> of file <a class="el" href="BitPackedFloatSoA_8hpp_source.html">BitPackedFloatSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BitPackedFloat_8hpp_source.html#l00307">307</a> of file <a class="el" href="BitPackedFloat_8hpp_source.html">BitPackedFloat.hpp</a>.</p>
 
 </div>
 </div>
@@ -1668,7 +1730,7 @@ template&lt;typename RecordDim , std::size_t VectorRegisterBits&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li>
-    <li class="footer">Generated on Fri Jan 20 2023 21:47:22 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Sat Jan 21 2023 16:38:23 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

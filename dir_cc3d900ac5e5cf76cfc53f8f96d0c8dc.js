@@ -3,7 +3,7 @@ var dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc =
     [ "tree", "dir_167d1c89d05e547509b1688d85c563df.html", "dir_167d1c89d05e547509b1688d85c563df" ],
     [ "AoS.hpp", "AoS_8hpp.html", "AoS_8hpp" ],
     [ "AoSoA.hpp", "AoSoA_8hpp.html", "AoSoA_8hpp" ],
-    [ "BitPackedFloatSoA.hpp", "BitPackedFloatSoA_8hpp.html", "BitPackedFloatSoA_8hpp" ],
+    [ "BitPackedFloat.hpp", "BitPackedFloat_8hpp.html", "BitPackedFloat_8hpp" ],
     [ "BitPackedInt.hpp", "BitPackedInt_8hpp.html", "BitPackedInt_8hpp" ],
     [ "Bytesplit.hpp", "Bytesplit_8hpp.html", "Bytesplit_8hpp" ],
     [ "Byteswap.hpp", "Byteswap_8hpp.html", "Byteswap_8hpp" ],

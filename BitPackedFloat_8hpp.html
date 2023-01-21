@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Low-Level Abstraction of Memory Access: /home/runner/work/llama/llama/include/llama/mapping/BitPackedFloatSoA.hpp File Reference</title>
+<title>Low-Level Abstraction of Memory Access: /home/runner/work/llama/llama/include/llama/mapping/BitPackedFloat.hpp File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -63,7 +63,7 @@ $(function() {
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
-$(document).ready(function(){initNavTree('BitPackedFloatSoA_8hpp.html',''); initResizable(); });
+$(document).ready(function(){initNavTree('BitPackedFloat_8hpp.html',''); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -89,7 +89,7 @@ $(document).ready(function(){initNavTree('BitPackedFloatSoA_8hpp.html',''); init
 <a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
-<div class="title">BitPackedFloatSoA.hpp File Reference</div>  </div>
+<div class="title">BitPackedFloat.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="ProxyRefOpMixin_8hpp_source.html">../ProxyRefOpMixin.hpp</a>&quot;</code><br />
@@ -102,12 +102,12 @@ $(document).ready(function(){initNavTree('BitPackedFloatSoA_8hpp.html',''); init
 <code>#include &lt;limits&gt;</code><br />
 <code>#include &lt;type_traits&gt;</code><br />
 </div><div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Include dependency graph for BitPackedFloatSoA.hpp:</div>
+  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Include dependency graph for BitPackedFloat.hpp:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="BitPackedFloatSoA_8hpp__incl.png" border="0" usemap="#a_2home_2runner_2work_2llama_2llama_2include_2llama_2mapping_2BitPackedFloatSoA_8hpp" alt=""/></div>
-<map name="a_2home_2runner_2work_2llama_2llama_2include_2llama_2mapping_2BitPackedFloatSoA_8hpp" id="a_2home_2runner_2work_2llama_2llama_2include_2llama_2mapping_2BitPackedFloatSoA_8hpp">
+<div class="center"><img src="BitPackedFloat_8hpp__incl.png" border="0" usemap="#a_2home_2runner_2work_2llama_2llama_2include_2llama_2mapping_2BitPackedFloat_8hpp" alt=""/></div>
+<map name="a_2home_2runner_2work_2llama_2llama_2include_2llama_2mapping_2BitPackedFloat_8hpp" id="a_2home_2runner_2work_2llama_2llama_2include_2llama_2mapping_2BitPackedFloat_8hpp">
 <area shape="rect" title=" " alt="" coords="493,5,709,61"/>
 <area shape="rect" href="ProxyRefOpMixin_8hpp.html" title=" " alt="" coords="5,184,180,211"/>
 <area shape="rect" href="BitPackedInt_8hpp.html" title=" " alt="" coords="341,109,471,136"/>
@@ -135,7 +135,7 @@ $(document).ready(function(){initNavTree('BitPackedFloatSoA_8hpp.html',''); init
 </map>
 </div>
 </div>
-<p><a href="BitPackedFloatSoA_8hpp_source.html">Go to the source code of this file.</a></p>
+<p><a href="BitPackedFloat_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
@@ -148,6 +148,10 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html">llama::mapping::BitPackedFloatSoA&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, TLinearizeArrayDimsFunctor, TStoredIntegral &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BindBitPackedFloatSoA.html">llama::mapping::BindBitPackedFloatSoA&lt; ExponentBits, MantissaBits, LinearizeArrayDimsFunctor, StoredIntegral &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BitPackedFloatAoS.html">llama::mapping::BitPackedFloatAoS&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, TLinearizeArrayDimsFunctor, FlattenRecordDim, TStoredIntegral &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BindBitPackedFloatAoS.html">llama::mapping::BindBitPackedFloatAoS&lt; ExponentBits, MantissaBits, LinearizeArrayDimsFunctor, FlattenRecordDim, StoredIntegral &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -185,14 +189,20 @@ Variables</h2></td></tr>
 <tr class="memitem:a89403fec542ad934c779be84c857e970"><td class="memTemplParams" colspan="2">template&lt;typename... Ts&gt; </td></tr>
 <tr class="memitem:a89403fec542ad934c779be84c857e970"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a89403fec542ad934c779be84c857e970">llama::mapping::isBitPackedFloatSoA&lt; BitPackedFloatSoA&lt; Ts... &gt; &gt;</a> = true</td></tr>
 <tr class="separator:a89403fec542ad934c779be84c857e970"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c8b80aa8bfba10f6b647735746bb61b"><td class="memTemplParams" colspan="2">template&lt;typename Mapping &gt; </td></tr>
+<tr class="memitem:a2c8b80aa8bfba10f6b647735746bb61b"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a2c8b80aa8bfba10f6b647735746bb61b">llama::mapping::isBitPackedFloatAoS</a> = false</td></tr>
+<tr class="separator:a2c8b80aa8bfba10f6b647735746bb61b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b8796654ca4115a2e4bb5a0e5ac0ca6"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim , typename ExponentBits , typename MantissaBits , typename LinearizeArrayDimsFunctor , template&lt; typename &gt; typename FlattenRecordDim, typename StoredIntegral &gt; </td></tr>
+<tr class="memitem:a4b8796654ca4115a2e4bb5a0e5ac0ca6"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a4b8796654ca4115a2e4bb5a0e5ac0ca6">llama::mapping::isBitPackedFloatAoS&lt; BitPackedFloatAoS&lt; ArrayExtents, RecordDim, ExponentBits, MantissaBits, LinearizeArrayDimsFunctor, FlattenRecordDim, StoredIntegral &gt; &gt;</a> = true</td></tr>
+<tr class="separator:a4b8796654ca4115a2e4bb5a0e5ac0ca6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc.html">mapping</a></li><li class="navelem"><a class="el" href="BitPackedFloatSoA_8hpp.html">BitPackedFloatSoA.hpp</a></li>
-    <li class="footer">Generated on Fri Jan 20 2023 21:47:22 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc.html">mapping</a></li><li class="navelem"><a class="el" href="BitPackedFloat_8hpp.html">BitPackedFloat.hpp</a></li>
+    <li class="footer">Generated on Sat Jan 21 2023 16:38:23 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

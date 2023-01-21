@@ -1,5 +1,9 @@
 var NAVTREEINDEX4 =
 {
+"structllama_1_1RecordCoord.html#a685a368d5b00931fb77af19012b10b4b":[2,0,1,21,0],
+"structllama_1_1RecordCoord.html#a9eba3978f93a2195c99e8f459a291f9e":[2,0,1,21,2],
+"structllama_1_1RecordCoord_3_4.html":[2,0,1,22],
+"structllama_1_1RecordCoord_3_4.html#a2fbc9a92eb6d265b4f646333aa6df076":[2,0,1,22,0],
 "structllama_1_1RecordCoord_3_4.html#a88c46f2ba080197e2c49a2e4066b841a":[2,0,1,22,1],
 "structllama_1_1RecordRef.html":[2,0,1,23],
 "structllama_1_1RecordRef.html#a00162d3e10237d687c7130d695c6da4c":[2,0,1,23,55],
@@ -245,9 +249,5 @@ var NAVTREEINDEX4 =
 "structllama_1_1internal_1_1BoxedValue.html#a9221d8f114d4b7c993ebfa564f830920":[2,0,1,2,39,1],
 "structllama_1_1internal_1_1BoxedValue.html#ac6549d3a6ee2ef2af3238c711fadab58":[2,0,1,2,39,0],
 "structllama_1_1internal_1_1BoxedValue_3_01Constant_3_01V_01_4_00_01I_01_4.html":[2,0,1,2,40],
-"structllama_1_1internal_1_1BoxedValue_3_01Constant_3_01V_01_4_00_01I_01_4.html#a0508bb05e49ee91ad0f2e9dcc94600eb":[2,0,1,2,40,1],
-"structllama_1_1internal_1_1BoxedValue_3_01Constant_3_01V_01_4_00_01I_01_4.html#aabbb0ec3ba2d6644975803b53c2d4de8":[2,0,1,2,40,0],
-"structllama_1_1internal_1_1BoxedValue_3_01Constant_3_01V_01_4_00_01I_01_4.html#adae9b0544944885cb10a5b6894bfb309":[2,0,1,2,40,2],
-"structllama_1_1internal_1_1DivideAssign.html":[2,0,1,2,50],
-"structllama_1_1internal_1_1DivideAssign.html#a4ef194014d4c19d8bba9c2c3a0b7d9e0":[2,0,1,2,50,0]
+"structllama_1_1internal_1_1BoxedValue_3_01Constant_3_01V_01_4_00_01I_01_4.html#a0508bb05e49ee91ad0f2e9dcc94600eb":[2,0,1,2,40,1]
 };

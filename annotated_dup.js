@@ -144,6 +144,8 @@ var annotated_dup =
         [ "BindAoSoA", "structllama_1_1mapping_1_1BindAoSoA.html", "structllama_1_1mapping_1_1BindAoSoA" ],
         [ "BitPackedFloatSoA", "structllama_1_1mapping_1_1BitPackedFloatSoA.html", "structllama_1_1mapping_1_1BitPackedFloatSoA" ],
         [ "BindBitPackedFloatSoA", "structllama_1_1mapping_1_1BindBitPackedFloatSoA.html", "structllama_1_1mapping_1_1BindBitPackedFloatSoA" ],
+        [ "BitPackedFloatAoS", "structllama_1_1mapping_1_1BitPackedFloatAoS.html", "structllama_1_1mapping_1_1BitPackedFloatAoS" ],
+        [ "BindBitPackedFloatAoS", "structllama_1_1mapping_1_1BindBitPackedFloatAoS.html", "structllama_1_1mapping_1_1BindBitPackedFloatAoS" ],
         [ "BitPackedIntSoA", "structllama_1_1mapping_1_1BitPackedIntSoA.html", "structllama_1_1mapping_1_1BitPackedIntSoA" ],
         [ "BindBitPackedIntSoA", "structllama_1_1mapping_1_1BindBitPackedIntSoA.html", "structllama_1_1mapping_1_1BindBitPackedIntSoA" ],
         [ "BitPackedIntAoS", "structllama_1_1mapping_1_1BitPackedIntAoS.html", "structllama_1_1mapping_1_1BitPackedIntAoS" ],
