@@ -16,7 +16,7 @@ constexpr auto problemSize = 64 * 1024; ///< total number of particles
 constexpr auto steps = 5; ///< number of steps to calculate
 constexpr auto allowRsqrt = true; // rsqrt can be way faster, but less accurate
 constexpr auto runUpate = true; // run update step. Useful to disable for benchmarking the move step.
-constexpr auto trace = false;
+constexpr auto countFieldAccesses = false;
 constexpr auto heatmap = false;
 
 constexpr auto sharedElementsPerBlock = 512;
@@ -27,14 +27,14 @@ constexpr auto aosoaLanes = 32; // coalesced memory access
 static_assert(problemSize % sharedElementsPerBlock == 0);
 static_assert(sharedElementsPerBlock % threadsPerBlock == 0);
 
-static_assert(!trace || !heatmap, "Cannot turn on Trace and Heatmap at the same time");
+static_assert(!countFieldAccesses || !heatmap, "Cannot turn on FieldAccessCount and Heatmap at the same time");
 
 constexpr auto timestep = FP{0.0001};
 constexpr auto eps2 = FP{0.01};
 
 #if defined(__CUDA_ARCH__) && __CUDA_ARCH__ < 600
 static_assert(
-    !trace && !heatmap,
+    !countFieldAccesses && !heatmap,
     "Since tracing/heatmap is enabled, this example needs compute capability >= 60 for 64bit atomics");
 #endif
 using CountType = unsigned long long int;
@@ -214,8 +214,8 @@ try
     }();
     auto tmapping = [&]
     {
-        if constexpr(trace)
-            return llama::mapping::Trace<std::decay_t<decltype(mapping)>, CountType>{mapping};
+        if constexpr(countFieldAccesses)
+            return llama::mapping::FieldAccessCount<std::decay_t<decltype(mapping)>, CountType>{mapping};
         else if constexpr(heatmap)
             return llama::mapping::Heatmap<std::decay_t<decltype(mapping)>, 1, CountType>{mapping};
         else
@@ -243,7 +243,7 @@ try
         p(tag::Mass()) = distribution(engine) / FP{100};
         hostView(i) = p;
     }
-    if constexpr(trace)
+    if constexpr(countFieldAccesses)
         hostView.mapping().fieldHits(hostView.storageBlobs) = {};
 
     watch.printAndReset("init");
@@ -314,7 +314,7 @@ try
             cudaMemcpyDeviceToHost));
     std::cout << "copy D->H " << stop() << " s\n";
 
-    if constexpr(trace)
+    if constexpr(countFieldAccesses)
     {
         hostView.mapping().printFieldHits(hostView.storageBlobs);
     }

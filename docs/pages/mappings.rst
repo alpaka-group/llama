@@ -203,21 +203,21 @@ A script for gnuplot visualizing the heatmap can be extracted.
     std::ofstream{"plot.sh"} << mapping.gnuplotScriptBinary;
 
 
-Trace
------
+FieldAccessCount
+----------------
 
-The Trace mapping is a meta mapping that wraps over an inner mapping and counts all accesses made to the fields of the record dimension.
+The FieldAccessCount mapping is a meta mapping that wraps over an inner mapping and counts all accesses made to the fields of the record dimension.
 A report is printed to stdout when requested.
 The mapping adds an additional blob to the blobs of the inner mapping used as storage for the access counts.
 
 .. code-block:: C++
 
     auto anyMapping = ...;
-    llama::mapping::Trace mapping{anyMapping};
+    llama::mapping::FieldAccessCount mapping{anyMapping};
     ...
     mapping.printFieldHits(view.storageBlobs); // print report with read and writes to each field
 
-The Trace mapping uses proxy references to instrument reads and writes.
+The FieldAccessCount mapping uses proxy references to instrument reads and writes.
 If this is problematic, it can also be configured to return raw C++ references.
 In that case, only the number of memory location computations can be traced,
 but not how often the program reads/writes to those locations.
@@ -226,7 +226,7 @@ Also, the data type used to count accesses is configurable.
 .. code-block:: C++
 
     auto anyMapping = ...;
-    llama::mapping::Trace<decltype(anyMapping), std::size_t, false> mapping{anyMapping};
+    llama::mapping::FieldAccessCount<decltype(anyMapping), std::size_t, false> mapping{anyMapping};
 
 
 Null

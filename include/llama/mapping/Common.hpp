@@ -238,7 +238,7 @@ namespace llama::mapping
         {
 #ifdef __CUDA_ARCH__
             // if you get an error here that there is no overload of atomicAdd, your CMAKE_CUDA_ARCHITECTURE might be
-            // too low or you need to use a smaller CountType for the Trace or Heatmap mapping.
+            // too low or you need to use a smaller CountType for the FieldAccessCount or Heatmap mapping.
             if constexpr(mp_contains<mp_list<int, unsigned int, unsigned long long int>, CountType>::value)
                 atomicAdd(&i, CountType{1});
             else if constexpr(sizeof(CountType) == sizeof(unsigned int))

@@ -66,6 +66,7 @@
 #include "mapping/Bytesplit.hpp"
 #include "mapping/Byteswap.hpp"
 #include "mapping/ChangeType.hpp"
+#include "mapping/FieldAccessCount.hpp"
 #include "mapping/Heatmap.hpp"
 #include "mapping/Null.hpp"
 #include "mapping/One.hpp"
@@ -73,7 +74,6 @@
 #include "mapping/Projection.hpp"
 #include "mapping/SoA.hpp"
 #include "mapping/Split.hpp"
-#include "mapping/Trace.hpp"
 #include "mapping/tree/Mapping.hpp"
 
 #if defined(__CUDACC__)

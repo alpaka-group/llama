@@ -26,7 +26,7 @@ using FP = float;
 
 constexpr auto problemSize = 16 * 1024;
 constexpr auto steps = 5;
-constexpr auto trace = false;
+constexpr auto countFieldAccesses = false;
 constexpr auto heatmap = false;
 constexpr auto dumpMapping = false;
 constexpr auto allowRsqrt
@@ -326,8 +326,8 @@ namespace usellama
 
         auto tmapping = [&]
         {
-            if constexpr(trace)
-                return llama::mapping::Trace{std::move(mapping)};
+            if constexpr(countFieldAccesses)
+                return llama::mapping::FieldAccessCount{std::move(mapping)};
             else
                 return std::move(mapping);
         }();
@@ -356,7 +356,7 @@ namespace usellama
             p(tag::Vel{}, tag::Z{}) = dist(engine) / FP{10};
             p(tag::Mass{}) = dist(engine) / FP{100};
         }
-        if constexpr(trace)
+        if constexpr(countFieldAccesses)
             particles.mapping().fieldHits(particles.storageBlobs) = {};
         watch.printAndReset("init");
 
@@ -389,7 +389,7 @@ namespace usellama
 
         if constexpr(heatmap)
             std::ofstream("nbody_heatmap_" + mappingName(Mapping) + ".sh") << particles.mapping().toGnuplotScript();
-        if constexpr(trace)
+        if constexpr(countFieldAccesses)
             particles.mapping().printFieldHits(particles.storageBlobs);
 
         return printReferenceParticle(particles(referenceParticleIndex)(tag::Pos{}).load());
