@@ -1,0 +1,90 @@
+cff-version: 1.2.0
+title: "LLAMA: The Low-Level Abstraction of Memory Access"
+message: "If you use this software, please cite it using the metadata from this file."
+type: software
+authors:
+- family-names: "Gruber"
+  given-names: "Bernhard Manfred"
+  affiliation:  >-
+    EP-SFT, CERN, Geneva, Switzerland and
+    Center for Advanced Systems Understanding (CASUS), Saxony, Germany and
+    Helmholtz-Zentrum Dresden-Rossendorf and
+    Faculty of Computer Science, Technische Universität Dresden, Dresden, Germany
+  orcid: "https://orcid.org/0000-0001-7848-1690"
+  email: bernhardmgruber@gmail.com
+- family-names: "Widera"
+  given-names: "René"
+  affiliation: "Helmholtz-Zentrum Dresden-Rossendorf"
+  orcid: "https://orcid.org/0000-0003-1642-0459"
+- family-names: "Matthes"
+  given-names: "Alexander"
+  affiliation: "Helmholtz-Zentrum Dresden-Rossendorf, TU Dresden"
+  orcid: "https://orcid.org/0000-0002-6702-2015"
+version: '0.4'
+date-released: '2022-01-25'
+repository-code: 'https://github.com/alpaka-group/llama'
+abstract: >-
+  LLAMA is a cross-platform C++17/C++20 header-only template
+  library for the abstraction of data layout and memory
+  access. It separtes the view of the algorithm on the
+  memory and the real data layout in the background. This
+  allows for performance portability in applications running
+  on heterogeneous hardware with the very same code.
+license: LGPL-3.0+
+keywords:
+  - HPC
+  - C++
+  - data layout
+  - memory access
+  - heterogeneous computing
+  - performance portability
+references:
+  - type: grant
+    title: 'European Cluster of Advanced Laser Light Sources'
+    authors:
+      - name: 'EUROPEAN X-RAY FREE-ELECTRON LASERFACILITY GMBH'
+    number: 654220
+  - type: grant
+    title: 'This work has been sponsored by the Wolfgang Gentner Programme of the German Federal Ministry of Education and Research (grant no. 13E18CHA)'
+    authors:
+      - name: 'German Federal Ministry of Education and Research'
+    number: 13E18CHA
+  - type: article
+    title: 'LLAMA: The low-level abstraction for memory access'
+    doi: 10.1002/spe.3077
+    url: 'https://onlinelibrary.wiley.com/doi/abs/10.1002/spe.3077'
+    journal: 'Software: Practice and Experience'
+    volume: 53
+    number: 1
+    start: 115
+    end: 141
+    year: 2023
+    authors:
+      - family-names: "Gruber"
+        given-names: "Bernhard Manfred"
+        orcid: "https://orcid.org/0000-0001-7848-1690"
+        affiliation:  >-
+          EP-SFT, CERN, Geneva, Switzerland and
+          Center for Advanced Systems Understanding (CASUS), Saxony, Germany and
+          Helmholtz-Zentrum Dresden-Rossendorf and
+          Faculty of Computer Science, Technische Universität Dresden, Dresden, Germany
+      - family-names: "Amadio"
+        given-names: "Guilherme"
+        orcid: "https://orcid.org/0000-0002-2102-7945"
+        affiliation: "EP-SFT, CERN, Geneva, Switzerland"
+      - family-names: "Blomer"
+        given-names: "Jakob"
+        orcid: "https://orcid.org/0000-0001-9750-6224"
+        affiliation: "EP-SFT, CERN, Geneva, Switzerland"
+      - family-names: "Matthes"
+        given-names: "Alexander"
+        orcid: "https://orcid.org/0000-0002-6702-2015"
+        affiliation: "Helmholtz-Zentrum Dresden-Rossendorf, Dresden, Germany and LogmeIn, Dresden, Germany"
+      - family-names: "Widera"
+        given-names: "René"
+        orcid: "https://orcid.org/0000-0003-1642-0459"
+        affiliation: "Helmholtz-Zentrum Dresden-Rossendorf, Dresden, Germany"
+      - family-names: "Bussmann"
+        given-names: "Michael"
+        orcid: "https://orcid.org/0000-0002-8258-3881"
+        affiliation: 'Center for Advanced Systems Understanding (CASUS), Saxony, Germany'
