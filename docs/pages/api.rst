@@ -164,7 +164,7 @@ Mappings
    :members:
 .. doxygenstruct:: llama::mapping::Split
    :members:
-.. doxygenstruct:: llama::mapping::Trace
+.. doxygenstruct:: llama::mapping::FieldAccessCount
    :members:
 
 Acessors

@@ -142,7 +142,7 @@ TEST_CASE("Heatmap.nbody")
         llama::mapping::PackedSingleBlobSoA<llama::ArrayExtents<std::size_t, n>, ParticleHeatmap>{});
 }
 
-TEST_CASE("Trace.ctor")
+TEST_CASE("FieldAccessCount.ctor")
 {
     using AE = llama::ArrayExtentsDynamic<int, 1>;
     using Mapping = llama::mapping::AoS<AE, ParticleHeatmap>;
@@ -150,23 +150,23 @@ TEST_CASE("Trace.ctor")
     // mapping ctor
     {
         const Mapping mapping{AE{42}};
-        auto trace = llama::mapping::Trace<Mapping>{mapping};
+        auto trace = llama::mapping::FieldAccessCount<Mapping>{mapping};
         CHECK(trace.extents() == AE{42});
     }
 
     // forwarding ctor
     {
-        auto trace = llama::mapping::Trace<Mapping>{AE{42}};
+        auto trace = llama::mapping::FieldAccessCount<Mapping>{AE{42}};
         CHECK(trace.extents() == AE{42});
     }
 }
 
-TEMPLATE_LIST_TEST_CASE("Trace.nbody.mem_locs_computed", "", SizeTypes)
+TEMPLATE_LIST_TEST_CASE("FieldAccessCount.nbody.mem_locs_computed", "", SizeTypes)
 {
     auto run = [&](auto mapping)
     {
-        auto particles = llama::allocView(
-            llama::mapping::Trace<decltype(mapping), TestType, false>{mapping}); // view initialization also writes!
+        auto particles = llama::allocView(llama::mapping::FieldAccessCount<decltype(mapping), TestType, false>{
+            mapping}); // view initialization also writes!
         updateAndMove(particles);
         auto& hits = particles.mapping().fieldHits(particles.storageBlobs);
         CHECK(hits.size() == 7);
@@ -196,12 +196,12 @@ Mass            10300
     run(llama::mapping::PackedSingleBlobSoA<llama::ArrayExtents<std::size_t, n>, ParticleHeatmap>{});
 }
 
-TEMPLATE_LIST_TEST_CASE("Trace.nbody.reads_writes", "", SizeTypes)
+TEMPLATE_LIST_TEST_CASE("FieldAccessCount.nbody.reads_writes", "", SizeTypes)
 {
     auto run = [&](auto mapping)
     {
-        auto particles = llama::allocView(
-            llama::mapping::Trace<decltype(mapping), TestType>{mapping}); // view initialization also writes!
+        auto particles = llama::allocView(llama::mapping::FieldAccessCount<decltype(mapping), TestType>{
+            mapping}); // view initialization also writes!
         updateAndMove(particles);
         auto& hits = particles.mapping().fieldHits(particles.storageBlobs);
         CHECK(hits.size() == 7);
@@ -238,9 +238,10 @@ Mass            10100        200
     run(llama::mapping::PackedSingleBlobSoA<llama::ArrayExtents<std::size_t, n>, ParticleHeatmap>{});
 }
 
-TEST_CASE("Trace.ProxyRef.SwapAndAssign")
+TEST_CASE("FieldAccessCount.ProxyRef.SwapAndAssign")
 {
-    auto view = llama::allocView(llama::mapping::Trace{llama::mapping::AoS<llama::ArrayExtents<int, 42>, double>{{}}});
+    auto view = llama::allocView(
+        llama::mapping::FieldAccessCount{llama::mapping::AoS<llama::ArrayExtents<int, 42>, double>{{}}});
 
     view(0) = 1.0;
     view(1) = 2.0;

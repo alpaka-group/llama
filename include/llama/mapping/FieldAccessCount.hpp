@@ -23,24 +23,24 @@ namespace llama::mapping
     namespace internal
     {
         template<typename Value, typename Ref, typename Count>
-        struct TraceReference : ProxyRefOpMixin<TraceReference<Value, Ref, Count>, Value>
+        struct FieldAccessCountReference : ProxyRefOpMixin<FieldAccessCountReference<Value, Ref, Count>, Value>
         {
             using value_type = Value;
 
             template<typename RefFwd>
-            LLAMA_FN_HOST_ACC_INLINE constexpr TraceReference(RefFwd&& r, AccessCounts<Count>* hits)
+            LLAMA_FN_HOST_ACC_INLINE constexpr FieldAccessCountReference(RefFwd&& r, AccessCounts<Count>* hits)
                 : r(std::forward<RefFwd>(r))
                 , hits(hits)
             {
                 static_assert(std::is_same_v<std::remove_reference_t<Ref>, std::remove_reference_t<RefFwd>>);
             }
 
-            TraceReference(const TraceReference&) = default;
-            TraceReference(TraceReference&&) noexcept = default;
-            auto operator=(TraceReference&& ref) noexcept -> TraceReference& = default;
-            ~TraceReference() = default;
+            FieldAccessCountReference(const FieldAccessCountReference&) = default;
+            FieldAccessCountReference(FieldAccessCountReference&&) noexcept = default;
+            auto operator=(FieldAccessCountReference&& ref) noexcept -> FieldAccessCountReference& = default;
+            ~FieldAccessCountReference() = default;
 
-            LLAMA_FN_HOST_ACC_INLINE auto operator=(const TraceReference& ref) -> TraceReference&
+            LLAMA_FN_HOST_ACC_INLINE auto operator=(const FieldAccessCountReference& ref) -> FieldAccessCountReference&
             {
                 if(&ref != this)
                 {
@@ -50,7 +50,7 @@ namespace llama::mapping
                 return *this;
             }
 
-            LLAMA_FN_HOST_ACC_INLINE auto operator=(value_type value) -> TraceReference&
+            LLAMA_FN_HOST_ACC_INLINE auto operator=(value_type value) -> FieldAccessCountReference&
             {
                 internal::atomicInc(hits->writes);
                 r = value;
@@ -70,14 +70,14 @@ namespace llama::mapping
         };
     } // namespace internal
 
-    /// Forwards all calls to the inner mapping. Traces all accesses made through this mapping and allows printing a
+    /// Forwards all calls to the inner mapping. Counts all accesses made through this mapping and allows printing a
     /// summary.
     /// @tparam Mapping The type of the inner mapping.
     /// @tparam TCountType The type used for counting the number of accesses.
-    /// @tparam MyCodeHandlesProxyReferences If false, Trace will avoid proxy references but can then only count
-    /// the number of address computations
+    /// @tparam MyCodeHandlesProxyReferences If false, FieldAccessCount will avoid proxy references but can then only
+    /// count the number of address computations
     template<typename Mapping, typename TCountType = std::size_t, bool MyCodeHandlesProxyReferences = true>
-    struct Trace : Mapping
+    struct FieldAccessCount : Mapping
     {
     private:
         using size_type = typename Mapping::ArrayExtents::value_type;
@@ -90,15 +90,16 @@ namespace llama::mapping
 
         inline static constexpr auto blobCount = Mapping::blobCount + 1;
 
-        constexpr Trace() = default;
+        constexpr FieldAccessCount() = default;
 
         LLAMA_FN_HOST_ACC_INLINE
-        explicit Trace(Mapping mapping) : Mapping(std::move(mapping))
+        explicit FieldAccessCount(Mapping mapping) : Mapping(std::move(mapping))
         {
         }
 
         template<typename... Args>
-        LLAMA_FN_HOST_ACC_INLINE explicit Trace(Args&&... innerArgs) : Mapping(std::forward<Args>(innerArgs)...)
+        LLAMA_FN_HOST_ACC_INLINE explicit FieldAccessCount(Args&&... innerArgs)
+            : Mapping(std::forward<Args>(innerArgs)...)
         {
         }
 
@@ -124,7 +125,8 @@ namespace llama::mapping
         {
             static_assert(
                 !std::is_const_v<Blobs>,
-                "Cannot access (even just reading) data through Trace from const blobs/view, since we need to write "
+                "Cannot access (even just reading) data through FieldAccessCount from const blobs/view, since we need "
+                "to write "
                 "the access counts");
 
             auto& hits = fieldHits(blobs)[+flatRecordCoord<RecordDim, RecordCoord<RecordCoords...>>];
@@ -133,7 +135,7 @@ namespace llama::mapping
             {
                 using Value = GetType<RecordDim, decltype(rc)>;
                 using Ref = decltype(ref);
-                return internal::TraceReference<Value, Ref, CountType>{std::forward<Ref>(ref), &hits};
+                return internal::FieldAccessCountReference<Value, Ref, CountType>{std::forward<Ref>(ref), &hits};
             }
             else
             {
@@ -249,8 +251,9 @@ namespace llama::mapping
     };
 
     template<typename Mapping>
-    inline constexpr bool isTrace = false;
+    inline constexpr bool isFieldAccessCount = false;
 
     template<typename Mapping, typename CountType, bool MyCodeHandlesProxyReferences>
-    inline constexpr bool isTrace<Trace<Mapping, CountType, MyCodeHandlesProxyReferences>> = true;
+    inline constexpr bool isFieldAccessCount<FieldAccessCount<Mapping, CountType, MyCodeHandlesProxyReferences>>
+        = true;
 } // namespace llama::mapping
