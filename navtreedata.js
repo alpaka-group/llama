@@ -61,12 +61,12 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "Accessors_8hpp.html",
-"RecordRef_8hpp.html#a1ba0c9b09c6a1e76d0d8f9c3e2fbe3ba",
+"RecordRef_8hpp.html#a066dd05be57445a48d062423d35f13d5",
 "namespacellama.html#a0d0fda5486eb5976f940a638f0cdd9d4",
-"namespacellama_1_1mapping.html#aeead2d9c8929b8c0aff18aad054a0710a4492081ca02b059f9e8af4ddaf0f7292",
+"namespacellama_1_1mapping.html#aeead2d9c8929b8c0aff18aad054a0710ad12fbc9a2ba3b0b91a4190959b4c966b",
 "structllama_1_1RecordCoord.html#a685a368d5b00931fb77af19012b10b4b",
 "structllama_1_1internal_1_1BoxedValue_3_01Constant_3_01V_01_4_00_01I_01_4.html#aabbb0ec3ba2d6644975803b53c2d4de8",
-"structllama_1_1mapping_1_1Heatmap.html#aab0257d17e1b8a591f4079fcd25999c4",
+"structllama_1_1mapping_1_1FlattenRecordDimInOrder.html#a2a95feabe41a0dddadbb416de12f0f94",
 "structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctors_3_01Tree_00_01Tuple_3_4_01_4.html#a8767dc6be695cfddd20d5200b431d1be"
 ];
 

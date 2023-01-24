@@ -102,6 +102,7 @@ var annotated_dup =
           [ "ChangeTypeProjection", "structllama_1_1mapping_1_1internal_1_1ChangeTypeProjection.html", "structllama_1_1mapping_1_1internal_1_1ChangeTypeProjection" ],
           [ "MakeProjectionPair", "structllama_1_1mapping_1_1internal_1_1MakeProjectionPair.html", "structllama_1_1mapping_1_1internal_1_1MakeProjectionPair" ],
           [ "S", "structllama_1_1mapping_1_1internal_1_1S.html", null ],
+          [ "FieldAccessCountReference", "structllama_1_1mapping_1_1internal_1_1FieldAccessCountReference.html", "structllama_1_1mapping_1_1internal_1_1FieldAccessCountReference" ],
           [ "NullReference", "structllama_1_1mapping_1_1internal_1_1NullReference.html", "structllama_1_1mapping_1_1internal_1_1NullReference" ],
           [ "UnaryFunctionTraits", "structllama_1_1mapping_1_1internal_1_1UnaryFunctionTraits.html", null ],
           [ "UnaryFunctionTraits< Ret(*)(Arg)>", "structllama_1_1mapping_1_1internal_1_1UnaryFunctionTraits_3_01Ret_07_5_08_07Arg_08_4.html", "structllama_1_1mapping_1_1internal_1_1UnaryFunctionTraits_3_01Ret_07_5_08_07Arg_08_4" ],
@@ -111,8 +112,7 @@ var annotated_dup =
           [ "PartionedRecordDim", "structllama_1_1mapping_1_1internal_1_1PartionedRecordDim.html", "structllama_1_1mapping_1_1internal_1_1PartionedRecordDim" ],
           [ "ReplaceTagListsByCoords", "structllama_1_1mapping_1_1internal_1_1ReplaceTagListsByCoords.html", null ],
           [ "ReplaceTagListsByCoords< RecordDim, RecordCoord< RCs... > >", "structllama_1_1mapping_1_1internal_1_1ReplaceTagListsByCoords_3_01RecordDim_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html", "structllama_1_1mapping_1_1internal_1_1ReplaceTagListsByCoords_3_01RecordDim_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4" ],
-          [ "ReplaceTagListsByCoords< RecordDim, mp_list< Args... > >", "structllama_1_1mapping_1_1internal_1_1ReplaceTagListsByCoords_3_01RecordDim_00_01mp__list_3_01Args_8_8_8_01_4_01_4.html", "structllama_1_1mapping_1_1internal_1_1ReplaceTagListsByCoords_3_01RecordDim_00_01mp__list_3_01Args_8_8_8_01_4_01_4" ],
-          [ "TraceReference", "structllama_1_1mapping_1_1internal_1_1TraceReference.html", "structllama_1_1mapping_1_1internal_1_1TraceReference" ]
+          [ "ReplaceTagListsByCoords< RecordDim, mp_list< Args... > >", "structllama_1_1mapping_1_1internal_1_1ReplaceTagListsByCoords_3_01RecordDim_00_01mp__list_3_01Args_8_8_8_01_4_01_4.html", "structllama_1_1mapping_1_1internal_1_1ReplaceTagListsByCoords_3_01RecordDim_00_01mp__list_3_01Args_8_8_8_01_4_01_4" ]
         ] ],
         [ "tree", "namespacellama_1_1mapping_1_1tree.html", [
           [ "functor", "namespacellama_1_1mapping_1_1tree_1_1functor.html", [
@@ -162,6 +162,8 @@ var annotated_dup =
         [ "LinearizeArrayDimsMorton", "structllama_1_1mapping_1_1LinearizeArrayDimsMorton.html", "structllama_1_1mapping_1_1LinearizeArrayDimsMorton" ],
         [ "FlattenRecordDimInOrder", "structllama_1_1mapping_1_1FlattenRecordDimInOrder.html", "structllama_1_1mapping_1_1FlattenRecordDimInOrder" ],
         [ "FlattenRecordDimSorted", "structllama_1_1mapping_1_1FlattenRecordDimSorted.html", "structllama_1_1mapping_1_1FlattenRecordDimSorted" ],
+        [ "AccessCounts", "structllama_1_1mapping_1_1AccessCounts.html", "structllama_1_1mapping_1_1AccessCounts" ],
+        [ "FieldAccessCount", "structllama_1_1mapping_1_1FieldAccessCount.html", "structllama_1_1mapping_1_1FieldAccessCount" ],
         [ "Heatmap", "structllama_1_1mapping_1_1Heatmap.html", "structllama_1_1mapping_1_1Heatmap" ],
         [ "Null", "structllama_1_1mapping_1_1Null.html", "structllama_1_1mapping_1_1Null" ],
         [ "One", "structllama_1_1mapping_1_1One.html", "structllama_1_1mapping_1_1One" ],
@@ -172,9 +174,7 @@ var annotated_dup =
         [ "SoA", "structllama_1_1mapping_1_1SoA.html", "structllama_1_1mapping_1_1SoA" ],
         [ "BindSoA", "structllama_1_1mapping_1_1BindSoA.html", "structllama_1_1mapping_1_1BindSoA" ],
         [ "Split", "structllama_1_1mapping_1_1Split.html", "structllama_1_1mapping_1_1Split" ],
-        [ "BindSplit", "structllama_1_1mapping_1_1BindSplit.html", "structllama_1_1mapping_1_1BindSplit" ],
-        [ "AccessCounts", "structllama_1_1mapping_1_1AccessCounts.html", "structllama_1_1mapping_1_1AccessCounts" ],
-        [ "Trace", "structllama_1_1mapping_1_1Trace.html", "structllama_1_1mapping_1_1Trace" ]
+        [ "BindSplit", "structllama_1_1mapping_1_1BindSplit.html", "structllama_1_1mapping_1_1BindSplit" ]
       ] ],
       [ "Array", "structllama_1_1Array.html", "structllama_1_1Array" ],
       [ "Array< T, 0 >", "structllama_1_1Array_3_01T_00_010_01_4.html", "structllama_1_1Array_3_01T_00_010_01_4" ],

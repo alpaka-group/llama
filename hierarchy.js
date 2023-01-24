@@ -152,9 +152,9 @@ var hierarchy =
     [ "llama::mapping::internal::MakeProjectionPair< RecordDim >", "structllama_1_1mapping_1_1internal_1_1MakeProjectionPair.html", null ],
     [ "llama::mapping::internal::MakeReplacerProj< ProjectionMap >", "structllama_1_1mapping_1_1internal_1_1MakeReplacerProj.html", null ],
     [ "Mapping", null, [
+      [ "llama::mapping::FieldAccessCount< Mapping, TCountType, MyCodeHandlesProxyReferences >", "structllama_1_1mapping_1_1FieldAccessCount.html", null ],
       [ "llama::mapping::Heatmap< Mapping, Granularity, TCountType >", "structllama_1_1mapping_1_1Heatmap.html", null ],
-      [ "llama::mapping::PermuteArrayIndex< Mapping, Permutation >", "structllama_1_1mapping_1_1PermuteArrayIndex.html", null ],
-      [ "llama::mapping::Trace< Mapping, TCountType, MyCodeHandlesProxyReferences >", "structllama_1_1mapping_1_1Trace.html", null ]
+      [ "llama::mapping::PermuteArrayIndex< Mapping, Permutation >", "structllama_1_1mapping_1_1PermuteArrayIndex.html", null ]
     ] ],
     [ "llama::mapping::tree::internal::MergeFunctors< Tree, TreeOperationList >", "structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctors.html", null ],
     [ "llama::mapping::tree::internal::MergeFunctors< BasicTree, TreeOperationList >", "structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctors.html", null ],
@@ -184,6 +184,9 @@ var hierarchy =
     [ "llama::ProxyRefOpMixin< BitPackedIntRef< Integral, StoredIntegralCV, VHBits, SizeType, SignBit >, Integral >", "structllama_1_1ProxyRefOpMixin.html", [
       [ "llama::mapping::internal::BitPackedIntRef< Integral, StoredIntegralCV, VHBits, SizeType, SignBit >", "structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html", null ]
     ] ],
+    [ "llama::ProxyRefOpMixin< FieldAccessCountReference< Value, Ref, Count >, Value >", "structllama_1_1ProxyRefOpMixin.html", [
+      [ "llama::mapping::internal::FieldAccessCountReference< Value, Ref, Count >", "structllama_1_1mapping_1_1internal_1_1FieldAccessCountReference.html", null ]
+    ] ],
     [ "llama::ProxyRefOpMixin< NullReference< T >, T >", "structllama_1_1ProxyRefOpMixin.html", [
       [ "llama::mapping::internal::NullReference< T >", "structllama_1_1mapping_1_1internal_1_1NullReference.html", null ]
     ] ],
@@ -198,9 +201,6 @@ var hierarchy =
     ] ],
     [ "llama::ProxyRefOpMixin< ScopedUpdate< Reference >, internal::ValueOf< Reference >::type >", "structllama_1_1ProxyRefOpMixin.html", [
       [ "llama::ScopedUpdate< Reference, std::enable_if_t< std::is_fundamental_v< typename internal::ValueOf< Reference >::type > > >", "structllama_1_1ScopedUpdate_3_01Reference_00_01std_1_1enable__if__t_3_01std_1_1is__fundamental__e14f71eb64730a69a1b74dea5c5f8b59.html", null ]
-    ] ],
-    [ "llama::ProxyRefOpMixin< TraceReference< Value, Ref, Count >, Value >", "structllama_1_1ProxyRefOpMixin.html", [
-      [ "llama::mapping::internal::TraceReference< Value, Ref, Count >", "structllama_1_1mapping_1_1internal_1_1TraceReference.html", null ]
     ] ],
     [ "llama::bloballoc::AlignedAllocator< T, Alignment >::rebind< T2 >", "structllama_1_1bloballoc_1_1AlignedAllocator_1_1rebind.html", null ],
     [ "llama::Record< Fields >", "structllama_1_1Record.html", null ],

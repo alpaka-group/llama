@@ -154,6 +154,10 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1FlattenRecordDimSorted.html">FlattenRecordDimSorted</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1AccessCounts.html">AccessCounts</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1FieldAccessCount.html">FieldAccessCount</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Heatmap.html">Heatmap</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Null.html">Null</a></td></tr>
@@ -175,10 +179,6 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Split.html">Split</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BindSplit.html">BindSplit</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1AccessCounts.html">AccessCounts</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Trace.html">Trace</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
@@ -325,6 +325,12 @@ Variables</h2></td></tr>
 <tr class="memitem:a9ca2b15cf29934313d827f7e8a972952"><td class="memTemplParams" colspan="2">template&lt;typename TArrayExtents , typename TRecordDim , template&lt; typename, typename &gt; typename InnerMapping, typename ReplacementMap &gt; </td></tr>
 <tr class="memitem:a9ca2b15cf29934313d827f7e8a972952"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a9ca2b15cf29934313d827f7e8a972952">isChangeType&lt; ChangeType&lt; TArrayExtents, TRecordDim, InnerMapping, ReplacementMap &gt; &gt;</a> = true</td></tr>
 <tr class="separator:a9ca2b15cf29934313d827f7e8a972952"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6915406ebc3c267d178d2b8d2de4880d"><td class="memTemplParams" colspan="2">template&lt;typename Mapping &gt; </td></tr>
+<tr class="memitem:a6915406ebc3c267d178d2b8d2de4880d"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a6915406ebc3c267d178d2b8d2de4880d">isFieldAccessCount</a> = false</td></tr>
+<tr class="separator:a6915406ebc3c267d178d2b8d2de4880d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aefb24225681377e371e5529d5c41c6f0"><td class="memTemplParams" colspan="2">template&lt;typename Mapping , typename CountType , bool MyCodeHandlesProxyReferences&gt; </td></tr>
+<tr class="memitem:aefb24225681377e371e5529d5c41c6f0"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#aefb24225681377e371e5529d5c41c6f0">isFieldAccessCount&lt; FieldAccessCount&lt; Mapping, CountType, MyCodeHandlesProxyReferences &gt; &gt;</a> = true</td></tr>
+<tr class="separator:aefb24225681377e371e5529d5c41c6f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6d27fa50275ed7d312703a8d661bcb02"><td class="memTemplParams" colspan="2">template&lt;typename Mapping &gt; </td></tr>
 <tr class="memitem:a6d27fa50275ed7d312703a8d661bcb02"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a6d27fa50275ed7d312703a8d661bcb02">isHeatmap</a> = false</td></tr>
 <tr class="separator:a6d27fa50275ed7d312703a8d661bcb02"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -367,12 +373,6 @@ Variables</h2></td></tr>
 <tr class="memitem:a990d4d3fa6208c7df73c636dd60ec6a7"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim , typename SelectorForMapping1 , template&lt; typename... &gt; typename MappingTemplate1, template&lt; typename... &gt; typename MappingTemplate2, bool SeparateBlobs&gt; </td></tr>
 <tr class="memitem:a990d4d3fa6208c7df73c636dd60ec6a7"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a990d4d3fa6208c7df73c636dd60ec6a7">isSplit&lt; Split&lt; ArrayExtents, RecordDim, SelectorForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt; &gt;</a> = true</td></tr>
 <tr class="separator:a990d4d3fa6208c7df73c636dd60ec6a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a033ccad2b2e578270aeaa7e96e066d57"><td class="memTemplParams" colspan="2">template&lt;typename Mapping &gt; </td></tr>
-<tr class="memitem:a033ccad2b2e578270aeaa7e96e066d57"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a033ccad2b2e578270aeaa7e96e066d57">isTrace</a> = false</td></tr>
-<tr class="separator:a033ccad2b2e578270aeaa7e96e066d57"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a59f794bd5f87ee22946c743a4abaa90f"><td class="memTemplParams" colspan="2">template&lt;typename Mapping , typename CountType , bool MyCodeHandlesProxyReferences&gt; </td></tr>
-<tr class="memitem:a59f794bd5f87ee22946c743a4abaa90f"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a59f794bd5f87ee22946c743a4abaa90f">isTrace&lt; Trace&lt; Mapping, CountType, MyCodeHandlesProxyReferences &gt; &gt;</a> = true</td></tr>
-<tr class="separator:a59f794bd5f87ee22946c743a4abaa90f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Typedef Documentation</h2>
 <a id="a2a4beb14a86e160ddef39c87b5fb6c92"></a>
@@ -1269,6 +1269,58 @@ template&lt;typename TArrayExtents , typename TRecordDim , template&lt; typename
 
 </div>
 </div>
+<a id="a6915406ebc3c267d178d2b8d2de4880d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6915406ebc3c267d178d2b8d2de4880d">&#9670;&nbsp;</a></span>isFieldAccessCount</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Mapping &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool llama::mapping::isFieldAccessCount = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="FieldAccessCount_8hpp_source.html#l00254">254</a> of file <a class="el" href="FieldAccessCount_8hpp_source.html">FieldAccessCount.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aefb24225681377e371e5529d5c41c6f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aefb24225681377e371e5529d5c41c6f0">&#9670;&nbsp;</a></span>isFieldAccessCount&lt; FieldAccessCount&lt; Mapping, CountType, MyCodeHandlesProxyReferences &gt; &gt;</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Mapping , typename CountType , bool MyCodeHandlesProxyReferences&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool <a class="el" href="namespacellama_1_1mapping.html#a6915406ebc3c267d178d2b8d2de4880d">llama::mapping::isFieldAccessCount</a>&lt; <a class="el" href="structllama_1_1mapping_1_1FieldAccessCount.html">FieldAccessCount</a>&lt; Mapping, CountType, MyCodeHandlesProxyReferences &gt; &gt; = true</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="FieldAccessCount_8hpp_source.html#l00257">257</a> of file <a class="el" href="FieldAccessCount_8hpp_source.html">FieldAccessCount.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a6d27fa50275ed7d312703a8d661bcb02"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6d27fa50275ed7d312703a8d661bcb02">&#9670;&nbsp;</a></span>isHeatmap</h2>
 
@@ -1633,58 +1685,6 @@ template&lt;typename ArrayExtents , typename RecordDim , typename SelectorForMap
 
 </div>
 </div>
-<a id="a033ccad2b2e578270aeaa7e96e066d57"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a033ccad2b2e578270aeaa7e96e066d57">&#9670;&nbsp;</a></span>isTrace</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Mapping &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr bool llama::mapping::isTrace = false</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00252">252</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a59f794bd5f87ee22946c743a4abaa90f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a59f794bd5f87ee22946c743a4abaa90f">&#9670;&nbsp;</a></span>isTrace&lt; Trace&lt; Mapping, CountType, MyCodeHandlesProxyReferences &gt; &gt;</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Mapping , typename CountType , bool MyCodeHandlesProxyReferences&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr bool <a class="el" href="namespacellama_1_1mapping.html#a033ccad2b2e578270aeaa7e96e066d57">llama::mapping::isTrace</a>&lt; <a class="el" href="structllama_1_1mapping_1_1Trace.html">Trace</a>&lt; Mapping, CountType, MyCodeHandlesProxyReferences &gt; &gt; = true</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="Trace_8hpp_source.html#l00255">255</a> of file <a class="el" href="Trace_8hpp_source.html">Trace.hpp</a>.</p>
-
-</div>
-</div>
 <a id="abde584824d91d31ec24b7c326632a3c3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abde584824d91d31ec24b7c326632a3c3">&#9670;&nbsp;</a></span>maxLanes</h2>
 
@@ -1730,7 +1730,7 @@ template&lt;typename RecordDim , std::size_t VectorRegisterBits&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li>
-    <li class="footer">Generated on Sat Jan 21 2023 23:48:06 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Jan 24 2023 10:30:18 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
