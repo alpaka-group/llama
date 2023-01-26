@@ -189,6 +189,7 @@ if (LLAMA_BUILD_EXAMPLES)
 	if (CMAKE_CUDA_COMPILER)
 		add_subdirectory("examples/cuda/nbody")
 		add_subdirectory("examples/cuda/pitch")
+		add_subdirectory("examples/cuda/viewcopy")
 	endif()
 endif()
 
