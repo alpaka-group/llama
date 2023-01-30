@@ -161,6 +161,38 @@ namespace llama
             return nullptr;
         }
 
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto front() -> T&
+        {
+            outOfRange();
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto front() const -> const T&
+        {
+            outOfRange();
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto back() -> T&
+        {
+            outOfRange();
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto back() const -> const T&
+        {
+            outOfRange();
+        }
+
+        template<typename IndexType>
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator[](IndexType&&) -> T&
+        {
+            outOfRange();
+        }
+
+        template<typename IndexType>
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator[](IndexType&&) const -> const T&
+        {
+            outOfRange();
+        }
+
         LLAMA_FN_HOST_ACC_INLINE constexpr auto data() -> T*
         {
             return nullptr;
@@ -184,6 +216,24 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator+(const Array&, const Array&) -> Array
         {
             return {};
+        }
+
+        template<std::size_t I>
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto get() -> T&
+        {
+            outOfRange();
+        }
+
+        template<std::size_t I>
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto get() const -> const T&
+        {
+            outOfRange();
+        }
+
+    private:
+        [[noreturn]] void outOfRange() const
+        {
+            throw std::out_of_range{"Array has zero length"};
         }
     };
 
