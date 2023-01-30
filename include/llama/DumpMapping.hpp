@@ -121,7 +121,7 @@ namespace llama
             using RecordDim = typename Mapping::RecordDim;
 
             auto emitInfo = [&](auto nrAndOffset, std::size_t size) {
-                infos.push_back({ai, internal::toVec(rc), recordCoordTags<RecordDim>(rc), nrAndOffset, size});
+                infos.push_back({ai, internal::toVec(rc), prettyRecordCoord<RecordDim>(rc), nrAndOffset, size});
             };
 
             using Type = GetType<RecordDim, decltype(rc)>;
@@ -210,7 +210,7 @@ namespace llama
                             infos.push_back(
                                 {ai,
                                  internal::toVec(rc),
-                                 recordCoordTags<RecordDim>(rc),
+                                 prettyRecordCoord<RecordDim>(rc),
                                  {static_cast<std::size_t>(nr), static_cast<std::size_t>(off)},
                                  sizeof(Type)});
                         }
@@ -463,7 +463,7 @@ namespace llama
     background-color: #{:X};
 }}
 )",
-                    internal::cssClass(std::string{recordCoordTags<RecordDim>(rc)}),
+                    internal::cssClass(std::string{prettyRecordCoord<RecordDim>(rc)}),
                     byteSizeInPixel * size,
                     internal::color(internal::toVec(rc)));
             });

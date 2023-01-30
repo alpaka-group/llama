@@ -4,6 +4,7 @@
 
 #include "Core.hpp"
 
+#include <stdexcept>
 #include <string_view>
 
 namespace llama
@@ -302,59 +303,73 @@ namespace llama
                 mp_for_each<Tags>(
                     [&](auto tag)
                     {
-                        if(s != 0)
-                            s++; // for the '.'s
                         using Tag = decltype(tag);
                         if constexpr(isRecordCoord<Tag>)
-                            s += intToStrSize(s);
+                        {
+                            // handle array indices
+                            static_assert(Tag::size == 1);
+                            s += 2; // for the '[' and ']'
+                            s += intToStrSize(Tag::front);
+                        }
                         else
+                        {
+                            if(s != 0)
+                                s++; // for the '.'s
                             s += structName(tag).size();
+                        }
                     });
                 return s;
             }();
             llama::Array<char, size> a{};
-            auto w = a.begin();
+            auto it = a.begin();
 
             mp_for_each<Tags>(
                 [&](auto tag) constexpr
                 {
-                    if(w != a.begin())
-                    {
-                        *w = '.';
-                        w++;
-                    }
                     using Tag = decltype(tag);
                     if constexpr(isRecordCoord<Tag>)
                     {
-                        // handle array indices
-                        static_assert(Tag::size == 1);
-                        // convert to string
                         auto n = Tag::front;
-                        w += intToStrSize(n) - 1;
+                        *it = '[';
+                        it++;
+                        it += intToStrSize(n);
+                        auto it2 = it; // take copy because we write number backward
                         do
                         {
-                            *w = '0' + n % 10;
-                            w--;
+                            it2--;
+                            *it2 = '0' + n % 10;
                             n /= 10;
                         } while(n != 0);
+                        *it = ']';
+                        it++;
                     }
                     else
                     {
+                        if(it != a.begin())
+                        {
+                            *it = '.';
+                            it++;
+                        }
                         constexpr auto sn = structName(tag);
-                        constexprCopy(sn.begin(), sn.end(), w);
-                        w += sn.size();
+                        constexprCopy(sn.begin(), sn.end(), it);
+                        it += sn.size();
                     }
                 });
+
+            if(!a.empty() && a.back() == 0)
+                throw std::logic_error{"Implementation error: Array should have been completely overwritten."};
+
             return a;
         }();
     } // namespace internal
 
-    /// Returns the tags interspersed by '.' represented by the given record coord in the given record dimension.
+    /// Returns a pretty representation of the record coordinate inside the given record dimension. Tags are
+    /// interspersed by '.' and arrays are represented using subscript notation ("[123]").
     template<typename RecordDim, std::size_t... Coords>
-    constexpr auto recordCoordTags(RecordCoord<Coords...> = {}) -> std::string_view
+    constexpr auto prettyRecordCoord(RecordCoord<Coords...> = {}) -> std::string_view
     {
         constexpr auto& value = internal::recordCoordTagsStorage<RecordDim, Coords...>;
-        return std::string_view{&value[0], value.size()};
+        return std::string_view{value.data(), value.size()};
     }
 
     template<typename RecordDim>

@@ -519,32 +519,54 @@ TEST_CASE("structName")
     CHECK(llama::structName<ns::AnonNs2>() == "AnonNs2");
 }
 
-TEST_CASE("recordCoordTags.Particle")
+TEST_CASE("prettyRecordCoord.Particle")
 {
-    CHECK(llama::recordCoordTags<Particle>(llama::RecordCoord<0, 0>{}) == "Pos.X");
-    CHECK(llama::recordCoordTags<Particle>(llama::RecordCoord<0, 1>{}) == "Pos.Y");
-    CHECK(llama::recordCoordTags<Particle>(llama::RecordCoord<0, 2>{}) == "Pos.Z");
-    CHECK(llama::recordCoordTags<Particle>(llama::RecordCoord<1>{}) == "Mass");
-    CHECK(llama::recordCoordTags<Particle>(llama::RecordCoord<2, 0>{}) == "Vel.X");
-    CHECK(llama::recordCoordTags<Particle>(llama::RecordCoord<2, 1>{}) == "Vel.Y");
-    CHECK(llama::recordCoordTags<Particle>(llama::RecordCoord<2, 2>{}) == "Vel.Z");
-    CHECK(llama::recordCoordTags<Particle>(llama::RecordCoord<3, 0>{}) == "Flags.0");
-    CHECK(llama::recordCoordTags<Particle>(llama::RecordCoord<3, 1>{}) == "Flags.1");
-    CHECK(llama::recordCoordTags<Particle>(llama::RecordCoord<3, 2>{}) == "Flags.2");
-    CHECK(llama::recordCoordTags<Particle>(llama::RecordCoord<3, 3>{}) == "Flags.3");
+    STATIC_REQUIRE(llama::prettyRecordCoord<Particle>(llama::RecordCoord<>{}).empty());
+    STATIC_REQUIRE(llama::prettyRecordCoord<Particle>(llama::RecordCoord<0>{}) == "Pos");
+    STATIC_REQUIRE(llama::prettyRecordCoord<Particle>(llama::RecordCoord<0, 0>{}) == "Pos.X");
+    STATIC_REQUIRE(llama::prettyRecordCoord<Particle>(llama::RecordCoord<0, 1>{}) == "Pos.Y");
+    STATIC_REQUIRE(llama::prettyRecordCoord<Particle>(llama::RecordCoord<0, 2>{}) == "Pos.Z");
+    STATIC_REQUIRE(llama::prettyRecordCoord<Particle>(llama::RecordCoord<1>{}) == "Mass");
+    STATIC_REQUIRE(llama::prettyRecordCoord<Particle>(llama::RecordCoord<2>{}) == "Vel");
+    STATIC_REQUIRE(llama::prettyRecordCoord<Particle>(llama::RecordCoord<2, 0>{}) == "Vel.X");
+    STATIC_REQUIRE(llama::prettyRecordCoord<Particle>(llama::RecordCoord<2, 1>{}) == "Vel.Y");
+    STATIC_REQUIRE(llama::prettyRecordCoord<Particle>(llama::RecordCoord<2, 2>{}) == "Vel.Z");
+    STATIC_REQUIRE(llama::prettyRecordCoord<Particle>(llama::RecordCoord<3>{}) == "Flags");
+    STATIC_REQUIRE(llama::prettyRecordCoord<Particle>(llama::RecordCoord<3, 0>{}) == "Flags[0]");
+    STATIC_REQUIRE(llama::prettyRecordCoord<Particle>(llama::RecordCoord<3, 1>{}) == "Flags[1]");
+    STATIC_REQUIRE(llama::prettyRecordCoord<Particle>(llama::RecordCoord<3, 2>{}) == "Flags[2]");
+    STATIC_REQUIRE(llama::prettyRecordCoord<Particle>(llama::RecordCoord<3, 3>{}) == "Flags[3]");
+
+    STATIC_REQUIRE(llama::prettyRecordCoord<Track>(llama::RecordCoord<2>{}) == "NumIALeft");
+    STATIC_REQUIRE(llama::prettyRecordCoord<Track>(llama::RecordCoord<2, 0>{}) == "NumIALeft[0]");
+    STATIC_REQUIRE(llama::prettyRecordCoord<Track>(llama::RecordCoord<2, 1>{}) == "NumIALeft[1]");
+    STATIC_REQUIRE(llama::prettyRecordCoord<Track>(llama::RecordCoord<2, 2>{}) == "NumIALeft[2]");
+
+    using Row = llama::Record<llama::Field<tag::A, double[3]>>;
+    using Matrix = llama::Record<llama::Field<tag::B, Row[3]>>;
+
+    STATIC_REQUIRE(llama::prettyRecordCoord<Matrix>(llama::RecordCoord<0>{}) == "B");
+    STATIC_REQUIRE(llama::prettyRecordCoord<Matrix>(llama::RecordCoord<0, 0>{}) == "B[0]");
+    STATIC_REQUIRE(llama::prettyRecordCoord<Matrix>(llama::RecordCoord<0, 1>{}) == "B[1]");
+    STATIC_REQUIRE(llama::prettyRecordCoord<Matrix>(llama::RecordCoord<0, 2>{}) == "B[2]");
+    STATIC_REQUIRE(llama::prettyRecordCoord<Matrix>(llama::RecordCoord<0, 0, 0>{}) == "B[0].A");
+    STATIC_REQUIRE(llama::prettyRecordCoord<Matrix>(llama::RecordCoord<0, 0, 0, 0>{}) == "B[0].A[0]");
+    STATIC_REQUIRE(llama::prettyRecordCoord<Matrix>(llama::RecordCoord<0, 0, 0, 1>{}) == "B[0].A[1]");
+    STATIC_REQUIRE(llama::prettyRecordCoord<Matrix>(llama::RecordCoord<0, 2, 0, 2>{}) == "B[2].A[2]");
 }
 
-TEST_CASE("recordCoordTags.picongpu")
+TEST_CASE("prettyRecordCoord.picongpu")
 {
-    CHECK(llama::recordCoordTags<picongpu::Frame>(llama::RecordCoord<0>{}) == "multiMask");
-    CHECK(llama::recordCoordTags<picongpu::Frame>(llama::RecordCoord<1>{}) == "localCellIdx");
+    CHECK(llama::prettyRecordCoord<picongpu::Frame>(llama::RecordCoord<0>{}) == "multiMask");
+    CHECK(llama::prettyRecordCoord<picongpu::Frame>(llama::RecordCoord<1>{}) == "localCellIdx");
 #if defined(__NVCOMPILER) || defined(_MSC_VER) || (defined(__clang__) && __clang_major__ < 12)
-    CHECK(llama::recordCoordTags<picongpu::Frame>(llama::RecordCoord<2>{}) == "position<position_pic,pmacc_isAlias>");
+    CHECK(
+        llama::prettyRecordCoord<picongpu::Frame>(llama::RecordCoord<2>{}) == "position<position_pic,pmacc_isAlias>");
 #else
-    CHECK(llama::recordCoordTags<picongpu::Frame>(llama::RecordCoord<2>{}) == "position<position_pic>");
+    CHECK(llama::prettyRecordCoord<picongpu::Frame>(llama::RecordCoord<2>{}) == "position<position_pic>");
 #endif
-    CHECK(llama::recordCoordTags<picongpu::Frame>(llama::RecordCoord<3>{}) == "momentum");
-    CHECK(llama::recordCoordTags<picongpu::Frame>(llama::RecordCoord<4>{}) == "weighting");
+    CHECK(llama::prettyRecordCoord<picongpu::Frame>(llama::RecordCoord<3>{}) == "momentum");
+    CHECK(llama::prettyRecordCoord<picongpu::Frame>(llama::RecordCoord<4>{}) == "weighting");
 }
 
 namespace
