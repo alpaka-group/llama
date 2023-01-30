@@ -49,6 +49,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - allow the `BitPackedInt*` mappings to omit the sign bit #675
 - added new mapping `BitPackedIntAoS` #678
 - added new mapping `BitPackedFloatAoS` #687
+- improved array handling of `recordCoordTags` #693
 
 ### Breaking changes
 
@@ -66,6 +67,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - replaced Boolean parameters of mappings by enums to increase readability #655
 - the `Trace` mapping has been renamed to `FieldAccessCount` #690
 - replaced `.zenodo.json` by `CITATION.cff` #696
+- renamed `recordCoordTags` into `prettyRecordCoord` #693
 
 ### Bug fixes and improvements
 - fixed various compilation flags #470
