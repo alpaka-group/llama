@@ -190,11 +190,11 @@ namespace llama::mapping
                 {
                     const size_type i = flatRecordCoord<RecordDim, decltype(rc)>;
                     if constexpr(MyCodeHandlesProxyReferences)
-                        std::cout << std::left << std::setw(columnWidth) << recordCoordTags<RecordDim>(rc) << ' '
+                        std::cout << std::left << std::setw(columnWidth) << prettyRecordCoord<RecordDim>(rc) << ' '
                                   << std::right << std::setw(columnWidth) << hits[i].reads << ' ' << std::right
                                   << std::setw(columnWidth) << hits[i].writes << '\n';
                     else
-                        std::cout << std::left << std::setw(columnWidth) << recordCoordTags<RecordDim>(rc) << ' '
+                        std::cout << std::left << std::setw(columnWidth) << prettyRecordCoord<RecordDim>(rc) << ' '
                                   << std::right << std::setw(columnWidth) << hits[i].memLocsComputed << '\n';
                 });
             std::cout << std::internal;
@@ -216,7 +216,7 @@ namespace llama::mapping
                 [&](auto rc)
                 {
                     const size_type i = flatRecordCoord<RecordDim, decltype(rc)>;
-                    constexpr auto fieldName = recordCoordTags<RecordDim>(rc);
+                    constexpr auto fieldName = prettyRecordCoord<RecordDim>(rc);
                     char fieldNameZT[fieldName.size() + 1]{}; // nvcc does not handle the %*.*s parameter correctly
                     llama::internal::constexprCopy(fieldName.begin(), fieldName.end(), fieldNameZT);
                     if constexpr(MyCodeHandlesProxyReferences)

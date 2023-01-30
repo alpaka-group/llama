@@ -383,4 +383,9 @@ TEST_CASE("dump.picongpu.frame_openPMD.25")
     auto mapping = Mapping{ArrayExtents{25}};
     dump(mapping);
 }
+
+TEST_CASE("dump.AdePT.track")
+{
+    dump(llama::mapping::AoS<llama::ArrayExtents<int, 8>, Track>{{}});
+}
 #endif

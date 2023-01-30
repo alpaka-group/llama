@@ -388,3 +388,45 @@ namespace picongpu
         llama::Field<totalCellIdx, pmacc::DataSpace<3>>>;
 } // namespace picongpu
 // NOLINTEND(readability-identifier-naming)
+
+// clang-format off
+struct RngState {};
+struct Energy {};
+struct NumIALeft {};
+struct InitialRange {};
+struct DynamicRangeFactor {};
+struct TlimitMin {};
+struct Pos {};
+struct Dir {};
+struct NavState {};
+// clang-format on
+
+struct RanluxppDouble
+{
+};
+
+namespace vecgeom
+{
+    using Precision = double;
+
+    template<typename T>
+    struct Vector3D
+    {
+    };
+
+    struct NavStateIndex
+    {
+    };
+} // namespace vecgeom
+
+// from AdePT:
+using Track = llama::Record<
+    llama::Field<RngState, RanluxppDouble>,
+    llama::Field<Energy, double>,
+    llama::Field<NumIALeft, double[3]>,
+    llama::Field<InitialRange, double>,
+    llama::Field<DynamicRangeFactor, double>,
+    llama::Field<TlimitMin, double>,
+    llama::Field<Pos, vecgeom::Vector3D<vecgeom::Precision>>,
+    llama::Field<Dir, vecgeom::Vector3D<vecgeom::Precision>>,
+    llama::Field<NavState, vecgeom::NavStateIndex>>;
