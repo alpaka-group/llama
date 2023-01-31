@@ -140,15 +140,15 @@ TEMPLATE_TEST_CASE("mapping.BitPackedFloatSoA", "", float, double)
     }
 }
 
-constexpr auto n = std::size_t{1000};
 TEMPLATE_TEST_CASE(
     "mapping.BitPackedFloatSoA.ReducedPrecisionComputation",
     "",
     (llama::mapping::
-         BitPackedFloatAoS<llama::ArrayExtents<std::size_t, n>, Vec3D, llama::Constant<8>, llama::Constant<23>>),
+         BitPackedFloatAoS<llama::ArrayExtents<std::size_t, 1000>, Vec3D, llama::Constant<8>, llama::Constant<23>>),
     (llama::mapping::
-         BitPackedFloatSoA<llama::ArrayExtents<std::size_t, n>, Vec3D, llama::Constant<8>, llama::Constant<23>>) )
+         BitPackedFloatSoA<llama::ArrayExtents<std::size_t, 1000>, Vec3D, llama::Constant<8>, llama::Constant<23>>) )
 {
+    constexpr auto n = std::size_t{1000};
     auto view = llama::allocView(llama::mapping::AoS<llama::ArrayExtents<std::size_t, n>, Vec3D>{{}});
     std::default_random_engine engine;
     std::uniform_real_distribution dist{0.0f, 1e20f};
@@ -183,6 +183,7 @@ TEMPLATE_TEST_CASE(
 
 TEST_CASE("mapping.BitPackedFloatAoS.blobs")
 {
+    constexpr auto n = std::size_t{1000};
     using Mapping = llama::mapping::
         BitPackedFloatAoS<llama::ArrayExtents<std::size_t, n>, Vec3D, llama::Constant<3>, llama::Constant<5>>;
     STATIC_REQUIRE(Mapping::blobCount == 1);
@@ -194,6 +195,7 @@ TEST_CASE("mapping.BitPackedFloatAoS.blobs")
 
 TEST_CASE("mapping.BitPackedFloatSoA.blobs")
 {
+    constexpr auto n = std::size_t{1000};
     using Mapping = llama::mapping::
         BitPackedFloatSoA<llama::ArrayExtents<std::size_t, n>, Vec3D, llama::Constant<3>, llama::Constant<5>>;
     STATIC_REQUIRE(Mapping::blobCount == 3);

@@ -3,40 +3,40 @@
 #include <atomic>
 #include <deque>
 
-// clang-format off
 namespace tag
 {
-    struct Value {};
+    struct Value
+    {
+    };
 } // namespace tag
 
-using RecordDim = llama::Record<
-    llama::Field<tag::Value, int>
->;
-// clang-format on
+using RecordDimJustInt = llama::Record<llama::Field<tag::Value, int>>;
 
 TEST_CASE("view.default-ctor")
 {
     using ArrayExtents = llama::ArrayExtentsDynamic<std::size_t, 2>;
-    [[maybe_unused]] const llama::View<llama::mapping::AlignedAoS<ArrayExtents, RecordDim>, std::byte*> view1{};
-    [[maybe_unused]] const llama::View<llama::mapping::PackedAoS<ArrayExtents, RecordDim>, std::byte*> view2{};
-    [[maybe_unused]] const llama::View<llama::mapping::AlignedSingleBlobSoA<ArrayExtents, RecordDim>, std::byte*>
-        view3{};
-    [[maybe_unused]] const llama::View<llama::mapping::PackedSingleBlobSoA<ArrayExtents, RecordDim>, std::byte*>
-        view4{};
-    [[maybe_unused]] const llama::View<llama::mapping::MultiBlobSoA<ArrayExtents, RecordDim>, std::byte*> view5{};
-    [[maybe_unused]] const llama::View<llama::mapping::One<ArrayExtents, RecordDim>, std::byte*> view6{};
+    [[maybe_unused]] const llama::View<llama::mapping::AlignedAoS<ArrayExtents, RecordDimJustInt>, std::byte*> view1{};
+    [[maybe_unused]] const llama::View<llama::mapping::PackedAoS<ArrayExtents, RecordDimJustInt>, std::byte*> view2{};
     [[maybe_unused]] const llama::
-        View<llama::mapping::tree::Mapping<ArrayExtents, RecordDim, llama::Tuple<>>, std::byte*>
+        View<llama::mapping::AlignedSingleBlobSoA<ArrayExtents, RecordDimJustInt>, std::byte*>
+            view3{};
+    [[maybe_unused]] const llama::View<llama::mapping::PackedSingleBlobSoA<ArrayExtents, RecordDimJustInt>, std::byte*>
+        view4{};
+    [[maybe_unused]] const llama::View<llama::mapping::MultiBlobSoA<ArrayExtents, RecordDimJustInt>, std::byte*>
+        view5{};
+    [[maybe_unused]] const llama::View<llama::mapping::One<ArrayExtents, RecordDimJustInt>, std::byte*> view6{};
+    [[maybe_unused]] const llama::
+        View<llama::mapping::tree::Mapping<ArrayExtents, RecordDimJustInt, llama::Tuple<>>, std::byte*>
             view7{};
 }
 //
 // TEST_CASE("view.trivial")
 //{
 //    using ArrayExtents = llama::ArrayExtents<std::size_t, 2, llama::dyn>;
-//    using Mapping = llama::mapping::AlignedAoS<ArrayExtents, RecordDim>;
+//    using Mapping = llama::mapping::AlignedAoS<ArrayExtents, RecordDimJustInt>;
 //    constexpr auto s = Mapping{{10}}.blobSize(0);
 //    using BlobType = decltype(llama::bloballoc::Stack<s>{}(std::integral_constant<std::size_t, 4>{}, 0));
-//    using View = llama::View<llama::mapping::AlignedAoS<ArrayExtents, RecordDim>, BlobType>;
+//    using View = llama::View<llama::mapping::AlignedAoS<ArrayExtents, RecordDimJustInt>, BlobType>;
 //    STATIC_REQUIRE(std::is_trivially_constructible_v<View>);
 //    STATIC_REQUIRE(std::is_trivial_v<View>);
 //    STATIC_REQUIRE(std::is_trivial_v<View>);
@@ -47,7 +47,7 @@ TEST_CASE("view.move")
     using ArrayExtents = llama::ArrayExtentsDynamic<std::size_t, 2>;
     constexpr ArrayExtents viewSize{16, 16};
 
-    using Mapping = llama::mapping::SoA<ArrayExtents, RecordDim>;
+    using Mapping = llama::mapping::SoA<ArrayExtents, RecordDimJustInt>;
     auto view1 = llama::allocView(Mapping(viewSize));
 
     decltype(view1) view2;
@@ -61,7 +61,7 @@ TEST_CASE("view.swap")
     using ArrayExtents = llama::ArrayExtentsDynamic<std::size_t, 2>;
     constexpr ArrayExtents viewSize{16, 16};
 
-    using Mapping = llama::mapping::SoA<ArrayExtents, RecordDim>;
+    using Mapping = llama::mapping::SoA<ArrayExtents, RecordDimJustInt>;
     auto view1 = llama::allocView(Mapping(viewSize));
     auto view2 = llama::allocView(Mapping(viewSize));
 
@@ -83,7 +83,7 @@ TEST_CASE("view.non-memory-owning")
         using ArrayExtents = llama::ArrayExtentsDynamic<std::size_t, 1>;
         const ArrayExtents extents{256};
 
-        using Mapping = llama::mapping::SoA<ArrayExtents, RecordDim>;
+        using Mapping = llama::mapping::SoA<ArrayExtents, RecordDimJustInt>;
         const Mapping mapping{extents};
 
         const auto blobSize = mapping.blobSize(0);
