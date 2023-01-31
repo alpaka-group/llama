@@ -6,7 +6,7 @@ var StructName_8hpp =
     [ "constexprSearch", "StructName_8hpp.html#a06b6530184968dbd1019a24aee8edd9e", null ],
     [ "intToStrSize", "StructName_8hpp.html#ad4195dfa3069a0e4cc1d15e13175cc88", null ],
     [ "isIdentChar", "StructName_8hpp.html#a7a180ada47fd3f35af9c404efbce16cf", null ],
-    [ "recordCoordTags", "StructName_8hpp.html#a3d23cdc7e16d96e5d627ef1b15e6c4af", null ],
+    [ "prettyRecordCoord", "StructName_8hpp.html#a9e34d4e183a7bcc5759082b3844c19ee", null ],
     [ "recordCoordTags", "StructName_8hpp.html#ad4229fbc3f0a63b19c56b256991a4762", null ],
     [ "resizeArray", "StructName_8hpp.html#a512bb7612671cad70ae1e21587c633a2", null ],
     [ "structName", "StructName_8hpp.html#a8def4cdbf850f818833a38d67e6ebf34", null ],

@@ -1,5 +1,14 @@
 var NAVTREEINDEX4 =
 {
+"structllama_1_1ProxyRefOpMixin.html#a9f835cd88e899ce34527bafba1751bb9":[2,0,1,20,1],
+"structllama_1_1ProxyRefOpMixin.html#aa5c01adb17955a5be25e835456d947fb":[2,0,1,20,9],
+"structllama_1_1ProxyRefOpMixin.html#aaf96151b0aface32e6510a9f15ee616c":[2,0,1,20,6],
+"structllama_1_1ProxyRefOpMixin.html#ac1a4bc2313d753d30a9560fe9364f959":[2,0,1,20,14],
+"structllama_1_1ProxyRefOpMixin.html#aea6caa1eeacdd3fab0a7d5d91b4364ac":[2,0,1,20,5],
+"structllama_1_1Record.html":[2,0,1,18],
+"structllama_1_1RecordCoord.html":[2,0,1,21],
+"structllama_1_1RecordCoord.html#a3710d7a4f643b8b004809005a7d81f44":[2,0,1,21,3],
+"structllama_1_1RecordCoord.html#a4520d6c79acf89f81c64c803a06450af":[2,0,1,21,1],
 "structllama_1_1RecordCoord.html#a685a368d5b00931fb77af19012b10b4b":[2,0,1,21,0],
 "structllama_1_1RecordCoord.html#a9eba3978f93a2195c99e8f459a291f9e":[2,0,1,21,2],
 "structllama_1_1RecordCoord_3_4.html":[2,0,1,22],
@@ -240,14 +249,5 @@ var NAVTREEINDEX4 =
 "structllama_1_1bloballoc_1_1UniquePtr.html#affa75475e5567690fee1a68fab39b5b7":[2,0,1,1,1,0],
 "structllama_1_1bloballoc_1_1Vector.html":[2,0,1,1,4],
 "structllama_1_1bloballoc_1_1Vector.html#a460676ac82586d1bef38037a1816464b":[2,0,1,1,4,0],
-"structllama_1_1internal_1_1Assign.html":[2,0,1,2,46],
-"structllama_1_1internal_1_1Assign.html#ae8e7737477254928607c54a1dbe94918":[2,0,1,2,46,0],
-"structllama_1_1internal_1_1BindMakeSizedSimd.html":[2,0,1,2,59],
-"structllama_1_1internal_1_1BindMakeSizedSimd.html#acca5c76c5268c0c3ec794a8afdc74417":[2,0,1,2,59,0],
-"structllama_1_1internal_1_1BoxedValue.html":[2,0,1,2,39],
-"structllama_1_1internal_1_1BoxedValue.html#a7a292b38343b52e1f26ced153584637f":[2,0,1,2,39,2],
-"structllama_1_1internal_1_1BoxedValue.html#a9221d8f114d4b7c993ebfa564f830920":[2,0,1,2,39,1],
-"structllama_1_1internal_1_1BoxedValue.html#ac6549d3a6ee2ef2af3238c711fadab58":[2,0,1,2,39,0],
-"structllama_1_1internal_1_1BoxedValue_3_01Constant_3_01V_01_4_00_01I_01_4.html":[2,0,1,2,40],
-"structllama_1_1internal_1_1BoxedValue_3_01Constant_3_01V_01_4_00_01I_01_4.html#a0508bb05e49ee91ad0f2e9dcc94600eb":[2,0,1,2,40,1]
+"structllama_1_1internal_1_1Assign.html":[2,0,1,2,46]
 };

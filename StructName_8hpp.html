@@ -91,6 +91,7 @@ $(document).ready(function(){initNavTree('StructName_8hpp.html',''); initResizab
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="Core_8hpp_source.html">Core.hpp</a>&quot;</code><br />
+<code>#include &lt;stdexcept&gt;</code><br />
 <code>#include &lt;string_view&gt;</code><br />
 </div><div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Include dependency graph for StructName.hpp:</div>
@@ -99,9 +100,10 @@ $(document).ready(function(){initNavTree('StructName_8hpp.html',''); initResizab
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="StructName_8hpp__incl.png" border="0" usemap="#a_2home_2runner_2work_2llama_2llama_2include_2llama_2StructName_8hpp" alt=""/></div>
 <map name="a_2home_2runner_2work_2llama_2llama_2include_2llama_2StructName_8hpp" id="a_2home_2runner_2work_2llama_2llama_2include_2llama_2StructName_8hpp">
-<area shape="rect" title=" " alt="" coords="383,5,647,47"/>
+<area shape="rect" title=" " alt="" coords="435,5,699,47"/>
 <area shape="rect" href="Core_8hpp.html" title=" " alt="" coords="419,95,499,121"/>
-<area shape="rect" title=" " alt="" coords="523,95,621,121"/>
+<area shape="rect" title=" " alt="" coords="523,95,610,121"/>
+<area shape="rect" title=" " alt="" coords="634,95,731,121"/>
 <area shape="rect" href="ArrayExtents_8hpp.html" title=" " alt="" coords="130,169,265,196"/>
 <area shape="rect" href="Meta_8hpp.html" title=" " alt="" coords="421,244,504,271"/>
 <area shape="rect" title=" " alt="" coords="254,244,346,271"/>
@@ -168,10 +170,9 @@ Functions</h2></td></tr>
 <tr class="separator:a8def4cdbf850f818833a38d67e6ebf34"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad4195dfa3069a0e4cc1d15e13175cc88"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#ad4195dfa3069a0e4cc1d15e13175cc88">llama::internal::intToStrSize</a> (std::size_t s)</td></tr>
 <tr class="separator:ad4195dfa3069a0e4cc1d15e13175cc88"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3d23cdc7e16d96e5d627ef1b15e6c4af"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , std::size_t... Coords&gt; </td></tr>
-<tr class="memitem:a3d23cdc7e16d96e5d627ef1b15e6c4af"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a3d23cdc7e16d96e5d627ef1b15e6c4af">llama::recordCoordTags</a> (RecordCoord&lt; Coords... &gt;={}) -&gt; std::string_view</td></tr>
-<tr class="memdesc:a3d23cdc7e16d96e5d627ef1b15e6c4af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the tags interspersed by '.' represented by the given record coord in the given record dimension.  <a href="namespacellama.html#a3d23cdc7e16d96e5d627ef1b15e6c4af">More...</a><br /></td></tr>
-<tr class="separator:a3d23cdc7e16d96e5d627ef1b15e6c4af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e34d4e183a7bcc5759082b3844c19ee"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , std::size_t... Coords&gt; </td></tr>
+<tr class="memitem:a9e34d4e183a7bcc5759082b3844c19ee"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a9e34d4e183a7bcc5759082b3844c19ee">llama::prettyRecordCoord</a> (RecordCoord&lt; Coords... &gt;={}) -&gt; std::string_view</td></tr>
+<tr class="separator:a9e34d4e183a7bcc5759082b3844c19ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad4229fbc3f0a63b19c56b256991a4762"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim &gt; </td></tr>
 <tr class="memitem:ad4229fbc3f0a63b19c56b256991a4762"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ad4229fbc3f0a63b19c56b256991a4762">llama::recordCoordTags</a> (RecordCoord&lt;&gt;) -&gt; std::string_view</td></tr>
 <tr class="separator:ad4229fbc3f0a63b19c56b256991a4762"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -197,7 +198,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="StructName_8hpp.html">StructName.hpp</a></li>
-    <li class="footer">Generated on Tue Jan 31 2023 11:24:22 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Jan 31 2023 15:39:35 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

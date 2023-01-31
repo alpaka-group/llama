@@ -410,10 +410,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a8def4cdbf850f818833a38d67e6ebf34"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a8def4cdbf850f818833a38d67e6ebf34"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a8def4cdbf850f818833a38d67e6ebf34">structName</a> (T={}) -&gt; std::string_view</td></tr>
 <tr class="separator:a8def4cdbf850f818833a38d67e6ebf34"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3d23cdc7e16d96e5d627ef1b15e6c4af"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , std::size_t... Coords&gt; </td></tr>
-<tr class="memitem:a3d23cdc7e16d96e5d627ef1b15e6c4af"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a3d23cdc7e16d96e5d627ef1b15e6c4af">recordCoordTags</a> (<a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coords... &gt;={}) -&gt; std::string_view</td></tr>
-<tr class="memdesc:a3d23cdc7e16d96e5d627ef1b15e6c4af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the tags interspersed by '.' represented by the given record coord in the given record dimension.  <a href="namespacellama.html#a3d23cdc7e16d96e5d627ef1b15e6c4af">More...</a><br /></td></tr>
-<tr class="separator:a3d23cdc7e16d96e5d627ef1b15e6c4af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e34d4e183a7bcc5759082b3844c19ee"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , std::size_t... Coords&gt; </td></tr>
+<tr class="memitem:a9e34d4e183a7bcc5759082b3844c19ee"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a9e34d4e183a7bcc5759082b3844c19ee">prettyRecordCoord</a> (<a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coords... &gt;={}) -&gt; std::string_view</td></tr>
+<tr class="separator:a9e34d4e183a7bcc5759082b3844c19ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad4229fbc3f0a63b19c56b256991a4762"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim &gt; </td></tr>
 <tr class="memitem:ad4229fbc3f0a63b19c56b256991a4762"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ad4229fbc3f0a63b19c56b256991a4762">recordCoordTags</a> (<a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt;&gt;) -&gt; std::string_view</td></tr>
 <tr class="separator:ad4229fbc3f0a63b19c56b256991a4762"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1699,7 +1698,7 @@ template&lt;typename T , std::size_t N&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00264">264</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00314">314</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
 
 </div>
 </div>
@@ -2418,7 +2417,7 @@ template&lt;typename T , std::size_t N&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00194">194</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00244">244</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
 
 </div>
 </div>
@@ -2750,7 +2749,7 @@ template&lt;typename T , std::size_t N&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00233">233</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00283">283</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
 
 </div>
 </div>
@@ -2780,7 +2779,7 @@ template&lt;typename T , std::size_t N&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00244">244</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00294">294</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
 
 </div>
 </div>
@@ -2816,6 +2815,38 @@ template&lt;typename... Elements&gt; </div>
 
 </div>
 </div>
+<a id="a9e34d4e183a7bcc5759082b3844c19ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9e34d4e183a7bcc5759082b3844c19ee">&#9670;&nbsp;</a></span>prettyRecordCoord()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename RecordDim , std::size_t... Coords&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto llama::prettyRecordCoord </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coords... &gt;&#160;</td>
+          <td class="paramname"> = <code>{}</code></td><td>)</td>
+          <td> -&gt; std::string_view
+    </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns a pretty representation of the record coordinate inside the given record dimension. Tags are interspersed by '.' and arrays are represented using subscript notation ("[123]"). </p>
+
+<p class="definition">Definition at line <a class="el" href="StructName_8hpp_source.html#l00369">369</a> of file <a class="el" href="StructName_8hpp_source.html">StructName.hpp</a>.</p>
+
+</div>
+</div>
 <a id="abab7973f7686f93f02ad33e4d0636a25"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abab7973f7686f93f02ad33e4d0636a25">&#9670;&nbsp;</a></span>product() <span class="overload">[1/2]</span></h2>
 
@@ -2843,7 +2874,7 @@ template&lt;typename T , std::size_t N&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00255">255</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00305">305</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
 
 </div>
 </div>
@@ -2915,7 +2946,7 @@ template&lt;typename T , std::size_t N&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00222">222</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00272">272</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
 
 </div>
 </div>
@@ -2956,45 +2987,12 @@ template&lt;typename T , std::size_t N&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00211">211</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a3d23cdc7e16d96e5d627ef1b15e6c4af"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3d23cdc7e16d96e5d627ef1b15e6c4af">&#9670;&nbsp;</a></span>recordCoordTags() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename RecordDim , std::size_t... Coords&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr auto llama::recordCoordTags </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coords... &gt;&#160;</td>
-          <td class="paramname"> = <code>{}</code></td><td>)</td>
-          <td> -&gt; std::string_view
-    </td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Returns the tags interspersed by '.' represented by the given record coord in the given record dimension. </p>
-
-<p class="definition">Definition at line <a class="el" href="StructName_8hpp_source.html#l00354">354</a> of file <a class="el" href="StructName_8hpp_source.html">StructName.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Array_8hpp_source.html#l00261">261</a> of file <a class="el" href="Array_8hpp_source.html">Array.hpp</a>.</p>
 
 </div>
 </div>
 <a id="ad4229fbc3f0a63b19c56b256991a4762"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad4229fbc3f0a63b19c56b256991a4762">&#9670;&nbsp;</a></span>recordCoordTags() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ad4229fbc3f0a63b19c56b256991a4762">&#9670;&nbsp;</a></span>recordCoordTags()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3020,7 +3018,7 @@ template&lt;typename RecordDim &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="StructName_8hpp_source.html#l00361">361</a> of file <a class="el" href="StructName_8hpp_source.html">StructName.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="StructName_8hpp_source.html#l00376">376</a> of file <a class="el" href="StructName_8hpp_source.html">StructName.hpp</a>.</p>
 
 </div>
 </div>
@@ -3256,7 +3254,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="StructName_8hpp_source.html#l00274">274</a> of file <a class="el" href="StructName_8hpp_source.html">StructName.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="StructName_8hpp_source.html#l00275">275</a> of file <a class="el" href="StructName_8hpp_source.html">StructName.hpp</a>.</p>
 
 </div>
 </div>
@@ -4508,7 +4506,7 @@ template&lt;typename T &gt; </div>
 <div class="line">        <span class="keywordflow">return</span> std::string_view{value.data(), value.size()};</div>
 <div class="line">    }()</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="StructName_8hpp_source.html#l00196">196</a> of file <a class="el" href="StructName_8hpp_source.html">StructName.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="StructName_8hpp_source.html#l00197">197</a> of file <a class="el" href="StructName_8hpp_source.html">StructName.hpp</a>.</p>
 
 </div>
 </div>
@@ -4723,7 +4721,7 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Tue Jan 31 2023 11:24:22 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Jan 31 2023 15:39:35 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
