@@ -373,6 +373,38 @@
 			            return nullptr;
 			        }
 
+			        LLAMA_FN_HOST_ACC_INLINE constexpr auto front() -> T&
+			        {
+			            outOfRange();
+			        }
+
+			        LLAMA_FN_HOST_ACC_INLINE constexpr auto front() const -> const T&
+			        {
+			            outOfRange();
+			        }
+
+			        LLAMA_FN_HOST_ACC_INLINE constexpr auto back() -> T&
+			        {
+			            outOfRange();
+			        }
+
+			        LLAMA_FN_HOST_ACC_INLINE constexpr auto back() const -> const T&
+			        {
+			            outOfRange();
+			        }
+
+			        template<typename IndexType>
+			        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator[](IndexType&&) -> T&
+			        {
+			            outOfRange();
+			        }
+
+			        template<typename IndexType>
+			        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator[](IndexType&&) const -> const T&
+			        {
+			            outOfRange();
+			        }
+
 			        LLAMA_FN_HOST_ACC_INLINE constexpr auto data() -> T*
 			        {
 			            return nullptr;
@@ -396,6 +428,24 @@
 			        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator+(const Array&, const Array&) -> Array
 			        {
 			            return {};
+			        }
+
+			        template<std::size_t I>
+			        LLAMA_FN_HOST_ACC_INLINE constexpr auto get() -> T&
+			        {
+			            outOfRange();
+			        }
+
+			        template<std::size_t I>
+			        LLAMA_FN_HOST_ACC_INLINE constexpr auto get() const -> const T&
+			        {
+			            outOfRange();
+			        }
+
+			    private:
+			        [[noreturn]] void outOfRange() const
+			        {
+			            throw std::out_of_range{"Array has zero length"};
 			        }
 			    };
 
@@ -2142,6 +2192,7 @@
 		// #pragma once
 		// #include "Core.hpp"    // amalgamate: file already expanded
 
+		#include <stdexcept>
 		#include <string_view>
 
 		namespace llama
@@ -2440,59 +2491,73 @@
 		                mp_for_each<Tags>(
 		                    [&](auto tag)
 		                    {
-		                        if(s != 0)
-		                            s++; // for the '.'s
 		                        using Tag = decltype(tag);
 		                        if constexpr(isRecordCoord<Tag>)
-		                            s += intToStrSize(s);
+		                        {
+		                            // handle array indices
+		                            static_assert(Tag::size == 1);
+		                            s += 2; // for the '[' and ']'
+		                            s += intToStrSize(Tag::front);
+		                        }
 		                        else
+		                        {
+		                            if(s != 0)
+		                                s++; // for the '.'s
 		                            s += structName(tag).size();
+		                        }
 		                    });
 		                return s;
 		            }();
 		            llama::Array<char, size> a{};
-		            auto w = a.begin();
+		            auto it = a.begin();
 
 		            mp_for_each<Tags>(
 		                [&](auto tag) constexpr
 		                {
-		                    if(w != a.begin())
-		                    {
-		                        *w = '.';
-		                        w++;
-		                    }
 		                    using Tag = decltype(tag);
 		                    if constexpr(isRecordCoord<Tag>)
 		                    {
-		                        // handle array indices
-		                        static_assert(Tag::size == 1);
-		                        // convert to string
 		                        auto n = Tag::front;
-		                        w += intToStrSize(n) - 1;
+		                        *it = '[';
+		                        it++;
+		                        it += intToStrSize(n);
+		                        auto it2 = it; // take copy because we write number backward
 		                        do
 		                        {
-		                            *w = '0' + n % 10;
-		                            w--;
+		                            it2--;
+		                            *it2 = '0' + n % 10;
 		                            n /= 10;
 		                        } while(n != 0);
+		                        *it = ']';
+		                        it++;
 		                    }
 		                    else
 		                    {
+		                        if(it != a.begin())
+		                        {
+		                            *it = '.';
+		                            it++;
+		                        }
 		                        constexpr auto sn = structName(tag);
-		                        constexprCopy(sn.begin(), sn.end(), w);
-		                        w += sn.size();
+		                        constexprCopy(sn.begin(), sn.end(), it);
+		                        it += sn.size();
 		                    }
 		                });
+
+		            if(!a.empty() && a.back() == 0)
+		                throw std::logic_error{"Implementation error: Array should have been completely overwritten."};
+
 		            return a;
 		        }();
 		    } // namespace internal
 
-		    /// Returns the tags interspersed by '.' represented by the given record coord in the given record dimension.
+		    /// Returns a pretty representation of the record coordinate inside the given record dimension. Tags are
+		    /// interspersed by '.' and arrays are represented using subscript notation ("[123]").
 		    template<typename RecordDim, std::size_t... Coords>
-		    constexpr auto recordCoordTags(RecordCoord<Coords...> = {}) -> std::string_view
+		    constexpr auto prettyRecordCoord(RecordCoord<Coords...> = {}) -> std::string_view
 		    {
 		        constexpr auto& value = internal::recordCoordTagsStorage<RecordDim, Coords...>;
-		        return std::string_view{&value[0], value.size()};
+		        return std::string_view{value.data(), value.size()};
 		    }
 
 		    template<typename RecordDim>
@@ -6781,7 +6846,7 @@ namespace llama
 // #include "View.hpp"    // amalgamate: file already expanded
 
 // #include <algorithm>    // amalgamate: file already included
-#include <stdexcept>
+// #include <stdexcept>    // amalgamate: file already included
 // #include <string>    // amalgamate: file already included
 
 namespace llama
@@ -7394,7 +7459,7 @@ namespace llama
 	            using RecordDim = typename Mapping::RecordDim;
 
 	            auto emitInfo = [&](auto nrAndOffset, std::size_t size) {
-	                infos.push_back({ai, internal::toVec(rc), recordCoordTags<RecordDim>(rc), nrAndOffset, size});
+	                infos.push_back({ai, internal::toVec(rc), prettyRecordCoord<RecordDim>(rc), nrAndOffset, size});
 	            };
 
 	            using Type = GetType<RecordDim, decltype(rc)>;
@@ -7483,7 +7548,7 @@ namespace llama
 	                            infos.push_back(
 	                                {ai,
 	                                 internal::toVec(rc),
-	                                 recordCoordTags<RecordDim>(rc),
+	                                 prettyRecordCoord<RecordDim>(rc),
 	                                 {static_cast<std::size_t>(nr), static_cast<std::size_t>(off)},
 	                                 sizeof(Type)});
 	                        }
@@ -7736,7 +7801,7 @@ namespace llama
 	    background-color: #{:X};
 	}}
 	)",
-	                    internal::cssClass(std::string{recordCoordTags<RecordDim>(rc)}),
+	                    internal::cssClass(std::string{prettyRecordCoord<RecordDim>(rc)}),
 	                    byteSizeInPixel * size,
 	                    internal::color(internal::toVec(rc)));
 	            });
@@ -9535,11 +9600,11 @@ namespace llama
 	                {
 	                    const size_type i = flatRecordCoord<RecordDim, decltype(rc)>;
 	                    if constexpr(MyCodeHandlesProxyReferences)
-	                        std::cout << std::left << std::setw(columnWidth) << recordCoordTags<RecordDim>(rc) << ' '
+	                        std::cout << std::left << std::setw(columnWidth) << prettyRecordCoord<RecordDim>(rc) << ' '
 	                                  << std::right << std::setw(columnWidth) << hits[i].reads << ' ' << std::right
 	                                  << std::setw(columnWidth) << hits[i].writes << '\n';
 	                    else
-	                        std::cout << std::left << std::setw(columnWidth) << recordCoordTags<RecordDim>(rc) << ' '
+	                        std::cout << std::left << std::setw(columnWidth) << prettyRecordCoord<RecordDim>(rc) << ' '
 	                                  << std::right << std::setw(columnWidth) << hits[i].memLocsComputed << '\n';
 	                });
 	            std::cout << std::internal;
@@ -9561,7 +9626,7 @@ namespace llama
 	                [&](auto rc)
 	                {
 	                    const size_type i = flatRecordCoord<RecordDim, decltype(rc)>;
-	                    constexpr auto fieldName = recordCoordTags<RecordDim>(rc);
+	                    constexpr auto fieldName = prettyRecordCoord<RecordDim>(rc);
 	                    char fieldNameZT[fieldName.size() + 1]{}; // nvcc does not handle the %*.*s parameter correctly
 	                    llama::internal::constexprCopy(fieldName.begin(), fieldName.end(), fieldNameZT);
 	                    if constexpr(MyCodeHandlesProxyReferences)
