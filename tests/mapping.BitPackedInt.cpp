@@ -122,13 +122,13 @@ TEMPLATE_TEST_CASE(
     }
 }
 
-constexpr auto n = 1000;
 TEMPLATE_TEST_CASE(
     "mapping.BitPackedInt.SInts.Roundtrip",
     "",
-    (llama::mapping::BitPackedIntSoA<llama::ArrayExtents<std::size_t, n>, Vec3I, llama::Constant<12>>),
-    (llama::mapping::BitPackedIntAoS<llama::ArrayExtents<std::size_t, n>, Vec3I, llama::Constant<12>>) )
+    (llama::mapping::BitPackedIntSoA<llama::ArrayExtents<std::size_t, 1000>, Vec3I, llama::Constant<12>>),
+    (llama::mapping::BitPackedIntAoS<llama::ArrayExtents<std::size_t, 1000>, Vec3I, llama::Constant<12>>) )
 {
+    constexpr auto n = 1000;
     auto view = llama::allocView(llama::mapping::AoS<llama::ArrayExtents<std::size_t, n>, Vec3I>{});
     std::default_random_engine engine;
     std::uniform_int_distribution dist{-2000, 2000}; // fits into 12 bits
