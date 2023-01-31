@@ -7246,7 +7246,7 @@ namespace llama
 // NOLINTNEXTLINE(modernize-macro-to-enum)
 #define LLAMA_VERSION_MAJOR 0
 // NOLINTNEXTLINE(modernize-macro-to-enum)
-#define LLAMA_VERSION_MINOR 4
+#define LLAMA_VERSION_MINOR 5
 // NOLINTNEXTLINE(modernize-macro-to-enum)
 #define LLAMA_VERSION_PATCH 0
 
