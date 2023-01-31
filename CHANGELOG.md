@@ -79,7 +79,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - various minor CI fixes and updates: #478, #479, #483, #485, #491, #493, #494, #505, #512, #515, #519, #533, #538, #546, #556, #558, #562, #569, #571, #586, #600, #601, #602, #619, #620, #621, #622, #645, #646, #686, #688
 - various small code fixes: #486, #489, #495, #500, #502, #507, #527, #560, #575, #584, #597, #598, #603, #617, #631, #632, #641, #649, #658, #659, #673
 - various documentation fixes: #496, #514, #543, #563, #588, #624, #644, #649, #689
-- various unit test improvements: #531, #534, #537, #568, #609, #613, #661
+- various unit test improvements: #531, #534, #537, #568, #609, #613, #661, #698
 - fixed empty base optimization for MSVC: #499
 - `llama::structName<T>()` and `llama::recordCoordTags<T>` are now `constexpr` #521
 - cmake variables from Catch are now hidden by default in cmake guis #548
