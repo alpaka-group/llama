@@ -65,6 +65,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - the `SoA` mapping now aligns subarrays by default if a single blob is used #648
 - replaced Boolean parameters of mappings by enums to increase readability #655
 - the `Trace` mapping has been renamed to `FieldAccessCount` #690
+- replaced `.zenodo.json` by `CITATION.cff` #696
 
 ### Bug fixes and improvements
 - fixed various compilation flags #470
