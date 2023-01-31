@@ -20,8 +20,8 @@ authors:
   given-names: "Alexander"
   affiliation: "Helmholtz-Zentrum Dresden-Rossendorf, TU Dresden"
   orcid: "https://orcid.org/0000-0002-6702-2015"
-version: '0.4'
-date-released: '2022-01-25'
+version: '0.5'
+date-released: '2023-01-31'
 repository-code: 'https://github.com/alpaka-group/llama'
 abstract: >-
   LLAMA is a cross-platform C++17/C++20 header-only template
