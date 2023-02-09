@@ -762,4 +762,25 @@ namespace llama
             }
         };
     } // namespace internal
+
+    struct PrettySize
+    {
+        double size;
+        const char* unit;
+    };
+
+    /// Repeatedly divides the given size (in bytes) until it fits below 1000. Returns the new size and a string
+    /// literal with the corresponding unit.
+    inline auto prettySize(double size) -> PrettySize
+    {
+        static const char* unit[] = {"B ", "KB", "MB", "GB", "TB", "PB", "EB"};
+        unsigned unitIndex = 0;
+        while(size > 1000.0)
+        {
+            size /= 1000.0;
+            unitIndex++;
+        }
+        assert(unitIndex < std::size(unit));
+        return {size, unit[unitIndex]};
+    }
 } // namespace llama

@@ -86,7 +86,56 @@ namespace llama::mapping
         using RecordDim = typename Mapping::RecordDim;
         using CountType = TCountType;
         inline static constexpr bool myCodeHandlesProxyReferences = MyCodeHandlesProxyReferences;
-        using FieldHitsArray = Array<AccessCounts<CountType>, flatFieldCount<RecordDim>>;
+
+        struct FieldHitsArray : Array<AccessCounts<CountType>, flatFieldCount<RecordDim>>
+        {
+            LLAMA_FN_HOST_ACC_INLINE auto total() const -> AccessCounts<CountType>
+            {
+                AccessCounts<CountType> total{};
+                for(const auto& ac : *this)
+                {
+                    if constexpr(MyCodeHandlesProxyReferences)
+                    {
+                        total.reads += ac.reads;
+                        total.writes += ac.writes;
+                    }
+                    else
+                        total.memLocsComputed += ac.memLocsComputed;
+                }
+                return total;
+            }
+
+            struct TotalBytes
+            {
+                CountType totalRead;
+                CountType totalWritten;
+            };
+
+            /// When MyCodeHandlesProxyReferences is true, return a pair of the total read and written bytes. If false,
+            /// returns the total bytes of accessed data as a single value.
+            LLAMA_FN_HOST_ACC_INLINE auto totalBytes() const
+            {
+                CountType r = 0;
+                CountType w = 0; // NOLINT(misc-const-correctness)
+                forEachLeafCoord<RecordDim>(
+                    [&](auto rc)
+                    {
+                        const size_type i = flatRecordCoord<RecordDim, decltype(rc)>;
+                        const auto fieldSize = sizeof(GetType<RecordDim, decltype(rc)>);
+                        if constexpr(MyCodeHandlesProxyReferences)
+                        {
+                            r += (*this)[i].reads * fieldSize;
+                            w += (*this)[i].writes * fieldSize;
+                        }
+                        else
+                            r += (*this)[i].memLocsComputed * fieldSize;
+                    });
+                if constexpr(MyCodeHandlesProxyReferences)
+                    return TotalBytes{r, w};
+                else
+                    return r;
+            }
+        };
 
         inline static constexpr auto blobCount = Mapping::blobCount + 1;
 
@@ -175,28 +224,49 @@ namespace llama::mapping
 
     private:
         static constexpr auto columnWidth = 10;
+        static constexpr auto sizeColumnWidth = 5;
 
         void printFieldHitsHost(const FieldHitsArray& hits) const
         {
             if constexpr(MyCodeHandlesProxyReferences)
                 std::cout << std::left << std::setw(columnWidth) << "Field" << ' ' << std::right
-                          << std::setw(columnWidth) << "Reads" << ' ' << std::right << std::setw(columnWidth)
-                          << "Writes" << '\n';
+                          << std::setw(sizeColumnWidth) << "Size" << std::right << std::setw(columnWidth) << "Reads"
+                          << ' ' << std::right << std::setw(columnWidth) << "Writes" << '\n';
             else
                 std::cout << std::left << std::setw(columnWidth) << "Field" << ' ' << std::right
-                          << std::setw(columnWidth) << "Mlocs comp" << '\n';
+                          << std::setw(sizeColumnWidth) << "Size" << std::right << std::setw(columnWidth)
+                          << "Mlocs cmp" << '\n';
             forEachLeafCoord<RecordDim>(
                 [&](auto rc)
                 {
                     const size_type i = flatRecordCoord<RecordDim, decltype(rc)>;
+                    const auto fieldSize = sizeof(GetType<RecordDim, decltype(rc)>);
                     if constexpr(MyCodeHandlesProxyReferences)
                         std::cout << std::left << std::setw(columnWidth) << prettyRecordCoord<RecordDim>(rc) << ' '
-                                  << std::right << std::setw(columnWidth) << hits[i].reads << ' ' << std::right
+                                  << std::right << std::setw(sizeColumnWidth) << fieldSize << std::right
+                                  << std::setw(columnWidth) << hits[i].reads << ' ' << std::right
                                   << std::setw(columnWidth) << hits[i].writes << '\n';
                     else
                         std::cout << std::left << std::setw(columnWidth) << prettyRecordCoord<RecordDim>(rc) << ' '
-                                  << std::right << std::setw(columnWidth) << hits[i].memLocsComputed << '\n';
+                                  << std::right << std::setw(sizeColumnWidth) << fieldSize << std::right
+                                  << std::setw(columnWidth) << hits[i].memLocsComputed << '\n';
                 });
+            const auto total = hits.totalBytes();
+            if constexpr(MyCodeHandlesProxyReferences)
+            {
+                const auto [rsize, runit] = prettySize(total.totalRead);
+                const auto [wsize, wunit] = prettySize(total.totalWritten);
+                std::cout << std::left << std::setw(columnWidth) << "Total" << ' ' << std::right
+                          << std::setw(sizeColumnWidth) << ' ' << std::right << std::setw(columnWidth) << rsize
+                          << runit << ' ' << std::right << std::setw(columnWidth - 2) << wsize << wunit << '\n';
+            }
+            else
+            {
+                const auto [size, unit] = prettySize(total);
+                std::cout << std::left << std::setw(columnWidth) << "Total" << ' ' << std::right
+                          << std::setw(sizeColumnWidth) << ' ' << std::right << std::setw(columnWidth) << size << unit
+                          << '\n';
+            }
             std::cout << std::internal;
         }
 
@@ -205,17 +275,27 @@ namespace llama::mapping
             if constexpr(MyCodeHandlesProxyReferences)
             {
                 // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg,hicpp-vararg)
-                printf("%*s %*s %*s\n", columnWidth, "Field", columnWidth, "Reads", columnWidth, "Writes");
+                printf(
+                    "%*s %*s %*s %*s\n",
+                    columnWidth,
+                    "Field",
+                    sizeColumnWidth,
+                    "Size",
+                    columnWidth,
+                    "Reads",
+                    columnWidth,
+                    "Writes");
             }
             else
             {
                 // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg,hicpp-vararg)
-                printf("%*s %*s\n", columnWidth, "Field", columnWidth, "Mlocs comp");
+                printf("%*s %*s %*s\n", columnWidth, "Field", sizeColumnWidth, "Size", columnWidth, "Mlocs cmp");
             }
             forEachLeafCoord<RecordDim>(
                 [&](auto rc)
                 {
                     const size_type i = flatRecordCoord<RecordDim, decltype(rc)>;
+                    const auto fieldSize = sizeof(GetType<RecordDim, decltype(rc)>);
                     constexpr auto fieldName = prettyRecordCoord<RecordDim>(rc);
                     char fieldNameZT[fieldName.size() + 1]{}; // nvcc does not handle the %*.*s parameter correctly
                     llama::internal::constexprCopy(fieldName.begin(), fieldName.end(), fieldNameZT);
@@ -223,9 +303,11 @@ namespace llama::mapping
                     {
                         // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg,hicpp-vararg)
                         printf(
-                            "%*.s %*lu %*lu\n",
+                            "%*.s %*lu %*lu %*lu\n",
                             columnWidth,
                             fieldNameZT,
+                            sizeColumnWidth,
+                            fieldSize,
                             columnWidth,
                             static_cast<unsigned long>(hits[i].reads),
                             columnWidth,
@@ -235,13 +317,41 @@ namespace llama::mapping
                     {
                         // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg,hicpp-vararg)
                         printf(
-                            "%*.s %*lu\n",
+                            "%*.s %*lu %*lu\n",
                             columnWidth,
                             fieldNameZT,
+                            sizeColumnWidth,
+                            fieldSize,
                             columnWidth,
                             static_cast<unsigned long>(hits[i].memLocsComputed));
                     }
                 });
+
+            const auto total = hits.totalBytes();
+            if constexpr(MyCodeHandlesProxyReferences)
+            {
+                const auto [rsize, runit] = prettySize(total.totalRead);
+                const auto [wsize, wunit] = prettySize(total.totalWritten);
+                // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg,hicpp-vararg)
+                printf(
+                    "%*s %*s %*f%s %*f%s\n",
+                    columnWidth,
+                    "Total",
+                    sizeColumnWidth,
+                    "",
+                    columnWidth,
+                    rsize,
+                    runit,
+                    columnWidth - 2,
+                    wsize,
+                    wunit);
+            }
+            else
+            {
+                const auto [size, unit] = prettySize(total);
+                // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg,hicpp-vararg)
+                printf("%*s %*s %*f%s\n", columnWidth, "Total", sizeColumnWidth, "", columnWidth, size, unit);
+            }
         }
 
         LLAMA_FN_HOST_ACC_INLINE auto inner() const -> const Mapping&

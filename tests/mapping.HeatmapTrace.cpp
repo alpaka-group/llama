@@ -182,15 +182,19 @@ TEMPLATE_LIST_TEST_CASE("FieldAccessCount.nbody.mem_locs_computed", "", SizeType
         std::streambuf* old = std::cout.rdbuf(buffer.rdbuf());
         particles.mapping().printFieldHits(particles.storageBlobs);
         std::cout.rdbuf(old);
-        CHECK(buffer.str() == R"(Field      Mlocs comp
-Pos.X           10400
-Pos.Y           10400
-Pos.Z           10400
-Vel.X             400
-Vel.Y             400
-Vel.Z             400
-Mass            10300
+        CHECK(buffer.str() == R"(Field       Size Mlocs cmp
+Pos.X          8     10400
+Pos.Y          8     10400
+Pos.Z          8     10400
+Vel.X          8       400
+Vel.Y          8       400
+Vel.Z          8       400
+Mass           4     10300
+Total                300.4KB
 )");
+
+        CHECK(hits.total().memLocsComputed == 42700);
+        CHECK(hits.totalBytes() == 300400);
     };
     run(llama::mapping::AlignedAoS<llama::ArrayExtents<std::size_t, n>, ParticleHeatmap>{});
     run(llama::mapping::PackedSingleBlobSoA<llama::ArrayExtents<std::size_t, n>, ParticleHeatmap>{});
@@ -224,15 +228,22 @@ TEMPLATE_LIST_TEST_CASE("FieldAccessCount.nbody.reads_writes", "", SizeTypes)
         std::streambuf* old = std::cout.rdbuf(buffer.rdbuf());
         particles.mapping().printFieldHits(particles.storageBlobs);
         std::cout.rdbuf(old);
-        CHECK(buffer.str() == R"(Field           Reads     Writes
-Pos.X           10200        300
-Pos.Y           10200        300
-Pos.Z           10200        300
-Vel.X             200        200
-Vel.Y             200        200
-Vel.Z             200        200
-Mass            10100        200
+        CHECK(buffer.str() == R"(Field       Size     Reads     Writes
+Pos.X          8     10200        300
+Pos.Y          8     10200        300
+Pos.Z          8     10200        300
+Vel.X          8       200        200
+Vel.Y          8       200        200
+Vel.Z          8       200        200
+Mass           4     10100        200
+Total                  290KB     12.8KB
 )");
+
+        CHECK(hits.total().reads == 41300);
+        CHECK(hits.total().writes == 1700);
+        const auto [totalRead, totalWritten] = hits.totalBytes();
+        CHECK(totalRead == 290000);
+        CHECK(totalWritten == 12800);
     };
     run(llama::mapping::AlignedAoS<llama::ArrayExtents<std::size_t, n>, ParticleHeatmap>{});
     run(llama::mapping::PackedSingleBlobSoA<llama::ArrayExtents<std::size_t, n>, ParticleHeatmap>{});
