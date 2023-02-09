@@ -1298,21 +1298,38 @@ namespace manualAoSSIMD
         xsimd::make_batch_constant<xsimd::batch<int, typename Simd::arch_type>, GenStrides>());
 
     template<typename Simd>
+    auto gather(const typename Simd::value_type* p) -> Simd
+    {
+        const auto strides = particleStrides<Simd>;
+        return Simd::gather(p, strides);
+        // Simd simd;
+        // for(auto i = 0; i < Simd::size; i++)
+        //     reinterpret_cast<typename Simd::value_type*>(&simd)[i] = p[i * (sizeof(Particle) / sizeof(FP))];
+        // return simd;
+    }
+
+    template<typename Simd>
+    void scatter(Simd simd, typename Simd::value_type* p)
+    {
+        const auto strides = particleStrides<Simd>;
+        simd.scatter(p, strides);
+        // for(auto i = 0; i < Simd::size; i++)
+        //     p[i * (sizeof(Particle) / sizeof(FP))] = simd.get(i);
+    }
+
+    template<typename Simd>
     void update(Particle* particles, int threads)
     {
-        constexpr auto lanes = Simd::size;
-        const auto strides = particleStrides<Simd>;
-
 #    pragma omp parallel for schedule(static) num_threads(threads)
-        for(std::ptrdiff_t i = 0; i < problemSize; i += lanes)
+        for(std::ptrdiff_t i = 0; i < problemSize; i += Simd::size)
         {
             auto& pi = particles[i];
-            const Simd piposx = Simd::gather(&pi.pos.x, strides);
-            const Simd piposy = Simd::gather(&pi.pos.y, strides);
-            const Simd piposz = Simd::gather(&pi.pos.z, strides);
-            Simd pivelx = Simd::gather(&pi.vel.x, strides);
-            Simd pively = Simd::gather(&pi.vel.y, strides);
-            Simd pivelz = Simd::gather(&pi.vel.z, strides);
+            const Simd piposx = gather<Simd>(&pi.pos.x);
+            const Simd piposy = gather<Simd>(&pi.pos.y);
+            const Simd piposz = gather<Simd>(&pi.pos.z);
+            Simd pivelx = gather<Simd>(&pi.vel.x);
+            Simd pively = gather<Simd>(&pi.vel.y);
+            Simd pivelz = gather<Simd>(&pi.vel.z);
 
             for(std::size_t j = 0; j < problemSize; j++)
             {
@@ -1325,29 +1342,22 @@ namespace manualAoSSIMD
                 pPInteraction(piposx, piposy, piposz, pivelx, pively, pivelz, pjposx, pjposy, pjposz, pjmass);
             }
 
-            // scatter
-            pivelx.scatter(&pi.vel.x, strides);
-            pively.scatter(&pi.vel.y, strides);
-            pivelz.scatter(&pi.vel.z, strides);
+            scatter(pivelx, &pi.vel.x);
+            scatter(pively, &pi.vel.y);
+            scatter(pivelz, &pi.vel.z);
         }
     }
 
     template<typename Simd>
     void move(Particle* particles, int threads)
     {
-        constexpr auto lanes = Simd::size;
-        const auto strides = particleStrides<Simd>;
-
 #    pragma omp parallel for schedule(static) num_threads(threads)
-        for(std::ptrdiff_t i = 0; i < problemSize; i += lanes)
+        for(std::ptrdiff_t i = 0; i < problemSize; i += Simd::size)
         {
             auto& pi = particles[i];
-            (Simd::gather(&pi.pos.x, strides) + Simd::gather(&pi.vel.x, strides) * timestep)
-                .scatter(&pi.pos.x, strides);
-            (Simd::gather(&pi.pos.y, strides) + Simd::gather(&pi.vel.y, strides) * timestep)
-                .scatter(&pi.pos.y, strides);
-            (Simd::gather(&pi.pos.z, strides) + Simd::gather(&pi.vel.z, strides) * timestep)
-                .scatter(&pi.pos.z, strides);
+            scatter(gather<Simd>(&pi.pos.x) + gather<Simd>(&pi.vel.x) * timestep, &pi.pos.x);
+            scatter(gather<Simd>(&pi.pos.y) + gather<Simd>(&pi.vel.y) * timestep, &pi.pos.y);
+            scatter(gather<Simd>(&pi.pos.z) + gather<Simd>(&pi.vel.z) * timestep, &pi.pos.z);
         }
     }
 
