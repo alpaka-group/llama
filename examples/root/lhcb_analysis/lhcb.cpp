@@ -1,6 +1,14 @@
 // Copyright CERN; jblomer@cern.ch
 // Modified by: Bernhard Manfred Gruber
 
+// This example is based on an example provided by the LHCB experiment at CERN. The analysis searches for a difference
+// between the behavior of matter and anti-matter. The project analyses B-meson decays to three charged particles.
+// A project notebook is provided by LHCB here: http://opendata.cern.ch/record/4902 and on GitHub:
+// https://github.com/lhcb/opendata-project.
+
+// A walkthrough of the concrete analysis is here:
+// https://github.com/lhcb/opendata-project/blob/master/LHCb_Open_Data_Project.ipynb
+
 #include <ROOT/RNTuple.hxx>
 #include <TApplication.h>
 #include <TCanvas.h>
