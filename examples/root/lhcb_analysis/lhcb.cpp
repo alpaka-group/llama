@@ -255,6 +255,7 @@ namespace
     using SoAMB = llama::mapping::MultiBlobSoA<llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>, RecordDim>;
 
     using AoSHeatmap = llama::mapping::Heatmap<AoS>;
+    using AoSFieldAccessCount = llama::mapping::FieldAccessCount<AoS>;
 
     using boost::mp11::mp_list;
 
@@ -397,6 +398,12 @@ namespace
     }
 
     template<typename View>
+    void clearFieldAccessCounts(View& v)
+    {
+        v.mapping().fieldHits(v.storageBlobs) = {};
+    }
+
+    template<typename View>
     auto sortView(View& v)
     {
         auto begin = std::chrono::steady_clock::now();
@@ -428,6 +435,11 @@ namespace
         saveLayout<Mapping>(layoutsFolder + "/" + mappingName + ".svg");
 
         auto [view, conversionTime] = convertRNTupleToLLAMA<Mapping>(inputFile);
+        if constexpr(llama::mapping::isFieldAccessCount<Mapping>)
+        {
+            view.mapping().printFieldHits(view.storageBlobs);
+            clearFieldAccessCounts(view);
+        }
         if constexpr(llama::mapping::isHeatmap<Mapping>)
         {
             saveHeatmap(view, heatmapFolder + "/" + mappingName + "_conversion.bin");
@@ -447,6 +459,8 @@ namespace
                 hist = h;
             totalAnalysisTime += analysisTime;
         }
+        if constexpr(llama::mapping::isFieldAccessCount<Mapping>)
+            view.mapping().printFieldHits(view.storageBlobs);
         if constexpr(llama::mapping::isHeatmap<Mapping>)
             saveHeatmap(view, heatmapFolder + "/" + mappingName + "_analysis.bin");
         save(hist, mappingName);
@@ -495,6 +509,7 @@ auto main(int argc, const char* argv[]) -> int
 
     testAnalysis<AoS>(inputFile, "AoS");
     // testAnalysis<AoS, true>(inputFile, "AoS");
+    testAnalysis<AoSFieldAccessCount>(inputFile, "AoS FAC");
     testAnalysis<AoSHeatmap>(inputFile, "AoS Heatmap");
     testAnalysis<AoSoA8>(inputFile, "AoSoA8");
     testAnalysis<AoSoA16>(inputFile, "AoSoA16");
