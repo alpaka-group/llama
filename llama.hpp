@@ -8605,6 +8605,8 @@ namespace llama
 	            = std::conditional_t<mp_contains<FlatRecordDim<RecordDim>, double>::value, std::uint64_t, std::uint32_t>;
 	    } // namespace internal
 
+	    // TODO(bgruber): I would like to allow zero mantissa bits, which would then no longer support INF. Likewise,
+	    // support to skip the sign bit would also be great.
 	    /// Struct of array mapping using bit packing to reduce size/precision of floating-point data types. The bit layout
 	    /// is [1 sign bit, exponentBits bits from the exponent, mantissaBits bits from the mantissa]+ and tries to follow
 	    /// IEEE 754. Infinity and NAN are supported. If the packed exponent bits are not big enough to hold a number, it
@@ -8613,7 +8615,7 @@ namespace llama
 	    /// \tparam ExponentBits If ExponentBits is llama::Constant<N>, the compile-time N specifies the number of bits to
 	    /// use to store the exponent. If ExponentBits is llama::Value<T>, the number of bits is specified at runtime,
 	    /// passed to the constructor and stored as type T. Must not be zero.
-	    /// \tparam MantissaBits Like ExponentBits but for the mantissa bits. May be zero.
+	    /// \tparam MantissaBits Like ExponentBits but for the mantissa bits. Must not be zero (otherwise values turn INF).
 	    /// \tparam TLinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
 	    /// how big the linear domain gets.
 	    /// \tparam TStoredIntegral Integral type used as storage of reduced precision floating-point values.
