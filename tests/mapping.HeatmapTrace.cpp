@@ -40,9 +40,14 @@ namespace
     template<typename View>
     auto blockHitsSpan(View view, int i)
     {
-        const auto* p = view.mapping().blockHits(i, view.storageBlobs);
+#ifdef __cpp_lib_span
+        const auto span = view.mapping().blockHits(i, view.storageBlobs);
+        return std::vector(span.begin(), span.end());
+#else
+        const auto* p = view.mapping().blockHitsPtr(i, view.storageBlobs);
         const auto size = view.mapping().blockHitsSize(i);
         return std::vector(p, p + size);
+#endif
     }
 } // namespace
 
