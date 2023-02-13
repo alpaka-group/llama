@@ -25,6 +25,8 @@ namespace llama::mapping
         typename TCountType = std::size_t>
     struct Heatmap : private Mapping
     {
+        static_assert(!hasAnyComputedField<Mapping>, "Heatmaps for computed mappings are not implemented.");
+
     private:
         using size_type = typename Mapping::ArrayExtents::value_type;
 
