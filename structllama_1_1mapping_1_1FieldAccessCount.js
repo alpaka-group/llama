@@ -1,7 +1,7 @@
 var structllama_1_1mapping_1_1FieldAccessCount =
 [
+    [ "FieldHitsArray", "structllama_1_1mapping_1_1FieldAccessCount_1_1FieldHitsArray.html", "structllama_1_1mapping_1_1FieldAccessCount_1_1FieldHitsArray" ],
     [ "CountType", "structllama_1_1mapping_1_1FieldAccessCount.html#abf11fd7084ed576acc6e0cfa3bff8de7", null ],
-    [ "FieldHitsArray", "structllama_1_1mapping_1_1FieldAccessCount.html#aa983579eaeb95c5cc31128d76755ef24", null ],
     [ "RecordDim", "structllama_1_1mapping_1_1FieldAccessCount.html#a1b6fa99b9767f2b8fe2ab0621c3518a5", null ],
     [ "FieldAccessCount", "structllama_1_1mapping_1_1FieldAccessCount.html#a5f79af9d640e07035df034618d8f3263", null ],
     [ "FieldAccessCount", "structllama_1_1mapping_1_1FieldAccessCount.html#ab7343517e4c8227cf9a3be93aebb8edd", null ],

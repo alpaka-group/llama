@@ -1,11 +1,10 @@
 var searchData=
 [
-  ['offset_478',['offset',['../structllama_1_1NrAndOffset.html#a3ce7816ca78ecdb2a130aa886c0e9965',1,'llama::NrAndOffset::offset()'],['../structllama_1_1SubView.html#a247053b7eff2707c3551da7c6756a9c3',1,'llama::SubView::offset()']]],
-  ['offsetof_479',['offsetOf',['../namespacellama.html#aae03df933faef61723569d4655563bbe',1,'llama']]],
-  ['offsetofimplworkaround_480',['offsetOfImplWorkaround',['../namespacellama_1_1internal.html#a8420725970ab9da75999e4dfad4e8590',1,'llama::internal']]],
-  ['one_481',['One',['../structllama_1_1mapping_1_1One.html',1,'llama::mapping']]],
-  ['one_482',['one',['../namespacellama_1_1mapping_1_1tree.html#afbd4ba87d1acf92e1418324f097a68c8',1,'llama::mapping::tree']]],
-  ['one_483',['One',['../namespacellama.html#ace059168abe83f42c9493ad853abb746',1,'llama']]],
+  ['offset_479',['offset',['../structllama_1_1NrAndOffset.html#a3ce7816ca78ecdb2a130aa886c0e9965',1,'llama::NrAndOffset::offset()'],['../structllama_1_1SubView.html#a247053b7eff2707c3551da7c6756a9c3',1,'llama::SubView::offset()']]],
+  ['offsetof_480',['offsetOf',['../namespacellama.html#aae03df933faef61723569d4655563bbe',1,'llama']]],
+  ['offsetofimplworkaround_481',['offsetOfImplWorkaround',['../namespacellama_1_1internal.html#a8420725970ab9da75999e4dfad4e8590',1,'llama::internal']]],
+  ['one_482',['One',['../structllama_1_1mapping_1_1One.html',1,'llama::mapping::One&lt; TArrayExtents, TRecordDim, TFieldAlignment, FlattenRecordDim &gt;'],['../namespacellama.html#ace059168abe83f42c9493ad853abb746',1,'llama::One()']]],
+  ['one_483',['one',['../namespacellama_1_1mapping_1_1tree.html#afbd4ba87d1acf92e1418324f097a68c8',1,'llama::mapping::tree']]],
   ['one_2ehpp_484',['One.hpp',['../One_8hpp.html',1,'']]],
   ['one_3c_20mp_5fsize_5ft_3c_201_20_3e_20_3e_485',['one&lt; mp_size_t&lt; 1 &gt; &gt;',['../namespacellama_1_1mapping_1_1tree.html#a68ee4cf81bdbbb90a0279a4c9bc8c629',1,'llama::mapping::tree']]],
   ['oneperfield_486',['OnePerField',['../namespacellama_1_1mapping.html#a79bb2d70c1866c3090d5810dd0c92cb3aa8d7ca911df4c0991253a7aaaa4e3708',1,'llama::mapping']]],

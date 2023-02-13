@@ -192,6 +192,7 @@ var annotated_dup =
       [ "Field", "structllama_1_1Field.html", null ],
       [ "Record", "structllama_1_1Record.html", null ],
       [ "NrAndOffset", "structllama_1_1NrAndOffset.html", "structllama_1_1NrAndOffset" ],
+      [ "PrettySize", "structllama_1_1PrettySize.html", "structllama_1_1PrettySize" ],
       [ "ProxyRefOpMixin", "structllama_1_1ProxyRefOpMixin.html", "structllama_1_1ProxyRefOpMixin" ],
       [ "RecordCoord", "structllama_1_1RecordCoord.html", "structllama_1_1RecordCoord" ],
       [ "RecordCoord<>", "structllama_1_1RecordCoord_3_4.html", "structllama_1_1RecordCoord_3_4" ],

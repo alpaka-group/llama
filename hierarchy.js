@@ -9,6 +9,9 @@ var hierarchy =
     [ "llama::bloballoc::AlignedAllocator< T, Alignment >", "structllama_1_1bloballoc_1_1AlignedAllocator.html", null ],
     [ "llama::Array< T, N >", "structllama_1_1Array.html", null ],
     [ "llama::bloballoc::Array< BytesToReserve >", "structllama_1_1bloballoc_1_1Array.html", null ],
+    [ "llama::Array< AccessCounts< CountType >, flatFieldCount< RecordDim > >", "structllama_1_1Array.html", [
+      [ "llama::mapping::FieldAccessCount< Mapping, TCountType, MyCodeHandlesProxyReferences >::FieldHitsArray", "structllama_1_1mapping_1_1FieldAccessCount_1_1FieldHitsArray.html", null ]
+    ] ],
     [ "llama::Array< BlobType, Mapping::blobCount >", "structllama_1_1Array.html", null ],
     [ "llama::Array< std::byte, BytesToReserve >", "structllama_1_1Array.html", [
       [ "llama::bloballoc::Array< BytesToReserve >::AlignedArray< Alignment >", "structllama_1_1bloballoc_1_1Array_1_1AlignedArray.html", null ]
@@ -177,6 +180,7 @@ var hierarchy =
     [ "llama::mapping::internal::PartionedRecordDim< RecordDim, RecordCoordForMapping1 >", "structllama_1_1mapping_1_1internal_1_1PartionedRecordDim.html", null ],
     [ "llama::mapping::internal::PartitionFoldOpImpl< Acc, TagList >", "structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html", null ],
     [ "llama::internal::PlusAssign", "structllama_1_1internal_1_1PlusAssign.html", null ],
+    [ "llama::PrettySize", "structllama_1_1PrettySize.html", null ],
     [ "llama::ProxyRefOpMixin< Derived, ValueType >", "structllama_1_1ProxyRefOpMixin.html", null ],
     [ "llama::ProxyRefOpMixin< BitPackedFloatRef< Float, StoredIntegralCV, VHExp, VHMan, SizeType >, Float >", "structllama_1_1ProxyRefOpMixin.html", [
       [ "llama::mapping::internal::BitPackedFloatRef< Float, StoredIntegralCV, VHExp, VHMan, SizeType >", "structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html", null ]
@@ -241,6 +245,7 @@ var hierarchy =
     [ "TMapping", null, [
       [ "llama::View< TMapping, TBlobType, TAccessor >", "structllama_1_1View.html", null ]
     ] ],
+    [ "llama::mapping::FieldAccessCount< Mapping, TCountType, MyCodeHandlesProxyReferences >::FieldHitsArray::TotalBytes", "structllama_1_1mapping_1_1FieldAccessCount_1_1FieldHitsArray_1_1TotalBytes.html", null ],
     [ "llama::internal::TransformLeavesWithCoordImpl< Coord, T, TypeFunctor >", "structllama_1_1internal_1_1TransformLeavesWithCoordImpl.html", null ],
     [ "llama::internal::TransformLeavesWithCoordImpl< RecordCoord< Is... >, Child[N], TypeFunctor >", "structllama_1_1internal_1_1TransformLeavesWithCoordImpl_3_01RecordCoord_3_01Is_8_8_8_01_4_00_01C1fa9eea95bd347b217962f0d40f323c8.html", null ],
     [ "llama::internal::TransformLeavesWithCoordImpl< RecordCoord< Is... >, Record< Fields... >, TypeFunctor >", "structllama_1_1internal_1_1TransformLeavesWithCoordImpl_3_01RecordCoord_3_01Is_8_8_8_01_4_00_01R42adaa4e9e950291b6a81a9b9f4ba005.html", null ],
