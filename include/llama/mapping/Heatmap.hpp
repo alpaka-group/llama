@@ -6,6 +6,9 @@
 #include <atomic>
 #include <sstream>
 #include <vector>
+#if __has_include(<span>)
+#    include <span>
+#endif
 
 namespace llama::mapping
 {
@@ -86,7 +89,7 @@ namespace llama::mapping
             const auto [nr, offset] = Mapping::blobNrAndOffset(ai, rc);
             using Type = GetType<typename Mapping::RecordDim, RecordCoord<RecordCoords...>>;
 
-            auto* hits = blockHits(nr, blobs);
+            auto* hits = blockHitsPtr(nr, blobs);
             for(size_type i = 0; i < divCeil(size_type{sizeof(Type)}, Granularity); i++)
                 internal::atomicInc(hits[offset / Granularity + i]);
 
@@ -99,22 +102,25 @@ namespace llama::mapping
         // Returns the size of the block hits buffer for blob forBlobI in block counts.
         LLAMA_FN_HOST_ACC_INLINE auto blockHitsSize(size_type forBlobI) const -> size_type
         {
+            assert(forBlobI < Mapping::blobCount);
             return divCeil(Mapping::blobSize(forBlobI), Granularity);
         }
         LLAMA_SUPPRESS_HOST_DEVICE_WARNING
 
         template<typename Blobs>
-        LLAMA_FN_HOST_ACC_INLINE auto blockHits(size_type forBlobI, const Blobs& blobs) const -> const CountType*
+        LLAMA_FN_HOST_ACC_INLINE auto blockHitsPtr(size_type forBlobI, Blobs& blobs) const
+            -> CopyConst<Blobs, CountType>*
         {
-            return reinterpret_cast<const CountType*>(&blobs[size_type{Mapping::blobCount} + forBlobI][0]);
+            return reinterpret_cast<CopyConst<Blobs, CountType>*>(&blobs[size_type{Mapping::blobCount} + forBlobI][0]);
         }
 
-        LLAMA_SUPPRESS_HOST_DEVICE_WARNING
+#ifdef __cpp_lib_span
         template<typename Blobs>
-        LLAMA_FN_HOST_ACC_INLINE auto blockHits(size_type forBlobI, Blobs& blobs) const -> CountType*
+        auto blockHits(size_type forBlobI, Blobs& blobs) const -> std::span<CopyConst<Blobs, CountType>>
         {
-            return reinterpret_cast<CountType*>(&blobs[size_type{Mapping::blobCount} + forBlobI][0]);
+            return {blockHitsPtr(forBlobI, blobs), blockHitsSize(forBlobI)};
         }
+#endif
 
     private:
         static auto trimBlobRight(const CountType* bh, std::size_t size)
@@ -138,7 +144,7 @@ namespace llama::mapping
         {
             for(std::size_t i = 0; i < Mapping::blobCount; i++)
             {
-                auto* bh = blockHits(i, blobs);
+                auto* bh = blockHitsPtr(i, blobs);
                 auto size = blockHitsSize(i);
                 if(trimEnd)
                     size = trimBlobRight(bh, size);
@@ -163,7 +169,7 @@ namespace llama::mapping
         {
             for(std::size_t i = 0; i < Mapping::blobCount; i++)
             {
-                auto* bh = blockHits(i, blobs);
+                auto* bh = blockHitsPtr(i, blobs);
                 auto size = blockHitsSize(i);
                 if(trimEnd)
                     size = trimBlobRight(bh, size);

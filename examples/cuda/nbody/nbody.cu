@@ -275,7 +275,7 @@ try
     {
         auto& hmap = accView.mapping();
         for(std::size_t i = 0; i < blobs; i++)
-            cudaMemsetAsync(hmap.blockHits(i, accView.storageBlobs), 0, hmap.blockHitsSize(i) * sizeof(CountType));
+            cudaMemsetAsync(hmap.blockHitsPtr(i, accView.storageBlobs), 0, hmap.blockHitsSize(i) * sizeof(CountType));
     }
     std::cout << "copy H->D " << stop() << " s\n";
 
