@@ -215,6 +215,20 @@ TEMPLATE_LIST_TEST_CASE("mapping.traits", "", SizeTypes)
     STATIC_REQUIRE(!llama::mapping::isFieldAccessCount<BPI>);
     STATIC_REQUIRE(!llama::mapping::isFieldAccessCount<BPF>);
     STATIC_REQUIRE(llama::mapping::isFieldAccessCount<FAC>);
+
+    STATIC_REQUIRE(!llama::hasAnyComputedField<AAoS>);
+    STATIC_REQUIRE(!llama::hasAnyComputedField<PAoS>);
+    STATIC_REQUIRE(!llama::hasAnyComputedField<ASBSoA>);
+    STATIC_REQUIRE(!llama::hasAnyComputedField<PSBSoA>);
+    STATIC_REQUIRE(!llama::hasAnyComputedField<MBSoA>);
+    STATIC_REQUIRE(!llama::hasAnyComputedField<AoAoS>);
+    STATIC_REQUIRE(!llama::hasAnyComputedField<One>);
+    STATIC_REQUIRE(llama::hasAnyComputedField<Null>);
+    STATIC_REQUIRE(llama::hasAnyComputedField<BS>);
+    STATIC_REQUIRE(!llama::hasAnyComputedField<CT>);
+    STATIC_REQUIRE(llama::hasAnyComputedField<BPI>);
+    STATIC_REQUIRE(llama::hasAnyComputedField<BPF>);
+    STATIC_REQUIRE(llama::hasAnyComputedField<FAC>);
 }
 
 TEST_CASE("mapping.LinearizeArrayDimsCpp.size")

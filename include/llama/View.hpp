@@ -81,6 +81,13 @@ namespace llama
     template<typename Mapping, typename RecordCoord>
     inline constexpr bool isComputed = internal::IsComputed<Mapping, RecordCoord>::value;
 
+    /// Returns true if any field accessed via the given mapping is a computed value.
+    // TODO(bgruber): harmonize this with LLAMA's concepts from Concepts.hpp
+    template<typename Mapping>
+    inline constexpr bool hasAnyComputedField = mp_any_of<
+        LeafRecordCoords<typename Mapping::RecordDim>,
+        mp_bind_front<internal::IsComputed, Mapping>::template fn>::value;
+
 #if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ <= 4
     namespace internal
     {
