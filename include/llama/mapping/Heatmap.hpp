@@ -66,7 +66,7 @@ namespace llama::mapping
         {
             if(blobIndex < size_type{Mapping::blobCount})
                 return Mapping::blobSize(blobIndex);
-            return blockHitsSize(blobIndex) * sizeof(CountType);
+            return blockHitsSize(blobIndex - size_type{Mapping::blobCount}) * sizeof(CountType);
         }
 
         template<std::size_t... RecordCoords>
@@ -105,8 +105,8 @@ namespace llama::mapping
             assert(forBlobI < Mapping::blobCount);
             return divCeil(Mapping::blobSize(forBlobI), Granularity);
         }
-        LLAMA_SUPPRESS_HOST_DEVICE_WARNING
 
+        LLAMA_SUPPRESS_HOST_DEVICE_WARNING
         template<typename Blobs>
         LLAMA_FN_HOST_ACC_INLINE auto blockHitsPtr(size_type forBlobI, Blobs& blobs) const
             -> CopyConst<Blobs, CountType>*
