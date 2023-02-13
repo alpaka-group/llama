@@ -19,6 +19,7 @@
 #include <chrono>
 #include <filesystem>
 #include <fmt/core.h>
+#include <fstream>
 #include <llama/llama.hpp>
 #include <omp.h>
 #include <string>
@@ -437,6 +438,20 @@ namespace
         return duration;
     }
 
+    template<typename View>
+    auto countAccessedHeatmapBlocks(const View& v) -> std::size_t
+    {
+        std::size_t total = 0;
+        const auto& m = v.mapping();
+        for(std::size_t i = 0; i < View::Mapping::blobCount / 2; i++)
+        {
+            auto* bh = m.blockHitsPtr(i, v.storageBlobs);
+            auto size = m.blockHitsSize(i);
+            total += std::count_if(bh, bh + size, [](auto c) { return c > 0; });
+        }
+        return total;
+    }
+
     template<typename Mapping, bool Sort = false>
     void testAnalysis(const std::string& inputFile, const std::string& mappingName)
     {
@@ -459,8 +474,9 @@ namespace
             sortTime = sortView(view);
 
         TH1D hist{};
+        const auto repetitions = /*llama::mapping::isHeatmap<Mapping> ? 1 :*/ analysisRepetitions;
         std::chrono::microseconds totalAnalysisTime{};
-        for(int i = 0; i < analysisRepetitions; i++)
+        for(int i = 0; i < repetitions; i++)
         {
             auto [h, analysisTime] = analysis(view, mappingName);
             if(i == 0)
@@ -472,20 +488,34 @@ namespace
         if constexpr(llama::mapping::isHeatmap<Mapping>)
             saveHeatmap(view, heatmapFolder + "/" + mappingName + "_analysis.bin");
         save(hist, mappingName);
+        std::size_t cachlinesLoaded = 0;
+        if constexpr(
+            !llama::mapping::isHeatmap<Mapping> && !llama::mapping::isFieldAccessCount<Mapping>
+            && !llama::hasAnyComputedField<Mapping>)
+        {
+            // measure cachelines
+            auto view2 = llama::allocView(llama::mapping::Heatmap<Mapping, 64>{view.mapping()});
+            llama::copy(view, view2);
+            clearHeatmap(view2);
+            analysis(view2, mappingName);
+            cachlinesLoaded = countAccessedHeatmapBlocks(view2);
+        }
+
         const auto mean = hist.GetMean();
         const auto absError = std::abs(mean - expectedMean);
         fmt::print(
-            "{:16} {:>15.1f} {:>10.1f} {:>12.1f} {:>10.1f} {:>7} {:>6.1f} {:>6.1f} {:>6.1f} {:>6.3f}\n",
+            "{:16} {:>15.1f} {:>10.1f} {:>12.1f} {:>10.1f} {:>7} {:>6.1f} {:>6.1f} {:>6.1f} {:>6.3f} {:>8}\n",
             "\"" + mappingName + "\"",
             conversionTime / 1000.0,
             sortTime.count() / 1000.0,
-            totalAnalysisTime.count() / analysisRepetitions / 1000.0,
+            totalAnalysisTime.count() / repetitions / 1000.0,
             totalBlobSizes(view.mapping()) / 1024.0 / 1024.0,
             hist.GetEntries(),
             mean,
             hist.GetStdDev(),
             std::abs(mean - expectedMean),
-            absError / expectedMean);
+            absError / expectedMean,
+            cachlinesLoaded);
     }
 } // namespace
 
@@ -503,7 +533,7 @@ auto main(int argc, const char* argv[]) -> int
                                       // format. Remove this once RNTuple hits production.
 
     fmt::print(
-        "{:16} {:>15} {:>10} {:>12} {:>10} {:>7} {:>6} {:>6} {:>6} {:>6}\n",
+        "{:16} {:>15} {:>10} {:>12} {:>10} {:>7} {:>6} {:>6} {:>6} {:>6} {:>8}\n",
         "Mapping",
         "RNT->LLAMA(ms)",
         "Sort(ms)",
@@ -513,11 +543,13 @@ auto main(int argc, const char* argv[]) -> int
         "Mean",
         "StdDev",
         "ErrAbs",
-        "ErrRel");
+        "ErrRel",
+        "$L-load");
 
     testAnalysis<AoS>(inputFile, "AoS");
     // testAnalysis<AoS, true>(inputFile, "AoS");
-    testAnalysis<AoSFieldAccessCount>(inputFile, "AoS FAC");
+    testAnalysis<AoSFieldAccessCount>(inputFile, "AoS FAC"); // also shows how many bytes were needed,
+                                                             // which is actually the same for all analyses
     testAnalysis<AoSHeatmap>(inputFile, "AoS Heatmap");
     testAnalysis<AoSoA8>(inputFile, "AoSoA8");
     testAnalysis<AoSoA16>(inputFile, "AoSoA16");
