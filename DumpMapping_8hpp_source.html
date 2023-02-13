@@ -107,7 +107,7 @@ $(document).ready(function(){initNavTree('DumpMapping_8hpp_source.html',''); ini
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <span class="keyword">namespace </span>internal</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    {</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> Mapping&gt;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        constexpr <span class="keyword">auto</span> hasAnyComputedField() -&gt; <span class="keywordtype">bool</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        constexpr <span class="keyword">auto</span> <a class="code" href="namespacellama.html#a156385d5598b772070206225a5093266">hasAnyComputedField</a>() -&gt; <span class="keywordtype">bool</span></div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        {</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;            <span class="keywordtype">bool</span> computed = <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;            forEachLeafCoord&lt;typename Mapping::RecordDim&gt;([&amp;](<span class="keyword">auto</span> rc)</div>
@@ -355,7 +355,7 @@ $(document).ready(function(){initNavTree('DumpMapping_8hpp_source.html',''); ini
 <div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160; </div>
 <div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;        std::string svg;</div>
 <div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160; </div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;        constexpr <span class="keyword">auto</span> hasAnyComputedField = internal::hasAnyComputedField&lt;Mapping&gt;();</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;        constexpr <span class="keyword">auto</span> <a class="code" href="namespacellama.html#a156385d5598b772070206225a5093266">hasAnyComputedField</a> = internal::hasAnyComputedField&lt;Mapping&gt;();</div>
 <div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;        std::array&lt;int, Mapping::blobCount + hasAnyComputedField + 1&gt; blobYOffset{};</div>
 <div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;        <span class="keyword">auto</span> writeBlobHeader = [&amp;](std::size_t i, std::size_t size, std::string_view name)</div>
 <div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;        {</div>
@@ -471,7 +471,7 @@ $(document).ready(function(){initNavTree('DumpMapping_8hpp_source.html',''); ini
 <div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;<span class="stringliteral">)&quot;;</span></div>
 <div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;<span class="stringliteral">        }</span></div>
 <div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;<span class="stringliteral">        </span><span class="keywordflow">if</span>(hasAnyComputedField)</div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;<span class="stringliteral">        </span><span class="keywordflow">if</span>(<a class="code" href="namespacellama.html#a156385d5598b772070206225a5093266">hasAnyComputedField</a>)</div>
 <div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;        {</div>
 <div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;            writeBlobHeader(Mapping::blobCount, computedSizeSoFar, <span class="stringliteral">&quot;Comp.&quot;</span>);</div>
 <div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160; </div>
@@ -594,18 +594,19 @@ $(document).ready(function(){initNavTree('DumpMapping_8hpp_source.html',''); ini
 <div class="ttc" id="aView_8hpp_html"><div class="ttname"><a href="View_8hpp.html">View.hpp</a></div></div>
 <div class="ttc" id="anamespacellama_html"><div class="ttname"><a href="namespacellama.html">llama</a></div><div class="ttdef"><b>Definition:</b> <a href="Accessors_8hpp_source.html#l00009">Accessors.hpp:10</a></div></div>
 <div class="ttc" id="anamespacellama_html_a0d0fda5486eb5976f940a638f0cdd9d4"><div class="ttname"><a href="namespacellama.html#a0d0fda5486eb5976f940a638f0cdd9d4">llama::ArrayIndex</a></div><div class="ttdeci">ArrayIndex(Args...) -&gt; ArrayIndex&lt; typename internal::IndexTypeFromArgs&lt; std::size_t, Args... &gt;::type, sizeof...(Args)&gt;</div></div>
+<div class="ttc" id="anamespacellama_html_a156385d5598b772070206225a5093266"><div class="ttname"><a href="namespacellama.html#a156385d5598b772070206225a5093266">llama::hasAnyComputedField</a></div><div class="ttdeci">constexpr bool hasAnyComputedField</div><div class="ttdoc">Returns true if any field accessed via the given mapping is a computed value.</div><div class="ttdef"><b>Definition:</b> <a href="View_8hpp_source.html#l00087">View.hpp:87</a></div></div>
 <div class="ttc" id="anamespacellama_html_a33a2a1438ebfa33ecdae893ab0b93e37"><div class="ttname"><a href="namespacellama.html#a33a2a1438ebfa33ecdae893ab0b93e37">llama::NrAndOffset</a></div><div class="ttdeci">NrAndOffset(Int, Int) -&gt; NrAndOffset&lt; Int &gt;</div></div>
-<div class="ttc" id="anamespacellama_html_a8e5d70e7cec0c305424ed3890c4cedc6"><div class="ttname"><a href="namespacellama.html#a8e5d70e7cec0c305424ed3890c4cedc6">llama::allocView</a></div><div class="ttdeci">auto allocView(Mapping mapping={}, const Allocator &amp;alloc={}, Accessor accessor={}) -&gt; View&lt; Mapping, internal::AllocatorBlobType&lt; Allocator, typename Mapping::RecordDim &gt;, Accessor &gt;</div><div class="ttdef"><b>Definition:</b> <a href="View_8hpp_source.html#l00178">View.hpp:178</a></div></div>
+<div class="ttc" id="anamespacellama_html_a8e5d70e7cec0c305424ed3890c4cedc6"><div class="ttname"><a href="namespacellama.html#a8e5d70e7cec0c305424ed3890c4cedc6">llama::allocView</a></div><div class="ttdeci">auto allocView(Mapping mapping={}, const Allocator &amp;alloc={}, Accessor accessor={}) -&gt; View&lt; Mapping, internal::AllocatorBlobType&lt; Allocator, typename Mapping::RecordDim &gt;, Accessor &gt;</div><div class="ttdef"><b>Definition:</b> <a href="View_8hpp_source.html#l00185">View.hpp:185</a></div></div>
 <div class="ttc" id="anamespacellama_html_a9676a3903b134df116791bcae533d6c6"><div class="ttname"><a href="namespacellama.html#a9676a3903b134df116791bcae533d6c6">llama::isComputed</a></div><div class="ttdeci">constexpr bool isComputed</div><div class="ttdoc">Returns true if the field accessed via the given mapping and record coordinate is a computed value.</div><div class="ttdef"><b>Definition:</b> <a href="View_8hpp_source.html#l00082">View.hpp:82</a></div></div>
 <div class="ttc" id="anamespacellama_html_acdfb627d325de5ab6c18cdc842cd7350"><div class="ttname"><a href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">llama::GetType</a></div><div class="ttdeci">typename internal::GetTypeImpl&lt; RecordDim, RecordCoordOrTags... &gt;::type GetType</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00278">Core.hpp:278</a></div></div>
-<div class="ttc" id="astructllama_1_1View_html_ab78c51e95a88b07395d0311107f31ba3"><div class="ttname"><a href="structllama_1_1View.html#ab78c51e95a88b07395d0311107f31ba3">llama::View::Mapping</a></div><div class="ttdeci">TMapping Mapping</div><div class="ttdef"><b>Definition:</b> <a href="View_8hpp_source.html#l00413">View.hpp:413</a></div></div>
+<div class="ttc" id="astructllama_1_1View_html_ab78c51e95a88b07395d0311107f31ba3"><div class="ttname"><a href="structllama_1_1View.html#ab78c51e95a88b07395d0311107f31ba3">llama::View::Mapping</a></div><div class="ttdeci">TMapping Mapping</div><div class="ttdef"><b>Definition:</b> <a href="View_8hpp_source.html#l00420">View.hpp:420</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="DumpMapping_8hpp.html">DumpMapping.hpp</a></li>
-    <li class="footer">Generated on Mon Feb 13 2023 20:44:31 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Mon Feb 13 2023 21:44:11 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

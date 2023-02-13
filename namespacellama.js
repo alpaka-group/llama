@@ -144,6 +144,7 @@ var namespacellama =
     [ "flatRecordCoord< Record< Children... >, RecordCoord< I, Is... > >", "namespacellama.html#a49085229ed957d67678ce1e04c704e67", null ],
     [ "flatRecordCoord< T, RecordCoord<> >", "namespacellama.html#a03ce8695c9b67882c44356056ad3156d", null ],
     [ "flatSizeOf", "namespacellama.html#ac8f48517b46c35c1a511273f08d2abb3", null ],
+    [ "hasAnyComputedField", "namespacellama.html#a156385d5598b772070206225a5093266", null ],
     [ "hasSameTags", "namespacellama.html#a39d280955e5b9deb36f6c8fa1124ca2b", null ],
     [ "isAllowedFieldType", "namespacellama.html#acca32b49e2be7c3c136e940939c531ae", null ],
     [ "isComputed", "namespacellama.html#a9676a3903b134df116791bcae533d6c6", null ],

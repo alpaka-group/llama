@@ -1,5 +1,6 @@
 var NAVTREEINDEX7 =
 {
+"structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeElement.html":[2,0,1,3,1,1,3],
 "structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeElement.html#ad42f5ce7a61ccadf4865031ebeb331ac":[2,0,1,3,1,1,3,0],
 "structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeElement_3_01Tag_00_01ChildType_0fCount_0e_00_01CountType_01_4.html":[2,0,1,3,1,1,5],
 "structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeElement_3_01Tag_00_01ChildType_0fCount_0e_00_01CountType_01_4.html#aaab9523b8d90c8f9d4a360590939440e":[2,0,1,3,1,1,5,0],

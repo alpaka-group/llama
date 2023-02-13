@@ -1,5 +1,7 @@
 var NAVTREEINDEX5 =
 {
+"structllama_1_1bloballoc_1_1SharedPtr.html#a5080b68a3c4da3051afa37f04871e837":[2,0,1,1,2,0],
+"structllama_1_1bloballoc_1_1SharedPtr.html#ae90813d3ac4877d722150d240e790c98":[2,0,1,1,2,1],
 "structllama_1_1bloballoc_1_1UniquePtr.html":[2,0,1,1,1],
 "structllama_1_1bloballoc_1_1UniquePtr.html#affa75475e5567690fee1a68fab39b5b7":[2,0,1,1,1,0],
 "structllama_1_1bloballoc_1_1Vector.html":[2,0,1,1,4],
@@ -247,7 +249,5 @@ var NAVTREEINDEX5 =
 "structllama_1_1mapping_1_1Bytesplit_1_1Reference.html#ad397146d87434a6114bb15a88644b3bf":[2,0,1,3,14,0,0],
 "structllama_1_1mapping_1_1Byteswap.html":[2,0,1,3,16],
 "structllama_1_1mapping_1_1ChangeType.html":[2,0,1,3,18],
-"structllama_1_1mapping_1_1FieldAccessCount.html":[2,0,1,3,27],
-"structllama_1_1mapping_1_1FieldAccessCount.html#a0774f3c44d838d70fd9282d5e96fe373":[2,0,1,3,27,8],
-"structllama_1_1mapping_1_1FieldAccessCount.html#a1b6fa99b9767f2b8fe2ab0621c3518a5":[2,0,1,3,27,2]
+"structllama_1_1mapping_1_1FieldAccessCount.html":[2,0,1,3,27]
 };
