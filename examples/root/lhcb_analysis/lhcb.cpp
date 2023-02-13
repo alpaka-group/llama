@@ -30,6 +30,7 @@
 namespace
 {
     constexpr auto analysisRepetitions = 100;
+    constexpr auto analysisRepetitionsInstrumentation = 1; // costly, so run less often
 
     // clang-format off
     struct H1isMuon{};
@@ -474,7 +475,9 @@ namespace
             sortTime = sortView(view);
 
         TH1D hist{};
-        const auto repetitions = /*llama::mapping::isHeatmap<Mapping> ? 1 :*/ analysisRepetitions;
+        const auto repetitions = llama::mapping::isFieldAccessCount<Mapping> || llama::mapping::isHeatmap<Mapping>
+            ? analysisRepetitionsInstrumentation
+            : analysisRepetitions;
         std::chrono::microseconds totalAnalysisTime{};
         for(int i = 0; i < repetitions; i++)
         {
@@ -504,11 +507,12 @@ namespace
         const auto mean = hist.GetMean();
         const auto absError = std::abs(mean - expectedMean);
         fmt::print(
-            "{:16} {:>15.1f} {:>10.1f} {:>12.1f} {:>10.1f} {:>7} {:>6.1f} {:>6.1f} {:>6.1f} {:>6.3f} {:>8}\n",
+            "{:16} {:>15.1f} {:>10.1f} {:>12.1f} {:>4} {:>10.1f} {:>7} {:>6.1f} {:>6.1f} {:>6.1f} {:>6.3f} {:>8}\n",
             "\"" + mappingName + "\"",
             conversionTime / 1000.0,
             sortTime.count() / 1000.0,
             totalAnalysisTime.count() / repetitions / 1000.0,
+            repetitions,
             totalBlobSizes(view.mapping()) / 1024.0 / 1024.0,
             hist.GetEntries(),
             mean,
@@ -533,11 +537,12 @@ auto main(int argc, const char* argv[]) -> int
                                       // format. Remove this once RNTuple hits production.
 
     fmt::print(
-        "{:16} {:>15} {:>10} {:>12} {:>10} {:>7} {:>6} {:>6} {:>6} {:>6} {:>8}\n",
+        "{:16} {:>15} {:>10} {:>12} {:>4} {:>10} {:>7} {:>6} {:>6} {:>6} {:>6} {:>8}\n",
         "Mapping",
         "RNT->LLAMA(ms)",
         "Sort(ms)",
         "Analysis(ms)",
+        "Rep",
         "Size(MiB)",
         "Entries",
         "Mean",
