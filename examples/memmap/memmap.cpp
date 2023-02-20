@@ -1,3 +1,6 @@
+// Copyright 2022 Bernhard Manfred Gruber
+// SPDX-License-Identifier: LGPL-3.0-or-later
+
 #include <boost/iostreams/device/mapped_file.hpp>
 #include <iostream>
 #include <llama/llama.hpp>

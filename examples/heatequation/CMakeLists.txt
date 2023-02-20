@@ -1,3 +1,6 @@
+# Copyright 2020 Bernhard Manfred Gruber
+# SPDX-License-Identifier: ISC
+
 cmake_minimum_required (VERSION 3.18.3)
 project(llama-heatequation CXX)
 

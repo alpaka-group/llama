@@ -1,9 +1,6 @@
-/*
- * main.cpp
- *
- *  Created on: Aug 20, 2020
- *      Author: Jiri Vyskocil
- */
+// Copyright 2020 Jiri Vyskocil, Bernhard Manfred Gruber
+// SPDX-License-Identifier: LGPL-3.0-or-later
+
 #define _USE_MATH_DEFINES // NOLINT
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) && !defined(ALPAKA_ACC_GPU_CUDA_ONLY_MODE)
 #    define ALPAKA_ACC_GPU_CUDA_ONLY_MODE

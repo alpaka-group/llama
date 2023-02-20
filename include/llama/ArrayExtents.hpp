@@ -1,4 +1,5 @@
-// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright 2022 Bernhard Manfred Gruber
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
 #pragma once
 

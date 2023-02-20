@@ -1,14 +1,5 @@
-/* To the extent possible under law, Alexander Matthes has waived all
- * copyright and related or neighboring rights to this example of LLAMA using
- * the CC0 license, see https://creativecommons.org/publicdomain/zero/1.0 .
- *
- * This example is meant to be "stolen" from to learn how to use LLAMA, which
- * itself is not under the public domain but LGPL3+.
- */
-
-/** \file asynccopy.cpp
- *  \brief Asynchronous bluring example for LLAMA using ALPAKA.
- */
+// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
+// SPDX-License-Identifier: CC0-1.0
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
