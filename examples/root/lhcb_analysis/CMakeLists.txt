@@ -13,3 +13,8 @@ add_executable(${PROJECT_NAME} lhcb.cpp)
 #target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
 target_link_libraries(${PROJECT_NAME} PRIVATE
 		ROOT::Hist ROOT::Graf ROOT::Gpad ROOT::ROOTNTuple llama::llama OpenMP::OpenMP_CXX)
+if (MSVC)
+	target_compile_options(${PROJECT_NAME} PRIVATE /arch:AVX2)
+else()
+	target_compile_options(${PROJECT_NAME} PRIVATE -march=native)
+endif()
