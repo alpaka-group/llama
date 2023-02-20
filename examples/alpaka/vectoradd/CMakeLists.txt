@@ -1,3 +1,6 @@
+# Copyright 2022 Bernhard Manfred Gruber
+# SPDX-License-Identifier: CC0-1.0
+
 cmake_minimum_required (VERSION 3.18.3)
 project(llama-alpaka-vectoradd CXX)
 

@@ -1,3 +1,6 @@
+// Copyright 2021 Bernhard Manfred Gruber
+// SPDX-License-Identifier: LGPL-3.0-or-later
+
 #include <algorithm>
 #include <array>
 #include <cstring>

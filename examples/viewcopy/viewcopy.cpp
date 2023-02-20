@@ -1,3 +1,6 @@
+// Copyright 2020 Bernhard Manfred Gruber
+// SPDX-License-Identifier: LGPL-3.0-or-later
+
 #include "../common/Stopwatch.hpp"
 #include "../common/hostname.hpp"
 #include "../common/ttjet_13tev_june2019.hpp"

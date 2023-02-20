@@ -1,3 +1,6 @@
+// Copyright 2021 Bernhard Manfred Gruber
+// SPDX-License-Identifier: LGPL-3.0-or-later
+
 #pragma once
 
 // This record dimension example is inspired by a non-public CMS NanoAOD file called: ttjet_13tev_june2019_lzma.

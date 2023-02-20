@@ -1,5 +1,5 @@
-// Copyright 2018 Alexander Matthes
-// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright 2023 Alexander Matthes, Bernhard Manfred Gruber
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
 #pragma once
 
