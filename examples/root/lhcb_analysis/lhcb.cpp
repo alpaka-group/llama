@@ -348,7 +348,7 @@ namespace
         llama::mapping::BindBitPackedIntAoS<llama::Constant<1>, llama::mapping::SignBit::Discard>::fn,
         llama::mapping::BindSplit<
             mp_list<mp_list<H1ProbK>, mp_list<H2ProbK>>,
-            llama::mapping::AlignedAoS,
+            llama::mapping::BindBitPackedFloatAoS<llama::Constant<6>, llama::Constant<16>>::template fn,
             llama::mapping::BindBitPackedFloatAoS<llama::Constant<6>, llama::Constant<16>>::template fn,
             true>::fn,
         true>;
@@ -361,6 +361,30 @@ namespace
         llama::mapping::BindSplit<
             mp_list<mp_list<H1ProbK>, mp_list<H2ProbK>>,
             llama::mapping::AlignedAoS,
+            llama::mapping::BindBitPackedFloatAoS<llama::Constant<6>, llama::Constant<16>>::template fn,
+            true>::fn,
+        true>;
+
+    using Custom8 = llama::mapping::Split<
+        llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>,
+        RecordDim,
+        mp_list<mp_list<H1isMuon>, mp_list<H2isMuon>, mp_list<H3isMuon>>,
+        llama::mapping::BindBitPackedIntAoS<llama::Constant<1>, llama::mapping::SignBit::Discard>::fn,
+        llama::mapping::BindSplit<
+            mp_list<mp_list<H1ProbK>, mp_list<H2ProbK>>,
+            llama::mapping::BindChangeType<llama::mapping::BindAoS<>::fn, mp_list<mp_list<double, float>>>::fn,
+            llama::mapping::BindBitPackedFloatAoS<llama::Constant<6>, llama::Constant<16>>::template fn,
+            true>::fn,
+        true>;
+
+    using Custom9 = llama::mapping::Split<
+        llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>,
+        RecordDim,
+        mp_list<mp_list<H1isMuon>, mp_list<H2isMuon>, mp_list<H3isMuon>>,
+        llama::mapping::BindBitPackedIntAoS<llama::Constant<1>, llama::mapping::SignBit::Discard>::fn,
+        llama::mapping::BindSplit<
+            mp_list<mp_list<H1ProbK>, mp_list<H2ProbK>>,
+            llama::mapping::BindChangeType<llama::mapping::BindAoS<>::fn, mp_list<mp_list<double, float>>>::fn,
             llama::mapping::BindChangeType<llama::mapping::BindAoS<>::fn, mp_list<mp_list<double, float>>>::fn,
             true>::fn,
         true>;
@@ -507,7 +531,7 @@ namespace
         const auto mean = hist.GetMean();
         const auto absError = std::abs(mean - expectedMean);
         fmt::print(
-            "{:16} {:>15.1f} {:>10.1f} {:>12.1f} {:>4} {:>10.1f} {:>7} {:>6.1f} {:>6.1f} {:>6.1f} {:>6.3f} {:>8}\n",
+            "{:16} {:>15.3f} {:>10.3f} {:>12.3f} {:>4} {:>10.1f} {:>7} {:>6.1f} {:>6.1f} {:>6.1f} {:>6.3f} {:>8}\n",
             "\"" + mappingName + "\"",
             conversionTime / 1000.0,
             sortTime.count() / 1000.0,
@@ -577,6 +601,10 @@ auto main(int argc, const char* argv[]) -> int
     testAnalysis<Custom6, true>(inputFile, "Custom6 S");
     testAnalysis<Custom7>(inputFile, "Custom7");
     testAnalysis<Custom7, true>(inputFile, "Custom7 S");
+    testAnalysis<Custom8>(inputFile, "Custom8");
+    testAnalysis<Custom8, true>(inputFile, "Custom8 S");
+    testAnalysis<Custom9>(inputFile, "Custom9");
+    testAnalysis<Custom9, true>(inputFile, "Custom9 S");
 
     constexpr auto fullExp = 11;
     constexpr auto fullMan = 52;
