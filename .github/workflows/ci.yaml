@@ -345,7 +345,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: brew install dependencies
         run: |
-          brew install llvm libomp
+          brew install llvm libomp pkg-config
           echo "CXX is here: $(brew --prefix llvm)/bin/clang++"
       - name: vcpkg install dependencies
         run: |
