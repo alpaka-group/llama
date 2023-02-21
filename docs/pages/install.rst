@@ -25,7 +25,7 @@ LLAMA library
 At its core, using the LLAMA library requires:
 
 - cmake 3.18.3 or higher
-- Boost 1.70.0 or higher
+- Boost 1.74.0 or higher
 - libfmt 6.2.1 or higher (optional) for support to dump mappings as SVG/HTML
 
 Tests
