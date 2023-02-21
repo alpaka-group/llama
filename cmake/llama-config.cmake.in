@@ -17,7 +17,7 @@ set(llama_INCLUDE_DIR ${llama_INCLUDE_DIR} "${PACKAGE_PREFIX_DIR}/include")
 target_include_directories(llama INTERFACE ${llama_INCLUDE_DIR})
 
 # dependencies
-find_package(Boost 1.70.0 REQUIRED)
+find_package(Boost 1.74.0 REQUIRED)
 find_package(fmt CONFIG QUIET)
 target_link_libraries(llama INTERFACE Boost::headers)
 if (fmt_FOUND)

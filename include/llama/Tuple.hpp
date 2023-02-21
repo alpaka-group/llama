@@ -245,10 +245,10 @@ namespace llama
 
     /// Applies a functor to every element of a tuple, creating a new tuple with the result of the element
     /// transformations. The functor needs to implement a template `operator()` to which all tuple elements are passed.
-    // TODO(bgruber): replace by mp11 version in Boost 1.74.
     template<typename... Elements, typename Functor>
     LLAMA_FN_HOST_ACC_INLINE constexpr auto tupleTransform(const Tuple<Elements...>& tuple, const Functor& functor)
     {
+        // note: cannot use mp11::tuple_transform since that returns a std::tuple
         return internal::tupleTransformHelper(std::make_index_sequence<sizeof...(Elements)>{}, tuple, functor);
     }
 
