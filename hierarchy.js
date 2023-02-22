@@ -167,7 +167,6 @@ var hierarchy =
     [ "llama::internal::MinusAssign", "structllama_1_1internal_1_1MinusAssign.html", null ],
     [ "llama::internal::ModuloAssign", "structllama_1_1internal_1_1ModuloAssign.html", null ],
     [ "llama::mapping::tree::functor::MoveRTDown< TreeCoord, Amount >", "structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDown.html", null ],
-    [ "boost::mp11::detail::mp_flatten_impl< L2 >", "structboost_1_1mp11_1_1detail_1_1mp__flatten__impl.html", null ],
     [ "boost::mp11::mp_size", null, [
       [ "std::tuple_size< llama::RecordRef< View, BoundRecordCoord, OwnView > >", "structstd_1_1tuple__size_3_01llama_1_1RecordRef_3_01View_00_01BoundRecordCoord_00_01OwnView_01_4_01_4.html", null ]
     ] ],

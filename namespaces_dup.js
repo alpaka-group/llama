@@ -1,6 +1,5 @@
 var namespaces_dup =
 [
-    [ "boost", "namespaceboost.html", "namespaceboost" ],
     [ "llama", "namespacellama.html", "namespacellama" ],
     [ "std", null, [
       [ "tuple_size< llama::Array< T, N > >", "structstd_1_1tuple__size_3_01llama_1_1Array_3_01T_00_01N_01_4_01_4.html", null ],

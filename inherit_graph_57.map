@@ -1,3 +1,7 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structllama_1_1internal_1_1IndirectValue.html" title=" " alt="" coords="5,5,180,47"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,119,124,146"/>
+<area shape="rect" id="node2" href="$structllama_1_1internal_1_1IsBoundedArray.html" title=" " alt="" coords="191,5,385,47"/>
+<area shape="rect" id="node3" href="$structllama_1_1internal_1_1IsComputed.html" title=" " alt="" coords="187,71,389,127"/>
+<area shape="rect" id="node4" href="$structllama_1_1internal_1_1IsConstant.html" title=" " alt="" coords="172,151,404,178"/>
+<area shape="rect" id="node5" href="$structllama_1_1internal_1_1IsProxyReferenceImpl.html" title=" " alt="" coords="173,203,403,244"/>
 </map>
