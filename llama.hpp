@@ -3,32 +3,37 @@
 // ============================================================================
 // == ./DumpMapping.hpp ==
 // ==
-// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright 2022 Bernhard Manfred Gruber
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
 // #pragma once
 #if __has_include(<fmt/format.h>)
 	// ============================================================================
 	// == ./ArrayIndexRange.hpp ==
 	// ==
+	// Copyright 2022 Bernhard Manfred Gruber
+	// SPDX-License-Identifier: LGPL-3.0-or-later
+
 	// #pragma once
 		// ============================================================================
 		// == ./ArrayExtents.hpp ==
 		// ==
-		// SPDX-License-Identifier: GPL-3.0-or-later
+		// Copyright 2022 Bernhard Manfred Gruber
+		// SPDX-License-Identifier: LGPL-3.0-or-later
 
 		// #pragma once
 			// ============================================================================
 			// == ./Array.hpp ==
 			// ==
-			// Copyright 2018 Alexander Matthes
-			// SPDX-License-Identifier: GPL-3.0-or-later
+			// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
+			// SPDX-License-Identifier: LGPL-3.0-or-later
 
 			// #pragma once
 				// ============================================================================
 				// == ./macros.hpp ==
 				// ==
-				// Copyright 2018 Alexander Matthes
-				// SPDX-License-Identifier: GPL-3.0-or-later
+				// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
+				// SPDX-License-Identifier: LGPL-3.0-or-later
 
 				// #pragma once
 				#ifdef __INTEL_COMPILER
@@ -553,7 +558,8 @@
 			// ============================================================================
 			// == ./Meta.hpp ==
 			// ==
-			// SPDX-License-Identifier: GPL-3.0-or-later
+			// Copyright 2022 Bernhard Manfred Gruber
+			// SPDX-License-Identifier: LGPL-3.0-or-later
 
 			// #pragma once
 			#include <boost/mp11.hpp>
@@ -882,8 +888,8 @@
 		// ============================================================================
 		// == ./Core.hpp ==
 		// ==
-		// Copyright 2018 Alexander Matthes
-		// SPDX-License-Identifier: GPL-3.0-or-later
+		// Copyright 2023 Alexander Matthes, Bernhard Manfred Gruber
+		// SPDX-License-Identifier: LGPL-3.0-or-later
 
 		// #pragma once
 		// #include "ArrayExtents.hpp"    // amalgamate: file already expanded
@@ -891,8 +897,8 @@
 			// ============================================================================
 			// == ./RecordCoord.hpp ==
 			// ==
-			// Copyright 2018 Alexander Matthes
-			// SPDX-License-Identifier: GPL-3.0-or-later
+			// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
+			// SPDX-License-Identifier: LGPL-3.0-or-later
 
 			// #pragma once
 			// #include "Meta.hpp"    // amalgamate: file already expanded
@@ -1839,7 +1845,8 @@
 		// ============================================================================
 		// == ./HasRanges.hpp ==
 		// ==
-		// SPDX-License-Identifier: GPL-3.0-or-later
+		// Copyright 2022 Bernhard Manfred Gruber
+		// SPDX-License-Identifier: LGPL-3.0-or-later
 
 		// #pragma once
 		// TODO(bgruber): clang 10-15 (libstdc++ from gcc 11.2 or gcc 12.1) fail to compile this currently with the issue
@@ -2136,7 +2143,8 @@
 	// ============================================================================
 	// == ./StructName.hpp ==
 	// ==
-	// SPDX-License-Identifier: GPL-3.0-or-later
+	// Copyright 2022 Bernhard Manfred Gruber
+	// SPDX-License-Identifier: LGPL-3.0-or-later
 
 	// #pragma once
 	// #include "Core.hpp"    // amalgamate: file already expanded
@@ -2522,17 +2530,23 @@
 	// ============================================================================
 	// == ./View.hpp ==
 	// ==
-	// Copyright 2018 Alexander Matthes
-	// SPDX-License-Identifier: GPL-3.0-or-later
+	// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
+	// SPDX-License-Identifier: LGPL-3.0-or-later
 
 	// #pragma once
 		// ============================================================================
 		// == ./Accessors.hpp ==
 		// ==
+		// Copyright 2023 Bernhard Manfred Gruber
+		// SPDX-License-Identifier: LGPL-3.0-or-later
+
 		// #pragma once
 			// ============================================================================
 			// == ./Concepts.hpp ==
 			// ==
+			// Copyright 2022 Bernhard Manfred Gruber
+			// SPDX-License-Identifier: LGPL-3.0-or-later
+
 			// #pragma once
 			// #include "Array.hpp"    // amalgamate: file already expanded
 			// #include "Core.hpp"    // amalgamate: file already expanded
@@ -2677,7 +2691,8 @@
 			// ============================================================================
 			// == ./ProxyRefOpMixin.hpp ==
 			// ==
-			// SPDX-License-Identifier: GPL-3.0-or-later
+			// Copyright 2022 Bernhard Manfred Gruber
+			// SPDX-License-Identifier: LGPL-3.0-or-later
 
 			// #pragma once
 			// #include "macros.hpp"    // amalgamate: file already expanded
@@ -2947,8 +2962,8 @@
 		// ============================================================================
 		// == ./BlobAllocators.hpp ==
 		// ==
-		// Copyright 2018 Alexander Matthes
-		// SPDX-License-Identifier: GPL-3.0-or-later
+		// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
+		// SPDX-License-Identifier: LGPL-3.0-or-later
 
 		// #pragma once
 		// #include "Array.hpp"    // amalgamate: file already expanded
@@ -3140,16 +3155,16 @@
 		// ============================================================================
 		// == ./mapping/One.hpp ==
 		// ==
-		// Copyright 2018 Alexander Matthes
-		// SPDX-License-Identifier: GPL-3.0-or-later
+		// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
+		// SPDX-License-Identifier: LGPL-3.0-or-later
 
 		// #pragma once
 		// #include "../Core.hpp"    // amalgamate: file already expanded
 			// ============================================================================
 			// == ./mapping/Common.hpp ==
 			// ==
-			// Copyright 2018 Alexander Matthes
-			// SPDX-License-Identifier: GPL-3.0-or-later
+			// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
+			// SPDX-License-Identifier: LGPL-3.0-or-later
 
 			// #pragma once
 			// #include "../Core.hpp"    // amalgamate: file already expanded
@@ -4794,8 +4809,8 @@ namespace llama
 // ============================================================================
 // == ./mapping/SoA.hpp ==
 // ==
-// Copyright 2018 Alexander Matthes
-// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
 // #pragma once
 // #include "Common.hpp"    // amalgamate: file already expanded
@@ -5028,7 +5043,8 @@ namespace llama::mapping
 // ============================================================================
 // == ./mapping/Projection.hpp ==
 // ==
-// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright 2022 Bernhard Manfred Gruber
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
 // #pragma once
 // #include "../ProxyRefOpMixin.hpp"    // amalgamate: file already expanded
@@ -5230,6 +5246,9 @@ namespace llama::mapping
 // ============================================================================
 // == ./mapping/FieldAccessCount.hpp ==
 // ==
+// Copyright 2022 Bernhard Manfred Gruber
+// SPDX-License-Identifier: LGPL-3.0-or-later
+
 // #pragma once
 // #include "../StructName.hpp"    // amalgamate: file already expanded
 // #include "Common.hpp"    // amalgamate: file already expanded
@@ -5605,6 +5624,9 @@ namespace llama::mapping
 // ============================================================================
 // == ./mapping/Heatmap.hpp ==
 // ==
+// Copyright 2022 Bernhard Manfred Gruber
+// SPDX-License-Identifier: LGPL-3.0-or-later
+
 // #pragma once
 // #include "Common.hpp"    // amalgamate: file already expanded
 
@@ -5839,7 +5861,8 @@ EOF
 // ============================================================================
 // == ./mapping/BitPackedInt.hpp ==
 // ==
-// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright 2023 Bernhard Manfred Gruber
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
 // #pragma once
 // #include "../Core.hpp"    // amalgamate: file already expanded
@@ -6402,15 +6425,15 @@ namespace llama::mapping
 // ============================================================================
 // == ./mapping/tree/TreeFromDimensions.hpp ==
 // ==
-// Copyright 2018 Alexander Matthes
-// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright 2020 Alexander Matthes, Bernhard Manfred Gruber
+// SPDX-License-Identifier: LGPL-3.0-or-later
 // #pragma once
 // #include "../../Core.hpp"    // amalgamate: file already expanded
 	// ============================================================================
 	// == ./Tuple.hpp ==
 	// ==
-	// Copyright 2018 Alexander Matthes
-	// SPDX-License-Identifier: GPL-3.0-or-later
+	// Copyright 2023 Alexander Matthes, Bernhard Manfred Gruber
+	// SPDX-License-Identifier: LGPL-3.0-or-later
 
 	// #pragma once
 	// #include "Meta.hpp"    // amalgamate: file already expanded
@@ -6837,8 +6860,8 @@ namespace llama::mapping::tree
 // ============================================================================
 // == ./mapping/tree/toString.hpp ==
 // ==
-// Copyright 2018 Alexander Matthes
-// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright 2020 Alexander Matthes, Bernhard Manfred Gruber
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
 // #pragma once
 // #include "TreeFromDimensions.hpp"    // amalgamate: file already expanded
@@ -6925,16 +6948,16 @@ namespace llama::mapping::tree
 // ============================================================================
 // == ./mapping/tree/Mapping.hpp ==
 // ==
-// Copyright 2018 Alexander Matthes
-// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright 2020 Alexander Matthes, Bernhard Manfred Gruber
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
 // #pragma once
 // #include "../Common.hpp"    // amalgamate: file already expanded
 	// ============================================================================
 	// == ./mapping/tree/Functors.hpp ==
 	// ==
-	// Copyright 2018 Alexander Matthes
-	// SPDX-License-Identifier: GPL-3.0-or-later
+	// Copyright 2020 Alexander Matthes, Bernhard Manfred Gruber
+	// SPDX-License-Identifier: LGPL-3.0-or-later
 
 	// #pragma once
 	// #include "TreeFromDimensions.hpp"    // amalgamate: file already expanded
@@ -7413,7 +7436,8 @@ namespace llama::mapping::tree
 // ============================================================================
 // == ./mapping/PermuteArrayIndex.hpp ==
 // ==
-// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright 2022 Bernhard Manfred Gruber
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
 // #pragma once
 // #include "Common.hpp"    // amalgamate: file already expanded
@@ -7482,8 +7506,8 @@ namespace llama::mapping
 // ============================================================================
 // == ./mapping/AoS.hpp ==
 // ==
-// Copyright 2018 Alexander Matthes
-// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
 // #pragma once
 // #include "Common.hpp"    // amalgamate: file already expanded
@@ -7602,7 +7626,8 @@ namespace llama::mapping
 // ============================================================================
 // == ./mapping/Byteswap.hpp ==
 // ==
-// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright 2022 Bernhard Manfred Gruber
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
 // #pragma once
 // #include "../Core.hpp"    // amalgamate: file already expanded
@@ -7693,7 +7718,8 @@ namespace llama::mapping
 // ============================================================================
 // == ./mapping/AoSoA.hpp ==
 // ==
-// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright 2022 Bernhard Manfred Gruber
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
 // #pragma once
 // #include "Common.hpp"    // amalgamate: file already expanded
@@ -7792,7 +7818,8 @@ namespace llama::mapping
 // ============================================================================
 // == ./mapping/Bytesplit.hpp ==
 // ==
-// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright 2022 Bernhard Manfred Gruber
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
 // #pragma once
 // #include "../ProxyRefOpMixin.hpp"    // amalgamate: file already expanded
@@ -7940,7 +7967,8 @@ namespace llama::mapping
 // ============================================================================
 // == ./mapping/ChangeType.hpp ==
 // ==
-// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright 2022 Bernhard Manfred Gruber
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
 // #pragma once
 // #include "../ProxyRefOpMixin.hpp"    // amalgamate: file already expanded
@@ -8036,7 +8064,8 @@ namespace llama::mapping
 // ============================================================================
 // == ./mapping/Null.hpp ==
 // ==
-// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright 2022 Bernhard Manfred Gruber
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
 // #pragma once
 // #include "../ProxyRefOpMixin.hpp"    // amalgamate: file already expanded
@@ -8113,6 +8142,9 @@ namespace llama::mapping
 // ============================================================================
 // == ./mapping/Split.hpp ==
 // ==
+// Copyright 2022 Bernhard Manfred Gruber
+// SPDX-License-Identifier: LGPL-3.0-or-later
+
 // #pragma once
 // #include "../View.hpp"    // amalgamate: file already expanded
 // #include "Common.hpp"    // amalgamate: file already expanded
@@ -8377,7 +8409,8 @@ namespace llama::mapping
 // ============================================================================
 // == ./mapping/BitPackedFloat.hpp ==
 // ==
-// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright 2023 Bernhard Manfred Gruber
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
 // #pragma once
 // #include "../ProxyRefOpMixin.hpp"    // amalgamate: file already expanded
@@ -8828,8 +8861,8 @@ namespace llama::mapping
 // ============================================================================
 // == ./llama.hpp ==
 // ==
-// Copyright 2018 Alexander Matthes
-// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright 2018 Alexander Matthes, Bernhard Manfred Gruber
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
 // #pragma once
 /// \mainpage LLAMA API documentation
@@ -8878,7 +8911,8 @@ namespace llama::mapping
 	// ============================================================================
 	// == ./Copy.hpp ==
 	// ==
-	// SPDX-License-Identifier: GPL-3.0-or-later
+	// Copyright 2021 Bernhard Manfred Gruber
+	// SPDX-License-Identifier: LGPL-3.0-or-later
 
 	// #pragma once
 	// #include "View.hpp"    // amalgamate: file already expanded
@@ -9309,8 +9343,8 @@ namespace llama::mapping
 	// ============================================================================
 	// == ./RecordRef.hpp ==
 	// ==
-	// Copyright 2018 Alexander Matthes
-	// SPDX-License-Identifier: GPL-3.0-or-later
+	// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
+	// SPDX-License-Identifier: LGPL-3.0-or-later
 
 	// #pragma once
 	// #include "Concepts.hpp"    // amalgamate: file already expanded
@@ -10341,6 +10375,9 @@ namespace llama::mapping
 	// ============================================================================
 	// == ./Simd.hpp ==
 	// ==
+	// Copyright 2022 Bernhard Manfred Gruber
+	// SPDX-License-Identifier: LGPL-3.0-or-later
+
 	// #pragma once
 	// #include "Core.hpp"    // amalgamate: file already expanded
 	// #include "RecordRef.hpp"    // amalgamate: file already expanded
@@ -10708,7 +10745,8 @@ namespace llama::mapping
 	// ============================================================================
 	// == ./Vector.hpp ==
 	// ==
-	// SPDX-License-Identifier: GPL-3.0-or-later
+	// Copyright 2021 Bernhard Manfred Gruber
+	// SPDX-License-Identifier: LGPL-3.0-or-later
 
 	// #pragma once
 	// #include "RecordRef.hpp"    // amalgamate: file already expanded
@@ -11059,7 +11097,8 @@ namespace llama::mapping
 // ============================================================================
 // == ./Proofs.hpp ==
 // ==
-// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright 2022 Bernhard Manfred Gruber
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
 // #pragma once
 // #include "ArrayIndexRange.hpp"    // amalgamate: file already expanded
