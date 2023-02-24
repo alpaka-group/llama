@@ -14,7 +14,7 @@
 namespace llama::mapping
 {
     template<typename TArrayExtents, typename TRecordDim>
-    struct MappingBase : private TArrayExtents
+    struct MappingBase : protected TArrayExtents
     {
         using ArrayExtents = TArrayExtents;
         using ArrayIndex = typename ArrayExtents::Index;
