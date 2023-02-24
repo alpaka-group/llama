@@ -4,7 +4,7 @@
 cmake_minimum_required (VERSION 3.18.3)
 
 find_package(OpenMP REQUIRED)
-set(STREAM_ARRAY_SIZE 80000000) # if we make this too large, we will get linker errors due to ELF/PE limits
+set(STREAM_ARRAY_SIZE 400000000 CACHE STRING "STREAM benchmark array size")
 
 project(stream C)
 
