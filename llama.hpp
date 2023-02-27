@@ -3112,6 +3112,12 @@
 		    /// on the view before passing it to the kernel.
 		    struct CudaMalloc
 		    {
+		        inline static const auto deleter = [](void* p)
+		        {
+		            if(const auto code = cudaFree(p); code != cudaSuccess)
+		                throw std::runtime_error(std::string{"cudaFree failed with code "} + cudaGetErrorString(code));
+		        };
+
 		        template<std::size_t FieldAlignment>
 		        inline auto operator()(std::integral_constant<std::size_t, FieldAlignment>, std::size_t count) const
 		        {
@@ -3120,11 +3126,6 @@
 		                throw std::runtime_error(std::string{"cudaMalloc failed with code "} + cudaGetErrorString(code));
 		            if(reinterpret_cast<std::uintptr_t>(p) & (FieldAlignment - 1 != 0u))
 		                throw std::runtime_error{"cudaMalloc does not align sufficiently"};
-		            auto deleter = [](void* p)
-		            {
-		                if(const auto code = cudaFree(p); code != cudaSuccess)
-		                    throw std::runtime_error(std::string{"cudaFree failed with code "} + cudaGetErrorString(code));
-		            };
 		            return std::unique_ptr<std::byte[], decltype(deleter)>(p, deleter);
 		        }
 		    };
@@ -3647,7 +3648,7 @@
 	        using View = View<Mapping, BlobType, Accessor>;
 	        using RecordDim = typename View::RecordDim;
 	        forEachADCoord(
-	            view.mapping().extents(),
+	            view.extents(),
 	            [&]([[maybe_unused]] typename View::ArrayIndex ai)
 	            {
 	                if constexpr(isRecordDim<RecordDim>)
@@ -3978,6 +3979,11 @@
 	            return static_cast<const Mapping&>(*this);
 	        }
 
+	        LLAMA_FN_HOST_ACC_INLINE auto extents() const -> ArrayExtents
+	        {
+	            return mapping().extents();
+	        }
+
 	        LLAMA_FN_HOST_ACC_INLINE auto accessor() -> Accessor&
 	        {
 	            return static_cast<Accessor&>(*this);
@@ -4089,25 +4095,25 @@
 	        LLAMA_FN_HOST_ACC_INLINE
 	        auto begin() -> iterator
 	        {
-	            return {ArrayIndexRange<ArrayExtents>{mapping().extents()}.begin(), this};
+	            return {ArrayIndexRange<ArrayExtents>{extents()}.begin(), this};
 	        }
 
 	        LLAMA_FN_HOST_ACC_INLINE
 	        auto begin() const -> const_iterator
 	        {
-	            return {ArrayIndexRange<ArrayExtents>{mapping().extents()}.begin(), this};
+	            return {ArrayIndexRange<ArrayExtents>{extents()}.begin(), this};
 	        }
 
 	        LLAMA_FN_HOST_ACC_INLINE
 	        auto end() -> iterator
 	        {
-	            return {ArrayIndexRange<ArrayExtents>{mapping().extents()}.end(), this};
+	            return {ArrayIndexRange<ArrayExtents>{extents()}.end(), this};
 	        }
 
 	        LLAMA_FN_HOST_ACC_INLINE
 	        auto end() const -> const_iterator
 	        {
-	            return {ArrayIndexRange<ArrayExtents>{mapping().extents()}.end(), this};
+	            return {ArrayIndexRange<ArrayExtents>{extents()}.end(), this};
 	        }
 
 	        Array<BlobType, Mapping::blobCount> storageBlobs;
@@ -8969,7 +8975,7 @@ namespace llama::mapping
 	        internal::assertTrivialCopyable<typename Mapping::RecordDim>();
 
 	        // TODO(bgruber): we do not verify if the mappings have other runtime state than the array dimensions
-	        if(srcView.mapping().extents() != dstView.mapping().extents())
+	        if(srcView.extents() != dstView.extents())
 	            throw std::runtime_error{"Array dimensions sizes are different"};
 
 	        // TODO(bgruber): this is maybe not the best parallel copying strategy
@@ -8997,7 +9003,7 @@ namespace llama::mapping
 	            std::is_same_v<typename SrcMapping::RecordDim, typename DstMapping::RecordDim>,
 	            "The source and destination record dimensions must be the same");
 
-	        if(srcView.mapping().extents() != dstView.mapping().extents())
+	        if(srcView.extents() != dstView.extents())
 	            throw std::runtime_error{"Array dimensions sizes are different"};
 
 	        auto copyOne = [&](auto ai) LLAMA_LAMBDA_INLINE
@@ -9007,7 +9013,7 @@ namespace llama::mapping
 	        };
 
 	        constexpr auto dims = SrcMapping::ArrayExtents::rank;
-	        const auto extents = srcView.mapping().extents().toArray();
+	        const auto extents = srcView.extents().toArray();
 	        const auto workPerThread = (extents[0] + threadCount - 1) / threadCount;
 	        const auto start = threadId * workPerThread;
 	        const auto end = std::min((threadId + 1) * workPerThread, static_cast<std::size_t>(extents[0]));
@@ -9074,7 +9080,7 @@ namespace llama::mapping
 	        static constexpr auto lanesSrc = internal::aosoaLanes<SrcMapping>;
 	        static constexpr auto lanesDst = internal::aosoaLanes<DstMapping>;
 
-	        if(srcView.mapping().extents() != dstView.mapping().extents())
+	        if(srcView.extents() != dstView.extents())
 	            throw std::runtime_error{"Array dimensions sizes are different"};
 
 	        static constexpr auto srcIsAoSoA = lanesSrc != std::numeric_limits<std::size_t>::max();
@@ -9088,7 +9094,7 @@ namespace llama::mapping
 	            !dstIsAoSoA || std::tuple_size_v<decltype(dstView.storageBlobs)> == 1,
 	            "Implementation assumes AoSoA with single blob");
 
-	        const auto flatSize = product(dstView.mapping().extents());
+	        const auto flatSize = product(dstView.extents());
 
 	        // TODO(bgruber): implement the following by adding additional copy loops for the remaining elements
 	        if(!srcIsAoSoA && flatSize % lanesDst != 0)
@@ -10582,7 +10588,7 @@ namespace llama::mapping
 	            }
 	            else
 	            {
-	                auto b = ArrayIndexIterator{srcRef.view.mapping().extents(), srcRef.arrayIndex()};
+	                auto b = ArrayIndexIterator{srcRef.view.extents(), srcRef.arrayIndex()};
 	                ElementSimd elemSimd; // g++-12 really needs the intermediate elemSimd and memcpy
 	                for(auto i = 0; i < Traits::lanes; i++)
 	                    reinterpret_cast<FieldType*>(&elemSimd)[i]
@@ -10624,7 +10630,7 @@ namespace llama::mapping
 	                // TODO(bgruber): how does this generalize conceptually to 2D and higher dimensions? in which
 	                // direction should we collect SIMD values?
 	                const ElementSimd elemSimd = srcSimd(rc);
-	                auto b = ArrayIndexIterator{dstRef.view.mapping().extents(), dstRef.arrayIndex()};
+	                auto b = ArrayIndexIterator{dstRef.view.extents(), dstRef.arrayIndex()};
 	                for(auto i = 0; i < Traits::lanes; i++)
 	                    dstRef.view (*b++)(cat(typename T::BoundRecordCoord{}, rc))
 	                        = reinterpret_cast<const FieldType*>(&elemSimd)[i]; // scalar store
@@ -10928,7 +10934,7 @@ namespace llama::mapping
 
 	        LLAMA_FN_HOST_ACC_INLINE auto capacity() const -> size_type
 	        {
-	            return m_view.mapping().extents()[0];
+	            return m_view.extents()[0];
 	        }
 
 	        // NOLINTNEXTLINE(readability-identifier-naming)
