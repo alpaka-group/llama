@@ -17,6 +17,7 @@ var structllama_1_1View =
     [ "begin", "structllama_1_1View.html#a6c8ae804350dd9aeb9d85f8db110b6d1", null ],
     [ "end", "structllama_1_1View.html#a60ea916b74c979d658774792e9490d40", null ],
     [ "end", "structllama_1_1View.html#a949eeed1494299bb8cbc39260ab9331d", null ],
+    [ "extents", "structllama_1_1View.html#ad2cffd2465f0ff9217d8797b52757faa", null ],
     [ "mapping", "structllama_1_1View.html#a02995d9561c50196f5efae24031c0af6", null ],
     [ "mapping", "structllama_1_1View.html#a181eaaaf491f3ccf599503410cdbe42e", null ],
     [ "operator()", "structllama_1_1View.html#a821703da22b47469141cd8b65f96a1ec", null ],
