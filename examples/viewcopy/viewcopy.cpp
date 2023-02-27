@@ -53,8 +53,8 @@ void stdCopy(const llama::View<SrcMapping, SrcBlobType>& srcView, llama::View<Ds
 {
     static_assert(std::is_same_v<typename SrcMapping::RecordDim, typename DstMapping::RecordDim>);
 
-    if(srcView.mapping().extents() != dstView.mapping().extents())
-        throw std::runtime_error{"Array dimensions sizes are different"};
+    if(srcView.extents() != dstView.extents())
+        throw std::runtime_error{"Array extents are different"};
 
     std::copy(srcView.begin(), srcView.end(), dstView.begin());
 }
@@ -106,7 +106,7 @@ template<typename Mapping, typename BlobType>
 auto hash(const llama::View<Mapping, BlobType>& view)
 {
     std::size_t acc = 0;
-    for(auto ad : llama::ArrayIndexRange{view.mapping().extents()})
+    for(auto ad : llama::ArrayIndexRange{view.extents()})
         llama::forEachLeafCoord<typename Mapping::RecordDim>([&](auto rc) { boost::hash_combine(acc, view(ad)(rc)); });
     return acc;
 }

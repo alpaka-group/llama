@@ -144,7 +144,7 @@ void iotaFillView(View& view)
 {
     std::int64_t value = 0;
     using RecordDim = typename View::RecordDim;
-    for(auto ai : llama::ArrayIndexRange{view.mapping().extents()})
+    for(auto ai : llama::ArrayIndexRange{view.extents()})
     {
         if constexpr(llama::isRecordDim<RecordDim>)
         {
@@ -169,7 +169,7 @@ void iotaCheckView(View& view)
 {
     std::int64_t value = 0;
     using RecordDim = typename View::RecordDim;
-    for(auto ai : llama::ArrayIndexRange{view.mapping().extents()})
+    for(auto ai : llama::ArrayIndexRange{view.extents()})
     {
         if constexpr(llama::isRecordDim<RecordDim>)
         {

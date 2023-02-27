@@ -40,7 +40,7 @@ auto computeCentroid(const View& triangles)
     llama::One<Vertex> centroid{};
     for(const auto& t : triangles)
         centroid += t(tag::a) + t(tag::b) + t(tag::c);
-    return centroid / triangles.mapping().extents()[0] / 3;
+    return centroid / triangles.extents()[0] / 3;
 }
 
 auto main(int argc, const char* argv[]) -> int

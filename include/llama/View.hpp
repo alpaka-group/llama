@@ -127,7 +127,7 @@ namespace llama
         using View = View<Mapping, BlobType, Accessor>;
         using RecordDim = typename View::RecordDim;
         forEachADCoord(
-            view.mapping().extents(),
+            view.extents(),
             [&]([[maybe_unused]] typename View::ArrayIndex ai)
             {
                 if constexpr(isRecordDim<RecordDim>)
@@ -458,6 +458,11 @@ namespace llama
             return static_cast<const Mapping&>(*this);
         }
 
+        LLAMA_FN_HOST_ACC_INLINE auto extents() const -> ArrayExtents
+        {
+            return mapping().extents();
+        }
+
         LLAMA_FN_HOST_ACC_INLINE auto accessor() -> Accessor&
         {
             return static_cast<Accessor&>(*this);
@@ -569,25 +574,25 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE
         auto begin() -> iterator
         {
-            return {ArrayIndexRange<ArrayExtents>{mapping().extents()}.begin(), this};
+            return {ArrayIndexRange<ArrayExtents>{extents()}.begin(), this};
         }
 
         LLAMA_FN_HOST_ACC_INLINE
         auto begin() const -> const_iterator
         {
-            return {ArrayIndexRange<ArrayExtents>{mapping().extents()}.begin(), this};
+            return {ArrayIndexRange<ArrayExtents>{extents()}.begin(), this};
         }
 
         LLAMA_FN_HOST_ACC_INLINE
         auto end() -> iterator
         {
-            return {ArrayIndexRange<ArrayExtents>{mapping().extents()}.end(), this};
+            return {ArrayIndexRange<ArrayExtents>{extents()}.end(), this};
         }
 
         LLAMA_FN_HOST_ACC_INLINE
         auto end() const -> const_iterator
         {
-            return {ArrayIndexRange<ArrayExtents>{mapping().extents()}.end(), this};
+            return {ArrayIndexRange<ArrayExtents>{extents()}.end(), this};
         }
 
         Array<BlobType, Mapping::blobCount> storageBlobs;

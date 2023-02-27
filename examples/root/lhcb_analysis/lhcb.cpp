@@ -176,7 +176,7 @@ namespace
         auto hists = std::vector<TH1D>(omp_get_max_threads(), TH1D("B_mass", mappingName.c_str(), 500, 5050, 5500));
 
         auto begin = std::chrono::steady_clock::now();
-        const RE::NTupleSize_t n = view.mapping().extents()[0];
+        const RE::NTupleSize_t n = view.extents()[0];
 #pragma omp parallel for
         for(RE::NTupleSize_t i = 0; i < n; i++)
         {

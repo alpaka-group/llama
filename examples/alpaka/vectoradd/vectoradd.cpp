@@ -53,7 +53,7 @@ struct ComputeKernel
     LLAMA_FN_HOST_ACC_INLINE void operator()(const Acc& acc, View a, View b) const
     {
         const auto ti = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc)[0];
-        const auto [n] = a.mapping().extents();
+        const auto [n] = a.extents();
         const auto start = ti * Elems;
         const auto end = alpaka::math::min(acc, start + Elems, n);
 

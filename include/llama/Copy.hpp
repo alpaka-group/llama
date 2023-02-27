@@ -57,7 +57,7 @@ namespace llama
         internal::assertTrivialCopyable<typename Mapping::RecordDim>();
 
         // TODO(bgruber): we do not verify if the mappings have other runtime state than the array dimensions
-        if(srcView.mapping().extents() != dstView.mapping().extents())
+        if(srcView.extents() != dstView.extents())
             throw std::runtime_error{"Array dimensions sizes are different"};
 
         // TODO(bgruber): this is maybe not the best parallel copying strategy
@@ -85,7 +85,7 @@ namespace llama
             std::is_same_v<typename SrcMapping::RecordDim, typename DstMapping::RecordDim>,
             "The source and destination record dimensions must be the same");
 
-        if(srcView.mapping().extents() != dstView.mapping().extents())
+        if(srcView.extents() != dstView.extents())
             throw std::runtime_error{"Array dimensions sizes are different"};
 
         auto copyOne = [&](auto ai) LLAMA_LAMBDA_INLINE
@@ -95,7 +95,7 @@ namespace llama
         };
 
         constexpr auto dims = SrcMapping::ArrayExtents::rank;
-        const auto extents = srcView.mapping().extents().toArray();
+        const auto extents = srcView.extents().toArray();
         const auto workPerThread = (extents[0] + threadCount - 1) / threadCount;
         const auto start = threadId * workPerThread;
         const auto end = std::min((threadId + 1) * workPerThread, static_cast<std::size_t>(extents[0]));
@@ -162,7 +162,7 @@ namespace llama
         static constexpr auto lanesSrc = internal::aosoaLanes<SrcMapping>;
         static constexpr auto lanesDst = internal::aosoaLanes<DstMapping>;
 
-        if(srcView.mapping().extents() != dstView.mapping().extents())
+        if(srcView.extents() != dstView.extents())
             throw std::runtime_error{"Array dimensions sizes are different"};
 
         static constexpr auto srcIsAoSoA = lanesSrc != std::numeric_limits<std::size_t>::max();
@@ -176,7 +176,7 @@ namespace llama
             !dstIsAoSoA || std::tuple_size_v<decltype(dstView.storageBlobs)> == 1,
             "Implementation assumes AoSoA with single blob");
 
-        const auto flatSize = product(dstView.mapping().extents());
+        const auto flatSize = product(dstView.extents());
 
         // TODO(bgruber): implement the following by adding additional copy loops for the remaining elements
         if(!srcIsAoSoA && flatSize % lanesDst != 0)
