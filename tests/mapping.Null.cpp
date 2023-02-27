@@ -13,7 +13,7 @@ TEST_CASE("mapping.Null")
     auto view = llama::allocView(mapping);
     iotaFillView(view);
 
-    for(auto ai : llama::ArrayIndexRange{view.mapping().extents()})
+    for(auto ai : llama::ArrayIndexRange{view.extents()})
         llama::forEachLeafCoord<Particle>(
             [&](auto rc)
             {

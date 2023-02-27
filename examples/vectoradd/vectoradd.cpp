@@ -38,7 +38,7 @@ namespace usellama
     template<typename View>
     [[gnu::noinline]] void compute(const View& a, const View& b, View& c)
     {
-        const auto [n] = c.mapping().extents();
+        const auto [n] = c.extents();
 
         for(std::size_t i = 0; i < n; i++)
         {

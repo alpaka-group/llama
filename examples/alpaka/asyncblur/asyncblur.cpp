@@ -88,8 +88,8 @@ struct BlurKernel
             const int bStart[2]
                 = {bi[0] * ElemsPerBlock + threadIdxInBlock[0], bi[1] * ElemsPerBlock + threadIdxInBlock[1]};
             const int bEnd[2] = {
-                alpaka::math::min(acc, bStart[0] + ElemsPerBlock + 2 * KernelSize, oldImage.mapping().extents()[0]),
-                alpaka::math::min(acc, bStart[1] + ElemsPerBlock + 2 * KernelSize, oldImage.mapping().extents()[1]),
+                alpaka::math::min(acc, bStart[0] + ElemsPerBlock + 2 * KernelSize, oldImage.extents()[0]),
+                alpaka::math::min(acc, bStart[1] + ElemsPerBlock + 2 * KernelSize, oldImage.extents()[1]),
             };
             LLAMA_INDEPENDENT_DATA
             for(auto y = bStart[0]; y < bEnd[0]; y += threadsPerBlock)
@@ -102,8 +102,8 @@ struct BlurKernel
 
         const int start[2] = {ti[0] * Elems, ti[1] * Elems};
         const int end[2] = {
-            alpaka::math::min(acc, start[0] + Elems, oldImage.mapping().extents()[0] - 2 * KernelSize),
-            alpaka::math::min(acc, start[1] + Elems, oldImage.mapping().extents()[1] - 2 * KernelSize),
+            alpaka::math::min(acc, start[0] + Elems, oldImage.extents()[0] - 2 * KernelSize),
+            alpaka::math::min(acc, start[1] + Elems, oldImage.extents()[1] - 2 * KernelSize),
         };
 
         LLAMA_INDEPENDENT_DATA

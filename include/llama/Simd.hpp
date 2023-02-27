@@ -206,7 +206,7 @@ namespace llama
             }
             else
             {
-                auto b = ArrayIndexIterator{srcRef.view.mapping().extents(), srcRef.arrayIndex()};
+                auto b = ArrayIndexIterator{srcRef.view.extents(), srcRef.arrayIndex()};
                 ElementSimd elemSimd; // g++-12 really needs the intermediate elemSimd and memcpy
                 for(auto i = 0; i < Traits::lanes; i++)
                     reinterpret_cast<FieldType*>(&elemSimd)[i]
@@ -248,7 +248,7 @@ namespace llama
                 // TODO(bgruber): how does this generalize conceptually to 2D and higher dimensions? in which
                 // direction should we collect SIMD values?
                 const ElementSimd elemSimd = srcSimd(rc);
-                auto b = ArrayIndexIterator{dstRef.view.mapping().extents(), dstRef.arrayIndex()};
+                auto b = ArrayIndexIterator{dstRef.view.extents(), dstRef.arrayIndex()};
                 for(auto i = 0; i < Traits::lanes; i++)
                     dstRef.view (*b++)(cat(typename T::BoundRecordCoord{}, rc))
                         = reinterpret_cast<const FieldType*>(&elemSimd)[i]; // scalar store

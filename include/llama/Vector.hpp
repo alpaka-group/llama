@@ -182,7 +182,7 @@ namespace llama
 
         LLAMA_FN_HOST_ACC_INLINE auto capacity() const -> size_type
         {
-            return m_view.mapping().extents()[0];
+            return m_view.extents()[0];
         }
 
         // NOLINTNEXTLINE(readability-identifier-naming)

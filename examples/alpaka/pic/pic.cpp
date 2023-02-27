@@ -193,10 +193,10 @@ void output(int n, const ParticleView& particles)
     };
     auto addFloat = [&](float f) { buffer.push_back(swapBytes(f)); };
 
-    const auto pointCount = particles.mapping().extents()[0];
+    const auto pointCount = particles.extents()[0];
     outP << "POINTS " << pointCount << " float\n";
     buffer.reserve(pointCount * 3);
-    for(auto i : llama::ArrayIndexRange{particles.mapping().extents()})
+    for(auto i : llama::ArrayIndexRange{particles.extents()})
     {
         auto p = particles(i);
         addFloat(0);
@@ -207,7 +207,7 @@ void output(int n, const ParticleView& particles)
 
     outP << "POINT_DATA " << pointCount << "\nVECTORS velocity float\n";
     buffer.clear();
-    for(auto i : llama::ArrayIndexRange{particles.mapping().extents()})
+    for(auto i : llama::ArrayIndexRange{particles.extents()})
     {
         auto p = particles(i);
         addFloat(p(U{}, Z{}));
@@ -218,13 +218,13 @@ void output(int n, const ParticleView& particles)
 
     outP << "SCALARS q float 1\nLOOKUP_TABLE default\n";
     buffer.clear();
-    for(auto i : llama::ArrayIndexRange{particles.mapping().extents()})
+    for(auto i : llama::ArrayIndexRange{particles.extents()})
         addFloat(particles(i)(Q{}));
     flushBuffer();
 
     outP << "SCALARS m float 1\nLOOKUP_TABLE default\n";
     buffer.clear();
-    for(auto i : llama::ArrayIndexRange{particles.mapping().extents()})
+    for(auto i : llama::ArrayIndexRange{particles.extents()})
         addFloat(particles(i)(M{}));
     flushBuffer();
 }
