@@ -419,7 +419,7 @@ namespace
     {
         std::filesystem::create_directories(heatmapFile.parent_path());
         const auto& m = v.mapping();
-        m.writeGnuplotDataFileBinary(v.storageBlobs, std::ofstream{heatmapFile});
+        m.writeGnuplotDataFileBinary(v.blobs(), std::ofstream{heatmapFile});
         std::ofstream{heatmapFile.parent_path() / "plot.sh"} << View::Mapping::gnuplotScriptBinary;
     }
 
@@ -428,13 +428,13 @@ namespace
     {
         const auto bc = View::Mapping::blobCount;
         for(int i = bc / 2; i < bc; i++)
-            std::memset(&v.storageBlobs[i][0], 0, v.mapping().blobSize(i));
+            std::memset(&v.blobs()[i][0], 0, v.mapping().blobSize(i));
     }
 
     template<typename View>
     void clearFieldAccessCounts(View& v)
     {
-        v.mapping().fieldHits(v.storageBlobs) = {};
+        v.mapping().fieldHits(v.blobs()) = {};
     }
 
     template<typename View>
@@ -470,7 +470,7 @@ namespace
         const auto& m = v.mapping();
         for(std::size_t i = 0; i < View::Mapping::blobCount / 2; i++)
         {
-            auto* bh = m.blockHitsPtr(i, v.storageBlobs);
+            auto* bh = m.blockHitsPtr(i, v.blobs());
             auto size = m.blockHitsSize(i);
             total += std::count_if(bh, bh + size, [](auto c) { return c > 0; });
         }
@@ -485,7 +485,7 @@ namespace
         auto [view, conversionTime] = convertRNTupleToLLAMA<Mapping>(inputFile);
         if constexpr(llama::mapping::isFieldAccessCount<Mapping>)
         {
-            view.mapping().printFieldHits(view.storageBlobs);
+            view.mapping().printFieldHits(view.blobs());
             clearFieldAccessCounts(view);
         }
         if constexpr(llama::mapping::isHeatmap<Mapping>)
@@ -511,7 +511,7 @@ namespace
             totalAnalysisTime += analysisTime;
         }
         if constexpr(llama::mapping::isFieldAccessCount<Mapping>)
-            view.mapping().printFieldHits(view.storageBlobs);
+            view.mapping().printFieldHits(view.blobs());
         if constexpr(llama::mapping::isHeatmap<Mapping>)
             saveHeatmap(view, heatmapFolder + "/" + mappingName + "_analysis.bin");
         save(hist, mappingName);

@@ -90,7 +90,7 @@ TEST_CASE("mapping.ByteSplit.SoA.verify")
         //                                                                  : (b == 3 || b == 7 || b == 11);
         const auto isNonZero = (b == 0 || b == 4 || b == 8);
         for(auto i = 0; i < 128; i++)
-            CHECK(view.storageBlobs[b][i] == (isNonZero ? static_cast<std::byte>(i) : std::byte{0}));
+            CHECK(view.blobs()[b][i] == (isNonZero ? static_cast<std::byte>(i) : std::byte{0}));
     }
 }
 

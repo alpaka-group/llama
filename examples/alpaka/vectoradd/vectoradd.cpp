@@ -152,8 +152,8 @@ try
     const auto blobCount = decltype(mapping)::blobCount;
     for(std::size_t i = 0; i < blobCount; i++)
     {
-        alpaka::memcpy(queue, devA.storageBlobs[i], hostA.storageBlobs[i]);
-        alpaka::memcpy(queue, devB.storageBlobs[i], hostB.storageBlobs[i]);
+        alpaka::memcpy(queue, devA.blobs()[i], hostA.blobs()[i]);
+        alpaka::memcpy(queue, devB.blobs()[i], hostB.blobs()[i]);
     }
     chrono.printAndReset("Copy H->D");
 
@@ -175,8 +175,8 @@ try
 
     for(std::size_t i = 0; i < blobCount; i++)
     {
-        alpaka::memcpy(queue, hostA.storageBlobs[i], devA.storageBlobs[i]);
-        alpaka::memcpy(queue, hostB.storageBlobs[i], devB.storageBlobs[i]);
+        alpaka::memcpy(queue, hostA.blobs()[i], devA.blobs()[i]);
+        alpaka::memcpy(queue, hostB.blobs()[i], devB.blobs()[i]);
     }
     chrono.printAndReset("Copy D->H");
 }

@@ -330,10 +330,7 @@ try
                     hostChunkView[chunkNr](y, x) = subViewHost(y, x);
             }
             for(std::size_t i = 0; i < devMapping.blobCount; i++)
-                alpaka::memcpy(
-                    queue[chunkNr],
-                    devOldView[chunkNr].storageBlobs[i],
-                    hostChunkView[chunkNr].storageBlobs[i]);
+                alpaka::memcpy(queue[chunkNr], devOldView[chunkNr].blobs()[i], hostChunkView[chunkNr].blobs()[i]);
 
             alpaka::exec<Acc>(
                 queue[chunkNr],
@@ -343,10 +340,7 @@ try
                 llama::shallowCopy(devNewView[chunkNr]));
 
             for(std::size_t i = 0; i < devMapping.blobCount; i++)
-                alpaka::memcpy(
-                    queue[chunkNr],
-                    hostChunkView[chunkNr].storageBlobs[i],
-                    devNewView[chunkNr].storageBlobs[i]);
+                alpaka::memcpy(queue[chunkNr], hostChunkView[chunkNr].blobs()[i], devNewView[chunkNr].blobs()[i]);
         }
 
     // Wait for not finished tasks on accelerator

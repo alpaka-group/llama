@@ -108,7 +108,7 @@ namespace llama
         {
             const auto& mapping = view.mapping();
             for(std::size_t i = 0; i < View::Mapping::blobCount; i++)
-                std::memset(&view.storageBlobs[i][0], pattern, mapping.blobSize(i));
+                std::memset(&view.blobs()[i][0], pattern, mapping.blobSize(i));
         }
 
         template<typename View, typename RecordCoord>
@@ -127,7 +127,7 @@ namespace llama
 
             using Type = GetType<RecordDim, decltype(rc)>;
             // computed values can come from anywhere, so we can only apply heuristics
-            auto& blobs = view.storageBlobs;
+            auto& blobs = view.blobs();
             auto&& ref = view.mapping().compute(ai, rc, blobs);
 
             // try to find the mapped address in one of the blobs
