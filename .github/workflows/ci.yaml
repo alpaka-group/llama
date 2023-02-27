@@ -40,6 +40,12 @@ jobs:
     runs-on: ubuntu-22.04
     env:
       CXX: clang++-15
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - files: '../tests'
+          - files: '../examples'
     steps:
     - uses: actions/checkout@v3
     - name: add LLVM apt repo
@@ -69,7 +75,7 @@ jobs:
       run: |
         cd build
         sed -i 's/\(-forward-unknown-to-host-compiler\|--generate-code=arch=[^ ]\+\|--expt-extended-lambda\|--extended-lambda\|--expt-relaxed-constexpr\|--use_fast_math\)//g' compile_commands.json # remove NVCC specific flags which clang cannot handle
-        run-clang-tidy-15 -j $THREADS -header-filter='(tests|include/llama|examples)' -extra-arg=--no-cuda-version-check -extra-arg=-nocudalib -extra-arg=-Wno-unused-command-line-argument '^(?!.*'$PWD').*$'
+        run-clang-tidy-15 -j $THREADS -header-filter='(tests|include/llama|examples)' -extra-arg=--no-cuda-version-check -extra-arg=-nocudalib -extra-arg=-Wno-unused-command-line-argument ${{ matrix.files }}
 
   coverage:
     needs: clang-format
