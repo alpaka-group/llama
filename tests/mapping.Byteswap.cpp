@@ -40,7 +40,7 @@ TEST_CASE("mapping.Byteswap.CheckBytes")
     view(0)(tag::Y{}) = 0x1234;
     view(0)(tag::Z{}) = 0x12345678;
 
-    std::byte* p = &view.storageBlobs[0][0]; // NOLINT(readability-container-data-pointer)
+    std::byte* p = &view.blobs()[0][0]; // NOLINT(readability-container-data-pointer)
     CHECK(*reinterpret_cast<uint8_t*>(p) == 0x12);
     CHECK(*reinterpret_cast<uint16_t*>(p + 2) == 0x3412);
     CHECK(*reinterpret_cast<uint32_t*>(p + 4) == 0x78563412);

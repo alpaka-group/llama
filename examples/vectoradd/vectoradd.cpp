@@ -119,7 +119,7 @@ namespace usellama
         }
         plotFile << "\"" << mappingname << "\"\t" << acc / steps << '\n';
 
-        return static_cast<int>(c.storageBlobs[0][0]);
+        return static_cast<int>(c.blobs()[0][0]);
     }
 } // namespace usellama
 

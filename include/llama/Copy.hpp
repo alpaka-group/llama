@@ -63,8 +63,8 @@ namespace llama
         // TODO(bgruber): this is maybe not the best parallel copying strategy
         for(std::size_t i = 0; i < Mapping::blobCount; i++)
             internal::parallelMemcpy(
-                &dstView.storageBlobs[i][0],
-                &srcView.storageBlobs[i][0],
+                &dstView.blobs()[i][0],
+                &srcView.blobs()[i][0],
                 dstView.mapping().blobSize(i),
                 threadId,
                 threadCount);
@@ -169,12 +169,8 @@ namespace llama
         static constexpr auto dstIsAoSoA = lanesDst != std::numeric_limits<std::size_t>::max();
 
         static_assert(srcIsAoSoA || dstIsAoSoA, "At least one of the mappings must be an AoSoA mapping");
-        static_assert(
-            !srcIsAoSoA || std::tuple_size_v<decltype(srcView.storageBlobs)> == 1,
-            "Implementation assumes AoSoA with single blob");
-        static_assert(
-            !dstIsAoSoA || std::tuple_size_v<decltype(dstView.storageBlobs)> == 1,
-            "Implementation assumes AoSoA with single blob");
+        static_assert(!srcIsAoSoA || SrcMapping::blobCount == 1, "Implementation assumes AoSoA with single blob");
+        static_assert(!dstIsAoSoA || DstMapping::blobCount == 1, "Implementation assumes AoSoA with single blob");
 
         const auto flatSize = product(dstView.extents());
 
@@ -207,21 +203,21 @@ namespace llama
         auto mapSrc = [&](std::size_t flatArrayIndex, auto rc) LLAMA_LAMBDA_INLINE
         {
             if constexpr(srcIsAoSoA)
-                return &srcView.storageBlobs[0][0] + mapAoSoA(flatArrayIndex, rc, lanesSrc);
+                return &srcView.blobs()[0][0] + mapAoSoA(flatArrayIndex, rc, lanesSrc);
             else
             {
                 const auto [blob, off] = mapSoA(flatArrayIndex, rc, isSrcMB);
-                return &srcView.storageBlobs[blob][off];
+                return &srcView.blobs()[blob][off];
             }
         };
         auto mapDst = [&](std::size_t flatArrayIndex, auto rc) LLAMA_LAMBDA_INLINE
         {
             if constexpr(dstIsAoSoA)
-                return &dstView.storageBlobs[0][0] + mapAoSoA(flatArrayIndex, rc, lanesDst);
+                return &dstView.blobs()[0][0] + mapAoSoA(flatArrayIndex, rc, lanesDst);
             else
             {
                 const auto [blob, off] = mapSoA(flatArrayIndex, rc, isDstMB);
-                return &dstView.storageBlobs[blob][off];
+                return &dstView.blobs()[blob][off];
             }
         };
 

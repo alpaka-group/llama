@@ -102,10 +102,10 @@ void daxpyAlpakaLlama(std::string mappingName, std::ofstream& plotFile, Mapping 
 
     for(std::size_t i = 0; i < Mapping::blobCount; i++)
     {
-        auto vx = alpaka::createView(devHost, &x.storageBlobs[0][0], mapping.blobSize(i));
-        auto vy = alpaka::createView(devHost, &y.storageBlobs[0][0], mapping.blobSize(i));
-        alpaka::memcpy(queue, viewX.storageBlobs[i], vx);
-        alpaka::memcpy(queue, viewY.storageBlobs[i], vy);
+        auto vx = alpaka::createView(devHost, &x.blobs()[0][0], mapping.blobSize(i));
+        auto vy = alpaka::createView(devHost, &y.blobs()[0][0], mapping.blobSize(i));
+        alpaka::memcpy(queue, viewX.blobs()[i], vx);
+        alpaka::memcpy(queue, viewY.blobs()[i], vy);
     }
     watch.printAndReset("copy H->D");
 
@@ -145,8 +145,8 @@ void daxpyAlpakaLlama(std::string mappingName, std::ofstream& plotFile, Mapping 
 
     for(std::size_t i = 0; i < Mapping::blobCount; i++)
     {
-        auto vz = alpaka::createView(devHost, &z.storageBlobs[0][0], mapping.blobSize(i));
-        alpaka::memcpy(queue, vz, viewZ.storageBlobs[i]);
+        auto vz = alpaka::createView(devHost, &z.blobs()[0][0], mapping.blobSize(i));
+        alpaka::memcpy(queue, vz, viewZ.blobs()[i]);
     }
     watch.printAndReset("copy D->H");
 

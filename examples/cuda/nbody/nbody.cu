@@ -247,7 +247,7 @@ try
         hostView(i) = p;
     }
     if constexpr(countFieldAccesses)
-        hostView.mapping().fieldHits(hostView.storageBlobs) = {};
+        hostView.mapping().fieldHits(hostView.blobs()) = {};
 
     watch.printAndReset("init");
 
@@ -267,18 +267,18 @@ try
     };
 
     start();
-    const auto blobs = hostView.storageBlobs.size() / (heatmap ? 2 : 1); // exclude heatmap blobs
+    const auto blobs = hostView.blobs().size() / (heatmap ? 2 : 1); // exclude heatmap blobs
     for(std::size_t i = 0; i < blobs; i++)
         checkError(cudaMemcpy(
-            &accView.storageBlobs[i][0],
-            &hostView.storageBlobs[i][0],
+            &accView.blobs()[i][0],
+            &hostView.blobs()[i][0],
             hostView.mapping().blobSize(i),
             cudaMemcpyHostToDevice));
     if constexpr(heatmap)
     {
         auto& hmap = accView.mapping();
         for(std::size_t i = 0; i < blobs; i++)
-            cudaMemsetAsync(hmap.blockHitsPtr(i, accView.storageBlobs), 0, hmap.blockHitsSize(i) * sizeof(CountType));
+            cudaMemsetAsync(hmap.blockHitsPtr(i, accView.blobs()), 0, hmap.blockHitsSize(i) * sizeof(CountType));
     }
     std::cout << "copy H->D " << stop() << " s\n";
 
@@ -309,17 +309,17 @@ try
     plotFile << std::quoted(title) << "\t" << sumUpdate / steps << '\t' << sumMove / steps << '\n';
 
     start();
-    for(std::size_t i = 0; i < hostView.storageBlobs.size(); i++)
+    for(std::size_t i = 0; i < hostView.blobs().size(); i++)
         checkError(cudaMemcpy(
-            &hostView.storageBlobs[i][0],
-            &accView.storageBlobs[i][0],
+            &hostView.blobs()[i][0],
+            &accView.blobs()[i][0],
             hostView.mapping().blobSize(i),
             cudaMemcpyDeviceToHost));
     std::cout << "copy D->H " << stop() << " s\n";
 
     if constexpr(countFieldAccesses)
     {
-        hostView.mapping().printFieldHits(hostView.storageBlobs);
+        hostView.mapping().printFieldHits(hostView.blobs());
     }
     else if constexpr(heatmap)
     {
@@ -329,7 +329,7 @@ try
                 c = '_';
         std::ofstream{"plot_heatmap.sh"} << hostView.mapping().gnuplotScript;
         hostView.mapping().writeGnuplotDataFile(
-            hostView.storageBlobs,
+            hostView.blobs(),
             std::ofstream{"cuda_nbody_heatmap_" + titleCopy + ".dat"});
     }
 

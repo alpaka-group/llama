@@ -135,7 +135,7 @@ void iotaStorage(View& view)
     for(auto i = 0; i < View::Mapping::blobCount; i++)
     {
         auto fillFunc = [val = 0]() mutable { return static_cast<typename View::BlobType::PrimType>(val++); };
-        std::generate_n(view.storageBlobs[i].storageBlobs.get(), view.mapping().blobSize(i), fillFunc);
+        std::generate_n(view.blobs()[i].blobs().get(), view.mapping().blobSize(i), fillFunc);
     }
 }
 
@@ -282,10 +282,10 @@ struct TriangleAoSWithComputedNormal : llama::mapping::PackedAoS<ArrayExtents, R
     constexpr auto compute(
         ArrayIndex ai,
         llama::RecordCoord<RecordCoords...>,
-        llama::Array<Blob, Base::blobCount>& storageBlobs) const
+        llama::Array<Blob, Base::blobCount>& blobs) const
     {
         auto fetch = [&](llama::NrAndOffset<std::size_t> nrAndOffset) -> double
-        { return *reinterpret_cast<double*>(&storageBlobs[nrAndOffset.nr][nrAndOffset.offset]); };
+        { return *reinterpret_cast<double*>(&blobs[nrAndOffset.nr][nrAndOffset.offset]); };
 
         const auto ax = fetch(Base::template blobNrAndOffset<0, 0>(ai));
         const auto ay = fetch(Base::template blobNrAndOffset<0, 1>(ai));

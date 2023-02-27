@@ -242,7 +242,7 @@ void run(const std::string& mappingName)
             const auto src = srcBlobs[i];
             const auto dst = dstBlobs[i];
             assert(mapping.blobSize(src) == mapping.blobSize(dst));
-            std::memcpy(&dstView.storageBlobs[dst][0], &srcView.storageBlobs[src][0], mapping.blobSize(src));
+            std::memcpy(&dstView.blobs()[dst][0], &srcView.blobs()[src][0], mapping.blobSize(src));
         }
     };
 

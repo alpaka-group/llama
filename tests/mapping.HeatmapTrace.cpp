@@ -44,10 +44,10 @@ namespace
     auto blockHitsSpan(View view, int i)
     {
 #ifdef __cpp_lib_span
-        const auto span = view.mapping().blockHits(i, view.storageBlobs);
+        const auto span = view.mapping().blockHits(i, view.blobs());
         return std::vector(span.begin(), span.end());
 #else
-        const auto* p = view.mapping().blockHitsPtr(i, view.storageBlobs);
+        const auto* p = view.mapping().blockHitsPtr(i, view.blobs());
         const auto size = view.mapping().blockHitsSize(i);
         return std::vector(p, p + size);
 #endif
@@ -72,7 +72,7 @@ TEST_CASE("Heatmap.simple")
                                                              1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0});
 
     std::stringstream ss;
-    hmap.writeGnuplotDataFileAscii(view.storageBlobs, ss, false, 24);
+    hmap.writeGnuplotDataFileAscii(view.blobs(), ss, false, 24);
     CHECK(ss.str() == "0 0 0 0 1 1 1 1 0 0 0 0 1 1 1 1 0 0 0 0 0 0 0 0\n");
 }
 
@@ -93,11 +93,11 @@ TEST_CASE("Heatmap.perInt")
     CHECK(blockHitsSpan(view, 0) == std::vector<std::size_t>{0, 1, 0, 1, 0, 0});
 
     std::stringstream ss;
-    hmap.writeGnuplotDataFileAscii(view.storageBlobs, ss, false, 6);
+    hmap.writeGnuplotDataFileAscii(view.blobs(), ss, false, 6);
     CHECK(ss.str() == "0 1 0 1 0 0\n");
 
     ss = {};
-    hmap.writeGnuplotDataFileAscii(view.storageBlobs, ss, true, 6);
+    hmap.writeGnuplotDataFileAscii(view.blobs(), ss, true, 6);
     CHECK(ss.str() == "0 1 0 1 0 0\n");
 }
 
@@ -121,7 +121,7 @@ TEST_CASE("Heatmap.nbody")
         {
             std::ofstream{"plot_heatmap_ascii.sh"} << particles.mapping().gnuplotScriptAscii;
             std::stringstream ss;
-            particles.mapping().writeGnuplotDataFileAscii(particles.storageBlobs, ss);
+            particles.mapping().writeGnuplotDataFileAscii(particles.blobs(), ss);
             const auto script = ss.str();
             std::ofstream{"heatmap." + name + ".dat"} << script;
             CHECK(script == expectedScript);
@@ -131,7 +131,7 @@ TEST_CASE("Heatmap.nbody")
             std::ofstream{"plot_heatmap_binary.sh"} << particles.mapping().gnuplotScriptBinary;
             std::vector<char> v;
             auto bsd = boost::iostreams::back_inserter(v);
-            particles.mapping().writeGnuplotDataFileBinary(particles.storageBlobs, bsd);
+            particles.mapping().writeGnuplotDataFileBinary(particles.blobs(), bsd);
             std::ofstream{"heatmap." + name + ".bin", std::ios::binary}.write(
                 v.data(),
                 static_cast<std::streamsize>(v.size()));
@@ -176,7 +176,7 @@ TEMPLATE_LIST_TEST_CASE("FieldAccessCount.nbody.mem_locs_computed", "", SizeType
         auto particles = llama::allocView(llama::mapping::FieldAccessCount<decltype(mapping), TestType, false>{
             mapping}); // view initialization also writes!
         updateAndMove(particles);
-        auto& hits = particles.mapping().fieldHits(particles.storageBlobs);
+        auto& hits = particles.mapping().fieldHits(particles.blobs());
         CHECK(hits.size() == 7);
         CHECK(hits[0].memLocsComputed == 10400);
         CHECK(hits[1].memLocsComputed == 10400);
@@ -188,7 +188,7 @@ TEMPLATE_LIST_TEST_CASE("FieldAccessCount.nbody.mem_locs_computed", "", SizeType
 
         const std::stringstream buffer;
         std::streambuf* old = std::cout.rdbuf(buffer.rdbuf());
-        particles.mapping().printFieldHits(particles.storageBlobs);
+        particles.mapping().printFieldHits(particles.blobs());
         std::cout.rdbuf(old);
         CHECK(buffer.str() == R"(Field       Size Mlocs cmp
 Pos.X          8     10400
@@ -215,7 +215,7 @@ TEMPLATE_LIST_TEST_CASE("FieldAccessCount.nbody.reads_writes", "", SizeTypes)
         auto particles = llama::allocView(llama::mapping::FieldAccessCount<decltype(mapping), TestType>{
             mapping}); // view initialization also writes!
         updateAndMove(particles);
-        auto& hits = particles.mapping().fieldHits(particles.storageBlobs);
+        auto& hits = particles.mapping().fieldHits(particles.blobs());
         CHECK(hits.size() == 7);
         CHECK(hits[0].reads == 10200);
         CHECK(hits[1].reads == 10200);
@@ -234,7 +234,7 @@ TEMPLATE_LIST_TEST_CASE("FieldAccessCount.nbody.reads_writes", "", SizeTypes)
 
         const std::stringstream buffer;
         std::streambuf* old = std::cout.rdbuf(buffer.rdbuf());
-        particles.mapping().printFieldHits(particles.storageBlobs);
+        particles.mapping().printFieldHits(particles.blobs());
         std::cout.rdbuf(old);
         CHECK(buffer.str() == R"(Field       Size     Reads     Writes
 Pos.X          8     10200        300

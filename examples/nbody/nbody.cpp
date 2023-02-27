@@ -360,7 +360,7 @@ namespace usellama
             p(tag::Mass{}) = dist(engine) / FP{100};
         }
         if constexpr(countFieldAccesses)
-            particles.mapping().fieldHits(particles.storageBlobs) = {};
+            particles.mapping().fieldHits(particles.blobs()) = {};
         watch.printAndReset("init");
 
         double sumUpdate = 0;
@@ -393,7 +393,7 @@ namespace usellama
         if constexpr(heatmap)
             std::ofstream("nbody_heatmap_" + mappingName(Mapping) + ".sh") << particles.mapping().toGnuplotScript();
         if constexpr(countFieldAccesses)
-            particles.mapping().printFieldHits(particles.storageBlobs);
+            particles.mapping().printFieldHits(particles.blobs());
 
         return printReferenceParticle(particles(referenceParticleIndex)(tag::Pos{}).load());
     }

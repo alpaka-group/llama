@@ -319,7 +319,7 @@ TEST_CASE("view.transformBlobs")
     auto copy = llama::transformBlobs(
         view,
         [](auto& vector) { return std::deque<std::byte>(vector.begin(), vector.end()); });
-    STATIC_REQUIRE(std::is_same_v<std::decay_t<decltype(copy.storageBlobs[0])>, std::deque<std::byte>>);
+    STATIC_REQUIRE(std::is_same_v<std::decay_t<decltype(copy.blobs()[0])>, std::deque<std::byte>>);
     iotaCheckView(copy);
 }
 
@@ -337,8 +337,8 @@ TEMPLATE_TEST_CASE(
                        typename std::decay_t<decltype(view)>::Mapping,
                        typename std::decay_t<decltype(copy)>::Mapping>);
         // check that blob start address is the same
-        for(std::size_t i = 0; i < view.storageBlobs.size(); i++)
-            CHECK(&view.storageBlobs[i][0] == &copy.storageBlobs[i][0]);
+        for(std::size_t i = 0; i < view.blobs().size(); i++)
+            CHECK(&view.blobs()[i][0] == &copy.blobs()[i][0]);
     };
 
     const auto copy = llama::shallowCopy(view);

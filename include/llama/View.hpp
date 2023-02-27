@@ -440,11 +440,16 @@ namespace llama
         // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init,hicpp-member-init)
         View() = default;
 
+        /// Creates a LLAMA View manually. Prefer the allocations functions \ref allocView and \ref
+        /// allocViewUninitialized if possible.
+        /// \param mapping The mapping used by the view to map accesses into memory.
+        /// \param blobs An array of blobs providing storage space for the mapped data.
+        /// \param accessor The accessor to use when an access is made through this view.
         LLAMA_FN_HOST_ACC_INLINE
-        explicit View(Mapping mapping, Array<BlobType, Mapping::blobCount> storageBlobs = {}, Accessor accessor = {})
+        explicit View(Mapping mapping, Array<BlobType, Mapping::blobCount> blobs = {}, Accessor accessor = {})
             : Mapping(std::move(mapping))
             , Accessor(std::move(accessor))
-            , storageBlobs(std::move(storageBlobs))
+            , m_blobs(std::move(blobs))
         {
         }
 
@@ -595,7 +600,15 @@ namespace llama
             return {ArrayIndexRange<ArrayExtents>{extents()}.end(), this};
         }
 
-        Array<BlobType, Mapping::blobCount> storageBlobs;
+        LLAMA_FN_HOST_ACC_INLINE auto blobs() -> Array<BlobType, Mapping::blobCount>&
+        {
+            return m_blobs;
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE auto blobs() const -> const Array<BlobType, Mapping::blobCount>&
+        {
+            return m_blobs;
+        }
 
     private:
         template<typename TView, typename TBoundRecordCoord, bool OwnView>
@@ -604,14 +617,16 @@ namespace llama
         template<std::size_t... Coords>
         LLAMA_FN_HOST_ACC_INLINE auto access(ArrayIndex ai, RecordCoord<Coords...> rc = {}) const -> decltype(auto)
         {
-            return accessor()(mapToMemory(mapping(), ai, rc, storageBlobs));
+            return accessor()(mapToMemory(mapping(), ai, rc, m_blobs));
         }
 
         template<std::size_t... Coords>
         LLAMA_FN_HOST_ACC_INLINE auto access(ArrayIndex ai, RecordCoord<Coords...> rc = {}) -> decltype(auto)
         {
-            return accessor()(mapToMemory(mapping(), ai, rc, storageBlobs));
+            return accessor()(mapToMemory(mapping(), ai, rc, m_blobs));
         }
+
+        Array<BlobType, Mapping::blobCount> m_blobs;
     };
 
     template<typename View>
@@ -624,11 +639,11 @@ namespace llama
     {
         template<typename Blobs, typename TransformBlobFunc, std::size_t... Is>
         LLAMA_FN_HOST_ACC_INLINE auto makeTransformedBlobArray(
-            Blobs& storageBlobs,
+            Blobs& blobs,
             const TransformBlobFunc& transformBlob,
             std::integer_sequence<std::size_t, Is...>)
         {
-            return llama::Array{transformBlob(storageBlobs[Is])...};
+            return llama::Array{transformBlob(blobs[Is])...};
         }
     } // namespace internal
 
@@ -638,10 +653,8 @@ namespace llama
     LLAMA_FN_HOST_ACC_INLINE auto transformBlobs(View& view, const TransformBlobFunc& transformBlob)
     {
         constexpr auto blobCount = std::decay_t<View>::Mapping::blobCount;
-        auto blobs = internal::makeTransformedBlobArray(
-            view.storageBlobs,
-            transformBlob,
-            std::make_index_sequence<blobCount>{});
+        auto blobs
+            = internal::makeTransformedBlobArray(view.blobs(), transformBlob, std::make_index_sequence<blobCount>{});
         return llama::View<typename View::Mapping, typename decltype(blobs)::value_type, typename View::Accessor>{
             view.mapping(),
             std::move(blobs),
@@ -678,7 +691,7 @@ namespace llama
     {
         return View<Mapping, BlobType, NewAccessor>{
             std::move(view.mapping()),
-            std::move(view.storageBlobs),
+            std::move(view.blobs()),
             std::move(newAccessor)};
     }
 
@@ -696,7 +709,7 @@ namespace llama
 
         return View<NewMapping, BlobType, Accessor>{
             std::move(newMapping),
-            std::move(view.storageBlobs),
+            std::move(view.blobs()),
             std::move(view.accessor())};
     }
 

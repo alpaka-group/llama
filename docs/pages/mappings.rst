@@ -199,7 +199,7 @@ A script for gnuplot visualizing the heatmap can be extracted.
     auto anyMapping = ...;
     llama::mapping::Heatmap mapping{anyMapping};
     ...
-    mapping.writeGnuplotDataFileBinary(view.storageBlobs, std::ofstream{"heatmap.data", std::ios::binary});
+    mapping.writeGnuplotDataFileBinary(view.blobs(), std::ofstream{"heatmap.data", std::ios::binary});
     std::ofstream{"plot.sh"} << mapping.gnuplotScriptBinary;
 
 
@@ -215,7 +215,7 @@ The mapping adds an additional blob to the blobs of the inner mapping used as st
     auto anyMapping = ...;
     llama::mapping::FieldAccessCount mapping{anyMapping};
     ...
-    mapping.printFieldHits(view.storageBlobs); // print report with read and writes to each field
+    mapping.printFieldHits(view.blobs()); // print report with read and writes to each field
 
 The FieldAccessCount mapping uses proxy references to instrument reads and writes.
 If this is problematic, it can also be configured to return raw C++ references.
