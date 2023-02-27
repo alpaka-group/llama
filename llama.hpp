@@ -3961,11 +3961,16 @@
 	        // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init,hicpp-member-init)
 	        View() = default;
 
+	        /// Creates a LLAMA View manually. Prefer the allocations functions \ref allocView and \ref
+	        /// allocViewUninitialized if possible.
+	        /// \param mapping The mapping used by the view to map accesses into memory.
+	        /// \param blobs An array of blobs providing storage space for the mapped data.
+	        /// \param accessor The accessor to use when an access is made through this view.
 	        LLAMA_FN_HOST_ACC_INLINE
-	        explicit View(Mapping mapping, Array<BlobType, Mapping::blobCount> storageBlobs = {}, Accessor accessor = {})
+	        explicit View(Mapping mapping, Array<BlobType, Mapping::blobCount> blobs = {}, Accessor accessor = {})
 	            : Mapping(std::move(mapping))
 	            , Accessor(std::move(accessor))
-	            , storageBlobs(std::move(storageBlobs))
+	            , m_blobs(std::move(blobs))
 	        {
 	        }
 
@@ -4116,7 +4121,15 @@
 	            return {ArrayIndexRange<ArrayExtents>{extents()}.end(), this};
 	        }
 
-	        Array<BlobType, Mapping::blobCount> storageBlobs;
+	        LLAMA_FN_HOST_ACC_INLINE auto blobs() -> Array<BlobType, Mapping::blobCount>&
+	        {
+	            return m_blobs;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE auto blobs() const -> const Array<BlobType, Mapping::blobCount>&
+	        {
+	            return m_blobs;
+	        }
 
 	    private:
 	        template<typename TView, typename TBoundRecordCoord, bool OwnView>
@@ -4125,14 +4138,16 @@
 	        template<std::size_t... Coords>
 	        LLAMA_FN_HOST_ACC_INLINE auto access(ArrayIndex ai, RecordCoord<Coords...> rc = {}) const -> decltype(auto)
 	        {
-	            return accessor()(mapToMemory(mapping(), ai, rc, storageBlobs));
+	            return accessor()(mapToMemory(mapping(), ai, rc, m_blobs));
 	        }
 
 	        template<std::size_t... Coords>
 	        LLAMA_FN_HOST_ACC_INLINE auto access(ArrayIndex ai, RecordCoord<Coords...> rc = {}) -> decltype(auto)
 	        {
-	            return accessor()(mapToMemory(mapping(), ai, rc, storageBlobs));
+	            return accessor()(mapToMemory(mapping(), ai, rc, m_blobs));
 	        }
+
+	        Array<BlobType, Mapping::blobCount> m_blobs;
 	    };
 
 	    template<typename View>
@@ -4145,11 +4160,11 @@
 	    {
 	        template<typename Blobs, typename TransformBlobFunc, std::size_t... Is>
 	        LLAMA_FN_HOST_ACC_INLINE auto makeTransformedBlobArray(
-	            Blobs& storageBlobs,
+	            Blobs& blobs,
 	            const TransformBlobFunc& transformBlob,
 	            std::integer_sequence<std::size_t, Is...>)
 	        {
-	            return llama::Array{transformBlob(storageBlobs[Is])...};
+	            return llama::Array{transformBlob(blobs[Is])...};
 	        }
 	    } // namespace internal
 
@@ -4159,10 +4174,8 @@
 	    LLAMA_FN_HOST_ACC_INLINE auto transformBlobs(View& view, const TransformBlobFunc& transformBlob)
 	    {
 	        constexpr auto blobCount = std::decay_t<View>::Mapping::blobCount;
-	        auto blobs = internal::makeTransformedBlobArray(
-	            view.storageBlobs,
-	            transformBlob,
-	            std::make_index_sequence<blobCount>{});
+	        auto blobs
+	            = internal::makeTransformedBlobArray(view.blobs(), transformBlob, std::make_index_sequence<blobCount>{});
 	        return llama::View<typename View::Mapping, typename decltype(blobs)::value_type, typename View::Accessor>{
 	            view.mapping(),
 	            std::move(blobs),
@@ -4199,7 +4212,7 @@
 	    {
 	        return View<Mapping, BlobType, NewAccessor>{
 	            std::move(view.mapping()),
-	            std::move(view.storageBlobs),
+	            std::move(view.blobs()),
 	            std::move(newAccessor)};
 	    }
 
@@ -4217,7 +4230,7 @@
 
 	        return View<NewMapping, BlobType, Accessor>{
 	            std::move(newMapping),
-	            std::move(view.storageBlobs),
+	            std::move(view.blobs()),
 	            std::move(view.accessor())};
 	    }
 
@@ -4411,7 +4424,7 @@ namespace llama
         {
             const auto& mapping = view.mapping();
             for(std::size_t i = 0; i < View::Mapping::blobCount; i++)
-                std::memset(&view.storageBlobs[i][0], pattern, mapping.blobSize(i));
+                std::memset(&view.blobs()[i][0], pattern, mapping.blobSize(i));
         }
 
         template<typename View, typename RecordCoord>
@@ -4430,7 +4443,7 @@ namespace llama
 
             using Type = GetType<RecordDim, decltype(rc)>;
             // computed values can come from anywhere, so we can only apply heuristics
-            auto& blobs = view.storageBlobs;
+            auto& blobs = view.blobs();
             auto&& ref = view.mapping().compute(ai, rc, blobs);
 
             // try to find the mapped address in one of the blobs
@@ -8981,8 +8994,8 @@ namespace llama::mapping
 	        // TODO(bgruber): this is maybe not the best parallel copying strategy
 	        for(std::size_t i = 0; i < Mapping::blobCount; i++)
 	            internal::parallelMemcpy(
-	                &dstView.storageBlobs[i][0],
-	                &srcView.storageBlobs[i][0],
+	                &dstView.blobs()[i][0],
+	                &srcView.blobs()[i][0],
 	                dstView.mapping().blobSize(i),
 	                threadId,
 	                threadCount);
@@ -9087,12 +9100,8 @@ namespace llama::mapping
 	        static constexpr auto dstIsAoSoA = lanesDst != std::numeric_limits<std::size_t>::max();
 
 	        static_assert(srcIsAoSoA || dstIsAoSoA, "At least one of the mappings must be an AoSoA mapping");
-	        static_assert(
-	            !srcIsAoSoA || std::tuple_size_v<decltype(srcView.storageBlobs)> == 1,
-	            "Implementation assumes AoSoA with single blob");
-	        static_assert(
-	            !dstIsAoSoA || std::tuple_size_v<decltype(dstView.storageBlobs)> == 1,
-	            "Implementation assumes AoSoA with single blob");
+	        static_assert(!srcIsAoSoA || SrcMapping::blobCount == 1, "Implementation assumes AoSoA with single blob");
+	        static_assert(!dstIsAoSoA || DstMapping::blobCount == 1, "Implementation assumes AoSoA with single blob");
 
 	        const auto flatSize = product(dstView.extents());
 
@@ -9125,21 +9134,21 @@ namespace llama::mapping
 	        auto mapSrc = [&](std::size_t flatArrayIndex, auto rc) LLAMA_LAMBDA_INLINE
 	        {
 	            if constexpr(srcIsAoSoA)
-	                return &srcView.storageBlobs[0][0] + mapAoSoA(flatArrayIndex, rc, lanesSrc);
+	                return &srcView.blobs()[0][0] + mapAoSoA(flatArrayIndex, rc, lanesSrc);
 	            else
 	            {
 	                const auto [blob, off] = mapSoA(flatArrayIndex, rc, isSrcMB);
-	                return &srcView.storageBlobs[blob][off];
+	                return &srcView.blobs()[blob][off];
 	            }
 	        };
 	        auto mapDst = [&](std::size_t flatArrayIndex, auto rc) LLAMA_LAMBDA_INLINE
 	        {
 	            if constexpr(dstIsAoSoA)
-	                return &dstView.storageBlobs[0][0] + mapAoSoA(flatArrayIndex, rc, lanesDst);
+	                return &dstView.blobs()[0][0] + mapAoSoA(flatArrayIndex, rc, lanesDst);
 	            else
 	            {
 	                const auto [blob, off] = mapSoA(flatArrayIndex, rc, isDstMB);
-	                return &dstView.storageBlobs[blob][off];
+	                return &dstView.blobs()[blob][off];
 	            }
 	        };
 
