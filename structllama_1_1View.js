@@ -10,11 +10,13 @@ var structllama_1_1View =
     [ "RecordDim", "structllama_1_1View.html#a0e311e171359b386b0e86b16738d1d8d", null ],
     [ "size_type", "structllama_1_1View.html#a1485c39735f15874051e1863874847e1", null ],
     [ "View", "structllama_1_1View.html#aa827a9b348f8608d209b74065c33fea9", null ],
-    [ "View", "structllama_1_1View.html#ad506d7f530e6d122f2888167496e3daa", null ],
+    [ "View", "structllama_1_1View.html#a22cd26331c3909ad6f0c5286496b4177", null ],
     [ "accessor", "structllama_1_1View.html#a97b7ae30e104e9b9aa3701b4958b4a4e", null ],
     [ "accessor", "structllama_1_1View.html#a91123eb8b6a1081bee3ec06a6457b64c", null ],
     [ "begin", "structllama_1_1View.html#a5ef11158b3423bb2a9e4251680ccc435", null ],
     [ "begin", "structllama_1_1View.html#a6c8ae804350dd9aeb9d85f8db110b6d1", null ],
+    [ "blobs", "structllama_1_1View.html#a3ee1bbe6eecc3323a2b821bdfcb99d64", null ],
+    [ "blobs", "structllama_1_1View.html#a435f346eff028dd6dbf25b00746d9d67", null ],
     [ "end", "structllama_1_1View.html#a60ea916b74c979d658774792e9490d40", null ],
     [ "end", "structllama_1_1View.html#a949eeed1494299bb8cbc39260ab9331d", null ],
     [ "extents", "structllama_1_1View.html#ad2cffd2465f0ff9217d8797b52757faa", null ],
@@ -30,6 +32,5 @@ var structllama_1_1View =
     [ "operator[]", "structllama_1_1View.html#a5b2e47c3ed82390f8a988f9cd8451a08", null ],
     [ "operator[]", "structllama_1_1View.html#acb1c44d96c698a0f6ca8f288e9f28914", null ],
     [ "operator[]", "structllama_1_1View.html#aeaa37e0e681119833521a96c20228ccb", null ],
-    [ "RecordRef", "structllama_1_1View.html#ac9e9cf8bf6a130ba0fb6dcfd0be19709", null ],
-    [ "storageBlobs", "structllama_1_1View.html#ad7f3890ac6ad4ded0c0327f120e62953", null ]
+    [ "RecordRef", "structllama_1_1View.html#ac9e9cf8bf6a130ba0fb6dcfd0be19709", null ]
 ];

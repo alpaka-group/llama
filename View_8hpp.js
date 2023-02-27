@@ -13,7 +13,7 @@ var View_8hpp =
     [ "allocViewUninitialized", "View_8hpp.html#a1a76478259d35873449cc44e27dd5abc", null ],
     [ "constructFields", "View_8hpp.html#af4c8d962f80ddc030f99b08479ecb083", null ],
     [ "makeBlobArray", "View_8hpp.html#a36b0736740116d5e9fff6172f5b202af", null ],
-    [ "makeTransformedBlobArray", "View_8hpp.html#ac918dee3b9de15beb006a38d668788df", null ],
+    [ "makeTransformedBlobArray", "View_8hpp.html#a5680a3947cde8d1a5d180a09f0003003", null ],
     [ "mapToMemory", "View_8hpp.html#a4f8b2bbd3934fae49394efdc1b4ce3c4", null ],
     [ "shallowCopy", "View_8hpp.html#ae800146eabadd222999acf6020391b75", null ],
     [ "SubView", "View_8hpp.html#ad76145974be23fcd0fcc5ad7bb4e972a", null ],

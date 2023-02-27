@@ -196,7 +196,7 @@ $(document).ready(function(){initNavTree('DumpMapping_8hpp_source.html',''); ini
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        {</div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;            <span class="keyword">const</span> <span class="keyword">auto</span>&amp; mapping = view.mapping();</div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;            <span class="keywordflow">for</span>(std::size_t i = 0; i &lt; View::Mapping::blobCount; i++)</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;                std::memset(&amp;view.storageBlobs[i][0], pattern, mapping.blobSize(i));</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;                std::memset(&amp;view.blobs()[i][0], pattern, mapping.blobSize(i));</div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        }</div>
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
 <div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> View, <span class="keyword">typename</span> RecordCoord&gt;</div>
@@ -215,7 +215,7 @@ $(document).ready(function(){initNavTree('DumpMapping_8hpp_source.html',''); ini
 <div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;            <span class="keyword">using</span> Type = <a class="code" href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">GetType</a>&lt;RecordDim, decltype(rc)&gt;;</div>
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;            <span class="comment">// computed values can come from anywhere, so we can only apply heuristics</span></div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;            <span class="keyword">auto</span>&amp; blobs = view.storageBlobs;</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;            <span class="keyword">auto</span>&amp; blobs = view.blobs();</div>
 <div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;            <span class="keyword">auto</span>&amp;&amp; ref = view.mapping().compute(ai, rc, blobs);</div>
 <div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160; </div>
 <div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;            <span class="comment">// try to find the mapped address in one of the blobs</span></div>
@@ -607,7 +607,7 @@ $(document).ready(function(){initNavTree('DumpMapping_8hpp_source.html',''); ini
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="DumpMapping_8hpp.html">DumpMapping.hpp</a></li>
-    <li class="footer">Generated on Mon Feb 27 2023 17:08:16 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Mon Feb 27 2023 17:21:07 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
