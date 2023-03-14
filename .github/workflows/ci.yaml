@@ -44,7 +44,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - files: '../tests'
+          - files: '../tests/m.*'
+          - files: '../tests/[^m].*'
           - files: '../examples'
     steps:
     - uses: actions/checkout@v3
