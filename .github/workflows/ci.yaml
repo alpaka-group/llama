@@ -215,6 +215,10 @@ jobs:
             cxx: clang++-15
             install_extra: clang-15 libomp-15-dev
             add_llvm_repo: true
+          - name: build-ubuntu-clang16
+            cxx: clang++-16
+            install_extra: clang-16 libomp-16-dev
+            add_llvm_repo: true
           - name: build-ubuntu-icpx
             cxx: icpx
             install_oneapi: true
@@ -238,6 +242,7 @@ jobs:
           sudo add-apt-repository 'deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-13 main'
           sudo add-apt-repository 'deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-14 main'
           sudo add-apt-repository 'deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-15 main'
+          sudo add-apt-repository 'deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-16 main'
       - name: add CUDA apt repo
         if: matrix.add_nvcpp_repo
         run: |
