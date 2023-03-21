@@ -37,7 +37,20 @@ if (MSVC)
 	target_compile_definitions(llama INTERFACE _USE_MATH_DEFINES)
 endif()
 
+# CUDA
+include(CheckLanguage)
+check_language(CUDA)
+if (CMAKE_CUDA_COMPILER)
+	enable_language(CUDA)
+	set(CMAKE_CUDA_ARCHITECTURES "35" CACHE STRING "CUDA architectures to compile for")
+else()
+	message(WARNING "Could not find CUDA. Try setting CMAKE_CUDA_COMPILER. CUDA tests and examples are disabled.")
+endif()
+
 # tests
+include(CMakeDependentOption)
+cmake_dependent_option(LLAMA_COMPILE_TESTS_AS_CUDA "Sets the language of all test code to CUDA." OFF "BUILD_TESTING;CMAKE_CUDA_COMPILER" OFF)
+
 option(BUILD_TESTING "" OFF)
 include(CTest)
 if (BUILD_TESTING)
@@ -68,9 +81,7 @@ if (BUILD_TESTING)
 	source_group(TREE "${CMAKE_CURRENT_LIST_DIR}/tests" FILES ${testSources})
 	target_compile_features(tests PRIVATE cxx_std_20)
 
-	option(LLAMA_COMPILE_TESTS_AS_CUDA "Sets the language of all test code to CUDA." OFF)
 	if (LLAMA_COMPILE_TESTS_AS_CUDA)
-		enable_language(CUDA)
 		foreach(f ${testSources})
 			set_source_files_properties(${f} PROPERTIES LANGUAGE CUDA)
 		endforeach()
@@ -155,15 +166,9 @@ if (LLAMA_BUILD_EXAMPLES)
 	endif()
 
 	# CUDA examples
-	include(CheckLanguage)
-	check_language(CUDA)
 	if (CMAKE_CUDA_COMPILER)
-		enable_language(CUDA)
-		set(CMAKE_CUDA_ARCHITECTURES "35" CACHE STRING "CUDA architectures to compile for")
 		add_subdirectory("examples/cuda/nbody")
 		add_subdirectory("examples/cuda/pitch")
-	else()
-		message(WARNING "Could not find CUDA. Try setting CMAKE_CUDA_COMPILER. CUDA examples are disabled.")
 	endif()
 endif()
 
