@@ -149,7 +149,7 @@
 			#endif
 
 			#ifndef LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-			#    ifdef __CUDACC__
+			#    ifdef __NVCC__
 			#        ifdef __NVCC_DIAG_PRAGMA_SUPPORT__
 			#            define LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING                                                          \
 			                _Pragma("nv_diag_suppress 20011") _Pragma("nv_diag_suppress 20014")
@@ -167,7 +167,7 @@
 			#    endif
 			#endif
 			#ifndef LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
-			#    ifdef __CUDACC__
+			#    ifdef __NVCC__
 			#        ifdef __NVCC_DIAG_PRAGMA_SUPPORT__
 			#            define LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING                                                            \
 			                _Pragma("nv_diag_default 20011") _Pragma("nv_diag_default 20014")
@@ -5778,7 +5778,7 @@ namespace llama
     };
 
     template<typename... Elements>
-    Tuple(Elements...) -> Tuple<std::remove_cv_t<std::remove_reference_t<Elements>>...>;
+    LLAMA_HOST_ACC Tuple(Elements...)->Tuple<std::remove_cv_t<std::remove_reference_t<Elements>>...>;
 
     template<std::size_t I, typename... Elements>
     LLAMA_FN_HOST_ACC_INLINE constexpr auto get(Tuple<Elements...>& tuple) -> auto&
@@ -9872,12 +9872,12 @@ namespace llama::mapping
         template<typename UserT, typename StoredT>
         struct ChangeTypeProjection
         {
-            static auto load(StoredT v) -> UserT
+            LLAMA_FN_HOST_ACC_INLINE static auto load(StoredT v) -> UserT
             {
                 return static_cast<UserT>(v); // we could allow stronger casts here
             }
 
-            static auto store(UserT v) -> StoredT
+            LLAMA_FN_HOST_ACC_INLINE static auto store(UserT v) -> StoredT
             {
                 return static_cast<StoredT>(v); // we could allow stronger casts here
             }
@@ -10813,7 +10813,7 @@ namespace llama
 
 // suppress warnings on missing return statements. we get a lot of these because nvcc/nvc++ have some troubles with if
 // constexpr.
-#ifdef __CUDACC__
+#ifdef __NVCC__
 #    ifdef __NVCC_DIAG_PRAGMA_SUPPORT__
 #        pragma nv_diag_suppress 940
 #    else
@@ -11225,7 +11225,7 @@ namespace llama
 // #include "mapping/Split.hpp"    // amalgamate: file already expanded
 // #include "mapping/tree/Mapping.hpp"    // amalgamate: file already expanded
 
-#if defined(__CUDACC__)
+#if defined(__NVCC__)
 #    ifdef __NVCC_DIAG_PRAGMA_SUPPORT__
 #        pragma nv_diag_default 940
 #    else
