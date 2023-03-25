@@ -371,11 +371,13 @@ namespace llama
             return *this;
         }
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr auto isNull() const {
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto isNull() const
+        {
             return ai[0] == maxAiVal;
         }
 
-        LLAMA_FN_HOST_ACC_INLINE constexpr void setNull() {
+        LLAMA_FN_HOST_ACC_INLINE constexpr void setNull()
+        {
             ai[0] = maxAiVal;
         }
 
@@ -434,9 +436,7 @@ namespace llama
     private:
         LLAMA_FN_HOST_ACC_INLINE static void checkViews([[maybe_unused]] const View* a, [[maybe_unused]] const View* b)
         {
-            assert(
-                (a == nullptr || b == nullptr || a == b)
-                && "Mixing pointers into different views is not allowed");
+            assert((a == nullptr || b == nullptr || a == b) && "Mixing pointers into different views is not allowed");
         }
     };
 
