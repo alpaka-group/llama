@@ -330,6 +330,125 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE void storeSimdRecord(const Simd& srcSimd, T&& dstRef, RecordCoord rc);
     } // namespace internal
 
+    template<typename View, typename BoundRecordCoord, bool OwnIndex = false>
+    struct PointerRef
+    {
+        using ArrayIndex = typename View::ArrayIndex;
+
+    private:
+        using ArrayIndexQual = std::conditional_t<OwnIndex, ArrayIndex, ArrayIndex&>;
+        inline static constexpr auto maxAiVal = std::numeric_limits<typename ArrayIndex::value_type>::max();
+
+    public:
+        LLAMA_FN_HOST_ACC_INLINE constexpr PointerRef(std::nullptr_t) : ai{}, view(nullptr)
+        {
+            setNull();
+            static_assert(OwnIndex);
+        }
+
+        constexpr PointerRef(const PointerRef& other) = default;
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr PointerRef(ArrayIndexQual ai, View& view) : ai(ai), view(&view)
+        {
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator=(const PointerRef& other) -> PointerRef&
+        {
+            checkViews(view, other.view);
+            ai = other.ai;
+            view = other.view; // adopt other view (in case this was a nullptr)
+            return *this;
+        }
+
+        // retarget pointer
+        template<bool OtherOwnIndex>
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator=(
+            const PointerRef<View, BoundRecordCoord, OtherOwnIndex>& other) -> PointerRef&
+        {
+            checkViews(view, other.view);
+            ai = other.ai;
+            view = other.view; // adopt other view (in case this was a nullptr)
+            return *this;
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto isNull() const
+        {
+            return ai[0] == maxAiVal;
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr void setNull()
+        {
+            ai[0] = maxAiVal;
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator*()
+        {
+            assert(!isNull() && "nullptr dereferences");
+            return RecordRef<View, BoundRecordCoord>{ai, *view};
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator*() const
+        {
+            assert(!isNull() && "nullptr dereferences");
+            return RecordRef<const View, BoundRecordCoord>{ai, *view};
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator=(std::nullptr_t) -> PointerRef&
+        {
+            static_assert(ArrayIndex::rank > 0, "nullptr is not supported for zero-dim views");
+            setNull();
+            return *this;
+        }
+        LLAMA_FN_HOST_ACC_INLINE friend constexpr auto operator==(PointerRef a, PointerRef b) -> bool
+        {
+            checkViews(a.view, b.view);
+            return a.ai == b.ai;
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE friend constexpr auto operator==(PointerRef a, std::nullptr_t) -> bool
+        {
+            return a.isNull();
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE friend constexpr auto operator==(std::nullptr_t, PointerRef b) -> bool
+        {
+            return b.isNull();
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE friend constexpr auto operator!=(PointerRef a, PointerRef b) -> bool
+        {
+            return !(a == b);
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE friend constexpr auto operator!=(std::nullptr_t a, PointerRef b) -> bool
+        {
+            return !(a == b);
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE friend constexpr auto operator!=(PointerRef a, std::nullptr_t b) -> bool
+        {
+            return !(a == b);
+        }
+
+        ArrayIndexQual ai;
+        View* view;
+
+    private:
+        LLAMA_FN_HOST_ACC_INLINE static void checkViews([[maybe_unused]] const View* a, [[maybe_unused]] const View* b)
+        {
+            assert((a == nullptr || b == nullptr || a == b) && "Mixing pointers into different views is not allowed");
+        }
+    };
+
+    template<typename View, typename BoundRecordCoord>
+    using Pointer = PointerRef<View, BoundRecordCoord, true>;
+
+    template<typename T>
+    inline constexpr bool isPointerRef = false;
+
+    template<typename View, typename BoundRecordCoord, bool OwnIndex>
+    inline constexpr bool isPointerRef<PointerRef<View, BoundRecordCoord, OwnIndex>> = true;
+
     /// Record reference type returned by \ref View after resolving an array dimensions coordinate or partially
     /// resolving a \ref RecordCoord. A record reference does not hold data itself, it just binds enough information
     /// (array dimensions coord and partial record coord) to retrieve it later from a \ref View. Records references
@@ -338,6 +457,9 @@ namespace llama
     template<typename TView, typename TBoundRecordCoord, bool OwnView>
     struct RecordRef : private TView::Mapping::ArrayIndex
     {
+        template<typename View, typename BoundRecordCoord, bool OwnIndex>
+        friend struct PointerRef;
+
         using View = TView; ///< View this record reference points into.
         using BoundRecordCoord
             = TBoundRecordCoord; ///< Record coords into View::RecordDim which are already bound by this RecordRef.
@@ -382,6 +504,11 @@ namespace llama
         auto operator=(RecordRef&&) noexcept -> RecordRef& = default;
 
         ~RecordRef() = default;
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto arrayIndex() -> ArrayIndex&
+        {
+            return static_cast<ArrayIndex&>(*this);
+        }
 
         LLAMA_FN_HOST_ACC_INLINE constexpr auto arrayIndex() const -> ArrayIndex
         {
@@ -430,6 +557,14 @@ namespace llama
                 LLAMA_FORCE_INLINE_RECURSIVE
                 return RecordRef<const View, AbsolutCoord>{arrayIndex(), this->view};
             }
+            //            else if constexpr(/*isPointer<AccessedType>*/ std::is_same_v<AccessedType, ArrayIndex>)
+            //            {
+            //                const ArrayIndex dstAi = this->view.access(arrayIndex(), AbsolutCoord{});
+            //                // using DstRecordDim = typename AccessedType::type;
+            //                // static_assert(std::is_same_v<DstRecordDim, RecordDim>, "Implementation limit");
+            //                using Pointee = RecordRef<View, RecordCoord<>, false>;
+            //                return Pointer<Pointee>{Pointee{dstAi, view}};
+            //            }
             else
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
@@ -448,6 +583,14 @@ namespace llama
                 LLAMA_FORCE_INLINE_RECURSIVE
                 return RecordRef<View, AbsolutCoord>{arrayIndex(), this->view};
             }
+            //            else if constexpr(/*isPointer<AccessedType>*/ std::is_same_v<AccessedType, ArrayIndex>)
+            //            {
+            //                const ArrayIndex dstAi = this->view.access(arrayIndex(), AbsolutCoord{});
+            //                // using DstRecordDim = typename AccessedType::type;
+            //                // static_assert(std::is_same_v<DstRecordDim, RecordDim>, "Implementation limit");
+            //                using Pointee = RecordRef<View, RecordCoord<>, false>;
+            //                return Pointer<Pointee>{Pointee{dstAi, view}};
+            //            }
             else
             {
                 LLAMA_FORCE_INLINE_RECURSIVE
@@ -724,6 +867,16 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE void store(const TupleLike& t)
         {
             internal::assignTuples(asTuple(), t, std::make_index_sequence<std::tuple_size_v<TupleLike>>{});
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator&()
+        {
+            return Pointer<View, BoundRecordCoord>{arrayIndex(), view};
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator&() const
+        {
+            return Pointer<View, BoundRecordCoord>{arrayIndex(), view};
         }
 
         // swap for equal RecordRef

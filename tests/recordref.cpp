@@ -1291,3 +1291,142 @@ TEST_CASE("ScopedUpdate.RecordRef")
     test(v);
     test(v());
 }
+
+TEST_CASE("RecordRef.Pointer")
+{
+    auto view = llama::allocView(
+        llama::mapping::PointerToIndex<llama::ArrayExtentsDynamic<int, 1>, Vec3I, llama::mapping::BindAoS<>::fn>{{1}});
+
+    auto rr = view[0];
+    auto p = &rr;
+    auto p2 = p;
+    CHECK(p2 == p);
+    p = nullptr;
+    CHECK(p == nullptr);
+    CHECK(p2 != p);
+    CHECK(p2 == &rr);
+    auto rr2 = *p2;
+    p2 = nullptr;
+    CHECK(p2 == p);
+    STATIC_REQUIRE(std::is_same_v<decltype(rr), decltype(rr2)>);
+    CHECK(rr == rr2);
+
+    llama::Pointer<decltype(view), llama::RecordCoord<>> p3 = nullptr;
+    CHECK(p3 == nullptr);
+    p3 = &rr;
+    CHECK(p3 != nullptr);
+}
+
+struct Next
+{
+};
+
+struct Value
+{
+};
+
+using Node = llama::Record<llama::Field<Value, int>, llama::Field<Next, llama::mapping::PointerToRecordDim>>;
+
+TEST_CASE("RecordRef.Pointer.ForwardList")
+{
+    auto view = llama::allocView(
+        llama::mapping::PointerToIndex<llama::ArrayExtentsDynamic<int, 1>, Node, llama::mapping::BindAoS<>::fn>{{10}});
+
+    for(int i = 0; i < 10; i++)
+    {
+        view[i](Value{}) = i;
+        if(i < 9)
+            view[i](Next{}) = &view[i + 1];
+        else
+            view[i](Next{}) = nullptr;
+    }
+
+    CHECK(view[0](Value{}) == 0);
+    CHECK((*view[0](Next{}))(Value{}) == 1);
+    CHECK((*(*view[0](Next{}))(Next{}))(Value{}) == 2);
+
+    // walk list
+    int i = 0;
+    auto head = &view[0];
+    while(head != nullptr)
+    {
+        CHECK((*head)(Value{}) == i);
+        head = (*head)(Next{});
+        i++;
+    }
+}
+
+struct Left
+{
+};
+
+struct Right
+{
+};
+
+using TreeNode = llama::Record<
+    llama::Field<Value, int>,
+    llama::Field<Left, llama::mapping::PointerToRecordDim>,
+    llama::Field<Right, llama::mapping::PointerToRecordDim>>;
+
+TEST_CASE("RecordRef.Pointer.BinaryTree")
+{
+    auto nodes = llama::allocView(
+        llama::mapping::PointerToIndex<llama::ArrayExtentsDynamic<int, 1>, TreeNode, llama::mapping::BindAoS<>::fn>{
+            {100}});
+    int count = 0;
+
+    auto createNode = [&](int value)
+    {
+        assert(count < nodes.extents()[0]);
+        auto p = &nodes[count];
+        count++;
+        (*p)(Value{}) = value;
+        (*p)(Left{}) = nullptr;
+        (*p)(Right{}) = nullptr;
+        return p;
+    };
+
+    auto insert = [](auto& tree, auto z)
+    {
+        llama::Pointer<decltype(nodes), llama::RecordCoord<>> y = nullptr;
+        auto x = tree;
+        while(x != nullptr)
+        {
+            y = x;
+            if((*z)(Value{}) < (*x)(Value{}))
+                x = (*x)(Left{});
+            else
+                x = (*x)(Right{});
+        }
+        if(y == nullptr)
+            tree = z;
+        else if((*z)(Value{}) < (*y)(Value{}))
+            (*y)(Left{}) = z;
+        else
+            (*y)(Right{}) = z;
+    };
+
+    llama::Pointer<decltype(nodes), llama::RecordCoord<>> t = nullptr;
+    std::vector<int> values{42, 3, 8, 75, 42, 63, 15, 7, 22};
+    for(const int i : values)
+        insert(t, createNode(i));
+
+    auto visitInOrder = [](auto tree, auto f, auto&& self)
+    {
+        if(tree == nullptr)
+            return;
+        self((*tree)(Left{}), f, self);
+        f((*tree)(Value{}));
+        self((*tree)(Right{}), f, self);
+    };
+
+    std::vector<int> valuesOut;
+    visitInOrder(
+        t,
+        [&](int i) { valuesOut.push_back(i); },
+        visitInOrder);
+
+    std::sort(begin(values), end(values));
+    CHECK(values == valuesOut);
+}
