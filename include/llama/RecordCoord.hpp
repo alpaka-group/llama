@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Meta.hpp"
+#include "macros.hpp"
 
 #include <array>
 #include <ostream>
