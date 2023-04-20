@@ -436,3 +436,74 @@ using Track = llama::Record<
     llama::Field<Pos, vecgeom::Vector3D<vecgeom::Precision>>,
     llama::Field<Dir, vecgeom::Vector3D<vecgeom::Precision>>,
     llama::Field<NavState, vecgeom::NavStateIndex>>;
+
+// from LHCB HEP:
+using NTupleSize_t = std::size_t;
+
+// clang-format off
+struct H1isMuon{};
+struct H2isMuon{};
+struct H3isMuon{};
+
+struct H1PX{};
+struct H1PY{};
+struct H1PZ{};
+struct H1ProbK{};
+struct H1ProbPi{};
+
+struct H2PX{};
+struct H2PY{};
+struct H2PZ{};
+struct H2ProbK{};
+struct H2ProbPi{};
+
+struct H3PX{};
+struct H3PY{};
+struct H3PZ{};
+struct H3ProbK{};
+struct H3ProbPi{};
+// clang-format on
+
+using LhcbEvent = llama::Record<
+    llama::Field<H1isMuon, int>,
+    llama::Field<H2isMuon, int>,
+    llama::Field<H3isMuon, int>,
+    llama::Field<H1PX, double>,
+    llama::Field<H1PY, double>,
+    llama::Field<H1PZ, double>,
+    llama::Field<H1ProbK, double>,
+    llama::Field<H1ProbPi, double>,
+    llama::Field<H2PX, double>,
+    llama::Field<H2PY, double>,
+    llama::Field<H2PZ, double>,
+    llama::Field<H2ProbK, double>,
+    llama::Field<H2ProbPi, double>,
+    llama::Field<H3PX, double>,
+    llama::Field<H3PY, double>,
+    llama::Field<H3PZ, double>,
+    llama::Field<H3ProbK, double>,
+    llama::Field<H3ProbPi, double>>;
+
+using LhcbCustom4 = llama::mapping::Split<
+    llama::ArrayExtentsDynamic<NTupleSize_t, 1>,
+    LhcbEvent,
+    mp_list<mp_list<H1isMuon>, mp_list<H2isMuon>, mp_list<H3isMuon>>,
+    llama::mapping::AlignedAoS,
+    llama::mapping::BindSplit<
+        mp_list<mp_list<H1ProbK>, mp_list<H2ProbK>>,
+        llama::mapping::AlignedAoS,
+        llama::mapping::AlignedAoS,
+        true>::fn,
+    true>;
+
+using LhcbCustom8 = llama::mapping::Split<
+    llama::ArrayExtentsDynamic<NTupleSize_t, 1>,
+    LhcbEvent,
+    mp_list<mp_list<H1isMuon>, mp_list<H2isMuon>, mp_list<H3isMuon>>,
+    llama::mapping::BindBitPackedIntAoS<llama::Constant<1>, llama::mapping::SignBit::Discard>::fn,
+    llama::mapping::BindSplit<
+        mp_list<mp_list<H1ProbK>, mp_list<H2ProbK>>,
+        llama::mapping::BindChangeType<llama::mapping::BindAoS<>::fn, mp_list<mp_list<double, float>>>::fn,
+        llama::mapping::BindBitPackedFloatAoS<llama::Constant<6>, llama::Constant<16>>::template fn,
+        true>::fn,
+    true>;

@@ -391,4 +391,14 @@ TEST_CASE("dump.AdePT.track")
 {
     dump(llama::mapping::AoS<llama::ArrayExtents<int, 8>, Track>{{}});
 }
+
+TEST_CASE("dump.LHCb.Custom4")
+{
+    dump(LhcbCustom4{{3}});
+}
+
+TEST_CASE("dump.LHCb.Custom8")
+{
+    dump(LhcbCustom8{{3}});
+}
 #endif
