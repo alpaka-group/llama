@@ -230,6 +230,8 @@ jobs:
           - name: build-ubuntu-icpx
             cxx: icpx
             install_oneapi: true
+            install_extra: g++-12 # for libstdc++
+            cxx_flags: --gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/12
           - name: build-ubuntu-nvc++
             cxx: /opt/nvidia/hpc_sdk/Linux_x86_64/22.9/compilers/bin/nvc++
             add_nvcpp_repo: true
