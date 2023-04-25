@@ -229,8 +229,8 @@ jobs:
             cxx_std: 20
           - name: build-ubuntu-icpx
             cxx: icpx
-            install_oneapi: true
-            install_extra: g++-12 # for libstdc++
+            add_oneapi_repo: true
+            install_extra: intel-oneapi-compiler-dpcpp-cpp g++-12 # for libstdc++
             cxx_flags: --gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/12
           - name: build-ubuntu-nvc++
             cxx: /opt/nvidia/hpc_sdk/Linux_x86_64/22.9/compilers/bin/nvc++
@@ -259,13 +259,12 @@ jobs:
           echo 'deb [trusted=yes] https://developer.download.nvidia.com/hpc-sdk/ubuntu/amd64 /' | sudo tee /etc/apt/sources.list.d/nvhpc.list
           sudo apt update
       - name: install OneAPI
-        if: matrix.install_oneapi
+        if: matrix.add_oneapi_repo
         run: |
           wget https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
           sudo apt-key add GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
           sudo add-apt-repository "deb https://apt.repos.intel.com/oneapi all main"
           sudo apt update
-          sudo apt install intel-oneapi-compiler-dpcpp-cpp
       - name: install extras
         if: ${{ matrix.install_extra }}
         run: |
@@ -273,7 +272,7 @@ jobs:
       - name: vcpkg install dependencies
         run: |
           # vcpkg fails to build with Intel or nvhpc compilers
-          if [ ${{ matrix.install_oneapi }} ] || [ ${{ matrix.add_nvcpp_repo }} ]; then unset CXX; fi
+          if [ ${{ matrix.add_oneapi_repo }} ] || [ ${{ matrix.add_nvcpp_repo }} ]; then unset CXX; fi
           eval $VCPKG_INSTALL
       - name: download CUDA
         if: matrix.cuda_url
@@ -285,7 +284,7 @@ jobs:
           sudo sh cuda_installer.run --silent --toolkit --override
       - name: cmake
         run: |
-          if [ ${{ matrix.install_oneapi }} ]; then source /opt/intel/oneapi/setvars.sh; fi
+          if [ ${{ matrix.add_oneapi_repo }} ]; then source /opt/intel/oneapi/setvars.sh; fi
           mkdir build
           cd build
 
@@ -319,11 +318,11 @@ jobs:
                    -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
       - name: build tests + examples
         run: |
-          if [ ${{ matrix.install_oneapi }} ]; then source /opt/intel/oneapi/setvars.sh; fi
+          if [ ${{ matrix.add_oneapi_repo }} ]; then source /opt/intel/oneapi/setvars.sh; fi
           cmake --build build -j $THREADS
       - name: run tests
         run: |
-          if [ ${{ matrix.install_oneapi }} ]; then source /opt/intel/oneapi/setvars.sh; fi
+          if [ ${{ matrix.add_oneapi_repo }} ]; then source /opt/intel/oneapi/setvars.sh; fi
           build/tests
 
   build-windows:
