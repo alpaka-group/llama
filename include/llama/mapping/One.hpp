@@ -85,7 +85,9 @@ namespace llama::mapping
 
     /// Binds parameters to a \ref One mapping except for array and record dimension, producing a quoted
     /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
-    template<FieldAlignment FieldAlignment, template<typename> typename FlattenRecordDim>
+    template<
+        FieldAlignment FieldAlignment = FieldAlignment::Align,
+        template<typename> typename FlattenRecordDim = FlattenRecordDimMinimizePadding>
     struct BindOne
     {
         template<typename ArrayExtents, typename RecordDim>

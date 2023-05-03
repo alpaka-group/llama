@@ -146,7 +146,7 @@ namespace llama
 
         LLAMA_FN_HOST_ACC_INLINE constexpr auto operator[](T i) const -> value_type
         {
-            return mp_with_index<rank>(i, [&](auto ic) { return get<decltype(ic)::value>(); });
+            return mp_with_index<rank>(i, [&](auto ic) LLAMA_LAMBDA_INLINE { return get<decltype(ic)::value>(); });
         }
 
     private:
