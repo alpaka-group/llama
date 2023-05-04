@@ -316,17 +316,6 @@ namespace llama
     template<typename RecordDim>
     using LeafRecordCoords = typename internal::LeafRecordCoordsImpl<RecordDim, RecordCoord<>>::type;
 
-    namespace internal
-    {
-        // adapted from boost::mp11, but with LLAMA_FN_HOST_ACC_INLINE
-        template<template<typename...> typename L, typename... T, typename F>
-        LLAMA_FN_HOST_ACC_INLINE constexpr void mpForEachInlined(L<T...>, F&& f)
-        {
-            using A = int[sizeof...(T)];
-            (void) A{((void) f(T{}), 0)...};
-        }
-    } // namespace internal
-
     /// Iterates over the record dimension tree and calls a functor on each element.
     /// \param functor Functor to execute at each element of. Needs to have `operator()` with a template parameter for
     /// the \ref RecordCoord in the record dimension tree.
