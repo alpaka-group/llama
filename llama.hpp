@@ -3144,7 +3144,7 @@ namespace llama::accessor
 			            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset<size_type>
 			        {
 			            constexpr std::size_t flatFieldIndex =
-			#ifdef __NVCC__
+			#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ <= 6
 			                *& // mess with nvcc compiler state to workaround bug
 			#endif
 			                 Flattener::template flatIndex<RecordCoords...>;
@@ -4052,7 +4052,7 @@ namespace llama::accessor
 		            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset<size_type>
 		        {
 		            constexpr std::size_t flatFieldIndex =
-		#ifdef __NVCC__
+		#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ <= 6
 		                *& // mess with nvcc compiler state to workaround bug
 		#endif
 		                 Flattener::template flatIndex<RecordCoords...>;
@@ -4226,7 +4226,7 @@ namespace llama::accessor
 		            else
 		            {
 		                constexpr std::size_t flatFieldIndex =
-		#ifdef __NVCC__
+		#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ <= 6
 		                    *& // mess with nvcc compiler state to workaround bug
 		#endif
 		                     Flattener::template flatIndex<RecordCoords...>;
@@ -6730,7 +6730,7 @@ namespace llama::accessor
 		            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset<size_type>
 		        {
 		            constexpr std::size_t flatFieldIndex =
-		#ifdef __NVCC__
+		#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ <= 6
 		                *& // mess with nvcc compiler state to workaround bug
 		#endif
 		                 Flattener::template flatIndex<RecordCoords...>;
