@@ -12,6 +12,14 @@ namespace llama
 
     namespace internal
     {
+        // adapted from boost::mp11, but with LLAMA_FN_HOST_ACC_INLINE
+        template<template<typename...> typename L, typename... T, typename F>
+        LLAMA_FN_HOST_ACC_INLINE constexpr void mpForEachInlined(L<T...>, F&& f)
+        {
+            using A = int[sizeof...(T)];
+            (void) A{((void) f(T{}), 0)...};
+        }
+
         template<typename FromList, template<auto...> class ToList>
         struct mp_unwrap_values_into_impl;
 
