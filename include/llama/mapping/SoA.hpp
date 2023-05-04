@@ -125,7 +125,7 @@ namespace llama::mapping
             typename Base::ArrayIndex ai,
             RecordCoord<RecordCoords...> = {}) const -> NrAndOffset<size_type>
         {
-            const auto elementOffset = LinearizeArrayDimsFunctor{}(ai, Base::extents())
+            const size_type elementOffset = LinearizeArrayDimsFunctor{}(ai, Base::extents())
                 * static_cast<size_type>(sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>));
             if constexpr(blobs == Blobs::OnePerField)
             {
@@ -139,7 +139,7 @@ namespace llama::mapping
                     *& // mess with nvcc compiler state to workaround bug
 #endif
                      Flattener::template flatIndex<RecordCoords...>;
-                const auto flatSize = LinearizeArrayDimsFunctor{}.size(Base::extents());
+                const size_type flatSize = LinearizeArrayDimsFunctor{}.size(Base::extents());
                 using FRD = typename Flattener::FlatRecordDim;
                 if constexpr(subArrayAlignment == SubArrayAlignment::Align)
                 {
@@ -147,9 +147,7 @@ namespace llama::mapping
                     {
                         // full array extents are known statically, we can precompute the sub array offsets
                         constexpr auto subArrayOffsets = computeSubArrayOffsets();
-                        size_type offset = subArrayOffsets[flatFieldIndex];
-                        offset += elementOffset;
-                        return {0, offset};
+                        return {0, subArrayOffsets[flatFieldIndex] + elementOffset};
                     }
                     else
                     {
