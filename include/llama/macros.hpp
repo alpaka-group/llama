@@ -184,3 +184,11 @@
 #else
 #    define LLAMA_UNLIKELY
 #endif
+
+/// Expands to consteval if the compilers supports the keyword, otherwise to constexpr.
+// TODO(bgruber): reevalute with nvhpc in the future or find workaround
+#if defined(__cpp_consteval) && !defined(__NVCOMPILER)
+#    define LLAMA_CONSTEVAL consteval
+#else
+#    define LLAMA_CONSTEVAL constexpr
+#endif
