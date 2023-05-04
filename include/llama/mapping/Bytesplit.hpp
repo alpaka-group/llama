@@ -88,7 +88,7 @@ namespace llama::mapping
                 value_type v;
                 auto* p = reinterpret_cast<std::byte*>(&v);
                 mp_for_each<mp_iota_c<sizeof(value_type)>>(
-                    [&](auto ic)
+                    [&](auto ic) LLAMA_LAMBDA_INLINE
                     {
                         constexpr auto i = decltype(ic)::value;
                         auto&& ref = mapToMemory(inner, ai, Cat<RC, RecordCoord<i>>{}, blobs);
@@ -107,7 +107,7 @@ namespace llama::mapping
 
                 auto* p = reinterpret_cast<std::byte*>(&v);
                 mp_for_each<mp_iota_c<sizeof(value_type)>>(
-                    [&](auto ic)
+                    [&](auto ic) LLAMA_LAMBDA_INLINE
                     {
                         constexpr auto i = decltype(ic)::value;
 

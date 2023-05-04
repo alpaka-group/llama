@@ -84,7 +84,7 @@ namespace llama::mapping
                 size_type size = 0;
                 using FRD = typename Flattener::FlatRecordDim;
                 mp_for_each<mp_transform<mp_identity, FRD>>(
-                    [&](auto ti)
+                    [&](auto ti) LLAMA_LAMBDA_INLINE
                     {
                         using FieldType = typename decltype(ti)::type;
                         size = roundUpToMultiple(size, static_cast<size_type>(alignof(FieldType)));
@@ -99,7 +99,7 @@ namespace llama::mapping
         }
 
     private:
-        LLAMA_FN_HOST_ACC_INLINE static constexpr auto computeSubArrayOffsets()
+        static LLAMA_CONSTEVAL auto computeSubArrayOffsets()
         {
             using FRD = typename Flattener::FlatRecordDim;
             constexpr auto staticFlatSize = LinearizeArrayDimsFunctor{}.size(TArrayExtents{});
@@ -158,7 +158,7 @@ namespace llama::mapping
                         // or rely on the compiler it out of loops.
                         size_type offset = 0;
                         mp_for_each<mp_iota_c<flatFieldIndex>>(
-                            [&](auto ic)
+                            [&](auto ic) LLAMA_LAMBDA_INLINE
                             {
                                 constexpr auto i = decltype(ic)::value;
                                 using ThisFieldType = mp_at_c<FRD, i>;
