@@ -128,7 +128,7 @@ namespace llama
         using RecordDim = typename View::RecordDim;
         forEachADCoord(
             view.extents(),
-            [&]([[maybe_unused]] typename View::ArrayIndex ai)
+            [&]([[maybe_unused]] typename View::ArrayIndex ai) LLAMA_LAMBDA_INLINE
             {
                 if constexpr(isRecordDim<RecordDim>)
                 {
@@ -136,7 +136,7 @@ namespace llama
 #if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ <= 4
                         internal::NvccWorkaroundLambda<View>{view, ai}
 #else
-                        [&](auto rc)
+                        [&](auto rc) LLAMA_LAMBDA_INLINE
                         {
                             using FieldType = GetType<RecordDim, decltype(rc)>;
                             using RefType = decltype(view(ai)(rc));

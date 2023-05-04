@@ -56,7 +56,7 @@ namespace llama
     /// @tparam MakeSimd Type function creating a SIMD type given a field type from the record dimension.
     /// @param reduce Binary reduction function to reduce the SIMD lanes.
     template<typename RecordDim, template<typename> typename MakeSimd, typename BinaryReductionFunction>
-    constexpr auto chooseSimdLanes(BinaryReductionFunction reduce) -> std::size_t
+    LLAMA_CONSTEVAL auto chooseSimdLanes(BinaryReductionFunction reduce) -> std::size_t
     {
         using FRD = FlatRecordDim<RecordDim>;
         std::size_t lanes = simdLanes<MakeSimd<mp_first<FRD>>>;

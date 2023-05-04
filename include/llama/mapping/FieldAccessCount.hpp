@@ -121,7 +121,7 @@ namespace llama::mapping
                 CountType r = 0;
                 CountType w = 0; // NOLINT(misc-const-correctness)
                 forEachLeafCoord<RecordDim>(
-                    [&](auto rc)
+                    [&](auto rc) LLAMA_LAMBDA_INLINE
                     {
                         const size_type i = flatRecordCoord<RecordDim, decltype(rc)>;
                         const auto fieldSize = sizeof(GetType<RecordDim, decltype(rc)>);
