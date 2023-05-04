@@ -209,6 +209,14 @@
 			#else
 			#    define LLAMA_UNLIKELY
 			#endif
+
+			/// Expands to consteval if the compilers supports the keyword, otherwise to constexpr.
+			// TODO(bgruber): reevalute with nvhpc in the future or find workaround
+			#if defined(__cpp_consteval) && !defined(__NVCOMPILER)
+			#    define LLAMA_CONSTEVAL consteval
+			#else
+			#    define LLAMA_CONSTEVAL constexpr
+			#endif
 			// ==
 			// == ./macros.hpp ==
 			// ============================================================================
@@ -563,6 +571,14 @@
 
 		    namespace internal
 		    {
+		        // adapted from boost::mp11, but with LLAMA_FN_HOST_ACC_INLINE
+		        template<template<typename...> typename L, typename... T, typename F>
+		        LLAMA_FN_HOST_ACC_INLINE constexpr void mpForEachInlined(L<T...>, F&& f)
+		        {
+		            using A = int[sizeof...(T)];
+		            (void) A{((void) f(T{}), 0)...};
+		        }
+
 		        template<typename FromList, template<auto...> class ToList>
 		        struct mp_unwrap_values_into_impl;
 
@@ -741,7 +757,7 @@
 
 	        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator[](T i) const -> value_type
 	        {
-	            return mp_with_index<rank>(i, [&](auto ic) { return get<decltype(ic)::value>(); });
+	            return mp_with_index<rank>(i, [&](auto ic) LLAMA_LAMBDA_INLINE { return get<decltype(ic)::value>(); });
 	        }
 
 	    private:
@@ -1362,17 +1378,6 @@
 	    /// Returns a flat type list containing all record coordinates to all leaves of the given record dimension.
 	    template<typename RecordDim>
 	    using LeafRecordCoords = typename internal::LeafRecordCoordsImpl<RecordDim, RecordCoord<>>::type;
-
-	    namespace internal
-	    {
-	        // adapted from boost::mp11, but with LLAMA_FN_HOST_ACC_INLINE
-	        template<template<typename...> typename L, typename... T, typename F>
-	        LLAMA_FN_HOST_ACC_INLINE constexpr void mpForEachInlined(L<T...>, F&& f)
-	        {
-	            using A = int[sizeof...(T)];
-	            (void) A{((void) f(T{}), 0)...};
-	        }
-	    } // namespace internal
 
 	    /// Iterates over the record dimension tree and calls a functor on each element.
 	    /// \param functor Functor to execute at each element of. Needs to have `operator()` with a template parameter for
@@ -3174,7 +3179,9 @@ namespace llama::accessor
 
 			    /// Binds parameters to a \ref One mapping except for array and record dimension, producing a quoted
 			    /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
-			    template<FieldAlignment FieldAlignment, template<typename> typename FlattenRecordDim>
+			    template<
+			        FieldAlignment FieldAlignment = FieldAlignment::Align,
+			        template<typename> typename FlattenRecordDim = FlattenRecordDimMinimizePadding>
 			    struct BindOne
 			    {
 			        template<typename ArrayExtents, typename RecordDim>
@@ -3312,7 +3319,7 @@ namespace llama::accessor
 		        using RecordDim = typename View::RecordDim;
 		        forEachADCoord(
 		            view.extents(),
-		            [&]([[maybe_unused]] typename View::ArrayIndex ai)
+		            [&]([[maybe_unused]] typename View::ArrayIndex ai) LLAMA_LAMBDA_INLINE
 		            {
 		                if constexpr(isRecordDim<RecordDim>)
 		                {
@@ -3320,7 +3327,7 @@ namespace llama::accessor
 		#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ <= 4
 		                        internal::NvccWorkaroundLambda<View>{view, ai}
 		#else
-		                        [&](auto rc)
+		                        [&](auto rc) LLAMA_LAMBDA_INLINE
 		                        {
 		                            using FieldType = GetType<RecordDim, decltype(rc)>;
 		                            using RefType = decltype(view(ai)(rc));
@@ -4175,7 +4182,7 @@ namespace llama::accessor
 		                size_type size = 0;
 		                using FRD = typename Flattener::FlatRecordDim;
 		                mp_for_each<mp_transform<mp_identity, FRD>>(
-		                    [&](auto ti)
+		                    [&](auto ti) LLAMA_LAMBDA_INLINE
 		                    {
 		                        using FieldType = typename decltype(ti)::type;
 		                        size = roundUpToMultiple(size, static_cast<size_type>(alignof(FieldType)));
@@ -4190,7 +4197,7 @@ namespace llama::accessor
 		        }
 
 		    private:
-		        LLAMA_FN_HOST_ACC_INLINE static constexpr auto computeSubArrayOffsets()
+		        static LLAMA_CONSTEVAL auto computeSubArrayOffsets()
 		        {
 		            using FRD = typename Flattener::FlatRecordDim;
 		            constexpr auto staticFlatSize = LinearizeArrayDimsFunctor{}.size(TArrayExtents{});
@@ -4216,7 +4223,7 @@ namespace llama::accessor
 		            typename Base::ArrayIndex ai,
 		            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset<size_type>
 		        {
-		            const auto elementOffset = LinearizeArrayDimsFunctor{}(ai, Base::extents())
+		            const size_type elementOffset = LinearizeArrayDimsFunctor{}(ai, Base::extents())
 		                * static_cast<size_type>(sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>));
 		            if constexpr(blobs == Blobs::OnePerField)
 		            {
@@ -4230,7 +4237,7 @@ namespace llama::accessor
 		                    *& // mess with nvcc compiler state to workaround bug
 		#endif
 		                     Flattener::template flatIndex<RecordCoords...>;
-		                const auto flatSize = LinearizeArrayDimsFunctor{}.size(Base::extents());
+		                const size_type flatSize = LinearizeArrayDimsFunctor{}.size(Base::extents());
 		                using FRD = typename Flattener::FlatRecordDim;
 		                if constexpr(subArrayAlignment == SubArrayAlignment::Align)
 		                {
@@ -4238,9 +4245,7 @@ namespace llama::accessor
 		                    {
 		                        // full array extents are known statically, we can precompute the sub array offsets
 		                        constexpr auto subArrayOffsets = computeSubArrayOffsets();
-		                        size_type offset = subArrayOffsets[flatFieldIndex];
-		                        offset += elementOffset;
-		                        return {0, offset};
+		                        return {0, subArrayOffsets[flatFieldIndex] + elementOffset};
 		                    }
 		                    else
 		                    {
@@ -4249,7 +4254,7 @@ namespace llama::accessor
 		                        // or rely on the compiler it out of loops.
 		                        size_type offset = 0;
 		                        mp_for_each<mp_iota_c<flatFieldIndex>>(
-		                            [&](auto ic)
+		                            [&](auto ic) LLAMA_LAMBDA_INLINE
 		                            {
 		                                constexpr auto i = decltype(ic)::value;
 		                                using ThisFieldType = mp_at_c<FRD, i>;
@@ -6848,7 +6853,7 @@ namespace llama::accessor
 	    /// @tparam MakeSimd Type function creating a SIMD type given a field type from the record dimension.
 	    /// @param reduce Binary reduction function to reduce the SIMD lanes.
 	    template<typename RecordDim, template<typename> typename MakeSimd, typename BinaryReductionFunction>
-	    constexpr auto chooseSimdLanes(BinaryReductionFunction reduce) -> std::size_t
+	    LLAMA_CONSTEVAL auto chooseSimdLanes(BinaryReductionFunction reduce) -> std::size_t
 	    {
 	        using FRD = FlatRecordDim<RecordDim>;
 	        std::size_t lanes = simdLanes<MakeSimd<mp_first<FRD>>>;
@@ -8854,7 +8859,7 @@ namespace llama::accessor
 	                value_type v;
 	                auto* p = reinterpret_cast<std::byte*>(&v);
 	                mp_for_each<mp_iota_c<sizeof(value_type)>>(
-	                    [&](auto ic)
+	                    [&](auto ic) LLAMA_LAMBDA_INLINE
 	                    {
 	                        constexpr auto i = decltype(ic)::value;
 	                        auto&& ref = mapToMemory(inner, ai, Cat<RC, RecordCoord<i>>{}, blobs);
@@ -8873,7 +8878,7 @@ namespace llama::accessor
 
 	                auto* p = reinterpret_cast<std::byte*>(&v);
 	                mp_for_each<mp_iota_c<sizeof(value_type)>>(
-	                    [&](auto ic)
+	                    [&](auto ic) LLAMA_LAMBDA_INLINE
 	                    {
 	                        constexpr auto i = decltype(ic)::value;
 
@@ -9427,7 +9432,7 @@ namespace llama::accessor
 	                CountType r = 0;
 	                CountType w = 0; // NOLINT(misc-const-correctness)
 	                forEachLeafCoord<RecordDim>(
-	                    [&](auto rc)
+	                    [&](auto rc) LLAMA_LAMBDA_INLINE
 	                    {
 	                        const size_type i = flatRecordCoord<RecordDim, decltype(rc)>;
 	                        const auto fieldSize = sizeof(GetType<RecordDim, decltype(rc)>);
