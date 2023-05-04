@@ -181,6 +181,9 @@ Macros</h2></td></tr>
 <tr class="memitem:a00cc5cd2c6d364291992fbd5bbc4771f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="macros_8hpp.html#a00cc5cd2c6d364291992fbd5bbc4771f">LLAMA_UNLIKELY</a></td></tr>
 <tr class="memdesc:a00cc5cd2c6d364291992fbd5bbc4771f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Expands to unlikely if [[unlikely]] supported by the compiler. Use as [[LLAMA_UNLIKELY]].  <a href="macros_8hpp.html#a00cc5cd2c6d364291992fbd5bbc4771f">More...</a><br /></td></tr>
 <tr class="separator:a00cc5cd2c6d364291992fbd5bbc4771f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac52095b6b237dbc727a93f91dba623b2"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="macros_8hpp.html#ac52095b6b237dbc727a93f91dba623b2">LLAMA_CONSTEVAL</a>&#160;&#160;&#160;constexpr</td></tr>
+<tr class="memdesc:ac52095b6b237dbc727a93f91dba623b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Expands to consteval if the compilers supports the keyword, otherwise to constexpr.  <a href="macros_8hpp.html#ac52095b6b237dbc727a93f91dba623b2">More...</a><br /></td></tr>
+<tr class="separator:ac52095b6b237dbc727a93f91dba623b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="acdb51ba3bd1bda9d71de13d3a092d50a"></a>
@@ -213,6 +216,24 @@ Macros</h2></td></tr>
 <p>Suppresses the nvcc warnings: 'calling a <b>host</b> function from a <b>host</b> <b>device</b> function is not allowed' and 'calling a <b>host</b> function("...") from a <b>host</b> <b>device</b> function("...") is not allowed' This macro can be applied before the concerned code block, which then needs to be ended with <a class="el" href="macros_8hpp.html#af7008057667ae5357a49f28a175743bf">LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING</a>. </p>
 
 <p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00141">141</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ac52095b6b237dbc727a93f91dba623b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac52095b6b237dbc727a93f91dba623b2">&#9670;&nbsp;</a></span>LLAMA_CONSTEVAL</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define LLAMA_CONSTEVAL&#160;&#160;&#160;constexpr</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Expands to consteval if the compilers supports the keyword, otherwise to constexpr. </p>
+
+<p class="definition">Definition at line <a class="el" href="macros_8hpp_source.html#l00193">193</a> of file <a class="el" href="macros_8hpp_source.html">macros.hpp</a>.</p>
 
 </div>
 </div>
@@ -499,7 +520,7 @@ Macros</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="macros_8hpp.html">macros.hpp</a></li>
-    <li class="footer">Generated on Thu May 4 2023 13:58:49 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Thu May 4 2023 17:42:13 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

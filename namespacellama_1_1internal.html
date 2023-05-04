@@ -250,9 +250,6 @@ Functions</h2></td></tr>
 <tr class="separator:aafa8c3b0fd47fb8140b6b9aec0b61cb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0a81e9975bf6750cae8fa41b8b94f58c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a0a81e9975bf6750cae8fa41b8b94f58c">parallelMemcpy</a> (std::byte *dst, const std::byte *src, std::size_t size, std::size_t threadId=0, std::size_t threadCount=1, <a class="el" href="namespacellama_1_1internal.html#a359ae38d758d2af3b2e5610fcc32c110">memcopyFunc</a> singleThreadMemcpy=std::memcpy)</td></tr>
 <tr class="separator:a0a81e9975bf6750cae8fa41b8b94f58c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acde58af143505d1ef6a1d7e34d181e5f"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename... &gt; typename L, typename... T, typename F &gt; </td></tr>
-<tr class="memitem:acde58af143505d1ef6a1d7e34d181e5f"><td class="memTemplItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#acde58af143505d1ef6a1d7e34d181e5f">mpForEachInlined</a> (L&lt; T... &gt;, F &amp;&amp;f)</td></tr>
-<tr class="separator:acde58af143505d1ef6a1d7e34d181e5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2413ee7f2d6487f7e306148cf2b46ac4"><td class="memTemplParams" colspan="2">template&lt;typename TypeList &gt; </td></tr>
 <tr class="memitem:a2413ee7f2d6487f7e306148cf2b46ac4"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a2413ee7f2d6487f7e306148cf2b46ac4">flatAlignOfImpl</a> ()</td></tr>
 <tr class="separator:a2413ee7f2d6487f7e306148cf2b46ac4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -274,6 +271,9 @@ Functions</h2></td></tr>
 <tr class="memitem:acfbbb27c8356e64d8f7282336c3b60a1"><td class="memTemplParams" colspan="2">template&lt;typename... FieldsA, typename FieldB , typename... FieldsB, auto Pos = FindFieldByTag&lt;Record&lt;FieldsA...&gt;, GetFieldTag&lt;FieldB&gt;&gt;::value&gt; </td></tr>
 <tr class="memitem:acfbbb27c8356e64d8f7282336c3b60a1"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#acfbbb27c8356e64d8f7282336c3b60a1">mergeRecordDimsImpl</a> (mp_identity&lt; <a class="el" href="structllama_1_1Record.html">Record</a>&lt; FieldsA... &gt;&gt;, mp_identity&lt; <a class="el" href="structllama_1_1Record.html">Record</a>&lt; FieldB, FieldsB... &gt;&gt;)</td></tr>
 <tr class="separator:acfbbb27c8356e64d8f7282336c3b60a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8648dede6110d886fb486aaf99611069"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename... &gt; typename L, typename... T, typename F &gt; </td></tr>
+<tr class="memitem:a8648dede6110d886fb486aaf99611069"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a8648dede6110d886fb486aaf99611069">mpForEachInlined</a> (L&lt; T... &gt;, F &amp;&amp;f)</td></tr>
+<tr class="separator:a8648dede6110d886fb486aaf99611069"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a158338076284b27d9f1875797789bd59"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a158338076284b27d9f1875797789bd59">divRoundUp</a> (std::size_t dividend, std::size_t divisor) -&gt; std::size_t</td></tr>
 <tr class="separator:a158338076284b27d9f1875797789bd59"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a02e115f3c9d3acdccd07526d475ed358"><td class="memTemplParams" colspan="2">template&lt;std::size_t... Coords1, std::size_t... Coords2&gt; </td></tr>
@@ -474,7 +474,7 @@ template&lt;typename FromList , template&lt; auto... &gt; class ToList&gt; </div
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Meta_8hpp_source.html#l00025">25</a> of file <a class="el" href="Meta_8hpp_source.html">Meta.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Meta_8hpp_source.html#l00033">33</a> of file <a class="el" href="Meta_8hpp_source.html">Meta.hpp</a>.</p>
 
 </div>
 </div>
@@ -1305,7 +1305,7 @@ template&lt;typename TypeList &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00430">430</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00419">419</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1603,7 +1603,7 @@ template&lt;typename A , std::size_t NA, typename B , std::size_t NB&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00652">652</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00641">641</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1635,7 +1635,7 @@ template&lt;typename A , typename B &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00645">645</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00634">634</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1667,7 +1667,7 @@ template&lt;typename... FieldsA&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00662">662</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00651">651</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1699,12 +1699,12 @@ template&lt;typename... FieldsA, typename FieldB , typename... FieldsB, auto Pos
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00672">672</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00661">661</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
-<a id="acde58af143505d1ef6a1d7e34d181e5f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acde58af143505d1ef6a1d7e34d181e5f">&#9670;&nbsp;</a></span>mpForEachInlined()</h2>
+<a id="a8648dede6110d886fb486aaf99611069"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8648dede6110d886fb486aaf99611069">&#9670;&nbsp;</a></span>mpForEachInlined()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1715,7 +1715,7 @@ template&lt;template&lt; typename... &gt; typename L, typename... T, typename F 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr void llama::internal::mpForEachInlined </td>
+          <td class="memname">constexpr <a class="el" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a> void llama::internal::mpForEachInlined </td>
           <td>(</td>
           <td class="paramtype">L&lt; T... &gt;&#160;</td>
           <td class="paramname">, </td>
@@ -1734,12 +1734,12 @@ template&lt;template&lt; typename... &gt; typename L, typename... T, typename F 
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00323">323</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Meta_8hpp_source.html#l00017">17</a> of file <a class="el" href="Meta_8hpp_source.html">Meta.hpp</a>.</p>
 
 </div>
 </div>
@@ -1768,7 +1768,7 @@ template&lt;typename TypeList , std::size_t I, bool Align&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00524">524</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00513">513</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -2136,7 +2136,7 @@ template&lt;typename TypeList , bool Align, bool IncludeTailPadding&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00474">474</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00463">463</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -2484,7 +2484,7 @@ template&lt;std::size_t I, typename RecordDim &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00397">397</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00386">386</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -2510,7 +2510,7 @@ template&lt;typename... Children&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00400">400</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00389">389</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -2537,11 +2537,11 @@ template&lt;std::size_t I, typename... Children&gt; </div>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">= <a class="code" href="namespacellama_1_1internal.html#a1dc0436b8f0598e4fe3e707051be5b5f">flatFieldCountBefore</a>&lt;I - 1, Record&lt;Children...&gt;&gt;</div>
 <div class="line">            + <a class="code" href="namespacellama.html#aa6c960189f5edc242be631e2e8757914">flatFieldCount</a>&lt;<a class="code" href="namespacellama.html#a75dfd56127d13358c2991a57340657dc">GetFieldType</a>&lt;mp_at_c&lt;Record&lt;Children...&gt;, I - 1&gt;&gt;&gt;</div>
-<div class="ttc" id="anamespacellama_1_1internal_html_a1dc0436b8f0598e4fe3e707051be5b5f"><div class="ttname"><a href="namespacellama_1_1internal.html#a1dc0436b8f0598e4fe3e707051be5b5f">llama::internal::flatFieldCountBefore</a></div><div class="ttdeci">constexpr std::size_t flatFieldCountBefore</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00397">Core.hpp:397</a></div></div>
+<div class="ttc" id="anamespacellama_1_1internal_html_a1dc0436b8f0598e4fe3e707051be5b5f"><div class="ttname"><a href="namespacellama_1_1internal.html#a1dc0436b8f0598e4fe3e707051be5b5f">llama::internal::flatFieldCountBefore</a></div><div class="ttdeci">constexpr std::size_t flatFieldCountBefore</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00386">Core.hpp:386</a></div></div>
 <div class="ttc" id="anamespacellama_html_a75dfd56127d13358c2991a57340657dc"><div class="ttname"><a href="namespacellama.html#a75dfd56127d13358c2991a57340657dc">llama::GetFieldType</a></div><div class="ttdeci">mp_second&lt; Field &gt; GetFieldType</div><div class="ttdoc">Get the type from a Field.</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00089">Core.hpp:89</a></div></div>
-<div class="ttc" id="anamespacellama_html_aa6c960189f5edc242be631e2e8757914"><div class="ttname"><a href="namespacellama.html#aa6c960189f5edc242be631e2e8757914">llama::flatFieldCount</a></div><div class="ttdeci">constexpr std::size_t flatFieldCount</div><div class="ttdoc">The total number of fields in the recursively expanded record dimension.</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00385">Core.hpp:385</a></div></div>
+<div class="ttc" id="anamespacellama_html_aa6c960189f5edc242be631e2e8757914"><div class="ttname"><a href="namespacellama.html#aa6c960189f5edc242be631e2e8757914">llama::flatFieldCount</a></div><div class="ttdeci">constexpr std::size_t flatFieldCount</div><div class="ttdoc">The total number of fields in the recursively expanded record dimension.</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00374">Core.hpp:374</a></div></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00405">405</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00394">394</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -2759,7 +2759,7 @@ template&lt;typename T &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1internal.html">internal</a></li>
-    <li class="footer">Generated on Thu May 4 2023 13:58:49 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Thu May 4 2023 17:42:13 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

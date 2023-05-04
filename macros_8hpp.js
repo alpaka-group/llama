@@ -2,6 +2,7 @@ var macros_8hpp =
 [
     [ "LLAMA_ACC", "macros_8hpp.html#acdb51ba3bd1bda9d71de13d3a092d50a", null ],
     [ "LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING", "macros_8hpp.html#a721a8877e1c29f2118eb4c2cb84bae66", null ],
+    [ "LLAMA_CONSTEVAL", "macros_8hpp.html#ac52095b6b237dbc727a93f91dba623b2", null ],
     [ "LLAMA_COPY", "macros_8hpp.html#a2c7addf59d59bed9110075644e115f97", null ],
     [ "LLAMA_DECLSPEC_EMPTY_BASES", "macros_8hpp.html#a54cf6c1e66eb82c07a01b945491e4916", null ],
     [ "LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING", "macros_8hpp.html#af7008057667ae5357a49f28a175743bf", null ],
