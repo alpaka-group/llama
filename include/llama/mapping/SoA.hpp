@@ -54,7 +54,7 @@ namespace llama::mapping
         inline static constexpr std::size_t blobCount
             = blobs == Blobs::OnePerField ? mp_size<FlatRecordDim<TRecordDim>>::value : 1;
 
-#ifndef __NVCC__
+#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ >= 12
         using Base::Base;
 #else
         constexpr SoA() = default;
