@@ -314,10 +314,77 @@ TEST_CASE("recorddim.recurring_tags")
         llama::Field<tag::Y, llama::Record<llama::Field<tag::X, float>>>,
         llama::Field<tag::Z, llama::Record<llama::Field<tag::X, llama::Record<llama::Field<tag::X, float>>>>>>;
 
-
     auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{1}, RecordDim{}});
     view(0)(tag::X{}) = 42;
     view(0)(tag::Y{}, tag::X{}) = 42;
     view(0)(tag::Z{}, tag::X{}, tag::X{}) = 42;
+}
+#endif
+
+#ifdef LLAMA_HAS_STRING_FIELDS
+TEST_CASE("recorddim.NamedFields")
+{
+    using RecordDim = llama::Record<
+        llama::NamedField<"x", int>,
+        llama::NamedField<"y", int>,
+        llama::NamedField<"pos", Vec2F>,
+        llama::Field<tag::Vel, llama::Record<llama::Field<tag::X, float>, llama::NamedField<"y", float>>>>;
+
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{1}, RecordDim{}});
+
+    using namespace llama::literals;
+    view(0)("x"_Name) = 1;
+    view(0)("y"_Name) = 2;
+    view(0)("pos"_Name, tag::X{}) = 3;
+    view(0)("pos"_Name, tag::Y{}) = 4;
+    view(0)(tag::Vel{}, tag::X{}) = 5;
+    view(0)(tag::Vel{}, "y"_Name) = 6;
+
+    CHECK(view(0)(llama::RecordCoord<0>{}) == 1);
+    CHECK(view(0)(llama::RecordCoord<1>{}) == 2);
+    CHECK(view(0)(llama::RecordCoord<2, 0>{}) == 3);
+    CHECK(view(0)(llama::RecordCoord<2, 1>{}) == 4);
+    CHECK(view(0)(llama::RecordCoord<3, 0>{}) == 5);
+    CHECK(view(0)(llama::RecordCoord<3, 1>{}) == 6);
+}
+#endif
+
+#ifdef LLAMA_CAN_REFLECT_RECORD_DIM
+#    include <boost/describe/class.hpp>
+namespace
+{
+    struct MyVel
+    {
+        int x;
+        int y;
+    };
+    BOOST_DESCRIBE_STRUCT(MyVel, (), (x, y));
+
+    struct MyStruct
+    {
+        int a;
+        int b;
+        MyVel pos;
+    };
+    BOOST_DESCRIBE_STRUCT(MyStruct, (), (a, b, pos));
+} // namespace
+
+
+TEST_CASE("recorddim.Boost.Describe")
+{
+    using RecordDim = llama::ReflectToRecordDim<MyStruct>;
+    auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{1}, RecordDim{}});
+
+    using namespace llama::literals;
+
+    view(0)("a"_Name) = 1;
+    view(0)("b"_Name) = 2;
+    view(0)("pos"_Name, "x"_Name) = 3;
+    view(0)("pos"_Name, "y"_Name) = 4;
+
+    CHECK(view(0)(llama::RecordCoord<0>{}) == 1);
+    CHECK(view(0)(llama::RecordCoord<1>{}) == 2);
+    CHECK(view(0)(llama::RecordCoord<2, 0>{}) == 3);
+    CHECK(view(0)(llama::RecordCoord<2, 1>{}) == 4);
 }
 #endif

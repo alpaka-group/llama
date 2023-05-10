@@ -10,6 +10,9 @@
 #include <iostream>
 #include <string>
 #include <type_traits>
+#if __has_include(<boost/describe/members.hpp>)
+#    include <boost/describe/members.hpp>
+#endif
 
 namespace llama
 {
@@ -52,6 +55,91 @@ namespace llama
     struct Record
     {
     };
+
+#if __cpp_nontype_template_args >= 201911L && !defined(__EDG__)
+    /// Defined when string literals are supported in the record dimension. See also \ref NamedField.
+#    define LLAMA_HAS_STRING_FIELDS
+
+    namespace internal
+    {
+        // N includes the char to store the null-terminator
+        template<std::size_t N>
+        struct FixedString
+        {
+            constexpr FixedString(const char* str)
+            {
+                std::copy(str, str + N, data);
+            }
+
+            char data[N];
+        };
+
+        template<std::size_t N>
+        FixedString(const char (&str)[N]) -> FixedString<N>;
+
+        template<FixedString Name>
+        struct StringTag
+        {
+        };
+    } // namespace internal
+
+    inline namespace literals
+    {
+        /// Literal operator for converting a string literal "abc"_Name to a StringTag<"Name">.
+        template<internal::FixedString Name>
+        auto operator"" _Name()
+        {
+            return internal::StringTag<Name>{};
+        }
+    } // namespace literals
+
+    /// Alternative to \ref Field. Use with string literals, e.g. NamedField<"x", float>. Access at the \ref View
+    /// requires to use "x"_Name then.
+    template<internal::FixedString Tag, typename Type>
+    using NamedField = Field<internal::StringTag<Tag>, Type>;
+
+#    if __has_include(<boost/describe/members.hpp>)
+    /// Defined when LLAMA has support to reflect a C++ struct into a record dimension using Boost.Describe.
+#        define LLAMA_CAN_REFLECT_RECORD_DIM
+    namespace internal
+    {
+        template<typename T>
+        auto reflectToRecordDim();
+
+        template<class C, typename T>
+        auto memberPointerPointeeType(T C::*) -> T;
+
+        constexpr auto constexpr_strlen(const char* s)
+        {
+            const char* end = s;
+            while(*end != 0)
+                end++;
+            return end - s;
+        }
+
+        template<typename Member>
+        using MakeFieldFromMemberDescriptor = NamedField<
+            FixedString<constexpr_strlen(Member::name) + 1>(Member::name),
+            decltype(reflectToRecordDim<decltype(memberPointerPointeeType(Member::pointer))>())>;
+
+        template<typename T>
+        auto reflectToRecordDim()
+        {
+            if constexpr(boost::describe::has_describe_members<T>::value)
+            {
+                using MemberList = boost::describe::describe_members<T, boost::describe::mod_public>;
+                return mp_rename<mp_transform<MakeFieldFromMemberDescriptor, MemberList>, llama::Record>{};
+            }
+            else
+                return T{};
+        }
+    } // namespace internal
+
+    /// Reflects the given type T using Boost.Describe and creates a record dimension for it.
+    template<typename T>
+    using ReflectToRecordDim = decltype(internal::reflectToRecordDim<T>());
+#    endif
+#endif
 
     template<typename T>
     struct NrAndOffset
