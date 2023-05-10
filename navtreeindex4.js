@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"structllama_1_1ProxyRefOpMixin.html#a74fa44395646ece004b25ddc9058ab54":[2,0,0,21,12],
 "structllama_1_1ProxyRefOpMixin.html#a79956552e378d2dbb181c1e925b2278c":[2,0,0,21,0],
 "structllama_1_1ProxyRefOpMixin.html#a9f835cd88e899ce34527bafba1751bb9":[2,0,0,21,1],
 "structllama_1_1ProxyRefOpMixin.html#aa5c01adb17955a5be25e835456d947fb":[2,0,0,21,9],
@@ -248,6 +249,5 @@ var NAVTREEINDEX4 =
 "structllama_1_1bloballoc_1_1SharedPtr.html":[2,0,0,1,2],
 "structllama_1_1bloballoc_1_1SharedPtr.html#a5080b68a3c4da3051afa37f04871e837":[2,0,0,1,2,0],
 "structllama_1_1bloballoc_1_1SharedPtr.html#ae90813d3ac4877d722150d240e790c98":[2,0,0,1,2,1],
-"structllama_1_1bloballoc_1_1UniquePtr.html":[2,0,0,1,1],
-"structllama_1_1bloballoc_1_1UniquePtr.html#affa75475e5567690fee1a68fab39b5b7":[2,0,0,1,1,0]
+"structllama_1_1bloballoc_1_1UniquePtr.html":[2,0,0,1,1]
 };

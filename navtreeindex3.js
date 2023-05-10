@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"namespacellama_1_1mapping.html#aeead2d9c8929b8c0aff18aad054a0710":[1,0,0,4,52],
 "namespacellama_1_1mapping.html#aeead2d9c8929b8c0aff18aad054a0710a4492081ca02b059f9e8af4ddaf0f7292":[1,0,0,4,52,0],
 "namespacellama_1_1mapping.html#aeead2d9c8929b8c0aff18aad054a0710ad12fbc9a2ba3b0b91a4190959b4c966b":[1,0,0,4,52,1],
 "namespacellama_1_1mapping.html#aefb24225681377e371e5529d5c41c6f0":[1,0,0,4,77],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "structllama_1_1ProxyRefOpMixin.html#a38d2f14e872312209bb5089dcb48b5a1":[2,0,0,21,7],
 "structllama_1_1ProxyRefOpMixin.html#a427586bad791a7de5d69fcb990a4a2c8":[2,0,0,21,2],
 "structllama_1_1ProxyRefOpMixin.html#a461255210746b50f4b018054a2e00079":[2,0,0,21,11],
-"structllama_1_1ProxyRefOpMixin.html#a6e149fa3d0657b524413f1dfddad9288":[2,0,0,21,8],
-"structllama_1_1ProxyRefOpMixin.html#a74fa44395646ece004b25ddc9058ab54":[2,0,0,21,12]
+"structllama_1_1ProxyRefOpMixin.html#a6e149fa3d0657b524413f1dfddad9288":[2,0,0,21,8]
 };
