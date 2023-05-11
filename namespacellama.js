@@ -73,6 +73,7 @@ var namespacellama =
     [ "blobMemcpy", "namespacellama.html#a22c65b7815a74750d6b589d95d19d703", null ],
     [ "cat", "namespacellama.html#a42cdd926d98388052f028ab19c94b649", null ],
     [ "chooseSimdLanes", "namespacellama.html#abb21e8bcb7c41613b7183a1beef1f600", null ],
+    [ "constructField", "namespacellama.html#a5ccd7f98debeb59c219c00f554a843bc", null ],
     [ "constructFields", "namespacellama.html#af4c8d962f80ddc030f99b08479ecb083", null ],
     [ "copy", "namespacellama.html#ab67a5448cc031309dc1aa8580b7d4950", null ],
     [ "copyRecord", "namespacellama.html#a4fca680f97ca52a42cd74519e6347395", null ],
