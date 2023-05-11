@@ -388,3 +388,25 @@ TEST_CASE("recorddim.Boost.Describe")
     CHECK(view(0)(llama::RecordCoord<2, 1>{}) == 4);
 }
 #endif
+
+TEST_CASE("recorddim.forEachLeaf")
+{
+    {
+        std::stringstream ss;
+        llama::forEachLeafCoord<Vec3I>([&](auto rc) { ss << rc << ","; });
+        CHECK(ss.str() == "RecordCoord<0>,RecordCoord<1>,RecordCoord<2>,");
+    }
+    {
+        std::stringstream ss;
+        llama::forEachLeafCoord<Particle>([&](auto rc) { ss << rc << ","; });
+        CHECK(
+            ss.str()
+            == "RecordCoord<0, 0>,RecordCoord<0, 1>,RecordCoord<0, 2>,RecordCoord<1>,RecordCoord<2, 0>,RecordCoord<2, "
+               "1>,RecordCoord<2, 2>,RecordCoord<3, 0>,RecordCoord<3, 1>,RecordCoord<3, 2>,RecordCoord<3, 3>,");
+    }
+    {
+        std::stringstream ss;
+        llama::forEachLeafCoord<int>([&](auto rc) { ss << rc << ","; });
+        CHECK(ss.str() == "RecordCoord<>,");
+    }
+}
