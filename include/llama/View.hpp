@@ -88,39 +88,46 @@ namespace llama
         LeafRecordCoords<typename Mapping::RecordDim>,
         mp_bind_front<internal::IsComputed, Mapping>::template fn>::value;
 
-#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ <= 4
-    namespace internal
+    template<typename Mapping, typename BlobType, typename Accessor, std::size_t... RCs>
+    LLAMA_FN_HOST_ACC_INLINE void constructField(
+        View<Mapping, BlobType, Accessor>& view,
+        typename Mapping::ArrayIndex ai,
+        RecordCoord<RCs...> rc)
     {
-        template<typename View>
-        struct NvccWorkaroundLambda
+        using FieldType = GetType<typename Mapping::RecordDim, decltype(rc)>;
+
+        // this handles physical and computed mappings
+        if constexpr(sizeof...(RCs) == 0)
         {
-            using RecordDim = typename View::RecordDim;
-            using ArrayIndex = typename View::ArrayIndex;
-
-            template<typename RecordCoord>
-            void operator()(RecordCoord rc) const
+            using RefType = decltype(view(ai));
+            if constexpr(isProxyReference<RefType>)
             {
-                using FieldType = GetType<RecordDim, decltype(rc)>;
-                using RefType = decltype(view(ai)(rc));
-                // this handles physical and computed mappings
-                if constexpr(std::is_lvalue_reference_v<RefType>)
-                {
-                    new(&view(ai)(rc)) FieldType;
-                }
-                else if constexpr(isProxyReference<RefType>)
-                {
-                    view(ai)(rc) = FieldType{};
-                }
+                view(ai) = FieldType{};
             }
+            else if constexpr(
+                std::is_lvalue_reference_v<RefType> && !std::is_const_v<std::remove_reference_t<RefType>>)
+            {
+                new(&view(ai)) FieldType{};
+            }
+        }
+        else
+        {
+            using RefType = decltype(view(ai)(rc));
+            if constexpr(isProxyReference<RefType>)
+            {
+                view(ai)(rc) = FieldType{};
+            }
+            else if constexpr(
+                std::is_lvalue_reference_v<RefType> && !std::is_const_v<std::remove_reference_t<RefType>>)
+            {
+                new(&view(ai)(rc)) FieldType{};
+            }
+        }
+    }
 
-            View& view;
-            ArrayIndex ai;
-        };
-    } // namespace internal
-#endif
-
-    /// Runs the constructor of all fields reachable through the given view. Computed fields are constructed if they
-    /// return l-value references. If the mapping is a computed
+    /// Value-initializes all fields reachable through the given view. That is, constructors are run and fundamental
+    /// types are zero-initialized. Computed fields are constructed if they return l-value references and assigned a
+    /// default constructed value if they return a proxy reference.
     template<typename Mapping, typename BlobType, typename Accessor>
     LLAMA_FN_HOST_ACC_INLINE void constructFields(View<Mapping, BlobType, Accessor>& view)
     {
@@ -128,55 +135,15 @@ namespace llama
         using RecordDim = typename View::RecordDim;
         forEachADCoord(
             view.extents(),
-            [&]([[maybe_unused]] typename View::ArrayIndex ai) LLAMA_LAMBDA_INLINE
-            {
-                if constexpr(isRecordDim<RecordDim>)
-                {
-                    forEachLeafCoord<RecordDim>(
-#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ <= 4
-                        internal::NvccWorkaroundLambda<View>{view, ai}
-#else
-                        [&](auto rc) LLAMA_LAMBDA_INLINE
-                        {
-                            using FieldType = GetType<RecordDim, decltype(rc)>;
-                            using RefType = decltype(view(ai)(rc));
-                            // this handles physical and computed mappings
-                            if constexpr(isProxyReference<RefType>)
-                            {
-                                view(ai)(rc) = FieldType{};
-                            }
-                            else if constexpr(
-                                std::is_lvalue_reference_v<RefType>
-                                && !std::is_const_v<std::remove_reference_t<RefType>>)
-                            {
-                                new(&view(ai)(rc)) FieldType;
-                            }
-                        }
-#endif
-                    );
-                }
-                else
-                {
-                    // this handles physical and computed mappings
-                    using RefType = decltype(view(ai));
-                    if constexpr(isProxyReference<RefType>)
-                    {
-                        view(ai) = RecordDim{};
-                    }
-                    else if constexpr(
-                        std::is_lvalue_reference_v<RefType> && !std::is_const_v<std::remove_reference_t<RefType>>)
-                    {
-                        new(&view(ai)) RecordDim;
-                    }
-                }
-            });
+            [&](typename View::ArrayIndex ai) LLAMA_LAMBDA_INLINE
+            { forEachLeafCoord<RecordDim>([&](auto rc) LLAMA_LAMBDA_INLINE { constructField(view, ai, rc); }); });
     }
 
     /// Creates a view based on the given mapping, e.g. \ref AoS or \ref :SoA. For allocating the view's underlying
     /// memory, the specified allocator callable is used (or the default one, which is \ref bloballoc::Vector). The
     /// allocator callable is called with the alignment and size of bytes to allocate for each blob of the mapping.
-    /// The constructors are run for all fields by calling \ref constructFields. This function is the preferred way to
-    /// create a \ref View. See also \ref allocViewUninitialized.
+    /// Value-initialization is performed for all fields by calling \ref constructFields. This function is the
+    /// preferred way to create a \ref View. See also \ref allocViewUninitialized.
 #ifdef __cpp_lib_concepts
     template<typename Mapping, BlobAllocator Allocator = bloballoc::Vector, typename Accessor = accessor::Default>
 #else
