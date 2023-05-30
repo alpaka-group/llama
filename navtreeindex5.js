@@ -1,8 +1,5 @@
 var NAVTREEINDEX5 =
 {
-"structllama_1_1bloballoc_1_1UniquePtr.html":[2,0,0,1,1],
-"structllama_1_1bloballoc_1_1UniquePtr.html#affa75475e5567690fee1a68fab39b5b7":[2,0,0,1,1,0],
-"structllama_1_1bloballoc_1_1Vector.html":[2,0,0,1,4],
 "structllama_1_1bloballoc_1_1Vector.html#a460676ac82586d1bef38037a1816464b":[2,0,0,1,4,0],
 "structllama_1_1internal_1_1Assign.html":[2,0,0,2,46],
 "structllama_1_1internal_1_1Assign.html#ae8e7737477254928607c54a1dbe94918":[2,0,0,2,46,0],
@@ -249,5 +246,8 @@ var NAVTREEINDEX5 =
 "structllama_1_1mapping_1_1Bytesplit_1_1Reference.html#ad397146d87434a6114bb15a88644b3bf":[2,0,0,3,14,0,0],
 "structllama_1_1mapping_1_1Byteswap.html":[2,0,0,3,16],
 "structllama_1_1mapping_1_1ChangeType.html":[2,0,0,3,18],
-"structllama_1_1mapping_1_1FieldAccessCount.html":[2,0,0,3,27]
+"structllama_1_1mapping_1_1FieldAccessCount.html":[2,0,0,3,27],
+"structllama_1_1mapping_1_1FieldAccessCount.html#a0774f3c44d838d70fd9282d5e96fe373":[2,0,0,3,27,8],
+"structllama_1_1mapping_1_1FieldAccessCount.html#a1b6fa99b9767f2b8fe2ab0621c3518a5":[2,0,0,3,27,2],
+"structllama_1_1mapping_1_1FieldAccessCount.html#a3d63d9d9ecf9ed6bda2e6e895c07e691":[2,0,0,3,27,11]
 };

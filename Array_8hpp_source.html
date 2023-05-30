@@ -406,19 +406,16 @@ $(document).ready(function(){initNavTree('Array_8hpp_source.html',''); initResiz
 <div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;    }</div>
 <div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;} <span class="comment">// namespace llama</span></div>
 <div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160; </div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;<span class="keyword">namespace </span>std</div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;{</div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keywordtype">size_t</span> N&gt;</div>
-<div class="line"><a name="l00327"></a><span class="lineno"><a class="line" href="structstd_1_1tuple__size_3_01llama_1_1Array_3_01T_00_01N_01_4_01_4.html">  327</a></span>&#160;    <span class="keyword">struct </span>tuple_size&lt;<a class="code" href="namespacellama.html">llama</a>::<a class="code" href="namespacellama.html#a690689d38b43930430e58bb7fe17aca7">Array</a>&lt;T, N&gt;&gt; : integral_constant&lt;size_t, N&gt; <span class="comment">// NOLINT(cert-dcl58-cpp)</span></div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;    {</div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;    };</div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160; </div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;    <span class="keyword">template</span>&lt;<span class="keywordtype">size_t</span> I, <span class="keyword">typename</span> T, <span class="keywordtype">size_t</span> N&gt;</div>
-<div class="line"><a name="l00332"></a><span class="lineno"><a class="line" href="structstd_1_1tuple__element_3_01I_00_01llama_1_1Array_3_01T_00_01N_01_4_01_4.html">  332</a></span>&#160;    <span class="keyword">struct </span>tuple_element&lt;I, <a class="code" href="namespacellama.html">llama</a>::<a class="code" href="namespacellama.html#a690689d38b43930430e58bb7fe17aca7">Array</a>&lt;T, N&gt;&gt; <span class="comment">// NOLINT(cert-dcl58-cpp)</span></div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;    {</div>
-<div class="line"><a name="l00334"></a><span class="lineno"><a class="line" href="structstd_1_1tuple__element_3_01I_00_01llama_1_1Array_3_01T_00_01N_01_4_01_4.html#a9eb4aa91a7a1ef27eb5060719269e93b">  334</a></span>&#160;        <span class="keyword">using</span> <a class="code" href="structstd_1_1tuple__element_3_01I_00_01llama_1_1Array_3_01T_00_01N_01_4_01_4.html#a9eb4aa91a7a1ef27eb5060719269e93b">type</a> = T;</div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;    };</div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;} <span class="comment">// namespace std</span></div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keywordtype">size_t</span> N&gt;</div>
+<div class="line"><a name="l00325"></a><span class="lineno"><a class="line" href="structstd_1_1tuple__size_3_01llama_1_1Array_3_01T_00_01N_01_4_01_4.html">  325</a></span>&#160;<span class="keyword">struct </span>std::tuple_size&lt;<a class="code" href="namespacellama.html">llama</a>::<a class="code" href="namespacellama.html#a690689d38b43930430e58bb7fe17aca7">Array</a>&lt;T, N&gt;&gt; : std::integral_constant&lt;size_t, N&gt; <span class="comment">// NOLINT(cert-dcl58-cpp)</span></div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;{</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;};</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160; </div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;<span class="keyword">template</span>&lt;<span class="keywordtype">size_t</span> I, <span class="keyword">typename</span> T, <span class="keywordtype">size_t</span> N&gt;</div>
+<div class="line"><a name="l00330"></a><span class="lineno"><a class="line" href="structstd_1_1tuple__element_3_01I_00_01llama_1_1Array_3_01T_00_01N_01_4_01_4.html">  330</a></span>&#160;<span class="keyword">struct </span>std::tuple_element&lt;I, <a class="code" href="namespacellama.html">llama</a>::<a class="code" href="namespacellama.html#a690689d38b43930430e58bb7fe17aca7">Array</a>&lt;T, N&gt;&gt; <span class="comment">// NOLINT(cert-dcl58-cpp)</span></div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;{</div>
+<div class="line"><a name="l00332"></a><span class="lineno"><a class="line" href="structstd_1_1tuple__element_3_01I_00_01llama_1_1Array_3_01T_00_01N_01_4_01_4.html#a9eb4aa91a7a1ef27eb5060719269e93b">  332</a></span>&#160;    <span class="keyword">using</span> <a class="code" href="structstd_1_1tuple__element_3_01I_00_01llama_1_1Array_3_01T_00_01N_01_4_01_4.html#a9eb4aa91a7a1ef27eb5060719269e93b">type</a> = T;</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;};</div>
 <div class="ttc" id="amacros_8hpp_html"><div class="ttname"><a href="macros_8hpp.html">macros.hpp</a></div></div>
 <div class="ttc" id="amacros_8hpp_html_adad0b5fb27fb373cb41c47ed7ab419af"><div class="ttname"><a href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a></div><div class="ttdeci">#define LLAMA_FN_HOST_ACC_INLINE</div><div class="ttdef"><b>Definition:</b> <a href="macros_8hpp_source.html#l00096">macros.hpp:96</a></div></div>
 <div class="ttc" id="anamespacellama_html"><div class="ttname"><a href="namespacellama.html">llama</a></div><div class="ttdef"><b>Definition:</b> <a href="Accessors_8hpp_source.html#l00012">Accessors.hpp:13</a></div></div>
@@ -472,14 +469,14 @@ $(document).ready(function(){initNavTree('Array_8hpp_source.html',''); initResiz
 <div class="ttc" id="astructllama_1_1Array_html_ad52f8200264f4af5b40762c5177f1e99"><div class="ttname"><a href="structllama_1_1Array.html#ad52f8200264f4af5b40762c5177f1e99">llama::Array::front</a></div><div class="ttdeci">constexpr auto front() -&gt; T &amp;</div><div class="ttdef"><b>Definition:</b> <a href="Array_8hpp_source.html#l00053">Array.hpp:53</a></div></div>
 <div class="ttc" id="astructllama_1_1Array_html_ae5db7865aabd4d3174462fc7a818fe73"><div class="ttname"><a href="structllama_1_1Array.html#ae5db7865aabd4d3174462fc7a818fe73">llama::Array::get</a></div><div class="ttdeci">constexpr auto get() -&gt; T &amp;</div><div class="ttdef"><b>Definition:</b> <a href="Array_8hpp_source.html#l00117">Array.hpp:117</a></div></div>
 <div class="ttc" id="astructllama_1_1Array_html_ae62482909e05847ecbca0f5077a29132"><div class="ttname"><a href="structllama_1_1Array.html#ae62482909e05847ecbca0f5077a29132">llama::Array::back</a></div><div class="ttdeci">constexpr auto back() const -&gt; const T &amp;</div><div class="ttdef"><b>Definition:</b> <a href="Array_8hpp_source.html#l00068">Array.hpp:68</a></div></div>
-<div class="ttc" id="astructstd_1_1tuple__element_3_01I_00_01llama_1_1Array_3_01T_00_01N_01_4_01_4_html_a9eb4aa91a7a1ef27eb5060719269e93b"><div class="ttname"><a href="structstd_1_1tuple__element_3_01I_00_01llama_1_1Array_3_01T_00_01N_01_4_01_4.html#a9eb4aa91a7a1ef27eb5060719269e93b">std::tuple_element&lt; I, llama::Array&lt; T, N &gt; &gt;::type</a></div><div class="ttdeci">T type</div><div class="ttdef"><b>Definition:</b> <a href="Array_8hpp_source.html#l00334">Array.hpp:334</a></div></div>
+<div class="ttc" id="astructstd_1_1tuple__element_3_01I_00_01llama_1_1Array_3_01T_00_01N_01_4_01_4_html_a9eb4aa91a7a1ef27eb5060719269e93b"><div class="ttname"><a href="structstd_1_1tuple__element_3_01I_00_01llama_1_1Array_3_01T_00_01N_01_4_01_4.html#a9eb4aa91a7a1ef27eb5060719269e93b">std::tuple_element&lt; I, llama::Array&lt; T, N &gt; &gt;::type</a></div><div class="ttdeci">T type</div><div class="ttdef"><b>Definition:</b> <a href="Array_8hpp_source.html#l00332">Array.hpp:332</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="Array_8hpp.html">Array.hpp</a></li>
-    <li class="footer">Generated on Thu May 11 2023 12:22:09 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue May 30 2023 23:38:10 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

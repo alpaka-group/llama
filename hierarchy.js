@@ -132,10 +132,8 @@ var hierarchy =
       [ "llama::mapping::Bytesplit< TArrayExtents, TRecordDim, InnerMapping >", "structllama_1_1mapping_1_1Bytesplit.html", null ],
       [ "llama::mapping::Projection< TArrayExtents, TRecordDim, InnerMapping, TProjectionMap >", "structllama_1_1mapping_1_1Projection.html", null ]
     ] ],
-    [ "integral_constant", null, [
-      [ "std::tuple_size< llama::Array< T, N > >", "structstd_1_1tuple__size_3_01llama_1_1Array_3_01T_00_01N_01_4_01_4.html", null ]
-    ] ],
     [ "std::integral_constant", null, [
+      [ "std::tuple_size< llama::Array< T, N > >", "structstd_1_1tuple__size_3_01llama_1_1Array_3_01T_00_01N_01_4_01_4.html", null ],
       [ "std::tuple_size< llama::ArrayExtents< SizeType, Sizes... > >", "structstd_1_1tuple__size_3_01llama_1_1ArrayExtents_3_01SizeType_00_01Sizes_8_8_8_01_4_01_4.html", null ],
       [ "std::tuple_size< llama::ArrayIndex< V, N > >", "structstd_1_1tuple__size_3_01llama_1_1ArrayIndex_3_01V_00_01N_01_4_01_4.html", null ]
     ] ],

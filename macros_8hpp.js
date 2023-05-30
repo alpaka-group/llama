@@ -1,5 +1,6 @@
 var macros_8hpp =
 [
+    [ "CAN_USE_RANGES", "macros_8hpp.html#a46ce794a2a02ddc4a84b9119b5f66ab8", null ],
     [ "LLAMA_ACC", "macros_8hpp.html#acdb51ba3bd1bda9d71de13d3a092d50a", null ],
     [ "LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING", "macros_8hpp.html#a721a8877e1c29f2118eb4c2cb84bae66", null ],
     [ "LLAMA_CONSTEVAL", "macros_8hpp.html#ac52095b6b237dbc727a93f91dba623b2", null ],
@@ -8,7 +9,6 @@ var macros_8hpp =
     [ "LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING", "macros_8hpp.html#af7008057667ae5357a49f28a175743bf", null ],
     [ "LLAMA_FN_HOST_ACC_INLINE", "macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af", null ],
     [ "LLAMA_FORCE_INLINE", "macros_8hpp.html#a602fc531cfc17c6b8fadea678b7c937b", null ],
-    [ "LLAMA_FORCE_INLINE_RECURSIVE", "macros_8hpp.html#a48abf2d81c1aac87ff87f95bb427049a", null ],
     [ "LLAMA_HOST_ACC", "macros_8hpp.html#a0df9a6bf4db1561110a18783a7276900", null ],
     [ "LLAMA_INDEPENDENT_DATA", "macros_8hpp.html#aa201f5c2567527b34eae5fbdab0e2416", null ],
     [ "LLAMA_LAMBDA_INLINE", "macros_8hpp.html#a5a40ca12db507af3cf9cbff655513aca", null ],
