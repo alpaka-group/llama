@@ -426,15 +426,9 @@ namespace llama
             using AbsolutCoord = Cat<BoundRecordCoord, RecordCoord<Coord...>>;
             using AccessedType = GetType<RecordDim, AbsolutCoord>;
             if constexpr(isRecordDim<AccessedType>)
-            {
-                LLAMA_FORCE_INLINE_RECURSIVE
                 return RecordRef<const View, AbsolutCoord>{arrayIndex(), this->view};
-            }
             else
-            {
-                LLAMA_FORCE_INLINE_RECURSIVE
                 return this->view.access(arrayIndex(), AbsolutCoord{});
-            }
         }
 
         // FIXME(bgruber): remove redundancy
@@ -444,15 +438,9 @@ namespace llama
             using AbsolutCoord = Cat<BoundRecordCoord, RecordCoord<Coord...>>;
             using AccessedType = GetType<RecordDim, AbsolutCoord>;
             if constexpr(isRecordDim<AccessedType>)
-            {
-                LLAMA_FORCE_INLINE_RECURSIVE
                 return RecordRef<View, AbsolutCoord>{arrayIndex(), this->view};
-            }
             else
-            {
-                LLAMA_FORCE_INLINE_RECURSIVE
                 return this->view.access(arrayIndex(), AbsolutCoord{});
-            }
         }
 
         /// Access a record in the record dimension underneath the current record reference using a series of tags. If
@@ -462,8 +450,6 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Tags...) const -> decltype(auto)
         {
             using RecordCoord = GetCoordFromTags<AccessibleRecordDim, Tags...>;
-
-            LLAMA_FORCE_INLINE_RECURSIVE
             return operator()(RecordCoord{});
         }
 
@@ -472,8 +458,6 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE auto operator()(Tags...) -> decltype(auto)
         {
             using RecordCoord = GetCoordFromTags<AccessibleRecordDim, Tags...>;
-
-            LLAMA_FORCE_INLINE_RECURSIVE
             return operator()(RecordCoord{});
         }
 
@@ -816,7 +800,6 @@ namespace llama
     LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeaf(RecordRefFwd&& vr, Functor&& functor)
     {
         using RecordRef = std::remove_reference_t<RecordRefFwd>;
-        LLAMA_FORCE_INLINE_RECURSIVE
         forEachLeafCoord<typename RecordRef::AccessibleRecordDim>(
             [functor = std::forward<Functor>(functor), &vr = vr](auto rc)
                 LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(constexpr mutable) { std::forward<Functor>(functor)(vr(rc)); });

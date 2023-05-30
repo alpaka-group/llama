@@ -456,29 +456,17 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayIndex ai) const -> decltype(auto)
         {
             if constexpr(isRecordDim<RecordDim>)
-            {
-                LLAMA_FORCE_INLINE_RECURSIVE
                 return RecordRef<const View>{ai, *this};
-            }
             else
-            {
-                LLAMA_FORCE_INLINE_RECURSIVE
                 return access(ai, RecordCoord<>{});
-            }
         }
 
         LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayIndex ai) -> decltype(auto)
         {
             if constexpr(isRecordDim<RecordDim>)
-            {
-                LLAMA_FORCE_INLINE_RECURSIVE
                 return RecordRef<View>{ai, *this};
-            }
             else
-            {
-                LLAMA_FORCE_INLINE_RECURSIVE
                 return access(ai, RecordCoord<>{});
-            }
         }
 
         /// Retrieves the \ref RecordRef at the \ref ArrayIndex index constructed from the passed component
@@ -491,7 +479,6 @@ namespace llama
             static_assert(
                 sizeof...(Indices) == ArrayIndex::rank,
                 "Please specify as many indices as you have array dimensions");
-            LLAMA_FORCE_INLINE_RECURSIVE
             return (*this)(ArrayIndex{static_cast<typename ArrayIndex::value_type>(indices)...});
         }
 
@@ -503,7 +490,6 @@ namespace llama
             static_assert(
                 sizeof...(Indices) == ArrayIndex::rank,
                 "Please specify as many indices as you have array dimensions");
-            LLAMA_FORCE_INLINE_RECURSIVE
             return (*this)(ArrayIndex{static_cast<typename ArrayIndex::value_type>(indices)...});
         }
 
@@ -511,13 +497,11 @@ namespace llama
         /// indices.
         LLAMA_FN_HOST_ACC_INLINE auto operator[](ArrayIndex ai) const -> decltype(auto)
         {
-            LLAMA_FORCE_INLINE_RECURSIVE
             return (*this)(ai);
         }
 
         LLAMA_FN_HOST_ACC_INLINE auto operator[](ArrayIndex ai) -> decltype(auto)
         {
-            LLAMA_FORCE_INLINE_RECURSIVE
             return (*this)(ai);
         }
 
@@ -532,13 +516,11 @@ namespace llama
         /// Retrieves the \ref RecordRef at the 1D \ref ArrayIndex index constructed from the passed index.
         LLAMA_FN_HOST_ACC_INLINE auto operator[](size_type index) const -> decltype(auto)
         {
-            LLAMA_FORCE_INLINE_RECURSIVE
             return (*this)(index);
         }
 
         LLAMA_FN_HOST_ACC_INLINE auto operator[](size_type index) -> decltype(auto)
         {
-            LLAMA_FORCE_INLINE_RECURSIVE
             return (*this)(index);
         }
 
@@ -703,13 +685,11 @@ namespace llama
         /// Same as \ref View::operator()(ArrayIndex), but shifted by the offset of this \ref SubView.
         LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayIndex ai) const -> decltype(auto)
         {
-            LLAMA_FORCE_INLINE_RECURSIVE
             return parentView(ArrayIndex{ai + offset});
         }
 
         LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayIndex ai) -> decltype(auto)
         {
-            LLAMA_FORCE_INLINE_RECURSIVE
             return parentView(ArrayIndex{ai + offset});
         }
 
@@ -723,7 +703,6 @@ namespace llama
             static_assert(
                 std::conjunction_v<std::is_convertible<Indices, size_type>...>,
                 "Indices must be convertible to ArrayExtents::size_type");
-            LLAMA_FORCE_INLINE_RECURSIVE
             return parentView(
                 ArrayIndex{ArrayIndex{static_cast<typename ArrayIndex::value_type>(indices)...} + offset});
         }
@@ -737,7 +716,6 @@ namespace llama
             static_assert(
                 std::conjunction_v<std::is_convertible<Indices, size_type>...>,
                 "Indices must be convertible to ArrayExtents::size_type");
-            LLAMA_FORCE_INLINE_RECURSIVE
             return parentView(
                 ArrayIndex{ArrayIndex{static_cast<typename ArrayIndex::value_type>(indices)...} + offset});
         }

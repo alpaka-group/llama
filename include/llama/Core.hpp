@@ -413,7 +413,6 @@ namespace llama
     LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeafCoord(Functor&& functor, RecordCoord<Coords...> baseCoord)
     {
         LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-        LLAMA_FORCE_INLINE_RECURSIVE
         internal::mpForEachInlined(
             LeafRecordCoords<GetType<RecordDim, RecordCoord<Coords...>>>{},
             [&](auto innerCoord) LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(constexpr)
@@ -429,7 +428,6 @@ namespace llama
     template<typename RecordDim, typename Functor, typename... Tags>
     LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeafCoord(Functor&& functor, Tags... /*baseTags*/)
     {
-        LLAMA_FORCE_INLINE_RECURSIVE
         forEachLeafCoord<RecordDim>(std::forward<Functor>(functor), GetCoordFromTags<RecordDim, Tags...>{});
     }
 

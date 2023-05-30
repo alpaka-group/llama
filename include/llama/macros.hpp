@@ -154,13 +154,6 @@
 #    endif
 #endif
 
-#if defined(_MSC_VER)
-#    define LLAMA_FORCE_INLINE_RECURSIVE __pragma(inline_depth(255))
-#else
-/// Forces the compiler to recursively inline the call hiearchy started by the subsequent function call.
-#    define LLAMA_FORCE_INLINE_RECURSIVE
-#endif
-
 /// Forces a copy of a value. This is useful to prevent ODR usage of constants when compiling for GPU targets.
 #define LLAMA_COPY(x) decltype(x)(x)
 
