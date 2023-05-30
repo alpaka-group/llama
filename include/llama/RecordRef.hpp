@@ -4,10 +4,10 @@
 #pragma once
 
 #include "Concepts.hpp"
-#include "HasRanges.hpp"
 #include "ProxyRefOpMixin.hpp"
 #include "StructName.hpp"
 #include "View.hpp"
+#include "macros.hpp"
 
 #include <iosfwd>
 #include <type_traits>
