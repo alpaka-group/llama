@@ -172,13 +172,6 @@
 		#    endif
 		#endif
 
-		#if defined(_MSC_VER)
-		#    define LLAMA_FORCE_INLINE_RECURSIVE __pragma(inline_depth(255))
-		#else
-		/// Forces the compiler to recursively inline the call hiearchy started by the subsequent function call.
-		#    define LLAMA_FORCE_INLINE_RECURSIVE
-		#endif
-
 		/// Forces a copy of a value. This is useful to prevent ODR usage of constants when compiling for GPU targets.
 		#define LLAMA_COPY(x) decltype(x)(x)
 
@@ -209,6 +202,20 @@
 		#    define LLAMA_CONSTEVAL consteval
 		#else
 		#    define LLAMA_CONSTEVAL constexpr
+		#endif
+
+		// TODO(bgruber): clang 10-15 (libstdc++ from gcc 11.2 or gcc 12.1) fail to compile this currently with the issue
+		// described here:
+		// https://stackoverflow.com/questions/64300832/why-does-clang-think-gccs-subrange-does-not-satisfy-gccs-ranges-begin-functi
+		// Intel LLVM compiler is also using the clang frontend
+		#define CAN_USE_RANGES 0
+		#if __has_include(<version>)
+		#    include <version>
+		#    if defined(__cpp_concepts) && defined(__cpp_lib_ranges) && (!defined(__clang__) || __clang_major__ >= 16)        \
+		        && !defined(__INTEL_LLVM_COMPILER) && (!defined(_MSC_VER) || _MSC_VER > 1932) && !defined(__NVCOMPILER)
+		#        undef CAN_USE_RANGES
+		#        define CAN_USE_RANGES 1
+		#    endif
 		#endif
 		// ==
 		// == ./macros.hpp ==
@@ -531,19 +538,16 @@
 	    }
 	} // namespace llama
 
-	namespace std
+	template<typename T, size_t N>
+	struct std::tuple_size<llama::Array<T, N>> : std::integral_constant<size_t, N> // NOLINT(cert-dcl58-cpp)
 	{
-	    template<typename T, size_t N>
-	    struct tuple_size<llama::Array<T, N>> : integral_constant<size_t, N> // NOLINT(cert-dcl58-cpp)
-	    {
-	    };
+	};
 
-	    template<size_t I, typename T, size_t N>
-	    struct tuple_element<I, llama::Array<T, N>> // NOLINT(cert-dcl58-cpp)
-	    {
-	        using type = T;
-	    };
-	} // namespace std
+	template<size_t I, typename T, size_t N>
+	struct std::tuple_element<I, llama::Array<T, N>> // NOLINT(cert-dcl58-cpp)
+	{
+	    using type = T;
+	};
 	// ==
 	// == ./Array.hpp ==
 	// ============================================================================
@@ -1484,7 +1488,6 @@
 		    LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeafCoord(Functor&& functor, RecordCoord<Coords...> baseCoord)
 		    {
 		        LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-		        LLAMA_FORCE_INLINE_RECURSIVE
 		        internal::mpForEachInlined(
 		            LeafRecordCoords<GetType<RecordDim, RecordCoord<Coords...>>>{},
 		            [&](auto innerCoord) LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(constexpr)
@@ -1500,7 +1503,6 @@
 		    template<typename RecordDim, typename Functor, typename... Tags>
 		    LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeafCoord(Functor&& functor, Tags... /*baseTags*/)
 		    {
-		        LLAMA_FORCE_INLINE_RECURSIVE
 		        forEachLeafCoord<RecordDim>(std::forward<Functor>(functor), GetCoordFromTags<RecordDim, Tags...>{});
 		    }
 
@@ -2549,30 +2551,7 @@ namespace llama::bloballoc
 	// #pragma once
 	// #include "ArrayExtents.hpp"    // amalgamate: file already expanded
 	// #include "Core.hpp"    // amalgamate: file already expanded
-		// ============================================================================
-		// == ./HasRanges.hpp ==
-		// ==
-		// Copyright 2022 Bernhard Manfred Gruber
-		// SPDX-License-Identifier: LGPL-3.0-or-later
-
-		// #pragma once
-		// TODO(bgruber): clang 10-15 (libstdc++ from gcc 11.2 or gcc 12.1) fail to compile this currently with the issue
-		// described here:
-		// https://stackoverflow.com/questions/64300832/why-does-clang-think-gccs-subrange-does-not-satisfy-gccs-ranges-begin-functi
-		// Intel LLVM compiler is also using the clang frontend
-		#define CAN_USE_RANGES 0
-		#if __has_include(<version>)
-		#    include <version>
-		#    if defined(__cpp_concepts) && defined(__cpp_lib_ranges) && (!defined(__clang__) || __clang_major__ >= 16)        \
-		        && !defined(__INTEL_LLVM_COMPILER) && (!defined(_MSC_VER) || _MSC_VER > 1932) && !defined(__NVCOMPILER)
-		#        undef CAN_USE_RANGES
-		#        define CAN_USE_RANGES 1
-		#    endif
-		#endif
-		// ==
-		// == ./HasRanges.hpp ==
-		// ============================================================================
-
+	// #include "macros.hpp"    // amalgamate: file already expanded
 
 	#include <algorithm>
 	#include <iterator>
@@ -2849,7 +2828,6 @@ namespace llama::bloballoc
 // #include "BlobAllocators.hpp"    // amalgamate: file already expanded
 // #include "Concepts.hpp"    // amalgamate: file already expanded
 // #include "Core.hpp"    // amalgamate: file already expanded
-// #include "HasRanges.hpp"    // amalgamate: file already expanded
 // #include "macros.hpp"    // amalgamate: file already expanded
 	// ============================================================================
 	// == ./mapping/One.hpp ==
@@ -3678,29 +3656,17 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayIndex ai) const -> decltype(auto)
         {
             if constexpr(isRecordDim<RecordDim>)
-            {
-                LLAMA_FORCE_INLINE_RECURSIVE
                 return RecordRef<const View>{ai, *this};
-            }
             else
-            {
-                LLAMA_FORCE_INLINE_RECURSIVE
                 return access(ai, RecordCoord<>{});
-            }
         }
 
         LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayIndex ai) -> decltype(auto)
         {
             if constexpr(isRecordDim<RecordDim>)
-            {
-                LLAMA_FORCE_INLINE_RECURSIVE
                 return RecordRef<View>{ai, *this};
-            }
             else
-            {
-                LLAMA_FORCE_INLINE_RECURSIVE
                 return access(ai, RecordCoord<>{});
-            }
         }
 
         /// Retrieves the \ref RecordRef at the \ref ArrayIndex index constructed from the passed component
@@ -3713,7 +3679,6 @@ namespace llama
             static_assert(
                 sizeof...(Indices) == ArrayIndex::rank,
                 "Please specify as many indices as you have array dimensions");
-            LLAMA_FORCE_INLINE_RECURSIVE
             return (*this)(ArrayIndex{static_cast<typename ArrayIndex::value_type>(indices)...});
         }
 
@@ -3725,7 +3690,6 @@ namespace llama
             static_assert(
                 sizeof...(Indices) == ArrayIndex::rank,
                 "Please specify as many indices as you have array dimensions");
-            LLAMA_FORCE_INLINE_RECURSIVE
             return (*this)(ArrayIndex{static_cast<typename ArrayIndex::value_type>(indices)...});
         }
 
@@ -3733,13 +3697,11 @@ namespace llama
         /// indices.
         LLAMA_FN_HOST_ACC_INLINE auto operator[](ArrayIndex ai) const -> decltype(auto)
         {
-            LLAMA_FORCE_INLINE_RECURSIVE
             return (*this)(ai);
         }
 
         LLAMA_FN_HOST_ACC_INLINE auto operator[](ArrayIndex ai) -> decltype(auto)
         {
-            LLAMA_FORCE_INLINE_RECURSIVE
             return (*this)(ai);
         }
 
@@ -3754,13 +3716,11 @@ namespace llama
         /// Retrieves the \ref RecordRef at the 1D \ref ArrayIndex index constructed from the passed index.
         LLAMA_FN_HOST_ACC_INLINE auto operator[](size_type index) const -> decltype(auto)
         {
-            LLAMA_FORCE_INLINE_RECURSIVE
             return (*this)(index);
         }
 
         LLAMA_FN_HOST_ACC_INLINE auto operator[](size_type index) -> decltype(auto)
         {
-            LLAMA_FORCE_INLINE_RECURSIVE
             return (*this)(index);
         }
 
@@ -3925,13 +3885,11 @@ namespace llama
         /// Same as \ref View::operator()(ArrayIndex), but shifted by the offset of this \ref SubView.
         LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayIndex ai) const -> decltype(auto)
         {
-            LLAMA_FORCE_INLINE_RECURSIVE
             return parentView(ArrayIndex{ai + offset});
         }
 
         LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayIndex ai) -> decltype(auto)
         {
-            LLAMA_FORCE_INLINE_RECURSIVE
             return parentView(ArrayIndex{ai + offset});
         }
 
@@ -3945,7 +3903,6 @@ namespace llama
             static_assert(
                 std::conjunction_v<std::is_convertible<Indices, size_type>...>,
                 "Indices must be convertible to ArrayExtents::size_type");
-            LLAMA_FORCE_INLINE_RECURSIVE
             return parentView(
                 ArrayIndex{ArrayIndex{static_cast<typename ArrayIndex::value_type>(indices)...} + offset});
         }
@@ -3959,7 +3916,6 @@ namespace llama
             static_assert(
                 std::conjunction_v<std::is_convertible<Indices, size_type>...>,
                 "Indices must be convertible to ArrayExtents::size_type");
-            LLAMA_FORCE_INLINE_RECURSIVE
             return parentView(
                 ArrayIndex{ArrayIndex{static_cast<typename ArrayIndex::value_type>(indices)...} + offset});
         }
@@ -5666,10 +5622,10 @@ namespace llama
 
 	// #pragma once
 	// #include "Concepts.hpp"    // amalgamate: file already expanded
-	// #include "HasRanges.hpp"    // amalgamate: file already expanded
 	// #include "ProxyRefOpMixin.hpp"    // amalgamate: file already expanded
 	// #include "StructName.hpp"    // amalgamate: file already expanded
 	// #include "View.hpp"    // amalgamate: file already expanded
+	// #include "macros.hpp"    // amalgamate: file already expanded
 
 	#include <iosfwd>
 	// #include <type_traits>    // amalgamate: file already included
@@ -6088,15 +6044,9 @@ namespace llama
 	            using AbsolutCoord = Cat<BoundRecordCoord, RecordCoord<Coord...>>;
 	            using AccessedType = GetType<RecordDim, AbsolutCoord>;
 	            if constexpr(isRecordDim<AccessedType>)
-	            {
-	                LLAMA_FORCE_INLINE_RECURSIVE
 	                return RecordRef<const View, AbsolutCoord>{arrayIndex(), this->view};
-	            }
 	            else
-	            {
-	                LLAMA_FORCE_INLINE_RECURSIVE
 	                return this->view.access(arrayIndex(), AbsolutCoord{});
-	            }
 	        }
 
 	        // FIXME(bgruber): remove redundancy
@@ -6106,15 +6056,9 @@ namespace llama
 	            using AbsolutCoord = Cat<BoundRecordCoord, RecordCoord<Coord...>>;
 	            using AccessedType = GetType<RecordDim, AbsolutCoord>;
 	            if constexpr(isRecordDim<AccessedType>)
-	            {
-	                LLAMA_FORCE_INLINE_RECURSIVE
 	                return RecordRef<View, AbsolutCoord>{arrayIndex(), this->view};
-	            }
 	            else
-	            {
-	                LLAMA_FORCE_INLINE_RECURSIVE
 	                return this->view.access(arrayIndex(), AbsolutCoord{});
-	            }
 	        }
 
 	        /// Access a record in the record dimension underneath the current record reference using a series of tags. If
@@ -6124,8 +6068,6 @@ namespace llama
 	        LLAMA_FN_HOST_ACC_INLINE auto operator()(Tags...) const -> decltype(auto)
 	        {
 	            using RecordCoord = GetCoordFromTags<AccessibleRecordDim, Tags...>;
-
-	            LLAMA_FORCE_INLINE_RECURSIVE
 	            return operator()(RecordCoord{});
 	        }
 
@@ -6134,8 +6076,6 @@ namespace llama
 	        LLAMA_FN_HOST_ACC_INLINE auto operator()(Tags...) -> decltype(auto)
 	        {
 	            using RecordCoord = GetCoordFromTags<AccessibleRecordDim, Tags...>;
-
-	            LLAMA_FORCE_INLINE_RECURSIVE
 	            return operator()(RecordCoord{});
 	        }
 
@@ -6478,7 +6418,6 @@ namespace llama
 	    LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeaf(RecordRefFwd&& vr, Functor&& functor)
 	    {
 	        using RecordRef = std::remove_reference_t<RecordRefFwd>;
-	        LLAMA_FORCE_INLINE_RECURSIVE
 	        forEachLeafCoord<typename RecordRef::AccessibleRecordDim>(
 	            [functor = std::forward<Functor>(functor), &vr = vr](auto rc)
 	                LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(constexpr mutable) { std::forward<Functor>(functor)(vr(rc)); });
@@ -11138,7 +11077,6 @@ namespace llama
 // #include "Copy.hpp"    // amalgamate: file already expanded
 // #include "Core.hpp"    // amalgamate: file already expanded
 // #include "DumpMapping.hpp"    // amalgamate: file already expanded
-// #include "HasRanges.hpp"    // amalgamate: file already expanded
 // #include "Meta.hpp"    // amalgamate: file already expanded
 // #include "ProxyRefOpMixin.hpp"    // amalgamate: file already expanded
 // #include "RecordRef.hpp"    // amalgamate: file already expanded
