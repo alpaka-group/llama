@@ -531,8 +531,8 @@ namespace
         const auto mean = hist.GetMean();
         const auto absError = std::abs(mean - expectedMean);
         fmt::print(
-            "{:16} {:>15.3f} {:>10.3f} {:>12.3f} {:>4} {:>10.1f} {:>7} {:>6.1f} {:>6.1f} {:>6.1f} {:>6.3f} {:>8}\n",
-            "\"" + mappingName + "\"",
+            "{:12} {:>9.3f} {:>9.3f} {:>9.3f} {:>4} {:>10.1f} {:>7} {:>6.1f} {:>6.1f} {:>6.1f} {:>6.3f} {:>8}\n",
+            mappingName,
             conversionTime / 1000.0,
             sortTime.count() / 1000.0,
             totalAnalysisTime.count() / repetitions / 1000.0,
@@ -561,11 +561,11 @@ auto main(int argc, const char* argv[]) -> int
                                       // format. Remove this once RNTuple hits production.
 
     fmt::print(
-        "{:16} {:>15} {:>10} {:>12} {:>4} {:>10} {:>7} {:>6} {:>6} {:>6} {:>6} {:>8}\n",
+        "{:12} {:>9} {:>9} {:>9} {:>4} {:>10} {:>7} {:>6} {:>6} {:>6} {:>6} {:>8}\n",
         "Mapping",
-        "RNT->LLAMA(ms)",
+        "Read(ms)",
         "Sort(ms)",
-        "Analysis(ms)",
+        "Anly(ms)",
         "Rep",
         "Size(MiB)",
         "Entries",
@@ -577,55 +577,55 @@ auto main(int argc, const char* argv[]) -> int
 
     testAnalysis<AoS>(inputFile, "AoS");
     // testAnalysis<AoS, true>(inputFile, "AoS");
-    testAnalysis<AoSFieldAccessCount>(inputFile, "AoS FAC"); // also shows how many bytes were needed,
+    testAnalysis<AoSFieldAccessCount>(inputFile, "AoS_FAC"); // also shows how many bytes were needed,
                                                              // which is actually the same for all analyses
-    testAnalysis<AoSHeatmap>(inputFile, "AoS Heatmap");
+    testAnalysis<AoSHeatmap>(inputFile, "AoS_HM");
     testAnalysis<AoSoA8>(inputFile, "AoSoA8");
     testAnalysis<AoSoA16>(inputFile, "AoSoA16");
-    testAnalysis<SoAASB>(inputFile, "SoA SB A");
-    testAnalysis<SoAMB>(inputFile, "SoA MB");
+    testAnalysis<SoAASB>(inputFile, "SoA_SB_A");
+    testAnalysis<SoAMB>(inputFile, "SoA_MB");
     // testAnalysis<SoAMB, true>(inputFile, "SoA MB S");
 
-    testAnalysis<AoS_Floats>(inputFile, "AoS float");
-    testAnalysis<SoAMB_Floats>(inputFile, "SoA MB float");
+    testAnalysis<AoS_Floats>(inputFile, "AoS_F");
+    testAnalysis<SoAMB_Floats>(inputFile, "SoA_MB_F");
     // testAnalysis<SoAMB_Floats, true>(inputFile, "SoA MB S float");
 
     testAnalysis<Custom1>(inputFile, "Custom1");
     testAnalysis<Custom2>(inputFile, "Custom2");
     testAnalysis<Custom3>(inputFile, "Custom3");
     testAnalysis<Custom4>(inputFile, "Custom4");
-    testAnalysis<Custom4Heatmap>(inputFile, "Custom4 Heatmap");
+    testAnalysis<Custom4Heatmap>(inputFile, "Custom4_HM");
     testAnalysis<Custom5>(inputFile, "Custom5");
-    testAnalysis<Custom5, true>(inputFile, "Custom5 S");
+    testAnalysis<Custom5, true>(inputFile, "Custom5_S");
     testAnalysis<Custom6>(inputFile, "Custom6");
-    testAnalysis<Custom6, true>(inputFile, "Custom6 S");
+    testAnalysis<Custom6, true>(inputFile, "Custom6_S");
     testAnalysis<Custom7>(inputFile, "Custom7");
-    testAnalysis<Custom7, true>(inputFile, "Custom7 S");
+    testAnalysis<Custom7, true>(inputFile, "Custom7_S");
     testAnalysis<Custom8>(inputFile, "Custom8");
-    testAnalysis<Custom8, true>(inputFile, "Custom8 S");
+    testAnalysis<Custom8, true>(inputFile, "Custom8_S");
     testAnalysis<Custom9>(inputFile, "Custom9");
-    testAnalysis<Custom9, true>(inputFile, "Custom9 S");
+    testAnalysis<Custom9, true>(inputFile, "Custom9_S");
 
     constexpr auto fullExp = 11;
     constexpr auto fullMan = 52;
-    testAnalysis<MakeBitpacked<fullExp, fullMan>>(inputFile, fmt::format("BP SoA {}e{}", fullMan, fullExp));
+    testAnalysis<MakeBitpacked<fullExp, fullMan>>(inputFile, fmt::format("BP_SoA_{}e{}", fullMan, fullExp));
 
     // using namespace boost::mp11;
     // mp_for_each<mp_reverse<mp_drop_c<mp_iota_c<fullExp>, 1>>>(
     //     [&](auto ic)
     //     {
     //         constexpr auto exp = decltype(ic)::value;
-    //         testAnalysis<MakeBitpacked<exp, fullMan>>(inputFile, fmt::format("BP SoA {}e{}", fullMan, exp));
+    //         testAnalysis<MakeBitpacked<exp, fullMan>>(inputFile, fmt::format("BP_SoA_{}e{}", fullMan, exp));
     //     });
     // mp_for_each<mp_reverse<mp_drop_c<mp_iota_c<fullMan>, 1>>>(
     //     [&](auto ic)
     //     {
     //         constexpr auto man = decltype(ic)::value;
-    //         testAnalysis<MakeBitpacked<fullExp, man>>(inputFile, fmt::format("BP SoA {}e{}", man, fullExp));
+    //         testAnalysis<MakeBitpacked<fullExp, man>>(inputFile, fmt::format("BP_SoA_{}e{}", man, fullExp));
     //     });
 
     // we typically observe wrong results at exp < 6, and man < 16
-    testAnalysis<MakeBitpacked<6, 16>>(inputFile, "BP SoA 16e6");
+    testAnalysis<MakeBitpacked<6, 16>>(inputFile, "BP_SoA_16e6");
 
     return 0;
 }
