@@ -33,48 +33,65 @@ namespace
     constexpr auto analysisRepetitionsInstrumentation = 1; // costly, so run less often
 
     // clang-format off
-    struct H1isMuon{};
-    struct H2isMuon{};
-    struct H3isMuon{};
+    struct BFlightDistance{};
+    struct BVertexChi2{};
 
+    struct H1Charge{};
+    struct H1IpChi2{};
     struct H1PX{};
     struct H1PY{};
     struct H1PZ{};
     struct H1ProbK{};
     struct H1ProbPi{};
+    struct H1isMuon{};
 
+    struct H2Charge{};
+    struct H2IpChi2{};
     struct H2PX{};
     struct H2PY{};
     struct H2PZ{};
     struct H2ProbK{};
     struct H2ProbPi{};
+    struct H2isMuon{};
 
+    struct H3Charge{};
+    struct H3IpChi2{};
     struct H3PX{};
     struct H3PY{};
     struct H3PZ{};
     struct H3ProbK{};
     struct H3ProbPi{};
+    struct H3isMuon{};
     // clang-format on
 
+    // TODO(bgruber): only needed data is loaded. Should we load the entire data set?
     using RecordDim = llama::Record<
-        llama::Field<H1isMuon, int>,
-        llama::Field<H2isMuon, int>,
-        llama::Field<H3isMuon, int>,
+        // llama::Field<BFlightDistance, double>,
+        // llama::Field<BVertexChi2, double>,
+        // llama::Field<H1Charge, int>,
+        // llama::Field<H1IpChi2, double>,
         llama::Field<H1PX, double>,
         llama::Field<H1PY, double>,
         llama::Field<H1PZ, double>,
         llama::Field<H1ProbK, double>,
         llama::Field<H1ProbPi, double>,
+        llama::Field<H1isMuon, int>,
+        // llama::Field<H2Charge, int>,
+        // llama::Field<H2IpChi2, double>,
         llama::Field<H2PX, double>,
         llama::Field<H2PY, double>,
         llama::Field<H2PZ, double>,
         llama::Field<H2ProbK, double>,
         llama::Field<H2ProbPi, double>,
+        llama::Field<H2isMuon, int>,
+        // llama::Field<H3Charge, int>,
+        // llama::Field<H3IpChi2, double>,
         llama::Field<H3PX, double>,
         llama::Field<H3PY, double>,
         llama::Field<H3PZ, double>,
         llama::Field<H3ProbK, double>,
-        llama::Field<H3ProbPi, double>>;
+        llama::Field<H3ProbPi, double>,
+        llama::Field<H3isMuon, int>>;
 
     namespace RE = ROOT::Experimental;
 
@@ -95,59 +112,17 @@ namespace
 
         auto view = llama::allocViewUninitialized(Mapping{typename Mapping::ArrayExtents{ntuple->GetNEntries()}});
 
-        auto viewH1IsMuon = ntuple->GetView<int>("H1_isMuon");
-        auto viewH2IsMuon = ntuple->GetView<int>("H2_isMuon");
-        auto viewH3IsMuon = ntuple->GetView<int>("H3_isMuon");
-
-        auto viewH1PX = ntuple->GetView<double>("H1_PX");
-        auto viewH1PY = ntuple->GetView<double>("H1_PY");
-        auto viewH1PZ = ntuple->GetView<double>("H1_PZ");
-        auto viewH1ProbK = ntuple->GetView<double>("H1_ProbK");
-        auto viewH1ProbPi = ntuple->GetView<double>("H1_ProbPi");
-
-        auto viewH2PX = ntuple->GetView<double>("H2_PX");
-        auto viewH2PY = ntuple->GetView<double>("H2_PY");
-        auto viewH2PZ = ntuple->GetView<double>("H2_PZ");
-        auto viewH2ProbK = ntuple->GetView<double>("H2_ProbK");
-        auto viewH2ProbPi = ntuple->GetView<double>("H2_ProbPi");
-
-        auto viewH3PX = ntuple->GetView<double>("H3_PX");
-        auto viewH3PY = ntuple->GetView<double>("H3_PY");
-        auto viewH3PZ = ntuple->GetView<double>("H3_PZ");
-        auto viewH3ProbK = ntuple->GetView<double>("H3_ProbK");
-        auto viewH3ProbPi = ntuple->GetView<double>("H3_ProbPi");
-
-        for(auto i : ntuple->GetEntryRange())
-        {
-            auto&& event = view(i);
-            event(H1isMuon{}) = viewH1IsMuon(i);
-            event(H2isMuon{}) = viewH2IsMuon(i);
-            event(H3isMuon{}) = viewH3IsMuon(i);
-
-            // a few sanity checks in case we mess up with the bitpacking
-            assert(event(H1isMuon{}) != viewH1IsMuon(i));
-            assert(event(H2isMuon{}) != viewH2IsMuon(i));
-            assert(event(H3isMuon{}) != viewH3IsMuon(i));
-
-            event(H1PX{}) = viewH1PX(i);
-            event(H1PY{}) = viewH1PY(i);
-            event(H1PZ{}) = viewH1PZ(i);
-            event(H1ProbK{}) = viewH1ProbK(i);
-            event(H1ProbPi{}) = viewH1ProbPi(i);
-
-            event(H2PX{}) = viewH2PX(i);
-            event(H2PY{}) = viewH2PY(i);
-            event(H2PZ{}) = viewH2PZ(i);
-            event(H2ProbK{}) = viewH2ProbK(i);
-            event(H2ProbPi{}) = viewH2ProbPi(i);
-
-            event(H3PX{}) = viewH3PX(i);
-            event(H3PY{}) = viewH3PY(i);
-            event(H3PZ{}) = viewH3PZ(i);
-            event(H3ProbK{}) = viewH3ProbK(i);
-            event(H3ProbPi{}) = viewH3ProbPi(i);
-        }
-
+        llama::forEachLeafCoord<RecordDim>(
+            [&]<typename RecordCoord>(RecordCoord)
+            {
+                using Type = llama::GetType<RecordDim, RecordCoord>;
+                using Tag = llama::GetTag<RecordDim, RecordCoord>;
+                auto columnName = std::string(llama::structName<Tag>());
+                columnName.insert(columnName.begin() + 1 + (columnName[0] == 'H'), '_');
+                auto columnView = ntuple->GetView<Type>(columnName);
+                for(auto i : ntuple->GetEntryRange())
+                    view(i)(Tag{}) = columnView(i);
+            });
         const auto duration
             = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - begin).count();
 
@@ -535,7 +510,7 @@ namespace
             mappingName,
             conversionTime / 1000.0,
             sortTime.count() / 1000.0,
-            totalAnalysisTime.count() / repetitions / 1000.0,
+            static_cast<double>(totalAnalysisTime.count()) / repetitions / 1000.0,
             repetitions,
             totalBlobSizes(view.mapping()) / 1024.0 / 1024.0,
             hist.GetEntries(),
