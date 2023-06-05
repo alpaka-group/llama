@@ -208,18 +208,18 @@ namespace
         return std::tuple{hists[0], duration};
     }
 
-    const auto histogramFolder = std::string("lhcb/histograms");
-    const auto layoutsFolder = std::string("lhcb/layouts");
-    const auto heatmapFolder = std::string("lhcb/heatmaps");
+    const auto histogramFolder = std::filesystem::path("lhcb/histograms");
+    const auto layoutsFolder = std::filesystem::path("lhcb/layouts");
+    const auto heatmapFolder = std::filesystem::path("lhcb/heatmaps");
 
-    void save(TH1D& h, const std::string& mappingName)
+    void saveHist(TH1D& h, const std::string& mappingName)
     {
-        const auto file = std::filesystem::path(histogramFolder + "/" + mappingName + ".png");
-        std::filesystem::create_directories(file.parent_path());
+        std::filesystem::create_directories(histogramFolder);
         auto c = TCanvas("c", "", 800, 700);
         h.GetXaxis()->SetTitle("m_{KKK} [MeV/c^{2}]");
         h.DrawCopy("", "");
-        c.Print(file.c_str());
+        c.Print((histogramFolder / (mappingName + ".png")).c_str());
+        c.Print((histogramFolder / (mappingName + ".pdf")).c_str());
         // c.Modified();
         // c.Update();
         // auto app = TApplication("", nullptr, nullptr);
@@ -394,17 +394,17 @@ namespace
     template<typename Mapping>
     void saveLayout(const std::filesystem::path& layoutFile)
     {
-        std::filesystem::create_directories(layoutFile.parent_path());
-        std::ofstream{layoutFile} << llama::toSvg(Mapping{typename Mapping::ArrayExtents{10}});
+        std::filesystem::create_directories(layoutsFolder);
+        std::ofstream{layoutsFolder / layoutFile} << llama::toSvg(Mapping{typename Mapping::ArrayExtents{10}});
     }
 
     template<typename View>
     void saveHeatmap(const View& v, const std::filesystem::path& heatmapFile)
     {
-        std::filesystem::create_directories(heatmapFile.parent_path());
+        std::filesystem::create_directories(heatmapFolder);
         const auto& m = v.mapping();
-        m.writeGnuplotDataFileBinary(v.blobs(), std::ofstream{heatmapFile});
-        std::ofstream{heatmapFile.parent_path() / "plot.sh"} << View::Mapping::gnuplotScriptBinary;
+        m.writeGnuplotDataFileBinary(v.blobs(), std::ofstream{heatmapFolder / heatmapFile});
+        std::ofstream{heatmapFolder / "plot.sh"} << View::Mapping::gnuplotScriptBinary;
     }
 
     template<typename View>
@@ -464,7 +464,7 @@ namespace
     template<typename Mapping, bool Sort = false>
     void testAnalysis(const std::string& inputFile, const std::string& mappingName)
     {
-        saveLayout<Mapping>(layoutsFolder + "/" + mappingName + ".svg");
+        saveLayout<Mapping>(mappingName + ".svg");
 
         auto [view, conversionTime] = convertRNTupleToLLAMA<Mapping>(inputFile);
         if constexpr(llama::mapping::isFieldAccessCount<Mapping>)
@@ -474,7 +474,7 @@ namespace
         }
         if constexpr(llama::mapping::isHeatmap<Mapping>)
         {
-            saveHeatmap(view, heatmapFolder + "/" + mappingName + "_conversion.bin");
+            saveHeatmap(view, heatmapFolder / (mappingName + "_conversion.bin"));
             clearHeatmap(view);
         }
 
@@ -497,8 +497,8 @@ namespace
         if constexpr(llama::mapping::isFieldAccessCount<Mapping>)
             view.mapping().printFieldHits(view.blobs());
         if constexpr(llama::mapping::isHeatmap<Mapping>)
-            saveHeatmap(view, heatmapFolder + "/" + mappingName + "_analysis.bin");
-        save(hist, mappingName);
+            saveHeatmap(view, mappingName + "_analysis.bin");
+        saveHist(hist, mappingName);
         std::size_t cachlinesLoaded = 0;
         if constexpr(
             !llama::mapping::isHeatmap<Mapping> && !llama::mapping::isFieldAccessCount<Mapping>
