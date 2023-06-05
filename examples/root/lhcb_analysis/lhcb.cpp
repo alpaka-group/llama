@@ -302,6 +302,15 @@ namespace
             true>::fn,
         true>;
 
+    using Custom1_3_H1ProbK_float = llama::mapping::Split<
+        llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>,
+        RecordDim,
+        mp_list<mp_list<H1isMuon>, mp_list<H2isMuon>, mp_list<H3isMuon>, mp_list<H1ProbK>>,
+        llama::mapping::BindChangeType<llama::mapping::BindAoS<>::fn, mp_list<mp_list<double, float>>>::fn,
+        llama::mapping::
+            BindSplit<mp_list<mp_list<H2ProbK>>, llama::mapping::AlignedAoS, llama::mapping::AlignedAoS, true>::fn,
+        true>;
+
     using Custom4Heatmap = llama::mapping::Heatmap<Custom4>;
 
     using Custom5 = llama::mapping::Split<
@@ -580,6 +589,7 @@ auto main(int argc, const char* argv[]) -> int
     testAnalysis<Custom8, true>(inputFile, "Custom8_S");
     testAnalysis<Custom9>(inputFile, "Custom9");
     testAnalysis<Custom9, true>(inputFile, "Custom9_S");
+    testAnalysis<Custom1_3_H1ProbK_float>(inputFile, "Custom1_3_F");
 
     constexpr auto fullExp = 11;
     constexpr auto fullMan = 52;
