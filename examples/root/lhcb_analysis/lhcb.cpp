@@ -218,7 +218,7 @@ namespace
         std::filesystem::create_directories(file.parent_path());
         auto c = TCanvas("c", "", 800, 700);
         h.GetXaxis()->SetTitle("m_{KKK} [MeV/c^{2}]");
-        h.DrawCopy();
+        h.DrawCopy("", "");
         c.Print(file.c_str());
         // c.Modified();
         // c.Update();
