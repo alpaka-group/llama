@@ -118,6 +118,14 @@ if (BUILD_TESTING)
 		target_compile_options(tests PRIVATE --display_error_number -Wc,--pending_instantiations=0)
 		target_compile_options(tests PRIVATE --diag_suppress=177) # disable: #177-D: variable "<unnamed>::autoRegistrar72" was declared but never referenced
 	endif()
+	if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+		if (LLAMA_ENABLE_ASAN_FOR_TESTS AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 12.0 AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 14.0)
+			target_compile_options(tests PRIVATE -Wno-maybe-uninitialized) # triggered inside std::function by std::regex
+		endif()
+		if (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 13.0 AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 14.0)
+			target_compile_options(tests PRIVATE -Wno-dangling-reference) # triggered by an access involving RecordRef, so basically everywhere
+		endif()
+	endif()
 	target_link_libraries(tests PRIVATE Catch2::Catch2WithMain llama::llama)
 
 	option(LLAMA_ENABLE_ASAN_FOR_TESTS "Enables address sanitizer for tests" OFF)

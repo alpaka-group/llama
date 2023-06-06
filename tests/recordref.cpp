@@ -1214,7 +1214,15 @@ TEST_CASE("ScopedUpdate.Object")
 {
     std::vector v = {1};
     {
+#if defined(__GNUC__) && __GNUC__ == 13
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Warray-bounds"
+#    pragma GCC diagnostic ignored "-Wstringop-overflow"
+#endif
         llama::ScopedUpdate u(v);
+#if defined(__GNUC__) && __GNUC__ == 13
+#    pragma GCC diagnostic pop
+#endif
         STATIC_REQUIRE(std::is_same_v<decltype(u), llama::ScopedUpdate<std::vector<int>&>>);
         u.push_back(2);
         CHECK(u == std::vector{1, 2});
