@@ -271,9 +271,9 @@ Functions</h2></td></tr>
 <tr class="memitem:acfbbb27c8356e64d8f7282336c3b60a1"><td class="memTemplParams" colspan="2">template&lt;typename... FieldsA, typename FieldB , typename... FieldsB, auto Pos = FindFieldByTag&lt;Record&lt;FieldsA...&gt;, GetFieldTag&lt;FieldB&gt;&gt;::value&gt; </td></tr>
 <tr class="memitem:acfbbb27c8356e64d8f7282336c3b60a1"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#acfbbb27c8356e64d8f7282336c3b60a1">mergeRecordDimsImpl</a> (mp_identity&lt; <a class="el" href="structllama_1_1Record.html">Record</a>&lt; FieldsA... &gt;&gt;, mp_identity&lt; <a class="el" href="structllama_1_1Record.html">Record</a>&lt; FieldB, FieldsB... &gt;&gt;)</td></tr>
 <tr class="separator:acfbbb27c8356e64d8f7282336c3b60a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8648dede6110d886fb486aaf99611069"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename... &gt; typename L, typename... T, typename F &gt; </td></tr>
-<tr class="memitem:a8648dede6110d886fb486aaf99611069"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a> void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a8648dede6110d886fb486aaf99611069">mpForEachInlined</a> (L&lt; T... &gt;, F &amp;&amp;f)</td></tr>
-<tr class="separator:a8648dede6110d886fb486aaf99611069"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acde58af143505d1ef6a1d7e34d181e5f"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename... &gt; typename L, typename... T, typename F &gt; </td></tr>
+<tr class="memitem:acde58af143505d1ef6a1d7e34d181e5f"><td class="memTemplItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#acde58af143505d1ef6a1d7e34d181e5f">mpForEachInlined</a> (L&lt; T... &gt;, F &amp;&amp;f)</td></tr>
+<tr class="separator:acde58af143505d1ef6a1d7e34d181e5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a158338076284b27d9f1875797789bd59"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a158338076284b27d9f1875797789bd59">divRoundUp</a> (std::size_t dividend, std::size_t divisor) -&gt; std::size_t</td></tr>
 <tr class="separator:a158338076284b27d9f1875797789bd59"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a02e115f3c9d3acdccd07526d475ed358"><td class="memTemplParams" colspan="2">template&lt;std::size_t... Coords1, std::size_t... Coords2&gt; </td></tr>
@@ -474,7 +474,7 @@ template&lt;typename FromList , template&lt; auto... &gt; class ToList&gt; </div
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Meta_8hpp_source.html#l00033">33</a> of file <a class="el" href="Meta_8hpp_source.html">Meta.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Meta_8hpp_source.html#l00035">35</a> of file <a class="el" href="Meta_8hpp_source.html">Meta.hpp</a>.</p>
 
 </div>
 </div>
@@ -1703,8 +1703,8 @@ template&lt;typename... FieldsA, typename FieldB , typename... FieldsB, auto Pos
 
 </div>
 </div>
-<a id="a8648dede6110d886fb486aaf99611069"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8648dede6110d886fb486aaf99611069">&#9670;&nbsp;</a></span>mpForEachInlined()</h2>
+<a id="acde58af143505d1ef6a1d7e34d181e5f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acde58af143505d1ef6a1d7e34d181e5f">&#9670;&nbsp;</a></span>mpForEachInlined()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1715,7 +1715,7 @@ template&lt;template&lt; typename... &gt; typename L, typename... T, typename F 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr <a class="el" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a> void llama::internal::mpForEachInlined </td>
+          <td class="memname">constexpr void llama::internal::mpForEachInlined </td>
           <td>(</td>
           <td class="paramtype">L&lt; T... &gt;&#160;</td>
           <td class="paramname">, </td>
@@ -1734,12 +1734,12 @@ template&lt;template&lt; typename... &gt; typename L, typename... T, typename F 
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Meta_8hpp_source.html#l00017">17</a> of file <a class="el" href="Meta_8hpp_source.html">Meta.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Meta_8hpp_source.html#l00019">19</a> of file <a class="el" href="Meta_8hpp_source.html">Meta.hpp</a>.</p>
 
 </div>
 </div>
@@ -2759,7 +2759,7 @@ template&lt;typename T &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1internal.html">internal</a></li>
-    <li class="footer">Generated on Tue May 30 2023 23:38:10 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Jun 6 2023 10:13:53 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
