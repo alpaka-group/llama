@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "macros.hpp"
+
 #include <boost/mp11.hpp>
 
 namespace llama
