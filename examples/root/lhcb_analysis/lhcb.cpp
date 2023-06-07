@@ -397,7 +397,7 @@ namespace
     void saveLayout(const std::filesystem::path& layoutFile)
     {
         std::filesystem::create_directories(layoutsFolder);
-        std::ofstream{layoutsFolder / layoutFile} << llama::toSvg(Mapping{typename Mapping::ArrayExtents{10}});
+        std::ofstream{layoutsFolder / layoutFile} << llama::toSvg(Mapping{typename Mapping::ArrayExtents{3}}, 32);
     }
 
     template<typename View>
