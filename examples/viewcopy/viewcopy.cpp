@@ -110,6 +110,7 @@ auto hash(const llama::View<Mapping, BlobType>& view)
         llama::forEachLeafCoord<typename Mapping::RecordDim>([&](auto rc) { boost::hash_combine(acc, view(ad)(rc)); });
     return acc;
 }
+
 template<typename Mapping>
 auto prepareViewAndHash(Mapping mapping)
 {
@@ -122,6 +123,7 @@ auto prepareViewAndHash(Mapping mapping)
     const auto checkSum = hash(view);
     return std::tuple{view, checkSum};
 }
+
 auto main() -> int
 try
 {
