@@ -374,7 +374,7 @@ namespace llama
     }
 
     template<typename RecordDim>
-    constexpr auto recordCoordTags(RecordCoord<>) -> std::string_view
+    constexpr auto prettyRecordCoord(RecordCoord<>) -> std::string_view
     {
         return {};
     }
