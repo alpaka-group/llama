@@ -48,7 +48,10 @@ auto main() -> int
                 using T = llama::GetType<Data, decltype(rc)>;
                 ++value;
                 if(view(i)(rc) != static_cast<T>(value))
-                    fmt::print("Error: value after store is corrupt. {} != {}\n", view(i)(rc), value);
+                    fmt::print(
+                        "Error: value after store is corrupt. {} != {}\n",
+                        llama::decayCopy(view(i)(rc)),
+                        value);
             });
 
     // extract into a view of unsplit fields
@@ -72,7 +75,10 @@ auto main() -> int
                 using T = llama::GetType<Data, decltype(rc)>;
                 ++value;
                 if(view(i)(rc) != static_cast<T>(static_cast<T>(value) * 2))
-                    fmt::print("Error: value after resplit is corrupt. {} != {}\n", view(i)(rc), value);
+                    fmt::print(
+                        "Error: value after resplit is corrupt. {} != {}\n",
+                        llama::decayCopy(view(i)(rc)),
+                        value);
             });
 
     // compute something on the split view
@@ -89,7 +95,7 @@ auto main() -> int
                 if(view(i)(rc) != static_cast<T>(static_cast<T>(value) * 4))
                     fmt::print(
                         "Error: value after computation on split data is corrupt. {} != {}\n",
-                        view(i)(rc),
+                        llama::decayCopy(view(i)(rc)),
                         value);
             });
 
