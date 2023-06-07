@@ -17,6 +17,8 @@ Useful helpers
 .. doxygentypedef:: CopyConst
 .. doxygenstruct:: llama::ProxyRefOpMixin
    :members:
+.. doxygenfunction:: llama::decayCopy
+.. doxygenstruct:: llama::ScopedUpdate
 
 Array
 ^^^^^

@@ -807,12 +807,12 @@ namespace llama
 
     namespace internal
     {
-        // gets the value type for a given T, where T models a reference type. T is either an l-value reference, a
-        // proxy reference or a RecordRef
+        // gets the value type for a given T, where T models either a value, an l-value reference, a proxy reference or
+        // a RecordRef.
         template<typename T, typename = void>
         struct ValueOf
         {
-            static_assert(sizeof(T) == 0, "T does not model a reference");
+            using type = T;
         };
 
         template<typename T>
@@ -837,6 +837,13 @@ namespace llama
             using type = T;
         };
     } // namespace internal
+
+    /// Pulls a copy of the given value or reference. Proxy references are resolved to their value types.
+    template<typename T>
+    auto decayCopy(T&& valueOrRef) -> typename internal::ValueOf<T>::type
+    {
+        return std::forward<T>(valueOrRef);
+    }
 
     /// Scope guard type. ScopedUpdate takes a copy of a value through a reference and stores it internally during
     /// construction. The stored value is written back when ScopedUpdate is destroyed. ScopedUpdate tries to act like

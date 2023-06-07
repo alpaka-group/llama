@@ -1192,6 +1192,21 @@ TEST_CASE("ValueOf")
 #endif
     STATIC_REQUIRE(std::is_same_v<llama::internal::ValueOf<decltype(ref)>::type, int>);
 }
+
+TEST_CASE("decayCopy")
+{
+    STATIC_REQUIRE(std::is_same_v<decltype(llama::decayCopy(42)), int>);
+    const int i = 42;
+    STATIC_REQUIRE(std::is_same_v<decltype(llama::decayCopy(i)), int>);
+    const int& ir = i;
+    STATIC_REQUIRE(std::is_same_v<decltype(llama::decayCopy(ir)), int>);
+
+    auto mapping = llama::mapping::BitPackedIntSoA<llama::ArrayExtents<int, 4>, Vec3I>{{}, 17};
+    auto v = llama::allocView(mapping);
+    STATIC_REQUIRE(std::is_same_v<decltype(llama::decayCopy(v(1))), llama::One<Vec3I>>);
+    STATIC_REQUIRE(std::is_same_v<decltype(llama::decayCopy(v(1)(tag::X{}))), int>);
+}
+
 TEST_CASE("ScopedUpdate.Fundamental")
 {
     int i = 1;
