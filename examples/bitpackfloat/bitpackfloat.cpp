@@ -33,7 +33,7 @@ auto main() -> int
         {
             fmt::print(
                 "Blob {}: {} bytes (uncompressed {} bytes)\n",
-                ic,
+                ic(),
                 mapping.blobSize(ic),
                 n * sizeof(llama::GetType<Vector, llama::RecordCoord<decltype(ic)::value>>));
         });

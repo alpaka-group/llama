@@ -35,7 +35,7 @@ auto main() -> int
         {
             fmt::print(
                 "Blob {}: {} bytes (uncompressed {} bytes)\n",
-                ic,
+                ic(),
                 mapping.blobSize(ic),
                 n * sizeof(llama::GetType<Vector, llama::RecordCoord<decltype(ic)::value>>));
         });
@@ -49,7 +49,11 @@ auto main() -> int
 
     fmt::print("Bitpacked initial:\n");
     for(std::size_t i = 0; i < n; i++)
-        fmt::print("[{}, {}, {}]\n", view(i)(tag::X{}), view(i)(tag::Y{}), view(i)(tag::Z{}));
+        fmt::print(
+            "[{}, {}, {}]\n",
+            llama::decayCopy(view(i)(tag::X{})),
+            llama::decayCopy(view(i)(tag::Y{})),
+            llama::decayCopy(view(i)(tag::Z{})));
 
     // extract into a view of full size integers
     auto viewExtracted
@@ -67,5 +71,9 @@ auto main() -> int
 
     fmt::print("Bitpacked after % 10:\n");
     for(std::size_t i = 0; i < n; i++)
-        fmt::print("[{}, {}, {}]\n", view(i)(tag::X{}), view(i)(tag::Y{}), view(i)(tag::Z{}));
+        fmt::print(
+            "[{}, {}, {}]\n",
+            llama::decayCopy(view(i)(tag::X{})),
+            llama::decayCopy(view(i)(tag::Y{})),
+            llama::decayCopy(view(i)(tag::Z{})));
 }
