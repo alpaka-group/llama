@@ -77,6 +77,7 @@ var namespacellama =
     [ "constructFields", "namespacellama.html#af4c8d962f80ddc030f99b08479ecb083", null ],
     [ "copy", "namespacellama.html#ab67a5448cc031309dc1aa8580b7d4950", null ],
     [ "copyRecord", "namespacellama.html#a4fca680f97ca52a42cd74519e6347395", null ],
+    [ "decayCopy", "namespacellama.html#a0f8572ce32d64cda19cb705d78247bed", null ],
     [ "divCeil", "namespacellama.html#a516c8260631ec1b61a52f0e56dc58ac7", null ],
     [ "dot", "namespacellama.html#a672915c49821a718f5dfa5d4540c4192", null ],
     [ "fieldWiseCopy", "namespacellama.html#af977754d689a5f3cc10fd80d4b37ba1f", null ],

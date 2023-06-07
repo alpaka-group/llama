@@ -1,5 +1,7 @@
 var NAVTREEINDEX5 =
 {
+"structllama_1_1bloballoc_1_1UniquePtr.html":[2,0,0,1,1],
+"structllama_1_1bloballoc_1_1UniquePtr.html#affa75475e5567690fee1a68fab39b5b7":[2,0,0,1,1,0],
 "structllama_1_1bloballoc_1_1Vector.html":[2,0,0,1,4],
 "structllama_1_1bloballoc_1_1Vector.html#a460676ac82586d1bef38037a1816464b":[2,0,0,1,4,0],
 "structllama_1_1internal_1_1Assign.html":[2,0,0,2,46],
@@ -138,6 +140,7 @@ var NAVTREEINDEX5 =
 "structllama_1_1internal_1_1TupleLeaf_3_01I_00_01T_00_01true_01_4.html#a1ce104d37b7e3981d9c697894e839337":[2,0,0,2,64,0],
 "structllama_1_1internal_1_1TupleLeaf_3_01I_00_01T_00_01true_01_4.html#a25fcf83a36ba813959d80613f75b5426":[2,0,0,2,64,1],
 "structllama_1_1internal_1_1ValueOf.html":[2,0,0,2,52],
+"structllama_1_1internal_1_1ValueOf.html#ad8e53dc89d58866b1b90b809ca382a38":[2,0,0,2,52,0],
 "structllama_1_1internal_1_1ValueOf_3_01T_00_01std_1_1enable__if__t_3_01isProxyReference_3_01T_01_4_01_4_01_4.html":[2,0,0,2,54],
 "structllama_1_1internal_1_1ValueOf_3_01T_00_01std_1_1enable__if__t_3_01isProxyReference_3_01T_01_4_01_4_01_4.html#a99c707da66f6e0e6dd2ee09d1c41cf3f":[2,0,0,2,54,0],
 "structllama_1_1internal_1_1ValueOf_3_01T_00_01std_1_1enable__if__t_3_01isRecordRef_3_01T_01_4_01_4_01_4.html":[2,0,0,2,53],
@@ -246,8 +249,5 @@ var NAVTREEINDEX5 =
 "structllama_1_1mapping_1_1Bytesplit_1_1Reference.html#accb43aa5bb33fb0ce8227e8a6fd52190":[2,0,0,3,14,0,3],
 "structllama_1_1mapping_1_1Bytesplit_1_1Reference.html#ad397146d87434a6114bb15a88644b3bf":[2,0,0,3,14,0,0],
 "structllama_1_1mapping_1_1Byteswap.html":[2,0,0,3,16],
-"structllama_1_1mapping_1_1ChangeType.html":[2,0,0,3,18],
-"structllama_1_1mapping_1_1FieldAccessCount.html":[2,0,0,3,27],
-"structllama_1_1mapping_1_1FieldAccessCount.html#a0774f3c44d838d70fd9282d5e96fe373":[2,0,0,3,27,8],
-"structllama_1_1mapping_1_1FieldAccessCount.html#a1b6fa99b9767f2b8fe2ab0621c3518a5":[2,0,0,3,27,2]
+"structllama_1_1mapping_1_1ChangeType.html":[2,0,0,3,18]
 };

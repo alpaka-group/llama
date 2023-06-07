@@ -393,6 +393,10 @@ Functions</h2></td></tr>
 <tr class="memitem:aacc8837b94b46c9989ce0e7fe8c172ac"><td class="memTemplParams" colspan="2">template&lt;typename RecordRefFwd , typename Functor &gt; </td></tr>
 <tr class="memitem:aacc8837b94b46c9989ce0e7fe8c172ac"><td class="memTemplItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#aacc8837b94b46c9989ce0e7fe8c172ac">forEachLeaf</a> (RecordRefFwd &amp;&amp;vr, Functor &amp;&amp;functor)</td></tr>
 <tr class="separator:aacc8837b94b46c9989ce0e7fe8c172ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f8572ce32d64cda19cb705d78247bed"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a0f8572ce32d64cda19cb705d78247bed"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a0f8572ce32d64cda19cb705d78247bed">decayCopy</a> (T &amp;&amp;valueOrRef) -&gt; typename <a class="el" href="structllama_1_1internal_1_1ValueOf.html">internal::ValueOf</a>&lt; T &gt;::type</td></tr>
+<tr class="memdesc:a0f8572ce32d64cda19cb705d78247bed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pulls a copy of the given value or reference. Proxy references are resolved to their value types.  <a href="namespacellama.html#a0f8572ce32d64cda19cb705d78247bed">More...</a><br /></td></tr>
+<tr class="separator:a0f8572ce32d64cda19cb705d78247bed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad7dddd17106d2711c85b213e61fb9155"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:ad7dddd17106d2711c85b213e61fb9155"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ad7dddd17106d2711c85b213e61fb9155">ScopedUpdate</a> (T) -&gt; <a class="el" href="structllama_1_1ScopedUpdate.html">ScopedUpdate</a>&lt; typename <a class="el" href="structllama_1_1internal_1_1ReferenceTo.html">internal::ReferenceTo</a>&lt; std::remove_reference_t&lt; T &gt;&gt;::type &gt;</td></tr>
 <tr class="separator:ad7dddd17106d2711c85b213e61fb9155"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1672,6 +1676,31 @@ template&lt;typename View , typename BoundRecordCoord , bool OwnView&gt; </div>
 <p>Returns a <a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a> with the same record dimension as the given record ref, with values copyied from rr. </p>
 
 <p class="definition">Definition at line <a class="el" href="RecordRef_8hpp_source.html#l00028">28</a> of file <a class="el" href="RecordRef_8hpp_source.html">RecordRef.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a0f8572ce32d64cda19cb705d78247bed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f8572ce32d64cda19cb705d78247bed">&#9670;&nbsp;</a></span>decayCopy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">auto llama::decayCopy </td>
+          <td>(</td>
+          <td class="paramtype">T &amp;&amp;&#160;</td>
+          <td class="paramname"><em>valueOrRef</em></td><td>)</td>
+          <td> -&gt; typename <a class="el" href="structllama_1_1internal_1_1ValueOf.html">internal::ValueOf</a>&lt;T&gt;::type
+    </td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Pulls a copy of the given value or reference. Proxy references are resolved to their value types. </p>
+
+<p class="definition">Definition at line <a class="el" href="RecordRef_8hpp_source.html#l00843">843</a> of file <a class="el" href="RecordRef_8hpp_source.html">RecordRef.hpp</a>.</p>
 
 </div>
 </div>
@@ -4839,7 +4868,7 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Tue Jun 6 2023 10:13:53 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Wed Jun 7 2023 17:47:40 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

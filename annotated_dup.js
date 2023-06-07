@@ -67,7 +67,7 @@ var annotated_dup =
         [ "MultiplyAssign", "structllama_1_1internal_1_1MultiplyAssign.html", "structllama_1_1internal_1_1MultiplyAssign" ],
         [ "DivideAssign", "structllama_1_1internal_1_1DivideAssign.html", "structllama_1_1internal_1_1DivideAssign" ],
         [ "ModuloAssign", "structllama_1_1internal_1_1ModuloAssign.html", "structllama_1_1internal_1_1ModuloAssign" ],
-        [ "ValueOf", "structllama_1_1internal_1_1ValueOf.html", null ],
+        [ "ValueOf", "structllama_1_1internal_1_1ValueOf.html", "structllama_1_1internal_1_1ValueOf" ],
         [ "ValueOf< T, std::enable_if_t< isRecordRef< T > > >", "structllama_1_1internal_1_1ValueOf_3_01T_00_01std_1_1enable__if__t_3_01isRecordRef_3_01T_01_4_01_4_01_4.html", "structllama_1_1internal_1_1ValueOf_3_01T_00_01std_1_1enable__if__t_3_01isRecordRef_3_01T_01_4_01_4_01_4" ],
         [ "ValueOf< T, std::enable_if_t< isProxyReference< T > > >", "structllama_1_1internal_1_1ValueOf_3_01T_00_01std_1_1enable__if__t_3_01isProxyReference_3_01T_01_4_01_4_01_4.html", "structllama_1_1internal_1_1ValueOf_3_01T_00_01std_1_1enable__if__t_3_01isProxyReference_3_01T_01_4_01_4_01_4" ],
         [ "ValueOf< T & >", "structllama_1_1internal_1_1ValueOf_3_01T_01_6_01_4.html", "structllama_1_1internal_1_1ValueOf_3_01T_01_6_01_4" ],
