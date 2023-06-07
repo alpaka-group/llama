@@ -325,6 +325,7 @@ namespace
             true>::fn,
         true>;
 
+    template<std::size_t ManBits = 16>
     using Custom6 = llama::mapping::Split<
         llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>,
         RecordDim,
@@ -332,9 +333,9 @@ namespace
         llama::mapping::BindBitPackedIntAoS<llama::Constant<1>, llama::mapping::SignBit::Discard>::fn,
         llama::mapping::BindSplit<
             mp_list<mp_list<H1ProbK>, mp_list<H2ProbK>>,
-            llama::mapping::BindBitPackedFloatAoS<llama::Constant<6>, llama::Constant<16>>::template fn,
-            llama::mapping::BindBitPackedFloatAoS<llama::Constant<6>, llama::Constant<16>>::template fn,
-            true>::fn,
+            llama::mapping::BindBitPackedFloatAoS<llama::Constant<6>, llama::Constant<ManBits>>::template fn,
+            llama::mapping::BindBitPackedFloatAoS<llama::Constant<6>, llama::Constant<ManBits>>::template fn,
+            true>::template fn,
         true>;
 
     using Custom7 = llama::mapping::Split<
@@ -349,6 +350,7 @@ namespace
             true>::fn,
         true>;
 
+    template<std::size_t ManBits = 16>
     using Custom8 = llama::mapping::Split<
         llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>,
         RecordDim,
@@ -357,8 +359,8 @@ namespace
         llama::mapping::BindSplit<
             mp_list<mp_list<H1ProbK>, mp_list<H2ProbK>>,
             llama::mapping::BindChangeType<llama::mapping::BindAoS<>::fn, mp_list<mp_list<double, float>>>::fn,
-            llama::mapping::BindBitPackedFloatAoS<llama::Constant<6>, llama::Constant<16>>::template fn,
-            true>::fn,
+            llama::mapping::BindBitPackedFloatAoS<llama::Constant<6>, llama::Constant<ManBits>>::template fn,
+            true>::template fn,
         true>;
 
     using Custom9 = llama::mapping::Split<
@@ -515,7 +517,7 @@ namespace
         const auto mean = hist.GetMean();
         const auto absError = std::abs(mean - expectedMean);
         fmt::print(
-            "{:12} {:>9.3f} {:>9.3f} {:>9.3f} {:>4} {:>10.1f} {:>7} {:>6.1f} {:>6.1f} {:>6.1f} {:>6.3f} {:>8}\n",
+            "{:13} {:>9.3f} {:>9.3f} {:>9.3f} {:>4} {:>10.1f} {:>7} {:>6.1f} {:>6.1f} {:>6.1f} {:>6.3f} {:>8}\n",
             mappingName,
             conversionTime / 1000.0,
             sortTime.count() / 1000.0,
@@ -545,7 +547,7 @@ auto main(int argc, const char* argv[]) -> int
                                       // format. Remove this once RNTuple hits production.
 
     fmt::print(
-        "{:12} {:>9} {:>9} {:>9} {:>4} {:>10} {:>7} {:>6} {:>6} {:>6} {:>6} {:>8}\n",
+        "{:13} {:>9} {:>9} {:>9} {:>4} {:>10} {:>7} {:>6} {:>6} {:>6} {:>6} {:>8}\n",
         "Mapping",
         "Read(ms)",
         "Sort(ms)",
@@ -581,12 +583,12 @@ auto main(int argc, const char* argv[]) -> int
     testAnalysis<Custom4Heatmap>(inputFile, "Custom4_HM");
     testAnalysis<Custom5>(inputFile, "Custom5");
     testAnalysis<Custom5, true>(inputFile, "Custom5_S");
-    testAnalysis<Custom6>(inputFile, "Custom6");
-    testAnalysis<Custom6, true>(inputFile, "Custom6_S");
+    testAnalysis<Custom6<>>(inputFile, "Custom6");
+    testAnalysis<Custom6<>, true>(inputFile, "Custom6_S");
     testAnalysis<Custom7>(inputFile, "Custom7");
     testAnalysis<Custom7, true>(inputFile, "Custom7_S");
-    testAnalysis<Custom8>(inputFile, "Custom8");
-    testAnalysis<Custom8, true>(inputFile, "Custom8_S");
+    testAnalysis<Custom8<>>(inputFile, "Custom8");
+    testAnalysis<Custom8<>, true>(inputFile, "Custom8_S");
     testAnalysis<Custom9>(inputFile, "Custom9");
     testAnalysis<Custom9, true>(inputFile, "Custom9_S");
     testAnalysis<Custom1_3_H1ProbK_float>(inputFile, "Custom1_3_F");
@@ -611,6 +613,20 @@ auto main(int argc, const char* argv[]) -> int
 
     // we typically observe wrong results at exp < 6, and man < 16
     testAnalysis<MakeBitpacked<6, 16>>(inputFile, "BP_SoA_16e6");
+
+    // mp_for_each<mp_reverse<mp_iota_c<fullMan + 1>>>(
+    //     [&](auto ic)
+    //     {
+    //         constexpr auto man = decltype(ic)::value;
+    //         testAnalysis<Custom8<man>>(inputFile, fmt::format("Custom8_16e{}", man));
+    //     });
+    //
+    // mp_for_each<mp_reverse<mp_iota_c<fullMan + 1>>>(
+    //     [&](auto ic)
+    //     {
+    //         constexpr auto man = decltype(ic)::value;
+    //         testAnalysis<Custom6<man>>(inputFile, fmt::format("Custom6_16e{}", man));
+    //     });
 
     return 0;
 }
