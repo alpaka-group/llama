@@ -598,13 +598,13 @@ auto main(int argc, const char* argv[]) -> int
     testAnalysis<MakeBitpacked<fullExp, fullMan>>(inputFile, fmt::format("BP_SoA_{}e{}", fullMan, fullExp));
 
     // using namespace boost::mp11;
-    // mp_for_each<mp_reverse<mp_drop_c<mp_iota_c<fullExp>, 1>>>(
+    // mp_for_each<mp_reverse<mp_iota_c<fullExp>>>(
     //     [&](auto ic)
     //     {
     //         constexpr auto exp = decltype(ic)::value;
     //         testAnalysis<MakeBitpacked<exp, fullMan>>(inputFile, fmt::format("BP_SoA_{}e{}", fullMan, exp));
     //     });
-    // mp_for_each<mp_reverse<mp_drop_c<mp_iota_c<fullMan>, 1>>>(
+    // mp_for_each<mp_reverse<mp_iota_c<fullMan>>>(
     //     [&](auto ic)
     //     {
     //         constexpr auto man = decltype(ic)::value;
