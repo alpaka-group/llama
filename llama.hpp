@@ -2897,7 +2897,7 @@ namespace llama
 	    }
 
 	    template<typename RecordDim>
-	    constexpr auto recordCoordTags(RecordCoord<>) -> std::string_view
+	    constexpr auto prettyRecordCoord(RecordCoord<>) -> std::string_view
 	    {
 	        return {};
 	    }
@@ -9900,8 +9900,8 @@ namespace llama::mapping::tree
 	// #    include "StructName.hpp"    // amalgamate: file already expanded
 	// #    include "View.hpp"    // amalgamate: file already expanded
 
-	#    include <boost/functional/hash.hpp>
 	#    include <fmt/format.h>
+	#    include <functional>
 	#    include <optional>
 	// #    include <string>    // amalgamate: file already included
 	// #    include <vector>    // amalgamate: file already included
@@ -9919,15 +9919,9 @@ namespace llama::mapping::tree
 	            return computed;
 	        }
 
-	        template<std::size_t... Coords>
-	        auto toVec(RecordCoord<Coords...>) -> std::vector<std::size_t>
+	        inline auto color(std::string_view recordCoordTags) -> std::size_t
 	        {
-	            return {Coords...};
-	        }
-
-	        inline auto color(const std::vector<std::size_t>& recordCoord) -> std::size_t
-	        {
-	            auto c = boost::hash<std::vector<std::size_t>>{}(recordCoord) &std::size_t{0xFFFFFF};
+	            auto c = std::hash<std::string_view>{}(recordCoordTags) &std::size_t{0xFFFFFF};
 	            c |= std::size_t{0x404040}; // ensure color per channel is at least 0x40.
 	            return c;
 	        }
@@ -9988,8 +9982,7 @@ namespace llama::mapping::tree
 	        struct FieldBox
 	        {
 	            ArrayIndex arrayIndex;
-	            std::vector<std::size_t> recordCoord;
-	            std::string_view recordTags;
+	            std::string_view recordCoordTags;
 	            NrAndOffset<std::size_t> nrAndOffset;
 	            std::size_t size;
 	        };
@@ -10013,7 +10006,7 @@ namespace llama::mapping::tree
 	            using RecordDim = typename Mapping::RecordDim;
 
 	            auto emitInfo = [&](auto nrAndOffset, std::size_t size) {
-	                infos.push_back({ai, internal::toVec(rc), prettyRecordCoord<RecordDim>(rc), nrAndOffset, size});
+	                infos.push_back({ai, prettyRecordCoord<RecordDim>(rc), nrAndOffset, size});
 	            };
 
 	            using Type = GetType<RecordDim, decltype(rc)>;
@@ -10021,8 +10014,8 @@ namespace llama::mapping::tree
 	            auto& blobs = view.blobs();
 	            auto&& ref = view.mapping().compute(ai, rc, blobs);
 
-	            // try to find the mapped address in one of the blobs
-	            if constexpr(std::is_reference_v<decltype(ref)>)
+	            // if we get a reference, try to find the mapped address in one of the blobs
+	            if constexpr(std::is_lvalue_reference_v<decltype(ref)>)
 	            {
 	                auto address = reinterpret_cast<std::intptr_t>(&ref);
 	                for(std::size_t i = 0; i < blobs.size(); i++)
@@ -10044,10 +10037,10 @@ namespace llama::mapping::tree
 	                const auto infosBefore = infos.size();
 
 	                // try to observe written bytes
-	                const auto pattern = std::is_same_v<Type, bool> ? std::uint8_t{0xFF} : std::uint8_t{0xAA};
+	                const auto pattern = std::uint8_t{0xFF};
 	                fillBlobsWithPattern(view, pattern);
 	                ref = Type{}; // a broad range of types is default constructible and should write
-	                              // zero bytes
+	                              // something zero-ish
 	                auto wasTouched = [&](auto b) { return static_cast<std::uint8_t>(b) != pattern; };
 	                for(std::size_t i = 0; i < Mapping::blobCount; i++)
 	                {
@@ -10101,7 +10094,6 @@ namespace llama::mapping::tree
 	                            const auto [nr, off] = mapping.blobNrAndOffset(ai, rc);
 	                            infos.push_back(
 	                                {ai,
-	                                 internal::toVec(rc),
 	                                 prettyRecordCoord<RecordDim>(rc),
 	                                 {static_cast<std::size_t>(nr), static_cast<std::size_t>(off)},
 	                                 sizeof(Type)});
@@ -10217,7 +10209,7 @@ namespace llama::mapping::tree
 	            }();
 	            auto x = (offset % wrapByteCount) * byteSizeInPixel + blobBlockWidth;
 	            auto y = (offset / wrapByteCount) * byteSizeInPixel + blobY;
-	            const auto fill = internal::color(info.recordCoord);
+	            const auto fill = internal::color(info.recordCoordTags);
 	            const auto width = byteSizeInPixel * info.size;
 
 	            const auto nextOffset = [&]
@@ -10271,7 +10263,7 @@ namespace llama::mapping::tree
 	                x + width / 2,
 	                y + byteSizeInPixel * 3 / 4,
 	                internal::formatArrayIndex(info.arrayIndex),
-	                internal::xmlEscape(std::string{info.recordTags}));
+	                internal::xmlEscape(std::string{info.recordCoordTags}));
 	            if(cropBoxes)
 	                svg += R"(</svg>
 	)";
@@ -10357,7 +10349,7 @@ namespace llama::mapping::tree
 	)",
 	                    internal::cssClass(std::string{prettyRecordCoord<RecordDim>(rc)}),
 	                    byteSizeInPixel * size,
-	                    internal::color(internal::toVec(rc)));
+	                    internal::color(prettyRecordCoord<RecordDim>(rc)));
 	            });
 
 	        html += fmt::format(R"(</style>
@@ -10385,9 +10377,9 @@ namespace llama::mapping::tree
 	            }
 	            html += fmt::format(
 	                R"(<div class="box {0}" title="{1} {2}">{1} {2}</div>)",
-	                internal::cssClass(std::string{info.recordTags}),
+	                internal::cssClass(std::string{info.recordCoordTags}),
 	                internal::formatArrayIndex(info.arrayIndex),
-	                internal::xmlEscape(std::string{info.recordTags}));
+	                internal::xmlEscape(std::string{info.recordCoordTags}));
 	        }
 	        html += R"(</body>
 	</html>)";
