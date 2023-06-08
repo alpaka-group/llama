@@ -7,7 +7,7 @@ var StructName_8hpp =
     [ "intToStrSize", "StructName_8hpp.html#ad4195dfa3069a0e4cc1d15e13175cc88", null ],
     [ "isIdentChar", "StructName_8hpp.html#a7a180ada47fd3f35af9c404efbce16cf", null ],
     [ "prettyRecordCoord", "StructName_8hpp.html#a9e34d4e183a7bcc5759082b3844c19ee", null ],
-    [ "recordCoordTags", "StructName_8hpp.html#ad4229fbc3f0a63b19c56b256991a4762", null ],
+    [ "prettyRecordCoord", "StructName_8hpp.html#ae605c0e18c4839602eb4e7f2d6696c22", null ],
     [ "resizeArray", "StructName_8hpp.html#a512bb7612671cad70ae1e21587c633a2", null ],
     [ "structName", "StructName_8hpp.html#a8def4cdbf850f818833a38d67e6ebf34", null ],
     [ "typeNameAsArray", "StructName_8hpp.html#a64b252f2299cce03f8814269a0c25ca2", null ],
