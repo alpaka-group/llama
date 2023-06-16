@@ -33,11 +33,11 @@ namespace
     constexpr auto analysisRepetitionsInstrumentation = 1; // costly, so run less often
 
     // clang-format off
-    struct BFlightDistance{};
-    struct BVertexChi2{};
+    // struct BFlightDistance{};
+    // struct BVertexChi2{};
 
-    struct H1Charge{};
-    struct H1IpChi2{};
+    // struct H1Charge{};
+    // struct H1IpChi2{};
     struct H1PX{};
     struct H1PY{};
     struct H1PZ{};
@@ -45,8 +45,8 @@ namespace
     struct H1ProbPi{};
     struct H1isMuon{};
 
-    struct H2Charge{};
-    struct H2IpChi2{};
+    // struct H2Charge{};
+    // struct H2IpChi2{};
     struct H2PX{};
     struct H2PY{};
     struct H2PZ{};
@@ -54,8 +54,8 @@ namespace
     struct H2ProbPi{};
     struct H2isMuon{};
 
-    struct H3Charge{};
-    struct H3IpChi2{};
+    // struct H3Charge{};
+    // struct H3IpChi2{};
     struct H3PX{};
     struct H3PY{};
     struct H3PZ{};
@@ -64,7 +64,8 @@ namespace
     struct H3isMuon{};
     // clang-format on
 
-    // TODO(bgruber): only needed data is loaded. Should we load the entire data set?
+    // Only needed data is loaded and represented in the LLAMA view. This is also the default behavior of ROOT's
+    // RDataFrame and handwritten analyses. Only used columns are loaded.
     using RecordDim = llama::Record<
         // llama::Field<BFlightDistance, double>,
         // llama::Field<BVertexChi2, double>,
