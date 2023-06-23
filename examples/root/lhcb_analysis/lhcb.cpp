@@ -30,7 +30,9 @@
 namespace
 {
     constexpr auto analysisRepetitions = 100;
-    constexpr auto analysisRepetitionsInstrumentation = 1; // costly, so run less often
+    constexpr auto analysisRepetitionsInstrumentation
+        = 0; // costly, so turned off by default, use 1 for FieldAccessCounts and Heatmap
+    constexpr auto estimateLoadedCachelines = false;
 
     // clang-format off
     // struct BFlightDistance{};
@@ -467,6 +469,11 @@ namespace
     template<typename Mapping, bool Sort = false>
     void testAnalysis(std::string_view inputFile, std::string_view treeName, const std::string& mappingName)
     {
+        const auto repetitions = llama::mapping::isFieldAccessCount<Mapping> || llama::mapping::isHeatmap<Mapping>
+            ? analysisRepetitionsInstrumentation
+            : analysisRepetitions;
+        if(repetitions == 0)
+            return;
         saveLayout<Mapping>(mappingName + ".svg");
 
         auto [view, conversionTime] = convertRNTupleToLLAMA<Mapping>(inputFile, treeName);
@@ -486,9 +493,6 @@ namespace
             sortTime = sortView(view);
 
         TH1D hist{};
-        const auto repetitions = llama::mapping::isFieldAccessCount<Mapping> || llama::mapping::isHeatmap<Mapping>
-            ? analysisRepetitionsInstrumentation
-            : analysisRepetitions;
         std::chrono::microseconds totalAnalysisTime{};
         for(int i = 0; i < repetitions; i++)
         {
@@ -504,8 +508,8 @@ namespace
         saveHist(hist, mappingName);
         std::size_t cachlinesLoaded = 0;
         if constexpr(
-            !llama::mapping::isHeatmap<Mapping> && !llama::mapping::isFieldAccessCount<Mapping>
-            && !llama::hasAnyComputedField<Mapping>)
+            estimateLoadedCachelines && !llama::mapping::isHeatmap<Mapping>
+            && !llama::mapping::isFieldAccessCount<Mapping> && !llama::hasAnyComputedField<Mapping>)
         {
             // measure cachelines
             auto view2 = llama::allocView(llama::mapping::Heatmap<Mapping, 64>{view.mapping()});
@@ -587,15 +591,15 @@ auto main(int argc, const char* argv[]) -> int
     testAnalysis<Custom4>(inputFile, treeName, "Custom4");
     testAnalysis<Custom4Heatmap>(inputFile, treeName, "Custom4_HM");
     testAnalysis<Custom5>(inputFile, treeName, "Custom5");
-    testAnalysis<Custom5, true>(inputFile, treeName, "Custom5_S");
+    //    testAnalysis<Custom5, true>(inputFile, treeName, "Custom5_S");
     testAnalysis<Custom6<>>(inputFile, treeName, "Custom6");
-    testAnalysis<Custom6<>, true>(inputFile, treeName, "Custom6_S");
+    //    testAnalysis<Custom6<>, true>(inputFile, treeName, "Custom6_S");
     testAnalysis<Custom7>(inputFile, treeName, "Custom7");
-    testAnalysis<Custom7, true>(inputFile, treeName, "Custom7_S");
+    //    testAnalysis<Custom7, true>(inputFile, treeName, "Custom7_S");
     testAnalysis<Custom8<>>(inputFile, treeName, "Custom8");
-    testAnalysis<Custom8<>, true>(inputFile, treeName, "Custom8_S");
+    //    testAnalysis<Custom8<>, true>(inputFile, treeName, "Custom8_S");
     testAnalysis<Custom9>(inputFile, treeName, "Custom9");
-    testAnalysis<Custom9, true>(inputFile, treeName, "Custom9_S");
+    //    testAnalysis<Custom9, true>(inputFile, treeName, "Custom9_S");
     testAnalysis<Custom1_3_H1ProbK_float>(inputFile, treeName, "Custom1_3_F");
 
     constexpr auto fullExp = 11;
