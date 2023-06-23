@@ -11,7 +11,7 @@ jobs:
     - uses: actions/checkout@v3
     - name: clone single-header
       run: |
-        git clone -b single-header https://x-access-token:${{secrets.github_token}}@github.com/${{github.repository}}.git single-header
+        git clone -b single-header --single-branch https://x-access-token:${{secrets.github_token}}@github.com/${{github.repository}}.git single-header
     - name: create-single-header.sh
       run: |
         ./tools/create-single-header.sh
@@ -19,14 +19,13 @@ jobs:
       run: |
         set -x
         cd single-header
-        git config --global user.email "action@github.com"
-        git config --global user.name "GitHub Action"
-        git add llama.hpp
-        if (git diff --quiet) || (git diff --staged --quiet)
+        if ! git diff --exit-code
         then
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+          git add llama.hpp
           git commit -m "Update llama.hpp"
           git push origin single-header
         else
           echo "No changes to commit"
         fi
-        git push
