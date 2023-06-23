@@ -538,8 +538,10 @@ auto main(int argc, const char* argv[]) -> int
 {
     if(argc != 2 && argc != 3)
     {
-        fmt::print("Please specify location of the LHCB B2HHH RNTuple input file and optionally the name of the "
-                   "contained tree!");
+        fmt::print(
+            "Invalid command line arguments. Usage:\n\n"
+            "{} <inputfile> [treename, default: \"DecayTree\"]\n",
+            argv[0]);
         return 1;
     }
 
