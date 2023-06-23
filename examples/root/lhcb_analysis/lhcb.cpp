@@ -97,11 +97,11 @@ namespace
     namespace RE = ROOT::Experimental;
 
     template<typename Mapping>
-    auto convertRNTupleToLLAMA(const std::string& path)
+    auto convertRNTupleToLLAMA(std::string_view path, std::string_view treeName)
     {
         auto begin = std::chrono::steady_clock::now();
 
-        auto ntuple = RE::RNTupleReader::Open(RE::RNTupleModel::Create(), "DecayTree", path);
+        auto ntuple = RE::RNTupleReader::Open(RE::RNTupleModel::Create(), treeName, path);
         //        try
         //        {
         //            ntuple->PrintInfo(ROOT::Experimental::ENTupleInfo::kStorageDetails);
@@ -465,11 +465,11 @@ namespace
     }
 
     template<typename Mapping, bool Sort = false>
-    void testAnalysis(const std::string& inputFile, const std::string& mappingName)
+    void testAnalysis(std::string_view inputFile, std::string_view treeName, const std::string& mappingName)
     {
         saveLayout<Mapping>(mappingName + ".svg");
 
-        auto [view, conversionTime] = convertRNTupleToLLAMA<Mapping>(inputFile);
+        auto [view, conversionTime] = convertRNTupleToLLAMA<Mapping>(inputFile, treeName);
         if constexpr(llama::mapping::isFieldAccessCount<Mapping>)
         {
             view.mapping().printFieldHits(view.blobs());
@@ -536,13 +536,15 @@ namespace
 
 auto main(int argc, const char* argv[]) -> int
 {
-    if(argc != 2)
+    if(argc != 2 && argc != 3)
     {
-        fmt::print("Please specify location of the LHCB B2HHH RNTuple input file!");
+        fmt::print("Please specify location of the LHCB B2HHH RNTuple input file and optionally the name of the "
+                   "contained tree!");
         return 1;
     }
 
     const auto& inputFile = argv[1];
+    const auto treeName = argc == 3 ? argv[2] : "DecayTree";
 
     gErrorIgnoreLevel = kWarning + 1; // TODO(bgruber): supress warnings that the RNTuple still uses a pre-released
                                       // format. Remove this once RNTuple hits production.
@@ -562,71 +564,73 @@ auto main(int argc, const char* argv[]) -> int
         "ErrRel",
         "$L-load");
 
-    testAnalysis<AoS>(inputFile, "AoS");
-    // testAnalysis<AoS, true>(inputFile, "AoS");
-    testAnalysis<AoSFieldAccessCount>(inputFile, "AoS_FAC"); // also shows how many bytes were needed,
-                                                             // which is actually the same for all analyses
-    testAnalysis<AoSHeatmap>(inputFile, "AoS_HM");
-    testAnalysis<AoSoA8>(inputFile, "AoSoA8");
-    testAnalysis<AoSoA16>(inputFile, "AoSoA16");
-    testAnalysis<SoAASB>(inputFile, "SoA_SB_A");
-    testAnalysis<SoAMB>(inputFile, "SoA_MB");
-    // testAnalysis<SoAMB, true>(inputFile, "SoA MB S");
+    testAnalysis<AoS>(inputFile, treeName, "AoS");
+    // testAnalysis<AoS, true>(inputFile, treeName,"AoS");
+    testAnalysis<AoSFieldAccessCount>(inputFile, treeName, "AoS_FAC"); // also shows how many bytes were needed,
+                                                                       // which is actually the same for all analyses
+    testAnalysis<AoSHeatmap>(inputFile, treeName, "AoS_HM");
+    testAnalysis<AoSoA8>(inputFile, treeName, "AoSoA8");
+    testAnalysis<AoSoA16>(inputFile, treeName, "AoSoA16");
+    testAnalysis<SoAASB>(inputFile, treeName, "SoA_SB_A");
+    testAnalysis<SoAMB>(inputFile, treeName, "SoA_MB");
+    // testAnalysis<SoAMB, true>(inputFile, treeName,"SoA MB S");
 
-    testAnalysis<AoS_Floats>(inputFile, "AoS_F");
-    testAnalysis<SoAMB_Floats>(inputFile, "SoA_MB_F");
-    // testAnalysis<SoAMB_Floats, true>(inputFile, "SoA MB S float");
+    testAnalysis<AoS_Floats>(inputFile, treeName, "AoS_F");
+    testAnalysis<SoAMB_Floats>(inputFile, treeName, "SoA_MB_F");
+    // testAnalysis<SoAMB_Floats, true>(inputFile, treeName,"SoA MB S float");
 
-    testAnalysis<Custom1>(inputFile, "Custom1");
-    testAnalysis<Custom2>(inputFile, "Custom2");
-    testAnalysis<Custom3>(inputFile, "Custom3");
-    testAnalysis<Custom4>(inputFile, "Custom4");
-    testAnalysis<Custom4Heatmap>(inputFile, "Custom4_HM");
-    testAnalysis<Custom5>(inputFile, "Custom5");
-    testAnalysis<Custom5, true>(inputFile, "Custom5_S");
-    testAnalysis<Custom6<>>(inputFile, "Custom6");
-    testAnalysis<Custom6<>, true>(inputFile, "Custom6_S");
-    testAnalysis<Custom7>(inputFile, "Custom7");
-    testAnalysis<Custom7, true>(inputFile, "Custom7_S");
-    testAnalysis<Custom8<>>(inputFile, "Custom8");
-    testAnalysis<Custom8<>, true>(inputFile, "Custom8_S");
-    testAnalysis<Custom9>(inputFile, "Custom9");
-    testAnalysis<Custom9, true>(inputFile, "Custom9_S");
-    testAnalysis<Custom1_3_H1ProbK_float>(inputFile, "Custom1_3_F");
+    testAnalysis<Custom1>(inputFile, treeName, "Custom1");
+    testAnalysis<Custom2>(inputFile, treeName, "Custom2");
+    testAnalysis<Custom3>(inputFile, treeName, "Custom3");
+    testAnalysis<Custom4>(inputFile, treeName, "Custom4");
+    testAnalysis<Custom4Heatmap>(inputFile, treeName, "Custom4_HM");
+    testAnalysis<Custom5>(inputFile, treeName, "Custom5");
+    testAnalysis<Custom5, true>(inputFile, treeName, "Custom5_S");
+    testAnalysis<Custom6<>>(inputFile, treeName, "Custom6");
+    testAnalysis<Custom6<>, true>(inputFile, treeName, "Custom6_S");
+    testAnalysis<Custom7>(inputFile, treeName, "Custom7");
+    testAnalysis<Custom7, true>(inputFile, treeName, "Custom7_S");
+    testAnalysis<Custom8<>>(inputFile, treeName, "Custom8");
+    testAnalysis<Custom8<>, true>(inputFile, treeName, "Custom8_S");
+    testAnalysis<Custom9>(inputFile, treeName, "Custom9");
+    testAnalysis<Custom9, true>(inputFile, treeName, "Custom9_S");
+    testAnalysis<Custom1_3_H1ProbK_float>(inputFile, treeName, "Custom1_3_F");
 
     constexpr auto fullExp = 11;
     constexpr auto fullMan = 52;
-    testAnalysis<MakeBitpacked<fullExp, fullMan>>(inputFile, fmt::format("BP_SoA_{}e{}", fullMan, fullExp));
+    testAnalysis<MakeBitpacked<fullExp, fullMan>>(inputFile, treeName, fmt::format("BP_SoA_{}e{}", fullMan, fullExp));
 
     // using namespace boost::mp11;
     // mp_for_each<mp_reverse<mp_iota_c<fullExp>>>(
     //     [&](auto ic)
     //     {
     //         constexpr auto exp = decltype(ic)::value;
-    //         testAnalysis<MakeBitpacked<exp, fullMan>>(inputFile, fmt::format("BP_SoA_{}e{}", fullMan, exp));
+    //         testAnalysis<MakeBitpacked<exp, fullMan>>(inputFile, treeName, fmt::format("BP_SoA_{}e{}", fullMan,
+    //         exp));
     //     });
     // mp_for_each<mp_reverse<mp_iota_c<fullMan>>>(
     //     [&](auto ic)
     //     {
     //         constexpr auto man = decltype(ic)::value;
-    //         testAnalysis<MakeBitpacked<fullExp, man>>(inputFile, fmt::format("BP_SoA_{}e{}", man, fullExp));
+    //         testAnalysis<MakeBitpacked<fullExp, man>>(inputFile, treeName, fmt::format("BP_SoA_{}e{}", man,
+    //         fullExp));
     //     });
 
     // we typically observe wrong results at exp < 6, and man < 16
-    testAnalysis<MakeBitpacked<6, 16>>(inputFile, "BP_SoA_16e6");
+    testAnalysis<MakeBitpacked<6, 16>>(inputFile, treeName, "BP_SoA_16e6");
 
     // mp_for_each<mp_reverse<mp_iota_c<fullMan + 1>>>(
     //     [&](auto ic)
     //     {
     //         constexpr auto man = decltype(ic)::value;
-    //         testAnalysis<Custom8<man>>(inputFile, fmt::format("Custom8_16e{}", man));
+    //         testAnalysis<Custom8<man>>(inputFile, treeName,fmt::format("Custom8_16e{}", man));
     //     });
     //
     // mp_for_each<mp_reverse<mp_iota_c<fullMan + 1>>>(
     //     [&](auto ic)
     //     {
     //         constexpr auto man = decltype(ic)::value;
-    //         testAnalysis<Custom6<man>>(inputFile, fmt::format("Custom6_16e{}", man));
+    //         testAnalysis<Custom6<man>>(inputFile, treeName,fmt::format("Custom6_16e{}", man));
     //     });
 
     return 0;
