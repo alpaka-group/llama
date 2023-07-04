@@ -247,6 +247,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - run: lscpu
       - name: add ubuntu toolchain repo
         if: matrix.add_toolchain_ppa
         run: |
