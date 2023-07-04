@@ -194,7 +194,15 @@ jobs:
           - name: build-ubuntu-gcc12-nvcc12.1
             cxx: g++-12
             install_extra: g++-12
-            cuda_url: https://developer.download.nvidia.com/compute/cuda/12.1.0/local_installers/cuda_12.1.0_530.30.02_linux.run
+            cuda_url: https://developer.download.nvidia.com/compute/cuda/12.1.1/local_installers/cuda_12.1.1_530.30.02_linux.run
+          - name: build-ubuntu-gcc12-nvcc12.2
+            cxx: g++-12
+            install_extra: g++-12
+            cuda_url: https://developer.download.nvidia.com/compute/cuda/12.2.0/local_installers/cuda_12.2.0_535.54.03_linux.run
+          - name: build-ubuntu-gcc13
+            cxx: g++-13
+            add_toolchain_repo: true
+            install_extra: g++-13
           - name: build-ubuntu-clang10
             os: ubuntu-20.04 # clang-10 is not available on ubuntu-22.04
             cxx: clang++-10
