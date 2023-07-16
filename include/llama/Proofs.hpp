@@ -8,14 +8,6 @@
 
 namespace llama
 {
-    namespace internal
-    {
-        constexpr auto divRoundUp(std::size_t dividend, std::size_t divisor) -> std::size_t
-        {
-            return (dividend + divisor - 1) / divisor;
-        }
-    } // namespace internal
-
 // FIXME(bgruber): this test is actually not correct, because __cpp_constexpr_dynamic_alloc only guarantees constexpr
 // std::allocator
 #ifdef __cpp_constexpr_dynamic_alloc
@@ -58,7 +50,7 @@ namespace llama
     {
         internal::DynArray<internal::DynArray<std::uint64_t>> blobByteMapped(m.blobCount);
         for(std::size_t i = 0; i < m.blobCount; i++)
-            blobByteMapped.data[i].resize(internal::divRoundUp(m.blobSize(i), 64));
+            blobByteMapped.data[i].resize(divCeil(m.blobSize(i), std::size_t{64}));
 
         auto testAndSet = [&](auto blob, auto offset) constexpr
         {
