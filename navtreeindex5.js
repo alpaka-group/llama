@@ -1,5 +1,6 @@
 var NAVTREEINDEX5 =
 {
+"structllama_1_1bloballoc_1_1UniquePtr.html":[2,0,0,1,1],
 "structllama_1_1bloballoc_1_1UniquePtr.html#affa75475e5567690fee1a68fab39b5b7":[2,0,0,1,1,0],
 "structllama_1_1bloballoc_1_1Vector.html":[2,0,0,1,4],
 "structllama_1_1bloballoc_1_1Vector.html#a460676ac82586d1bef38037a1816464b":[2,0,0,1,4,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX5 =
 "structllama_1_1mapping_1_1Bytesplit_1_1Reference.html#accb43aa5bb33fb0ce8227e8a6fd52190":[2,0,0,3,14,0,3],
 "structllama_1_1mapping_1_1Bytesplit_1_1Reference.html#ad397146d87434a6114bb15a88644b3bf":[2,0,0,3,14,0,0],
 "structllama_1_1mapping_1_1Byteswap.html":[2,0,0,3,16],
-"structllama_1_1mapping_1_1ChangeType.html":[2,0,0,3,18],
-"structllama_1_1mapping_1_1FieldAccessCount.html":[2,0,0,3,27]
+"structllama_1_1mapping_1_1ChangeType.html":[2,0,0,3,18]
 };
