@@ -15,6 +15,9 @@
 namespace llama
 {
 #ifdef __cpp_lib_concepts
+    template<auto I>
+    concept isConstexpr = requires { std::integral_constant<decltype(I), I>{}; };
+
     template<typename M>
     concept Mapping = requires(M m) {
         typename M::ArrayExtents;
@@ -26,7 +29,7 @@ namespace llama
         {
             +M::blobCount
         } -> std::same_as<std::size_t>;
-        std::integral_constant<std::size_t, M::blobCount>{}; // validates constexpr-ness
+        requires isConstexpr<M::blobCount>;
         {
             m.blobSize(typename M::ArrayExtents::value_type{})
         } -> std::same_as<typename M::ArrayExtents::value_type>;
@@ -78,12 +81,11 @@ namespace llama
         || (ProxyReference<R> && std::is_same_v<typename R::value_type, T>);
 
     template<typename M, typename RC>
-    concept ComputedField
-        = M::isComputed(RC{}) && requires(M m, typename M::ArrayIndex ai, Array<Array<std::byte, 1>, 1> blobs) {
-              {
-                  m.compute(ai, RC{}, blobs)
-              } -> AnyReferenceTo<GetType<typename M::RecordDim, RC>>;
-          };
+    concept ComputedField = M::isComputed(RC{}) && requires(M m, typename M::ArrayIndex ai, std::byte** blobs) {
+        {
+            m.compute(ai, RC{}, blobs)
+        } -> AnyReferenceTo<GetType<typename M::RecordDim, RC>>;
+    };
 
     template<typename M>
     struct MakeIsComputed
@@ -113,18 +115,21 @@ namespace llama
     template<typename M>
     concept PartiallyComputedMapping = Mapping<M> && allFieldsArePhysicalOrComputed<M>;
 
-    // according to http://eel.is/c++draft/intro.object#3 only std::byte and unsigned char can provide storage for
-    // other types
+    /// Additional semantic requirement: &b[i] + j == &b[i + j] for any integral i and j in range of the blob
     template<typename B>
     concept Blob = requires(B b, std::size_t i) {
-        requires std::is_same_v<std::remove_cvref_t<decltype(b[i])>, std::byte>
-            || std::is_same_v<std::remove_cvref_t<decltype(b[i])>, unsigned char>;
+        // according to http://eel.is/c++draft/intro.object#3 only std::byte and unsigned char can
+        // provide storage for
+        // other types
+        requires std::is_lvalue_reference_v<decltype(b[i])>;
+        requires std::same_as<std::remove_cvref_t<decltype(b[i])>, std::byte>
+            || std::same_as<std::remove_cvref_t<decltype(b[i])>, unsigned char>;
     };
 
     template<typename BA>
-    concept BlobAllocator = requires(BA ba, std::integral_constant<std::size_t, 16> alignment, std::size_t size) {
+    concept BlobAllocator = requires(BA ba, std::size_t size) {
         {
-            ba(alignment, size)
+            ba(std::integral_constant<std::size_t, 16>{}, size)
         } -> Blob;
     };
 #endif
