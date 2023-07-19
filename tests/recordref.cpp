@@ -4,6 +4,7 @@
 #include "common.hpp"
 
 #include <algorithm>
+#include <cstdio>
 #include <sstream>
 #include <vector>
 
@@ -29,6 +30,13 @@ namespace
         record(tag::Vel{}, tag::Y{}) = 4;
         record(tag::Vel{}, tag::Z{}) = 5;
         record(tag::Mass{}) = 6;
+
+#if defined(__NVCOMPILER) && __NVCOMPILER_MAJOR__ >= 23
+        // nvc++ somehow optimizes out the return of record but corrupts the value, so we make it escape to prevent
+        // compiler optimizations
+        printf("", &record);
+#endif
+
         return record;
     }
 } // namespace
@@ -1198,7 +1206,7 @@ TEST_CASE("decayCopy")
     STATIC_REQUIRE(std::is_same_v<decltype(llama::decayCopy(42)), int>);
     const int i = 42;
     STATIC_REQUIRE(std::is_same_v<decltype(llama::decayCopy(i)), int>);
-    const int& ir = i;
+    [[maybe_unused]] const int& ir = i;
     STATIC_REQUIRE(std::is_same_v<decltype(llama::decayCopy(ir)), int>);
 
     auto mapping = llama::mapping::BitPackedIntSoA<llama::ArrayExtents<int, 4>, Vec3I>{{}, 17};
