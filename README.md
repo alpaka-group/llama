@@ -36,9 +36,9 @@ LLAMA tries to stay close to recent developments in C++ and so requires fairly u
 The following compilers are supported by LLAMA and tested as part of our CI:
 
 
-| Linux                                                                                                                     | Windows                                             | MacOS                            |
-|---------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------|----------------------------------|
-| g++ 9 - 12 </br> clang++ 10 - 16 </br> icpx (latest) </br> nvc++ 22.9 </br> nvcc 11.2 - 12.1 | Visual Studio 2022 </br> (latest on GitHub actions) | clang++ </br> (latest from brew) |
+| Linux                                                                                        | Windows                                             | MacOS                            |
+|----------------------------------------------------------------------------------------------|-----------------------------------------------------|----------------------------------|
+| g++ 9 - 13 </br> clang++ 10 - 16 </br> icpx (latest) </br> nvc++ 22.9 </br> nvcc 11.2 - 12.1 | Visual Studio 2022 </br> (latest on GitHub actions) | clang++ </br> (latest from brew) |
 
 
 Single header
