@@ -245,9 +245,9 @@ var NAVTREEINDEX4 =
 "structllama_1_1bloballoc_1_1AlignedAllocator_1_1rebind.html":[2,0,0,1,3,0],
 "structllama_1_1bloballoc_1_1AlignedAllocator_1_1rebind.html#a21f94f8b3f97ad48279888f0d6a6cc2e":[2,0,0,1,3,0,0],
 "structllama_1_1bloballoc_1_1Array.html":[2,0,0,1,0],
-"structllama_1_1bloballoc_1_1Array.html#af934c30f2846edeeed8dd4a764d72839":[2,0,0,1,0,1],
+"structllama_1_1bloballoc_1_1Array.html#a3c282745bc38c9554406545e7d108520":[2,0,0,1,0,1],
 "structllama_1_1bloballoc_1_1Array_1_1AlignedArray.html":[2,0,0,1,0,0],
 "structllama_1_1bloballoc_1_1SharedPtr.html":[2,0,0,1,2],
-"structllama_1_1bloballoc_1_1SharedPtr.html#a5080b68a3c4da3051afa37f04871e837":[2,0,0,1,2,0],
-"structllama_1_1bloballoc_1_1SharedPtr.html#ae90813d3ac4877d722150d240e790c98":[2,0,0,1,2,1]
+"structllama_1_1bloballoc_1_1SharedPtr.html#acb24918a6bf634b254bdfead6c1062dc":[2,0,0,1,2,0],
+"structllama_1_1bloballoc_1_1UniquePtr.html":[2,0,0,1,1]
 };

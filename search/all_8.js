@@ -78,9 +78,10 @@ var searchData=
   ['istuplelike_353',['isTupleLike',['../namespacellama_1_1internal.html#aa30231c6e488d62d3b26388e1ca9f590',1,'llama::internal']]],
   ['isview_354',['isView',['../namespacellama.html#a2c3ef24f7ab0d71912a5f7e71cf24130',1,'llama']]],
   ['isview_3c_20view_3c_20mapping_2c_20blobtype_2c_20accessor_20_3e_20_3e_355',['isView&lt; View&lt; Mapping, BlobType, Accessor &gt; &gt;',['../namespacellama.html#abada4e4a295e9cacca30c9bebd6f5dbf',1,'llama']]],
-  ['iterator_356',['iterator',['../structllama_1_1View.html#abe36abe814e4a701c181c5fd06b6b9b0',1,'llama::View::iterator()'],['../structllama_1_1Vector.html#a7cb2da4cdee69566d96d906796ac96ff',1,'llama::Vector::iterator()']]],
-  ['iterator_357',['Iterator',['../structllama_1_1Iterator.html#a87ca77106e3bf02e1ddf3124fd00a5de',1,'llama::Iterator::Iterator(ArrayIndexIterator arrayIndex, View *view)'],['../structllama_1_1Iterator.html#afa877e06adc28f4c7bb7644b2aa77d67',1,'llama::Iterator::Iterator()=default'],['../structllama_1_1Iterator.html',1,'llama::Iterator&lt; View &gt;']]],
-  ['iterator_5fcategory_358',['iterator_category',['../structllama_1_1Iterator.html#a9e213325f5a69c320be804d24e0b1ccd',1,'llama::Iterator::iterator_category()'],['../structllama_1_1ArrayIndexIterator.html#ac149b9191555df8d9cd3c8b08b6f22ab',1,'llama::ArrayIndexIterator::iterator_category()']]],
-  ['loadsimdrecord_359',['loadSimdRecord',['../structllama_1_1RecordRef.html#a4db77e1b7709685c7eb45c7f6c86fb48',1,'llama::RecordRef']]],
-  ['storesimdrecord_360',['storeSimdRecord',['../structllama_1_1RecordRef.html#ab919c94e030e63d8d3220fe055280c5f',1,'llama::RecordRef']]]
+  ['iterator_356',['Iterator',['../structllama_1_1Iterator.html#a87ca77106e3bf02e1ddf3124fd00a5de',1,'llama::Iterator::Iterator(ArrayIndexIterator arrayIndex, View *view)'],['../structllama_1_1Iterator.html#afa877e06adc28f4c7bb7644b2aa77d67',1,'llama::Iterator::Iterator()=default']]],
+  ['iterator_357',['iterator',['../structllama_1_1View.html#abe36abe814e4a701c181c5fd06b6b9b0',1,'llama::View::iterator()'],['../structllama_1_1Vector.html#a7cb2da4cdee69566d96d906796ac96ff',1,'llama::Vector::iterator()']]],
+  ['iterator_358',['Iterator',['../structllama_1_1Iterator.html',1,'llama']]],
+  ['iterator_5fcategory_359',['iterator_category',['../structllama_1_1Iterator.html#a9e213325f5a69c320be804d24e0b1ccd',1,'llama::Iterator::iterator_category()'],['../structllama_1_1ArrayIndexIterator.html#ac149b9191555df8d9cd3c8b08b6f22ab',1,'llama::ArrayIndexIterator::iterator_category()']]],
+  ['loadsimdrecord_360',['loadSimdRecord',['../structllama_1_1RecordRef.html#a4db77e1b7709685c7eb45c7f6c86fb48',1,'llama::RecordRef']]],
+  ['storesimdrecord_361',['storeSimdRecord',['../structllama_1_1RecordRef.html#ab919c94e030e63d8d3220fe055280c5f',1,'llama::RecordRef']]]
 ];

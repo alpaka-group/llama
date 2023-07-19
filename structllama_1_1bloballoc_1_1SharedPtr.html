@@ -83,7 +83,6 @@ $(document).ready(function(){initNavTree('structllama_1_1bloballoc_1_1SharedPtr.
 
 <div class="header">
   <div class="summary">
-<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="structllama_1_1bloballoc_1_1SharedPtr-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -93,44 +92,19 @@ $(document).ready(function(){initNavTree('structllama_1_1bloballoc_1_1SharedPtr.
 
 <p><code>#include &lt;<a class="el" href="BlobAllocators_8hpp_source.html">BlobAllocators.hpp</a>&gt;</code></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
-Public Types</h2></td></tr>
-<tr class="memitem:a5080b68a3c4da3051afa37f04871e837"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a5080b68a3c4da3051afa37f04871e837"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1bloballoc_1_1SharedPtr.html#a5080b68a3c4da3051afa37f04871e837">shared_ptr</a> = std::shared_ptr&lt; T &gt;</td></tr>
-<tr class="separator:a5080b68a3c4da3051afa37f04871e837"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ae90813d3ac4877d722150d240e790c98"><td class="memTemplParams" colspan="2">template&lt;std::size_t Alignment&gt; </td></tr>
-<tr class="memitem:ae90813d3ac4877d722150d240e790c98"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1bloballoc_1_1SharedPtr.html#ae90813d3ac4877d722150d240e790c98">operator()</a> (std::integral_constant&lt; std::size_t, Alignment &gt;, std::size_t count) const -&gt; <a class="el" href="structllama_1_1bloballoc_1_1SharedPtr.html#a5080b68a3c4da3051afa37f04871e837">shared_ptr</a>&lt; std::byte[]&gt;</td></tr>
-<tr class="separator:ae90813d3ac4877d722150d240e790c98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb24918a6bf634b254bdfead6c1062dc"><td class="memTemplParams" colspan="2">template&lt;std::size_t Alignment&gt; </td></tr>
+<tr class="memitem:acb24918a6bf634b254bdfead6c1062dc"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1bloballoc_1_1SharedPtr.html#acb24918a6bf634b254bdfead6c1062dc">operator()</a> (std::integral_constant&lt; std::size_t, Alignment &gt;, std::size_t count) const -&gt; std::shared_ptr&lt; std::byte[]&gt;</td></tr>
+<tr class="separator:acb24918a6bf634b254bdfead6c1062dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Allocates heap memory managed by a <code>std::shared_ptr</code> for a <a class="el" href="structllama_1_1View.html">View</a>. This memory is shared between all copies of a <a class="el" href="structllama_1_1View.html">View</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="BlobAllocators_8hpp_source.html#l00067">67</a> of file <a class="el" href="BlobAllocators_8hpp_source.html">BlobAllocators.hpp</a>.</p>
-</div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="a5080b68a3c4da3051afa37f04871e837"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5080b68a3c4da3051afa37f04871e837">&#9670;&nbsp;</a></span>shared_ptr</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="structllama_1_1bloballoc_1_1SharedPtr.html#a5080b68a3c4da3051afa37f04871e837">llama::bloballoc::SharedPtr::shared_ptr</a> =  std::shared_ptr&lt;T&gt;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="BlobAllocators_8hpp_source.html#l00071">71</a> of file <a class="el" href="BlobAllocators_8hpp_source.html">BlobAllocators.hpp</a>.</p>
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="ae90813d3ac4877d722150d240e790c98"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae90813d3ac4877d722150d240e790c98">&#9670;&nbsp;</a></span>operator()()</h2>
+<p class="definition">Definition at line <a class="el" href="BlobAllocators_8hpp_source.html#l00064">64</a> of file <a class="el" href="BlobAllocators_8hpp_source.html">BlobAllocators.hpp</a>.</p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="acb24918a6bf634b254bdfead6c1062dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb24918a6bf634b254bdfead6c1062dc">&#9670;&nbsp;</a></span>operator()()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -155,7 +129,7 @@ template&lt;std::size_t Alignment&gt; </div>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td> const -&gt; <a class="el" href="structllama_1_1bloballoc_1_1SharedPtr.html#a5080b68a3c4da3051afa37f04871e837">shared_ptr</a>&lt;std::byte[]&gt;
+          <td></td><td> const -&gt; std::shared_ptr&lt;std::byte[]&gt;
         </td>
         </tr>
       </table>
@@ -166,7 +140,7 @@ template&lt;std::size_t Alignment&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="BlobAllocators_8hpp_source.html#l00079">79</a> of file <a class="el" href="BlobAllocators_8hpp_source.html">BlobAllocators.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="BlobAllocators_8hpp_source.html#l00067">67</a> of file <a class="el" href="BlobAllocators_8hpp_source.html">BlobAllocators.hpp</a>.</p>
 
 </div>
 </div>
@@ -179,7 +153,7 @@ template&lt;std::size_t Alignment&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1bloballoc.html">bloballoc</a></li><li class="navelem"><a class="el" href="structllama_1_1bloballoc_1_1SharedPtr.html">SharedPtr</a></li>
-    <li class="footer">Generated on Mon Jul 17 2023 12:41:34 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Wed Jul 19 2023 16:37:43 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
