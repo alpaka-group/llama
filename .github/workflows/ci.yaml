@@ -249,7 +249,7 @@ jobs:
       - uses: actions/checkout@v3
       - run: lscpu
       - name: add ubuntu toolchain repo
-        if: matrix.add_toolchain_ppa
+        if: matrix.add_toolchain_repo
         run: |
           sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa
           sudo apt update
