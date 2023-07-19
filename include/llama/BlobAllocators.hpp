@@ -10,9 +10,6 @@
 #include <cstddef>
 #include <memory>
 #include <vector>
-#if defined(_LIBCPP_VERSION) && _LIBCPP_VERSION < 11000
-#    include <boost/shared_ptr.hpp>
-#endif
 #if __has_include(<cuda_runtime.h>)
 #    include <cuda_runtime.h>
 #endif
@@ -35,10 +32,10 @@ namespace llama::bloballoc
         template<std::size_t Alignment>
         LLAMA_FN_HOST_ACC_INLINE auto operator()(
             std::integral_constant<std::size_t, Alignment>,
-            [[maybe_unused]] std::size_t count) const
+            [[maybe_unused]] std::size_t count) const -> AlignedArray<Alignment>
         {
             assert(count == BytesToReserve);
-            return AlignedArray<Alignment>{};
+            return {};
         }
     };
 #ifdef __cpp_lib_concepts
@@ -66,23 +63,14 @@ namespace llama::bloballoc
     /// of a \ref View.
     struct SharedPtr
     {
-        // libc++ below 11.0.0 does not yet support shared_ptr with arrays
-        template<typename T>
-        using shared_ptr =
-#if defined(_LIBCPP_VERSION) && _LIBCPP_VERSION < 11000
-            boost::shared_ptr<T>;
-#else
-            std::shared_ptr<T>;
-#endif
-
         template<std::size_t Alignment>
         auto operator()(std::integral_constant<std::size_t, Alignment>, std::size_t count) const
-            -> shared_ptr<std::byte[]>
+            -> std::shared_ptr<std::byte[]>
         {
             auto* ptr
                 = static_cast<std::byte*>(::operator new[](count * sizeof(std::byte), std::align_val_t{Alignment}));
             auto deleter = [](std::byte* ptr) { ::operator delete[](ptr, std::align_val_t{Alignment}); };
-            return shared_ptr<std::byte[]>{ptr, deleter};
+            return {ptr, deleter};
         }
     };
 #ifdef __cpp_lib_concepts
