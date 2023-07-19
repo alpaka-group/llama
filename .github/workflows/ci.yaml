@@ -379,6 +379,7 @@ jobs:
         include:
           - os: macos-11
           - os: macos-12
+          - os: macos-13
     steps:
       - uses: actions/checkout@v3
       - name: brew install dependencies
