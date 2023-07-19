@@ -241,9 +241,9 @@ jobs:
             install_extra: intel-oneapi-compiler-dpcpp-cpp g++-12 # for libstdc++
             cxx_flags: --gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/12
           - name: build-ubuntu-nvc++
-            cxx: /opt/nvidia/hpc_sdk/Linux_x86_64/22.9/compilers/bin/nvc++
+            cxx: /opt/nvidia/hpc_sdk/Linux_x86_64/23.5/compilers/bin/nvc++
             add_nvcpp_repo: true
-            install_extra: nvhpc-22-9
+            install_extra: nvhpc-23-5
 
     steps:
       - uses: actions/checkout@v3
