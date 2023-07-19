@@ -7,7 +7,8 @@
       "cacheVariables": {
         "BUILD_TESTING": "ON",
         "LLAMA_BUILD_EXAMPLES": "ON",
-        "alpaka_ACC_CPU_B_SEQ_T_SEQ_ENABLE": "ON"
+        "alpaka_ACC_CPU_B_SEQ_T_SEQ_ENABLE": "ON",
+        "Boost_NO_WARN_NEW_VERSIONS": "ON"
       }
     }
   ]
