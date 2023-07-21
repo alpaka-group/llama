@@ -90,7 +90,7 @@ namespace llama
     template<typename Mapping, typename BlobType, typename Accessor, std::size_t... RCs>
     LLAMA_FN_HOST_ACC_INLINE void constructField(
         View<Mapping, BlobType, Accessor>& view,
-        typename Mapping::ArrayIndex ai,
+        typename Mapping::ArrayExtents::Index ai,
         RecordCoord<RCs...> rc)
     {
         using FieldType = GetType<typename Mapping::RecordDim, decltype(rc)>;
@@ -348,7 +348,7 @@ namespace llama
     template<typename Mapping, typename RecordCoord, typename Blobs>
     LLAMA_FN_HOST_ACC_INLINE auto mapToMemory(
         Mapping& mapping,
-        typename Mapping::ArrayIndex ai,
+        typename Mapping::ArrayExtents::Index ai,
         RecordCoord rc,
         Blobs& blobs) -> decltype(auto)
     {
@@ -386,7 +386,7 @@ namespace llama
         using Mapping = TMapping;
         using BlobType = TBlobType;
         using ArrayExtents = typename Mapping::ArrayExtents;
-        using ArrayIndex = typename Mapping::ArrayIndex;
+        using ArrayIndex = typename ArrayExtents::Index;
         using RecordDim = typename Mapping::RecordDim;
         using Accessor = TAccessor;
         using iterator = Iterator<View>;
@@ -670,7 +670,7 @@ namespace llama
         using ParentView = std::remove_const_t<std::remove_reference_t<StoredParentView>>; ///< type of the parent view
         using Mapping = typename ParentView::Mapping; ///< mapping of the parent view
         using ArrayExtents = typename Mapping::ArrayExtents; ///< array extents of the parent view
-        using ArrayIndex = typename Mapping::ArrayIndex; ///< array index of the parent view
+        using ArrayIndex = typename ArrayExtents::Index; ///< array index of the parent view
 
         using size_type = typename ArrayExtents::value_type;
 
@@ -740,6 +740,6 @@ namespace llama
     /// SubView vview(view); will store a reference to view.
     /// SubView vview(std::move(view)); will store the view.
     template<typename TStoredParentView>
-    SubView(TStoredParentView&&, typename std::remove_reference_t<TStoredParentView>::Mapping::ArrayIndex)
+    SubView(TStoredParentView&&, typename std::remove_reference_t<TStoredParentView>::Mapping::ArrayExtents::Index)
         -> SubView<TStoredParentView>;
 } // namespace llama

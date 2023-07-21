@@ -134,13 +134,16 @@ namespace llama::mapping
             = InnerMapping<TArrayExtents, internal::ReplaceTypesByProjectionResults<TRecordDim, TProjectionMap>>;
         using ProjectionMap = TProjectionMap;
         using ArrayExtents = typename Inner::ArrayExtents;
-        using ArrayIndex = typename Inner::ArrayIndex;
         using RecordDim = TRecordDim; // hide Inner::RecordDim
         using Inner::blobCount;
         using Inner::blobSize;
         using Inner::extents;
         using Inner::Inner;
 
+    protected:
+        using ArrayIndex = typename ArrayExtents::Index;
+
+    public:
         template<typename RecordCoord>
         LLAMA_FN_HOST_ACC_INLINE static constexpr auto isComputed(RecordCoord) -> bool
         {
@@ -150,7 +153,7 @@ namespace llama::mapping
 
         template<std::size_t... RecordCoords, typename BlobArray>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto compute(
-            typename Inner::ArrayIndex ai,
+            ArrayIndex ai,
             RecordCoord<RecordCoords...> rc,
             BlobArray& blobs) const
         {

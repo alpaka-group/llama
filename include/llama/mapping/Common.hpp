@@ -17,10 +17,13 @@ namespace llama::mapping
     struct MappingBase : protected TArrayExtents
     {
         using ArrayExtents = TArrayExtents;
-        using ArrayIndex = typename ArrayExtents::Index;
         using RecordDim = TRecordDim;
+
+    protected:
+        using ArrayIndex = typename ArrayExtents::Index;
         using size_type = typename ArrayExtents::value_type;
 
+    public:
         constexpr MappingBase() = default;
 
         LLAMA_FN_HOST_ACC_INLINE

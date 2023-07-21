@@ -57,14 +57,14 @@ The view requires each mapping to fulfill at least the following concept:
     template <typename M>
     concept Mapping = requires(M m) {
         typename M::ArrayExtents;
-        typename M::ArrayIndex;
         typename M::RecordDim;
         { m.extents() } -> std::same_as<typename M::ArrayExtents>;
         { +M::blobCount } -> std::same_as<std::size_t>;
+        requires isConstexpr<M::blobCount>;
         { m.blobSize(std::size_t{}) } -> std::same_as<typename M::ArrayExtents::value_type>;
     };
 
-That is, each mapping type needs to expose the types :cpp:`ArrayExtents`, :cpp:`ArrayIndex` and :cpp:`RecordDim`.
+That is, each mapping type needs to expose the types :cpp:`ArrayExtents` and :cpp:`RecordDim`.
 Each mapping also needs to provide a getter `extents()` to retrieve the runtime value of the :cpp:`ArrayExtents` held by the mapping,
 and provide a :cpp:`static constexpr` member variable :cpp:`blobCount`.
 Finally, the member function :cpp:`blobSize(i)` gives the size in bytes of the :cpp:`i`\ th block of memory needed for this mapping

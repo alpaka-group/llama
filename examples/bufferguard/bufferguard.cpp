@@ -27,7 +27,6 @@ template<template<typename, typename> typename InnerMapping, typename TRecordDim
 struct GuardMapping2D : llama::ArrayExtentsDynamic<std::size_t, 2>
 {
     using ArrayExtents = llama::ArrayExtentsDynamic<std::size_t, 2>;
-    using ArrayIndex = llama::ArrayIndex<std::size_t, 2>;
     using RecordDim = TRecordDim;
 
     constexpr GuardMapping2D() = default;
@@ -71,7 +70,7 @@ struct GuardMapping2D : llama::ArrayExtentsDynamic<std::size_t, 2>
     }
 
     template<std::size_t... RecordCoords>
-    constexpr auto blobNrAndOffset(ArrayIndex ai, llama::RecordCoord<RecordCoords...> rc = {}) const
+    constexpr auto blobNrAndOffset(ArrayExtents::Index ai, llama::RecordCoord<RecordCoords...> rc = {}) const
         -> llama::NrAndOffset<std::size_t>
     {
         // [0][0] is at left top

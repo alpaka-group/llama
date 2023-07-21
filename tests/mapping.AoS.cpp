@@ -9,7 +9,7 @@ TEST_CASE("mapping.AoS.Packed.address")
     {
         using Mapping = llama::mapping::PackedAoS<decltype(arrayExtents), Particle>;
         auto mapping = Mapping{arrayExtents};
-        using ArrayIndex = typename Mapping::ArrayIndex;
+        using ArrayIndex = typename Mapping::ArrayExtents::Index;
 
         STATIC_REQUIRE(mapping.blobCount == 1);
         CHECK(mapping.blobSize(0) == 14336);
@@ -72,7 +72,7 @@ TEST_CASE("mapping.AoS.Packed.fortran.address")
         using Mapping
             = llama::mapping::PackedAoS<decltype(arrayExtents), Particle, llama::mapping::LinearizeArrayDimsFortran>;
         auto mapping = Mapping{arrayExtents};
-        using ArrayIndex = typename Mapping::ArrayIndex;
+        using ArrayIndex = typename Mapping::ArrayExtents::Index;
 
         STATIC_REQUIRE(mapping.blobCount == 1);
         CHECK(mapping.blobSize(0) == 14336);
@@ -135,7 +135,7 @@ TEST_CASE("mapping.AoS.Packed.morton.address")
         using Mapping
             = llama::mapping::PackedAoS<decltype(arrayExtents), Particle, llama::mapping::LinearizeArrayDimsMorton>;
         auto mapping = Mapping{arrayExtents};
-        using ArrayIndex = typename Mapping::ArrayIndex;
+        using ArrayIndex = typename Mapping::ArrayExtents::Index;
 
         STATIC_REQUIRE(mapping.blobCount == 1);
         CHECK(mapping.blobSize(0) == 14336);
@@ -197,7 +197,7 @@ TEST_CASE("mapping.AoS.Aligned.address")
     {
         using Mapping = llama::mapping::AlignedAoS<decltype(arrayExtents), Particle>;
         auto mapping = Mapping{arrayExtents};
-        using ArrayIndex = typename Mapping::ArrayIndex;
+        using ArrayIndex = typename Mapping::ArrayExtents::Index;
 
         STATIC_REQUIRE(mapping.blobCount == 1);
         CHECK(mapping.blobSize(0) == 16384);
@@ -259,7 +259,7 @@ TEST_CASE("mapping.AoS.aligned_min.address")
     {
         using Mapping = llama::mapping::MinAlignedAoS<decltype(arrayExtents), Particle>;
         auto mapping = Mapping{arrayExtents};
-        using ArrayIndex = typename Mapping::ArrayIndex;
+        using ArrayIndex = typename Mapping::ArrayExtents::Index;
 
         STATIC_REQUIRE(mapping.blobCount == 1);
         CHECK(mapping.blobSize(0) == 14336);

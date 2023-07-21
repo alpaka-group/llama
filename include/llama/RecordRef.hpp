@@ -336,14 +336,14 @@ namespace llama
     /// should not be created by the user. They are returned from various access functions in \ref View and RecordRef
     /// itself.
     template<typename TView, typename TBoundRecordCoord, bool OwnView>
-    struct RecordRef : private TView::Mapping::ArrayIndex
+    struct RecordRef : private TView::Mapping::ArrayExtents::Index
     {
         using View = TView; ///< View this record reference points into.
         using BoundRecordCoord
             = TBoundRecordCoord; ///< Record coords into View::RecordDim which are already bound by this RecordRef.
 
     private:
-        using ArrayIndex = typename View::Mapping::ArrayIndex;
+        using ArrayIndex = typename View::Mapping::ArrayExtents::Index;
         using RecordDim = typename View::Mapping::RecordDim;
 
         std::conditional_t<OwnView, View, View&> view;
