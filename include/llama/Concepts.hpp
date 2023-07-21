@@ -21,7 +21,6 @@ namespace llama
     template<typename M>
     concept Mapping = requires(M m) {
         typename M::ArrayExtents;
-        typename M::ArrayIndex;
         typename M::RecordDim;
         {
             m.extents()
@@ -36,7 +35,7 @@ namespace llama
     };
 
     template<typename M, typename RC>
-    concept PhysicalField = requires(M m, typename M::ArrayIndex ai) {
+    concept PhysicalField = requires(M m, typename M::ArrayExtents::Index ai) {
         {
             m.blobNrAndOffset(ai, RC{})
         } -> std::same_as<NrAndOffset<typename M::ArrayExtents::value_type>>;
@@ -81,11 +80,12 @@ namespace llama
         || (ProxyReference<R> && std::is_same_v<typename R::value_type, T>);
 
     template<typename M, typename RC>
-    concept ComputedField = M::isComputed(RC{}) && requires(M m, typename M::ArrayIndex ai, std::byte** blobs) {
-        {
-            m.compute(ai, RC{}, blobs)
-        } -> AnyReferenceTo<GetType<typename M::RecordDim, RC>>;
-    };
+    concept ComputedField
+        = M::isComputed(RC{}) && requires(M m, typename M::ArrayExtents::Index ai, std::byte** blobs) {
+              {
+                  m.compute(ai, RC{}, blobs)
+              } -> AnyReferenceTo<GetType<typename M::RecordDim, RC>>;
+          };
 
     template<typename M>
     struct MakeIsComputed

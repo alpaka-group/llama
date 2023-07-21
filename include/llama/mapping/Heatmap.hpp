@@ -32,14 +32,14 @@ namespace llama::mapping
 
     private:
         using size_type = typename Mapping::ArrayExtents::value_type;
+        using ArrayIndex = typename Mapping::ArrayExtents::Index;
 
     public:
         using Inner = Mapping;
         inline static constexpr std::size_t granularity = Granularity;
         using CountType = TCountType;
-        using typename Mapping::ArrayExtents;
-        using typename Mapping::ArrayIndex;
-        using typename Mapping::RecordDim;
+        using ArrayExtents = typename Mapping::ArrayExtents;
+        using RecordDim = typename Mapping::RecordDim;
 
         // We duplicate every blob of the inner mapping with a shadow blob, where we count the accesses
         inline static constexpr std::size_t blobCount = Mapping::blobCount * 2;
@@ -81,10 +81,8 @@ namespace llama::mapping
         }
 
         template<std::size_t... RecordCoords, typename Blobs>
-        LLAMA_FN_HOST_ACC_INLINE auto compute(
-            typename Mapping::ArrayIndex ai,
-            RecordCoord<RecordCoords...> rc,
-            Blobs& blobs) const -> decltype(auto)
+        LLAMA_FN_HOST_ACC_INLINE auto compute(ArrayIndex ai, RecordCoord<RecordCoords...> rc, Blobs& blobs) const
+            -> decltype(auto)
         {
             static_assert(
                 !std::is_const_v<Blobs>,

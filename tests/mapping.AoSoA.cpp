@@ -30,7 +30,7 @@ TEST_CASE("mapping.AoSoA.4.address")
     {
         using Mapping = llama::mapping::AoSoA<decltype(arrayExtents), Particle, 4>;
         auto mapping = Mapping{arrayExtents};
-        using ArrayIndex = typename Mapping::ArrayIndex;
+        using ArrayIndex = typename Mapping::ArrayExtents::Index;
 
         {
             const auto ai = ArrayIndex{0, 0};

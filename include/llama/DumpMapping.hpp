@@ -107,9 +107,9 @@ namespace llama
         template<typename View, typename RecordCoord>
         void boxesFromComputedField(
             View& view,
-            typename View::Mapping::ArrayIndex ai,
+            typename View::Mapping::ArrayExtents::Index ai,
             RecordCoord rc,
-            std::vector<FieldBox<typename View::Mapping::ArrayIndex>>& infos)
+            std::vector<FieldBox<typename View::Mapping::ArrayExtents::Index>>& infos)
         {
             using Mapping = typename View::Mapping;
             using RecordDim = typename Mapping::RecordDim;
@@ -182,9 +182,9 @@ namespace llama
         }
 
         template<typename Mapping>
-        auto boxesFromMapping(const Mapping& mapping) -> std::vector<FieldBox<typename Mapping::ArrayIndex>>
+        auto boxesFromMapping(const Mapping& mapping) -> std::vector<FieldBox<typename Mapping::ArrayExtents::Index>>
         {
-            std::vector<FieldBox<typename Mapping::ArrayIndex>> infos;
+            std::vector<FieldBox<typename Mapping::ArrayExtents::Index>> infos;
 
             std::optional<decltype(allocView(mapping))> view;
             if constexpr(hasAnyComputedField<Mapping>())

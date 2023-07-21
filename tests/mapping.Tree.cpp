@@ -64,7 +64,7 @@ TEST_CASE("mapping.Tree.empty")
     STATIC_REQUIRE(mapping.blobCount == 1);
     CHECK(mapping.blobSize(0) == 14336);
 
-    using ArrayIndex = typename Mapping::ArrayIndex;
+    using ArrayIndex = typename Mapping::ArrayExtents::Index;
     {
         const auto ai = ArrayIndex{0, 0};
         CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 0);
@@ -134,7 +134,7 @@ TEST_CASE("mapping.Tree.Idem")
     STATIC_REQUIRE(mapping.blobCount == 1);
     CHECK(mapping.blobSize(0) == 14336);
 
-    using ArrayIndex = typename Mapping::ArrayIndex;
+    using ArrayIndex = typename Mapping::ArrayExtents::Index;
     {
         const auto ai = ArrayIndex{0, 0};
         CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 0);
@@ -204,7 +204,7 @@ TEST_CASE("mapping.Tree.LeafOnlyRT")
     STATIC_REQUIRE(mapping.blobCount == 1);
     CHECK(mapping.blobSize(0) == 14336);
 
-    using ArrayIndex = typename Mapping::ArrayIndex;
+    using ArrayIndex = typename Mapping::ArrayExtents::Index;
     {
         const auto ai = ArrayIndex{0, 0};
         CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 0);
@@ -274,7 +274,7 @@ TEST_CASE("mapping.Tree.MoveRTDown<>")
     STATIC_REQUIRE(mapping.blobCount == 1);
     CHECK(mapping.blobSize(0) == 14336);
 
-    using ArrayIndex = typename Mapping::ArrayIndex;
+    using ArrayIndex = typename Mapping::ArrayExtents::Index;
     {
         const auto ai = ArrayIndex{0, 0};
         CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 0);
@@ -332,7 +332,7 @@ TEST_CASE("mapping.Tree.MoveRTDown<0>")
     STATIC_REQUIRE(mapping.blobCount == 1);
     CHECK(mapping.blobSize(0) == 14336);
 
-    using ArrayIndex = typename Mapping::ArrayIndex;
+    using ArrayIndex = typename Mapping::ArrayExtents::Index;
     {
         const auto ai = ArrayIndex{0, 0};
         CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 0);
@@ -390,7 +390,7 @@ TEST_CASE("mapping.Tree.MoveRTDown<0,0>")
     STATIC_REQUIRE(mapping.blobCount == 1);
     CHECK(mapping.blobSize(0) == 32768);
 
-    using ArrayIndex = typename Mapping::ArrayIndex;
+    using ArrayIndex = typename Mapping::ArrayExtents::Index;
     {
         const auto ai = ArrayIndex{0, 0};
         CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 0);
@@ -448,7 +448,7 @@ TEST_CASE("mapping.Tree.MoveRTDownFixed<>")
     STATIC_REQUIRE(mapping.blobCount == 1);
     CHECK(mapping.blobSize(0) == 14336);
 
-    using ArrayIndex = typename Mapping::ArrayIndex;
+    using ArrayIndex = typename Mapping::ArrayExtents::Index;
     {
         const auto ai = ArrayIndex{0, 0};
         CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 0);
@@ -506,7 +506,7 @@ TEST_CASE("mapping.Tree.MoveRTDownFixed<0>")
     STATIC_REQUIRE(mapping.blobCount == 1);
     CHECK(mapping.blobSize(0) == 14336);
 
-    using ArrayIndex = typename Mapping::ArrayIndex;
+    using ArrayIndex = typename Mapping::ArrayExtents::Index;
     {
         const auto ai = ArrayIndex{0, 0};
         CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 0);
@@ -564,7 +564,7 @@ TEST_CASE("mapping.Tree.MoveRTDownFixed<0,0>")
     STATIC_REQUIRE(mapping.blobCount == 1);
     CHECK(mapping.blobSize(0) == 32768);
 
-    using ArrayIndex = typename Mapping::ArrayIndex;
+    using ArrayIndex = typename Mapping::ArrayExtents::Index;
     {
         const auto ai = ArrayIndex{0, 0};
         CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 0);
@@ -629,7 +629,7 @@ TEST_CASE("mapping.Tree.vectorblocks.runtime")
     STATIC_REQUIRE(mapping.blobCount == 1);
     CHECK(mapping.blobSize(0) == 14336);
 
-    using ArrayIndex = typename Mapping::ArrayIndex;
+    using ArrayIndex = typename Mapping::ArrayExtents::Index;
     {
         const auto ai = ArrayIndex{0, 0};
         CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 0);
@@ -694,7 +694,7 @@ TEST_CASE("mapping.Tree.vectorblocks.compiletime")
     STATIC_REQUIRE(mapping.blobCount == 1);
     CHECK(mapping.blobSize(0) == 14336);
 
-    using ArrayIndex = typename Mapping::ArrayIndex;
+    using ArrayIndex = typename Mapping::ArrayExtents::Index;
     {
         const auto ai = ArrayIndex{0, 0};
         CHECK(mapping.blobNrAndOffset<0, 0>(ai).offset == 0);

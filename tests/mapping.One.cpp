@@ -9,7 +9,7 @@ TEST_CASE("mapping.One.Packed.address")
     {
         using Mapping = llama::mapping::PackedOne<decltype(arrayExtents), Particle>;
         auto mapping = Mapping{arrayExtents};
-        using ArrayIndex = typename Mapping::ArrayIndex;
+        using ArrayIndex = typename Mapping::ArrayExtents::Index;
 
         STATIC_REQUIRE(mapping.blobCount == 1);
         STATIC_REQUIRE(mapping.blobSize(0) == 56);
@@ -41,7 +41,7 @@ TEST_CASE("mapping.One.Aligned.address")
     {
         using Mapping = llama::mapping::AlignedOne<decltype(arrayExtents), Particle>;
         auto mapping = Mapping{arrayExtents};
-        using ArrayIndex = typename Mapping::ArrayIndex;
+        using ArrayIndex = typename Mapping::ArrayExtents::Index;
 
         STATIC_REQUIRE(mapping.blobCount == 1);
         STATIC_REQUIRE(mapping.blobSize(0) == 60);
@@ -73,7 +73,7 @@ TEST_CASE("mapping.One.MinAligned.address")
     {
         using Mapping = llama::mapping::MinAlignedOne<decltype(arrayExtents), Particle>;
         auto mapping = Mapping{arrayExtents};
-        using ArrayIndex = typename Mapping::ArrayIndex;
+        using ArrayIndex = typename Mapping::ArrayExtents::Index;
 
         STATIC_REQUIRE(mapping.blobCount == 1);
         STATIC_REQUIRE(mapping.blobSize(0) == 56);

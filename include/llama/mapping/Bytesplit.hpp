@@ -25,13 +25,16 @@ namespace llama::mapping
         using Inner = InnerMapping<TArrayExtents, internal::SplitBytes<TRecordDim>>;
 
         using ArrayExtents = typename Inner::ArrayExtents;
-        using ArrayIndex = typename Inner::ArrayIndex;
         using RecordDim = TRecordDim; // hide Inner::RecordDim
         using Inner::blobCount;
 
         using Inner::blobSize;
         using Inner::extents;
 
+    private:
+        using ArrayIndex = typename TArrayExtents::Index;
+
+    public:
         LLAMA_FN_HOST_ACC_INLINE
         constexpr explicit Bytesplit(TArrayExtents extents, TRecordDim = {}) : Inner(extents)
         {

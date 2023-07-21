@@ -171,7 +171,7 @@ namespace llama::mapping
 
         template<std::size_t... RecordCoords, typename Blobs>
         LLAMA_FN_HOST_ACC_INLINE auto compute(
-            typename Mapping::ArrayIndex ai,
+            typename Mapping::ArrayExtents::Index ai,
             RecordCoord<RecordCoords...> rc,
             Blobs& blobs) const -> decltype(auto)
         {

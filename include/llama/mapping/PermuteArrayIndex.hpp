@@ -16,10 +16,10 @@ namespace llama::mapping
     {
     private:
         using size_type = typename Mapping::ArrayExtents::value_type;
+        using ArrayIndex = typename Mapping::ArrayExtents::Index;
 
     public:
         using Inner = Mapping;
-        using ArrayIndex = typename Inner::ArrayIndex;
 
         constexpr PermuteArrayIndex() = default;
 
