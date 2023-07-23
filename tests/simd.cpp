@@ -8,10 +8,10 @@
 // MSVC does not support std::experimental::simd and #warning
 #elif defined(__NVCOMPILER)
 #    pragma message(                                                                                                  \
-        "LLAMA SIMD tests disabled for nvc++. It fails to compile std::experimental::simd due to unrecognized intrinsics")
+            "LLAMA SIMD tests disabled for nvc++. It fails to compile std::experimental::simd due to unrecognized intrinsics")
 #elif defined(__NVCC__)
 #    pragma message(                                                                                                  \
-        "LLAMA SIMD tests disabled for nvcc. It fails to compile std::experimental::simd due to invalid type conversions")
+            "LLAMA SIMD tests disabled for nvcc. It fails to compile std::experimental::simd due to invalid type conversions")
 #elif defined(_LIBCPP_VERSION)
 #    warning "LLAMA SIMD tests disabled for libc++. Their std::experimental::simd implementation is incomplete"
 #elif !__has_include(<experimental/simd>)
