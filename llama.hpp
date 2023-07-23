@@ -5200,7 +5200,7 @@ namespace llama
     };
 
     template<typename... Elements>
-    LLAMA_HOST_ACC Tuple(Elements...)->Tuple<std::remove_cv_t<std::remove_reference_t<Elements>>...>;
+    LLAMA_HOST_ACC Tuple(Elements...) -> Tuple<std::remove_cv_t<std::remove_reference_t<Elements>>...>;
 
     template<std::size_t I, typename... Elements>
     LLAMA_FN_HOST_ACC_INLINE constexpr auto get(Tuple<Elements...>& tuple) -> auto&
