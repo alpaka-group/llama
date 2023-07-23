@@ -1,6 +1,5 @@
 var NAVTREEINDEX1 =
 {
-"RecordRef_8hpp.html#a0f8572ce32d64cda19cb705d78247bed":[3,0,0,0,16,34],
 "RecordRef_8hpp.html#a15a8a37491a6b1bba8aabe616efa6434":[3,0,0,0,16,25],
 "RecordRef_8hpp.html#a1b3659d40a3d3514d50ef854e9330d99":[3,0,0,0,16,39],
 "RecordRef_8hpp.html#a1ba0c9b09c6a1e76d0d8f9c3e2fbe3ba":[3,0,0,0,16,42],
@@ -249,5 +248,6 @@ var NAVTREEINDEX1 =
 "namespacellama.html#a0af0304a902bcb5c5c90377ad751033a":[1,0,0,39],
 "namespacellama.html#a0b641cbeb889f9a3002ae9ec9b6569c9":[1,0,0,84],
 "namespacellama.html#a0cf4c61546502674c83b7e32611aca4d":[1,0,0,136],
-"namespacellama.html#a0d0fda5486eb5976f940a638f0cdd9d4":[1,0,0,67]
+"namespacellama.html#a0d0fda5486eb5976f940a638f0cdd9d4":[1,0,0,67],
+"namespacellama.html#a0f8572ce32d64cda19cb705d78247bed":[1,0,0,75]
 };
