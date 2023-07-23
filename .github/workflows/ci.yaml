@@ -19,11 +19,11 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v3
-    - uses: DoozyX/clang-format-lint-action@v0.15
+    - uses: DoozyX/clang-format-lint-action@v0.16.2
       with:
         exclude: './thirdparty'
         extensions: 'cpp,hpp,h,cu'
-        clangFormatVersion: 15
+        clangFormatVersion: 16
         inplace: True
     - name: git diff
       run: git diff
