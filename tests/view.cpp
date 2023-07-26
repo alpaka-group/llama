@@ -4,7 +4,6 @@
 #include "common.hpp"
 
 #include <atomic>
-#include <deque>
 
 namespace tag
 {
@@ -311,16 +310,46 @@ TEST_CASE("view.indexing")
         });
 }
 
-TEST_CASE("view.transformBlobs")
+TEST_CASE("view.transformBlobs.copy")
 {
     auto view = llama::allocView(llama::mapping::AoS{llama::ArrayExtents{16, 16}, Particle{}});
     iotaFillView(view);
 
     auto copy = llama::transformBlobs(
         view,
-        [](auto& vector) { return std::deque<std::byte>(vector.begin(), vector.end()); });
-    STATIC_REQUIRE(std::is_same_v<std::decay_t<decltype(copy.blobs()[0])>, std::deque<std::byte>>);
+        [](auto& vector)
+        {
+            auto* p = reinterpret_cast<unsigned char*>(vector.data());
+            return std::vector<unsigned char>(p, p + vector.size());
+        });
+    STATIC_REQUIRE(std::is_same_v<std::decay_t<decltype(copy.blobs()[0])>, std::vector<unsigned char>>);
+    iotaCheckView(view);
     iotaCheckView(copy);
+}
+
+TEST_CASE("view.transformBlobs.move")
+{
+    auto view = llama::allocView(
+        llama::mapping::AoS{llama::ArrayExtents{16, 16}, Particle{}},
+        llama::bloballoc::UniquePtr{});
+    iotaFillView(view);
+
+    auto newDeleter
+        = [](unsigned char* ptr) { decltype(view)::BlobType::deleter_type{}(reinterpret_cast<std::byte*>(ptr)); };
+    auto moved = llama::transformBlobs(
+        std::move(view),
+        [&](auto&& p)
+        {
+            return std::unique_ptr<unsigned char[], decltype(newDeleter)>{
+                reinterpret_cast<unsigned char*>(p.release()),
+                newDeleter};
+        });
+    STATIC_REQUIRE(std::is_same_v<
+                   std::decay_t<decltype(moved.blobs()[0])>,
+                   std::unique_ptr<unsigned char[], decltype(newDeleter)>>);
+    iotaCheckView(moved);
+    for(const auto& blob : view.blobs()) // NOLINT(bugprone-use-after-move,hicpp-invalid-access-moved)
+        CHECK(blob.get() == nullptr);
 }
 
 TEMPLATE_TEST_CASE(
