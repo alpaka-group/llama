@@ -585,24 +585,51 @@ namespace llama
 
     namespace internal
     {
+        // remove in C++23, from: https://en.cppreference.com/w/cpp/utility/forward_like
+        // NOLINTBEGIN
+        template<class T, class U>
+        [[nodiscard]] constexpr auto&& forward_like(U&& x) noexcept
+        {
+            constexpr bool is_adding_const = std::is_const_v<std::remove_reference_t<T>>;
+            if constexpr(std::is_lvalue_reference_v<T&&>)
+            {
+                if constexpr(is_adding_const)
+                    return std::as_const(x);
+                else
+                    return static_cast<U&>(x);
+            }
+            else
+            {
+                if constexpr(is_adding_const)
+                    return std::move(std::as_const(x));
+                else
+                    return std::move(x);
+            }
+        }
+        // NOLINTEND
+
         template<typename Blobs, typename TransformBlobFunc, std::size_t... Is>
         LLAMA_FN_HOST_ACC_INLINE auto makeTransformedBlobArray(
-            Blobs& blobs,
+            Blobs&& blobs,
             const TransformBlobFunc& transformBlob,
             std::integer_sequence<std::size_t, Is...>)
         {
-            return llama::Array{transformBlob(blobs[Is])...};
+            return llama::Array{transformBlob(forward_like<Blobs>(blobs[Is]))...};
         }
     } // namespace internal
 
     /// Applies the given transformation to the blobs of a view and creates a new view with the transformed blobs and
     /// the same mapping and accessor as the old view.
-    template<typename View, typename TransformBlobFunc, typename = std::enable_if_t<isView<std::decay_t<View>>>>
-    LLAMA_FN_HOST_ACC_INLINE auto transformBlobs(View& view, const TransformBlobFunc& transformBlob)
+    template<typename ViewFwd, typename TransformBlobFunc, typename = std::enable_if_t<isView<std::decay_t<ViewFwd>>>>
+    LLAMA_FN_HOST_ACC_INLINE auto transformBlobs(ViewFwd&& view, const TransformBlobFunc& transformBlob)
     {
-        constexpr auto blobCount = std::decay_t<View>::Mapping::blobCount;
-        auto blobs
-            = internal::makeTransformedBlobArray(view.blobs(), transformBlob, std::make_index_sequence<blobCount>{});
+        using View = std::decay_t<ViewFwd>;
+        constexpr auto blobCount = View::Mapping::blobCount;
+
+        auto blobs = internal::makeTransformedBlobArray(
+            internal::forward_like<ViewFwd>(view.blobs()),
+            transformBlob,
+            std::make_index_sequence<blobCount>{});
         return llama::View<typename View::Mapping, typename decltype(blobs)::value_type, typename View::Accessor>{
             view.mapping(),
             std::move(blobs),
@@ -614,15 +641,15 @@ namespace llama
     /// \return A new view with the same mapping as view, where each blob refers to the blob in view.
     template<
         typename View,
-        typename NewBlobType = CopyConst<View, std::byte>*,
+        typename NewBlobType = CopyConst<std::remove_reference_t<View>, std::byte>*,
         typename = std::enable_if_t<isView<std::decay_t<View>>>>
-    LLAMA_FN_HOST_ACC_INLINE auto shallowCopy(View& view)
+    LLAMA_FN_HOST_ACC_INLINE auto shallowCopy(View&& view)
     {
         if constexpr(std::is_same_v<typename std::decay_t<View>::BlobType, NewBlobType>)
             return view;
         else
             return transformBlobs(
-                view,
+                std::forward<View>(view),
                 [](auto& blob)
                 {
                     LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
@@ -632,33 +659,33 @@ namespace llama
     }
 
     // Creates a new view from an existing view with the given accessor.
-    // \param view A view which's mapping and blobs are copied into a new view with the different accessor. If you no
-    // longer need the old view, consider moving it into the argument of this function.
-    template<typename NewAccessor, typename Mapping, typename BlobType, typename OldAccessor>
-    LLAMA_FN_HOST_ACC_INLINE auto withAccessor(View<Mapping, BlobType, OldAccessor> view, NewAccessor newAccessor = {})
+    // \param view A view which's mapping and blobs are forwarded into a new view with the different accessor.
+    template<typename NewAccessor, typename ViewFwd, typename = std::enable_if_t<isView<std::decay_t<ViewFwd>>>>
+    LLAMA_FN_HOST_ACC_INLINE auto withAccessor(ViewFwd&& view, NewAccessor newAccessor = {})
     {
-        return View<Mapping, BlobType, NewAccessor>{
-            std::move(view.mapping()),
-            std::move(view.blobs()),
+        using OldView = std::decay_t<ViewFwd>;
+        return View<typename OldView::Mapping, typename OldView::BlobType, NewAccessor>{
+            internal::forward_like<ViewFwd>(view.mapping()),
+            internal::forward_like<ViewFwd>(view.blobs()),
             std::move(newAccessor)};
     }
 
     // Creates a new view from an existing view with the given mapping.
-    // \param view A view which's accessor and blobs are copied into a new view with the different mapping. If you no
-    // longer need the old view, consider moving it into the argument of this function.
-    template<typename NewMapping, typename Mapping, typename BlobType, typename Accessor>
-    LLAMA_FN_HOST_ACC_INLINE auto withMapping(View<Mapping, BlobType, Accessor> view, NewMapping newMapping = {})
+    // \param view A view which's accessor and blobs are forwarded into a new view with the different mapping.
+    template<typename NewMapping, typename ViewFwd, typename = std::enable_if_t<isView<std::decay_t<ViewFwd>>>>
+    LLAMA_FN_HOST_ACC_INLINE auto withMapping(ViewFwd&& view, NewMapping newMapping = {})
     {
-        static_assert(Mapping::blobCount == NewMapping::blobCount);
-        for(std::size_t i = 0; i < Mapping::blobCount; i++)
+        using OldView = std::decay_t<ViewFwd>;
+        static_assert(OldView::Mapping::blobCount == NewMapping::blobCount);
+        for(std::size_t i = 0; i < NewMapping::blobCount; i++)
         {
             assert(view.mapping().blobSize(i) == newMapping.blobSize(i));
         }
 
-        return View<NewMapping, BlobType, Accessor>{
+        return View<NewMapping, typename OldView::BlobType, typename OldView::Accessor>{
             std::move(newMapping),
-            std::move(view.blobs()),
-            std::move(view.accessor())};
+            internal::forward_like<ViewFwd>(view.blobs()),
+            internal::forward_like<ViewFwd>(view.accessor())};
     }
 
     /// Like a \ref View, but array indices are shifted.
