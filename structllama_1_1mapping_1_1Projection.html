@@ -86,6 +86,7 @@ $(document).ready(function(){initNavTree('structllama_1_1mapping_1_1Projection.h
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pro-types">Protected Types</a> &#124;
 <a href="structllama_1_1mapping_1_1Projection-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">llama::mapping::Projection&lt; TArrayExtents, TRecordDim, InnerMapping, TProjectionMap &gt; Struct Template Reference</div>  </div>
@@ -124,18 +125,16 @@ Public Types</h2></td></tr>
 <tr class="separator:a1e5e2a679aa7c64196360208dcd0bc49"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a561ee92f75381d34b3ec7a0b8a936538"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Projection.html#a561ee92f75381d34b3ec7a0b8a936538">ArrayExtents</a> = typename Inner::ArrayExtents</td></tr>
 <tr class="separator:a561ee92f75381d34b3ec7a0b8a936538"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac1431cba9bc7acd543d3320b2415dbcb"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Projection.html#ac1431cba9bc7acd543d3320b2415dbcb">ArrayIndex</a> = typename Inner::ArrayIndex</td></tr>
-<tr class="separator:ac1431cba9bc7acd543d3320b2415dbcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e07d10e24daa52a2ccb859995ab3796"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Projection.html#a8e07d10e24daa52a2ccb859995ab3796">RecordDim</a> = TRecordDim</td></tr>
 <tr class="separator:a8e07d10e24daa52a2ccb859995ab3796"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a4b003eb3b27766158b40934b86bef838"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RecordCoords, typename BlobArray &gt; </td></tr>
-<tr class="memitem:a4b003eb3b27766158b40934b86bef838"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Projection.html#a4b003eb3b27766158b40934b86bef838">compute</a> (typename Inner::ArrayIndex ai, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt; rc, BlobArray &amp;blobs) const</td></tr>
-<tr class="separator:a4b003eb3b27766158b40934b86bef838"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1cc3a5431bcb81a1475d502ecd25ae61"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RecordCoords, typename BlobArray &gt; </td></tr>
+<tr class="memitem:a1cc3a5431bcb81a1475d502ecd25ae61"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Projection.html#a1cc3a5431bcb81a1475d502ecd25ae61">compute</a> (<a class="el" href="structllama_1_1mapping_1_1Projection.html#afcc2884bd643e8f2caa79880b08614a3">ArrayIndex</a> ai, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt; rc, BlobArray &amp;blobs) const</td></tr>
+<tr class="separator:a1cc3a5431bcb81a1475d502ecd25ae61"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a96b5a798b33bf8b5a8dd3739ebeea74b"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RecordCoords&gt; </td></tr>
-<tr class="memitem:a96b5a798b33bf8b5a8dd3739ebeea74b"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Projection.html#a96b5a798b33bf8b5a8dd3739ebeea74b">blobNrAndOffset</a> (<a class="el" href="structllama_1_1mapping_1_1Projection.html#ac1431cba9bc7acd543d3320b2415dbcb">ArrayIndex</a> ai, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt; rc={}) const -&gt; <a class="el" href="structllama_1_1NrAndOffset.html">NrAndOffset</a>&lt; typename <a class="el" href="structllama_1_1ArrayExtents.html#a26ddad4db80efe93143b86c766b9a69f">ArrayExtents::value_type</a> &gt;</td></tr>
+<tr class="memitem:a96b5a798b33bf8b5a8dd3739ebeea74b"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Projection.html#a96b5a798b33bf8b5a8dd3739ebeea74b">blobNrAndOffset</a> (<a class="el" href="structllama_1_1mapping_1_1Projection.html#afcc2884bd643e8f2caa79880b08614a3">ArrayIndex</a> ai, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt; rc={}) const -&gt; <a class="el" href="structllama_1_1NrAndOffset.html">NrAndOffset</a>&lt; typename <a class="el" href="structllama_1_1ArrayExtents.html#a26ddad4db80efe93143b86c766b9a69f">ArrayExtents::value_type</a> &gt;</td></tr>
 <tr class="separator:a96b5a798b33bf8b5a8dd3739ebeea74b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
@@ -143,6 +142,11 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:afe951187a320045148991fce5c61b224"><td class="memTemplParams" colspan="2">template&lt;typename RecordCoord &gt; </td></tr>
 <tr class="memitem:afe951187a320045148991fce5c61b224"><td class="memTemplItemLeft" align="right" valign="top">static constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Projection.html#afe951187a320045148991fce5c61b224">isComputed</a> (<a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>) -&gt; bool</td></tr>
 <tr class="separator:afe951187a320045148991fce5c61b224"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-types"></a>
+Protected Types</h2></td></tr>
+<tr class="memitem:afcc2884bd643e8f2caa79880b08614a3"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Projection.html#afcc2884bd643e8f2caa79880b08614a3">ArrayIndex</a> = typename <a class="el" href="structllama_1_1ArrayExtents.html#abce5defd13fa5853289a5b1f744eb243">ArrayExtents::Index</a></td></tr>
+<tr class="separator:afcc2884bd643e8f2caa79880b08614a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename TArrayExtents, typename TRecordDim, template&lt; typename, typename &gt; typename InnerMapping, typename TProjectionMap&gt;<br />
@@ -175,21 +179,29 @@ template&lt;typename TArrayExtents , typename TRecordDim , template&lt; typename
 
 </div>
 </div>
-<a id="ac1431cba9bc7acd543d3320b2415dbcb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac1431cba9bc7acd543d3320b2415dbcb">&#9670;&nbsp;</a></span>ArrayIndex</h2>
+<a id="afcc2884bd643e8f2caa79880b08614a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afcc2884bd643e8f2caa79880b08614a3">&#9670;&nbsp;</a></span>ArrayIndex</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename TArrayExtents , typename TRecordDim , template&lt; typename, typename &gt; typename InnerMapping, typename TProjectionMap &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1Projection.html">llama::mapping::Projection</a>&lt; TArrayExtents, TRecordDim, InnerMapping, TProjectionMap &gt;::<a class="el" href="structllama_1_1mapping_1_1Projection.html#ac1431cba9bc7acd543d3320b2415dbcb">ArrayIndex</a> =  typename Inner::ArrayIndex</td>
+          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1Projection.html">llama::mapping::Projection</a>&lt; TArrayExtents, TRecordDim, InnerMapping, TProjectionMap &gt;::<a class="el" href="structllama_1_1mapping_1_1Projection.html#afcc2884bd643e8f2caa79880b08614a3">ArrayIndex</a> =  typename <a class="el" href="structllama_1_1ArrayExtents.html#abce5defd13fa5853289a5b1f744eb243">ArrayExtents::Index</a></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Projection_8hpp_source.html#l00137">137</a> of file <a class="el" href="Projection_8hpp_source.html">Projection.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Projection_8hpp_source.html#l00144">144</a> of file <a class="el" href="Projection_8hpp_source.html">Projection.hpp</a>.</p>
 
 </div>
 </div>
@@ -243,7 +255,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , template&lt; typename
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Projection_8hpp_source.html#l00138">138</a> of file <a class="el" href="Projection_8hpp_source.html">Projection.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Projection_8hpp_source.html#l00137">137</a> of file <a class="el" href="Projection_8hpp_source.html">Projection.hpp</a>.</p>
 
 </div>
 </div>
@@ -264,7 +276,7 @@ template&lt;std::size_t... RecordCoords&gt; </div>
         <tr>
           <td class="memname">constexpr auto <a class="el" href="structllama_1_1mapping_1_1Projection.html">llama::mapping::Projection</a>&lt; TArrayExtents, TRecordDim, InnerMapping, TProjectionMap &gt;::blobNrAndOffset </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structllama_1_1mapping_1_1Projection.html#ac1431cba9bc7acd543d3320b2415dbcb">ArrayIndex</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1mapping_1_1Projection.html#afcc2884bd643e8f2caa79880b08614a3">ArrayIndex</a>&#160;</td>
           <td class="paramname"><em>ai</em>, </td>
         </tr>
         <tr>
@@ -287,12 +299,12 @@ template&lt;std::size_t... RecordCoords&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Projection_8hpp_source.html#l00170">170</a> of file <a class="el" href="Projection_8hpp_source.html">Projection.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Projection_8hpp_source.html#l00173">173</a> of file <a class="el" href="Projection_8hpp_source.html">Projection.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a4b003eb3b27766158b40934b86bef838"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4b003eb3b27766158b40934b86bef838">&#9670;&nbsp;</a></span>compute()</h2>
+<a id="a1cc3a5431bcb81a1475d502ecd25ae61"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1cc3a5431bcb81a1475d502ecd25ae61">&#9670;&nbsp;</a></span>compute()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -307,7 +319,7 @@ template&lt;std::size_t... RecordCoords, typename BlobArray &gt; </div>
         <tr>
           <td class="memname">constexpr auto <a class="el" href="structllama_1_1mapping_1_1Projection.html">llama::mapping::Projection</a>&lt; TArrayExtents, TRecordDim, InnerMapping, TProjectionMap &gt;::compute </td>
           <td>(</td>
-          <td class="paramtype">typename Inner::ArrayIndex&#160;</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1mapping_1_1Projection.html#afcc2884bd643e8f2caa79880b08614a3">ArrayIndex</a>&#160;</td>
           <td class="paramname"><em>ai</em>, </td>
         </tr>
         <tr>
@@ -335,7 +347,7 @@ template&lt;std::size_t... RecordCoords, typename BlobArray &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Projection_8hpp_source.html#l00152">152</a> of file <a class="el" href="Projection_8hpp_source.html">Projection.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Projection_8hpp_source.html#l00155">155</a> of file <a class="el" href="Projection_8hpp_source.html">Projection.hpp</a>.</p>
 
 </div>
 </div>
@@ -368,7 +380,7 @@ template&lt;typename RecordCoord &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Projection_8hpp_source.html#l00145">145</a> of file <a class="el" href="Projection_8hpp_source.html">Projection.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Projection_8hpp_source.html#l00148">148</a> of file <a class="el" href="Projection_8hpp_source.html">Projection.hpp</a>.</p>
 
 </div>
 </div>
@@ -381,7 +393,7 @@ template&lt;typename RecordCoord &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1Projection.html">Projection</a></li>
-    <li class="footer">Generated on Tue Jul 25 2023 15:58:42 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Thu Jul 27 2023 13:16:29 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

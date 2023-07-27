@@ -85,6 +85,7 @@ $(document).ready(function(){initNavTree('structllama_1_1mapping_1_1MappingBase.
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-types">Protected Types</a> &#124;
 <a href="structllama_1_1mapping_1_1MappingBase-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">llama::mapping::MappingBase&lt; TArrayExtents, TRecordDim &gt; Struct Template Reference</div>  </div>
@@ -127,12 +128,8 @@ $(document).ready(function(){initNavTree('structllama_1_1mapping_1_1MappingBase.
 Public Types</h2></td></tr>
 <tr class="memitem:ab0dff4b5449fbc61e63ef6c8ae427c70"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1MappingBase.html#ab0dff4b5449fbc61e63ef6c8ae427c70">ArrayExtents</a> = TArrayExtents</td></tr>
 <tr class="separator:ab0dff4b5449fbc61e63ef6c8ae427c70"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9e8dbadc1023c973d1d8a10a773e4786"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1MappingBase.html#a9e8dbadc1023c973d1d8a10a773e4786">ArrayIndex</a> = typename <a class="el" href="structllama_1_1ArrayExtents.html#abce5defd13fa5853289a5b1f744eb243">ArrayExtents::Index</a></td></tr>
-<tr class="separator:a9e8dbadc1023c973d1d8a10a773e4786"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a230ce8319dfa063ac4692dcd4034c462"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1MappingBase.html#a230ce8319dfa063ac4692dcd4034c462">RecordDim</a> = TRecordDim</td></tr>
 <tr class="separator:a230ce8319dfa063ac4692dcd4034c462"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5ce2266ed39400609731093894761df9"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1MappingBase.html#a5ce2266ed39400609731093894761df9">size_type</a> = typename <a class="el" href="structllama_1_1ArrayExtents.html#a26ddad4db80efe93143b86c766b9a69f">ArrayExtents::value_type</a></td></tr>
-<tr class="separator:a5ce2266ed39400609731093894761df9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -142,6 +139,13 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:adc783715f8bed6b56073c1ad4db068e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae552d836a8b07ae87ee2ab6280646051"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1MappingBase.html#ae552d836a8b07ae87ee2ab6280646051">extents</a> () const -&gt; <a class="el" href="structllama_1_1mapping_1_1MappingBase.html#ab0dff4b5449fbc61e63ef6c8ae427c70">ArrayExtents</a></td></tr>
 <tr class="separator:ae552d836a8b07ae87ee2ab6280646051"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-types"></a>
+Protected Types</h2></td></tr>
+<tr class="memitem:a9e8dbadc1023c973d1d8a10a773e4786"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1MappingBase.html#a9e8dbadc1023c973d1d8a10a773e4786">ArrayIndex</a> = typename <a class="el" href="structllama_1_1ArrayExtents.html#abce5defd13fa5853289a5b1f744eb243">ArrayExtents::Index</a></td></tr>
+<tr class="separator:a9e8dbadc1023c973d1d8a10a773e4786"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ce2266ed39400609731093894761df9"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1MappingBase.html#a5ce2266ed39400609731093894761df9">size_type</a> = typename <a class="el" href="structllama_1_1ArrayExtents.html#a26ddad4db80efe93143b86c766b9a69f">ArrayExtents::value_type</a></td></tr>
+<tr class="separator:a5ce2266ed39400609731093894761df9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename TArrayExtents, typename TRecordDim&gt;<br />
@@ -175,14 +179,22 @@ template&lt;typename TArrayExtents , typename TRecordDim &gt; </div>
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename TArrayExtents , typename TRecordDim &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1MappingBase.html">llama::mapping::MappingBase</a>&lt; TArrayExtents, TRecordDim &gt;::<a class="el" href="structllama_1_1mapping_1_1MappingBase.html#a9e8dbadc1023c973d1d8a10a773e4786">ArrayIndex</a> =  typename <a class="el" href="structllama_1_1ArrayExtents.html#abce5defd13fa5853289a5b1f744eb243">ArrayExtents::Index</a></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Common_8hpp_source.html#l00020">20</a> of file <a class="el" href="Common_8hpp_source.html">Common.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Common_8hpp_source.html#l00023">23</a> of file <a class="el" href="Common_8hpp_source.html">Common.hpp</a>.</p>
 
 </div>
 </div>
@@ -200,7 +212,7 @@ template&lt;typename TArrayExtents , typename TRecordDim &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Common_8hpp_source.html#l00021">21</a> of file <a class="el" href="Common_8hpp_source.html">Common.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Common_8hpp_source.html#l00020">20</a> of file <a class="el" href="Common_8hpp_source.html">Common.hpp</a>.</p>
 
 </div>
 </div>
@@ -211,14 +223,22 @@ template&lt;typename TArrayExtents , typename TRecordDim &gt; </div>
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename TArrayExtents , typename TRecordDim &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1MappingBase.html">llama::mapping::MappingBase</a>&lt; TArrayExtents, TRecordDim &gt;::<a class="el" href="structllama_1_1mapping_1_1MappingBase.html#a5ce2266ed39400609731093894761df9">size_type</a> =  typename <a class="el" href="structllama_1_1ArrayExtents.html#a26ddad4db80efe93143b86c766b9a69f">ArrayExtents::value_type</a></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Common_8hpp_source.html#l00022">22</a> of file <a class="el" href="Common_8hpp_source.html">Common.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Common_8hpp_source.html#l00024">24</a> of file <a class="el" href="Common_8hpp_source.html">Common.hpp</a>.</p>
 
 </div>
 </div>
@@ -286,7 +306,7 @@ template&lt;typename TArrayExtents , typename TRecordDim &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Common_8hpp_source.html#l00027">27</a> of file <a class="el" href="Common_8hpp_source.html">Common.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Common_8hpp_source.html#l00030">30</a> of file <a class="el" href="Common_8hpp_source.html">Common.hpp</a>.</p>
 
 </div>
 </div>
@@ -317,7 +337,7 @@ template&lt;typename TArrayExtents , typename TRecordDim &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Common_8hpp_source.html#l00031">31</a> of file <a class="el" href="Common_8hpp_source.html">Common.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Common_8hpp_source.html#l00034">34</a> of file <a class="el" href="Common_8hpp_source.html">Common.hpp</a>.</p>
 
 </div>
 </div>
@@ -330,7 +350,7 @@ template&lt;typename TArrayExtents , typename TRecordDim &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1MappingBase.html">MappingBase</a></li>
-    <li class="footer">Generated on Tue Jul 25 2023 15:58:42 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Thu Jul 27 2023 13:16:29 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

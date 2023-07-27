@@ -24,7 +24,7 @@ var searchData=
   ['mapping2_436',['mapping2',['../structllama_1_1mapping_1_1Split.html#a2cbca78d3a9e6e58910e4edfa30f3d60',1,'llama::mapping::Split']]],
   ['mappingbase_437',['MappingBase',['../structllama_1_1mapping_1_1MappingBase.html',1,'llama::mapping::MappingBase&lt; TArrayExtents, TRecordDim &gt;'],['../structllama_1_1mapping_1_1MappingBase.html#adc783715f8bed6b56073c1ad4db068e4',1,'llama::mapping::MappingBase::MappingBase(ArrayExtents extents, RecordDim={})'],['../structllama_1_1mapping_1_1MappingBase.html#a3ca09f04e20b05688fa3ca89c5224fde',1,'llama::mapping::MappingBase::MappingBase()=default']]],
   ['mapspiecewisecontiguous_438',['mapsPiecewiseContiguous',['../namespacellama.html#a32bf07b53ebc403eee401038fc95b591',1,'llama']]],
-  ['maptomemory_439',['mapToMemory',['../namespacellama.html#a4f8b2bbd3934fae49394efdc1b4ce3c4',1,'llama']]],
+  ['maptomemory_439',['mapToMemory',['../namespacellama.html#ae38fc0d77ddcdd41b2f2522f4c5bd24e',1,'llama']]],
   ['maxlanes_440',['maxLanes',['../namespacellama_1_1mapping.html#abde584824d91d31ec24b7c326632a3c3',1,'llama::mapping']]],
   ['memcopyfunc_441',['memcopyFunc',['../namespacellama_1_1internal.html#a359ae38d758d2af3b2e5610fcc32c110',1,'llama::internal']]],
   ['memlocscomputed_442',['memLocsComputed',['../structllama_1_1mapping_1_1AccessCounts.html#a7cb54709b1b75556d89b0d62391f9475',1,'llama::mapping::AccessCounts']]],

@@ -26,9 +26,6 @@ var hierarchy =
       [ "llama::ArrayIndex< T, Dim >", "structllama_1_1ArrayIndex.html", null ]
     ] ],
     [ "llama::ArrayExtents< T >", "structllama_1_1ArrayExtents_3_01T_01_4.html", null ],
-    [ "TView::Mapping::ArrayIndex", null, [
-      [ "llama::RecordRef< TView, TBoundRecordCoord, OwnView >", "structllama_1_1RecordRef.html", null ]
-    ] ],
     [ "llama::ArrayIndexIterator< ArrayExtents >", "structllama_1_1ArrayIndexIterator.html", null ],
     [ "llama::ArrayIndexIterator< typename View::ArrayExtents >", "structllama_1_1ArrayIndexIterator.html", null ],
     [ "llama::internal::Assign", "structllama_1_1internal_1_1Assign.html", null ],
@@ -119,6 +116,9 @@ var hierarchy =
     [ "llama::internal::GetTypeImpl< Record< Children... >, RecordCoord< HeadCoord, TailCoords... > >", "structllama_1_1internal_1_1GetTypeImpl_3_01Record_3_01Children_8_8_8_01_4_00_01RecordCoord_3_01Hd335281b58bf9419f48b7fc65f5657ab.html", null ],
     [ "llama::internal::GetTypeImpl< T, RecordCoord<> >", "structllama_1_1internal_1_1GetTypeImpl_3_01T_00_01RecordCoord_3_4_01_4.html", null ],
     [ "llama::mapping::tree::functor::Idem", "structllama_1_1mapping_1_1tree_1_1functor_1_1Idem.html", null ],
+    [ "TView::Mapping::ArrayExtents::Index", null, [
+      [ "llama::RecordRef< TView, TBoundRecordCoord, OwnView >", "structllama_1_1RecordRef.html", null ]
+    ] ],
     [ "llama::internal::IndexTypeFromArgs< Default, Ints >", "structllama_1_1internal_1_1IndexTypeFromArgs.html", null ],
     [ "llama::internal::IndexTypeFromArgs< Default, FirstInt, Ints... >", "structllama_1_1internal_1_1IndexTypeFromArgs_3_01Default_00_01FirstInt_00_01Ints_8_8_8_01_4.html", null ],
     [ "llama::internal::IndirectValue< T >", "structllama_1_1internal_1_1IndirectValue.html", null ],

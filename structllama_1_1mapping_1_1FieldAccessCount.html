@@ -141,9 +141,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a759681052237a95eb60e3d6ca9670116"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8b75778b8a59a22963e3df576a7b1d39"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1FieldAccessCount.html#a8b75778b8a59a22963e3df576a7b1d39">blobSize</a> (size_type blobIndex) const -&gt; size_type</td></tr>
 <tr class="separator:a8b75778b8a59a22963e3df576a7b1d39"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8555d33c80eff899dd7e16795248299"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RecordCoords, typename Blobs &gt; </td></tr>
-<tr class="memitem:ad8555d33c80eff899dd7e16795248299"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1FieldAccessCount.html#ad8555d33c80eff899dd7e16795248299">compute</a> (typename Mapping::ArrayIndex ai, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt; rc, <a class="el" href="namespacellama_1_1mapping.html#a79bb2d70c1866c3090d5810dd0c92cb3">Blobs</a> &amp;blobs) const -&gt; decltype(auto)</td></tr>
-<tr class="separator:ad8555d33c80eff899dd7e16795248299"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33c2ed2be790fac4d3ef7eff7ddf6510"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RecordCoords, typename Blobs &gt; </td></tr>
+<tr class="memitem:a33c2ed2be790fac4d3ef7eff7ddf6510"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1FieldAccessCount.html#a33c2ed2be790fac4d3ef7eff7ddf6510">compute</a> (typename Mapping::ArrayExtents::Index ai, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt; rc, <a class="el" href="namespacellama_1_1mapping.html#a79bb2d70c1866c3090d5810dd0c92cb3">Blobs</a> &amp;blobs) const -&gt; decltype(auto)</td></tr>
+<tr class="separator:a33c2ed2be790fac4d3ef7eff7ddf6510"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6a823fcc9d717e66eda247c184c2f2e8"><td class="memTemplParams" colspan="2">template&lt;typename Blobs &gt; </td></tr>
 <tr class="memitem:a6a823fcc9d717e66eda247c184c2f2e8"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1FieldAccessCount.html#a6a823fcc9d717e66eda247c184c2f2e8">fieldHits</a> (const <a class="el" href="namespacellama_1_1mapping.html#a79bb2d70c1866c3090d5810dd0c92cb3">Blobs</a> &amp;blobs) const -&gt; const <a class="el" href="structllama_1_1mapping_1_1FieldAccessCount_1_1FieldHitsArray.html">FieldHitsArray</a> &amp;</td></tr>
 <tr class="separator:a6a823fcc9d717e66eda247c184c2f2e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -342,8 +342,8 @@ template&lt;typename Mapping , typename TCountType  = std::size_t, bool MyCodeHa
 
 </div>
 </div>
-<a id="ad8555d33c80eff899dd7e16795248299"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad8555d33c80eff899dd7e16795248299">&#9670;&nbsp;</a></span>compute()</h2>
+<a id="a33c2ed2be790fac4d3ef7eff7ddf6510"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a33c2ed2be790fac4d3ef7eff7ddf6510">&#9670;&nbsp;</a></span>compute()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -358,7 +358,7 @@ template&lt;std::size_t... RecordCoords, typename Blobs &gt; </div>
         <tr>
           <td class="memname">auto <a class="el" href="structllama_1_1mapping_1_1FieldAccessCount.html">llama::mapping::FieldAccessCount</a>&lt; Mapping, TCountType, MyCodeHandlesProxyReferences &gt;::compute </td>
           <td>(</td>
-          <td class="paramtype">typename Mapping::ArrayIndex&#160;</td>
+          <td class="paramtype">typename Mapping::ArrayExtents::Index&#160;</td>
           <td class="paramname"><em>ai</em>, </td>
         </tr>
         <tr>
@@ -613,7 +613,7 @@ template&lt;typename Mapping , typename TCountType  = std::size_t, bool MyCodeHa
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1FieldAccessCount.html">FieldAccessCount</a></li>
-    <li class="footer">Generated on Tue Jul 25 2023 15:58:42 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Thu Jul 27 2023 13:16:29 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

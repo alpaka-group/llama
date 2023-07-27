@@ -103,148 +103,166 @@ $(document).ready(function(){initNavTree('Concepts_8hpp_source.html',''); initRe
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacellama.html">llama</a></div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;{</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#ifdef __cpp_lib_concepts</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    <span class="comment">// clang-format off</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> M&gt;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    concept Mapping = requires(M m) {</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <span class="keyword">typename</span> <a class="code" href="namespacellama.html#a3fccafcd85a44696a4d5e6659927b634">M::ArrayExtents</a>;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        <span class="keyword">typename</span> <a class="code" href="namespacellama.html#a0d0fda5486eb5976f940a638f0cdd9d4">M::ArrayIndex</a>;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        <span class="keyword">typename</span> M::RecordDim;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        { m.extents() } -&gt; std::same_as&lt;typename M::ArrayExtents&gt;;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        { +M::blobCount } -&gt; std::same_as&lt;std::size_t&gt;;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        std::integral_constant&lt;std::size_t, M::blobCount&gt;{}; <span class="comment">// validates constexpr-ness</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        { m.blobSize(<span class="keyword">typename</span> M::ArrayExtents::value_type{}) } -&gt; std::same_as&lt;typename M::ArrayExtents::value_type&gt;;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    };</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> M, <span class="keyword">typename</span> RC&gt;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    concept PhysicalField = requires(M m, <span class="keyword">typename</span> <a class="code" href="namespacellama.html#a0d0fda5486eb5976f940a638f0cdd9d4">M::ArrayIndex</a> ai) {</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        { m.blobNrAndOffset(ai, RC{}) } -&gt; std::same_as&lt;NrAndOffset&lt;typename M::ArrayExtents::value_type&gt;&gt;;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    };</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> M&gt;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keyword">struct </span>MakeIsPhysical</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    {</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> RC&gt;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keyword">using</span> fn = mp_bool&lt;PhysicalField&lt;M, RC&gt;&gt;;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    };</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> M&gt;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keyword">inline</span> constexpr <span class="keywordtype">bool</span> allFieldsArePhysical</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        = mp_all_of&lt;LeafRecordCoords&lt;typename M::RecordDim&gt;, MakeIsPhysical&lt;M&gt;::template fn&gt;::value;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> M&gt;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    concept PhysicalMapping = Mapping&lt;M&gt; &amp;&amp; allFieldsArePhysical&lt;M&gt;;</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> R&gt;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    concept LValueReference = std::is_lvalue_reference_v&lt;R&gt;;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> R&gt;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    concept AdlTwoStepSwappable = requires(R a, R b) { <a class="code" href="namespacellama.html#aebf7c7c54c4190a57a2cc1ad5c280453">swap</a>(a, b); } || requires(R a, R b) { <a class="code" href="namespacellama.html#aebf7c7c54c4190a57a2cc1ad5c280453">std::swap</a>(a, b); };</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    <span class="keyword">template</span>&lt;auto I&gt;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    concept isConstexpr = requires { std::integral_constant&lt;decltype(I), I&gt;{}; };</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> M&gt;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    concept Mapping = requires(M m) {</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        <span class="keyword">typename</span> <a class="code" href="namespacellama.html#a3fccafcd85a44696a4d5e6659927b634">M::ArrayExtents</a>;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        <span class="keyword">typename</span> M::RecordDim;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        {</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;            m.extents()</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        } -&gt; std::same_as&lt;typename M::ArrayExtents&gt;;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        {</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;            +M::blobCount</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        } -&gt; std::same_as&lt;std::size_t&gt;;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        requires isConstexpr&lt;M::blobCount&gt;;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        {</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;            m.blobSize(<span class="keyword">typename</span> M::ArrayExtents::value_type{})</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        } -&gt; std::same_as&lt;typename M::ArrayExtents::value_type&gt;;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    };</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> M, <span class="keyword">typename</span> RC&gt;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    concept PhysicalField = requires(M m, <span class="keyword">typename</span> M::ArrayExtents::Index ai) {</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        {</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;            m.blobNrAndOffset(ai, RC{})</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        } -&gt; std::same_as&lt;NrAndOffset&lt;typename M::ArrayExtents::value_type&gt;&gt;;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    };</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> M&gt;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keyword">struct </span>MakeIsPhysical</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    {</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> RC&gt;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="keyword">using</span> fn = mp_bool&lt;PhysicalField&lt;M, RC&gt;&gt;;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    };</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> M&gt;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keyword">inline</span> constexpr <span class="keywordtype">bool</span> allFieldsArePhysical</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        = mp_all_of&lt;LeafRecordCoords&lt;typename M::RecordDim&gt;, MakeIsPhysical&lt;M&gt;::template fn&gt;::value;</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> R&gt;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    concept ProxyReference = std::is_copy_constructible_v&lt;R&gt; &amp;&amp; std::is_copy_assignable_v&lt;R&gt; &amp;&amp; requires(R r) {</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keyword">typename</span> R::value_type;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        { <span class="keyword">static_cast&lt;</span>typename R::value_type<span class="keyword">&gt;</span>(r) } -&gt; std::same_as&lt;typename R::value_type&gt;;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        { r = std::declval&lt;typename R::value_type&gt;() } -&gt; std::same_as&lt;R&amp;&gt;;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    } &amp;&amp; AdlTwoStepSwappable&lt;R&gt;;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> R&gt;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    concept AnyReference = LValueReference&lt;R&gt; || ProxyReference&lt;R&gt;;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> R, <span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    concept AnyReferenceTo = (LValueReference&lt;R&gt; &amp;&amp; std::is_same_v&lt;std::remove_cvref_t&lt;R&gt;, T&gt;) || (ProxyReference&lt;R&gt; &amp;&amp; std::is_same_v&lt;typename R::value_type, T&gt;);</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> M, <span class="keyword">typename</span> RC&gt;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    concept ComputedField = <a class="code" href="namespacellama.html#a9676a3903b134df116791bcae533d6c6">M::isComputed</a>(RC{}) &amp;&amp; requires(M m, <span class="keyword">typename</span> <a class="code" href="namespacellama.html#a0d0fda5486eb5976f940a638f0cdd9d4">M::ArrayIndex</a> ai, <a class="code" href="namespacellama.html#a690689d38b43930430e58bb7fe17aca7">Array</a>&lt;Array&lt;std::byte, 1&gt;, 1&gt; blobs) {</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        { m.compute(ai, RC{}, blobs) } -&gt; AnyReferenceTo&lt;GetType&lt;typename M::RecordDim, RC&gt;&gt;;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    };</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> M&gt;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keyword">struct </span>MakeIsComputed</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    {</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> RC&gt;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        <span class="keyword">using</span> fn = mp_bool&lt;ComputedField&lt;M, RC&gt;&gt;;</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    };</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> M&gt;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="keyword">inline</span> constexpr <span class="keywordtype">bool</span> allFieldsAreComputed</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        = mp_all_of&lt;LeafRecordCoords&lt;typename M::RecordDim&gt;, MakeIsComputed&lt;M&gt;::template fn&gt;::value;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> M&gt;</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    concept FullyComputedMapping = Mapping&lt;M&gt; &amp;&amp; allFieldsAreComputed&lt;M&gt;;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="keyword">template</span>&lt;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        <span class="keyword">typename</span> M,</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        <span class="keyword">typename</span> LeafCoords = LeafRecordCoords&lt;typename M::RecordDim&gt;,</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        std::size_t PhysicalCount = mp_count_if&lt;LeafCoords, MakeIsPhysical&lt;M&gt;::template fn&gt;::value,</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        std::size_t ComputedCount = mp_count_if&lt;LeafCoords, MakeIsComputed&lt;M&gt;::template fn&gt;::value&gt;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="keyword">inline</span> constexpr <span class="keywordtype">bool</span> allFieldsArePhysicalOrComputed</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        = (PhysicalCount + ComputedCount) &gt;= mp_size&lt;LeafCoords&gt;::value&amp;&amp; PhysicalCount &gt; 0</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        &amp;&amp; ComputedCount &gt; 0; <span class="comment">// == instead of &gt;= would be better, but it&#39;s not easy to count correctly,</span></div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;                              <span class="comment">// because we cannot check whether the call to blobNrOrOffset()</span></div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;                              <span class="comment">// or compute() is actually valid</span></div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> M&gt;</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    concept PartiallyComputedMapping = Mapping&lt;M&gt; &amp;&amp; allFieldsArePhysicalOrComputed&lt;M&gt;;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> M&gt;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    concept PhysicalMapping = Mapping&lt;M&gt; &amp;&amp; allFieldsArePhysical&lt;M&gt;;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> R&gt;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    concept LValueReference = std::is_lvalue_reference_v&lt;R&gt;;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> R&gt;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    concept AdlTwoStepSwappable = requires(R a, R b) { <a class="code" href="namespacellama.html#aebf7c7c54c4190a57a2cc1ad5c280453">swap</a>(a, b); } || requires(R a, R b) { <a class="code" href="namespacellama.html#aebf7c7c54c4190a57a2cc1ad5c280453">std::swap</a>(a, b); };</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> R&gt;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    concept ProxyReference = std::is_copy_constructible_v&lt;R&gt; &amp;&amp; std::is_copy_assignable_v&lt;R&gt; &amp;&amp; requires(R r) {</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <span class="keyword">typename</span> R::value_type;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        {</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;            <span class="keyword">static_cast&lt;</span>typename R::value_type<span class="keyword">&gt;</span>(r)</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        } -&gt; std::same_as&lt;typename R::value_type&gt;;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        {</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;            r = std::declval&lt;typename R::value_type&gt;()</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        } -&gt; std::same_as&lt;R&amp;&gt;;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    } &amp;&amp; AdlTwoStepSwappable&lt;R&gt;;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> R&gt;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    concept AnyReference = LValueReference&lt;R&gt; || ProxyReference&lt;R&gt;;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> R, <span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    concept AnyReferenceTo = (LValueReference&lt;R&gt; &amp;&amp; std::is_same_v&lt;std::remove_cvref_t&lt;R&gt;, T&gt;)</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        || (ProxyReference&lt;R&gt; &amp;&amp; std::is_same_v&lt;typename R::value_type, T&gt;);</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> M, <span class="keyword">typename</span> RC&gt;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    concept ComputedField</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        = <a class="code" href="namespacellama.html#a9676a3903b134df116791bcae533d6c6">M::isComputed</a>(RC{}) &amp;&amp; requires(M m, <span class="keyword">typename</span> M::ArrayExtents::Index ai, std::byte** blobs) {</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;              {</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;                  m.compute(ai, RC{}, blobs)</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;              } -&gt; AnyReferenceTo&lt;GetType&lt;typename M::RecordDim, RC&gt;&gt;;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;          };</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> M&gt;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="keyword">struct </span>MakeIsComputed</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    {</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> RC&gt;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        <span class="keyword">using</span> fn = mp_bool&lt;ComputedField&lt;M, RC&gt;&gt;;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    };</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> M&gt;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <span class="keyword">inline</span> constexpr <span class="keywordtype">bool</span> allFieldsAreComputed</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        = mp_all_of&lt;LeafRecordCoords&lt;typename M::RecordDim&gt;, MakeIsComputed&lt;M&gt;::template fn&gt;::value;</div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="comment">// according to http://eel.is/c++draft/intro.object#3 only std::byte and unsigned char can provide storage for</span></div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="comment">// other types</span></div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> B&gt;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    concept Blob = requires(B b, std::size_t i) {</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        requires std::is_same_v&lt;std::remove_cvref_t&lt;decltype(b[i])&gt;, std::byte&gt; ||</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;            std::is_same_v&lt;std::remove_cvref_t&lt;decltype(b[i])&gt;, <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>&gt;;</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    };</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> BA&gt;</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    concept BlobAllocator = requires(BA ba, std::integral_constant&lt;std::size_t, 16&gt; alignment, std::size_t size) {</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        { ba(alignment, size) } -&gt; Blob;</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    };</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <span class="comment">// clang-format on</span></div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    <span class="keyword">namespace </span>internal</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    {</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> R, <span class="keyword">typename</span> = <span class="keywordtype">void</span>&gt;</div>
-<div class="line"><a name="l00119"></a><span class="lineno"><a class="line" href="structllama_1_1internal_1_1IsProxyReferenceImpl.html">  119</a></span>&#160;        <span class="keyword">struct </span><a class="code" href="structllama_1_1internal_1_1IsProxyReferenceImpl.html">IsProxyReferenceImpl</a> : std::false_type</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        {</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        };</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> R&gt;</div>
-<div class="line"><a name="l00124"></a><span class="lineno"><a class="line" href="structllama_1_1internal_1_1IsProxyReferenceImpl_3_01R_00_01std_1_1void__t_3_01typename_01R_1_1vaf29d5bd88afd76084d03518114f19340.html">  124</a></span>&#160;        <span class="keyword">struct </span><a class="code" href="structllama_1_1internal_1_1IsProxyReferenceImpl.html">IsProxyReferenceImpl</a>&lt;</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;            R,</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;            std::void_t&lt;</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;                typename R::value_type,</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;                decltype(static_cast&lt;typename R::value_type&gt;(std::declval&lt;R&amp;&gt;())),</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;                decltype(std::declval&lt;R&amp;&gt;() = std::declval&lt;typename R::value_type&gt;())&gt;&gt;</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;            : std::bool_constant&lt;std::is_copy_constructible_v&lt;R&gt; &amp;&amp; std::is_copy_assignable_v&lt;R&gt;&gt;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> M&gt;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    concept FullyComputedMapping = Mapping&lt;M&gt; &amp;&amp; allFieldsAreComputed&lt;M&gt;;</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <span class="keyword">template</span>&lt;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <span class="keyword">typename</span> M,</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <span class="keyword">typename</span> LeafCoords = LeafRecordCoords&lt;typename M::RecordDim&gt;,</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        std::size_t PhysicalCount = mp_count_if&lt;LeafCoords, MakeIsPhysical&lt;M&gt;::template fn&gt;::value,</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        std::size_t ComputedCount = mp_count_if&lt;LeafCoords, MakeIsComputed&lt;M&gt;::template fn&gt;::value&gt;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <span class="keyword">inline</span> constexpr <span class="keywordtype">bool</span> allFieldsArePhysicalOrComputed</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        = (PhysicalCount + ComputedCount) &gt;= mp_size&lt;LeafCoords&gt;::value &amp;&amp; PhysicalCount &gt; 0</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        &amp;&amp; ComputedCount &gt; 0; <span class="comment">// == instead of &gt;= would be better, but it&#39;s not easy to count correctly,</span></div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;                              <span class="comment">// because we cannot check whether the call to blobNrOrOffset()</span></div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;                              <span class="comment">// or compute() is actually valid</span></div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> M&gt;</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    concept PartiallyComputedMapping = Mapping&lt;M&gt; &amp;&amp; allFieldsArePhysicalOrComputed&lt;M&gt;;</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> B&gt;</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    concept Blob = requires(B b, std::size_t i) {</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        <span class="comment">// according to http://eel.is/c++draft/intro.object#3 only std::byte and unsigned char can</span></div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        <span class="comment">// provide storage for</span></div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        <span class="comment">// other types</span></div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        requires std::is_lvalue_reference_v&lt;decltype(b[i])&gt;;</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        requires std::same_as&lt;std::remove_cvref_t&lt;decltype(b[i])&gt;, std::byte&gt;</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;            || std::same_as&lt;std::remove_cvref_t&lt;decltype(b[i])&gt;, <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>&gt;;</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;    };</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> BA&gt;</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    concept BlobAllocator = requires(BA ba, std::size_t size) {</div>
 <div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;        {</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;        };</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;    } <span class="comment">// namespace internal</span></div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160; </div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> R&gt;</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;<span class="preprocessor">#ifdef __cpp_lib_concepts</span></div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;    <span class="keyword">inline</span> constexpr <span class="keywordtype">bool</span> <a class="code" href="namespacellama.html#a06e1dd12e96257f3aaf7a1ea6b9eead8">isProxyReference</a> = ProxyReference&lt;R&gt;;</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00139"></a><span class="lineno"><a class="line" href="namespacellama.html#a06e1dd12e96257f3aaf7a1ea6b9eead8">  139</a></span>&#160;    <span class="keyword">inline</span> constexpr <span class="keywordtype">bool</span> <a class="code" href="namespacellama.html#a06e1dd12e96257f3aaf7a1ea6b9eead8">isProxyReference</a> = <a class="code" href="structllama_1_1internal_1_1IsProxyReferenceImpl.html">internal::IsProxyReferenceImpl&lt;R&gt;::value</a>;</div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;} <span class="comment">// namespace llama</span></div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;            ba(std::integral_constant&lt;std::size_t, 16&gt;{}, size)</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;        } -&gt; Blob;</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    };</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160; </div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;    <span class="keyword">namespace </span>internal</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;    {</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> R, <span class="keyword">typename</span> = <span class="keywordtype">void</span>&gt;</div>
+<div class="line"><a name="l00140"></a><span class="lineno"><a class="line" href="structllama_1_1internal_1_1IsProxyReferenceImpl.html">  140</a></span>&#160;        <span class="keyword">struct </span><a class="code" href="structllama_1_1internal_1_1IsProxyReferenceImpl.html">IsProxyReferenceImpl</a> : std::false_type</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;        {</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;        };</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160; </div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> R&gt;</div>
+<div class="line"><a name="l00145"></a><span class="lineno"><a class="line" href="structllama_1_1internal_1_1IsProxyReferenceImpl_3_01R_00_01std_1_1void__t_3_01typename_01R_1_1vaf29d5bd88afd76084d03518114f19340.html">  145</a></span>&#160;        <span class="keyword">struct </span><a class="code" href="structllama_1_1internal_1_1IsProxyReferenceImpl.html">IsProxyReferenceImpl</a>&lt;</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;            R,</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;            std::void_t&lt;</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;                typename R::value_type,</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;                decltype(static_cast&lt;typename R::value_type&gt;(std::declval&lt;R&amp;&gt;())),</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;                decltype(std::declval&lt;R&amp;&gt;() = std::declval&lt;typename R::value_type&gt;())&gt;&gt;</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;            : std::bool_constant&lt;std::is_copy_constructible_v&lt;R&gt; &amp;&amp; std::is_copy_assignable_v&lt;R&gt;&gt;</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        {</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;        };</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;    } <span class="comment">// namespace internal</span></div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160; </div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> R&gt;</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;<span class="preprocessor">#ifdef __cpp_lib_concepts</span></div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;    <span class="keyword">inline</span> constexpr <span class="keywordtype">bool</span> <a class="code" href="namespacellama.html#a06e1dd12e96257f3aaf7a1ea6b9eead8">isProxyReference</a> = ProxyReference&lt;R&gt;;</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00160"></a><span class="lineno"><a class="line" href="namespacellama.html#a06e1dd12e96257f3aaf7a1ea6b9eead8">  160</a></span>&#160;    <span class="keyword">inline</span> constexpr <span class="keywordtype">bool</span> <a class="code" href="namespacellama.html#a06e1dd12e96257f3aaf7a1ea6b9eead8">isProxyReference</a> = <a class="code" href="structllama_1_1internal_1_1IsProxyReferenceImpl.html">internal::IsProxyReferenceImpl&lt;R&gt;::value</a>;</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;} <span class="comment">// namespace llama</span></div>
 <div class="ttc" id="aArray_8hpp_html"><div class="ttname"><a href="Array_8hpp.html">Array.hpp</a></div></div>
 <div class="ttc" id="aCore_8hpp_html"><div class="ttname"><a href="Core_8hpp.html">Core.hpp</a></div></div>
 <div class="ttc" id="aRecordCoord_8hpp_html"><div class="ttname"><a href="RecordCoord_8hpp.html">RecordCoord.hpp</a></div></div>
 <div class="ttc" id="anamespacellama_html"><div class="ttname"><a href="namespacellama.html">llama</a></div><div class="ttdef"><b>Definition:</b> <a href="Accessors_8hpp_source.html#l00012">Accessors.hpp:13</a></div></div>
-<div class="ttc" id="anamespacellama_html_a06e1dd12e96257f3aaf7a1ea6b9eead8"><div class="ttname"><a href="namespacellama.html#a06e1dd12e96257f3aaf7a1ea6b9eead8">llama::isProxyReference</a></div><div class="ttdeci">constexpr bool isProxyReference</div><div class="ttdef"><b>Definition:</b> <a href="Concepts_8hpp_source.html#l00139">Concepts.hpp:139</a></div></div>
-<div class="ttc" id="anamespacellama_html_a0d0fda5486eb5976f940a638f0cdd9d4"><div class="ttname"><a href="namespacellama.html#a0d0fda5486eb5976f940a638f0cdd9d4">llama::ArrayIndex</a></div><div class="ttdeci">ArrayIndex(Args...) -&gt; ArrayIndex&lt; typename internal::IndexTypeFromArgs&lt; std::size_t, Args... &gt;::type, sizeof...(Args)&gt;</div></div>
+<div class="ttc" id="anamespacellama_html_a06e1dd12e96257f3aaf7a1ea6b9eead8"><div class="ttname"><a href="namespacellama.html#a06e1dd12e96257f3aaf7a1ea6b9eead8">llama::isProxyReference</a></div><div class="ttdeci">constexpr bool isProxyReference</div><div class="ttdef"><b>Definition:</b> <a href="Concepts_8hpp_source.html#l00160">Concepts.hpp:160</a></div></div>
 <div class="ttc" id="anamespacellama_html_a3fccafcd85a44696a4d5e6659927b634"><div class="ttname"><a href="namespacellama.html#a3fccafcd85a44696a4d5e6659927b634">llama::ArrayExtents</a></div><div class="ttdeci">ArrayExtents(Args...) -&gt; ArrayExtents&lt; typename internal::IndexTypeFromArgs&lt; std::size_t, Args... &gt;::type,(Args{}, dyn)... &gt;</div></div>
-<div class="ttc" id="anamespacellama_html_a690689d38b43930430e58bb7fe17aca7"><div class="ttname"><a href="namespacellama.html#a690689d38b43930430e58bb7fe17aca7">llama::Array</a></div><div class="ttdeci">Array(First, Args... args) -&gt; Array&lt; First, sizeof...(Args)+1 &gt;</div></div>
 <div class="ttc" id="anamespacellama_html_a9676a3903b134df116791bcae533d6c6"><div class="ttname"><a href="namespacellama.html#a9676a3903b134df116791bcae533d6c6">llama::isComputed</a></div><div class="ttdeci">constexpr bool isComputed</div><div class="ttdoc">Returns true if the field accessed via the given mapping and record coordinate is a computed value.</div><div class="ttdef"><b>Definition:</b> <a href="View_8hpp_source.html#l00081">View.hpp:81</a></div></div>
 <div class="ttc" id="anamespacellama_html_aebf7c7c54c4190a57a2cc1ad5c280453"><div class="ttname"><a href="namespacellama.html#aebf7c7c54c4190a57a2cc1ad5c280453">llama::swap</a></div><div class="ttdeci">auto swap(RecordRef&lt; ViewA, BoundRecordDimA, OwnViewA &gt; &amp;a, RecordRef&lt; ViewB, BoundRecordDimB, OwnViewB &gt; &amp;b) noexcept -&gt; std::enable_if_t&lt; std::is_same_v&lt; typename RecordRef&lt; ViewA, BoundRecordDimA, OwnViewA &gt;::AccessibleRecordDim, typename RecordRef&lt; ViewB, BoundRecordDimB, OwnViewB &gt;::AccessibleRecordDim &gt;&gt;</div><div class="ttdef"><b>Definition:</b> <a href="RecordRef_8hpp_source.html#l00751">RecordRef.hpp:751</a></div></div>
-<div class="ttc" id="astructllama_1_1internal_1_1IsProxyReferenceImpl_html"><div class="ttname"><a href="structllama_1_1internal_1_1IsProxyReferenceImpl.html">llama::internal::IsProxyReferenceImpl</a></div><div class="ttdef"><b>Definition:</b> <a href="Concepts_8hpp_source.html#l00119">Concepts.hpp:120</a></div></div>
+<div class="ttc" id="astructllama_1_1internal_1_1IsProxyReferenceImpl_html"><div class="ttname"><a href="structllama_1_1internal_1_1IsProxyReferenceImpl.html">llama::internal::IsProxyReferenceImpl</a></div><div class="ttdef"><b>Definition:</b> <a href="Concepts_8hpp_source.html#l00140">Concepts.hpp:141</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="Concepts_8hpp.html">Concepts.hpp</a></li>
-    <li class="footer">Generated on Tue Jul 25 2023 15:58:42 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Thu Jul 27 2023 13:16:29 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

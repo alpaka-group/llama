@@ -14,7 +14,7 @@ var searchData=
   ['storesimdrecord_1231',['storeSimdRecord',['../namespacellama_1_1internal.html#a39d130ecf8dc32be0c10f142df6a0d42',1,'llama::internal::storeSimdRecord(const Simd &amp;srcSimd, T &amp;&amp;dstRef, RecordCoord rc)'],['../namespacellama_1_1internal.html#a383757e5ef0435ab24cc8570e355912f',1,'llama::internal::storeSimdRecord(const Simd &amp;srcSimd, TFwd &amp;&amp;dstRef, RecordCoord rc)']]],
   ['storeunaligned_1232',['storeUnaligned',['../structllama_1_1SimdTraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__arithmetic__v_3_01T_01_4_01_4_01_4.html#a67e2693738b7a12f3e262c534578afbe',1,'llama::SimdTraits&lt; T, std::enable_if_t&lt; std::is_arithmetic_v&lt; T &gt; &gt; &gt;']]],
   ['structname_1233',['structName',['../namespacellama.html#a8def4cdbf850f818833a38d67e6ebf34',1,'llama']]],
-  ['subview_1234',['SubView',['../structllama_1_1SubView.html#adbb2ed9591e50121c2b732e3c1cc570b',1,'llama::SubView::SubView()'],['../namespacellama.html#ad76145974be23fcd0fcc5ad7bb4e972a',1,'llama::SubView()']]],
+  ['subview_1234',['SubView',['../structllama_1_1SubView.html#adbb2ed9591e50121c2b732e3c1cc570b',1,'llama::SubView::SubView()'],['../namespacellama.html#a08522ce66a9c0e6ac1b771e38a81d97e',1,'llama::SubView()']]],
   ['sumchildrensmallerthan_1235',['sumChildrenSmallerThan',['../namespacellama_1_1mapping_1_1tree_1_1internal.html#ac64ac187e14ff4540b332b55e4fdc7f7',1,'llama::mapping::tree::internal']]],
   ['swap_1236',['swap',['../namespacellama.html#aebf7c7c54c4190a57a2cc1ad5c280453',1,'llama']]]
 ];

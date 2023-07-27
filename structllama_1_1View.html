@@ -126,8 +126,8 @@ Public Types</h2></td></tr>
 <tr class="separator:a3fbca466d7e6fdfd1ed0e368a224f8c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1fadf5a169e81c3171929c6fd53d2313"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a1fadf5a169e81c3171929c6fd53d2313">ArrayExtents</a> = typename Mapping::ArrayExtents</td></tr>
 <tr class="separator:a1fadf5a169e81c3171929c6fd53d2313"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af5a48c9b55ae1eb5872d7fb3f664d902"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#af5a48c9b55ae1eb5872d7fb3f664d902">ArrayIndex</a> = typename Mapping::ArrayIndex</td></tr>
-<tr class="separator:af5a48c9b55ae1eb5872d7fb3f664d902"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c99f7ed5230286191109dd723523847"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a0c99f7ed5230286191109dd723523847">ArrayIndex</a> = typename <a class="el" href="structllama_1_1ArrayExtents.html#abce5defd13fa5853289a5b1f744eb243">ArrayExtents::Index</a></td></tr>
+<tr class="separator:a0c99f7ed5230286191109dd723523847"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0e311e171359b386b0e86b16738d1d8d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a0e311e171359b386b0e86b16738d1d8d">RecordDim</a> = typename Mapping::RecordDim</td></tr>
 <tr class="separator:a0e311e171359b386b0e86b16738d1d8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac7ca80e1aa62ebe6ca0df8532bda9efc"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#ac7ca80e1aa62ebe6ca0df8532bda9efc">Accessor</a> = TAccessor</td></tr>
@@ -159,10 +159,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aeb97975804a31ebbddc3c53d4fbacdd5"><td class="memTemplParams" colspan="2">template&lt;typename V &gt; </td></tr>
 <tr class="memitem:aeb97975804a31ebbddc3c53d4fbacdd5"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#aeb97975804a31ebbddc3c53d4fbacdd5">operator()</a> (<a class="el" href="structllama_1_1ArrayIndex.html">llama::ArrayIndex</a>&lt; V, <a class="el" href="structllama_1_1ArrayIndex.html#a09d5dffbdde28ac87fc8ef1f20340593">ArrayIndex::rank</a> &gt;) const</td></tr>
 <tr class="separator:aeb97975804a31ebbddc3c53d4fbacdd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7c3249eb32762c1e26a0a568091483ed"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a7c3249eb32762c1e26a0a568091483ed">operator()</a> (<a class="el" href="structllama_1_1View.html#af5a48c9b55ae1eb5872d7fb3f664d902">ArrayIndex</a> ai) const -&gt; decltype(auto)</td></tr>
+<tr class="memitem:a7c3249eb32762c1e26a0a568091483ed"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a7c3249eb32762c1e26a0a568091483ed">operator()</a> (<a class="el" href="structllama_1_1View.html#a0c99f7ed5230286191109dd723523847">ArrayIndex</a> ai) const -&gt; decltype(auto)</td></tr>
 <tr class="memdesc:a7c3249eb32762c1e26a0a568091483ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> at the given <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a> index.  <a href="structllama_1_1View.html#a7c3249eb32762c1e26a0a568091483ed">More...</a><br /></td></tr>
 <tr class="separator:a7c3249eb32762c1e26a0a568091483ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a821703da22b47469141cd8b65f96a1ec"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a821703da22b47469141cd8b65f96a1ec">operator()</a> (<a class="el" href="structllama_1_1View.html#af5a48c9b55ae1eb5872d7fb3f664d902">ArrayIndex</a> ai) -&gt; decltype(auto)</td></tr>
+<tr class="memitem:a821703da22b47469141cd8b65f96a1ec"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a821703da22b47469141cd8b65f96a1ec">operator()</a> (<a class="el" href="structllama_1_1View.html#a0c99f7ed5230286191109dd723523847">ArrayIndex</a> ai) -&gt; decltype(auto)</td></tr>
 <tr class="separator:a821703da22b47469141cd8b65f96a1ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a99b9fd989744030d2b082b830ae4beb4"><td class="memTemplParams" colspan="2">template&lt;typename... Indices, std::enable_if_t&lt; std::conjunction_v&lt; std::is_convertible&lt; Indices, size_type &gt;... &gt;, int &gt;  = 0&gt; </td></tr>
 <tr class="memitem:a99b9fd989744030d2b082b830ae4beb4"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a99b9fd989744030d2b082b830ae4beb4">operator()</a> (Indices... indices) const -&gt; decltype(auto)</td></tr>
@@ -170,9 +170,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a62688dca2ffbedad30e219e2aa7d5400"><td class="memTemplParams" colspan="2">template&lt;typename... Indices, std::enable_if_t&lt; std::conjunction_v&lt; std::is_convertible&lt; Indices, size_type &gt;... &gt;, int &gt;  = 0&gt; </td></tr>
 <tr class="memitem:a62688dca2ffbedad30e219e2aa7d5400"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a62688dca2ffbedad30e219e2aa7d5400">operator()</a> (Indices... indices) -&gt; decltype(auto)</td></tr>
 <tr class="separator:a62688dca2ffbedad30e219e2aa7d5400"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a13b76bc25289fb7376b9dbfe9afc0cec"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a13b76bc25289fb7376b9dbfe9afc0cec">operator[]</a> (<a class="el" href="structllama_1_1View.html#af5a48c9b55ae1eb5872d7fb3f664d902">ArrayIndex</a> ai) const -&gt; decltype(auto)</td></tr>
+<tr class="memitem:a13b76bc25289fb7376b9dbfe9afc0cec"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a13b76bc25289fb7376b9dbfe9afc0cec">operator[]</a> (<a class="el" href="structllama_1_1View.html#a0c99f7ed5230286191109dd723523847">ArrayIndex</a> ai) const -&gt; decltype(auto)</td></tr>
 <tr class="separator:a13b76bc25289fb7376b9dbfe9afc0cec"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a526da546f43015bdd691572260cb7a90"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a526da546f43015bdd691572260cb7a90">operator[]</a> (<a class="el" href="structllama_1_1View.html#af5a48c9b55ae1eb5872d7fb3f664d902">ArrayIndex</a> ai) -&gt; decltype(auto)</td></tr>
+<tr class="memitem:a526da546f43015bdd691572260cb7a90"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a526da546f43015bdd691572260cb7a90">operator[]</a> (<a class="el" href="structllama_1_1View.html#a0c99f7ed5230286191109dd723523847">ArrayIndex</a> ai) -&gt; decltype(auto)</td></tr>
 <tr class="separator:a526da546f43015bdd691572260cb7a90"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5b2e47c3ed82390f8a988f9cd8451a08"><td class="memTemplParams" colspan="2">template&lt;typename V &gt; </td></tr>
 <tr class="memitem:a5b2e47c3ed82390f8a988f9cd8451a08"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1View.html#a5b2e47c3ed82390f8a988f9cd8451a08">operator[]</a> (<a class="el" href="structllama_1_1ArrayIndex.html">llama::ArrayIndex</a>&lt; V, <a class="el" href="structllama_1_1ArrayIndex.html#a09d5dffbdde28ac87fc8ef1f20340593">ArrayIndex::rank</a> &gt;) const</td></tr>
@@ -252,8 +252,8 @@ template&lt;typename TMapping , typename TBlobType , typename TAccessor  = acces
 
 </div>
 </div>
-<a id="af5a48c9b55ae1eb5872d7fb3f664d902"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af5a48c9b55ae1eb5872d7fb3f664d902">&#9670;&nbsp;</a></span>ArrayIndex</h2>
+<a id="a0c99f7ed5230286191109dd723523847"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c99f7ed5230286191109dd723523847">&#9670;&nbsp;</a></span>ArrayIndex</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -261,7 +261,7 @@ template&lt;typename TMapping , typename TBlobType , typename TAccessor  = acces
 template&lt;typename TMapping , typename TBlobType , typename TAccessor  = accessor::Default&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, TBlobType, TAccessor &gt;::<a class="el" href="structllama_1_1View.html#af5a48c9b55ae1eb5872d7fb3f664d902">ArrayIndex</a> =  typename Mapping::ArrayIndex</td>
+          <td class="memname">using <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, TBlobType, TAccessor &gt;::<a class="el" href="structllama_1_1View.html#a0c99f7ed5230286191109dd723523847">ArrayIndex</a> =  typename <a class="el" href="structllama_1_1ArrayExtents.html#abce5defd13fa5853289a5b1f744eb243">ArrayExtents::Index</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -807,7 +807,7 @@ template&lt;typename TMapping , typename TBlobType , typename TAccessor  = acces
         <tr>
           <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, TBlobType, TAccessor &gt;::operator() </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structllama_1_1View.html#af5a48c9b55ae1eb5872d7fb3f664d902">ArrayIndex</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1View.html#a0c99f7ed5230286191109dd723523847">ArrayIndex</a>&#160;</td>
           <td class="paramname"><em>ai</em></td><td>)</td>
           <td> -&gt; decltype(auto)
         </td>
@@ -838,7 +838,7 @@ template&lt;typename TMapping , typename TBlobType , typename TAccessor  = acces
         <tr>
           <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, TBlobType, TAccessor &gt;::operator() </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structllama_1_1View.html#af5a48c9b55ae1eb5872d7fb3f664d902">ArrayIndex</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1View.html#a0c99f7ed5230286191109dd723523847">ArrayIndex</a>&#160;</td>
           <td class="paramname"><em>ai</em></td><td>)</td>
           <td> const -&gt; decltype(auto)
         </td>
@@ -970,7 +970,7 @@ template&lt;typename TMapping , typename TBlobType , typename TAccessor  = acces
         <tr>
           <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, TBlobType, TAccessor &gt;::operator[] </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structllama_1_1View.html#af5a48c9b55ae1eb5872d7fb3f664d902">ArrayIndex</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1View.html#a0c99f7ed5230286191109dd723523847">ArrayIndex</a>&#160;</td>
           <td class="paramname"><em>ai</em></td><td>)</td>
           <td> -&gt; decltype(auto)
         </td>
@@ -1001,7 +1001,7 @@ template&lt;typename TMapping , typename TBlobType , typename TAccessor  = acces
         <tr>
           <td class="memname">auto <a class="el" href="structllama_1_1View.html">llama::View</a>&lt; TMapping, TBlobType, TAccessor &gt;::operator[] </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structllama_1_1View.html#af5a48c9b55ae1eb5872d7fb3f664d902">ArrayIndex</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1View.html#a0c99f7ed5230286191109dd723523847">ArrayIndex</a>&#160;</td>
           <td class="paramname"><em>ai</em></td><td>)</td>
           <td> const -&gt; decltype(auto)
         </td>
@@ -1153,7 +1153,7 @@ template&lt;typename TView , typename TBoundRecordCoord , bool OwnView&gt; </div
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="structllama_1_1View.html">View</a></li>
-    <li class="footer">Generated on Tue Jul 25 2023 15:58:42 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Thu Jul 27 2023 13:16:29 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

@@ -201,9 +201,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a1a76478259d35873449cc44e27dd5abc"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a1a76478259d35873449cc44e27dd5abc">llama::allocViewUninitialized</a> (Mapping mapping={}, const Allocator &amp;alloc={}, Accessor accessor={})</td></tr>
 <tr class="memdesc:a1a76478259d35873449cc44e27dd5abc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as <a class="el" href="namespacellama.html#a8e5d70e7cec0c305424ed3890c4cedc6">allocView</a> but does not run field constructors.  <a href="namespacellama.html#a1a76478259d35873449cc44e27dd5abc">More...</a><br /></td></tr>
 <tr class="separator:a1a76478259d35873449cc44e27dd5abc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5ccd7f98debeb59c219c00f554a843bc"><td class="memTemplParams" colspan="2">template&lt;typename Mapping , typename BlobType , typename Accessor , std::size_t... RCs&gt; </td></tr>
-<tr class="memitem:a5ccd7f98debeb59c219c00f554a843bc"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a5ccd7f98debeb59c219c00f554a843bc">llama::constructField</a> (View&lt; Mapping, BlobType, Accessor &gt; &amp;view, typename Mapping::ArrayIndex ai, RecordCoord&lt; RCs... &gt; rc)</td></tr>
-<tr class="separator:a5ccd7f98debeb59c219c00f554a843bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0289e8c7f0657f29a2b02a1d37452493"><td class="memTemplParams" colspan="2">template&lt;typename Mapping , typename BlobType , typename Accessor , std::size_t... RCs&gt; </td></tr>
+<tr class="memitem:a0289e8c7f0657f29a2b02a1d37452493"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a0289e8c7f0657f29a2b02a1d37452493">llama::constructField</a> (View&lt; Mapping, BlobType, Accessor &gt; &amp;view, typename Mapping::ArrayExtents::Index ai, RecordCoord&lt; RCs... &gt; rc)</td></tr>
+<tr class="separator:a0289e8c7f0657f29a2b02a1d37452493"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af4c8d962f80ddc030f99b08479ecb083"><td class="memTemplParams" colspan="2">template&lt;typename Mapping , typename BlobType , typename Accessor &gt; </td></tr>
 <tr class="memitem:af4c8d962f80ddc030f99b08479ecb083"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#af4c8d962f80ddc030f99b08479ecb083">llama::constructFields</a> (View&lt; Mapping, BlobType, Accessor &gt; &amp;view)</td></tr>
 <tr class="separator:af4c8d962f80ddc030f99b08479ecb083"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -217,9 +217,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a3750d27a7f8dd111fbe32dc769b44120"><td class="memTemplParams" colspan="2">template&lt;std::size_t Dim, typename RecordDim &gt; </td></tr>
 <tr class="memitem:a3750d27a7f8dd111fbe32dc769b44120"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a3750d27a7f8dd111fbe32dc769b44120">llama::allocViewStack</a> () -&gt; decltype(auto)</td></tr>
 <tr class="separator:a3750d27a7f8dd111fbe32dc769b44120"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4f8b2bbd3934fae49394efdc1b4ce3c4"><td class="memTemplParams" colspan="2">template&lt;typename Mapping , typename RecordCoord , typename Blobs &gt; </td></tr>
-<tr class="memitem:a4f8b2bbd3934fae49394efdc1b4ce3c4"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a4f8b2bbd3934fae49394efdc1b4ce3c4">llama::mapToMemory</a> (Mapping &amp;mapping, typename Mapping::ArrayIndex ai, RecordCoord rc, Blobs &amp;blobs) -&gt; decltype(auto)</td></tr>
-<tr class="separator:a4f8b2bbd3934fae49394efdc1b4ce3c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae38fc0d77ddcdd41b2f2522f4c5bd24e"><td class="memTemplParams" colspan="2">template&lt;typename Mapping , typename RecordCoord , typename Blobs &gt; </td></tr>
+<tr class="memitem:ae38fc0d77ddcdd41b2f2522f4c5bd24e"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ae38fc0d77ddcdd41b2f2522f4c5bd24e">llama::mapToMemory</a> (Mapping &amp;mapping, typename Mapping::ArrayExtents::Index ai, RecordCoord rc, Blobs &amp;blobs) -&gt; decltype(auto)</td></tr>
+<tr class="separator:ae38fc0d77ddcdd41b2f2522f4c5bd24e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5680a3947cde8d1a5d180a09f0003003"><td class="memTemplParams" colspan="2">template&lt;typename Blobs , typename TransformBlobFunc , std::size_t... Is&gt; </td></tr>
 <tr class="memitem:a5680a3947cde8d1a5d180a09f0003003"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a5680a3947cde8d1a5d180a09f0003003">llama::internal::makeTransformedBlobArray</a> (Blobs &amp;blobs, const TransformBlobFunc &amp;transformBlob, std::integer_sequence&lt; std::size_t, Is... &gt;)</td></tr>
 <tr class="separator:a5680a3947cde8d1a5d180a09f0003003"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -235,9 +235,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ad72593353a457dae8a55d0fb5279144a"><td class="memTemplParams" colspan="2">template&lt;typename NewMapping , typename Mapping , typename BlobType , typename Accessor &gt; </td></tr>
 <tr class="memitem:ad72593353a457dae8a55d0fb5279144a"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ad72593353a457dae8a55d0fb5279144a">llama::withMapping</a> (View&lt; Mapping, BlobType, Accessor &gt; view, NewMapping newMapping={})</td></tr>
 <tr class="separator:ad72593353a457dae8a55d0fb5279144a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad76145974be23fcd0fcc5ad7bb4e972a"><td class="memTemplParams" colspan="2">template&lt;typename TStoredParentView &gt; </td></tr>
-<tr class="memitem:ad76145974be23fcd0fcc5ad7bb4e972a"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ad76145974be23fcd0fcc5ad7bb4e972a">llama::SubView</a> (TStoredParentView &amp;&amp;, typename std::remove_reference_t&lt; TStoredParentView &gt;::Mapping::ArrayIndex) -&gt; SubView&lt; TStoredParentView &gt;</td></tr>
-<tr class="separator:ad76145974be23fcd0fcc5ad7bb4e972a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08522ce66a9c0e6ac1b771e38a81d97e"><td class="memTemplParams" colspan="2">template&lt;typename TStoredParentView &gt; </td></tr>
+<tr class="memitem:a08522ce66a9c0e6ac1b771e38a81d97e"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a08522ce66a9c0e6ac1b771e38a81d97e">llama::SubView</a> (TStoredParentView &amp;&amp;, typename std::remove_reference_t&lt; TStoredParentView &gt;::Mapping::ArrayExtents::Index) -&gt; SubView&lt; TStoredParentView &gt;</td></tr>
+<tr class="separator:a08522ce66a9c0e6ac1b771e38a81d97e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -269,7 +269,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="View_8hpp.html">View.hpp</a></li>
-    <li class="footer">Generated on Tue Jul 25 2023 15:58:42 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Thu Jul 27 2023 13:16:29 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

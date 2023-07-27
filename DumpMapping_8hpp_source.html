@@ -195,9 +195,9 @@ $(document).ready(function(){initNavTree('DumpMapping_8hpp_source.html',''); ini
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> View, <span class="keyword">typename</span> RecordCoord&gt;</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        <span class="keywordtype">void</span> boxesFromComputedField(</div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;            View&amp; view,</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;            <span class="keyword">typename</span> <a class="code" href="namespacellama.html#a0d0fda5486eb5976f940a638f0cdd9d4">View::Mapping::ArrayIndex</a> ai,</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;            <span class="keyword">typename</span> View::Mapping::ArrayExtents::Index ai,</div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;            RecordCoord rc,</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;            std::vector&lt;FieldBox&lt;typename View::Mapping::ArrayIndex&gt;&gt;&amp; infos)</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;            std::vector&lt;FieldBox&lt;typename View::Mapping::ArrayExtents::Index&gt;&gt;&amp; infos)</div>
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        {</div>
 <div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;            <span class="keyword">using</span> Mapping = <span class="keyword">typename</span> <a class="code" href="structllama_1_1View.html#ab78c51e95a88b07395d0311107f31ba3">View::Mapping</a>;</div>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;            <span class="keyword">using</span> RecordDim = <span class="keyword">typename</span> Mapping::RecordDim;</div>
@@ -270,9 +270,9 @@ $(document).ready(function(){initNavTree('DumpMapping_8hpp_source.html',''); ini
 <div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;        }</div>
 <div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160; </div>
 <div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> Mapping&gt;</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;        <span class="keyword">auto</span> boxesFromMapping(<span class="keyword">const</span> Mapping&amp; mapping) -&gt; std::vector&lt;FieldBox&lt;typename Mapping::ArrayIndex&gt;&gt;</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;        <span class="keyword">auto</span> boxesFromMapping(<span class="keyword">const</span> Mapping&amp; mapping) -&gt; std::vector&lt;FieldBox&lt;typename Mapping::ArrayExtents::Index&gt;&gt;</div>
 <div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        {</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;            std::vector&lt;FieldBox&lt;typename Mapping::ArrayIndex&gt;&gt; infos;</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;            std::vector&lt;FieldBox&lt;typename Mapping::ArrayExtents::Index&gt;&gt; infos;</div>
 <div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160; </div>
 <div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;            std::optional&lt;decltype(<a class="code" href="namespacellama.html#a8e5d70e7cec0c305424ed3890c4cedc6">allocView</a>(mapping))&gt; view;</div>
 <div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;            <span class="keywordflow">if</span> constexpr(hasAnyComputedField&lt;Mapping&gt;())</div>
@@ -599,7 +599,7 @@ $(document).ready(function(){initNavTree('DumpMapping_8hpp_source.html',''); ini
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="DumpMapping_8hpp.html">DumpMapping.hpp</a></li>
-    <li class="footer">Generated on Tue Jul 25 2023 15:58:42 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Thu Jul 27 2023 13:16:29 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
