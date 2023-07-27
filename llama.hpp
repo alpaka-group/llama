@@ -1951,21 +1951,30 @@
 	namespace llama
 	{
 	#ifdef __cpp_lib_concepts
-	    // clang-format off
-	    template <typename M>
+	    template<auto I>
+	    concept isConstexpr = requires { std::integral_constant<decltype(I), I>{}; };
+
+	    template<typename M>
 	    concept Mapping = requires(M m) {
 	        typename M::ArrayExtents;
-	        typename M::ArrayIndex;
 	        typename M::RecordDim;
-	        { m.extents() } -> std::same_as<typename M::ArrayExtents>;
-	        { +M::blobCount } -> std::same_as<std::size_t>;
-	        std::integral_constant<std::size_t, M::blobCount>{}; // validates constexpr-ness
-	        { m.blobSize(typename M::ArrayExtents::value_type{}) } -> std::same_as<typename M::ArrayExtents::value_type>;
+	        {
+	            m.extents()
+	        } -> std::same_as<typename M::ArrayExtents>;
+	        {
+	            +M::blobCount
+	        } -> std::same_as<std::size_t>;
+	        requires isConstexpr<M::blobCount>;
+	        {
+	            m.blobSize(typename M::ArrayExtents::value_type{})
+	        } -> std::same_as<typename M::ArrayExtents::value_type>;
 	    };
 
-	    template <typename M, typename RC>
-	    concept PhysicalField = requires(M m, typename M::ArrayIndex ai) {
-	        { m.blobNrAndOffset(ai, RC{}) } -> std::same_as<NrAndOffset<typename M::ArrayExtents::value_type>>;
+	    template<typename M, typename RC>
+	    concept PhysicalField = requires(M m, typename M::ArrayExtents::Index ai) {
+	        {
+	            m.blobNrAndOffset(ai, RC{})
+	        } -> std::same_as<NrAndOffset<typename M::ArrayExtents::value_type>>;
 	    };
 
 	    template<typename M>
@@ -1979,32 +1988,40 @@
 	    inline constexpr bool allFieldsArePhysical
 	        = mp_all_of<LeafRecordCoords<typename M::RecordDim>, MakeIsPhysical<M>::template fn>::value;
 
-	    template <typename M>
+	    template<typename M>
 	    concept PhysicalMapping = Mapping<M> && allFieldsArePhysical<M>;
 
-	    template <typename R>
+	    template<typename R>
 	    concept LValueReference = std::is_lvalue_reference_v<R>;
 
 	    template<typename R>
 	    concept AdlTwoStepSwappable = requires(R a, R b) { swap(a, b); } || requires(R a, R b) { std::swap(a, b); };
 
-	    template <typename R>
+	    template<typename R>
 	    concept ProxyReference = std::is_copy_constructible_v<R> && std::is_copy_assignable_v<R> && requires(R r) {
 	        typename R::value_type;
-	        { static_cast<typename R::value_type>(r) } -> std::same_as<typename R::value_type>;
-	        { r = std::declval<typename R::value_type>() } -> std::same_as<R&>;
+	        {
+	            static_cast<typename R::value_type>(r)
+	        } -> std::same_as<typename R::value_type>;
+	        {
+	            r = std::declval<typename R::value_type>()
+	        } -> std::same_as<R&>;
 	    } && AdlTwoStepSwappable<R>;
 
-	    template <typename R>
+	    template<typename R>
 	    concept AnyReference = LValueReference<R> || ProxyReference<R>;
 
-	    template <typename R, typename T>
-	    concept AnyReferenceTo = (LValueReference<R> && std::is_same_v<std::remove_cvref_t<R>, T>) || (ProxyReference<R> && std::is_same_v<typename R::value_type, T>);
+	    template<typename R, typename T>
+	    concept AnyReferenceTo = (LValueReference<R> && std::is_same_v<std::remove_cvref_t<R>, T>)
+	        || (ProxyReference<R> && std::is_same_v<typename R::value_type, T>);
 
-	    template <typename M, typename RC>
-	    concept ComputedField = M::isComputed(RC{}) && requires(M m, typename M::ArrayIndex ai, Array<Array<std::byte, 1>, 1> blobs) {
-	        { m.compute(ai, RC{}, blobs) } -> AnyReferenceTo<GetType<typename M::RecordDim, RC>>;
-	    };
+	    template<typename M, typename RC>
+	    concept ComputedField
+	        = M::isComputed(RC{}) && requires(M m, typename M::ArrayExtents::Index ai, std::byte** blobs) {
+	              {
+	                  m.compute(ai, RC{}, blobs)
+	              } -> AnyReferenceTo<GetType<typename M::RecordDim, RC>>;
+	          };
 
 	    template<typename M>
 	    struct MakeIsComputed
@@ -2017,7 +2034,7 @@
 	    inline constexpr bool allFieldsAreComputed
 	        = mp_all_of<LeafRecordCoords<typename M::RecordDim>, MakeIsComputed<M>::template fn>::value;
 
-	    template <typename M>
+	    template<typename M>
 	    concept FullyComputedMapping = Mapping<M> && allFieldsAreComputed<M>;
 
 	    template<
@@ -2026,27 +2043,31 @@
 	        std::size_t PhysicalCount = mp_count_if<LeafCoords, MakeIsPhysical<M>::template fn>::value,
 	        std::size_t ComputedCount = mp_count_if<LeafCoords, MakeIsComputed<M>::template fn>::value>
 	    inline constexpr bool allFieldsArePhysicalOrComputed
-	        = (PhysicalCount + ComputedCount) >= mp_size<LeafCoords>::value&& PhysicalCount > 0
+	        = (PhysicalCount + ComputedCount) >= mp_size<LeafCoords>::value && PhysicalCount > 0
 	        && ComputedCount > 0; // == instead of >= would be better, but it's not easy to count correctly,
 	                              // because we cannot check whether the call to blobNrOrOffset()
 	                              // or compute() is actually valid
 
-	    template <typename M>
+	    template<typename M>
 	    concept PartiallyComputedMapping = Mapping<M> && allFieldsArePhysicalOrComputed<M>;
 
-	    // according to http://eel.is/c++draft/intro.object#3 only std::byte and unsigned char can provide storage for
-	    // other types
+	    /// Additional semantic requirement: &b[i] + j == &b[i + j] for any integral i and j in range of the blob
 	    template<typename B>
 	    concept Blob = requires(B b, std::size_t i) {
-	        requires std::is_same_v<std::remove_cvref_t<decltype(b[i])>, std::byte> ||
-	            std::is_same_v<std::remove_cvref_t<decltype(b[i])>, unsigned char>;
+	        // according to http://eel.is/c++draft/intro.object#3 only std::byte and unsigned char can
+	        // provide storage for
+	        // other types
+	        requires std::is_lvalue_reference_v<decltype(b[i])>;
+	        requires std::same_as<std::remove_cvref_t<decltype(b[i])>, std::byte>
+	            || std::same_as<std::remove_cvref_t<decltype(b[i])>, unsigned char>;
 	    };
 
-	    template <typename BA>
-	    concept BlobAllocator = requires(BA ba, std::integral_constant<std::size_t, 16> alignment, std::size_t size) {
-	        { ba(alignment, size) } -> Blob;
+	    template<typename BA>
+	    concept BlobAllocator = requires(BA ba, std::size_t size) {
+	        {
+	            ba(std::integral_constant<std::size_t, 16>{}, size)
+	        } -> Blob;
 	    };
-	    // clang-format on
 	#endif
 
 	    namespace internal
@@ -2856,10 +2877,13 @@ namespace llama::bloballoc
 			    struct MappingBase : protected TArrayExtents
 			    {
 			        using ArrayExtents = TArrayExtents;
-			        using ArrayIndex = typename ArrayExtents::Index;
 			        using RecordDim = TRecordDim;
+
+			    protected:
+			        using ArrayIndex = typename ArrayExtents::Index;
 			        using size_type = typename ArrayExtents::value_type;
 
+			    public:
 			        constexpr MappingBase() = default;
 
 			        LLAMA_FN_HOST_ACC_INLINE
@@ -3288,7 +3312,7 @@ namespace llama::bloballoc
 	    template<typename Mapping, typename BlobType, typename Accessor, std::size_t... RCs>
 	    LLAMA_FN_HOST_ACC_INLINE void constructField(
 	        View<Mapping, BlobType, Accessor>& view,
-	        typename Mapping::ArrayIndex ai,
+	        typename Mapping::ArrayExtents::Index ai,
 	        RecordCoord<RCs...> rc)
 	    {
 	        using FieldType = GetType<typename Mapping::RecordDim, decltype(rc)>;
@@ -3546,7 +3570,7 @@ namespace llama::bloballoc
 	    template<typename Mapping, typename RecordCoord, typename Blobs>
 	    LLAMA_FN_HOST_ACC_INLINE auto mapToMemory(
 	        Mapping& mapping,
-	        typename Mapping::ArrayIndex ai,
+	        typename Mapping::ArrayExtents::Index ai,
 	        RecordCoord rc,
 	        Blobs& blobs) -> decltype(auto)
 	    {
@@ -3584,7 +3608,7 @@ namespace llama::bloballoc
 	        using Mapping = TMapping;
 	        using BlobType = TBlobType;
 	        using ArrayExtents = typename Mapping::ArrayExtents;
-	        using ArrayIndex = typename Mapping::ArrayIndex;
+	        using ArrayIndex = typename ArrayExtents::Index;
 	        using RecordDim = typename Mapping::RecordDim;
 	        using Accessor = TAccessor;
 	        using iterator = Iterator<View>;
@@ -3868,7 +3892,7 @@ namespace llama::bloballoc
 	        using ParentView = std::remove_const_t<std::remove_reference_t<StoredParentView>>; ///< type of the parent view
 	        using Mapping = typename ParentView::Mapping; ///< mapping of the parent view
 	        using ArrayExtents = typename Mapping::ArrayExtents; ///< array extents of the parent view
-	        using ArrayIndex = typename Mapping::ArrayIndex; ///< array index of the parent view
+	        using ArrayIndex = typename ArrayExtents::Index; ///< array index of the parent view
 
 	        using size_type = typename ArrayExtents::value_type;
 
@@ -3938,7 +3962,7 @@ namespace llama::bloballoc
 	    /// SubView vview(view); will store a reference to view.
 	    /// SubView vview(std::move(view)); will store the view.
 	    template<typename TStoredParentView>
-	    SubView(TStoredParentView&&, typename std::remove_reference_t<TStoredParentView>::Mapping::ArrayIndex)
+	    SubView(TStoredParentView&&, typename std::remove_reference_t<TStoredParentView>::Mapping::ArrayExtents::Index)
 	        -> SubView<TStoredParentView>;
 	} // namespace llama
 	// ==
@@ -5463,9 +5487,9 @@ namespace llama
         template<typename View, typename RecordCoord>
         void boxesFromComputedField(
             View& view,
-            typename View::Mapping::ArrayIndex ai,
+            typename View::Mapping::ArrayExtents::Index ai,
             RecordCoord rc,
-            std::vector<FieldBox<typename View::Mapping::ArrayIndex>>& infos)
+            std::vector<FieldBox<typename View::Mapping::ArrayExtents::Index>>& infos)
         {
             using Mapping = typename View::Mapping;
             using RecordDim = typename Mapping::RecordDim;
@@ -5538,9 +5562,9 @@ namespace llama
         }
 
         template<typename Mapping>
-        auto boxesFromMapping(const Mapping& mapping) -> std::vector<FieldBox<typename Mapping::ArrayIndex>>
+        auto boxesFromMapping(const Mapping& mapping) -> std::vector<FieldBox<typename Mapping::ArrayExtents::Index>>
         {
-            std::vector<FieldBox<typename Mapping::ArrayIndex>> infos;
+            std::vector<FieldBox<typename Mapping::ArrayExtents::Index>> infos;
 
             std::optional<decltype(allocView(mapping))> view;
             if constexpr(hasAnyComputedField<Mapping>())
@@ -6252,14 +6276,14 @@ namespace llama
 	    /// should not be created by the user. They are returned from various access functions in \ref View and RecordRef
 	    /// itself.
 	    template<typename TView, typename TBoundRecordCoord, bool OwnView>
-	    struct RecordRef : private TView::Mapping::ArrayIndex
+	    struct RecordRef : private TView::Mapping::ArrayExtents::Index
 	    {
 	        using View = TView; ///< View this record reference points into.
 	        using BoundRecordCoord
 	            = TBoundRecordCoord; ///< Record coords into View::RecordDim which are already bound by this RecordRef.
 
 	    private:
-	        using ArrayIndex = typename View::Mapping::ArrayIndex;
+	        using ArrayIndex = typename View::Mapping::ArrayExtents::Index;
 	        using RecordDim = typename View::Mapping::RecordDim;
 
 	        std::conditional_t<OwnView, View, View&> view;
@@ -8790,13 +8814,16 @@ namespace llama
 	        using Inner = InnerMapping<TArrayExtents, internal::SplitBytes<TRecordDim>>;
 
 	        using ArrayExtents = typename Inner::ArrayExtents;
-	        using ArrayIndex = typename Inner::ArrayIndex;
 	        using RecordDim = TRecordDim; // hide Inner::RecordDim
 	        using Inner::blobCount;
 
 	        using Inner::blobSize;
 	        using Inner::extents;
 
+	    private:
+	        using ArrayIndex = typename TArrayExtents::Index;
+
+	    public:
 	        LLAMA_FN_HOST_ACC_INLINE
 	        constexpr explicit Bytesplit(TArrayExtents extents, TRecordDim = {}) : Inner(extents)
 	        {
@@ -9058,13 +9085,16 @@ namespace llama
 		            = InnerMapping<TArrayExtents, internal::ReplaceTypesByProjectionResults<TRecordDim, TProjectionMap>>;
 		        using ProjectionMap = TProjectionMap;
 		        using ArrayExtents = typename Inner::ArrayExtents;
-		        using ArrayIndex = typename Inner::ArrayIndex;
 		        using RecordDim = TRecordDim; // hide Inner::RecordDim
 		        using Inner::blobCount;
 		        using Inner::blobSize;
 		        using Inner::extents;
 		        using Inner::Inner;
 
+		    protected:
+		        using ArrayIndex = typename ArrayExtents::Index;
+
+		    public:
 		        template<typename RecordCoord>
 		        LLAMA_FN_HOST_ACC_INLINE static constexpr auto isComputed(RecordCoord) -> bool
 		        {
@@ -9074,7 +9104,7 @@ namespace llama
 
 		        template<std::size_t... RecordCoords, typename BlobArray>
 		        LLAMA_FN_HOST_ACC_INLINE constexpr auto compute(
-		            typename Inner::ArrayIndex ai,
+		            ArrayIndex ai,
 		            RecordCoord<RecordCoords...> rc,
 		            BlobArray& blobs) const
 		        {
@@ -9476,7 +9506,7 @@ namespace llama
 
 	        template<std::size_t... RecordCoords, typename Blobs>
 	        LLAMA_FN_HOST_ACC_INLINE auto compute(
-	            typename Mapping::ArrayIndex ai,
+	            typename Mapping::ArrayExtents::Index ai,
 	            RecordCoord<RecordCoords...> rc,
 	            Blobs& blobs) const -> decltype(auto)
 	        {
@@ -9715,14 +9745,14 @@ namespace llama
 
 	    private:
 	        using size_type = typename Mapping::ArrayExtents::value_type;
+	        using ArrayIndex = typename Mapping::ArrayExtents::Index;
 
 	    public:
 	        using Inner = Mapping;
 	        inline static constexpr std::size_t granularity = Granularity;
 	        using CountType = TCountType;
-	        using typename Mapping::ArrayExtents;
-	        using typename Mapping::ArrayIndex;
-	        using typename Mapping::RecordDim;
+	        using ArrayExtents = typename Mapping::ArrayExtents;
+	        using RecordDim = typename Mapping::RecordDim;
 
 	        // We duplicate every blob of the inner mapping with a shadow blob, where we count the accesses
 	        inline static constexpr std::size_t blobCount = Mapping::blobCount * 2;
@@ -9764,10 +9794,8 @@ namespace llama
 	        }
 
 	        template<std::size_t... RecordCoords, typename Blobs>
-	        LLAMA_FN_HOST_ACC_INLINE auto compute(
-	            typename Mapping::ArrayIndex ai,
-	            RecordCoord<RecordCoords...> rc,
-	            Blobs& blobs) const -> decltype(auto)
+	        LLAMA_FN_HOST_ACC_INLINE auto compute(ArrayIndex ai, RecordCoord<RecordCoords...> rc, Blobs& blobs) const
+	            -> decltype(auto)
 	        {
 	            static_assert(
 	                !std::is_const_v<Blobs>,
@@ -10015,10 +10043,10 @@ namespace llama
 	    {
 	    private:
 	        using size_type = typename Mapping::ArrayExtents::value_type;
+	        using ArrayIndex = typename Mapping::ArrayExtents::Index;
 
 	    public:
 	        using Inner = Mapping;
-	        using ArrayIndex = typename Inner::ArrayIndex;
 
 	        constexpr PermuteArrayIndex() = default;
 
