@@ -476,18 +476,18 @@ Functions</h2></td></tr>
 <tr class="memitem:ae38fc0d77ddcdd41b2f2522f4c5bd24e"><td class="memTemplParams" colspan="2">template&lt;typename Mapping , typename RecordCoord , typename Blobs &gt; </td></tr>
 <tr class="memitem:ae38fc0d77ddcdd41b2f2522f4c5bd24e"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ae38fc0d77ddcdd41b2f2522f4c5bd24e">mapToMemory</a> (Mapping &amp;mapping, typename Mapping::ArrayExtents::Index ai, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a> rc, Blobs &amp;blobs) -&gt; decltype(auto)</td></tr>
 <tr class="separator:ae38fc0d77ddcdd41b2f2522f4c5bd24e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a887c0f2f25b3a4e104c73178fa12c92c"><td class="memTemplParams" colspan="2">template&lt;typename View , typename TransformBlobFunc , typename  = std::enable_if_t&lt;isView&lt;std::decay_t&lt;View&gt;&gt;&gt;&gt; </td></tr>
-<tr class="memitem:a887c0f2f25b3a4e104c73178fa12c92c"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a887c0f2f25b3a4e104c73178fa12c92c">transformBlobs</a> (<a class="el" href="structllama_1_1View.html">View</a> &amp;view, const TransformBlobFunc &amp;transformBlob)</td></tr>
-<tr class="separator:a887c0f2f25b3a4e104c73178fa12c92c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae800146eabadd222999acf6020391b75"><td class="memTemplParams" colspan="2">template&lt;typename View , typename NewBlobType  = CopyConst&lt;View, std::byte&gt;*, typename  = std::enable_if_t&lt;isView&lt;std::decay_t&lt;View&gt;&gt;&gt;&gt; </td></tr>
-<tr class="memitem:ae800146eabadd222999acf6020391b75"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ae800146eabadd222999acf6020391b75">shallowCopy</a> (<a class="el" href="structllama_1_1View.html">View</a> &amp;view)</td></tr>
-<tr class="separator:ae800146eabadd222999acf6020391b75"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ce30d8d3b31c0aae29c78915aa20221"><td class="memTemplParams" colspan="2">template&lt;typename NewAccessor , typename Mapping , typename BlobType , typename OldAccessor &gt; </td></tr>
-<tr class="memitem:a7ce30d8d3b31c0aae29c78915aa20221"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a7ce30d8d3b31c0aae29c78915aa20221">withAccessor</a> (<a class="el" href="structllama_1_1View.html">View</a>&lt; Mapping, BlobType, OldAccessor &gt; view, NewAccessor newAccessor={})</td></tr>
-<tr class="separator:a7ce30d8d3b31c0aae29c78915aa20221"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad72593353a457dae8a55d0fb5279144a"><td class="memTemplParams" colspan="2">template&lt;typename NewMapping , typename Mapping , typename BlobType , typename Accessor &gt; </td></tr>
-<tr class="memitem:ad72593353a457dae8a55d0fb5279144a"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ad72593353a457dae8a55d0fb5279144a">withMapping</a> (<a class="el" href="structllama_1_1View.html">View</a>&lt; Mapping, BlobType, Accessor &gt; view, NewMapping newMapping={})</td></tr>
-<tr class="separator:ad72593353a457dae8a55d0fb5279144a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a188282c298c3e709ff8727fafd31b24b"><td class="memTemplParams" colspan="2">template&lt;typename ViewFwd , typename TransformBlobFunc , typename  = std::enable_if_t&lt;isView&lt;std::decay_t&lt;ViewFwd&gt;&gt;&gt;&gt; </td></tr>
+<tr class="memitem:a188282c298c3e709ff8727fafd31b24b"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a188282c298c3e709ff8727fafd31b24b">transformBlobs</a> (ViewFwd &amp;&amp;view, const TransformBlobFunc &amp;transformBlob)</td></tr>
+<tr class="separator:a188282c298c3e709ff8727fafd31b24b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d2a40734074075e17bccd413a6f1ec1"><td class="memTemplParams" colspan="2">template&lt;typename View , typename NewBlobType  = CopyConst&lt;std::remove_reference_t&lt;View&gt;, std::byte&gt;*, typename  = std::enable_if_t&lt;isView&lt;std::decay_t&lt;View&gt;&gt;&gt;&gt; </td></tr>
+<tr class="memitem:a4d2a40734074075e17bccd413a6f1ec1"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a4d2a40734074075e17bccd413a6f1ec1">shallowCopy</a> (<a class="el" href="structllama_1_1View.html">View</a> &amp;&amp;view)</td></tr>
+<tr class="separator:a4d2a40734074075e17bccd413a6f1ec1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66091f10efa162f8e81cd6081ff155bf"><td class="memTemplParams" colspan="2">template&lt;typename NewAccessor , typename ViewFwd , typename  = std::enable_if_t&lt;isView&lt;std::decay_t&lt;ViewFwd&gt;&gt;&gt;&gt; </td></tr>
+<tr class="memitem:a66091f10efa162f8e81cd6081ff155bf"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a66091f10efa162f8e81cd6081ff155bf">withAccessor</a> (ViewFwd &amp;&amp;view, NewAccessor newAccessor={})</td></tr>
+<tr class="separator:a66091f10efa162f8e81cd6081ff155bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8bfcf783207896246153d05625310971"><td class="memTemplParams" colspan="2">template&lt;typename NewMapping , typename ViewFwd , typename  = std::enable_if_t&lt;isView&lt;std::decay_t&lt;ViewFwd&gt;&gt;&gt;&gt; </td></tr>
+<tr class="memitem:a8bfcf783207896246153d05625310971"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a8bfcf783207896246153d05625310971">withMapping</a> (ViewFwd &amp;&amp;view, NewMapping newMapping={})</td></tr>
+<tr class="separator:a8bfcf783207896246153d05625310971"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a08522ce66a9c0e6ac1b771e38a81d97e"><td class="memTemplParams" colspan="2">template&lt;typename TStoredParentView &gt; </td></tr>
 <tr class="memitem:a08522ce66a9c0e6ac1b771e38a81d97e"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a08522ce66a9c0e6ac1b771e38a81d97e">SubView</a> (TStoredParentView &amp;&amp;, typename std::remove_reference_t&lt; TStoredParentView &gt;::Mapping::ArrayExtents::Index) -&gt; <a class="el" href="structllama_1_1SubView.html">SubView</a>&lt; TStoredParentView &gt;</td></tr>
 <tr class="separator:a08522ce66a9c0e6ac1b771e38a81d97e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -3201,13 +3201,13 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="ae800146eabadd222999acf6020391b75"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae800146eabadd222999acf6020391b75">&#9670;&nbsp;</a></span>shallowCopy()</h2>
+<a id="a4d2a40734074075e17bccd413a6f1ec1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d2a40734074075e17bccd413a6f1ec1">&#9670;&nbsp;</a></span>shallowCopy()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename View , typename NewBlobType  = CopyConst&lt;View, std::byte&gt;*, typename  = std::enable_if_t&lt;isView&lt;std::decay_t&lt;View&gt;&gt;&gt;&gt; </div>
+template&lt;typename View , typename NewBlobType  = CopyConst&lt;std::remove_reference_t&lt;View&gt;, std::byte&gt;*, typename  = std::enable_if_t&lt;isView&lt;std::decay_t&lt;View&gt;&gt;&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -3215,7 +3215,7 @@ template&lt;typename View , typename NewBlobType  = CopyConst&lt;View, std::byte
         <tr>
           <td class="memname">auto llama::shallowCopy </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structllama_1_1View.html">View</a> &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1View.html">View</a> &amp;&amp;&#160;</td>
           <td class="paramname"><em>view</em></td><td>)</td>
           <td></td>
         </tr>
@@ -3234,7 +3234,7 @@ template&lt;typename View , typename NewBlobType  = CopyConst&lt;View, std::byte
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A new view with the same mapping as view, where each blob refers to the blob in view. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00619">619</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00646">646</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -3448,13 +3448,13 @@ template&lt;typename ViewA , typename BoundRecordDimA , bool OwnViewA, typename 
 
 </div>
 </div>
-<a id="a887c0f2f25b3a4e104c73178fa12c92c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a887c0f2f25b3a4e104c73178fa12c92c">&#9670;&nbsp;</a></span>transformBlobs()</h2>
+<a id="a188282c298c3e709ff8727fafd31b24b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a188282c298c3e709ff8727fafd31b24b">&#9670;&nbsp;</a></span>transformBlobs()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename View , typename TransformBlobFunc , typename  = std::enable_if_t&lt;isView&lt;std::decay_t&lt;View&gt;&gt;&gt;&gt; </div>
+template&lt;typename ViewFwd , typename TransformBlobFunc , typename  = std::enable_if_t&lt;isView&lt;std::decay_t&lt;ViewFwd&gt;&gt;&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -3462,7 +3462,7 @@ template&lt;typename View , typename TransformBlobFunc , typename  = std::enable
         <tr>
           <td class="memname">auto llama::transformBlobs </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structllama_1_1View.html">View</a> &amp;&#160;</td>
+          <td class="paramtype">ViewFwd &amp;&amp;&#160;</td>
           <td class="paramname"><em>view</em>, </td>
         </tr>
         <tr>
@@ -3485,7 +3485,7 @@ template&lt;typename View , typename TransformBlobFunc , typename  = std::enable
 </div><div class="memdoc">
 <p>Applies the given transformation to the blobs of a view and creates a new view with the transformed blobs and the same mapping and accessor as the old view. </p>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00601">601</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00624">624</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -3632,13 +3632,13 @@ template&lt;typename... Elements, typename Functor &gt; </div>
 
 </div>
 </div>
-<a id="a7ce30d8d3b31c0aae29c78915aa20221"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7ce30d8d3b31c0aae29c78915aa20221">&#9670;&nbsp;</a></span>withAccessor()</h2>
+<a id="a66091f10efa162f8e81cd6081ff155bf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a66091f10efa162f8e81cd6081ff155bf">&#9670;&nbsp;</a></span>withAccessor()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename NewAccessor , typename Mapping , typename BlobType , typename OldAccessor &gt; </div>
+template&lt;typename NewAccessor , typename ViewFwd , typename  = std::enable_if_t&lt;isView&lt;std::decay_t&lt;ViewFwd&gt;&gt;&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -3646,7 +3646,7 @@ template&lt;typename NewAccessor , typename Mapping , typename BlobType , typena
         <tr>
           <td class="memname">auto llama::withAccessor </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structllama_1_1View.html">View</a>&lt; Mapping, BlobType, OldAccessor &gt;&#160;</td>
+          <td class="paramtype">ViewFwd &amp;&amp;&#160;</td>
           <td class="paramname"><em>view</em>, </td>
         </tr>
         <tr>
@@ -3668,17 +3668,17 @@ template&lt;typename NewAccessor , typename Mapping , typename BlobType , typena
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00638">638</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00664">664</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
-<a id="ad72593353a457dae8a55d0fb5279144a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad72593353a457dae8a55d0fb5279144a">&#9670;&nbsp;</a></span>withMapping()</h2>
+<a id="a8bfcf783207896246153d05625310971"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8bfcf783207896246153d05625310971">&#9670;&nbsp;</a></span>withMapping()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename NewMapping , typename Mapping , typename BlobType , typename Accessor &gt; </div>
+template&lt;typename NewMapping , typename ViewFwd , typename  = std::enable_if_t&lt;isView&lt;std::decay_t&lt;ViewFwd&gt;&gt;&gt;&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -3686,7 +3686,7 @@ template&lt;typename NewMapping , typename Mapping , typename BlobType , typenam
         <tr>
           <td class="memname">auto llama::withMapping </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structllama_1_1View.html">View</a>&lt; Mapping, BlobType, Accessor &gt;&#160;</td>
+          <td class="paramtype">ViewFwd &amp;&amp;&#160;</td>
           <td class="paramname"><em>view</em>, </td>
         </tr>
         <tr>
@@ -3708,7 +3708,7 @@ template&lt;typename NewMapping , typename Mapping , typename BlobType , typenam
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00650">650</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00676">676</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -4868,7 +4868,7 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Thu Jul 27 2023 13:16:29 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Thu Jul 27 2023 13:17:25 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

@@ -379,9 +379,12 @@ Functions</h2></td></tr>
 <tr class="memitem:a36b0736740116d5e9fff6172f5b202af"><td class="memTemplParams" colspan="2">template&lt;typename Allocator , typename Mapping , std::size_t... Is&gt; </td></tr>
 <tr class="memitem:a36b0736740116d5e9fff6172f5b202af"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a36b0736740116d5e9fff6172f5b202af">makeBlobArray</a> (const Allocator &amp;alloc, const Mapping &amp;mapping, std::integer_sequence&lt; std::size_t, Is... &gt;) -&gt; <a class="el" href="structllama_1_1Array.html">Array</a>&lt; <a class="el" href="namespacellama_1_1internal.html#a6b703634fd8ad7364cf42588add461bc">AllocatorBlobType</a>&lt; Allocator, typename Mapping::RecordDim &gt;, Mapping::blobCount &gt;</td></tr>
 <tr class="separator:a36b0736740116d5e9fff6172f5b202af"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5680a3947cde8d1a5d180a09f0003003"><td class="memTemplParams" colspan="2">template&lt;typename Blobs , typename TransformBlobFunc , std::size_t... Is&gt; </td></tr>
-<tr class="memitem:a5680a3947cde8d1a5d180a09f0003003"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a5680a3947cde8d1a5d180a09f0003003">makeTransformedBlobArray</a> (Blobs &amp;blobs, const TransformBlobFunc &amp;transformBlob, std::integer_sequence&lt; std::size_t, Is... &gt;)</td></tr>
-<tr class="separator:a5680a3947cde8d1a5d180a09f0003003"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9c450a82fa4a4c09fdc9b4e95d12db3"><td class="memTemplParams" colspan="2">template&lt;class T , class U &gt; </td></tr>
+<tr class="memitem:ab9c450a82fa4a4c09fdc9b4e95d12db3"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto &amp;&amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#ab9c450a82fa4a4c09fdc9b4e95d12db3">forward_like</a> (U &amp;&amp;x) noexcept</td></tr>
+<tr class="separator:ab9c450a82fa4a4c09fdc9b4e95d12db3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8668f4ee45cbd9b4e752577b16631968"><td class="memTemplParams" colspan="2">template&lt;typename Blobs , typename TransformBlobFunc , std::size_t... Is&gt; </td></tr>
+<tr class="memitem:a8668f4ee45cbd9b4e752577b16631968"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a8668f4ee45cbd9b4e752577b16631968">makeTransformedBlobArray</a> (Blobs &amp;&amp;blobs, const TransformBlobFunc &amp;transformBlob, std::integer_sequence&lt; std::size_t, Is... &gt;)</td></tr>
+<tr class="separator:a8668f4ee45cbd9b4e752577b16631968"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -1309,6 +1312,36 @@ template&lt;typename TypeList &gt; </div>
 
 </div>
 </div>
+<a id="ab9c450a82fa4a4c09fdc9b4e95d12db3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab9c450a82fa4a4c09fdc9b4e95d12db3">&#9670;&nbsp;</a></span>forward_like()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T , class U &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto&amp;&amp; llama::internal::forward_like </td>
+          <td>(</td>
+          <td class="paramtype">U &amp;&amp;&#160;</td>
+          <td class="paramname"><em>x</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00591">591</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+
+</div>
+</div>
 <a id="ad4195dfa3069a0e4cc1d15e13175cc88"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad4195dfa3069a0e4cc1d15e13175cc88">&#9670;&nbsp;</a></span>intToStrSize()</h2>
 
@@ -1529,8 +1562,8 @@ template&lt;typename T , typename Tuple , std::size_t... Is&gt; </div>
 
 </div>
 </div>
-<a id="a5680a3947cde8d1a5d180a09f0003003"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5680a3947cde8d1a5d180a09f0003003">&#9670;&nbsp;</a></span>makeTransformedBlobArray()</h2>
+<a id="a8668f4ee45cbd9b4e752577b16631968"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8668f4ee45cbd9b4e752577b16631968">&#9670;&nbsp;</a></span>makeTransformedBlobArray()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1543,7 +1576,7 @@ template&lt;typename Blobs , typename TransformBlobFunc , std::size_t... Is&gt; 
         <tr>
           <td class="memname">auto llama::internal::makeTransformedBlobArray </td>
           <td>(</td>
-          <td class="paramtype">Blobs &amp;&#160;</td>
+          <td class="paramtype">Blobs &amp;&amp;&#160;</td>
           <td class="paramname"><em>blobs</em>, </td>
         </tr>
         <tr>
@@ -1571,7 +1604,7 @@ template&lt;typename Blobs , typename TransformBlobFunc , std::size_t... Is&gt; 
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00589">589</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00612">612</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -2759,7 +2792,7 @@ template&lt;typename T &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1internal.html">internal</a></li>
-    <li class="footer">Generated on Thu Jul 27 2023 13:16:29 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Thu Jul 27 2023 13:17:25 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
