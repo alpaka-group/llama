@@ -160,3 +160,15 @@ TEST_CASE("view.withAccessor.OffsetFloatAccessor")
     CHECK(view2(0)(tag::Pos{})(tag::X{}) == 2.0);
     CHECK(view2(0)(tag::Mass{}) == 12.0f);
 }
+
+TEST_CASE("view.allocView.Stacked")
+{
+    auto mapping = llama::mapping::AoS{llama::ArrayExtents{3, 4}, Particle{}};
+
+    auto view = llama::allocView(
+        mapping,
+        llama::bloballoc::Vector{},
+        llama::accessor::Stacked<llama::accessor::Default, llama::accessor::Restrict, llama::accessor::Default>{});
+    iotaFillView(view);
+    iotaCheckView(view);
+}
