@@ -177,6 +177,7 @@ Acessors
 .. doxygenstruct:: llama::accessor::Const
 .. doxygenstruct:: llama::accessor::Restrict
 .. doxygenstruct:: llama::accessor::Atomic
+.. doxygenstruct:: llama::accessor::Stacked
 
 RecordDim flattener
 ^^^^^^^^^^^^^^^^^^^
