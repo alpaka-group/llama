@@ -1,7 +1,14 @@
 #pragma once
 
 // ============================================================================
-// == ./macros.hpp ==
+// == ./include/llama ==
+// ==
+// ==
+// == ./include/llama ==
+// ============================================================================
+
+// ============================================================================
+// == ./include/llama/macros.hpp ==
 // ==
 // Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
 // SPDX-License-Identifier: LGPL-3.0-or-later
@@ -204,24 +211,24 @@
 #    endif
 #endif
 // ==
-// == ./macros.hpp ==
+// == ./include/llama/macros.hpp ==
 // ============================================================================
 
 // ============================================================================
-// == ./BlobAllocators.hpp ==
+// == ./include/llama/BlobAllocators.hpp ==
 // ==
 // Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 // #pragma once
 	// ============================================================================
-	// == ./Array.hpp ==
+	// == ./include/llama/Array.hpp ==
 	// ==
 	// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
 	// SPDX-License-Identifier: LGPL-3.0-or-later
 
 	// #pragma once
-	// #include "macros.hpp"    // amalgamate: file already expanded
+	// #include "macros.hpp"    // amalgamate: file already inlined
 
 	#include <ostream>
 	#include <tuple>
@@ -550,40 +557,40 @@
 	    using type = T;
 	};
 	// ==
-	// == ./Array.hpp ==
+	// == ./include/llama/Array.hpp ==
 	// ============================================================================
 
 	// ============================================================================
-	// == ./Concepts.hpp ==
+	// == ./include/llama/Concepts.hpp ==
 	// ==
 	// Copyright 2022 Bernhard Manfred Gruber
 	// SPDX-License-Identifier: LGPL-3.0-or-later
 
 	// #pragma once
-	// #include "Array.hpp"    // amalgamate: file already expanded
+	// #include "Array.hpp"    // amalgamate: file already inlined
 		// ============================================================================
-		// == ./Core.hpp ==
+		// == ./include/llama/Core.hpp ==
 		// ==
 		// Copyright 2023 Alexander Matthes, Bernhard Manfred Gruber
 		// SPDX-License-Identifier: LGPL-3.0-or-later
 
 		// #pragma once
 			// ============================================================================
-			// == ./ArrayExtents.hpp ==
+			// == ./include/llama/ArrayExtents.hpp ==
 			// ==
 			// Copyright 2022 Bernhard Manfred Gruber
 			// SPDX-License-Identifier: LGPL-3.0-or-later
 
 			// #pragma once
-			// #include "Array.hpp"    // amalgamate: file already expanded
+			// #include "Array.hpp"    // amalgamate: file already inlined
 				// ============================================================================
-				// == ./Meta.hpp ==
+				// == ./include/llama/Meta.hpp ==
 				// ==
 				// Copyright 2022 Bernhard Manfred Gruber
 				// SPDX-License-Identifier: LGPL-3.0-or-later
 
 				// #pragma once
-				// #include "macros.hpp"    // amalgamate: file already expanded
+				// #include "macros.hpp"    // amalgamate: file already inlined
 
 				#include <boost/mp11.hpp>
 
@@ -636,7 +643,7 @@
 				    using ReplacePlaceholders = typename internal::ReplacePlaceholdersImpl<Expression, Args...>::type;
 				} // namespace llama
 				// ==
-				// == ./Meta.hpp ==
+				// == ./include/llama/Meta.hpp ==
 				// ============================================================================
 
 
@@ -913,19 +920,19 @@
 			    using type = SizeType;
 			};
 			// ==
-			// == ./ArrayExtents.hpp ==
+			// == ./include/llama/ArrayExtents.hpp ==
 			// ============================================================================
 
-		// #include "Meta.hpp"    // amalgamate: file already expanded
+		// #include "Meta.hpp"    // amalgamate: file already inlined
 			// ============================================================================
-			// == ./RecordCoord.hpp ==
+			// == ./include/llama/RecordCoord.hpp ==
 			// ==
 			// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
 			// SPDX-License-Identifier: LGPL-3.0-or-later
 
 			// #pragma once
-			// #include "Meta.hpp"    // amalgamate: file already expanded
-			// #include "macros.hpp"    // amalgamate: file already expanded
+			// #include "Meta.hpp"    // amalgamate: file already inlined
+			// #include "macros.hpp"    // amalgamate: file already inlined
 
 			#include <array>
 			// #include <ostream>    // amalgamate: file already included
@@ -1081,7 +1088,7 @@
 			        = internal::recordCoordCommonPrefixIsSameImpl(First{}, Second{});
 			} // namespace llama
 			// ==
-			// == ./RecordCoord.hpp ==
+			// == ./include/llama/RecordCoord.hpp ==
 			// ============================================================================
 
 
@@ -1938,10 +1945,10 @@
 		    }
 		} // namespace llama
 		// ==
-		// == ./Core.hpp ==
+		// == ./include/llama/Core.hpp ==
 		// ============================================================================
 
-	// #include "RecordCoord.hpp"    // amalgamate: file already expanded
+	// #include "RecordCoord.hpp"    // amalgamate: file already inlined
 
 	// #include <type_traits>    // amalgamate: file already included
 
@@ -2097,10 +2104,10 @@
 	#endif
 	} // namespace llama
 	// ==
-	// == ./Concepts.hpp ==
+	// == ./include/llama/Concepts.hpp ==
 	// ============================================================================
 
-// #include "macros.hpp"    // amalgamate: file already expanded
+// #include "macros.hpp"    // amalgamate: file already inlined
 
 #include <cstddef>
 #include <memory>
@@ -2266,39 +2273,39 @@ namespace llama::bloballoc
 #endif
 } // namespace llama::bloballoc
 // ==
-// == ./BlobAllocators.hpp ==
+// == ./include/llama/BlobAllocators.hpp ==
 // ============================================================================
 
 // ============================================================================
-// == ./Copy.hpp ==
+// == ./include/llama/Copy.hpp ==
 // ==
 // Copyright 2021 Bernhard Manfred Gruber
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 // #pragma once
 	// ============================================================================
-	// == ./View.hpp ==
+	// == ./include/llama/View.hpp ==
 	// ==
 	// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
 	// SPDX-License-Identifier: LGPL-3.0-or-later
 
 	// #pragma once
 		// ============================================================================
-		// == ./Accessors.hpp ==
+		// == ./include/llama/Accessors.hpp ==
 		// ==
 		// Copyright 2023 Bernhard Manfred Gruber
 		// SPDX-License-Identifier: LGPL-3.0-or-later
 
 		// #pragma once
-		// #include "Concepts.hpp"    // amalgamate: file already expanded
+		// #include "Concepts.hpp"    // amalgamate: file already inlined
 			// ============================================================================
-			// == ./ProxyRefOpMixin.hpp ==
+			// == ./include/llama/ProxyRefOpMixin.hpp ==
 			// ==
 			// Copyright 2022 Bernhard Manfred Gruber
 			// SPDX-License-Identifier: LGPL-3.0-or-later
 
 			// #pragma once
-			// #include "macros.hpp"    // amalgamate: file already expanded
+			// #include "macros.hpp"    // amalgamate: file already inlined
 
 			namespace llama
 			{
@@ -2446,10 +2453,10 @@ namespace llama::bloballoc
 			    };
 			} // namespace llama
 			// ==
-			// == ./ProxyRefOpMixin.hpp ==
+			// == ./include/llama/ProxyRefOpMixin.hpp ==
 			// ============================================================================
 
-		// #include "macros.hpp"    // amalgamate: file already expanded
+		// #include "macros.hpp"    // amalgamate: file already inlined
 
 		#include <atomic>
 
@@ -2557,20 +2564,20 @@ namespace llama::bloballoc
 		#endif
 		} // namespace llama::accessor
 		// ==
-		// == ./Accessors.hpp ==
+		// == ./include/llama/Accessors.hpp ==
 		// ============================================================================
 
-	// #include "Array.hpp"    // amalgamate: file already expanded
+	// #include "Array.hpp"    // amalgamate: file already inlined
 		// ============================================================================
-		// == ./ArrayIndexRange.hpp ==
+		// == ./include/llama/ArrayIndexRange.hpp ==
 		// ==
 		// Copyright 2022 Bernhard Manfred Gruber
 		// SPDX-License-Identifier: LGPL-3.0-or-later
 
 		// #pragma once
-		// #include "ArrayExtents.hpp"    // amalgamate: file already expanded
-		// #include "Core.hpp"    // amalgamate: file already expanded
-		// #include "macros.hpp"    // amalgamate: file already expanded
+		// #include "ArrayExtents.hpp"    // amalgamate: file already inlined
+		// #include "Core.hpp"    // amalgamate: file already inlined
+		// #include "macros.hpp"    // amalgamate: file already inlined
 
 		#include <algorithm>
 		#include <iterator>
@@ -2841,29 +2848,29 @@ namespace llama::bloballoc
 		    };
 		} // namespace llama
 		// ==
-		// == ./ArrayIndexRange.hpp ==
+		// == ./include/llama/ArrayIndexRange.hpp ==
 		// ============================================================================
 
-	// #include "BlobAllocators.hpp"    // amalgamate: file already expanded
-	// #include "Concepts.hpp"    // amalgamate: file already expanded
-	// #include "Core.hpp"    // amalgamate: file already expanded
-	// #include "macros.hpp"    // amalgamate: file already expanded
+	// #include "BlobAllocators.hpp"    // amalgamate: file already inlined
+	// #include "Concepts.hpp"    // amalgamate: file already inlined
+	// #include "Core.hpp"    // amalgamate: file already inlined
+	// #include "macros.hpp"    // amalgamate: file already inlined
 		// ============================================================================
-		// == ./mapping/One.hpp ==
+		// == ./include/llama/mapping/One.hpp ==
 		// ==
 		// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
 		// SPDX-License-Identifier: LGPL-3.0-or-later
 
 		// #pragma once
-		// #include "../Core.hpp"    // amalgamate: file already expanded
+		// #include "../Core.hpp"    // amalgamate: file already inlined
 			// ============================================================================
-			// == ./mapping/Common.hpp ==
+			// == ./include/llama/mapping/Common.hpp ==
 			// ==
 			// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
 			// SPDX-License-Identifier: LGPL-3.0-or-later
 
 			// #pragma once
-			// #include "../Core.hpp"    // amalgamate: file already expanded
+			// #include "../Core.hpp"    // amalgamate: file already inlined
 
 			// #include <atomic>    // amalgamate: file already included
 			#include <climits>
@@ -3126,7 +3133,7 @@ namespace llama::bloballoc
 			    };
 			} // namespace llama::mapping
 			// ==
-			// == ./mapping/Common.hpp ==
+			// == ./include/llama/mapping/Common.hpp ==
 			// ============================================================================
 
 
@@ -3230,7 +3237,7 @@ namespace llama::bloballoc
 		    inline constexpr bool isOne<One<ArrayExtents, RecordDim, FieldAlignment, FlattenRecordDim>> = true;
 		} // namespace llama::mapping
 		// ==
-		// == ./mapping/One.hpp ==
+		// == ./include/llama/mapping/One.hpp ==
 		// ============================================================================
 
 
@@ -3993,17 +4000,17 @@ namespace llama::bloballoc
 	        -> SubView<TStoredParentView>;
 	} // namespace llama
 	// ==
-	// == ./View.hpp ==
+	// == ./include/llama/View.hpp ==
 	// ============================================================================
 
 	// ============================================================================
-	// == ./mapping/AoSoA.hpp ==
+	// == ./include/llama/mapping/AoSoA.hpp ==
 	// ==
 	// Copyright 2022 Bernhard Manfred Gruber
 	// SPDX-License-Identifier: LGPL-3.0-or-later
 
 	// #pragma once
-	// #include "Common.hpp"    // amalgamate: file already expanded
+	// #include "Common.hpp"    // amalgamate: file already inlined
 
 	// #include <limits>    // amalgamate: file already included
 
@@ -4101,17 +4108,17 @@ namespace llama::bloballoc
 
 	} // namespace llama::mapping
 	// ==
-	// == ./mapping/AoSoA.hpp ==
+	// == ./include/llama/mapping/AoSoA.hpp ==
 	// ============================================================================
 
 	// ============================================================================
-	// == ./mapping/SoA.hpp ==
+	// == ./include/llama/mapping/SoA.hpp ==
 	// ==
 	// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
 	// SPDX-License-Identifier: LGPL-3.0-or-later
 
 	// #pragma once
-	// #include "Common.hpp"    // amalgamate: file already expanded
+	// #include "Common.hpp"    // amalgamate: file already inlined
 
 	// #include <limits>    // amalgamate: file already included
 
@@ -4333,7 +4340,7 @@ namespace llama::bloballoc
 	        = true;
 	} // namespace llama::mapping
 	// ==
-	// == ./mapping/SoA.hpp ==
+	// == ./include/llama/mapping/SoA.hpp ==
 	// ============================================================================
 
 
@@ -4746,17 +4753,17 @@ namespace llama
     }
 } // namespace llama
 // ==
-// == ./Copy.hpp ==
+// == ./include/llama/Copy.hpp ==
 // ============================================================================
 
 // ============================================================================
-// == ./StructName.hpp ==
+// == ./include/llama/StructName.hpp ==
 // ==
 // Copyright 2022 Bernhard Manfred Gruber
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 // #pragma once
-// #include "Core.hpp"    // amalgamate: file already expanded
+// #include "Core.hpp"    // amalgamate: file already inlined
 
 #include <stdexcept>
 #include <string_view>
@@ -5133,18 +5140,18 @@ namespace llama
     }
 } // namespace llama
 // ==
-// == ./StructName.hpp ==
+// == ./include/llama/StructName.hpp ==
 // ============================================================================
 
 // ============================================================================
-// == ./Tuple.hpp ==
+// == ./include/llama/Tuple.hpp ==
 // ==
 // Copyright 2023 Alexander Matthes, Bernhard Manfred Gruber
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 // #pragma once
-// #include "Meta.hpp"    // amalgamate: file already expanded
-// #include "macros.hpp"    // amalgamate: file already expanded
+// #include "Meta.hpp"    // amalgamate: file already inlined
+// #include "macros.hpp"    // amalgamate: file already inlined
 
 namespace llama
 {
@@ -5400,21 +5407,21 @@ namespace llama
     }
 } // namespace llama
 // ==
-// == ./Tuple.hpp ==
+// == ./include/llama/Tuple.hpp ==
 // ============================================================================
 
 // ============================================================================
-// == ./DumpMapping.hpp ==
+// == ./include/llama/DumpMapping.hpp ==
 // ==
 // Copyright 2022 Bernhard Manfred Gruber
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 // #pragma once
 #if __has_include(<fmt/format.h>)
-// #    include "ArrayIndexRange.hpp"    // amalgamate: file already expanded
-// #    include "Core.hpp"    // amalgamate: file already expanded
-// #    include "StructName.hpp"    // amalgamate: file already expanded
-// #    include "View.hpp"    // amalgamate: file already expanded
+// #    include "ArrayIndexRange.hpp"    // amalgamate: file already inlined
+// #    include "Core.hpp"    // amalgamate: file already inlined
+// #    include "StructName.hpp"    // amalgamate: file already inlined
+// #    include "View.hpp"    // amalgamate: file already inlined
 
 #    include <fmt/format.h>
 #    include <functional>
@@ -5905,11 +5912,11 @@ namespace llama
 
 #endif
 // ==
-// == ./DumpMapping.hpp ==
+// == ./include/llama/DumpMapping.hpp ==
 // ============================================================================
 
 // ============================================================================
-// == ./llama.hpp ==
+// == ./include/llama/llama.hpp ==
 // ==
 // Copyright 2018 Alexander Matthes, Bernhard Manfred Gruber
 // SPDX-License-Identifier: LGPL-3.0-or-later
@@ -5955,26 +5962,26 @@ namespace llama
 #    pragma diag_suppress 941
 #endif
 
-// #include "ArrayExtents.hpp"    // amalgamate: file already expanded
-// #include "ArrayIndexRange.hpp"    // amalgamate: file already expanded
-// #include "BlobAllocators.hpp"    // amalgamate: file already expanded
-// #include "Copy.hpp"    // amalgamate: file already expanded
-// #include "Core.hpp"    // amalgamate: file already expanded
-// #include "DumpMapping.hpp"    // amalgamate: file already expanded
-// #include "Meta.hpp"    // amalgamate: file already expanded
-// #include "ProxyRefOpMixin.hpp"    // amalgamate: file already expanded
+// #include "ArrayExtents.hpp"    // amalgamate: file already inlined
+// #include "ArrayIndexRange.hpp"    // amalgamate: file already inlined
+// #include "BlobAllocators.hpp"    // amalgamate: file already inlined
+// #include "Copy.hpp"    // amalgamate: file already inlined
+// #include "Core.hpp"    // amalgamate: file already inlined
+// #include "DumpMapping.hpp"    // amalgamate: file already inlined
+// #include "Meta.hpp"    // amalgamate: file already inlined
+// #include "ProxyRefOpMixin.hpp"    // amalgamate: file already inlined
 	// ============================================================================
-	// == ./RecordRef.hpp ==
+	// == ./include/llama/RecordRef.hpp ==
 	// ==
 	// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
 	// SPDX-License-Identifier: LGPL-3.0-or-later
 
 	// #pragma once
-	// #include "Concepts.hpp"    // amalgamate: file already expanded
-	// #include "ProxyRefOpMixin.hpp"    // amalgamate: file already expanded
-	// #include "StructName.hpp"    // amalgamate: file already expanded
-	// #include "View.hpp"    // amalgamate: file already expanded
-	// #include "macros.hpp"    // amalgamate: file already expanded
+	// #include "Concepts.hpp"    // amalgamate: file already inlined
+	// #include "ProxyRefOpMixin.hpp"    // amalgamate: file already inlined
+	// #include "StructName.hpp"    // amalgamate: file already inlined
+	// #include "View.hpp"    // amalgamate: file already inlined
+	// #include "macros.hpp"    // amalgamate: file already inlined
 
 	#include <iosfwd>
 	// #include <type_traits>    // amalgamate: file already included
@@ -6982,27 +6989,27 @@ namespace llama
 	};
 	#endif
 	// ==
-	// == ./RecordRef.hpp ==
+	// == ./include/llama/RecordRef.hpp ==
 	// ============================================================================
 
 	// ============================================================================
-	// == ./Simd.hpp ==
+	// == ./include/llama/Simd.hpp ==
 	// ==
 	// Copyright 2022 Bernhard Manfred Gruber
 	// SPDX-License-Identifier: LGPL-3.0-or-later
 
 	// #pragma once
-	// #include "Core.hpp"    // amalgamate: file already expanded
-	// #include "RecordRef.hpp"    // amalgamate: file already expanded
-	// #include "macros.hpp"    // amalgamate: file already expanded
+	// #include "Core.hpp"    // amalgamate: file already inlined
+	// #include "RecordRef.hpp"    // amalgamate: file already inlined
+	// #include "macros.hpp"    // amalgamate: file already inlined
 		// ============================================================================
-		// == ./mapping/AoS.hpp ==
+		// == ./include/llama/mapping/AoS.hpp ==
 		// ==
 		// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
 		// SPDX-License-Identifier: LGPL-3.0-or-later
 
 		// #pragma once
-		// #include "Common.hpp"    // amalgamate: file already expanded
+		// #include "Common.hpp"    // amalgamate: file already inlined
 
 		namespace llama::mapping
 		{
@@ -7112,10 +7119,10 @@ namespace llama
 		        = true;
 		} // namespace llama::mapping
 		// ==
-		// == ./mapping/AoS.hpp ==
+		// == ./include/llama/mapping/AoS.hpp ==
 		// ============================================================================
 
-	// #include "mapping/SoA.hpp"    // amalgamate: file already expanded
+	// #include "mapping/SoA.hpp"    // amalgamate: file already inlined
 
 	// #include <type_traits>    // amalgamate: file already included
 
@@ -7469,20 +7476,20 @@ namespace llama
 	    }
 	} // namespace llama
 	// ==
-	// == ./Simd.hpp ==
+	// == ./include/llama/Simd.hpp ==
 	// ============================================================================
 
-// #include "StructName.hpp"    // amalgamate: file already expanded
-// #include "Tuple.hpp"    // amalgamate: file already expanded
+// #include "StructName.hpp"    // amalgamate: file already inlined
+// #include "Tuple.hpp"    // amalgamate: file already inlined
 	// ============================================================================
-	// == ./Vector.hpp ==
+	// == ./include/llama/Vector.hpp ==
 	// ==
 	// Copyright 2021 Bernhard Manfred Gruber
 	// SPDX-License-Identifier: LGPL-3.0-or-later
 
 	// #pragma once
-	// #include "RecordRef.hpp"    // amalgamate: file already expanded
-	// #include "View.hpp"    // amalgamate: file already expanded
+	// #include "RecordRef.hpp"    // amalgamate: file already inlined
+	// #include "View.hpp"    // amalgamate: file already inlined
 
 	// #include <algorithm>    // amalgamate: file already included
 	// #include <stdexcept>    // amalgamate: file already included
@@ -7789,31 +7796,31 @@ namespace llama
 
 	} // namespace llama
 	// ==
-	// == ./Vector.hpp ==
+	// == ./include/llama/Vector.hpp ==
 	// ============================================================================
 
-// #include "View.hpp"    // amalgamate: file already expanded
-// #include "macros.hpp"    // amalgamate: file already expanded
-// #include "mapping/AoS.hpp"    // amalgamate: file already expanded
-// #include "mapping/AoSoA.hpp"    // amalgamate: file already expanded
+// #include "View.hpp"    // amalgamate: file already inlined
+// #include "macros.hpp"    // amalgamate: file already inlined
+// #include "mapping/AoS.hpp"    // amalgamate: file already inlined
+// #include "mapping/AoSoA.hpp"    // amalgamate: file already inlined
 	// ============================================================================
-	// == ./mapping/BitPackedFloat.hpp ==
+	// == ./include/llama/mapping/BitPackedFloat.hpp ==
 	// ==
 	// Copyright 2023 Bernhard Manfred Gruber
 	// SPDX-License-Identifier: LGPL-3.0-or-later
 
 	// #pragma once
-	// #include "../ProxyRefOpMixin.hpp"    // amalgamate: file already expanded
+	// #include "../ProxyRefOpMixin.hpp"    // amalgamate: file already inlined
 		// ============================================================================
-		// == ./mapping/BitPackedInt.hpp ==
+		// == ./include/llama/mapping/BitPackedInt.hpp ==
 		// ==
 		// Copyright 2023 Bernhard Manfred Gruber
 		// SPDX-License-Identifier: LGPL-3.0-or-later
 
 		// #pragma once
-		// #include "../Core.hpp"    // amalgamate: file already expanded
-		// #include "../ProxyRefOpMixin.hpp"    // amalgamate: file already expanded
-		// #include "Common.hpp"    // amalgamate: file already expanded
+		// #include "../Core.hpp"    // amalgamate: file already inlined
+		// #include "../ProxyRefOpMixin.hpp"    // amalgamate: file already inlined
+		// #include "Common.hpp"    // amalgamate: file already inlined
 
 		// #include <climits>    // amalgamate: file already included
 		// #include <type_traits>    // amalgamate: file already included
@@ -8365,10 +8372,10 @@ namespace llama
 		        = true;
 		} // namespace llama::mapping
 		// ==
-		// == ./mapping/BitPackedInt.hpp ==
+		// == ./include/llama/mapping/BitPackedInt.hpp ==
 		// ============================================================================
 
-	// #include "Common.hpp"    // amalgamate: file already expanded
+	// #include "Common.hpp"    // amalgamate: file already inlined
 
 	// #include <algorithm>    // amalgamate: file already included
 	// #include <climits>    // amalgamate: file already included
@@ -8808,19 +8815,19 @@ namespace llama
 	        = true;
 	} // namespace llama::mapping
 	// ==
-	// == ./mapping/BitPackedFloat.hpp ==
+	// == ./include/llama/mapping/BitPackedFloat.hpp ==
 	// ============================================================================
 
-// #include "mapping/BitPackedInt.hpp"    // amalgamate: file already expanded
+// #include "mapping/BitPackedInt.hpp"    // amalgamate: file already inlined
 	// ============================================================================
-	// == ./mapping/Bytesplit.hpp ==
+	// == ./include/llama/mapping/Bytesplit.hpp ==
 	// ==
 	// Copyright 2022 Bernhard Manfred Gruber
 	// SPDX-License-Identifier: LGPL-3.0-or-later
 
 	// #pragma once
-	// #include "../ProxyRefOpMixin.hpp"    // amalgamate: file already expanded
-	// #include "Common.hpp"    // amalgamate: file already expanded
+	// #include "../ProxyRefOpMixin.hpp"    // amalgamate: file already inlined
+	// #include "Common.hpp"    // amalgamate: file already inlined
 
 	namespace llama::mapping
 	{
@@ -8961,29 +8968,29 @@ namespace llama
 	    inline constexpr bool isBytesplit<Bytesplit<TArrayExtents, TRecordDim, InnerMapping>> = true;
 	} // namespace llama::mapping
 	// ==
-	// == ./mapping/Bytesplit.hpp ==
+	// == ./include/llama/mapping/Bytesplit.hpp ==
 	// ============================================================================
 
 	// ============================================================================
-	// == ./mapping/Byteswap.hpp ==
+	// == ./include/llama/mapping/Byteswap.hpp ==
 	// ==
 	// Copyright 2022 Bernhard Manfred Gruber
 	// SPDX-License-Identifier: LGPL-3.0-or-later
 
 	// #pragma once
-	// #include "../Core.hpp"    // amalgamate: file already expanded
-	// #include "../ProxyRefOpMixin.hpp"    // amalgamate: file already expanded
-	// #include "Common.hpp"    // amalgamate: file already expanded
+	// #include "../Core.hpp"    // amalgamate: file already inlined
+	// #include "../ProxyRefOpMixin.hpp"    // amalgamate: file already inlined
+	// #include "Common.hpp"    // amalgamate: file already inlined
 		// ============================================================================
-		// == ./mapping/Projection.hpp ==
+		// == ./include/llama/mapping/Projection.hpp ==
 		// ==
 		// Copyright 2022 Bernhard Manfred Gruber
 		// SPDX-License-Identifier: LGPL-3.0-or-later
 
 		// #pragma once
-		// #include "../ProxyRefOpMixin.hpp"    // amalgamate: file already expanded
-		// #include "../View.hpp"    // amalgamate: file already expanded
-		// #include "Common.hpp"    // amalgamate: file already expanded
+		// #include "../ProxyRefOpMixin.hpp"    // amalgamate: file already inlined
+		// #include "../View.hpp"    // amalgamate: file already inlined
+		// #include "Common.hpp"    // amalgamate: file already inlined
 
 		namespace llama::mapping
 		{
@@ -9177,7 +9184,7 @@ namespace llama
 		    inline constexpr bool isProjection<Projection<TArrayExtents, TRecordDim, InnerMapping, ReplacementMap>> = true;
 		} // namespace llama::mapping
 		// ==
-		// == ./mapping/Projection.hpp ==
+		// == ./include/llama/mapping/Projection.hpp ==
 		// ============================================================================
 
 
@@ -9258,19 +9265,19 @@ namespace llama
 	    inline constexpr bool isByteswap<Byteswap<TArrayExtents, TRecordDim, InnerMapping>> = true;
 	} // namespace llama::mapping
 	// ==
-	// == ./mapping/Byteswap.hpp ==
+	// == ./include/llama/mapping/Byteswap.hpp ==
 	// ============================================================================
 
 	// ============================================================================
-	// == ./mapping/ChangeType.hpp ==
+	// == ./include/llama/mapping/ChangeType.hpp ==
 	// ==
 	// Copyright 2022 Bernhard Manfred Gruber
 	// SPDX-License-Identifier: LGPL-3.0-or-later
 
 	// #pragma once
-	// #include "../ProxyRefOpMixin.hpp"    // amalgamate: file already expanded
-	// #include "Common.hpp"    // amalgamate: file already expanded
-	// #include "Projection.hpp"    // amalgamate: file already expanded
+	// #include "../ProxyRefOpMixin.hpp"    // amalgamate: file already inlined
+	// #include "Common.hpp"    // amalgamate: file already inlined
+	// #include "Projection.hpp"    // amalgamate: file already inlined
 
 	namespace llama::mapping
 	{
@@ -9355,18 +9362,18 @@ namespace llama
 	    inline constexpr bool isChangeType<ChangeType<TArrayExtents, TRecordDim, InnerMapping, ReplacementMap>> = true;
 	} // namespace llama::mapping
 	// ==
-	// == ./mapping/ChangeType.hpp ==
+	// == ./include/llama/mapping/ChangeType.hpp ==
 	// ============================================================================
 
 	// ============================================================================
-	// == ./mapping/FieldAccessCount.hpp ==
+	// == ./include/llama/mapping/FieldAccessCount.hpp ==
 	// ==
 	// Copyright 2022 Bernhard Manfred Gruber
 	// SPDX-License-Identifier: LGPL-3.0-or-later
 
 	// #pragma once
-	// #include "../StructName.hpp"    // amalgamate: file already expanded
-	// #include "Common.hpp"    // amalgamate: file already expanded
+	// #include "../StructName.hpp"    // amalgamate: file already inlined
+	// #include "Common.hpp"    // amalgamate: file already inlined
 
 	#include <cstdio>
 	#include <iomanip>
@@ -9733,17 +9740,17 @@ namespace llama
 	        = true;
 	} // namespace llama::mapping
 	// ==
-	// == ./mapping/FieldAccessCount.hpp ==
+	// == ./include/llama/mapping/FieldAccessCount.hpp ==
 	// ============================================================================
 
 	// ============================================================================
-	// == ./mapping/Heatmap.hpp ==
+	// == ./include/llama/mapping/Heatmap.hpp ==
 	// ==
 	// Copyright 2022 Bernhard Manfred Gruber
 	// SPDX-License-Identifier: LGPL-3.0-or-later
 
 	// #pragma once
-	// #include "Common.hpp"    // amalgamate: file already expanded
+	// #include "Common.hpp"    // amalgamate: file already inlined
 
 	// #include <array>    // amalgamate: file already included
 	// #include <atomic>    // amalgamate: file already included
@@ -9968,17 +9975,17 @@ namespace llama
 	    inline constexpr bool isHeatmap<Heatmap<Mapping, Granularity, CountType>> = true;
 	} // namespace llama::mapping
 	// ==
-	// == ./mapping/Heatmap.hpp ==
+	// == ./include/llama/mapping/Heatmap.hpp ==
 	// ============================================================================
 
 	// ============================================================================
-	// == ./mapping/Null.hpp ==
+	// == ./include/llama/mapping/Null.hpp ==
 	// ==
 	// Copyright 2022 Bernhard Manfred Gruber
 	// SPDX-License-Identifier: LGPL-3.0-or-later
 
 	// #pragma once
-	// #include "../ProxyRefOpMixin.hpp"    // amalgamate: file already expanded
+	// #include "../ProxyRefOpMixin.hpp"    // amalgamate: file already inlined
 
 	namespace llama::mapping
 	{
@@ -10046,18 +10053,18 @@ namespace llama
 	    inline constexpr bool isNull<Null<ArrayExtents, RecordDim>> = true;
 	} // namespace llama::mapping
 	// ==
-	// == ./mapping/Null.hpp ==
+	// == ./include/llama/mapping/Null.hpp ==
 	// ============================================================================
 
-// #include "mapping/One.hpp"    // amalgamate: file already expanded
+// #include "mapping/One.hpp"    // amalgamate: file already inlined
 	// ============================================================================
-	// == ./mapping/PermuteArrayIndex.hpp ==
+	// == ./include/llama/mapping/PermuteArrayIndex.hpp ==
 	// ==
 	// Copyright 2022 Bernhard Manfred Gruber
 	// SPDX-License-Identifier: LGPL-3.0-or-later
 
 	// #pragma once
-	// #include "Common.hpp"    // amalgamate: file already expanded
+	// #include "Common.hpp"    // amalgamate: file already inlined
 
 	namespace llama::mapping
 	{
@@ -10117,20 +10124,20 @@ namespace llama
 	    inline constexpr bool isPermuteArrayIndex<PermuteArrayIndex<Mapping, Permutation...>> = true;
 	} // namespace llama::mapping
 	// ==
-	// == ./mapping/PermuteArrayIndex.hpp ==
+	// == ./include/llama/mapping/PermuteArrayIndex.hpp ==
 	// ============================================================================
 
-// #include "mapping/Projection.hpp"    // amalgamate: file already expanded
-// #include "mapping/SoA.hpp"    // amalgamate: file already expanded
+// #include "mapping/Projection.hpp"    // amalgamate: file already inlined
+// #include "mapping/SoA.hpp"    // amalgamate: file already inlined
 	// ============================================================================
-	// == ./mapping/Split.hpp ==
+	// == ./include/llama/mapping/Split.hpp ==
 	// ==
 	// Copyright 2022 Bernhard Manfred Gruber
 	// SPDX-License-Identifier: LGPL-3.0-or-later
 
 	// #pragma once
-	// #include "../View.hpp"    // amalgamate: file already expanded
-	// #include "Common.hpp"    // amalgamate: file already expanded
+	// #include "../View.hpp"    // amalgamate: file already inlined
+	// #include "Common.hpp"    // amalgamate: file already inlined
 
 	namespace llama::mapping
 	{
@@ -10386,32 +10393,32 @@ namespace llama
 	        = true;
 	} // namespace llama::mapping
 	// ==
-	// == ./mapping/Split.hpp ==
+	// == ./include/llama/mapping/Split.hpp ==
 	// ============================================================================
 
 	// ============================================================================
-	// == ./mapping/tree/Mapping.hpp ==
+	// == ./include/llama/mapping/tree/Mapping.hpp ==
 	// ==
 	// Copyright 2020 Alexander Matthes, Bernhard Manfred Gruber
 	// SPDX-License-Identifier: LGPL-3.0-or-later
 
 	// #pragma once
-	// #include "../Common.hpp"    // amalgamate: file already expanded
+	// #include "../Common.hpp"    // amalgamate: file already inlined
 		// ============================================================================
-		// == ./mapping/tree/Functors.hpp ==
+		// == ./include/llama/mapping/tree/Functors.hpp ==
 		// ==
 		// Copyright 2020 Alexander Matthes, Bernhard Manfred Gruber
 		// SPDX-License-Identifier: LGPL-3.0-or-later
 
 		// #pragma once
 			// ============================================================================
-			// == ./mapping/tree/TreeFromDimensions.hpp ==
+			// == ./include/llama/mapping/tree/TreeFromDimensions.hpp ==
 			// ==
 			// Copyright 2020 Alexander Matthes, Bernhard Manfred Gruber
 			// SPDX-License-Identifier: LGPL-3.0-or-later
 			// #pragma once
-			// #include "../../Core.hpp"    // amalgamate: file already expanded
-			// #include "../../Tuple.hpp"    // amalgamate: file already expanded
+			// #include "../../Core.hpp"    // amalgamate: file already inlined
+			// #include "../../Tuple.hpp"    // amalgamate: file already inlined
 
 			// #include <cstddef>    // amalgamate: file already included
 			// #include <string>    // amalgamate: file already included
@@ -10570,7 +10577,7 @@ namespace llama
 			    }
 			} // namespace llama::mapping::tree
 			// ==
-			// == ./mapping/tree/TreeFromDimensions.hpp ==
+			// == ./include/llama/mapping/tree/TreeFromDimensions.hpp ==
 			// ============================================================================
 
 
@@ -10817,18 +10824,18 @@ namespace llama
 		    using MoveRTDownFixed = MoveRTDown<TreeCoord, mp_size_t<Amount>>;
 		} // namespace llama::mapping::tree::functor
 		// ==
-		// == ./mapping/tree/Functors.hpp ==
+		// == ./include/llama/mapping/tree/Functors.hpp ==
 		// ============================================================================
 
-	// #include "TreeFromDimensions.hpp"    // amalgamate: file already expanded
+	// #include "TreeFromDimensions.hpp"    // amalgamate: file already inlined
 		// ============================================================================
-		// == ./mapping/tree/toString.hpp ==
+		// == ./include/llama/mapping/tree/toString.hpp ==
 		// ==
 		// Copyright 2020 Alexander Matthes, Bernhard Manfred Gruber
 		// SPDX-License-Identifier: LGPL-3.0-or-later
 
 		// #pragma once
-		// #include "TreeFromDimensions.hpp"    // amalgamate: file already expanded
+		// #include "TreeFromDimensions.hpp"    // amalgamate: file already inlined
 
 		// #include <string>    // amalgamate: file already included
 
@@ -10906,7 +10913,7 @@ namespace llama
 		    }
 		} // namespace llama::mapping::tree
 		// ==
-		// == ./mapping/tree/toString.hpp ==
+		// == ./include/llama/mapping/tree/toString.hpp ==
 		// ============================================================================
 
 
@@ -11129,7 +11136,7 @@ namespace llama
 	    };
 	} // namespace llama::mapping::tree
 	// ==
-	// == ./mapping/tree/Mapping.hpp ==
+	// == ./include/llama/mapping/tree/Mapping.hpp ==
 	// ============================================================================
 
 
@@ -11145,18 +11152,18 @@ namespace llama
 #    pragma diag_default 941
 #endif
 // ==
-// == ./llama.hpp ==
+// == ./include/llama/llama.hpp ==
 // ============================================================================
 
 // ============================================================================
-// == ./Proofs.hpp ==
+// == ./include/llama/Proofs.hpp ==
 // ==
 // Copyright 2022 Bernhard Manfred Gruber
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 // #pragma once
-// #include "ArrayIndexRange.hpp"    // amalgamate: file already expanded
-// #include "Core.hpp"    // amalgamate: file already expanded
+// #include "ArrayIndexRange.hpp"    // amalgamate: file already inlined
+// #include "Core.hpp"    // amalgamate: file already inlined
 
 namespace llama
 {
@@ -11275,8 +11282,6 @@ namespace llama
     }
 } // namespace llama
 // ==
-// == ./Proofs.hpp ==
+// == ./include/llama/Proofs.hpp ==
 // ============================================================================
-
-
 
