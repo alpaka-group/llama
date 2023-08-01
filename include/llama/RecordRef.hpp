@@ -461,6 +461,25 @@ namespace llama
             return operator()(RecordCoord{});
         }
 
+#ifdef LLAMA_HAS_STRING_FIELDS
+        /// Experimental
+        template<internal::FixedString Name>
+        LLAMA_FN_HOST_ACC_INLINE auto at() const -> decltype(auto)
+        {
+            using RecordCoord = GetCoordFromTags<AccessibleRecordDim, internal::StringTag<Name>>;
+            return operator()(RecordCoord{});
+        }
+
+        // FIXME(bgruber): remove redundancy
+        /// Experimental
+        template<internal::FixedString Name>
+        LLAMA_FN_HOST_ACC_INLINE auto at() -> decltype(auto)
+        {
+            using RecordCoord = GetCoordFromTags<AccessibleRecordDim, internal::StringTag<Name>>;
+            return operator()(RecordCoord{});
+        }
+#endif
+
         template<typename T>
         LLAMA_FN_HOST_ACC_INLINE auto operator=(const T& other) -> RecordRef&
         {
