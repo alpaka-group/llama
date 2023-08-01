@@ -2562,6 +2562,44 @@ namespace llama::bloballoc
 		        }
 		    };
 		#endif
+
+		    namespace internal
+		    {
+		        template<std::size_t I, typename Accessor>
+		        struct StackedLeave : Accessor
+		        {
+		        };
+		    } // namespace internal
+
+		    /// Accessor combining multiple other accessors. The contained accessors are applied in left to right order to the
+		    /// memory location when forming the reference returned from a view.
+		    template<typename... Accessors>
+		    struct Stacked : internal::StackedLeave<0, Default>
+		    {
+		    };
+
+		    template<typename FirstAccessor, typename... MoreAccessors>
+		    struct Stacked<FirstAccessor, MoreAccessors...>
+		        : internal::StackedLeave<1 + sizeof...(MoreAccessors), FirstAccessor>
+		        , Stacked<MoreAccessors...>
+		    {
+		        using First = internal::StackedLeave<1 + sizeof...(MoreAccessors), FirstAccessor>;
+		        using Rest = Stacked<MoreAccessors...>;
+
+		        LLAMA_FN_HOST_ACC_INLINE Stacked() = default;
+
+		        LLAMA_FN_HOST_ACC_INLINE explicit Stacked(FirstAccessor first, MoreAccessors... rest)
+		            : First{std::move(first)}
+		            , Rest{std::move(rest)...}
+		        {
+		        }
+
+		        template<typename Reference>
+		        LLAMA_FN_HOST_ACC_INLINE auto operator()(Reference&& r) const -> decltype(auto)
+		        {
+		            return static_cast<const Rest&>(*this)(static_cast<const First&>(*this)(std::forward<Reference>(r)));
+		        }
+		    };
 		} // namespace llama::accessor
 		// ==
 		// == ./include/llama/Accessors.hpp ==
