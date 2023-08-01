@@ -6,6 +6,9 @@ var hierarchy =
     ] ],
     [ "llama::mapping::AccessCounts< CountType >", "structllama_1_1mapping_1_1AccessCounts.html", null ],
     [ "llama::mapping::AccessCounts< Count >", "structllama_1_1mapping_1_1AccessCounts.html", null ],
+    [ "Accessor", null, [
+      [ "llama::accessor::internal::StackedLeave< I, Accessor >", "structllama_1_1accessor_1_1internal_1_1StackedLeave.html", null ]
+    ] ],
     [ "llama::bloballoc::AlignedAllocator< T, Alignment >", "structllama_1_1bloballoc_1_1AlignedAllocator.html", null ],
     [ "llama::Array< T, N >", "structllama_1_1Array.html", null ],
     [ "llama::bloballoc::Array< BytesToReserve >", "structllama_1_1bloballoc_1_1Array.html", null ],
@@ -74,6 +77,12 @@ var hierarchy =
     [ "llama::mapping::tree::internal::CreateTreeElement< Tag, ChildType[Count], CountType >", "structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeElement_3_01Tag_00_01ChildType_0fCount_0e_00_01CountType_01_4.html", null ],
     [ "llama::mapping::tree::internal::CreateTreeElement< Tag, Record< Fields... >, CountType >", "structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeElement_3_01Tag_00_01Record_3_01Fields_8_8_8_01_4_00_01CountType_01_4.html", null ],
     [ "llama::accessor::Default", "structllama_1_1accessor_1_1Default.html", [
+      [ "llama::accessor::internal::StackedLeave< 0, Default >", "structllama_1_1accessor_1_1internal_1_1StackedLeave.html", [
+        [ "llama::accessor::Stacked< MoreAccessors... >", "structllama_1_1accessor_1_1Stacked.html", [
+          [ "llama::accessor::Stacked< FirstAccessor, MoreAccessors... >", "structllama_1_1accessor_1_1Stacked_3_01FirstAccessor_00_01MoreAccessors_8_8_8_01_4.html", null ]
+        ] ],
+        [ "llama::accessor::Stacked< Accessors >", "structllama_1_1accessor_1_1Stacked.html", null ]
+      ] ],
       [ "llama::View< TMapping, TBlobType, TAccessor >", "structllama_1_1View.html", null ]
     ] ],
     [ "llama::internal::DivideAssign", "structllama_1_1internal_1_1DivideAssign.html", null ],
@@ -86,6 +95,11 @@ var hierarchy =
     ] ],
     [ "llama::Field< Tag, Type >", "structllama_1_1Field.html", null ],
     [ "llama::internal::FindFieldByTag< FieldList, Tag >", "structllama_1_1internal_1_1FindFieldByTag.html", null ],
+    [ "FirstAccessor", null, [
+      [ "llama::accessor::internal::StackedLeave< 1+sizeof...(MoreAccessors), FirstAccessor >", "structllama_1_1accessor_1_1internal_1_1StackedLeave.html", [
+        [ "llama::accessor::Stacked< FirstAccessor, MoreAccessors... >", "structllama_1_1accessor_1_1Stacked_3_01FirstAccessor_00_01MoreAccessors_8_8_8_01_4.html", null ]
+      ] ]
+    ] ],
     [ "llama::internal::FlattenRecordDimImpl< T >", "structllama_1_1internal_1_1FlattenRecordDimImpl.html", null ],
     [ "llama::internal::FlattenRecordDimImpl< Child[N]>", "structllama_1_1internal_1_1FlattenRecordDimImpl_3_01Child_0fN_0e_4.html", null ],
     [ "llama::internal::FlattenRecordDimImpl< Record< Fields... > >", "structllama_1_1internal_1_1FlattenRecordDimImpl_3_01Record_3_01Fields_8_8_8_01_4_01_4.html", null ],

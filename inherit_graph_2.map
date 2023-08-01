@@ -1,5 +1,11 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structllama_1_1accessor_1_1Default.html" title="Default accessor. Passes through the given reference." alt="" coords="5,5,185,32"/>
-<area shape="rect" id="node2" href="$structllama_1_1View.html" title=" " alt="" coords="233,23,416,65"/>
-<area shape="rect" id="node3" title=" " alt="" coords="52,56,139,83"/>
+<area shape="rect" id="node1" href="$structllama_1_1accessor_1_1Default.html" title="Default accessor. Passes through the given reference." alt="" coords="5,29,185,55"/>
+<area shape="rect" id="node2" href="$structllama_1_1accessor_1_1internal_1_1StackedLeave.html" title=" " alt="" coords="233,13,448,55"/>
+<area shape="rect" id="node6" href="$structllama_1_1View.html" title=" " alt="" coords="249,79,432,120"/>
+<area shape="rect" id="node3" href="$structllama_1_1accessor_1_1Stacked.html" title=" " alt="" coords="524,5,707,47"/>
+<area shape="rect" id="node5" href="$structllama_1_1accessor_1_1Stacked.html" title=" " alt="" coords="524,71,707,112"/>
+<area shape="rect" id="node4" href="$structllama_1_1accessor_1_1Stacked_3_01FirstAccessor_00_01MoreAccessors_8_8_8_01_4.html" title=" " alt="" coords="783,75,1039,116"/>
+<area shape="rect" id="node7" title=" " alt="" coords="287,151,395,178"/>
+<area shape="rect" id="node8" href="$structllama_1_1accessor_1_1internal_1_1StackedLeave.html" title=" " alt="" coords="496,137,735,193"/>
+<area shape="rect" id="node9" title=" " alt="" coords="52,86,139,113"/>
 </map>

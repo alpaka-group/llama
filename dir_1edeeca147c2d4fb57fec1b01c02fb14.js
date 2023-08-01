@@ -6,7 +6,10 @@ var dir_1edeeca147c2d4fb57fec1b01c02fb14 =
       [ "ByValue", "structllama_1_1accessor_1_1ByValue.html", "structllama_1_1accessor_1_1ByValue" ],
       [ "Const", "structllama_1_1accessor_1_1Const.html", "structllama_1_1accessor_1_1Const" ],
       [ "Reference", "structllama_1_1accessor_1_1Const_1_1Reference.html", "structllama_1_1accessor_1_1Const_1_1Reference" ],
-      [ "Restrict", "structllama_1_1accessor_1_1Restrict.html", "structllama_1_1accessor_1_1Restrict" ]
+      [ "Restrict", "structllama_1_1accessor_1_1Restrict.html", "structllama_1_1accessor_1_1Restrict" ],
+      [ "StackedLeave", "structllama_1_1accessor_1_1internal_1_1StackedLeave.html", null ],
+      [ "Stacked", "structllama_1_1accessor_1_1Stacked.html", null ],
+      [ "Stacked< FirstAccessor, MoreAccessors... >", "structllama_1_1accessor_1_1Stacked_3_01FirstAccessor_00_01MoreAccessors_8_8_8_01_4.html", "structllama_1_1accessor_1_1Stacked_3_01FirstAccessor_00_01MoreAccessors_8_8_8_01_4" ]
     ] ],
     [ "Array.hpp", "Array_8hpp.html", "Array_8hpp" ],
     [ "ArrayExtents.hpp", "ArrayExtents_8hpp.html", "ArrayExtents_8hpp" ],
