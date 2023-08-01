@@ -386,6 +386,16 @@ TEST_CASE("recorddim.Boost.Describe")
     CHECK(view(0)(llama::RecordCoord<1>{}) == 2);
     CHECK(view(0)(llama::RecordCoord<2, 0>{}) == 3);
     CHECK(view(0)(llama::RecordCoord<2, 1>{}) == 4);
+
+    view(0).at<"a">() = 5;
+    view(0).at<"b">() = 6;
+    view(0).at<"pos">().at<"x">() = 7;
+    view(0).at<"pos">().at<"y">() = 8;
+
+    CHECK(view(0)(llama::RecordCoord<0>{}) == 5);
+    CHECK(view(0)(llama::RecordCoord<1>{}) == 6);
+    CHECK(view(0)(llama::RecordCoord<2, 0>{}) == 7);
+    CHECK(view(0)(llama::RecordCoord<2, 1>{}) == 8);
 }
 #endif
 
