@@ -1,5 +1,6 @@
 var NAVTREEINDEX6 =
 {
+"structllama_1_1mapping_1_1Bytesplit_1_1Reference.html":[2,0,0,3,14,0],
 "structllama_1_1mapping_1_1Bytesplit_1_1Reference.html#a19d1b89c39bd6924c2de1a7c695b7e0c":[2,0,0,3,14,0,2],
 "structllama_1_1mapping_1_1Bytesplit_1_1Reference.html#a576d03612330d02949b5c39eee5feeec":[2,0,0,3,14,0,4],
 "structllama_1_1mapping_1_1Bytesplit_1_1Reference.html#a66d11ed0b6b4586339925cdb76c6dbd7":[2,0,0,3,14,0,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX6 =
 "structllama_1_1mapping_1_1tree_1_1functor_1_1Idem.html":[2,0,0,3,1,0,1],
 "structllama_1_1mapping_1_1tree_1_1functor_1_1Idem.html#a2f8cce2626978a9c5b62dd4c6c1e6cc4":[2,0,0,3,1,0,1,2],
 "structllama_1_1mapping_1_1tree_1_1functor_1_1Idem.html#a5298caaa7ad7699174bcb05514fc6ade":[2,0,0,3,1,0,1,0],
-"structllama_1_1mapping_1_1tree_1_1functor_1_1Idem.html#a89f7fd3892b8b9e31f0d6e8d8a937562":[2,0,0,3,1,0,1,1],
-"structllama_1_1mapping_1_1tree_1_1functor_1_1LeafOnlyRT.html":[2,0,0,3,1,0,2]
+"structllama_1_1mapping_1_1tree_1_1functor_1_1Idem.html#a89f7fd3892b8b9e31f0d6e8d8a937562":[2,0,0,3,1,0,1,1]
 };
