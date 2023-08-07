@@ -132,6 +132,62 @@ namespace llama
             ba(std::integral_constant<std::size_t, 16>{}, size)
         } -> Blob;
     };
+
+    template<typename V>
+    concept AnyView = requires(V v, const V cv) {
+        typename V::Mapping;
+        typename V::BlobType;
+        typename V::ArrayExtents;
+        typename V::ArrayIndex;
+        typename V::RecordDim;
+        typename V::Accessor;
+
+        typename V::iterator;
+        typename V::const_iterator;
+
+        {
+            v.mapping()
+        } -> std::same_as<typename V::Mapping&>;
+
+        {
+            cv.mapping()
+        } -> std::same_as<const typename V::Mapping&>;
+
+        {
+            v.accessor()
+        } -> std::same_as<typename V::Accessor&>;
+
+        {
+            cv.accessor()
+        } -> std::same_as<const typename V::Accessor&>;
+
+        {
+            cv.extents()
+        } -> std::same_as<typename V::ArrayExtents>;
+
+        {
+            v.begin()
+        } -> std::same_as<typename V::iterator>;
+
+        {
+            cv.begin()
+        } -> std::same_as<typename V::const_iterator>;
+
+        {
+            v.end()
+        } -> std::same_as<typename V::iterator>;
+
+        {
+            cv.end()
+        } -> std::same_as<typename V::const_iterator>;
+
+        {
+            v.blobs()
+        } -> std::same_as<Array<typename V::BlobType, V::Mapping::blobCount>&>;
+        {
+            cv.blobs()
+        } -> std::same_as<const Array<typename V::BlobType, V::Mapping::blobCount>&>;
+    };
 #endif
 
     namespace internal

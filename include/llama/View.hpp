@@ -365,11 +365,10 @@ namespace llama
         }
     }
 
-    /// Central LLAMA class holding memory for storage and giving access to values stored there defined by a mapping. A
-    /// view should be created using \ref allocView.
-    /// \tparam TMapping The mapping used by the view to map accesses into memory.
-    /// \tparam TBlobType The storage type used by the view holding memory.
-    /// \tparam TAccessor The accessor to use when an access is made through this view.
+    /// Central LLAMA class holding memory for storage and giving access to values stored there defined by a
+    /// mapping. A view should be created using \ref allocView. \tparam TMapping The mapping used by the view to
+    /// map accesses into memory. \tparam TBlobType The storage type used by the view holding memory. \tparam
+    /// TAccessor The accessor to use when an access is made through this view.
 #ifdef __cpp_lib_concepts
     template<typename TMapping, Blob TBlobType, typename TAccessor = accessor::Default>
 #else
@@ -391,15 +390,19 @@ namespace llama
         using Accessor = TAccessor;
         using iterator = Iterator<View>;
         using const_iterator = Iterator<const View>;
+
+    private:
         using size_type = typename ArrayExtents::value_type;
 
+    public:
         static_assert(
             std::is_same_v<Mapping, std::decay_t<Mapping>>,
             "Mapping must not be const qualified or a reference. Are you using decltype(...) as View template "
             "argument?");
         static_assert(
             std::is_same_v<ArrayExtents, std::decay_t<ArrayExtents>>,
-            "Mapping::ArrayExtents must not be const qualified or a reference. Are you using decltype(...) as mapping "
+            "Mapping::ArrayExtents must not be const qualified or a reference. Are you using decltype(...) as "
+            "mapping "
             "template argument?");
 
         /// Performs default initialization of the blob array.
@@ -429,11 +432,6 @@ namespace llama
             return static_cast<const Mapping&>(*this);
         }
 
-        LLAMA_FN_HOST_ACC_INLINE auto extents() const -> ArrayExtents
-        {
-            return mapping().extents();
-        }
-
         LLAMA_FN_HOST_ACC_INLINE auto accessor() -> Accessor&
         {
             return static_cast<Accessor&>(*this);
@@ -442,6 +440,11 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE auto accessor() const -> const Accessor&
         {
             return static_cast<const Accessor&>(*this);
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE auto extents() const -> ArrayExtents
+        {
+            return mapping().extents();
         }
 
 #if !(defined(_MSC_VER) && defined(__NVCC__))
@@ -618,8 +621,8 @@ namespace llama
         }
     } // namespace internal
 
-    /// Applies the given transformation to the blobs of a view and creates a new view with the transformed blobs and
-    /// the same mapping and accessor as the old view.
+    /// Applies the given transformation to the blobs of a view and creates a new view with the transformed blobs
+    /// and the same mapping and accessor as the old view.
     template<typename ViewFwd, typename TransformBlobFunc, typename = std::enable_if_t<isView<std::decay_t<ViewFwd>>>>
     LLAMA_FN_HOST_ACC_INLINE auto transformBlobs(ViewFwd&& view, const TransformBlobFunc& transformBlob)
     {
@@ -695,18 +698,51 @@ namespace llama
     {
         using StoredParentView = TStoredParentView;
         using ParentView = std::remove_const_t<std::remove_reference_t<StoredParentView>>; ///< type of the parent view
-        using Mapping = typename ParentView::Mapping; ///< mapping of the parent view
-        using ArrayExtents = typename Mapping::ArrayExtents; ///< array extents of the parent view
-        using ArrayIndex = typename ArrayExtents::Index; ///< array index of the parent view
 
+        using Mapping = typename ParentView::Mapping;
+        using ArrayExtents = typename ParentView::ArrayExtents;
+        using ArrayIndex = typename ParentView::ArrayIndex;
+        using BlobType = typename ParentView::BlobType;
+        using RecordDim = typename ParentView::RecordDim;
+        using Accessor = typename ParentView::Accessor;
+        using iterator = typename ParentView::iterator;
+        using const_iterator = typename ParentView::const_iterator;
+
+    private:
         using size_type = typename ArrayExtents::value_type;
 
+    public:
         /// Creates a SubView given a parent \ref View and offset.
         template<typename StoredParentViewFwd>
         LLAMA_FN_HOST_ACC_INLINE SubView(StoredParentViewFwd&& parentView, ArrayIndex offset)
             : parentView(std::forward<StoredParentViewFwd>(parentView))
             , offset(offset)
         {
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE auto mapping() -> Mapping&
+        {
+            return parentView.mapping();
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE auto mapping() const -> const Mapping&
+        {
+            return parentView.mapping();
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE auto accessor() -> Accessor&
+        {
+            return parentView.accessor();
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE auto accessor() const -> const Accessor&
+        {
+            return parentView.accessor();
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE auto extents() const -> ArrayExtents
+        {
+            return parentView.extents();
         }
 
         /// Same as \ref View::operator()(ArrayIndex), but shifted by the offset of this \ref SubView.
@@ -759,9 +795,22 @@ namespace llama
             return parentView(ArrayIndex{} + offset, rc);
         }
 
+        // TODO(bgruber): implement iterators. Those would be transform iterators on top of the parent view's
+        // iterators, applying the offset on access.
+
+        LLAMA_FN_HOST_ACC_INLINE auto blobs() -> Array<BlobType, Mapping::blobCount>&
+        {
+            return parentView.blobs();
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE auto blobs() const -> const Array<BlobType, Mapping::blobCount>&
+        {
+            return parentView.blobs();
+        }
+
         StoredParentView parentView;
-        const ArrayIndex offset; ///< offset by which this view's \ref ArrayIndex indices are shifted when passed to
-                                 ///< the parent view.
+        const ArrayIndex offset; ///< offset by which this view's \ref ArrayIndex indices are shifted when passed
+                                 ///< to the parent view.
     };
 
     /// SubView vview(view); will store a reference to view.
