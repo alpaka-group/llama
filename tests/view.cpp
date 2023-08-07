@@ -14,6 +14,18 @@ namespace tag
 
 using RecordDimJustInt = llama::Record<llama::Field<tag::Value, int>>;
 
+TEST_CASE("view.concept")
+{
+#ifdef __cpp_lib_concepts
+    using ArrayExtents = llama::ArrayExtentsDynamic<std::size_t, 2>;
+    using View = llama::View<llama::mapping::AlignedAoS<ArrayExtents, RecordDimJustInt>, std::byte*>;
+    STATIC_REQUIRE(llama::AnyView<View>);
+    // TODO(bgruber): finish SubView iterators and reenable this check
+    // using SubView = llama::SubView<View>;
+    // STATIC_REQUIRE(llama::AnyView<SubView>);
+#endif
+}
+
 TEST_CASE("view.default-ctor")
 {
     using ArrayExtents = llama::ArrayExtentsDynamic<std::size_t, 2>;
@@ -31,7 +43,19 @@ TEST_CASE("view.default-ctor")
         View<llama::mapping::tree::Mapping<ArrayExtents, RecordDimJustInt, llama::Tuple<>>, std::byte*>
             view7{};
 }
-//
+
+TEST_CASE("view.observers")
+{
+    using Mapping = llama::mapping::SoA<llama::ArrayExtentsDynamic<std::size_t, 1>, Particle>;
+    using Accessor = llama::accessor::Restrict;
+    auto view = llama::allocView(Mapping{{16}}, llama::bloballoc::SharedPtr{}, Accessor{});
+
+    STATIC_REQUIRE(std::is_same_v<decltype(view.mapping()), Mapping&>);
+    STATIC_REQUIRE(std::is_same_v<decltype(view.accessor()), Accessor&>);
+    STATIC_REQUIRE(std::is_same_v<decltype(view.blobs()), llama::Array<typename decltype(view)::BlobType, 11>&>);
+    CHECK(view.extents() == llama::ArrayExtentsDynamic<std::size_t, 1>{16});
+}
+
 // TEST_CASE("view.trivial")
 //{
 //    using ArrayExtents = llama::ArrayExtents<std::size_t, 2, llama::dyn>;
