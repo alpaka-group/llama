@@ -580,11 +580,18 @@ namespace llama
         Array<BlobType, Mapping::blobCount> m_blobs;
     };
 
+#ifdef __cpp_lib_concepts
+    template<typename View>
+    inline constexpr auto isView = AnyView<View>;
+#else
     template<typename View>
     inline constexpr auto isView = false;
 
+    // this definition does neither capture SubView nor user defined view's, but the issue resolves itself with a C++20
+    // upgrade.
     template<typename Mapping, typename BlobType, typename Accessor>
     inline constexpr auto isView<View<Mapping, BlobType, Accessor>> = true;
+#endif
 
     namespace internal
     {
