@@ -1108,6 +1108,20 @@ TEST_CASE("RecordRef.operator<<")
     CHECK(ss.str() == expected);
 }
 
+TEST_CASE("RecordRef.hash")
+{
+    llama::One<Vec3I> v;
+    llama::forEachLeaf(v, [i = 0](auto& ref) mutable { ref = ++i; });
+
+    std::size_t reference = 0;
+    boost::hash_combine(reference, v(tag::X{}));
+    boost::hash_combine(reference, v(tag::Y{}));
+    boost::hash_combine(reference, v(tag::Z{}));
+
+    CHECK(std::hash<decltype(v)>{}(v) == reference);
+    CHECK(std::hash<decltype(v())>{}(v()) == reference);
+}
+
 TEST_CASE("RecordRef.swap")
 {
     llama::One<Vec3I> p1{1};
