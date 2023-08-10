@@ -642,13 +642,13 @@ $(document).ready(function(){initNavTree('RecordRef_8hpp_source.html',''); initR
 <div class="line"><a name="l00574"></a><span class="lineno">  574</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
 <div class="line"><a name="l00575"></a><span class="lineno"><a class="line" href="structllama_1_1RecordRef.html#a3ce3df14aae118c00ac669cac09645db">  575</a></span>&#160;        <a class="code" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a> <span class="keyword">friend</span> <span class="keyword">auto</span> <a class="code" href="structllama_1_1RecordRef.html#a3ce3df14aae118c00ac669cac09645db">operator!=</a>(<span class="keyword">const</span> <a class="code" href="structllama_1_1RecordRef.html">RecordRef</a>&amp; vd, <span class="keyword">const</span> T&amp; t) -&gt; <span class="keywordtype">bool</span></div>
 <div class="line"><a name="l00576"></a><span class="lineno">  576</span>&#160;        {</div>
-<div class="line"><a name="l00577"></a><span class="lineno">  577</span>&#160;            <span class="keywordflow">return</span> internal::recordRefRelOperator&lt;std::not_equal_to&lt;&gt;&gt;(vd, t);</div>
+<div class="line"><a name="l00577"></a><span class="lineno">  577</span>&#160;            <span class="keywordflow">return</span> !(vd == t);</div>
 <div class="line"><a name="l00578"></a><span class="lineno">  578</span>&#160;        }</div>
 <div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160; </div>
 <div class="line"><a name="l00580"></a><span class="lineno">  580</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> = std::enable_if_t&lt;!isRecordRef&lt;T&gt;&gt;&gt;</div>
 <div class="line"><a name="l00581"></a><span class="lineno"><a class="line" href="structllama_1_1RecordRef.html#a29cafbc66f72dc1d0cdd50240dab09fd">  581</a></span>&#160;        <a class="code" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a> <span class="keyword">friend</span> <span class="keyword">auto</span> <a class="code" href="structllama_1_1RecordRef.html#a29cafbc66f72dc1d0cdd50240dab09fd">operator!=</a>(<span class="keyword">const</span> T&amp; t, <span class="keyword">const</span> <a class="code" href="structllama_1_1RecordRef.html">RecordRef</a>&amp; vd) -&gt; <span class="keywordtype">bool</span></div>
 <div class="line"><a name="l00582"></a><span class="lineno">  582</span>&#160;        {</div>
-<div class="line"><a name="l00583"></a><span class="lineno">  583</span>&#160;            <span class="keywordflow">return</span> vd != t;</div>
+<div class="line"><a name="l00583"></a><span class="lineno">  583</span>&#160;            <span class="keywordflow">return</span> !(t == vd);</div>
 <div class="line"><a name="l00584"></a><span class="lineno">  584</span>&#160;        }</div>
 <div class="line"><a name="l00585"></a><span class="lineno">  585</span>&#160; </div>
 <div class="line"><a name="l00586"></a><span class="lineno">  586</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
@@ -1241,7 +1241,7 @@ $(document).ready(function(){initNavTree('RecordRef_8hpp_source.html',''); initR
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="RecordRef_8hpp.html">RecordRef.hpp</a></li>
-    <li class="footer">Generated on Thu Aug 10 2023 09:04:55 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Thu Aug 10 2023 09:14:25 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
