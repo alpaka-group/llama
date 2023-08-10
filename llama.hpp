@@ -9583,13 +9583,13 @@ namespace llama
         template<typename T>
         LLAMA_FN_HOST_ACC_INLINE friend auto operator!=(const RecordRef& vd, const T& t) -> bool
         {
-            return internal::recordRefRelOperator<std::not_equal_to<>>(vd, t);
+            return !(vd == t);
         }
 
         template<typename T, typename = std::enable_if_t<!isRecordRef<T>>>
         LLAMA_FN_HOST_ACC_INLINE friend auto operator!=(const T& t, const RecordRef& vd) -> bool
         {
-            return vd != t;
+            return !(t == vd);
         }
 
         template<typename T>
