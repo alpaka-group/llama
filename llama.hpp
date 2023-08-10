@@ -1144,32 +1144,29 @@ namespace llama
 				    using ArrayExtentsDynamic = ArrayExtentsNCube<SizeType, N, dyn>;
 
 				    template<typename SizeType, std::size_t Dim, typename Func, typename... OuterIndices>
-				    LLAMA_FN_HOST_ACC_INLINE void forEachADCoord(
-				        [[maybe_unused]] ArrayIndex<SizeType, Dim> adSize,
+				    LLAMA_FN_HOST_ACC_INLINE void forEachArrayIndex(
+				        [[maybe_unused]] const ArrayIndex<SizeType, Dim>& extents,
 				        Func&& func,
 				        OuterIndices... outerIndices)
 				    {
+				        constexpr auto fixedIndices = sizeof...(outerIndices);
 				        LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-				        if constexpr(Dim > 0)
+				        if constexpr(fixedIndices < Dim)
 				        {
-				            for(SizeType i = 0; i < adSize[0]; i++)
-				                forEachADCoord(
-				                    ArrayIndex<SizeType, Dim - 1>{popFront(adSize)},
-				                    std::forward<Func>(func),
-				                    outerIndices...,
-				                    i);
+				            for(SizeType i = 0; i < extents[fixedIndices]; i++)
+				                forEachArrayIndex(extents, std::forward<Func>(func), outerIndices..., i);
 				        }
 				        else
 				        {
-				            std::forward<Func>(func)(ArrayIndex<SizeType, sizeof...(outerIndices)>{outerIndices...});
+				            std::forward<Func>(func)(ArrayIndex<SizeType, fixedIndices>{outerIndices...});
 				        }
 				        LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
 				    }
 
 				    template<typename SizeType, SizeType... Sizes, typename Func>
-				    LLAMA_FN_HOST_ACC_INLINE void forEachADCoord(ArrayExtents<SizeType, Sizes...> extents, Func&& func)
+				    LLAMA_FN_HOST_ACC_INLINE void forEachArrayIndex(ArrayExtents<SizeType, Sizes...> extents, Func&& func)
 				    {
-				        forEachADCoord(extents.toArray(), std::forward<Func>(func));
+				        forEachArrayIndex(extents.toArray(), std::forward<Func>(func));
 				    }
 				} // namespace llama
 
@@ -3706,7 +3703,7 @@ namespace llama
     {
         using View = View<Mapping, BlobType, Accessor>;
         using RecordDim = typename View::RecordDim;
-        forEachADCoord(
+        forEachArrayIndex(
             view.extents(),
             [&](typename View::ArrayIndex ai) LLAMA_LAMBDA_INLINE
             { forEachLeafCoord<RecordDim>([&](auto rc) LLAMA_LAMBDA_INLINE { constructField(view, ai, rc); }); });
@@ -4849,10 +4846,7 @@ namespace llama
         {
             using SrcSizeType = typename SrcMapping::ArrayExtents::value_type;
             if constexpr(dims > 1)
-                forEachADCoord(
-                    ArrayIndex<SrcSizeType, dims - 1>{popFront(extents)},
-                    copyOne,
-                    static_cast<SrcSizeType>(i));
+                forEachArrayIndex(extents, copyOne, static_cast<SrcSizeType>(i));
             else
                 copyOne(ArrayIndex<SrcSizeType, dims>{static_cast<std::size_t>(i)});
         }
