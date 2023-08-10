@@ -6507,12 +6507,12 @@ namespace llama::mapping
 	    {
 	        constexpr auto intToStrSize(std::size_t s)
 	        {
-	            std::size_t len = 0;
-	            do
+	            std::size_t len = 1;
+	            while(s >= 10)
 	            {
 	                len++;
 	                s /= 10;
-	            } while(s != 0);
+	            }
 	            return len;
 	        }
 
@@ -6559,7 +6559,7 @@ namespace llama::mapping
 	                        it++;
 	                        it += intToStrSize(n);
 	                        auto it2 = it; // take copy because we write number backward
-	                        do
+	                        do // NOLINT(cppcoreguidelines-avoid-do-while)
 	                        {
 	                            it2--;
 	                            *it2 = '0' + n % 10;
@@ -10024,7 +10024,8 @@ struct std::tuple_element<I, const llama::RecordRef<View, BoundRecordCoord, OwnV
 template<typename View, typename BoundRecordCoord, bool OwnView>
 struct std::hash<llama::RecordRef<View, BoundRecordCoord, OwnView>> // NOLINT(cert-dcl58-cpp)
 {
-    auto operator()(const llama::RecordRef<View, BoundRecordCoord, OwnView>& rr) const -> std::size_t
+    LLAMA_FN_HOST_ACC_INLINE auto operator()(const llama::RecordRef<View, BoundRecordCoord, OwnView>& rr) const
+        -> std::size_t
     {
         std::size_t acc = 0;
         llama::forEachLeaf(
@@ -10047,6 +10048,7 @@ template<
     template<class>
     class UQual>
 struct std::
+    // NOLINTNEXTLINE(cert-dcl58-cpp)
     basic_common_reference<llama::RecordRef<ViewA, BoundA, OwnA>, llama::RecordRef<ViewB, BoundB, OwnB>, TQual, UQual>
 {
     using type = std::enable_if_t<
