@@ -8,7 +8,6 @@ var structllama_1_1View =
     [ "iterator", "structllama_1_1View.html#abe36abe814e4a701c181c5fd06b6b9b0", null ],
     [ "Mapping", "structllama_1_1View.html#ab78c51e95a88b07395d0311107f31ba3", null ],
     [ "RecordDim", "structllama_1_1View.html#a0e311e171359b386b0e86b16738d1d8d", null ],
-    [ "size_type", "structllama_1_1View.html#a1485c39735f15874051e1863874847e1", null ],
     [ "View", "structllama_1_1View.html#aa827a9b348f8608d209b74065c33fea9", null ],
     [ "View", "structllama_1_1View.html#a22cd26331c3909ad6f0c5286496b4177", null ],
     [ "accessor", "structllama_1_1View.html#a97b7ae30e104e9b9aa3701b4958b4a4e", null ],
