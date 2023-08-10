@@ -9018,6 +9018,7 @@ namespace llama::mapping::tree
 // #include "View.hpp"    // amalgamate: file already inlined
 // #include "macros.hpp"    // amalgamate: file already inlined
 
+#include <boost/functional/hash.hpp>
 #include <iosfwd>
 // #include <type_traits>    // amalgamate: file already included
 
@@ -9862,7 +9863,7 @@ namespace llama
         template<typename T>
         struct ValueOf<T&>
         {
-            using type = T;
+            using type = std::remove_const_t<T>;
         };
     } // namespace internal
 
@@ -10018,6 +10019,19 @@ template<std::size_t I, typename View, typename BoundRecordCoord, bool OwnView>
 struct std::tuple_element<I, const llama::RecordRef<View, BoundRecordCoord, OwnView>> // NOLINT(cert-dcl58-cpp)
 {
     using type = decltype(std::declval<const llama::RecordRef<View, BoundRecordCoord, OwnView>>().template get<I>());
+};
+
+template<typename View, typename BoundRecordCoord, bool OwnView>
+struct std::hash<llama::RecordRef<View, BoundRecordCoord, OwnView>> // NOLINT(cert-dcl58-cpp)
+{
+    auto operator()(const llama::RecordRef<View, BoundRecordCoord, OwnView>& rr) const -> std::size_t
+    {
+        std::size_t acc = 0;
+        llama::forEachLeaf(
+            rr,
+            [&](auto&& ref) LLAMA_LAMBDA_INLINE { boost::hash_combine(acc, llama::decayCopy(ref)); });
+        return acc;
+    }
 };
 
 #if CAN_USE_RANGES
