@@ -304,7 +304,7 @@ TEST_CASE("AoS.Aligned")
     llama::forEachLeafCoord<ParticleUnaligned>(
         [&](auto rc)
         {
-            llama::forEachADCoord(
+            llama::forEachArrayIndex(
                 extents,
                 [&](auto ac)
                 {

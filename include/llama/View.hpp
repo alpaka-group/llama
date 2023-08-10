@@ -132,7 +132,7 @@ namespace llama
     {
         using View = View<Mapping, BlobType, Accessor>;
         using RecordDim = typename View::RecordDim;
-        forEachADCoord(
+        forEachArrayIndex(
             view.extents(),
             [&](typename View::ArrayIndex ai) LLAMA_LAMBDA_INLINE
             { forEachLeafCoord<RecordDim>([&](auto rc) LLAMA_LAMBDA_INLINE { constructField(view, ai, rc); }); });

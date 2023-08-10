@@ -55,7 +55,7 @@ Array dimensions
 .. doxygenstruct:: llama::ArrayIndexRange
    :members:
 
-.. doxygenfunction:: llama::forEachADCoord(ArrayExtents<SizeType, Sizes...> extents, Func&& func)
+.. doxygenfunction:: llama::forEachArrayIndex(ArrayExtents<SizeType, Sizes...> extents, Func&& func)
 
 Record dimension
 ----------------

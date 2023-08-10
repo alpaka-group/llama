@@ -103,7 +103,7 @@ namespace llama
         {
             using SrcSizeType = typename SrcMapping::ArrayExtents::value_type;
             if constexpr(dims > 1)
-                forEachADCoord(
+                forEachArrayIndex(
                     ArrayIndex<SrcSizeType, dims - 1>{popFront(extents)},
                     copyOne,
                     static_cast<SrcSizeType>(i));

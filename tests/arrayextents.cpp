@@ -171,24 +171,24 @@ TEMPLATE_LIST_TEST_CASE("ArrayExtents.toArray", "", SizeTypes)
     CHECK(llama::ArrayExtents<TestType, llama::dyn, 43, 44>{42}.toArray() == llama::Array<TestType, 3>{42, 43, 44});
 }
 
-TEMPLATE_LIST_TEST_CASE("forEachADCoord_1D", "", SizeTypes)
+TEMPLATE_LIST_TEST_CASE("forEachArrayIndex_1D", "", SizeTypes)
 {
     const auto n = TestType{3};
     const llama::ArrayExtents extents{n};
 
     std::vector<llama::ArrayIndex<TestType, 1>> indices;
-    llama::forEachADCoord(extents, [&](llama::ArrayIndex<TestType, 1> ai) { indices.push_back(ai); });
+    llama::forEachArrayIndex(extents, [&](llama::ArrayIndex<TestType, 1> ai) { indices.push_back(ai); });
 
     CHECK(indices == std::vector<llama::ArrayIndex<TestType, 1>>{{0}, {1}, {2}});
 }
 
-TEMPLATE_LIST_TEST_CASE("forEachADCoord_2D", "", SizeTypes)
+TEMPLATE_LIST_TEST_CASE("forEachArrayIndex_2D", "", SizeTypes)
 {
     const auto n = TestType{3};
     const llama::ArrayExtents extents{n, n};
 
     std::vector<llama::ArrayIndex<TestType, 2>> indices;
-    llama::forEachADCoord(extents, [&](llama::ArrayIndex<TestType, 2> ai) { indices.push_back(ai); });
+    llama::forEachArrayIndex(extents, [&](llama::ArrayIndex<TestType, 2> ai) { indices.push_back(ai); });
 
     CHECK(
         indices
@@ -196,13 +196,13 @@ TEMPLATE_LIST_TEST_CASE("forEachADCoord_2D", "", SizeTypes)
             llama::ArrayIndex<TestType, 2>>{{0, 0}, {0, 1}, {0, 2}, {1, 0}, {1, 1}, {1, 2}, {2, 0}, {2, 1}, {2, 2}});
 }
 
-TEMPLATE_LIST_TEST_CASE("forEachADCoord_3D", "", SizeTypes)
+TEMPLATE_LIST_TEST_CASE("forEachArrayIndex_3D", "", SizeTypes)
 {
     const auto n = TestType{3};
     const llama::ArrayExtents extents{n, n, n};
 
     std::vector<llama::ArrayIndex<TestType, 3>> indices;
-    llama::forEachADCoord(extents, [&](llama::ArrayIndex<TestType, 3> ai) { indices.push_back(ai); });
+    llama::forEachArrayIndex(extents, [&](llama::ArrayIndex<TestType, 3> ai) { indices.push_back(ai); });
 
     CHECK(
         indices
