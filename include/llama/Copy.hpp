@@ -103,10 +103,7 @@ namespace llama
         {
             using SrcSizeType = typename SrcMapping::ArrayExtents::value_type;
             if constexpr(dims > 1)
-                forEachArrayIndex(
-                    ArrayIndex<SrcSizeType, dims - 1>{popFront(extents)},
-                    copyOne,
-                    static_cast<SrcSizeType>(i));
+                forEachArrayIndex(extents, copyOne, static_cast<SrcSizeType>(i));
             else
                 copyOne(ArrayIndex<SrcSizeType, dims>{static_cast<std::size_t>(i)});
         }

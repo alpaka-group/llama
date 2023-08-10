@@ -239,23 +239,20 @@ namespace llama
 
     template<typename SizeType, std::size_t Dim, typename Func, typename... OuterIndices>
     LLAMA_FN_HOST_ACC_INLINE void forEachArrayIndex(
-        [[maybe_unused]] ArrayIndex<SizeType, Dim> adSize,
+        [[maybe_unused]] const ArrayIndex<SizeType, Dim>& extents,
         Func&& func,
         OuterIndices... outerIndices)
     {
+        constexpr auto fixedIndices = sizeof...(outerIndices);
         LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-        if constexpr(Dim > 0)
+        if constexpr(fixedIndices < Dim)
         {
-            for(SizeType i = 0; i < adSize[0]; i++)
-                forEachArrayIndex(
-                    ArrayIndex<SizeType, Dim - 1>{popFront(adSize)},
-                    std::forward<Func>(func),
-                    outerIndices...,
-                    i);
+            for(SizeType i = 0; i < extents[fixedIndices]; i++)
+                forEachArrayIndex(extents, std::forward<Func>(func), outerIndices..., i);
         }
         else
         {
-            std::forward<Func>(func)(ArrayIndex<SizeType, sizeof...(outerIndices)>{outerIndices...});
+            std::forward<Func>(func)(ArrayIndex<SizeType, fixedIndices>{outerIndices...});
         }
         LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
     }
