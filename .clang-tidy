@@ -63,7 +63,8 @@ Checks: >
     -hicpp-signed-bitwise,
     -cppcoreguidelines-pro-bounds-array-to-pointer-decay,
     -hicpp-no-array-decay,
-    -cppcoreguidelines-owning-memory
+    -cppcoreguidelines-owning-memory,
+    -cppcoreguidelines-avoid-const-or-ref-data-members
 
 WarningsAsErrors: '*'
 HeaderFilterRegex: ''

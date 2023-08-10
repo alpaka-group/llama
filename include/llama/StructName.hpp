@@ -283,12 +283,12 @@ namespace llama
     {
         constexpr auto intToStrSize(std::size_t s)
         {
-            std::size_t len = 0;
-            do
+            std::size_t len = 1;
+            while(s >= 10)
             {
                 len++;
                 s /= 10;
-            } while(s != 0);
+            }
             return len;
         }
 
@@ -335,7 +335,7 @@ namespace llama
                         it++;
                         it += intToStrSize(n);
                         auto it2 = it; // take copy because we write number backward
-                        do
+                        do // NOLINT(cppcoreguidelines-avoid-do-while)
                         {
                             it2--;
                             *it2 = '0' + n % 10;

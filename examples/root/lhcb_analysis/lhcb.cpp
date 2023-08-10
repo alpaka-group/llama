@@ -488,7 +488,7 @@ namespace
             clearHeatmap(view);
         }
 
-        std::chrono::microseconds sortTime{};
+        std::chrono::microseconds sortTime{}; // NOLINT(misc-const-correctness)
         if constexpr(Sort)
             sortTime = sortView(view);
 
@@ -525,7 +525,7 @@ namespace
             "{:13} {:>9.3f} {:>9.3f} {:>9.3f} {:>4} {:>10.1f} {:>7} {:>6.1f} {:>6.1f} {:>6.1f} {:>6.3f} {:>8}\n",
             mappingName,
             conversionTime / 1000.0,
-            sortTime.count() / 1000.0,
+            static_cast<double>(sortTime.count()) / 1000.0,
             static_cast<double>(totalAnalysisTime.count()) / repetitions / 1000.0,
             repetitions,
             totalBlobSizes(view.mapping()) / 1024.0 / 1024.0,
@@ -550,7 +550,7 @@ auto main(int argc, const char* argv[]) -> int
     }
 
     const auto& inputFile = argv[1];
-    const auto treeName = argc == 3 ? argv[2] : "DecayTree";
+    const auto treeName = std::string_view(argc == 3 ? argv[2] : "DecayTree");
 
     gErrorIgnoreLevel = kWarning + 1; // TODO(bgruber): supress warnings that the RNTuple still uses a pre-released
                                       // format. Remove this once RNTuple hits production.

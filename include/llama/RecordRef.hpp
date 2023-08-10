@@ -1015,7 +1015,8 @@ struct std::tuple_element<I, const llama::RecordRef<View, BoundRecordCoord, OwnV
 template<typename View, typename BoundRecordCoord, bool OwnView>
 struct std::hash<llama::RecordRef<View, BoundRecordCoord, OwnView>> // NOLINT(cert-dcl58-cpp)
 {
-    auto operator()(const llama::RecordRef<View, BoundRecordCoord, OwnView>& rr) const -> std::size_t
+    LLAMA_FN_HOST_ACC_INLINE auto operator()(const llama::RecordRef<View, BoundRecordCoord, OwnView>& rr) const
+        -> std::size_t
     {
         std::size_t acc = 0;
         llama::forEachLeaf(
@@ -1038,6 +1039,7 @@ template<
     template<class>
     class UQual>
 struct std::
+    // NOLINTNEXTLINE(cert-dcl58-cpp)
     basic_common_reference<llama::RecordRef<ViewA, BoundA, OwnA>, llama::RecordRef<ViewB, BoundB, OwnB>, TQual, UQual>
 {
     using type = std::enable_if_t<

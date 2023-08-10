@@ -145,7 +145,7 @@ TEST_CASE("ArrayIndexRange.concepts")
 
 TEST_CASE("ArrayIndexRange.3D.reverse")
 {
-    llama::ArrayExtentsDynamic<int, 3> extents{3, 3, 3};
+    const auto extents = llama::ArrayExtentsDynamic<int, 3>{3, 3, 3};
 
     std::vector<llama::ArrayIndex<int, 3>> indices;
     for(auto ai : llama::ArrayIndexRange{extents} | std::views::reverse)
