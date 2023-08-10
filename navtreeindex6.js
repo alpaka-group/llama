@@ -1,6 +1,5 @@
 var NAVTREEINDEX6 =
 {
-"structllama_1_1mapping_1_1BitPackedIntSoA.html#a9387e7adaa94f238f7b0e625bb72b444":[2,0,0,3,10,5],
 "structllama_1_1mapping_1_1BitPackedIntSoA.html#ac00c317d801559e021a494f198725dca":[2,0,0,3,10,3],
 "structllama_1_1mapping_1_1Bytesplit.html":[2,0,0,3,14],
 "structllama_1_1mapping_1_1Bytesplit.html#a5115425b91f0b0607696c9594d115a63":[2,0,0,3,14,7],
@@ -249,5 +248,6 @@ var NAVTREEINDEX6 =
 "structllama_1_1mapping_1_1tree_1_1Mapping.html#ad6a24222f361e29632ad42e5d3fd1f20":[2,0,0,3,1,2,6],
 "structllama_1_1mapping_1_1tree_1_1Mapping.html#add630d751b504ff1e133ae1188d6016b":[2,0,0,3,1,2,12],
 "structllama_1_1mapping_1_1tree_1_1Node.html":[2,0,0,3,1,4],
-"structllama_1_1mapping_1_1tree_1_1Node.html#a505e7e6a29add068afe6c17f3e5a022c":[2,0,0,3,1,4,1]
+"structllama_1_1mapping_1_1tree_1_1Node.html#a505e7e6a29add068afe6c17f3e5a022c":[2,0,0,3,1,4,1],
+"structllama_1_1mapping_1_1tree_1_1Node.html#a919033bfb2bdd7aa2ec5f86b6ea4afb9":[2,0,0,3,1,4,2]
 };

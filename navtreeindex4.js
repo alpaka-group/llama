@@ -1,6 +1,5 @@
 var NAVTREEINDEX4 =
 {
-"structllama_1_1ProxyRefOpMixin.html#a38d2f14e872312209bb5089dcb48b5a1":[2,0,0,21,7],
 "structllama_1_1ProxyRefOpMixin.html#a427586bad791a7de5d69fcb990a4a2c8":[2,0,0,21,2],
 "structllama_1_1ProxyRefOpMixin.html#a461255210746b50f4b018054a2e00079":[2,0,0,21,11],
 "structllama_1_1ProxyRefOpMixin.html#a6e149fa3d0657b524413f1dfddad9288":[2,0,0,21,8],
@@ -249,5 +248,6 @@ var NAVTREEINDEX4 =
 "structllama_1_1accessor_1_1Restrict.html#a5c9e0516db9ef5137d4efe33f7954721":[2,0,0,0,4,0],
 "structllama_1_1accessor_1_1Stacked.html":[2,0,0,0,5],
 "structllama_1_1accessor_1_1Stacked_3_01FirstAccessor_00_01MoreAccessors_8_8_8_01_4.html":[2,0,0,0,6],
-"structllama_1_1accessor_1_1Stacked_3_01FirstAccessor_00_01MoreAccessors_8_8_8_01_4.html#a63149c2fdc237aff98d21de860df83e1":[2,0,0,0,6,0]
+"structllama_1_1accessor_1_1Stacked_3_01FirstAccessor_00_01MoreAccessors_8_8_8_01_4.html#a63149c2fdc237aff98d21de860df83e1":[2,0,0,0,6,0],
+"structllama_1_1accessor_1_1Stacked_3_01FirstAccessor_00_01MoreAccessors_8_8_8_01_4.html#aa96b596a7661000b5142d2a7a76cde2b":[2,0,0,0,6,1]
 };

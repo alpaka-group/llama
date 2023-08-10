@@ -21,6 +21,7 @@ var RecordRef_8hpp =
     [ "tuple_size< llama::RecordRef< View, BoundRecordCoord, OwnView > >", "structstd_1_1tuple__size_3_01llama_1_1RecordRef_3_01View_00_01BoundRecordCoord_00_01OwnView_01_4_01_4.html", null ],
     [ "tuple_element< I, llama::RecordRef< View, BoundRecordCoord, OwnView > >", "structstd_1_1tuple__element_3_01I_00_01llama_1_1RecordRef_3_01View_00_01BoundRecordCoord_00_01OwnView_01_4_01_4.html", "structstd_1_1tuple__element_3_01I_00_01llama_1_1RecordRef_3_01View_00_01BoundRecordCoord_00_01OwnView_01_4_01_4" ],
     [ "tuple_element< I, const llama::RecordRef< View, BoundRecordCoord, OwnView > >", "structstd_1_1tuple__element_3_01I_00_01const_01llama_1_1RecordRef_3_01View_00_01BoundRecordCoord_00_01OwnView_01_4_01_4.html", "structstd_1_1tuple__element_3_01I_00_01const_01llama_1_1RecordRef_3_01View_00_01BoundRecordCoord_00_01OwnView_01_4_01_4" ],
+    [ "hash< llama::RecordRef< View, BoundRecordCoord, OwnView > >", "structstd_1_1hash_3_01llama_1_1RecordRef_3_01View_00_01BoundRecordCoord_00_01OwnView_01_4_01_4.html", "structstd_1_1hash_3_01llama_1_1RecordRef_3_01View_00_01BoundRecordCoord_00_01OwnView_01_4_01_4" ],
     [ "asFlatTupleImpl", "RecordRef_8hpp.html#a5bc564bd20a51a629e2d16c07b29e8f3", null ],
     [ "asFlatTupleImpl", "RecordRef_8hpp.html#ad1856157d9be25e5375111b804df7136", null ],
     [ "asFlatTupleImpl", "RecordRef_8hpp.html#a1c4645c16b714dadebd6372a6a521855", null ],
