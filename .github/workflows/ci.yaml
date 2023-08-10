@@ -39,7 +39,7 @@ jobs:
     needs: clang-format
     runs-on: ubuntu-22.04
     env:
-      CXX: clang++-15
+      CXX: clang++-16
     strategy:
       fail-fast: false
       matrix:
@@ -52,10 +52,10 @@ jobs:
     - name: add LLVM apt repo
       run: |
         wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
-        sudo add-apt-repository 'deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-15 main'
-    - name: install clang-15
+        sudo add-apt-repository 'deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-16 main'
+    - name: install clang-16
       run: |
-        sudo apt install clang-15 libomp-15-dev clang-tidy-15
+        sudo apt install clang-16 libomp-16-dev clang-tidy-16
     - name: vcpkg install dependencies
       run: |
         eval $VCPKG_INSTALL
@@ -76,7 +76,7 @@ jobs:
       run: |
         cd build
         sed -i 's/\(-forward-unknown-to-host-compiler\|--generate-code=arch=[^ ]\+\|--expt-extended-lambda\|--extended-lambda\|--expt-relaxed-constexpr\|--use_fast_math\)//g' compile_commands.json # remove NVCC specific flags which clang cannot handle
-        run-clang-tidy-15 -j $THREADS -header-filter='(tests|include/llama|examples)' -extra-arg=--no-cuda-version-check -extra-arg=-nocudalib -extra-arg=-Wno-unused-command-line-argument ${{ matrix.files }}
+        run-clang-tidy-16 -j $THREADS -header-filter='(tests|include/llama|examples)' -extra-arg=--no-cuda-version-check -extra-arg=-nocudalib -extra-arg=-Wno-unused-command-line-argument ${{ matrix.files }}
 
   coverage:
     needs: clang-format
