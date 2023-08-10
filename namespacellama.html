@@ -314,12 +314,12 @@ Functions</h2></td></tr>
 <tr class="memitem:acb7f71db415ea884ba0c9d22a9bf5414"><td class="memTemplParams" colspan="2">template&lt;typename SizeType , SizeType... Sizes&gt; </td></tr>
 <tr class="memitem:acb7f71db415ea884ba0c9d22a9bf5414"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#acb7f71db415ea884ba0c9d22a9bf5414">product</a> (<a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>&lt; SizeType, Sizes... &gt; e) -&gt; SizeType</td></tr>
 <tr class="separator:acb7f71db415ea884ba0c9d22a9bf5414"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a562aeab4e636c8d76a976e70d50d30b2"><td class="memTemplParams" colspan="2">template&lt;typename SizeType , std::size_t Dim, typename Func , typename... OuterIndices&gt; </td></tr>
-<tr class="memitem:a562aeab4e636c8d76a976e70d50d30b2"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a562aeab4e636c8d76a976e70d50d30b2">forEachADCoord</a> ([[maybe_unused]] <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a>&lt; SizeType, Dim &gt; adSize, Func &amp;&amp;func, OuterIndices... outerIndices)</td></tr>
-<tr class="separator:a562aeab4e636c8d76a976e70d50d30b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abee236c11aecedddfef20c8586b77953"><td class="memTemplParams" colspan="2">template&lt;typename SizeType , SizeType... Sizes, typename Func &gt; </td></tr>
-<tr class="memitem:abee236c11aecedddfef20c8586b77953"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#abee236c11aecedddfef20c8586b77953">forEachADCoord</a> (<a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>&lt; SizeType, Sizes... &gt; extents, Func &amp;&amp;func)</td></tr>
-<tr class="separator:abee236c11aecedddfef20c8586b77953"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1abf3984cdb9b597c147f06626114575"><td class="memTemplParams" colspan="2">template&lt;typename SizeType , std::size_t Dim, typename Func , typename... OuterIndices&gt; </td></tr>
+<tr class="memitem:a1abf3984cdb9b597c147f06626114575"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a1abf3984cdb9b597c147f06626114575">forEachArrayIndex</a> ([[maybe_unused]] const <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a>&lt; SizeType, Dim &gt; &amp;extents, Func &amp;&amp;func, OuterIndices... outerIndices)</td></tr>
+<tr class="separator:a1abf3984cdb9b597c147f06626114575"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a372264ea5e1f1bbbd0d89ffd5a9a77a2"><td class="memTemplParams" colspan="2">template&lt;typename SizeType , SizeType... Sizes, typename Func &gt; </td></tr>
+<tr class="memitem:a372264ea5e1f1bbbd0d89ffd5a9a77a2"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a372264ea5e1f1bbbd0d89ffd5a9a77a2">forEachArrayIndex</a> (<a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>&lt; SizeType, Sizes... &gt; extents, Func &amp;&amp;func)</td></tr>
+<tr class="separator:a372264ea5e1f1bbbd0d89ffd5a9a77a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a22c65b7815a74750d6b589d95d19d703"><td class="memTemplParams" colspan="2">template&lt;typename Mapping , typename SrcBlob , typename DstBlob &gt; </td></tr>
 <tr class="memitem:a22c65b7815a74750d6b589d95d19d703"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a22c65b7815a74750d6b589d95d19d703">blobMemcpy</a> (const <a class="el" href="structllama_1_1View.html">View</a>&lt; Mapping, SrcBlob &gt; &amp;srcView, <a class="el" href="structllama_1_1View.html">View</a>&lt; Mapping, DstBlob &gt; &amp;dstView, std::size_t threadId=0, std::size_t threadCount=1)</td></tr>
 <tr class="separator:a22c65b7815a74750d6b589d95d19d703"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1319,7 +1319,7 @@ template&lt;typename SrcMapping , typename SrcBlob , typename DstMapping , typen
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Copy_8hpp_source.html#l00141">141</a> of file <a class="el" href="Copy_8hpp_source.html">Copy.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Copy_8hpp_source.html#l00138">138</a> of file <a class="el" href="Copy_8hpp_source.html">Copy.hpp</a>.</p>
 
 </div>
 </div>
@@ -1643,7 +1643,7 @@ template&lt;typename SrcMapping , typename SrcBlob , typename DstMapping , typen
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Copy_8hpp_source.html#l00409">409</a> of file <a class="el" href="Copy_8hpp_source.html">Copy.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Copy_8hpp_source.html#l00406">406</a> of file <a class="el" href="Copy_8hpp_source.html">Copy.hpp</a>.</p>
 
 </div>
 </div>
@@ -1839,8 +1839,8 @@ template&lt;typename SrcMapping , typename SrcBlob , typename DstMapping , typen
 
 </div>
 </div>
-<a id="a562aeab4e636c8d76a976e70d50d30b2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a562aeab4e636c8d76a976e70d50d30b2">&#9670;&nbsp;</a></span>forEachADCoord() <span class="overload">[1/2]</span></h2>
+<a id="a1abf3984cdb9b597c147f06626114575"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1abf3984cdb9b597c147f06626114575">&#9670;&nbsp;</a></span>forEachArrayIndex() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1851,10 +1851,10 @@ template&lt;typename SizeType , std::size_t Dim, typename Func , typename... Out
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void llama::forEachADCoord </td>
+          <td class="memname">void llama::forEachArrayIndex </td>
           <td>(</td>
-          <td class="paramtype">[[maybe_unused] ] <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a>&lt; SizeType, Dim &gt;&#160;</td>
-          <td class="paramname"><em>adSize</em>, </td>
+          <td class="paramtype">[[maybe_unused] ] const <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a>&lt; SizeType, Dim &gt; &amp;&#160;</td>
+          <td class="paramname"><em>extents</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -1885,8 +1885,8 @@ template&lt;typename SizeType , std::size_t Dim, typename Func , typename... Out
 
 </div>
 </div>
-<a id="abee236c11aecedddfef20c8586b77953"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abee236c11aecedddfef20c8586b77953">&#9670;&nbsp;</a></span>forEachADCoord() <span class="overload">[2/2]</span></h2>
+<a id="a372264ea5e1f1bbbd0d89ffd5a9a77a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a372264ea5e1f1bbbd0d89ffd5a9a77a2">&#9670;&nbsp;</a></span>forEachArrayIndex() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1897,7 +1897,7 @@ template&lt;typename SizeType , SizeType... Sizes, typename Func &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void llama::forEachADCoord </td>
+          <td class="memname">void llama::forEachArrayIndex </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>&lt; SizeType, Sizes... &gt;&#160;</td>
           <td class="paramname"><em>extents</em>, </td>
@@ -1921,7 +1921,7 @@ template&lt;typename SizeType , SizeType... Sizes, typename Func &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ArrayExtents_8hpp_source.html#l00264">264</a> of file <a class="el" href="ArrayExtents_8hpp_source.html">ArrayExtents.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ArrayExtents_8hpp_source.html#l00261">261</a> of file <a class="el" href="ArrayExtents_8hpp_source.html">ArrayExtents.hpp</a>.</p>
 
 </div>
 </div>
@@ -4868,7 +4868,7 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Thu Aug 10 2023 19:15:30 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Thu Aug 10 2023 19:33:33 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

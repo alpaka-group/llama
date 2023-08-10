@@ -226,12 +226,12 @@ Functions</h2></td></tr>
 <tr class="memitem:aa53f8a0b5fadc80cbc91b1b8a1d7633c"><td class="memTemplParams" colspan="2">template&lt;typename SizeType , SizeType Extent, std::size_t... Is&gt; </td></tr>
 <tr class="memitem:aa53f8a0b5fadc80cbc91b1b8a1d7633c"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#aa53f8a0b5fadc80cbc91b1b8a1d7633c">llama::internal::makeArrayExtents</a> (std::index_sequence&lt; Is... &gt;)</td></tr>
 <tr class="separator:aa53f8a0b5fadc80cbc91b1b8a1d7633c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a562aeab4e636c8d76a976e70d50d30b2"><td class="memTemplParams" colspan="2">template&lt;typename SizeType , std::size_t Dim, typename Func , typename... OuterIndices&gt; </td></tr>
-<tr class="memitem:a562aeab4e636c8d76a976e70d50d30b2"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a562aeab4e636c8d76a976e70d50d30b2">llama::forEachADCoord</a> ([[maybe_unused]] ArrayIndex&lt; SizeType, Dim &gt; adSize, Func &amp;&amp;func, OuterIndices... outerIndices)</td></tr>
-<tr class="separator:a562aeab4e636c8d76a976e70d50d30b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abee236c11aecedddfef20c8586b77953"><td class="memTemplParams" colspan="2">template&lt;typename SizeType , SizeType... Sizes, typename Func &gt; </td></tr>
-<tr class="memitem:abee236c11aecedddfef20c8586b77953"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#abee236c11aecedddfef20c8586b77953">llama::forEachADCoord</a> (ArrayExtents&lt; SizeType, Sizes... &gt; extents, Func &amp;&amp;func)</td></tr>
-<tr class="separator:abee236c11aecedddfef20c8586b77953"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1abf3984cdb9b597c147f06626114575"><td class="memTemplParams" colspan="2">template&lt;typename SizeType , std::size_t Dim, typename Func , typename... OuterIndices&gt; </td></tr>
+<tr class="memitem:a1abf3984cdb9b597c147f06626114575"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a1abf3984cdb9b597c147f06626114575">llama::forEachArrayIndex</a> ([[maybe_unused]] const ArrayIndex&lt; SizeType, Dim &gt; &amp;extents, Func &amp;&amp;func, OuterIndices... outerIndices)</td></tr>
+<tr class="separator:a1abf3984cdb9b597c147f06626114575"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a372264ea5e1f1bbbd0d89ffd5a9a77a2"><td class="memTemplParams" colspan="2">template&lt;typename SizeType , SizeType... Sizes, typename Func &gt; </td></tr>
+<tr class="memitem:a372264ea5e1f1bbbd0d89ffd5a9a77a2"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a372264ea5e1f1bbbd0d89ffd5a9a77a2">llama::forEachArrayIndex</a> (ArrayExtents&lt; SizeType, Sizes... &gt; extents, Func &amp;&amp;func)</td></tr>
+<tr class="separator:a372264ea5e1f1bbbd0d89ffd5a9a77a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -245,7 +245,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="ArrayExtents_8hpp.html">ArrayExtents.hpp</a></li>
-    <li class="footer">Generated on Thu Aug 10 2023 19:15:30 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Thu Aug 10 2023 19:33:33 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
