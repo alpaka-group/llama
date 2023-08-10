@@ -238,7 +238,7 @@ namespace llama
     using ArrayExtentsDynamic = ArrayExtentsNCube<SizeType, N, dyn>;
 
     template<typename SizeType, std::size_t Dim, typename Func, typename... OuterIndices>
-    LLAMA_FN_HOST_ACC_INLINE void forEachADCoord(
+    LLAMA_FN_HOST_ACC_INLINE void forEachArrayIndex(
         [[maybe_unused]] ArrayIndex<SizeType, Dim> adSize,
         Func&& func,
         OuterIndices... outerIndices)
@@ -247,7 +247,7 @@ namespace llama
         if constexpr(Dim > 0)
         {
             for(SizeType i = 0; i < adSize[0]; i++)
-                forEachADCoord(
+                forEachArrayIndex(
                     ArrayIndex<SizeType, Dim - 1>{popFront(adSize)},
                     std::forward<Func>(func),
                     outerIndices...,
@@ -261,9 +261,9 @@ namespace llama
     }
 
     template<typename SizeType, SizeType... Sizes, typename Func>
-    LLAMA_FN_HOST_ACC_INLINE void forEachADCoord(ArrayExtents<SizeType, Sizes...> extents, Func&& func)
+    LLAMA_FN_HOST_ACC_INLINE void forEachArrayIndex(ArrayExtents<SizeType, Sizes...> extents, Func&& func)
     {
-        forEachADCoord(extents.toArray(), std::forward<Func>(func));
+        forEachArrayIndex(extents.toArray(), std::forward<Func>(func));
     }
 } // namespace llama
 
