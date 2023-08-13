@@ -66,6 +66,35 @@ TEST_CASE("view.withAccessor.Default.SharedPtr")
     CHECK(addr == addr2);
 }
 
+namespace
+{
+    struct AsScopedUpdate
+    {
+        template<typename Reference>
+        LLAMA_FN_HOST_ACC_INLINE auto operator()(Reference&& r) const
+        {
+            return llama::ScopedUpdate(r);
+        }
+    };
+} // namespace
+
+TEST_CASE("view.withAccessor.AsScopedUpdate")
+{
+    auto change = [](int& v) { v = 42; };
+
+    auto view = llama::withAccessor<AsScopedUpdate>(llama::allocView(
+        llama::mapping::Byteswap<llama::ArrayExtents<int, 1>, Vec3I, llama::mapping::BindAoS<>::fn>{{}},
+        llama::bloballoc::SharedPtr{}));
+
+    {
+        auto x = view(0)(tag::X{});
+        change(x);
+        CHECK(x == 42);
+        CHECK(view(0)(tag::X{}) == 0);
+    }
+    CHECK(view(0)(tag::X{}) == 42);
+}
+
 TEMPLATE_TEST_CASE(
     "view.withAccessor.shallowCopy.Default",
     "",
