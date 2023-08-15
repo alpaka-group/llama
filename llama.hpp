@@ -1088,14 +1088,7 @@ namespace llama
 				    template<typename... Args>
 				    ArrayExtents(Args...) -> ArrayExtents<
 				        typename internal::IndexTypeFromArgs<std::size_t, Args...>::type,
-				    // we just use Args to repeat dyn as often as Args is big
-				#ifdef __NVCC__
-				        (static_cast<std::void_t<Args>>(0),
-				         dyn.operator typename internal::IndexTypeFromArgs<std::size_t, Args...>::type())...
-				#else
-				        (Args{}, dyn)...
-				#endif
-				        >;
+				        (Args{}, dyn)...>; // we just use Args to repeat dyn as often as Args is big
 
 				    static_assert(std::is_trivially_default_constructible_v<ArrayExtents<std::size_t, 1>>);
 				    static_assert(std::is_trivially_copy_constructible_v<ArrayExtents<std::size_t, 1>>);
@@ -2683,7 +2676,7 @@ namespace llama
 	    struct Atomic
 	    {
 	        template<typename T>
-	        LLAMA_FN_HOST_ACC_INLINE auto operator()(T& r) const -> std::atomic_ref<T>
+	        LLAMA_FORCE_INLINE auto operator()(T& r) const -> std::atomic_ref<T>
 	        {
 	            return std::atomic_ref<T>{r};
 	        }
@@ -3504,7 +3497,7 @@ namespace llama
 	        using Flattener = FlattenRecordDim<TRecordDim>;
 	        static constexpr std::size_t blobCount = 1;
 
-	#ifndef __NVCC__
+	#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ >= 12
 	        using Base::Base;
 	#else
 	        constexpr One() = default;
@@ -5998,13 +5991,6 @@ namespace llama::mapping
             return mp_fold<mp_list<GetTags<Record<Fields...>, RCs>...>, Initial, PartitionFoldOp>{};
         }
 
-        // workaround for nvcc 11.3 and below: we cannot put the decltype() directly into the Split class
-        template<typename RecordDim, typename RecordCoordForMapping1>
-        struct PartionedRecordDim
-        {
-            using type = decltype(partitionRecordDim(RecordDim{}, RecordCoordForMapping1{}));
-        };
-
         template<typename RC, typename RecordCoordForMapping1>
         inline constexpr bool isSelected = recordCoordCommonPrefixIsSame<RecordCoordForMapping1, RC>;
 
@@ -6065,8 +6051,8 @@ namespace llama::mapping
         using SelectorForMapping1 = TSelectorForMapping1;
         using NormalizedSelectorForMapping1 =
             typename internal::ReplaceTagListsByCoords<RecordDim, SelectorForMapping1>::type;
-        using RecordDimPartitions =
-            typename internal::PartionedRecordDim<RecordDim, NormalizedSelectorForMapping1>::type;
+        using RecordDimPartitions
+            = decltype(internal::partitionRecordDim(RecordDim{}, NormalizedSelectorForMapping1{}));
         using RecordDim1 = mp_first<RecordDimPartitions>;
         using RecordDim2 = mp_second<RecordDimPartitions>;
 
