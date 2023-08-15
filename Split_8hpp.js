@@ -1,7 +1,6 @@
 var Split_8hpp =
 [
     [ "PartitionFoldOpImpl", "structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html", "structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl" ],
-    [ "PartionedRecordDim", "structllama_1_1mapping_1_1internal_1_1PartionedRecordDim.html", "structllama_1_1mapping_1_1internal_1_1PartionedRecordDim" ],
     [ "ReplaceTagListsByCoords< RecordDim, RecordCoord< RCs... > >", "structllama_1_1mapping_1_1internal_1_1ReplaceTagListsByCoords_3_01RecordDim_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html", "structllama_1_1mapping_1_1internal_1_1ReplaceTagListsByCoords_3_01RecordDim_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4" ],
     [ "ReplaceTagListsByCoords< RecordDim, mp_list< Args... > >", "structllama_1_1mapping_1_1internal_1_1ReplaceTagListsByCoords_3_01RecordDim_00_01mp__list_3_01Args_8_8_8_01_4_01_4.html", "structllama_1_1mapping_1_1internal_1_1ReplaceTagListsByCoords_3_01RecordDim_00_01mp__list_3_01Args_8_8_8_01_4_01_4" ],
     [ "Split", "structllama_1_1mapping_1_1Split.html", "structllama_1_1mapping_1_1Split" ],

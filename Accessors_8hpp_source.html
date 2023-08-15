@@ -188,7 +188,7 @@ $(document).ready(function(){initNavTree('Accessors_8hpp_source.html',''); initR
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    <span class="keyword">struct </span>Atomic</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    {</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        <a class="code" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a> <span class="keyword">auto</span> operator()(T&amp; r) <span class="keyword">const</span> -&gt; std::atomic_ref&lt;T&gt;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        <a class="code" href="macros_8hpp.html#a602fc531cfc17c6b8fadea678b7c937b">LLAMA_FORCE_INLINE</a> <span class="keyword">auto</span> operator()(T&amp; r) <span class="keyword">const</span> -&gt; std::atomic_ref&lt;T&gt;</div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        {</div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;            <span class="keywordflow">return</span> std::atomic_ref&lt;T&gt;{r};</div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        }</div>
@@ -234,6 +234,7 @@ $(document).ready(function(){initNavTree('Accessors_8hpp_source.html',''); initR
 <div class="ttc" id="aConcepts_8hpp_html"><div class="ttname"><a href="Concepts_8hpp.html">Concepts.hpp</a></div></div>
 <div class="ttc" id="aProxyRefOpMixin_8hpp_html"><div class="ttname"><a href="ProxyRefOpMixin_8hpp.html">ProxyRefOpMixin.hpp</a></div></div>
 <div class="ttc" id="amacros_8hpp_html"><div class="ttname"><a href="macros_8hpp.html">macros.hpp</a></div></div>
+<div class="ttc" id="amacros_8hpp_html_a602fc531cfc17c6b8fadea678b7c937b"><div class="ttname"><a href="macros_8hpp.html#a602fc531cfc17c6b8fadea678b7c937b">LLAMA_FORCE_INLINE</a></div><div class="ttdeci">#define LLAMA_FORCE_INLINE</div><div class="ttdoc">Forces the compiler to inline a function annotated with this macro.</div><div class="ttdef"><b>Definition:</b> <a href="macros_8hpp_source.html#l00045">macros.hpp:45</a></div></div>
 <div class="ttc" id="amacros_8hpp_html_adad0b5fb27fb373cb41c47ed7ab419af"><div class="ttname"><a href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a></div><div class="ttdeci">#define LLAMA_FN_HOST_ACC_INLINE</div><div class="ttdef"><b>Definition:</b> <a href="macros_8hpp_source.html#l00096">macros.hpp:96</a></div></div>
 <div class="ttc" id="anamespacellama_1_1accessor_html"><div class="ttname"><a href="namespacellama_1_1accessor.html">llama::accessor</a></div><div class="ttdef"><b>Definition:</b> <a href="Accessors_8hpp_source.html#l00012">Accessors.hpp:13</a></div></div>
 <div class="ttc" id="astructllama_1_1ProxyRefOpMixin_html"><div class="ttname"><a href="structllama_1_1ProxyRefOpMixin.html">llama::ProxyRefOpMixin</a></div><div class="ttdoc">CRTP mixin for proxy reference types to support all compound assignment and increment/decrement opera...</div><div class="ttdef"><b>Definition:</b> <a href="ProxyRefOpMixin_8hpp_source.html#l00012">ProxyRefOpMixin.hpp:13</a></div></div>
@@ -263,7 +264,7 @@ $(document).ready(function(){initNavTree('Accessors_8hpp_source.html',''); initR
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="Accessors_8hpp.html">Accessors.hpp</a></li>
-    <li class="footer">Generated on Sun Aug 13 2023 16:26:16 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Aug 15 2023 09:51:53 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

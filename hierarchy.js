@@ -189,7 +189,6 @@ var hierarchy =
     [ "llama::mapping::tree::Node< TIdentifier, TChildrenTuple, CountType >", "structllama_1_1mapping_1_1tree_1_1Node.html", null ],
     [ "llama::NoName", "structllama_1_1NoName.html", null ],
     [ "llama::NrAndOffset< T >", "structllama_1_1NrAndOffset.html", null ],
-    [ "llama::mapping::internal::PartionedRecordDim< RecordDim, RecordCoordForMapping1 >", "structllama_1_1mapping_1_1internal_1_1PartionedRecordDim.html", null ],
     [ "llama::mapping::internal::PartitionFoldOpImpl< Acc, TagList >", "structllama_1_1mapping_1_1internal_1_1PartitionFoldOpImpl.html", null ],
     [ "llama::internal::PlusAssign", "structllama_1_1internal_1_1PlusAssign.html", null ],
     [ "llama::PrettySize", "structllama_1_1PrettySize.html", null ],

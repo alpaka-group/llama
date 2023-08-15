@@ -8,7 +8,7 @@ var structllama_1_1mapping_1_1Split =
     [ "RecordDim", "structllama_1_1mapping_1_1Split.html#ad02eb9f592deae654b8cbd8e2ed8f44c", null ],
     [ "RecordDim1", "structllama_1_1mapping_1_1Split.html#a4eb538b875302b37f43d43c2bfe767b4", null ],
     [ "RecordDim2", "structllama_1_1mapping_1_1Split.html#ad5a8c4aef96eda2d8aabf87e244d574a", null ],
-    [ "RecordDimPartitions", "structllama_1_1mapping_1_1Split.html#af7694807849f872cc9a5d7f2dfe63c1d", null ],
+    [ "RecordDimPartitions", "structllama_1_1mapping_1_1Split.html#a71b4634fa1aaca4ee41c236ce84b935d", null ],
     [ "SelectorForMapping1", "structllama_1_1mapping_1_1Split.html#a8bce85de48fc51888c598cf1cf16640b", null ],
     [ "Split", "structllama_1_1mapping_1_1Split.html#a59d937379739b9fb3cc1ae51e689e21e", null ],
     [ "Split", "structllama_1_1mapping_1_1Split.html#aa4189da35d837e0e0b84f536009ccbbe", null ],
