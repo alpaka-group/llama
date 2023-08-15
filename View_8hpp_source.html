@@ -651,7 +651,7 @@ $(document).ready(function(){initNavTree('View_8hpp_source.html',''); initResiza
 <div class="line"><a name="l00598"></a><span class="lineno">  598</span>&#160;        <span class="comment">// remove in C++23, from: https://en.cppreference.com/w/cpp/utility/forward_like</span></div>
 <div class="line"><a name="l00599"></a><span class="lineno">  599</span>&#160;        <span class="comment">// NOLINTBEGIN</span></div>
 <div class="line"><a name="l00600"></a><span class="lineno">  600</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">class</span> T, <span class="keyword">class</span> U&gt;</div>
-<div class="line"><a name="l00601"></a><span class="lineno"><a class="line" href="namespacellama_1_1internal.html#ab9c450a82fa4a4c09fdc9b4e95d12db3">  601</a></span>&#160;        [[nodiscard]] constexpr <span class="keyword">auto</span>&amp;&amp; <a class="code" href="namespacellama_1_1internal.html#ab9c450a82fa4a4c09fdc9b4e95d12db3">forward_like</a>(U&amp;&amp; x) noexcept</div>
+<div class="line"><a name="l00601"></a><span class="lineno"><a class="line" href="namespacellama_1_1internal.html#ab9c450a82fa4a4c09fdc9b4e95d12db3">  601</a></span>&#160;        [[nodiscard]] <a class="code" href="macros_8hpp.html#adad0b5fb27fb373cb41c47ed7ab419af">LLAMA_FN_HOST_ACC_INLINE</a> constexpr <span class="keyword">auto</span>&amp;&amp; <a class="code" href="namespacellama_1_1internal.html#ab9c450a82fa4a4c09fdc9b4e95d12db3">forward_like</a>(U&amp;&amp; x) noexcept</div>
 <div class="line"><a name="l00602"></a><span class="lineno">  602</span>&#160;        {</div>
 <div class="line"><a name="l00603"></a><span class="lineno">  603</span>&#160;            constexpr <span class="keywordtype">bool</span> is_adding_const = std::is_const_v&lt;std::remove_reference_t&lt;T&gt;&gt;;</div>
 <div class="line"><a name="l00604"></a><span class="lineno">  604</span>&#160;            <span class="keywordflow">if</span> constexpr(std::is_lvalue_reference_v&lt;T&amp;&amp;&gt;)</div>
@@ -1012,7 +1012,7 @@ $(document).ready(function(){initNavTree('View_8hpp_source.html',''); initResiza
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="View_8hpp.html">View.hpp</a></li>
-    <li class="footer">Generated on Tue Aug 15 2023 09:51:53 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Aug 15 2023 12:45:05 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
