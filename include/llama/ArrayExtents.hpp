@@ -182,14 +182,7 @@ namespace llama
     template<typename... Args>
     ArrayExtents(Args...) -> ArrayExtents<
         typename internal::IndexTypeFromArgs<std::size_t, Args...>::type,
-    // we just use Args to repeat dyn as often as Args is big
-#ifdef __NVCC__
-        (static_cast<std::void_t<Args>>(0),
-         dyn.operator typename internal::IndexTypeFromArgs<std::size_t, Args...>::type())...
-#else
-        (Args{}, dyn)...
-#endif
-        >;
+        (Args{}, dyn)...>; // we just use Args to repeat dyn as often as Args is big
 
     static_assert(std::is_trivially_default_constructible_v<ArrayExtents<std::size_t, 1>>);
     static_assert(std::is_trivially_copy_constructible_v<ArrayExtents<std::size_t, 1>>);

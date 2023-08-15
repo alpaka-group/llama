@@ -31,7 +31,7 @@ namespace llama::mapping
         using Flattener = FlattenRecordDim<TRecordDim>;
         static constexpr std::size_t blobCount = 1;
 
-#ifndef __NVCC__
+#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ >= 12
         using Base::Base;
 #else
         constexpr One() = default;
