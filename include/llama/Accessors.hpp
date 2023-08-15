@@ -105,7 +105,7 @@ namespace llama::accessor
     struct Atomic
     {
         template<typename T>
-        LLAMA_FN_HOST_ACC_INLINE auto operator()(T& r) const -> std::atomic_ref<T>
+        LLAMA_FORCE_INLINE auto operator()(T& r) const -> std::atomic_ref<T>
         {
             return std::atomic_ref<T>{r};
         }

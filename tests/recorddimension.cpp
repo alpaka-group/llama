@@ -151,6 +151,7 @@ TEST_CASE("recorddim.record_with_nontrivial_ctor")
 }
 
 #    ifndef __NVCC__
+// we get this otherwise: error: identifier "_NV_ANON_NAMESPACE::UniqueInt::counter" is undefined in device code
 namespace
 {
     struct UniqueInt
