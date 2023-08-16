@@ -4,7 +4,7 @@
 cmake_minimum_required (VERSION 3.18.3)
 
 find_package(OpenMP REQUIRED)
-set(STREAM_ARRAY_SIZE 400000000 CACHE STRING "STREAM benchmark array size")
+set(STREAM_ARRAY_SIZE 80000000 CACHE STRING "STREAM benchmark array size")
 
 project(stream C)
 
@@ -14,7 +14,10 @@ target_link_libraries(${PROJECT_NAME} PRIVATE OpenMP::OpenMP_CXX)
 if (MSVC)
 	target_compile_options(${PROJECT_NAME} PRIVATE /arch:AVX2)
 else()
-	target_compile_options(${PROJECT_NAME} PRIVATE -march=native)
+	target_compile_options(${PROJECT_NAME} PRIVATE -march=native -mcmodel=medium) # mcmodel needed for large global vars
+	if (CMAKE_CXX_COMPILER_ID STREQUAL "IntelLLVM")
+		target_link_options(${PROJECT_NAME} PRIVATE -shared-intel)
+	endif()
 endif()
 
 project(llama-stream CXX)
@@ -30,5 +33,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE llama::llama OpenMP::OpenMP_CXX)
 if (MSVC)
 	target_compile_options(${PROJECT_NAME} PRIVATE /arch:AVX2)
 else()
-	target_compile_options(${PROJECT_NAME} PRIVATE -march=native)
+	target_compile_options(${PROJECT_NAME} PRIVATE -march=native -mcmodel=medium) # mcmodel needed for large global vars
+	if (CMAKE_CXX_COMPILER_ID STREQUAL "IntelLLVM")
+		target_link_options(${PROJECT_NAME} PRIVATE -shared-intel)
+	endif()
 endif()
