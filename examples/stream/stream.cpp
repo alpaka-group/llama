@@ -594,7 +594,12 @@ void checkSTREAMresults()
 
 #    undef abs
 #    undef M
-#    include <emmintrin.h>
+#    ifdef _MSC_VER
+#        include <intrin.h>
+#    else
+#        include <ammintrin.h>
+#        include <emmintrin.h>
+#    endif
 #    include <llama/llama.hpp>
 
 constexpr auto mapping = llama::mapping::AoS<llama::ArrayExtents<ssize_t, STREAM_ARRAY_SIZE>, STREAM_TYPE>{};
@@ -613,15 +618,23 @@ struct NonTemporalStoreAccessor
 #    else
             if constexpr(sizeof(T) == sizeof(long long))
             {
+#        ifdef __SSE4A__
+                _mm_stream_sd(&ref, _mm_set_sd(t));
+#        else
                 long long i;
                 std::memcpy(&i, &t, sizeof(i));
                 _mm_stream_si64(reinterpret_cast<long long*>(&ref), i);
+#        endif
             }
             else if constexpr(sizeof(T) == sizeof(int))
             {
+#        ifdef __SSE4A__
+                _mm_stream_ss(&ref, _mm_set_ss(t));
+#        else
                 int i;
                 std::memcpy(&i, &t, sizeof(i));
                 _mm_stream_si32(reinterpret_cast<int*>(&ref), i);
+#        endif
             }
             else
             {
