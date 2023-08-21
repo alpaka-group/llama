@@ -39,6 +39,14 @@ TEST_CASE("ArrayExtents.dim0")
     x2 = 0;
 }
 
+TEST_CASE("ArrayExtents.dim0.int")
+{
+    auto mapping = llama::mapping::SoA{llama::ArrayExtents{}, int{}};
+    auto view = llama::allocView(mapping);
+    view() = 42;
+    CHECK(view() == 42);
+}
+
 TEMPLATE_LIST_TEST_CASE("ArrayExtents.dim1.dynamic", "", SizeTypes)
 {
     const TestType n = 16;
