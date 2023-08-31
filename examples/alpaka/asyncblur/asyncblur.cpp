@@ -136,20 +136,15 @@ struct BlurKernel
 auto main(int argc, char** argv) -> int
 try
 {
-    // ALPAKA
     using Dim = alpaka::DimInt<2>;
-
     using Acc = alpaka::ExampleDefaultAcc<Dim, int>;
-    // using Acc = alpaka::AccGpuCudaRt<Dim, Size>;
-    // using Acc = alpaka::AccCpuSerial<Dim, Size>;
-
     using Queue = alpaka::Queue<Acc, std::conditional_t<async, alpaka::NonBlocking, alpaka::Blocking>>;
-    using DevHost = alpaka::DevCpu;
-    using DevAcc = alpaka::Dev<Acc>;
-    using PltfHost = alpaka::Pltf<DevHost>;
-    using PltfAcc = alpaka::Pltf<DevAcc>;
-    const DevAcc devAcc = alpaka::getDevByIdx<PltfAcc>(0);
-    const DevHost devHost = alpaka::getDevByIdx<PltfHost>(0);
+
+    const auto platformAcc = alpaka::Platform<Acc>{};
+    const auto platformHost = alpaka::PlatformCpu{};
+    const auto devAcc = alpaka::getDevByIdx(platformAcc, 0);
+    const auto devHost = alpaka::getDevByIdx(platformHost, 0);
+
     std::vector<Queue> queue;
     queue.reserve(chunkCount);
     for(std::size_t i = 0; i < chunkCount; ++i)

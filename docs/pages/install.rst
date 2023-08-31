@@ -41,7 +41,7 @@ Examples
 To build all examples of LLAMA, the following additional libraries are needed:
 
 - libfmt 6.2.1 or higher
-- `Alpaka <https://github.com/alpaka-group/alpaka>`_ 0.9.0 or higher
+- `Alpaka <https://github.com/alpaka-group/alpaka>`_ 1.0 or higher
 - `xsimd <https://github.com/xtensor-stack/xsimd>`_ 9.0.1 or higher
 - `ROOT <https://root.cern/>`_
 - `tinyobjloader <https://github.com/tinyobjloader/tinyobjloader>`_ 2.0.0-rc9 or higher

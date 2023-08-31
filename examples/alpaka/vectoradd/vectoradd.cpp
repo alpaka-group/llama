@@ -93,9 +93,11 @@ try
     using Dim = alpaka::DimInt<1>;
 
     using Acc = alpaka::ExampleDefaultAcc<Dim, Size>;
-    const auto devAcc = alpaka::getDevByIdx<Acc>(0);
-    const auto devHost = alpaka::getDevByIdx<alpaka::DevCpu>(0);
-    auto queue = alpaka::Queue<Acc, alpaka::Blocking>(devAcc);
+    const auto platformAcc = alpaka::Platform<Acc>{};
+    const auto platformHost = alpaka::PlatformCpu{};
+    const auto devAcc = alpaka::getDevByIdx(platformAcc, 0);
+    const auto devHost = alpaka::getDevByIdx(platformHost, 0);
+    auto queue = alpaka::Queue<Acc, alpaka::Blocking>{devAcc};
 
     // LLAMA
     const auto mapping = [&]
