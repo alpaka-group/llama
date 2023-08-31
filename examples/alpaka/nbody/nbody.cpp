@@ -218,11 +218,6 @@ void run(std::ostream& plotFile)
     using Dim = alpaka::DimInt<1>;
     using Size = int;
     using Acc = AccTemplate<Dim, Size>;
-    using DevHost = alpaka::DevCpu;
-    using DevAcc = alpaka::Dev<Acc>;
-    using PltfHost = alpaka::Pltf<DevHost>;
-    using PltfAcc = alpaka::Pltf<DevAcc>;
-    using Queue = alpaka::Queue<DevAcc, alpaka::Blocking>;
 
     auto mappingName = [](int m) -> std::string
     {
@@ -239,9 +234,11 @@ void run(std::ostream& plotFile)
     const auto title = "GM " + mappingName(MappingGM) + " SM " + mappingName(MappingSM);
     std::cout << '\n' << title << '\n';
 
-    const DevAcc devAcc(alpaka::getDevByIdx<PltfAcc>(0u));
-    const DevHost devHost(alpaka::getDevByIdx<PltfHost>(0u));
-    Queue queue(devAcc);
+    const auto platformAcc = alpaka::Platform<Acc>{};
+    const auto platformHost = alpaka::PlatformCpu{};
+    const auto devAcc = alpaka::getDevByIdx(platformAcc, 0);
+    const auto devHost = alpaka::getDevByIdx(platformHost, 0);
+    auto queue = alpaka::Queue<Acc, alpaka::Blocking>{devAcc};
 
     auto mapping = []
     {

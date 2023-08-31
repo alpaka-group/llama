@@ -75,11 +75,11 @@ void daxpyAlpakaLlama(std::string mappingName, std::ofstream& plotFile, Mapping 
     using Dim = alpaka::DimInt<1>;
     using Size = std::size_t;
     using Acc = alpaka::ExampleDefaultAcc<Dim, Size>;
-    using Dev = alpaka::Dev<Acc>;
-    using Queue = alpaka::Queue<Dev, alpaka::Blocking>;
-    const auto devAcc = alpaka::getDevByIdx<alpaka::Pltf<Dev>>(0u);
-    const auto devHost = alpaka::getDevByIdx<alpaka::PltfCpu>(0u);
-    auto queue = Queue(devAcc);
+    const auto platformAcc = alpaka::Platform<Acc>{};
+    const auto platformHost = alpaka::PlatformCpu{};
+    const auto devAcc = alpaka::getDevByIdx(platformAcc, 0);
+    const auto devHost = alpaka::getDevByIdx(platformHost, 0);
+    auto queue = alpaka::Queue<Acc, alpaka::Blocking>(devAcc);
 
     Stopwatch watch;
     auto x = llama::allocViewUninitialized(mapping);

@@ -781,14 +781,11 @@ template<int FieldMapping, int ParticleMapping>
 void run(std::ostream& plotFile)
 {
     using Acc = alpaka::ExampleDefaultAcc<Dim, Size>;
-    using DevHost = alpaka::DevCpu;
-    using DevAcc = alpaka::Dev<Acc>;
-    using PltfHost = alpaka::Pltf<DevHost>;
-    using PltfAcc = alpaka::Pltf<DevAcc>;
-    using Queue = alpaka::Queue<DevAcc, alpaka::Blocking>;
-    const DevAcc devAcc(alpaka::getDevByIdx<PltfAcc>(0u));
-    const DevHost devHost(alpaka::getDevByIdx<PltfHost>(0u));
-    Queue queue(devAcc);
+    const auto platformAcc = alpaka::Platform<Acc>{};
+    const auto platformHost = alpaka::PlatformCpu{};
+    const auto devAcc = alpaka::getDevByIdx(platformAcc, 0);
+    const auto devHost = alpaka::getDevByIdx(platformHost, 0);
+    auto queue = alpaka::Queue<Acc, alpaka::Blocking>(devAcc);
 
     fmt::print("Particle mapping: {}\n", particleMappingName(ParticleMapping));
     fmt::print("Field mapping:    {}\n", fieldMappingName(FieldMapping));
@@ -885,7 +882,7 @@ try
     affinity = affinity == nullptr ? "NONE - PLEASE PIN YOUR THREADS!" : affinity;
 
     using Acc = alpaka::ExampleDefaultAcc<Dim, Size>;
-    auto accName = alpaka::getName(alpaka::getDevByIdx<alpaka::Pltf<alpaka::Dev<Acc>>>(0u));
+    auto accName = alpaka::getName(alpaka::getDevByIdx(alpaka::Platform<Acc>{}, 0u));
     while(static_cast<bool>(std::isspace(accName.back())))
         accName.pop_back();
     fmt::print(

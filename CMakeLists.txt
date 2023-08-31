@@ -167,7 +167,7 @@ if (LLAMA_BUILD_EXAMPLES)
 	add_subdirectory("examples/stream")
 
 	# alpaka examples
-	find_package(alpaka 0.9.0)
+	find_package(alpaka 1.0)
 	if (_alpaka_FOUND)
 		add_subdirectory("examples/alpaka/nbody")
 		add_subdirectory("examples/alpaka/vectoradd")
