@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "../View.hpp"
 #include "Common.hpp"
 
 #include <array>
