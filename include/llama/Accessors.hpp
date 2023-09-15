@@ -8,6 +8,8 @@
 #include "macros.hpp"
 
 #include <atomic>
+#include <memory>
+#include <mutex>
 
 namespace llama::accessor
 {
@@ -111,6 +113,59 @@ namespace llama::accessor
         }
     };
 #endif
+
+    /// Locks a mutex during each access to the data structure.
+    template<typename Mutex = std::mutex>
+    struct Locked
+    {
+        // mutexes are usually not movable, so we put them on the heap, so the accessor is movable
+        std::unique_ptr<Mutex> m = std::make_unique<Mutex>();
+
+        template<typename Ref, typename Value>
+        // NOLINTNEXTLINE(cppcoreguidelines-special-member-functions,hicpp-special-member-functions)
+        struct Reference : ProxyRefOpMixin<Reference<Ref, Value>, Value>
+        {
+            Ref ref;
+            Mutex& m;
+
+            using value_type = Value;
+
+            // NOLINTNEXTLINE(bugprone-unhandled-self-assignment,cert-oop54-cpp)
+            LLAMA_FORCE_INLINE constexpr auto operator=(const Reference& other) -> Reference&
+            {
+                const std::lock_guard<Mutex> lock(m);
+                *this = static_cast<value_type>(other);
+                return *this;
+            }
+
+            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
+            LLAMA_FORCE_INLINE operator value_type() const
+            {
+                const std::lock_guard<Mutex> lock(m);
+                return static_cast<value_type>(ref);
+            }
+
+            template<typename T>
+            LLAMA_FORCE_INLINE auto operator=(T t) -> Reference&
+            {
+                const std::lock_guard<Mutex> lock(m);
+                ref = t;
+                return *this;
+            }
+        };
+
+        template<typename PR>
+        LLAMA_FORCE_INLINE auto operator()(PR r) const -> Reference<PR, typename PR::value_type>
+        {
+            return {{}, r, *m};
+        }
+
+        template<typename T>
+        LLAMA_FORCE_INLINE auto operator()(T& r) const -> Reference<T&, std::remove_cv_t<T>>
+        {
+            return {{}, r, *m};
+        }
+    };
 
     namespace internal
     {

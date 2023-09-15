@@ -151,7 +151,7 @@ namespace llama
     LLAMA_FN_HOST_ACC_INLINE auto allocView(Mapping mapping = {}, const Allocator& alloc = {}, Accessor accessor = {})
         -> View<Mapping, internal::AllocatorBlobType<Allocator, typename Mapping::RecordDim>, Accessor>
     {
-        auto view = allocViewUninitialized(std::move(mapping), alloc, accessor);
+        auto view = allocViewUninitialized(std::move(mapping), alloc, std::move(accessor));
         constructFields(view);
         return view;
     }
