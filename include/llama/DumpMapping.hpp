@@ -19,15 +19,6 @@ namespace llama
 {
     namespace internal
     {
-        template<typename Mapping>
-        constexpr auto hasAnyComputedField() -> bool
-        {
-            bool computed = false;
-            forEachLeafCoord<typename Mapping::RecordDim>([&](auto rc)
-                                                          { computed |= llama::isComputed<Mapping, decltype(rc)>; });
-            return computed;
-        }
-
         inline auto color(std::string_view recordCoordTags) -> std::size_t
         {
             auto c = std::hash<std::string_view>{}(recordCoordTags) &std::size_t{0xFFFFFF};
@@ -187,7 +178,7 @@ namespace llama
             std::vector<FieldBox<typename Mapping::ArrayExtents::Index>> infos;
 
             std::optional<decltype(allocView(mapping))> view;
-            if constexpr(hasAnyComputedField<Mapping>())
+            if constexpr(hasAnyComputedField<Mapping>)
                 view = allocView(mapping);
 
             using RecordDim = typename Mapping::RecordDim;
@@ -262,8 +253,7 @@ namespace llama
 
         std::string svg;
 
-        constexpr auto hasAnyComputedField = internal::hasAnyComputedField<Mapping>();
-        std::array<int, Mapping::blobCount + hasAnyComputedField + 1> blobYOffset{};
+        std::array<int, Mapping::blobCount + hasAnyComputedField<Mapping> + 1> blobYOffset{};
         auto writeBlobHeader = [&](std::size_t i, std::size_t size, std::string_view name)
         {
             const auto blobRows = (size + wrapByteCount - 1) / wrapByteCount;
@@ -378,7 +368,7 @@ namespace llama
 )";
         }
 
-        if(hasAnyComputedField)
+        if(hasAnyComputedField<Mapping>)
         {
             writeBlobHeader(Mapping::blobCount, computedSizeSoFar, "Comp.");
 
