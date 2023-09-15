@@ -3,6 +3,8 @@
 
 #include "common.hpp"
 
+#include <thread>
+
 TEST_CASE("view.allocView.Default")
 {
     auto mapping = llama::mapping::AoS{llama::ArrayExtents{3, 4}, Particle{}};
@@ -35,6 +37,21 @@ TEST_CASE("view.allocView.Atomic")
     iotaCheckView(view);
 }
 #endif
+
+TEST_CASE("view.allocView.Locked")
+{
+    auto mapping = llama::mapping::AoS{llama::ArrayExtents{3, 4}, Vec3I{}};
+    auto view = llama::allocView(mapping, llama::bloballoc::Vector{}, llama::accessor::Locked{});
+    iotaFillView(view);
+    iotaCheckView(view);
+    // concurrent access. TSAN would detect a race here (e.g. with Default accessor, tested with clang-16).
+    std::thread t1{[&] { view(1, 1)(tag::X{}) = 1; }};
+    std::thread t2{[&] { view(1, 1)(tag::X{}) = 2; }};
+    std::thread t3{[&] { view(2, 2)(tag::X{}) = 3; }};
+    t1.join();
+    t2.join();
+    t3.join();
+}
 
 TEST_CASE("view.withAccessor.Default.Vector")
 {
