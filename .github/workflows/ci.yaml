@@ -229,6 +229,10 @@ jobs:
             cuda_url: https://developer.download.nvidia.com/compute/cuda/12.1.0/local_installers/cuda_12.1.0_530.30.02_linux.run
             add_llvm_repo: true
             cxx_std: 20
+          - name: build-ubuntu-clang17
+            cxx: clang++-17
+            install_extra: clang-17 libomp-17-dev
+            add_llvm_repo: true
           - name: build-ubuntu-icpx
             cxx: icpx
             add_oneapi_repo: true
@@ -256,6 +260,7 @@ jobs:
           sudo add-apt-repository 'deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-14 main'
           sudo add-apt-repository 'deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-15 main'
           sudo add-apt-repository 'deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-16 main'
+          sudo add-apt-repository 'deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-17 main'
       - name: add CUDA apt repo
         if: matrix.add_nvcpp_repo
         run: |
