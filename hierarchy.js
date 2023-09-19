@@ -164,6 +164,7 @@ var hierarchy =
     [ "llama::mapping::LinearizeArrayDimsMorton", "structllama_1_1mapping_1_1LinearizeArrayDimsMorton.html", null ],
     [ "llama::RecordRef< TView, TBoundRecordCoord, OwnView >::Loader", "structllama_1_1RecordRef_1_1Loader.html", null ],
     [ "llama::RecordRef< TView, TBoundRecordCoord, OwnView >::LoaderConst", "structllama_1_1RecordRef_1_1LoaderConst.html", null ],
+    [ "llama::accessor::Locked< Mutex >", "structllama_1_1accessor_1_1Locked.html", null ],
     [ "llama::internal::MakePassSecond< F >", "structllama_1_1internal_1_1MakePassSecond.html", null ],
     [ "llama::mapping::internal::MakeProjectionPair< RecordDim >", "structllama_1_1mapping_1_1internal_1_1MakeProjectionPair.html", null ],
     [ "llama::mapping::internal::MakeReplacerProj< ProjectionMap >", "structllama_1_1mapping_1_1internal_1_1MakeReplacerProj.html", null ],
@@ -213,6 +214,9 @@ var hierarchy =
     ] ],
     [ "llama::ProxyRefOpMixin< Reference< Ref >, Ref::value_type >", "structllama_1_1ProxyRefOpMixin.html", [
       [ "llama::accessor::Const::Reference< Ref >", "structllama_1_1accessor_1_1Const_1_1Reference.html", null ]
+    ] ],
+    [ "llama::ProxyRefOpMixin< Reference< Ref, Value >, Value >", "structllama_1_1ProxyRefOpMixin.html", [
+      [ "llama::accessor::Locked< Mutex >::Reference< Ref, Value >", "structllama_1_1accessor_1_1Locked_1_1Reference.html", null ]
     ] ],
     [ "llama::ProxyRefOpMixin< ScopedUpdate< Reference >, internal::ValueOf< Reference >::type >", "structllama_1_1ProxyRefOpMixin.html", [
       [ "llama::ScopedUpdate< Reference, std::enable_if_t< std::is_fundamental_v< typename internal::ValueOf< Reference >::type > > >", "structllama_1_1ScopedUpdate_3_01Reference_00_01std_1_1enable__if__t_3_01std_1_1is__fundamental__e14f71eb64730a69a1b74dea5c5f8b59.html", null ]
