@@ -2593,6 +2593,8 @@ namespace llama::mapping
 		// #include "macros.hpp"    // amalgamate: file already inlined
 
 		// #include <atomic>    // amalgamate: file already included
+		#include <memory>
+		#include <mutex>
 
 		namespace llama::accessor
 		{
@@ -2696,6 +2698,59 @@ namespace llama::mapping
 		        }
 		    };
 		#endif
+
+		    /// Locks a mutex during each access to the data structure.
+		    template<typename Mutex = std::mutex>
+		    struct Locked
+		    {
+		        // mutexes are usually not movable, so we put them on the heap, so the accessor is movable
+		        std::unique_ptr<Mutex> m = std::make_unique<Mutex>();
+
+		        template<typename Ref, typename Value>
+		        // NOLINTNEXTLINE(cppcoreguidelines-special-member-functions,hicpp-special-member-functions)
+		        struct Reference : ProxyRefOpMixin<Reference<Ref, Value>, Value>
+		        {
+		            Ref ref;
+		            Mutex& m;
+
+		            using value_type = Value;
+
+		            // NOLINTNEXTLINE(bugprone-unhandled-self-assignment,cert-oop54-cpp)
+		            LLAMA_FORCE_INLINE constexpr auto operator=(const Reference& other) -> Reference&
+		            {
+		                const std::lock_guard<Mutex> lock(m);
+		                *this = static_cast<value_type>(other);
+		                return *this;
+		            }
+
+		            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
+		            LLAMA_FORCE_INLINE operator value_type() const
+		            {
+		                const std::lock_guard<Mutex> lock(m);
+		                return static_cast<value_type>(ref);
+		            }
+
+		            template<typename T>
+		            LLAMA_FORCE_INLINE auto operator=(T t) -> Reference&
+		            {
+		                const std::lock_guard<Mutex> lock(m);
+		                ref = t;
+		                return *this;
+		            }
+		        };
+
+		        template<typename PR>
+		        LLAMA_FORCE_INLINE auto operator()(PR r) const -> Reference<PR, typename PR::value_type>
+		        {
+		            return {{}, r, *m};
+		        }
+
+		        template<typename T>
+		        LLAMA_FORCE_INLINE auto operator()(T& r) const -> Reference<T&, std::remove_cv_t<T>>
+		        {
+		            return {{}, r, *m};
+		        }
+		    };
 
 		    namespace internal
 		    {
@@ -3035,7 +3090,7 @@ namespace llama::mapping
 		// #include "macros.hpp"    // amalgamate: file already inlined
 
 		#include <cstddef>
-		#include <memory>
+		// #include <memory>    // amalgamate: file already included
 		#include <vector>
 		#if __has_include(<cuda_runtime.h>)
 		#    include <cuda_runtime.h>
@@ -3457,7 +3512,7 @@ namespace llama::mapping
 	    LLAMA_FN_HOST_ACC_INLINE auto allocView(Mapping mapping = {}, const Allocator& alloc = {}, Accessor accessor = {})
 	        -> View<Mapping, internal::AllocatorBlobType<Allocator, typename Mapping::RecordDim>, Accessor>
 	    {
-	        auto view = allocViewUninitialized(std::move(mapping), alloc, accessor);
+	        auto view = allocViewUninitialized(std::move(mapping), alloc, std::move(accessor));
 	        constructFields(view);
 	        return view;
 	    }
