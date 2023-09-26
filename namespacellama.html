@@ -516,7 +516,7 @@ Variables</h2></td></tr>
 <tr class="memitem:adee8dc812f8d14dbea092728c88a937d"><td class="memTemplParams" colspan="2">template&lt;typename... Fields&gt; </td></tr>
 <tr class="memitem:adee8dc812f8d14dbea092728c88a937d"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#adee8dc812f8d14dbea092728c88a937d">isRecord&lt; Record&lt; Fields... &gt; &gt;</a> = true</td></tr>
 <tr class="separator:adee8dc812f8d14dbea092728c88a937d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a39d280955e5b9deb36f6c8fa1124ca2b"><td class="memTemplParams" colspan="2">template&lt;typename RecordDimA , typename LocalA , typename RecordDimB , typename LocalB &gt; </td></tr>
+<tr class="memitem:a39d280955e5b9deb36f6c8fa1124ca2b"><td class="memTemplParams" colspan="2">template&lt;typename RecordDimA , typename RecordCoordA , typename RecordDimB , typename RecordCoordB &gt; </td></tr>
 <tr class="memitem:a39d280955e5b9deb36f6c8fa1124ca2b"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a39d280955e5b9deb36f6c8fa1124ca2b">hasSameTags</a></td></tr>
 <tr class="separator:a39d280955e5b9deb36f6c8fa1124ca2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa6c960189f5edc242be631e2e8757914"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim &gt; </td></tr>
@@ -2190,7 +2190,7 @@ template&lt;std::size_t PieceLength, typename Mapping &gt; </div>
 </div><div class="memdoc">
 <p>Proofs by exhaustion of the array and record dimensions, that at least PieceLength elements are always stored contiguously. </p>
 
-<p class="definition">Definition at line <a class="el" href="Proofs_8hpp_source.html#l00099">99</a> of file <a class="el" href="Proofs_8hpp_source.html">Proofs.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Proofs_8hpp_source.html#l00091">91</a> of file <a class="el" href="Proofs_8hpp_source.html">Proofs.hpp</a>.</p>
 
 </div>
 </div>
@@ -4104,7 +4104,7 @@ template&lt;typename Mapping &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename RecordDimA , typename LocalA , typename RecordDimB , typename LocalB &gt; </div>
+template&lt;typename RecordDimA , typename RecordCoordA , typename RecordDimB , typename RecordCoordB &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -4121,20 +4121,20 @@ template&lt;typename RecordDimA , typename LocalA , typename RecordDimB , typena
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">= []() constexpr</div>
 <div class="line">    {</div>
-<div class="line">        <span class="keywordflow">if</span> constexpr(LocalA::size != LocalB::size)</div>
+<div class="line">        <span class="keywordflow">if</span> constexpr(RecordCoordA::size != RecordCoordB::size)</div>
 <div class="line">            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line">        <span class="keywordflow">else</span> <span class="keywordflow">if</span> constexpr(LocalA::size == 0 &amp;&amp; LocalB::size == 0)</div>
+<div class="line">        <span class="keywordflow">else</span> <span class="keywordflow">if</span> constexpr(RecordCoordA::size == 0 &amp;&amp; RecordCoordB::size == 0)</div>
 <div class="line">            return true;</div>
 <div class="line">        else</div>
-<div class="line">            return std::is_same_v&lt;<a class="code" href="namespacellama.html#a4a4fd33218cce7b2e592486d80f2ae90">GetTags</a>&lt;RecordDimA, LocalA&gt;, <a class="code" href="namespacellama.html#a4a4fd33218cce7b2e592486d80f2ae90">GetTags</a>&lt;RecordDimB, LocalB&gt;&gt;;</div>
+<div class="line">            return std::is_same_v&lt;<a class="code" href="namespacellama.html#a4a4fd33218cce7b2e592486d80f2ae90">GetTags</a>&lt;RecordDimA, RecordCoordA&gt;, <a class="code" href="namespacellama.html#a4a4fd33218cce7b2e592486d80f2ae90">GetTags</a>&lt;RecordDimB, RecordCoordB&gt;&gt;;</div>
 <div class="line">    }()</div>
 <div class="ttc" id="anamespacellama_html_a4a4fd33218cce7b2e592486d80f2ae90"><div class="ttname"><a href="namespacellama.html#a4a4fd33218cce7b2e592486d80f2ae90">llama::GetTags</a></div><div class="ttdeci">typename internal::GetTagsImpl&lt; RecordDim, RecordCoord &gt;::type GetTags</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00216">Core.hpp:216</a></div></div>
 </div><!-- fragment --><p>Is true if, starting at two coordinates in two record dimensions, all subsequent nodes in the record dimension tree have the same tag. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">RecordDimA</td><td>First record dimension. </td></tr>
-    <tr><td class="paramname">LocalA</td><td><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a> based on StartA along which the tags are compared. </td></tr>
+    <tr><td class="paramname">RecordCoordA</td><td><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a> based on RecordDimA along which the tags are compared. </td></tr>
     <tr><td class="paramname">RecordDimB</td><td>second record dimension. </td></tr>
-    <tr><td class="paramname">LocalB</td><td><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a> based on StartB along which the tags are compared. </td></tr>
+    <tr><td class="paramname">RecordCoordB</td><td><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a> based on RecordDimB along which the tags are compared. </td></tr>
   </table>
   </dd>
 </dl>
@@ -4868,7 +4868,7 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Tue Sep 19 2023 19:20:25 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Sep 26 2023 12:08:45 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

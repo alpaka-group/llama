@@ -300,15 +300,15 @@ $(document).ready(function(){initNavTree('Core_8hpp_source.html',''); initResiza
 <div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> RecordDim, <span class="keyword">typename</span> RecordCoord&gt;</div>
 <div class="line"><a name="l00235"></a><span class="lineno"><a class="line" href="namespacellama.html#a5c9a9464eb5c520170ea7911bac60863">  235</a></span>&#160;    <span class="keyword">using</span> <a class="code" href="namespacellama.html#a5c9a9464eb5c520170ea7911bac60863">GetTag</a> = <span class="keyword">typename</span> <a class="code" href="structllama_1_1internal_1_1GetTagImpl.html#a2d8b0d388554046b6b9ff99337212b39">internal::GetTagImpl&lt;RecordDim, RecordCoord&gt;::type</a>;</div>
 <div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160; </div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> RecordDimA, <span class="keyword">typename</span> LocalA, <span class="keyword">typename</span> RecordDimB, <span class="keyword">typename</span> LocalB&gt;</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> RecordDimA, <span class="keyword">typename</span> RecordCoordA, <span class="keyword">typename</span> RecordDimB, <span class="keyword">typename</span> RecordCoordB&gt;</div>
 <div class="line"><a name="l00244"></a><span class="lineno"><a class="line" href="namespacellama.html#a39d280955e5b9deb36f6c8fa1124ca2b">  244</a></span>&#160;    <span class="keyword">inline</span> constexpr <span class="keyword">auto</span> <a class="code" href="namespacellama.html#a39d280955e5b9deb36f6c8fa1124ca2b">hasSameTags</a> = []() constexpr</div>
 <div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;    {</div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;        <span class="keywordflow">if</span> constexpr(LocalA::size != LocalB::size)</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;        <span class="keywordflow">if</span> constexpr(RecordCoordA::size != RecordCoordB::size)</div>
 <div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> constexpr(LocalA::size == 0 &amp;&amp; LocalB::size == 0)</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> constexpr(RecordCoordA::size == 0 &amp;&amp; RecordCoordB::size == 0)</div>
 <div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;        <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;            <span class="keywordflow">return</span> std::is_same_v&lt;GetTags&lt;RecordDimA, LocalA&gt;, <a class="code" href="namespacellama.html#a4a4fd33218cce7b2e592486d80f2ae90">GetTags&lt;RecordDimB, LocalB&gt;</a>&gt;;</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;            <span class="keywordflow">return</span> std::is_same_v&lt;GetTags&lt;RecordDimA, RecordCoordA&gt;, <a class="code" href="namespacellama.html#a4a4fd33218cce7b2e592486d80f2ae90">GetTags&lt;RecordDimB, RecordCoordB&gt;</a>&gt;;</div>
 <div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;    }();</div>
 <div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160; </div>
 <div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;    <span class="keyword">namespace </span>internal</div>
@@ -995,7 +995,7 @@ $(document).ready(function(){initNavTree('Core_8hpp_source.html',''); initResiza
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="Core_8hpp.html">Core.hpp</a></li>
-    <li class="footer">Generated on Tue Sep 19 2023 19:20:25 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Sep 26 2023 12:08:45 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

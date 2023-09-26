@@ -88,7 +88,6 @@ var namespacellama_1_1internal =
     [ "constexprCount", "namespacellama_1_1internal.html#a20951c25dfe873211d2ad75e21959ba8", null ],
     [ "constexprRemoveCopy", "namespacellama_1_1internal.html#add45b9d3f0923821582c3bc9f7973087", null ],
     [ "constexprSearch", "namespacellama_1_1internal.html#a06b6530184968dbd1019a24aee8edd9e", null ],
-    [ "divRoundUp", "namespacellama_1_1internal.html#a158338076284b27d9f1875797789bd59", null ],
     [ "flatAlignOfImpl", "namespacellama_1_1internal.html#a2413ee7f2d6487f7e306148cf2b46ac4", null ],
     [ "forward_like", "namespacellama_1_1internal.html#ab9c450a82fa4a4c09fdc9b4e95d12db3", null ],
     [ "intToStrSize", "namespacellama_1_1internal.html#ad4195dfa3069a0e4cc1d15e13175cc88", null ],

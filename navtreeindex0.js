@@ -1,5 +1,6 @@
 var NAVTREEINDEX0 =
 {
+"":[1,0,1],
 "Accessors_8hpp.html":[3,0,0,0,1],
 "Accessors_8hpp_source.html":[3,0,0,0,1],
 "AoS_8hpp.html":[3,0,0,0,0,1],
@@ -224,8 +225,7 @@ var NAVTREEINDEX0 =
 "Projection_8hpp.html#ae5b63f36aa71a978887002ad2a5e6f50":[3,0,0,0,0,14,7],
 "Projection_8hpp_source.html":[3,0,0,0,0,14],
 "Proofs_8hpp.html":[3,0,0,0,13],
-"Proofs_8hpp.html#a158338076284b27d9f1875797789bd59":[3,0,0,0,13,0],
-"Proofs_8hpp.html#a32bf07b53ebc403eee401038fc95b591":[3,0,0,0,13,1],
+"Proofs_8hpp.html#a32bf07b53ebc403eee401038fc95b591":[3,0,0,0,13,0],
 "Proofs_8hpp_source.html":[3,0,0,0,13],
 "ProxyRefOpMixin_8hpp.html":[3,0,0,0,14],
 "ProxyRefOpMixin_8hpp_source.html":[3,0,0,0,14],
