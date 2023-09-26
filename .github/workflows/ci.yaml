@@ -12,7 +12,7 @@ concurrency:
 env:
   THREADS: 2
   CONFIG: RelWithDebInfo
-  VCPKG_INSTALL: "vcpkg --version; vcpkg install alpaka fmt tinyobjloader boost-mp11 boost-atomic boost-smart-ptr boost-functional boost-container boost-iostreams[core] catch2 xsimd"
+  VCPKG_INSTALL: "vcpkg --version; vcpkg install fmt tinyobjloader boost-mp11 boost-atomic boost-smart-ptr boost-functional boost-container boost-iostreams[core] catch2 xsimd; vcpkg install alpaka --head"
 
 jobs:
   clang-format:
