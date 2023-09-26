@@ -1296,18 +1296,18 @@ namespace llama
 	    /// Is true if, starting at two coordinates in two record dimensions, all subsequent nodes in the record dimension
 	    /// tree have the same tag.
 	    /// \tparam RecordDimA First record dimension.
-	    /// \tparam LocalA \ref RecordCoord based on StartA along which the tags are compared.
+	    /// \tparam RecordCoordA \ref RecordCoord based on RecordDimA along which the tags are compared.
 	    /// \tparam RecordDimB second record dimension.
-	    /// \tparam LocalB \ref RecordCoord based on StartB along which the tags are compared.
-	    template<typename RecordDimA, typename LocalA, typename RecordDimB, typename LocalB>
+	    /// \tparam RecordCoordB \ref RecordCoord based on RecordDimB along which the tags are compared.
+	    template<typename RecordDimA, typename RecordCoordA, typename RecordDimB, typename RecordCoordB>
 	    inline constexpr auto hasSameTags = []() constexpr
 	    {
-	        if constexpr(LocalA::size != LocalB::size)
+	        if constexpr(RecordCoordA::size != RecordCoordB::size)
 	            return false;
-	        else if constexpr(LocalA::size == 0 && LocalB::size == 0)
+	        else if constexpr(RecordCoordA::size == 0 && RecordCoordB::size == 0)
 	            return true;
 	        else
-	            return std::is_same_v<GetTags<RecordDimA, LocalA>, GetTags<RecordDimB, LocalB>>;
+	            return std::is_same_v<GetTags<RecordDimA, RecordCoordA>, GetTags<RecordDimB, RecordCoordB>>;
 	    }();
 
 	    namespace internal
@@ -8635,14 +8635,6 @@ namespace llama::mapping
 
 namespace llama
 {
-    namespace internal
-    {
-        constexpr auto divRoundUp(std::size_t dividend, std::size_t divisor) -> std::size_t
-        {
-            return (dividend + divisor - 1) / divisor;
-        }
-    } // namespace internal
-
 // FIXME(bgruber): this test is actually not correct, because __cpp_constexpr_dynamic_alloc only guarantees constexpr
 // std::allocator
 #ifdef __cpp_constexpr_dynamic_alloc
@@ -8685,7 +8677,7 @@ namespace llama
     {
         internal::DynArray<internal::DynArray<std::uint64_t>> blobByteMapped(m.blobCount);
         for(std::size_t i = 0; i < m.blobCount; i++)
-            blobByteMapped.data[i].resize(internal::divRoundUp(m.blobSize(i), 64));
+            blobByteMapped.data[i].resize(divCeil(m.blobSize(i), std::size_t{64}));
 
         auto testAndSet = [&](auto blob, auto offset) constexpr
         {
