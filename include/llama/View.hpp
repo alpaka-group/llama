@@ -13,6 +13,9 @@
 #include "mapping/One.hpp"
 
 #include <type_traits>
+#if __has_include(<experimental/simd>) && !defined(__NVCC__) && !defined(__NVCOMPILER)
+#    include <experimental/simd>
+#endif
 
 namespace llama
 {
@@ -87,6 +90,25 @@ namespace llama
         LeafRecordCoords<typename Mapping::RecordDim>,
         mp_bind_front<internal::IsComputed, Mapping>::template fn>::value;
 
+    namespace internal
+    {
+        template<typename T>
+        LLAMA_FN_HOST_ACC_INLINE void valueInit(T* p)
+        {
+            new(p) T{};
+        }
+
+#if defined(__GNUG__) && __GNUC__ > 11 && defined(__SANITIZE_ADDRESS__) && defined(__AVX512F__) && !defined(__NVCC__) \
+    && !defined(__NVCOMPILER)
+        // ASAN messes with placement new and GCC generates an aligned store to an unaligned address with AVX512
+        template<typename T>
+        LLAMA_FORCE_INLINE void valueInit(std::experimental::native_simd<T>* p)
+        {
+            std::memset(p, 0, sizeof(T));
+        }
+#endif
+    } // namespace internal
+
     template<typename Mapping, typename BlobType, typename Accessor, std::size_t... RCs>
     LLAMA_FN_HOST_ACC_INLINE void constructField(
         View<Mapping, BlobType, Accessor>& view,
@@ -106,7 +128,7 @@ namespace llama
             else if constexpr(
                 std::is_lvalue_reference_v<RefType> && !std::is_const_v<std::remove_reference_t<RefType>>)
             {
-                new(&view(ai)) FieldType{};
+                internal::valueInit(&view(ai));
             }
         }
         else
@@ -119,7 +141,7 @@ namespace llama
             else if constexpr(
                 std::is_lvalue_reference_v<RefType> && !std::is_const_v<std::remove_reference_t<RefType>>)
             {
-                new(&view(ai)(rc)) FieldType{};
+                internal::valueInit(&view(ai)(rc));
             }
         }
     }
