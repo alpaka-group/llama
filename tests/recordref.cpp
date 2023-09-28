@@ -1336,3 +1336,23 @@ TEST_CASE("ScopedUpdate.RecordRef")
     test(v);
     test(v());
 }
+
+#ifndef _MSC_VER
+// MSVC errors with: View.hpp: error C2719: 'blobs': formal parameter with requested alignment of 128 won't be aligned
+namespace
+{
+    struct alignas(128) S128
+    {
+        int i;
+    };
+} // namespace
+
+using Overaligned = llama::Record<llama::Field<tag::B, int>, llama::Field<tag::A, S128>>;
+
+TEST_CASE("RecordRef.alignment")
+{
+    llama::One<Overaligned> record;
+    auto& s = record(tag::A{});
+    CHECK(reinterpret_cast<std::uintptr_t>(&s) % 128 == 0);
+}
+#endif
