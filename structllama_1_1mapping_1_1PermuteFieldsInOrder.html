@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Low-Level Abstraction of Memory Access: llama::mapping::FlattenRecordDimInOrder&lt; RecordDim &gt; Struct Template Reference</title>
+<title>Low-Level Abstraction of Memory Access: llama::mapping::PermuteFieldsInOrder&lt; TFlatRecordDim &gt; Struct Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -63,7 +63,7 @@ $(function() {
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
-$(document).ready(function(){initNavTree('structllama_1_1mapping_1_1FlattenRecordDimInOrder.html',''); initResizable(); });
+$(document).ready(function(){initNavTree('structllama_1_1mapping_1_1PermuteFieldsInOrder.html',''); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -85,46 +85,46 @@ $(document).ready(function(){initNavTree('structllama_1_1mapping_1_1FlattenRecor
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
-<a href="structllama_1_1mapping_1_1FlattenRecordDimInOrder-members.html">List of all members</a>  </div>
+<a href="structllama_1_1mapping_1_1PermuteFieldsInOrder-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">llama::mapping::FlattenRecordDimInOrder&lt; RecordDim &gt; Struct Template Reference</div>  </div>
+<div class="title">llama::mapping::PermuteFieldsInOrder&lt; TFlatRecordDim &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Flattens the record dimension in the order fields are written.  
- <a href="structllama_1_1mapping_1_1FlattenRecordDimInOrder.html#details">More...</a></p>
+<p>Retains the order of the record dimension's fields.  
+ <a href="structllama_1_1mapping_1_1PermuteFieldsInOrder.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="Common_8hpp_source.html">Common.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a2a95feabe41a0dddadbb416de12f0f94"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1FlattenRecordDimInOrder.html#a2a95feabe41a0dddadbb416de12f0f94">FlatRecordDim</a> = <a class="el" href="namespacellama.html#a1fddf1f638927edfb8da8e3c78da4e1c">llama::FlatRecordDim</a>&lt; RecordDim &gt;</td></tr>
-<tr class="separator:a2a95feabe41a0dddadbb416de12f0f94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2abf718cc2a89f328177bf92f89b281a"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1PermuteFieldsInOrder.html#a2abf718cc2a89f328177bf92f89b281a">FlatRecordDim</a> = TFlatRecordDim</td></tr>
+<tr class="separator:a2abf718cc2a89f328177bf92f89b281a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
-<tr class="memitem:a6a14d9a8d0a41d707e657ed142a29c85"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RecordCoords&gt; </td></tr>
-<tr class="memitem:a6a14d9a8d0a41d707e657ed142a29c85"><td class="memTemplItemLeft" align="right" valign="top">static constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1FlattenRecordDimInOrder.html#a6a14d9a8d0a41d707e657ed142a29c85">flatIndex</a> = <a class="el" href="namespacellama.html#a6c3056b43b48f32a66160a6dd273662d">flatRecordCoord</a>&lt;RecordDim, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt;RecordCoords...&gt;&gt;</td></tr>
-<tr class="separator:a6a14d9a8d0a41d707e657ed142a29c85"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a392d3158a1fe1892f6119718098f8333"><td class="memTemplParams" colspan="2">template&lt;std::size_t FlatRecordCoord&gt; </td></tr>
+<tr class="memitem:a392d3158a1fe1892f6119718098f8333"><td class="memTemplItemLeft" align="right" valign="top">static constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1PermuteFieldsInOrder.html#a392d3158a1fe1892f6119718098f8333">permute</a> = FlatRecordCoord</td></tr>
+<tr class="separator:a392d3158a1fe1892f6119718098f8333"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename RecordDim&gt;<br />
-struct llama::mapping::FlattenRecordDimInOrder&lt; RecordDim &gt;</h3>
+<div class="textblock"><h3>template&lt;typename TFlatRecordDim&gt;<br />
+struct llama::mapping::PermuteFieldsInOrder&lt; TFlatRecordDim &gt;</h3>
 
-<p>Flattens the record dimension in the order fields are written. </p>
+<p>Retains the order of the record dimension's fields. </p>
 
 <p class="definition">Definition at line <a class="el" href="Common_8hpp_source.html#l00170">170</a> of file <a class="el" href="Common_8hpp_source.html">Common.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="a2a95feabe41a0dddadbb416de12f0f94"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2a95feabe41a0dddadbb416de12f0f94">&#9670;&nbsp;</a></span>FlatRecordDim</h2>
+<a id="a2abf718cc2a89f328177bf92f89b281a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2abf718cc2a89f328177bf92f89b281a">&#9670;&nbsp;</a></span>FlatRecordDim</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename RecordDim &gt; </div>
+template&lt;typename TFlatRecordDim &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1FlattenRecordDimInOrder.html">llama::mapping::FlattenRecordDimInOrder</a>&lt; RecordDim &gt;::<a class="el" href="structllama_1_1mapping_1_1FlattenRecordDimInOrder.html#a2a95feabe41a0dddadbb416de12f0f94">FlatRecordDim</a> =  <a class="el" href="namespacellama.html#a1fddf1f638927edfb8da8e3c78da4e1c">llama::FlatRecordDim</a>&lt;RecordDim&gt;</td>
+          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1PermuteFieldsInOrder.html">llama::mapping::PermuteFieldsInOrder</a>&lt; TFlatRecordDim &gt;::<a class="el" href="structllama_1_1mapping_1_1PermuteFieldsInOrder.html#a2abf718cc2a89f328177bf92f89b281a">FlatRecordDim</a> =  TFlatRecordDim</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -134,21 +134,21 @@ template&lt;typename RecordDim &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a6a14d9a8d0a41d707e657ed142a29c85"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6a14d9a8d0a41d707e657ed142a29c85">&#9670;&nbsp;</a></span>flatIndex</h2>
+<a id="a392d3158a1fe1892f6119718098f8333"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a392d3158a1fe1892f6119718098f8333">&#9670;&nbsp;</a></span>permute</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename RecordDim &gt; </div>
+template&lt;typename TFlatRecordDim &gt; </div>
 <div class="memtemplate">
-template&lt;std::size_t... RecordCoords&gt; </div>
+template&lt;std::size_t FlatRecordCoord&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr std::size_t <a class="el" href="structllama_1_1mapping_1_1FlattenRecordDimInOrder.html">llama::mapping::FlattenRecordDimInOrder</a>&lt; RecordDim &gt;::flatIndex = <a class="el" href="namespacellama.html#a6c3056b43b48f32a66160a6dd273662d">flatRecordCoord</a>&lt;RecordDim, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt;RecordCoords...&gt;&gt;</td>
+          <td class="memname">constexpr std::size_t <a class="el" href="structllama_1_1mapping_1_1PermuteFieldsInOrder.html">llama::mapping::PermuteFieldsInOrder</a>&lt; TFlatRecordDim &gt;::permute = FlatRecordCoord</td>
         </tr>
       </table>
   </td>
@@ -170,8 +170,8 @@ template&lt;std::size_t... RecordCoords&gt; </div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1FlattenRecordDimInOrder.html">FlattenRecordDimInOrder</a></li>
-    <li class="footer">Generated on Fri Sep 29 2023 14:34:06 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1PermuteFieldsInOrder.html">PermuteFieldsInOrder</a></li>
+    <li class="footer">Generated on Fri Sep 29 2023 18:52:18 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

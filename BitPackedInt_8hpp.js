@@ -19,7 +19,7 @@ var BitPackedInt_8hpp =
     [ "bitunpack1", "BitPackedInt_8hpp.html#a0d8c6b372599715f83af10565523dcfa", null ],
     [ "makeMask", "BitPackedInt_8hpp.html#a1a664b935ea0dec203a00a0298ebb423", null ],
     [ "isBitPackedIntAoS", "BitPackedInt_8hpp.html#a4106c8cedc2eabae181bb199449cd690", null ],
-    [ "isBitPackedIntAoS< BitPackedIntAoS< ArrayExtents, RecordDim, Bits, SignBit, LinearizeArrayDimsFunctor, FlattenRecordDim, StoredIntegral > >", "BitPackedInt_8hpp.html#a6df7e01c938f0e914fe8264caab15589", null ],
+    [ "isBitPackedIntAoS< BitPackedIntAoS< ArrayExtents, RecordDim, Bits, SignBit, LinearizeArrayDimsFunctor, PermuteFields, StoredIntegral > >", "BitPackedInt_8hpp.html#aa34dd1fbbe8e8c98707a4222fd45d5f6", null ],
     [ "isBitPackedIntSoA", "BitPackedInt_8hpp.html#a6663b77c0af63f5b4ac7d7d1ca0eaf9e", null ],
     [ "isBitPackedIntSoA< BitPackedIntSoA< ArrayExtents, RecordDim, Bits, SignBit, LinearizeArrayDimsFunctor, StoredIntegral > >", "BitPackedInt_8hpp.html#a422eada4e2d7e79a8415552fc5bfb264", null ]
 ];

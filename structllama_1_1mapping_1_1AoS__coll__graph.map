@@ -1,5 +1,5 @@
-<map id="llama::mapping::AoS&lt; TArrayExtents, TRecordDim, TFieldAlignment, TLinearizeArrayDimsFunctor, FlattenRecordDim &gt;" name="llama::mapping::AoS&lt; TArrayExtents, TRecordDim, TFieldAlignment, TLinearizeArrayDimsFunctor, FlattenRecordDim &gt;">
-<area shape="rect" id="node1" title=" " alt="" coords="5,169,251,240"/>
-<area shape="rect" id="node2" href="$structllama_1_1mapping_1_1MappingBase.html" title=" " alt="" coords="13,80,243,121"/>
-<area shape="rect" id="node3" title=" " alt="" coords="71,5,185,32"/>
+<map id="llama::mapping::AoS&lt; TArrayExtents, TRecordDim, TFieldAlignment, TLinearizeArrayDimsFunctor, PermuteFields &gt;" name="llama::mapping::AoS&lt; TArrayExtents, TRecordDim, TFieldAlignment, TLinearizeArrayDimsFunctor, PermuteFields &gt;">
+<area shape="rect" id="node1" title=" " alt="" coords="5,169,248,240"/>
+<area shape="rect" id="node2" href="$structllama_1_1mapping_1_1MappingBase.html" title=" " alt="" coords="11,80,242,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="70,5,183,32"/>
 </map>

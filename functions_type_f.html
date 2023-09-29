@@ -95,16 +95,8 @@ $(document).ready(function(){initNavTree('functions_type_f.html',''); initResiza
 : <a class="el" href="structllama_1_1Tuple_3_01TFirstElement_00_01RestElements_8_8_8_01_4.html#ae0669a86a4899ff36045d01a9922f182">llama::Tuple&lt; TFirstElement, RestElements... &gt;</a>
 </li>
 <li>FlatRecordDim
-: <a class="el" href="structllama_1_1mapping_1_1FlattenRecordDimInOrder.html#a2a95feabe41a0dddadbb416de12f0f94">llama::mapping::FlattenRecordDimInOrder&lt; RecordDim &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1FlattenRecordDimSorted.html#a5bdae1c12b6d6d6631376409a5b3f885">llama::mapping::FlattenRecordDimSorted&lt; RecordDim, Less &gt;</a>
-</li>
-<li>Flattener
-: <a class="el" href="structllama_1_1mapping_1_1AoS.html#a44b015fe93965f0ec1d15bcc96fe4048">llama::mapping::AoS&lt; TArrayExtents, TRecordDim, TFieldAlignment, TLinearizeArrayDimsFunctor, FlattenRecordDim &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1AoSoA.html#ab08a1085d8f66f74c260bd81a8129c5a">llama::mapping::AoSoA&lt; TArrayExtents, TRecordDim, Lanes, TLinearizeArrayDimsFunctor, FlattenRecordDim &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1BitPackedFloatAoS.html#a37ba8a62aba6a0ca1ec327187fa911f6">llama::mapping::BitPackedFloatAoS&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, TLinearizeArrayDimsFunctor, FlattenRecordDim, TStoredIntegral &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1BitPackedIntAoS.html#a07b6c4128ec53d4ca8b7a76fc99f8a5b">llama::mapping::BitPackedIntAoS&lt; TArrayExtents, TRecordDim, Bits, SignBit, TLinearizeArrayDimsFunctor, FlattenRecordDim, TStoredIntegral &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1One.html#ab4e2770b97ef13f840adccb3ef79c80b">llama::mapping::One&lt; TArrayExtents, TRecordDim, TFieldAlignment, FlattenRecordDim &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1SoA.html#a72280082063a4d1a67b90b915c5cbc44">llama::mapping::SoA&lt; TArrayExtents, TRecordDim, TBlobs, TSubArrayAlignment, TLinearizeArrayDimsFunctor, FlattenRecordDimSingleBlob &gt;</a>
+: <a class="el" href="structllama_1_1mapping_1_1PermuteFieldsInOrder.html#a2abf718cc2a89f328177bf92f89b281a">llama::mapping::PermuteFieldsInOrder&lt; TFlatRecordDim &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1PermuteFieldsSorted.html#a04f7ce002a8eb0cc3fa8e5cbc1804b99">llama::mapping::PermuteFieldsSorted&lt; FlatOrigRecordDim, Less &gt;</a>
 </li>
 <li>fn
 : <a class="el" href="structllama_1_1internal_1_1BindMakeSizedSimd.html#acca5c76c5268c0c3ec794a8afdc74417">llama::internal::BindMakeSizedSimd&lt; N, MakeSizedSimd &gt;</a>
@@ -112,14 +104,14 @@ $(document).ready(function(){initNavTree('functions_type_f.html',''); initResiza
 , <a class="el" href="structllama_1_1internal_1_1SizeEqualTo.html#a40c704eb6956b099cbe4aeb8f0cee320">llama::internal::SizeEqualTo&lt; S &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1BindAoS.html#a0e59970e819d649a915051feb2fe9a88">llama::mapping::BindAoS&lt; Alignment, LinearizeArrayDimsFunctor &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1BindAoSoA.html#abbda736bc6c623e67f865d812096909c">llama::mapping::BindAoSoA&lt; Lanes, LinearizeArrayDimsFunctor &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1BindBitPackedFloatAoS.html#afa9cbee396a00e564b7e72ff9b9c383e">llama::mapping::BindBitPackedFloatAoS&lt; ExponentBits, MantissaBits, LinearizeArrayDimsFunctor, FlattenRecordDim, StoredIntegral &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1BindBitPackedFloatAoS.html#ab7f1221365aa08af85769edfd3cd56ad">llama::mapping::BindBitPackedFloatAoS&lt; ExponentBits, MantissaBits, LinearizeArrayDimsFunctor, PermuteFields, StoredIntegral &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1BindBitPackedFloatSoA.html#a1f980ad795b278fc0b3ea84c5a73e021">llama::mapping::BindBitPackedFloatSoA&lt; ExponentBits, MantissaBits, LinearizeArrayDimsFunctor, StoredIntegral &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1BindBitPackedIntAoS.html#ace9550282f56372cca5c2792da1fea48">llama::mapping::BindBitPackedIntAoS&lt; Bits, SignBit, LinearizeArrayDimsFunctor, FlattenRecordDim, StoredIntegral &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1BindBitPackedIntAoS.html#aef712ea693a24e9bc93a55992d027a0f">llama::mapping::BindBitPackedIntAoS&lt; Bits, SignBit, LinearizeArrayDimsFunctor, PermuteFields, StoredIntegral &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1BindBitPackedIntSoA.html#a1c775cd15c555a4978da14655a1c2031">llama::mapping::BindBitPackedIntSoA&lt; Bits, SignBit, LinearizeArrayDimsFunctor, StoredIntegral &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1BindBytesplit.html#af6f67dfb2ab8ad468eac3e071a229975">llama::mapping::BindBytesplit&lt; InnerMapping &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1BindByteswap.html#ad8d2d4b3c91ec934c54ccca89ec6cfae">llama::mapping::BindByteswap&lt; InnerMapping &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1BindChangeType.html#a464b7a13c9650494f7e83562f35aef28">llama::mapping::BindChangeType&lt; InnerMapping, ReplacementMap &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1BindOne.html#aa6df0e9d6e23a2d6404a3c0181ed6c6e">llama::mapping::BindOne&lt; FieldAlignment, FlattenRecordDim &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1BindOne.html#ad56e6679f95a9a8581929113cc5ce4a6">llama::mapping::BindOne&lt; FieldAlignment, PermuteFields &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1BindProjection.html#ab0fddc09cd47662763c804f607282f52">llama::mapping::BindProjection&lt; InnerMapping, ProjectionMap &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1BindSoA.html#aac8996f8b3f46f3969385128f7a5544d">llama::mapping::BindSoA&lt; Blobs, SubArrayAlignment, LinearizeArrayDimsFunctor &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1BindSplit.html#a73005c55d6ee5af3aaa67ce7e224b2f2">llama::mapping::BindSplit&lt; SelectorForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
@@ -132,7 +124,7 @@ $(document).ready(function(){initNavTree('functions_type_f.html',''); initResiza
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri Sep 29 2023 14:34:07 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Fri Sep 29 2023 18:52:18 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

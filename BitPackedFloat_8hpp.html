@@ -149,9 +149,9 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BindBitPackedFloatSoA.html">llama::mapping::BindBitPackedFloatSoA&lt; ExponentBits, MantissaBits, LinearizeArrayDimsFunctor, StoredIntegral &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BitPackedFloatAoS.html">llama::mapping::BitPackedFloatAoS&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, TLinearizeArrayDimsFunctor, FlattenRecordDim, TStoredIntegral &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BitPackedFloatAoS.html">llama::mapping::BitPackedFloatAoS&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, TLinearizeArrayDimsFunctor, PermuteFields, TStoredIntegral &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BindBitPackedFloatAoS.html">llama::mapping::BindBitPackedFloatAoS&lt; ExponentBits, MantissaBits, LinearizeArrayDimsFunctor, FlattenRecordDim, StoredIntegral &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BindBitPackedFloatAoS.html">llama::mapping::BindBitPackedFloatAoS&lt; ExponentBits, MantissaBits, LinearizeArrayDimsFunctor, PermuteFields, StoredIntegral &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -192,9 +192,9 @@ Variables</h2></td></tr>
 <tr class="memitem:a2c8b80aa8bfba10f6b647735746bb61b"><td class="memTemplParams" colspan="2">template&lt;typename Mapping &gt; </td></tr>
 <tr class="memitem:a2c8b80aa8bfba10f6b647735746bb61b"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a2c8b80aa8bfba10f6b647735746bb61b">llama::mapping::isBitPackedFloatAoS</a> = false</td></tr>
 <tr class="separator:a2c8b80aa8bfba10f6b647735746bb61b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4b8796654ca4115a2e4bb5a0e5ac0ca6"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim , typename ExponentBits , typename MantissaBits , typename LinearizeArrayDimsFunctor , template&lt; typename &gt; typename FlattenRecordDim, typename StoredIntegral &gt; </td></tr>
-<tr class="memitem:a4b8796654ca4115a2e4bb5a0e5ac0ca6"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#a4b8796654ca4115a2e4bb5a0e5ac0ca6">llama::mapping::isBitPackedFloatAoS&lt; BitPackedFloatAoS&lt; ArrayExtents, RecordDim, ExponentBits, MantissaBits, LinearizeArrayDimsFunctor, FlattenRecordDim, StoredIntegral &gt; &gt;</a> = true</td></tr>
-<tr class="separator:a4b8796654ca4115a2e4bb5a0e5ac0ca6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab29ce7ccad909c0e7e98a6b5640ca91a"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim , typename ExponentBits , typename MantissaBits , typename LinearizeArrayDimsFunctor , template&lt; typename &gt; typename PermuteFields, typename StoredIntegral &gt; </td></tr>
+<tr class="memitem:ab29ce7ccad909c0e7e98a6b5640ca91a"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1mapping.html#ab29ce7ccad909c0e7e98a6b5640ca91a">llama::mapping::isBitPackedFloatAoS&lt; BitPackedFloatAoS&lt; ArrayExtents, RecordDim, ExponentBits, MantissaBits, LinearizeArrayDimsFunctor, PermuteFields, StoredIntegral &gt; &gt;</a> = true</td></tr>
+<tr class="separator:ab29ce7ccad909c0e7e98a6b5640ca91a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -202,7 +202,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc.html">mapping</a></li><li class="navelem"><a class="el" href="BitPackedFloat_8hpp.html">BitPackedFloat.hpp</a></li>
-    <li class="footer">Generated on Fri Sep 29 2023 14:34:06 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Fri Sep 29 2023 18:52:18 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
