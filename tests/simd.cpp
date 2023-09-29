@@ -16,6 +16,8 @@
 #    warning "LLAMA SIMD tests disabled for libc++. Their std::experimental::simd implementation is incomplete"
 #elif !__has_include(<experimental/simd>)
 #    warning "LLAMA SIMD tests disabled. Need std::experimental::simd, which is available in libstdc++ since GCC 11"
+#elif defined(__GNUG__) && __GNUC__ >= 12 && defined(__SANITIZE_ADDRESS__) && defined(__AVX512F__)
+#    warning "With ASan enabled, g++-12 and later generates an aligned store to an unaligned address with AVX512"
 #else
 #    include <experimental/simd>
 
