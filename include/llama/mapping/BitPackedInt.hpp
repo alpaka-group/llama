@@ -319,7 +319,7 @@ namespace llama::mapping
                 mp_for_each<mp_transform<mp_identity, FlatRecordDim<TRecordDim>>>(
                     [&](auto t)
                     {
-                        using FieldType = typename decltype(t)::type;
+                        using FieldType [[maybe_unused]] = typename decltype(t)::type;
 #ifdef __CUDA_ARCH__
                         assert(VHBits::value() <= sizeof(FieldType) * CHAR_BIT);
 #else
