@@ -223,11 +223,11 @@ jobs:
             cxx: clang++-16
             install_extra: clang-16 libomp-16-dev
             add_llvm_repo: true
-          - name: build-ubuntu-clang16-cuda11.6
+          - name: build-ubuntu-clang16-cuda12.1
             cxx: clang++-16
             cudacxx: clang++-16
             install_extra: clang-16 libomp-16-dev
-            cuda_url: https://developer.download.nvidia.com/compute/cuda/12.1.0/local_installers/cuda_12.1.0_530.30.02_linux.run
+            cuda_url: https://developer.download.nvidia.com/compute/cuda/12.1.1/local_installers/cuda_12.1.1_530.30.02_linux.run
             add_llvm_repo: true
             cxx_std: 20
           - name: build-ubuntu-clang17-asan
