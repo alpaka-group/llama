@@ -170,8 +170,9 @@ jobs:
           - name: build-ubuntu-gcc10-nvcc11.6
             cxx: g++-10
             cuda_url: https://developer.download.nvidia.com/compute/cuda/11.6.2/local_installers/cuda_11.6.2_510.47.03_linux.run
-          - name: build-ubuntu-gcc11
+          - name: build-ubuntu-gcc11-asan
             cxx: g++-11
+            asan: ON
           - name: build-ubuntu-gcc11-nvcc11.7
             cxx: g++-11
             cuda_url: https://developer.download.nvidia.com/compute/cuda/11.7.1/local_installers/cuda_11.7.1_515.65.01_linux.run
