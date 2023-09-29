@@ -326,7 +326,7 @@ TEMPLATE_TEST_CASE(
         unsigned,
         llama::mapping::SignBit::Keep,
         llama::mapping::LinearizeArrayDimsCpp,
-        llama::mapping::FlattenRecordDimInOrder,
+        llama::mapping::PermuteFieldsInOrder,
         std::uint32_t>) )
 {
     CHECK_THROWS(TestType{{}, 40});

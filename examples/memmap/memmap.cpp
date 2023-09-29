@@ -64,7 +64,7 @@ auto main(int argc, const char* argv[]) -> int
         Triangle,
         llama::mapping::FieldAlignment::Pack,
         llama::mapping::LinearizeArrayDimsCpp,
-        llama::mapping::FlattenRecordDimInOrder>{{n}};
+        llama::mapping::PermuteFieldsInOrder>{{n}};
     if(size != 80u + 4u + mapping.blobSize(0))
     {
         std::cout << "File size (" << size << ") != 80 + 4 + mapping size: (" << mapping.blobSize(0) << ")\n";

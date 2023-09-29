@@ -165,24 +165,23 @@ namespace llama::mapping
         }
     };
 
-    /// Flattens the record dimension in the order fields are written.
-    template<typename RecordDim>
-    struct FlattenRecordDimInOrder
+    /// Retains the order of the record dimension's fields.
+    template<typename TFlatRecordDim>
+    struct PermuteFieldsInOrder
     {
-        using FlatRecordDim = llama::FlatRecordDim<RecordDim>;
+        using FlatRecordDim = TFlatRecordDim;
 
-        template<std::size_t... RecordCoords>
-        static constexpr std::size_t flatIndex = flatRecordCoord<RecordDim, RecordCoord<RecordCoords...>>;
+        template<std::size_t FlatRecordCoord>
+        static constexpr std::size_t permute = FlatRecordCoord;
     };
 
-    /// Flattens the record dimension by sorting the fields according to a given predicate on the field types.
+    /// Sorts the record dimension's the fields according to a given predicate on the field types.
     /// @tparam Less A binary predicate accepting two field types, which exposes a member value. Value must be true if
     /// the first field type is less than the second one, otherwise false.
-    template<typename RecordDim, template<typename, typename> typename Less>
-    struct FlattenRecordDimSorted
+    template<typename FlatOrigRecordDim, template<typename, typename> typename Less>
+    struct PermuteFieldsSorted
     {
     private:
-        using FlatOrigRecordDim = llama::FlatRecordDim<RecordDim>;
         using FlatSortedRecordDim = mp_sort<FlatOrigRecordDim, Less>;
 
         template<typename A, typename B>
@@ -201,13 +200,8 @@ namespace llama::mapping
     public:
         using FlatRecordDim = FlatSortedRecordDim;
 
-        template<std::size_t... RecordCoords>
-        static constexpr std::size_t flatIndex = []() constexpr
-        {
-            constexpr auto indexBefore = flatRecordCoord<RecordDim, RecordCoord<RecordCoords...>>;
-            constexpr auto indexAfter = mp_at_c<InversePermutedIndices, indexBefore>::value;
-            return indexAfter;
-        }();
+        template<std::size_t FlatRecordCoord>
+        static constexpr std::size_t permute = mp_at_c<InversePermutedIndices, FlatRecordCoord>::value;
     };
 
     namespace internal
@@ -219,17 +213,17 @@ namespace llama::mapping
         using MoreAlignment = std::bool_constant<(alignof(A) > alignof(B))>;
     } // namespace internal
 
-    /// Flattens and sorts the record dimension by increasing alignment of its fields.
-    template<typename RecordDim>
-    using FlattenRecordDimIncreasingAlignment = FlattenRecordDimSorted<RecordDim, internal::LessAlignment>;
+    /// Sorts the record dimension fields by increasing alignment of its fields.
+    template<typename FlatRecordDim>
+    using PermuteFieldsIncreasingAlignment = PermuteFieldsSorted<FlatRecordDim, internal::LessAlignment>;
 
-    /// Flattens and sorts the record dimension by decreasing alignment of its fields.
-    template<typename RecordDim>
-    using FlattenRecordDimDecreasingAlignment = FlattenRecordDimSorted<RecordDim, internal::MoreAlignment>;
+    /// Sorts the record dimension fields by decreasing alignment of its fields.
+    template<typename FlatRecordDim>
+    using PermuteFieldsDecreasingAlignment = PermuteFieldsSorted<FlatRecordDim, internal::MoreAlignment>;
 
-    /// Flattens and sorts the record dimension by the alignment of its fields to minimize padding.
-    template<typename RecordDim>
-    using FlattenRecordDimMinimizePadding = FlattenRecordDimIncreasingAlignment<RecordDim>;
+    /// Sorts the record dimension fields by the alignment of its fields to minimize padding.
+    template<typename FlatRecordDim>
+    using PermuteFieldsMinimizePadding = PermuteFieldsIncreasingAlignment<FlatRecordDim>;
 
     namespace internal
     {

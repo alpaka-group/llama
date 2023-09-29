@@ -349,59 +349,59 @@ TEST_CASE("mapping.LinearizeArrayDimsMorton")
     CHECK(lin(llama::ArrayIndex{3, 3}, extents) == 15);
 }
 
-TEST_CASE("mapping.FlattenRecordDimInOrder")
+TEST_CASE("mapping.PermuteFieldsInOrder")
 {
-    using F = llama::mapping::FlattenRecordDimInOrder<Particle>;
+    using F = llama::mapping::PermuteFieldsInOrder<llama::FlatRecordDim<Particle>>;
     STATIC_REQUIRE(std::is_same_v<
                    F::FlatRecordDim,
                    mp_list<double, double, double, float, double, double, double, bool, bool, bool, bool>>);
-    STATIC_REQUIRE(F::flatIndex<0, 0> == 0);
-    STATIC_REQUIRE(F::flatIndex<0, 1> == 1);
-    STATIC_REQUIRE(F::flatIndex<0, 2> == 2);
-    STATIC_REQUIRE(F::flatIndex<1> == 3);
-    STATIC_REQUIRE(F::flatIndex<2, 0> == 4);
-    STATIC_REQUIRE(F::flatIndex<2, 1> == 5);
-    STATIC_REQUIRE(F::flatIndex<2, 2> == 6);
-    STATIC_REQUIRE(F::flatIndex<3, 0> == 7);
-    STATIC_REQUIRE(F::flatIndex<3, 1> == 8);
-    STATIC_REQUIRE(F::flatIndex<3, 2> == 9);
-    STATIC_REQUIRE(F::flatIndex<3, 3> == 10);
+    STATIC_REQUIRE(F::permute<0> == 0);
+    STATIC_REQUIRE(F::permute<1> == 1);
+    STATIC_REQUIRE(F::permute<2> == 2);
+    STATIC_REQUIRE(F::permute<3> == 3);
+    STATIC_REQUIRE(F::permute<4> == 4);
+    STATIC_REQUIRE(F::permute<5> == 5);
+    STATIC_REQUIRE(F::permute<6> == 6);
+    STATIC_REQUIRE(F::permute<7> == 7);
+    STATIC_REQUIRE(F::permute<8> == 8);
+    STATIC_REQUIRE(F::permute<9> == 9);
+    STATIC_REQUIRE(F::permute<10> == 10);
 }
 
-TEST_CASE("mapping.FlattenRecordDimIncreasingAlignment")
+TEST_CASE("mapping.PermuteFieldsIncreasingAlignment")
 {
-    using F = llama::mapping::FlattenRecordDimIncreasingAlignment<Particle>;
+    using F = llama::mapping::PermuteFieldsIncreasingAlignment<llama::FlatRecordDim<Particle>>;
     STATIC_REQUIRE(std::is_same_v<
                    F::FlatRecordDim,
                    mp_list<bool, bool, bool, bool, float, double, double, double, double, double, double>>);
-    STATIC_REQUIRE(F::flatIndex<0, 0> == 5);
-    STATIC_REQUIRE(F::flatIndex<0, 1> == 6);
-    STATIC_REQUIRE(F::flatIndex<0, 2> == 7);
-    STATIC_REQUIRE(F::flatIndex<1> == 4);
-    STATIC_REQUIRE(F::flatIndex<2, 0> == 8);
-    STATIC_REQUIRE(F::flatIndex<2, 1> == 9);
-    STATIC_REQUIRE(F::flatIndex<2, 2> == 10);
-    STATIC_REQUIRE(F::flatIndex<3, 0> == 0);
-    STATIC_REQUIRE(F::flatIndex<3, 1> == 1);
-    STATIC_REQUIRE(F::flatIndex<3, 2> == 2);
-    STATIC_REQUIRE(F::flatIndex<3, 3> == 3);
+    STATIC_REQUIRE(F::permute<0> == 5);
+    STATIC_REQUIRE(F::permute<1> == 6);
+    STATIC_REQUIRE(F::permute<2> == 7);
+    STATIC_REQUIRE(F::permute<3> == 4);
+    STATIC_REQUIRE(F::permute<4> == 8);
+    STATIC_REQUIRE(F::permute<5> == 9);
+    STATIC_REQUIRE(F::permute<6> == 10);
+    STATIC_REQUIRE(F::permute<7> == 0);
+    STATIC_REQUIRE(F::permute<8> == 1);
+    STATIC_REQUIRE(F::permute<9> == 2);
+    STATIC_REQUIRE(F::permute<10> == 3);
 }
 
-TEST_CASE("mapping.FlattenRecordDimDecreasingAlignment")
+TEST_CASE("mapping.PermuteFieldsDecreasingAlignment")
 {
-    using F = llama::mapping::FlattenRecordDimDecreasingAlignment<Particle>;
+    using F = llama::mapping::PermuteFieldsDecreasingAlignment<llama::FlatRecordDim<Particle>>;
     STATIC_REQUIRE(std::is_same_v<
                    F::FlatRecordDim,
                    mp_list<double, double, double, double, double, double, float, bool, bool, bool, bool>>);
-    STATIC_REQUIRE(F::flatIndex<0, 0> == 0);
-    STATIC_REQUIRE(F::flatIndex<0, 1> == 1);
-    STATIC_REQUIRE(F::flatIndex<0, 2> == 2);
-    STATIC_REQUIRE(F::flatIndex<1> == 6);
-    STATIC_REQUIRE(F::flatIndex<2, 0> == 3);
-    STATIC_REQUIRE(F::flatIndex<2, 1> == 4);
-    STATIC_REQUIRE(F::flatIndex<2, 2> == 5);
-    STATIC_REQUIRE(F::flatIndex<3, 0> == 7);
-    STATIC_REQUIRE(F::flatIndex<3, 1> == 8);
-    STATIC_REQUIRE(F::flatIndex<3, 2> == 9);
-    STATIC_REQUIRE(F::flatIndex<3, 3> == 10);
+    STATIC_REQUIRE(F::permute<0> == 0);
+    STATIC_REQUIRE(F::permute<1> == 1);
+    STATIC_REQUIRE(F::permute<2> == 2);
+    STATIC_REQUIRE(F::permute<3> == 6);
+    STATIC_REQUIRE(F::permute<4> == 3);
+    STATIC_REQUIRE(F::permute<5> == 4);
+    STATIC_REQUIRE(F::permute<6> == 5);
+    STATIC_REQUIRE(F::permute<7> == 7);
+    STATIC_REQUIRE(F::permute<8> == 8);
+    STATIC_REQUIRE(F::permute<9> == 9);
+    STATIC_REQUIRE(F::permute<10> == 10);
 }
