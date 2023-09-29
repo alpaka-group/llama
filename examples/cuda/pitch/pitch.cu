@@ -60,14 +60,14 @@ namespace llamaex
         typename TArrayExtents,
         typename TRecordDim,
         bool AlignAndPad = true,
-        template<typename> typename FlattenRecordDim = mapping::FlattenRecordDimInOrder>
+        template<typename> typename PermuteFields = mapping::PermuteFieldsInOrder>
     struct PitchedAoS : mapping::MappingBase<TArrayExtents, TRecordDim>
     {
     private:
         static constexpr std::size_t dim = TArrayExtents{}.size();
 
         using Base = mapping::MappingBase<TArrayExtents, TRecordDim>;
-        using Flattener = FlattenRecordDim<TRecordDim>;
+        using Permuter = PermuteFields<FlatRecordDim<TRecordDim>>;
 
         Array<std::size_t, dim> pitches;
 
@@ -116,9 +116,9 @@ namespace llamaex
 #if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ <= 6
                 *& // mess with nvcc compiler state to workaround bug
 #endif
-                 Flattener::template flatIndex<RecordCoords...>;
+                 Permuter::template permute<flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>>;
             const auto offset
-                = dot(pitches, ai) + flatOffsetOf<typename Flattener::FlatRecordDim, flatFieldIndex, AlignAndPad>;
+                = dot(pitches, ai) + flatOffsetOf<typename Permuter::FlatRecordDim, flatFieldIndex, AlignAndPad>;
             return {0, offset};
         }
     };

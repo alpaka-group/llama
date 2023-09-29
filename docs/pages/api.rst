@@ -178,15 +178,15 @@ Acessors
 .. doxygenstruct:: llama::accessor::Restrict
 .. doxygenstruct:: llama::accessor::Atomic
 .. doxygenstruct:: llama::accessor::Stacked
+RecordDim field permuters
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
-RecordDim flattener
-^^^^^^^^^^^^^^^^^^^
 
-.. doxygenstruct:: llama::mapping::FlattenRecordDimInOrder
-.. doxygenstruct:: llama::mapping::FlattenRecordDimSorted
-.. doxygentypedef:: llama::mapping::FlattenRecordDimIncreasingAlignment
-.. doxygentypedef:: llama::mapping::FlattenRecordDimDecreasingAlignment
-.. doxygentypedef:: llama::mapping::FlattenRecordDimMinimizePadding
+.. doxygenstruct:: llama::mapping::PermuteFieldsInOrder
+.. doxygenstruct:: llama::mapping::PermuteFieldsSorted
+.. doxygentypedef:: llama::mapping::PermuteFieldsIncreasingAlignment
+.. doxygentypedef:: llama::mapping::PermuteFieldsDecreasingAlignment
+.. doxygentypedef:: llama::mapping::PermuteFieldsMinimizePadding
 
 Common utilities
 ^^^^^^^^^^^^^^^^

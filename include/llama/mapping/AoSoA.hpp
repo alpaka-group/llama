@@ -26,15 +26,15 @@ namespace llama::mapping
 
     /// Array of struct of arrays mapping. Used to create a \ref View via \ref allocView.
     /// \tparam Lanes The size of the inner arrays of this array of struct of arrays.
-    /// \tparam FlattenRecordDim Defines how the record dimension's fields should be flattened. See \ref
-    /// FlattenRecordDimInOrder, \ref FlattenRecordDimIncreasingAlignment, \ref FlattenRecordDimDecreasingAlignment and
-    /// \ref FlattenRecordDimMinimizePadding.
+    /// \tparam PermuteFields Defines how the record dimension's fields should be permuted. See \ref
+    /// PermuteFieldsInOrder, \ref PermuteFieldsIncreasingAlignment, \ref PermuteFieldsDecreasingAlignment and
+    /// \ref PermuteFieldsMinimizePadding.
     template<
         typename TArrayExtents,
         typename TRecordDim,
         typename TArrayExtents::value_type Lanes,
         typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
-        template<typename> typename FlattenRecordDim = FlattenRecordDimInOrder>
+        template<typename> typename PermuteFields = PermuteFieldsInOrder>
     struct AoSoA : MappingBase<TArrayExtents, TRecordDim>
     {
     private:
@@ -44,7 +44,7 @@ namespace llama::mapping
     public:
         inline static constexpr typename TArrayExtents::value_type lanes = Lanes;
         using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
-        using Flattener = FlattenRecordDim<TRecordDim>;
+        using Permuter = PermuteFields<FlatRecordDim<TRecordDim>>;
         inline static constexpr std::size_t blobCount = 1;
 
 #if defined(__NVCC__) && __CUDACC_VER_MAJOR__ >= 12
@@ -72,13 +72,12 @@ namespace llama::mapping
 #if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ <= 6
                 *& // mess with nvcc compiler state to workaround bug
 #endif
-                 Flattener::template flatIndex<RecordCoords...>;
+                 Permuter::template permute<flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>>;
             const auto flatArrayIndex = LinearizeArrayDimsFunctor{}(ai, Base::extents());
             const auto blockIndex = flatArrayIndex / Lanes;
             const auto laneIndex = flatArrayIndex % Lanes;
             const auto offset = static_cast<size_type>(sizeOf<TRecordDim> * Lanes) * blockIndex
-                + static_cast<size_type>(flatOffsetOf<typename Flattener::FlatRecordDim, flatFieldIndex, false>)
-                    * Lanes
+                + static_cast<size_type>(flatOffsetOf<typename Permuter::FlatRecordDim, flatFieldIndex, false>) * Lanes
                 + static_cast<size_type>(sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>)) * laneIndex;
             return {0, offset};
         }

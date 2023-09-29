@@ -127,7 +127,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - added macros `LLAMA_FORCE_INLINE` and `LLAMA_HOST_ACC` #366
 - support clang as CUDA compiler #366
 - `llama::mapping::SoA` and `llama::mapping::AoSoA` now support custom record dimension flatteners #371
-- added the `llama::mapping::FlattenRecordDimIncreasingAlignment`, `llama::mapping::FlattenRecordDimDecreasingAlignment` and `llama::mapping::FlattenRecordDimMinimizePadding` record dimension flatteners #371
+- added the `llama::mapping::PermuteFieldsIncreasingAlignment`, `llama::mapping::PermuteFieldsDecreasingAlignment` and `llama::mapping::PermuteFieldsMinimizePadding` record dimension flatteners #371
 - added new mapping `llama::mapping::BitPackedIntSoA` bitpacking integers in the record dimension into SoA arrays, and added new example #372, #427, #441, #446
 - added new mapping `llama::mapping::BitPackedFloatSoA` bitpacking floating-point types in the record dimension into SoA arrays, and added new example #414, #427, #446
 - `LLAMA_FORCE_INLINE` views can be created on `const` blobs #375

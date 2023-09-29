@@ -29,9 +29,9 @@ namespace llama::mapping
     /// overhead to the mapping logic.
     /// \tparam TLinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
     /// how big the linear domain gets.
-    /// \tparam FlattenRecordDimSingleBlob Defines how the record dimension's fields should be flattened if Blobs is
-    /// Single. See \ref FlattenRecordDimInOrder, \ref FlattenRecordDimIncreasingAlignment, \ref
-    /// FlattenRecordDimDecreasingAlignment and \ref FlattenRecordDimMinimizePadding.
+    /// \tparam PermuteFieldsSingleBlob Defines how the record dimension's fields should be permuted if Blobs is
+    /// Single. See \ref PermuteFieldsInOrder, \ref PermuteFieldsIncreasingAlignment, \ref
+    /// PermuteFieldsDecreasingAlignment and \ref PermuteFieldsMinimizePadding.
     template<
         typename TArrayExtents,
         typename TRecordDim,
@@ -39,7 +39,7 @@ namespace llama::mapping
         SubArrayAlignment TSubArrayAlignment
         = TBlobs == Blobs::Single ? SubArrayAlignment::Align : SubArrayAlignment::Pack,
         typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
-        template<typename> typename FlattenRecordDimSingleBlob = FlattenRecordDimInOrder>
+        template<typename> typename PermuteFieldsSingleBlob = PermuteFieldsInOrder>
     struct SoA : MappingBase<TArrayExtents, TRecordDim>
     {
     private:
@@ -50,7 +50,7 @@ namespace llama::mapping
         inline static constexpr Blobs blobs = TBlobs;
         inline static constexpr SubArrayAlignment subArrayAlignment = TSubArrayAlignment;
         using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
-        using Flattener = FlattenRecordDimSingleBlob<TRecordDim>;
+        using Permuter = PermuteFieldsSingleBlob<FlatRecordDim<TRecordDim>>;
         inline static constexpr std::size_t blobCount
             = blobs == Blobs::OnePerField ? mp_size<FlatRecordDim<TRecordDim>>::value : 1;
 
@@ -82,7 +82,7 @@ namespace llama::mapping
             else if constexpr(subArrayAlignment == SubArrayAlignment::Align)
             {
                 size_type size = 0;
-                using FRD = typename Flattener::FlatRecordDim;
+                using FRD = typename Permuter::FlatRecordDim;
                 mp_for_each<mp_transform<mp_identity, FRD>>(
                     [&](auto ti) LLAMA_LAMBDA_INLINE
                     {
@@ -101,7 +101,7 @@ namespace llama::mapping
     private:
         static LLAMA_CONSTEVAL auto computeSubArrayOffsets()
         {
-            using FRD = typename Flattener::FlatRecordDim;
+            using FRD = typename Permuter::FlatRecordDim;
             constexpr auto staticFlatSize = LinearizeArrayDimsFunctor{}.size(TArrayExtents{});
             constexpr auto subArrays = mp_size<FRD>::value;
             Array<size_type, subArrays> r{};
@@ -138,9 +138,9 @@ namespace llama::mapping
 #if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ <= 6
                     *& // mess with nvcc compiler state to workaround bug
 #endif
-                     Flattener::template flatIndex<RecordCoords...>;
+                     Permuter::template permute<flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>>;
                 const size_type flatSize = LinearizeArrayDimsFunctor{}.size(Base::extents());
-                using FRD = typename Flattener::FlatRecordDim;
+                using FRD = typename Permuter::FlatRecordDim;
                 if constexpr(subArrayAlignment == SubArrayAlignment::Align)
                 {
                     if constexpr(TArrayExtents::rankStatic == TArrayExtents::rank)
