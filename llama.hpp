@@ -3722,24 +3722,23 @@ namespace llama
 				        }
 				    };
 
-				    /// Flattens the record dimension in the order fields are written.
-				    template<typename RecordDim>
-				    struct FlattenRecordDimInOrder
+				    /// Retains the order of the record dimension's fields.
+				    template<typename TFlatRecordDim>
+				    struct PermuteFieldsInOrder
 				    {
-				        using FlatRecordDim = llama::FlatRecordDim<RecordDim>;
+				        using FlatRecordDim = TFlatRecordDim;
 
-				        template<std::size_t... RecordCoords>
-				        static constexpr std::size_t flatIndex = flatRecordCoord<RecordDim, RecordCoord<RecordCoords...>>;
+				        template<std::size_t FlatRecordCoord>
+				        static constexpr std::size_t permute = FlatRecordCoord;
 				    };
 
-				    /// Flattens the record dimension by sorting the fields according to a given predicate on the field types.
+				    /// Sorts the record dimension's the fields according to a given predicate on the field types.
 				    /// @tparam Less A binary predicate accepting two field types, which exposes a member value. Value must be true if
 				    /// the first field type is less than the second one, otherwise false.
-				    template<typename RecordDim, template<typename, typename> typename Less>
-				    struct FlattenRecordDimSorted
+				    template<typename FlatOrigRecordDim, template<typename, typename> typename Less>
+				    struct PermuteFieldsSorted
 				    {
 				    private:
-				        using FlatOrigRecordDim = llama::FlatRecordDim<RecordDim>;
 				        using FlatSortedRecordDim = mp_sort<FlatOrigRecordDim, Less>;
 
 				        template<typename A, typename B>
@@ -3758,13 +3757,8 @@ namespace llama
 				    public:
 				        using FlatRecordDim = FlatSortedRecordDim;
 
-				        template<std::size_t... RecordCoords>
-				        static constexpr std::size_t flatIndex = []() constexpr
-				        {
-				            constexpr auto indexBefore = flatRecordCoord<RecordDim, RecordCoord<RecordCoords...>>;
-				            constexpr auto indexAfter = mp_at_c<InversePermutedIndices, indexBefore>::value;
-				            return indexAfter;
-				        }();
+				        template<std::size_t FlatRecordCoord>
+				        static constexpr std::size_t permute = mp_at_c<InversePermutedIndices, FlatRecordCoord>::value;
 				    };
 
 				    namespace internal
@@ -3776,17 +3770,17 @@ namespace llama
 				        using MoreAlignment = std::bool_constant<(alignof(A) > alignof(B))>;
 				    } // namespace internal
 
-				    /// Flattens and sorts the record dimension by increasing alignment of its fields.
-				    template<typename RecordDim>
-				    using FlattenRecordDimIncreasingAlignment = FlattenRecordDimSorted<RecordDim, internal::LessAlignment>;
+				    /// Sorts the record dimension fields by increasing alignment of its fields.
+				    template<typename FlatRecordDim>
+				    using PermuteFieldsIncreasingAlignment = PermuteFieldsSorted<FlatRecordDim, internal::LessAlignment>;
 
-				    /// Flattens and sorts the record dimension by decreasing alignment of its fields.
-				    template<typename RecordDim>
-				    using FlattenRecordDimDecreasingAlignment = FlattenRecordDimSorted<RecordDim, internal::MoreAlignment>;
+				    /// Sorts the record dimension fields by decreasing alignment of its fields.
+				    template<typename FlatRecordDim>
+				    using PermuteFieldsDecreasingAlignment = PermuteFieldsSorted<FlatRecordDim, internal::MoreAlignment>;
 
-				    /// Flattens and sorts the record dimension by the alignment of its fields to minimize padding.
-				    template<typename RecordDim>
-				    using FlattenRecordDimMinimizePadding = FlattenRecordDimIncreasingAlignment<RecordDim>;
+				    /// Sorts the record dimension fields by the alignment of its fields to minimize padding.
+				    template<typename FlatRecordDim>
+				    using PermuteFieldsMinimizePadding = PermuteFieldsIncreasingAlignment<FlatRecordDim>;
 
 				    namespace internal
 				    {
@@ -3833,14 +3827,14 @@ namespace llama
 			    /// used for temporary, single element views.
 			    /// \tparam TFieldAlignment If Align, padding bytes are inserted to guarantee that struct members are properly
 			    /// aligned. If false, struct members are tightly packed.
-			    /// \tparam FlattenRecordDim Defines how the record dimension's fields should be flattened. See \ref
-			    /// FlattenRecordDimInOrder, \ref FlattenRecordDimIncreasingAlignment, \ref FlattenRecordDimDecreasingAlignment and
-			    /// \ref FlattenRecordDimMinimizePadding.
+			    /// \tparam PermuteFields Defines how the record dimension's fields should be permuted. See \ref
+			    /// PermuteFieldsInOrder, \ref PermuteFieldsIncreasingAlignment, \ref PermuteFieldsDecreasingAlignment and
+			    /// \ref PermuteFieldsMinimizePadding.
 			    template<
 			        typename TArrayExtents,
 			        typename TRecordDim,
 			        FieldAlignment TFieldAlignment = FieldAlignment::Align,
-			        template<typename> typename FlattenRecordDim = FlattenRecordDimMinimizePadding>
+			        template<typename> typename PermuteFields = PermuteFieldsMinimizePadding>
 			    struct One : MappingBase<TArrayExtents, TRecordDim>
 			    {
 			    private:
@@ -3849,7 +3843,7 @@ namespace llama
 
 			    public:
 			        inline static constexpr FieldAlignment fieldAlignment = TFieldAlignment;
-			        using Flattener = FlattenRecordDim<TRecordDim>;
+			        using Permuter = PermuteFields<FlatRecordDim<TRecordDim>>;
 			        static constexpr std::size_t blobCount = 1;
 
 			#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ >= 12
@@ -3865,7 +3859,7 @@ namespace llama
 			        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(size_type) const -> size_type
 			        {
 			            return flatSizeOf<
-			                typename Flattener::FlatRecordDim,
+			                typename Permuter::FlatRecordDim,
 			                fieldAlignment == FieldAlignment::Align,
 			                false>; // no tail padding
 			        }
@@ -3879,9 +3873,9 @@ namespace llama
 			#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ <= 6
 			                *& // mess with nvcc compiler state to workaround bug
 			#endif
-			                 Flattener::template flatIndex<RecordCoords...>;
+			                 Permuter::template permute<flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>>;
 			            constexpr auto offset = static_cast<size_type>(flatOffsetOf<
-			                                                           typename Flattener::FlatRecordDim,
+			                                                           typename Permuter::FlatRecordDim,
 			                                                           flatFieldIndex,
 			                                                           fieldAlignment == FieldAlignment::Align>);
 			            return {size_type{0}, offset};
@@ -3891,28 +3885,28 @@ namespace llama
 			    /// One mapping preserving the alignment of the field types by inserting padding.
 			    /// \see One
 			    template<typename ArrayExtents, typename RecordDim>
-			    using AlignedOne = One<ArrayExtents, RecordDim, FieldAlignment::Align, FlattenRecordDimInOrder>;
+			    using AlignedOne = One<ArrayExtents, RecordDim, FieldAlignment::Align, PermuteFieldsInOrder>;
 
 			    /// One mapping preserving the alignment of the field types by inserting padding and permuting the field order to
 			    /// minimize this padding.
 			    /// \see One
 			    template<typename ArrayExtents, typename RecordDim>
-			    using MinAlignedOne = One<ArrayExtents, RecordDim, FieldAlignment::Align, FlattenRecordDimMinimizePadding>;
+			    using MinAlignedOne = One<ArrayExtents, RecordDim, FieldAlignment::Align, PermuteFieldsMinimizePadding>;
 
 			    /// One mapping packing the field types tightly, violating the types' alignment requirements.
 			    /// \see One
 			    template<typename ArrayExtents, typename RecordDim>
-			    using PackedOne = One<ArrayExtents, RecordDim, FieldAlignment::Pack, FlattenRecordDimInOrder>;
+			    using PackedOne = One<ArrayExtents, RecordDim, FieldAlignment::Pack, PermuteFieldsInOrder>;
 
 			    /// Binds parameters to a \ref One mapping except for array and record dimension, producing a quoted
 			    /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
 			    template<
 			        FieldAlignment FieldAlignment = FieldAlignment::Align,
-			        template<typename> typename FlattenRecordDim = FlattenRecordDimMinimizePadding>
+			        template<typename> typename PermuteFields = PermuteFieldsMinimizePadding>
 			    struct BindOne
 			    {
 			        template<typename ArrayExtents, typename RecordDim>
-			        using fn = One<ArrayExtents, RecordDim, FieldAlignment, FlattenRecordDim>;
+			        using fn = One<ArrayExtents, RecordDim, FieldAlignment, PermuteFields>;
 			    };
 
 			    template<typename Mapping>
@@ -3923,8 +3917,8 @@ namespace llama
 			        typename RecordDim,
 			        FieldAlignment FieldAlignment,
 			        template<typename>
-			        typename FlattenRecordDim>
-			    inline constexpr bool isOne<One<ArrayExtents, RecordDim, FieldAlignment, FlattenRecordDim>> = true;
+			        typename PermuteFields>
+			    inline constexpr bool isOne<One<ArrayExtents, RecordDim, FieldAlignment, PermuteFields>> = true;
 			} // namespace llama::mapping
 			// ==
 			// == ./include/llama/mapping/One.hpp ==
@@ -4779,15 +4773,15 @@ namespace llama
 
 		    /// Array of struct of arrays mapping. Used to create a \ref View via \ref allocView.
 		    /// \tparam Lanes The size of the inner arrays of this array of struct of arrays.
-		    /// \tparam FlattenRecordDim Defines how the record dimension's fields should be flattened. See \ref
-		    /// FlattenRecordDimInOrder, \ref FlattenRecordDimIncreasingAlignment, \ref FlattenRecordDimDecreasingAlignment and
-		    /// \ref FlattenRecordDimMinimizePadding.
+		    /// \tparam PermuteFields Defines how the record dimension's fields should be permuted. See \ref
+		    /// PermuteFieldsInOrder, \ref PermuteFieldsIncreasingAlignment, \ref PermuteFieldsDecreasingAlignment and
+		    /// \ref PermuteFieldsMinimizePadding.
 		    template<
 		        typename TArrayExtents,
 		        typename TRecordDim,
 		        typename TArrayExtents::value_type Lanes,
 		        typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
-		        template<typename> typename FlattenRecordDim = FlattenRecordDimInOrder>
+		        template<typename> typename PermuteFields = PermuteFieldsInOrder>
 		    struct AoSoA : MappingBase<TArrayExtents, TRecordDim>
 		    {
 		    private:
@@ -4797,7 +4791,7 @@ namespace llama
 		    public:
 		        inline static constexpr typename TArrayExtents::value_type lanes = Lanes;
 		        using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
-		        using Flattener = FlattenRecordDim<TRecordDim>;
+		        using Permuter = PermuteFields<FlatRecordDim<TRecordDim>>;
 		        inline static constexpr std::size_t blobCount = 1;
 
 		#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ >= 12
@@ -4825,13 +4819,12 @@ namespace llama
 		#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ <= 6
 		                *& // mess with nvcc compiler state to workaround bug
 		#endif
-		                 Flattener::template flatIndex<RecordCoords...>;
+		                 Permuter::template permute<flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>>;
 		            const auto flatArrayIndex = LinearizeArrayDimsFunctor{}(ai, Base::extents());
 		            const auto blockIndex = flatArrayIndex / Lanes;
 		            const auto laneIndex = flatArrayIndex % Lanes;
 		            const auto offset = static_cast<size_type>(sizeOf<TRecordDim> * Lanes) * blockIndex
-		                + static_cast<size_type>(flatOffsetOf<typename Flattener::FlatRecordDim, flatFieldIndex, false>)
-		                    * Lanes
+		                + static_cast<size_type>(flatOffsetOf<typename Permuter::FlatRecordDim, flatFieldIndex, false>) * Lanes
 		                + static_cast<size_type>(sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>)) * laneIndex;
 		            return {0, offset};
 		        }
@@ -4890,9 +4883,9 @@ namespace llama
 		    /// overhead to the mapping logic.
 		    /// \tparam TLinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
 		    /// how big the linear domain gets.
-		    /// \tparam FlattenRecordDimSingleBlob Defines how the record dimension's fields should be flattened if Blobs is
-		    /// Single. See \ref FlattenRecordDimInOrder, \ref FlattenRecordDimIncreasingAlignment, \ref
-		    /// FlattenRecordDimDecreasingAlignment and \ref FlattenRecordDimMinimizePadding.
+		    /// \tparam PermuteFieldsSingleBlob Defines how the record dimension's fields should be permuted if Blobs is
+		    /// Single. See \ref PermuteFieldsInOrder, \ref PermuteFieldsIncreasingAlignment, \ref
+		    /// PermuteFieldsDecreasingAlignment and \ref PermuteFieldsMinimizePadding.
 		    template<
 		        typename TArrayExtents,
 		        typename TRecordDim,
@@ -4900,7 +4893,7 @@ namespace llama
 		        SubArrayAlignment TSubArrayAlignment
 		        = TBlobs == Blobs::Single ? SubArrayAlignment::Align : SubArrayAlignment::Pack,
 		        typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
-		        template<typename> typename FlattenRecordDimSingleBlob = FlattenRecordDimInOrder>
+		        template<typename> typename PermuteFieldsSingleBlob = PermuteFieldsInOrder>
 		    struct SoA : MappingBase<TArrayExtents, TRecordDim>
 		    {
 		    private:
@@ -4911,7 +4904,7 @@ namespace llama
 		        inline static constexpr Blobs blobs = TBlobs;
 		        inline static constexpr SubArrayAlignment subArrayAlignment = TSubArrayAlignment;
 		        using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
-		        using Flattener = FlattenRecordDimSingleBlob<TRecordDim>;
+		        using Permuter = PermuteFieldsSingleBlob<FlatRecordDim<TRecordDim>>;
 		        inline static constexpr std::size_t blobCount
 		            = blobs == Blobs::OnePerField ? mp_size<FlatRecordDim<TRecordDim>>::value : 1;
 
@@ -4943,7 +4936,7 @@ namespace llama
 		            else if constexpr(subArrayAlignment == SubArrayAlignment::Align)
 		            {
 		                size_type size = 0;
-		                using FRD = typename Flattener::FlatRecordDim;
+		                using FRD = typename Permuter::FlatRecordDim;
 		                mp_for_each<mp_transform<mp_identity, FRD>>(
 		                    [&](auto ti) LLAMA_LAMBDA_INLINE
 		                    {
@@ -4962,7 +4955,7 @@ namespace llama
 		    private:
 		        static LLAMA_CONSTEVAL auto computeSubArrayOffsets()
 		        {
-		            using FRD = typename Flattener::FlatRecordDim;
+		            using FRD = typename Permuter::FlatRecordDim;
 		            constexpr auto staticFlatSize = LinearizeArrayDimsFunctor{}.size(TArrayExtents{});
 		            constexpr auto subArrays = mp_size<FRD>::value;
 		            Array<size_type, subArrays> r{};
@@ -4999,9 +4992,9 @@ namespace llama
 		#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ <= 6
 		                    *& // mess with nvcc compiler state to workaround bug
 		#endif
-		                     Flattener::template flatIndex<RecordCoords...>;
+		                     Permuter::template permute<flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>>;
 		                const size_type flatSize = LinearizeArrayDimsFunctor{}.size(Base::extents());
-		                using FRD = typename Flattener::FlatRecordDim;
+		                using FRD = typename Permuter::FlatRecordDim;
 		                if constexpr(subArrayAlignment == SubArrayAlignment::Align)
 		                {
 		                    if constexpr(TArrayExtents::rankStatic == TArrayExtents::rank)
@@ -7080,15 +7073,15 @@ namespace llama
 		    /// If Pack, struct members are tightly packed.
 		    /// \tparam TLinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
 		    /// how big the linear domain gets.
-		    /// \tparam FlattenRecordDim Defines how the record dimension's fields should be flattened. See \ref
-		    /// FlattenRecordDimInOrder, \ref FlattenRecordDimIncreasingAlignment, \ref FlattenRecordDimDecreasingAlignment and
-		    /// \ref FlattenRecordDimMinimizePadding.
+		    /// \tparam PermuteFields Defines how the record dimension's fields should be permuted. See \ref
+		    /// PermuteFieldsInOrder, \ref PermuteFieldsIncreasingAlignment, \ref PermuteFieldsDecreasingAlignment and
+		    /// \ref PermuteFieldsMinimizePadding.
 		    template<
 		        typename TArrayExtents,
 		        typename TRecordDim,
 		        FieldAlignment TFieldAlignment = FieldAlignment::Align,
 		        typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
-		        template<typename> typename FlattenRecordDim = FlattenRecordDimInOrder>
+		        template<typename> typename PermuteFields = PermuteFieldsInOrder>
 		    struct AoS : MappingBase<TArrayExtents, TRecordDim>
 		    {
 		    private:
@@ -7098,7 +7091,7 @@ namespace llama
 		    public:
 		        inline static constexpr FieldAlignment fieldAlignment = TFieldAlignment;
 		        using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
-		        using Flattener = FlattenRecordDim<TRecordDim>;
+		        using Permuter = PermuteFields<FlatRecordDim<TRecordDim>>;
 		        inline static constexpr std::size_t blobCount = 1;
 
 		        using Base::Base;
@@ -7106,7 +7099,7 @@ namespace llama
 		        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(size_type) const -> size_type
 		        {
 		            return LinearizeArrayDimsFunctor{}.size(Base::extents())
-		                * flatSizeOf<typename Flattener::FlatRecordDim, fieldAlignment == FieldAlignment::Align>;
+		                * flatSizeOf<typename Permuter::FlatRecordDim, fieldAlignment == FieldAlignment::Align>;
 		        }
 
 		        template<std::size_t... RecordCoords>
@@ -7118,13 +7111,13 @@ namespace llama
 		#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ <= 6
 		                *& // mess with nvcc compiler state to workaround bug
 		#endif
-		                 Flattener::template flatIndex<RecordCoords...>;
+		                 Permuter::template permute<flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>>;
 		            const auto offset
 		                = LinearizeArrayDimsFunctor{}(ai, Base::extents())
 		                    * static_cast<size_type>(
-		                        flatSizeOf<typename Flattener::FlatRecordDim, fieldAlignment == FieldAlignment::Align>)
+		                        flatSizeOf<typename Permuter::FlatRecordDim, fieldAlignment == FieldAlignment::Align>)
 		                + static_cast<size_type>(flatOffsetOf<
-		                                         typename Flattener::FlatRecordDim,
+		                                         typename Permuter::FlatRecordDim,
 		                                         flatFieldIndex,
 		                                         fieldAlignment == FieldAlignment::Align>);
 		            return {size_type{0}, offset};
@@ -7143,12 +7136,8 @@ namespace llama
 		    /// Array of struct mapping preserving the alignment of the field types by inserting padding and permuting the
 		    /// field order to minimize this padding. \see AoS
 		    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
-		    using MinAlignedAoS = AoS<
-		        ArrayExtents,
-		        RecordDim,
-		        FieldAlignment::Align,
-		        LinearizeArrayDimsFunctor,
-		        FlattenRecordDimMinimizePadding>;
+		    using MinAlignedAoS
+		        = AoS<ArrayExtents, RecordDim, FieldAlignment::Align, LinearizeArrayDimsFunctor, PermuteFieldsMinimizePadding>;
 
 		    /// Array of struct mapping packing the field types tightly, violating the type's alignment requirements.
 		    /// \see AoS
@@ -7175,9 +7164,8 @@ namespace llama
 		        FieldAlignment FieldAlignment,
 		        typename LinearizeArrayDimsFunctor,
 		        template<typename>
-		        typename FlattenRecordDim>
-		    inline constexpr bool
-		        isAoS<AoS<ArrayExtents, RecordDim, FieldAlignment, LinearizeArrayDimsFunctor, FlattenRecordDim>>
+		        typename PermuteFields>
+		    inline constexpr bool isAoS<AoS<ArrayExtents, RecordDim, FieldAlignment, LinearizeArrayDimsFunctor, PermuteFields>>
 		        = true;
 		} // namespace llama::mapping
 		// ==
@@ -7372,7 +7360,7 @@ namespace llama
 	            {
 	                static_assert(mapping::isAoS<Mapping>);
 	                static constexpr auto srcStride = flatSizeOf<
-	                    typename Mapping::Flattener::FlatRecordDim,
+	                    typename Mapping::Permuter::FlatRecordDim,
 	                    Mapping::fieldAlignment == llama::mapping::FieldAlignment::Align>;
 	                const auto* srcBaseAddr = reinterpret_cast<const std::byte*>(&srcRef(rc));
 	                ElementSimd elemSimd; // g++-12 really needs the intermediate elemSimd and memcpy
@@ -7412,7 +7400,7 @@ namespace llama
 	            else if constexpr(mapping::isAoS<Mapping>)
 	            {
 	                static constexpr auto stride = flatSizeOf<
-	                    typename Mapping::Flattener::FlatRecordDim,
+	                    typename Mapping::Permuter::FlatRecordDim,
 	                    Mapping::fieldAlignment == llama::mapping::FieldAlignment::Align>;
 	                auto* dstBaseAddr = reinterpret_cast<std::byte*>(&dstRef(rc));
 	                const ElementSimd elemSimd = srcSimd(rc);
@@ -8592,9 +8580,9 @@ namespace llama
 		    /// numbers will be read back positive.
 		    /// \tparam TLinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
 		    /// how big the linear domain gets.
-		    /// \tparam FlattenRecordDim Defines how the record dimension's fields should be flattened. See \ref
-		    //  FlattenRecordDimInOrder, \ref FlattenRecordDimIncreasingAlignment, \ref FlattenRecordDimDecreasingAlignment and
-		    //  \ref FlattenRecordDimMinimizePadding.
+		    /// \tparam PermuteFields Defines how the record dimension's fields should be permuted. See \ref
+		    //  PermuteFieldsInOrder, \ref PermuteFieldsIncreasingAlignment, \ref PermuteFieldsDecreasingAlignment and
+		    //  \ref PermuteFieldsMinimizePadding.
 		    /// \tparam TStoredIntegral Integral type used as storage of reduced precision integers. Must be std::uint32_t or
 		    /// std::uint64_t.
 		    template<
@@ -8603,7 +8591,7 @@ namespace llama
 		        typename Bits = typename TArrayExtents::value_type,
 		        SignBit SignBit = SignBit::Keep,
 		        typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
-		        template<typename> typename FlattenRecordDim = FlattenRecordDimInOrder,
+		        template<typename> typename PermuteFields = PermuteFieldsInOrder,
 		        typename TStoredIntegral = internal::StoredUnsignedFor<TRecordDim>>
 		    struct BitPackedIntAoS
 		        : internal::
@@ -8618,7 +8606,7 @@ namespace llama
 		        using typename Base::size_type;
 		        using VHBits = typename Base::VHBits; // use plain using declaration with nvcc >= 11.8
 
-		        using Flattener = FlattenRecordDim<TRecordDim>;
+		        using Permuter = PermuteFields<TRecordDim>;
 		        static constexpr std::size_t blobCount = 1;
 
 		        LLAMA_FN_HOST_ACC_INLINE
@@ -8636,7 +8624,8 @@ namespace llama
 		            RecordCoord<RecordCoords...>,
 		            Blobs& blobs) const
 		        {
-		            constexpr auto flatFieldIndex = static_cast<size_type>(Flattener::template flatIndex<RecordCoords...>);
+		            constexpr auto flatFieldIndex = static_cast<size_type>(
+		                Permuter::template permute<flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>>);
 		            const auto bitOffset = ((TLinearizeArrayDimsFunctor{}(ai, Base::extents())
 		                                     * static_cast<size_type>(flatFieldCount<TRecordDim>))
 		                                    + flatFieldIndex)
@@ -8659,7 +8648,7 @@ namespace llama
 		        typename Bits = void,
 		        SignBit SignBit = SignBit::Keep,
 		        typename LinearizeArrayDimsFunctor = mapping::LinearizeArrayDimsCpp,
-		        template<typename> typename FlattenRecordDim = FlattenRecordDimInOrder,
+		        template<typename> typename PermuteFields = PermuteFieldsInOrder,
 		        typename StoredIntegral = void>
 		    struct BindBitPackedIntAoS
 		    {
@@ -8670,7 +8659,7 @@ namespace llama
 		            std::conditional_t<!std::is_void_v<Bits>, Bits, typename ArrayExtents::value_type>,
 		            SignBit,
 		            LinearizeArrayDimsFunctor,
-		            FlattenRecordDim,
+		            PermuteFields,
 		            std::conditional_t<
 		                !std::is_void_v<StoredIntegral>,
 		                StoredIntegral,
@@ -8687,7 +8676,7 @@ namespace llama
 		        SignBit SignBit,
 		        typename LinearizeArrayDimsFunctor,
 		        template<typename>
-		        typename FlattenRecordDim,
+		        typename PermuteFields,
 		        typename StoredIntegral>
 		    inline constexpr bool isBitPackedIntAoS<BitPackedIntAoS<
 		        ArrayExtents,
@@ -8695,7 +8684,7 @@ namespace llama
 		        Bits,
 		        SignBit,
 		        LinearizeArrayDimsFunctor,
-		        FlattenRecordDim,
+		        PermuteFields,
 		        StoredIntegral>>
 		        = true;
 		} // namespace llama::mapping
@@ -9013,7 +9002,7 @@ namespace llama
 	        typename ExponentBits = typename TArrayExtents::value_type,
 	        typename MantissaBits = ExponentBits,
 	        typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
-	        template<typename> typename FlattenRecordDim = FlattenRecordDimInOrder,
+	        template<typename> typename PermuteFields = PermuteFieldsInOrder,
 	        typename TStoredIntegral = internal::StoredIntegralFor<TRecordDim>>
 	    struct LLAMA_DECLSPEC_EMPTY_BASES BitPackedFloatAoS
 	        : MappingBase<TArrayExtents, TRecordDim>
@@ -9030,7 +9019,7 @@ namespace llama
 	        using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
 	        using StoredIntegral = TStoredIntegral;
 
-	        using Flattener = FlattenRecordDim<TRecordDim>;
+	        using Permuter = PermuteFields<FlatRecordDim<TRecordDim>>;
 	        static constexpr std::size_t blobCount = 1;
 
 	        LLAMA_FN_HOST_ACC_INLINE
@@ -9080,7 +9069,8 @@ namespace llama
 	            RecordCoord<RecordCoords...>,
 	            Blobs& blobs) const
 	        {
-	            constexpr auto flatFieldIndex = static_cast<size_type>(Flattener::template flatIndex<RecordCoords...>);
+	            constexpr auto flatFieldIndex = static_cast<size_type>(
+	                Permuter::template permute<flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>>);
 	            const auto bitOffset = ((TLinearizeArrayDimsFunctor{}(ai, Base::extents())
 	                                     * static_cast<size_type>(flatFieldCount<TRecordDim>))
 	                                    + flatFieldIndex)
@@ -9102,7 +9092,7 @@ namespace llama
 	        typename ExponentBits = unsigned,
 	        typename MantissaBits = ExponentBits,
 	        typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
-	        template<typename> typename FlattenRecordDim = FlattenRecordDimInOrder,
+	        template<typename> typename PermuteFields = PermuteFieldsInOrder,
 	        typename StoredIntegral = void>
 	    struct BindBitPackedFloatAoS
 	    {
@@ -9113,7 +9103,7 @@ namespace llama
 	            ExponentBits,
 	            MantissaBits,
 	            LinearizeArrayDimsFunctor,
-	            FlattenRecordDim,
+	            PermuteFields,
 	            std::conditional_t<
 	                !std::is_void_v<StoredIntegral>,
 	                StoredIntegral,
@@ -9130,7 +9120,7 @@ namespace llama
 	        typename MantissaBits,
 	        typename LinearizeArrayDimsFunctor,
 	        template<typename>
-	        typename FlattenRecordDim,
+	        typename PermuteFields,
 	        typename StoredIntegral>
 	    inline constexpr bool isBitPackedFloatAoS<BitPackedFloatAoS<
 	        ArrayExtents,
@@ -9138,7 +9128,7 @@ namespace llama
 	        ExponentBits,
 	        MantissaBits,
 	        LinearizeArrayDimsFunctor,
-	        FlattenRecordDim,
+	        PermuteFields,
 	        StoredIntegral>>
 	        = true;
 	} // namespace llama::mapping
