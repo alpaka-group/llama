@@ -63,7 +63,7 @@ auto main(int argc, const char* argv[]) -> int
         llama::ArrayExtents<uint32_t, llama::dyn>,
         Triangle,
         llama::mapping::FieldAlignment::Pack,
-        llama::mapping::LinearizeArrayDimsCpp,
+        llama::mapping::LinearizeArrayIndexRight,
         llama::mapping::PermuteFieldsInOrder>{{n}};
     if(size != 80u + 4u + mapping.blobSize(0))
     {

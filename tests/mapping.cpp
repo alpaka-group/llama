@@ -256,18 +256,18 @@ TEMPLATE_LIST_TEST_CASE("mapping.traits", "", SizeTypes)
     STATIC_REQUIRE(llama::hasAnyComputedField<FAC>);
 }
 
-TEST_CASE("mapping.LinearizeArrayDimsCpp.size")
+TEST_CASE("mapping.LinearizeArrayIndexRight.size")
 {
-    llama::mapping::LinearizeArrayDimsCpp lin;
+    llama::mapping::LinearizeArrayIndexRight lin;
     CHECK(lin.size(llama::ArrayExtents{2, 3}) == 2 * 3);
     CHECK(lin.size(llama::ArrayExtents{2, 4}) == 2 * 4);
     CHECK(lin.size(llama::ArrayExtents{2, 5}) == 2 * 5);
     CHECK(lin.size(llama::ArrayExtents{8, 8}) == 8 * 8);
 }
 
-TEST_CASE("mapping.LinearizeArrayDimsCpp")
+TEST_CASE("mapping.LinearizeArrayIndexRight")
 {
-    const llama::mapping::LinearizeArrayDimsCpp lin;
+    const llama::mapping::LinearizeArrayIndexRight lin;
     const auto extents = llama::ArrayExtents<int, 4, 4>{};
     CHECK(lin(llama::ArrayIndex{0, 0}, extents) == 0);
     CHECK(lin(llama::ArrayIndex{0, 1}, extents) == 1);
@@ -287,18 +287,18 @@ TEST_CASE("mapping.LinearizeArrayDimsCpp")
     CHECK(lin(llama::ArrayIndex{3, 3}, extents) == 15);
 }
 
-TEST_CASE("mapping.LinearizeArrayDimsFortran.size")
+TEST_CASE("mapping.LinearizeArrayIndexLeft.size")
 {
-    llama::mapping::LinearizeArrayDimsFortran lin;
+    llama::mapping::LinearizeArrayIndexLeft lin;
     CHECK(lin.size(llama::ArrayExtents{2, 3}) == 2 * 3);
     CHECK(lin.size(llama::ArrayExtents{2, 4}) == 2 * 4);
     CHECK(lin.size(llama::ArrayExtents{2, 5}) == 2 * 5);
     CHECK(lin.size(llama::ArrayExtents{8, 8}) == 8 * 8);
 }
 
-TEST_CASE("mapping.LinearizeArrayDimsFortran")
+TEST_CASE("mapping.LinearizeArrayIndexLeft")
 {
-    const llama::mapping::LinearizeArrayDimsFortran lin;
+    const llama::mapping::LinearizeArrayIndexLeft lin;
     const auto extents = llama::ArrayExtents<int, 4, 4>{};
     CHECK(lin(llama::ArrayIndex{0, 0}, extents) == 0);
     CHECK(lin(llama::ArrayIndex{0, 1}, extents) == 4);
@@ -318,18 +318,18 @@ TEST_CASE("mapping.LinearizeArrayDimsFortran")
     CHECK(lin(llama::ArrayIndex{3, 3}, extents) == 15);
 }
 
-TEST_CASE("mapping.LinearizeArrayDimsMorton.size")
+TEST_CASE("mapping.LinearizeArrayIndexMorton.size")
 {
-    const llama::mapping::LinearizeArrayDimsMorton lin;
+    const llama::mapping::LinearizeArrayIndexMorton lin;
     CHECK(lin.size(llama::ArrayExtents{2, 3}) == 4 * 4);
     CHECK(lin.size(llama::ArrayExtents{2, 4}) == 4 * 4);
     CHECK(lin.size(llama::ArrayExtents{2, 5}) == 8 * 8);
     CHECK(lin.size(llama::ArrayExtents{8, 8}) == 8 * 8);
 }
 
-TEST_CASE("mapping.LinearizeArrayDimsMorton")
+TEST_CASE("mapping.LinearizeArrayIndexMorton")
 {
-    const llama::mapping::LinearizeArrayDimsMorton lin;
+    const llama::mapping::LinearizeArrayIndexMorton lin;
     const auto extents = llama::ArrayExtents<int, 4, 4>{};
     CHECK(lin(llama::ArrayIndex{0, 0}, extents) == 0);
     CHECK(lin(llama::ArrayIndex{0, 1}, extents) == 1);

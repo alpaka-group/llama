@@ -24,16 +24,19 @@ namespace
 
     // Do not test all combinations as this exlodes the unit test compile and runtime.
     using AoSMappings = mp_list<
-        llama::mapping::
-            AoS<ArrayExtents, RecordDim, llama::mapping::FieldAlignment::Pack, llama::mapping::LinearizeArrayDimsCpp>,
+        llama::mapping::AoS<
+            ArrayExtents,
+            RecordDim,
+            llama::mapping::FieldAlignment::Pack,
+            llama::mapping::LinearizeArrayIndexRight>,
         // llama::mapping::AoS<ArrayExtents, RecordDim, llama::mapping::FieldAlignment::Pack,
-        // llama::mapping::LinearizeArrayDimsFortran>, llama::mapping::AoS<ArrayExtents, RecordDim,
-        // llama::mapping::FieldAlignment::Align, llama::mapping::LinearizeArrayDimsCpp>,
+        // llama::mapping::LinearizeArrayIndexLeft>, llama::mapping::AoS<ArrayExtents, RecordDim,
+        // llama::mapping::FieldAlignment::Align, llama::mapping::LinearizeArrayIndexRight>,
         llama::mapping::AoS<
             ArrayExtents,
             RecordDim,
             llama::mapping::FieldAlignment::Align,
-            llama::mapping::LinearizeArrayDimsFortran>>;
+            llama::mapping::LinearizeArrayIndexLeft>>;
 
     using OtherMappings = mp_list<
         llama::mapping::SoA<
@@ -41,29 +44,29 @@ namespace
             RecordDim,
             llama::mapping::Blobs::Single,
             llama::mapping::SubArrayAlignment::Pack,
-            llama::mapping::LinearizeArrayDimsCpp>,
+            llama::mapping::LinearizeArrayIndexRight>,
         // llama::mapping::SoA<ArrayExtents, RecordDim, llama::mapping::Blobs::Single,
-        // llama::mapping::SubArrayAlignment::Pack, llama::mapping::LinearizeArrayDimsFortran>,
+        // llama::mapping::SubArrayAlignment::Pack, llama::mapping::LinearizeArrayIndexLeft>,
         // llama::mapping::SoA<ArrayExtents, RecordDim, llama::mapping::Blobs::OnePerField,
-        // llama::mapping::SubArrayAlignment::Pack, llama::mapping::LinearizeArrayDimsCpp>,
+        // llama::mapping::SubArrayAlignment::Pack, llama::mapping::LinearizeArrayIndexRight>,
         llama::mapping::SoA<
             ArrayExtents,
             RecordDim,
             llama::mapping::Blobs::OnePerField,
             llama::mapping::SubArrayAlignment::Pack,
-            llama::mapping::LinearizeArrayDimsFortran>,
+            llama::mapping::LinearizeArrayIndexLeft>,
         llama::mapping::SoA<
             ArrayExtents,
             RecordDim,
             llama::mapping::Blobs::Single,
             llama::mapping::SubArrayAlignment::Align,
-            llama::mapping::LinearizeArrayDimsCpp>,
+            llama::mapping::LinearizeArrayIndexRight>,
         // llama::mapping::SoA<ArrayExtents, RecordDim, llama::mapping::Blobs::Single,
-        // llama::mapping::SubArrayAlignment::Align, llama::mapping::LinearizeArrayDimsFortran>,
-        llama::mapping::AoSoA<ArrayExtents, RecordDim, 4, llama::mapping::LinearizeArrayDimsCpp>,
-        // llama::mapping::AoSoA<ArrayExtents, RecordDim, 4, llama::mapping::LinearizeArrayDimsFortran>,
-        // llama::mapping::AoSoA<ArrayExtents, RecordDim, 8, llama::mapping::LinearizeArrayDimsCpp>,
-        llama::mapping::AoSoA<ArrayExtents, RecordDim, 8, llama::mapping::LinearizeArrayDimsFortran>>;
+        // llama::mapping::SubArrayAlignment::Align, llama::mapping::LinearizeArrayIndexLeft>,
+        llama::mapping::AoSoA<ArrayExtents, RecordDim, 4, llama::mapping::LinearizeArrayIndexRight>,
+        // llama::mapping::AoSoA<ArrayExtents, RecordDim, 4, llama::mapping::LinearizeArrayIndexLeft>,
+        // llama::mapping::AoSoA<ArrayExtents, RecordDim, 8, llama::mapping::LinearizeArrayIndexRight>,
+        llama::mapping::AoSoA<ArrayExtents, RecordDim, 8, llama::mapping::LinearizeArrayIndexLeft>>;
 
     using AllMappings = mp_append<AoSMappings, OtherMappings>;
 
@@ -73,8 +76,8 @@ namespace
     using BothAreSoAOrHaveDifferentLinearizer = std::bool_constant<
         (llama::mapping::isSoA<mp_first<List>> && llama::mapping::isSoA<mp_second<List>>)
         || !std::is_same_v<
-            typename mp_first<List>::LinearizeArrayDimsFunctor,
-            typename mp_second<List>::LinearizeArrayDimsFunctor>>;
+            typename mp_first<List>::LinearizeArrayIndexFunctor,
+            typename mp_second<List>::LinearizeArrayIndexFunctor>>;
 
     using AoSoAMappingsProduct
         = mp_remove_if<mp_product<mp_list, OtherMappings, OtherMappings>, BothAreSoAOrHaveDifferentLinearizer>;

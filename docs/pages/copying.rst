@@ -53,15 +53,15 @@ Users can add specializations of :cpp:`llama::Copy` to provide additional copy s
 .. code-block:: C++
 
     // provide special copy from AoS -> UserDefinedMapping
-    template <typename ArrayExtents, typename RecordDim, bool Aligned, typename LinearizeArrayDims>
+    template <typename ArrayExtents, typename RecordDim, bool Aligned, typename LinearizeArrayIndex>
     struct Copy<
-        llama::mapping::AoS<ArrayExtents, RecordDim, Aligned, LinearizeArrayDims>,
+        llama::mapping::AoS<ArrayExtents, RecordDim, Aligned, LinearizeArrayIndex>,
         UserDefinedMapping<ArrayExtents, RecordDim>>
     {
         template <typename SrcBlob, typename DstBlob>
         void operator()(
-            const View<mapping::AoS<ArrayExtents, RecordDim, Aligned, LinearizeArrayDims>, SrcBlob>& srcView,
-            View<mapping::SoA<ArrayExtents, RecordDim, DstSeparateBuffers, LinearizeArrayDims>, DstBlob>& dstView,
+            const View<mapping::AoS<ArrayExtents, RecordDim, Aligned, LinearizeArrayIndex>, SrcBlob>& srcView,
+            View<mapping::SoA<ArrayExtents, RecordDim, DstSeparateBuffers, LinearizeArrayIndex>, DstBlob>& dstView,
             std::size_t threadId, std::size_t threadCount) {
             ...
         }

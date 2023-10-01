@@ -269,13 +269,13 @@ auto setup(Queue& queue, const Dev& dev, const DevHost& /*devHost*/)
                 ArrayExtents,
                 V3Real,
                 llama::mapping::FieldAlignment::Align,
-                llama::mapping::LinearizeArrayDimsFortran>(fieldExtents);
+                llama::mapping::LinearizeArrayIndexLeft>(fieldExtents);
         if constexpr(FieldMapping == 2)
             return llama::mapping::AoS<
                 ArrayExtents,
                 V3Real,
                 llama::mapping::FieldAlignment::Align,
-                llama::mapping::LinearizeArrayDimsMorton>(fieldExtents);
+                llama::mapping::LinearizeArrayIndexMorton>(fieldExtents);
         if constexpr(FieldMapping == 3)
             return llama::mapping::SoA<ArrayExtents, V3Real, llama::mapping::Blobs::Single>(fieldExtents);
         if constexpr(FieldMapping == 4)
@@ -284,14 +284,14 @@ auto setup(Queue& queue, const Dev& dev, const DevHost& /*devHost*/)
                 V3Real,
                 llama::mapping::Blobs::Single,
                 llama::mapping::SubArrayAlignment::Pack,
-                llama::mapping::LinearizeArrayDimsFortran>(fieldExtents);
+                llama::mapping::LinearizeArrayIndexLeft>(fieldExtents);
         if constexpr(FieldMapping == 5)
             return llama::mapping::SoA<
                 ArrayExtents,
                 V3Real,
                 llama::mapping::Blobs::Single,
                 llama::mapping::SubArrayAlignment::Pack,
-                llama::mapping::LinearizeArrayDimsMorton>(fieldExtents);
+                llama::mapping::LinearizeArrayIndexMorton>(fieldExtents);
         if constexpr(FieldMapping == 6)
             return llama::mapping::SoA<ArrayExtents, V3Real, llama::mapping::Blobs::OnePerField>(fieldExtents);
         if constexpr(FieldMapping == 7)
@@ -300,14 +300,14 @@ auto setup(Queue& queue, const Dev& dev, const DevHost& /*devHost*/)
                 V3Real,
                 llama::mapping::Blobs::OnePerField,
                 llama::mapping::SubArrayAlignment::Pack,
-                llama::mapping::LinearizeArrayDimsFortran>(fieldExtents);
+                llama::mapping::LinearizeArrayIndexLeft>(fieldExtents);
         if constexpr(FieldMapping == 8)
             return llama::mapping::SoA<
                 ArrayExtents,
                 V3Real,
                 llama::mapping::Blobs::OnePerField,
                 llama::mapping::SubArrayAlignment::Pack,
-                llama::mapping::LinearizeArrayDimsMorton>(fieldExtents);
+                llama::mapping::LinearizeArrayIndexMorton>(fieldExtents);
         if constexpr(FieldMapping == 9)
             return llama::mapping::AoSoA<ArrayExtents, V3Real, aosoaLanes>{fieldExtents};
     }();

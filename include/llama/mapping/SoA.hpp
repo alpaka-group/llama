@@ -27,7 +27,7 @@ namespace llama::mapping
     /// \tparam TSubArrayAlignment Only relevant when TBlobs == Single, ignored otherwise. If Align, aligns the sub
     /// arrays created within the single blob by inserting padding. If the array extents are dynamic, this may add some
     /// overhead to the mapping logic.
-    /// \tparam TLinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
+    /// \tparam TLinearizeArrayIndexFunctor Defines how the array dimensions should be mapped into linear numbers and
     /// how big the linear domain gets.
     /// \tparam PermuteFieldsSingleBlob Defines how the record dimension's fields should be permuted if Blobs is
     /// Single. See \ref PermuteFieldsInOrder, \ref PermuteFieldsIncreasingAlignment, \ref
@@ -38,7 +38,7 @@ namespace llama::mapping
         Blobs TBlobs = Blobs::OnePerField,
         SubArrayAlignment TSubArrayAlignment
         = TBlobs == Blobs::Single ? SubArrayAlignment::Align : SubArrayAlignment::Pack,
-        typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
+        typename TLinearizeArrayIndexFunctor = LinearizeArrayIndexRight,
         template<typename> typename PermuteFieldsSingleBlob = PermuteFieldsInOrder>
     struct SoA : MappingBase<TArrayExtents, TRecordDim>
     {
@@ -49,7 +49,7 @@ namespace llama::mapping
     public:
         inline static constexpr Blobs blobs = TBlobs;
         inline static constexpr SubArrayAlignment subArrayAlignment = TSubArrayAlignment;
-        using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
+        using LinearizeArrayIndexFunctor = TLinearizeArrayIndexFunctor;
         using Permuter = PermuteFieldsSingleBlob<FlatRecordDim<TRecordDim>>;
         inline static constexpr std::size_t blobCount
             = blobs == Blobs::OnePerField ? mp_size<FlatRecordDim<TRecordDim>>::value : 1;
@@ -67,7 +67,7 @@ namespace llama::mapping
         LLAMA_FN_HOST_ACC_INLINE
         constexpr auto blobSize([[maybe_unused]] size_type blobIndex) const -> size_type
         {
-            const auto flatSize = LinearizeArrayDimsFunctor{}.size(Base::extents());
+            const auto flatSize = LinearizeArrayIndexFunctor{}.size(Base::extents());
             if constexpr(blobs == Blobs::OnePerField)
             {
                 constexpr auto typeSizes = []() constexpr
@@ -102,7 +102,7 @@ namespace llama::mapping
         static LLAMA_CONSTEVAL auto computeSubArrayOffsets()
         {
             using FRD = typename Permuter::FlatRecordDim;
-            constexpr auto staticFlatSize = LinearizeArrayDimsFunctor{}.size(TArrayExtents{});
+            constexpr auto staticFlatSize = LinearizeArrayIndexFunctor{}.size(TArrayExtents{});
             constexpr auto subArrays = mp_size<FRD>::value;
             Array<size_type, subArrays> r{};
             // r[0] == 0, only compute the following offsets
@@ -125,7 +125,7 @@ namespace llama::mapping
             typename Base::ArrayIndex ai,
             RecordCoord<RecordCoords...> = {}) const -> NrAndOffset<size_type>
         {
-            const size_type elementOffset = LinearizeArrayDimsFunctor{}(ai, Base::extents())
+            const size_type elementOffset = LinearizeArrayIndexFunctor{}(ai, Base::extents())
                 * static_cast<size_type>(sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>));
             if constexpr(blobs == Blobs::OnePerField)
             {
@@ -139,7 +139,7 @@ namespace llama::mapping
                     *& // mess with nvcc compiler state to workaround bug
 #endif
                      Permuter::template permute<flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>>;
-                const size_type flatSize = LinearizeArrayDimsFunctor{}.size(Base::extents());
+                const size_type flatSize = LinearizeArrayIndexFunctor{}.size(Base::extents());
                 using FRD = typename Permuter::FlatRecordDim;
                 if constexpr(subArrayAlignment == SubArrayAlignment::Align)
                 {
@@ -184,32 +184,32 @@ namespace llama::mapping
 
     /// Struct of array mapping storing the entire layout in a single blob. The starts of the sub arrays are aligned by
     /// inserting padding. \see SoA
-    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
+    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
     using AlignedSingleBlobSoA
-        = SoA<ArrayExtents, RecordDim, Blobs::Single, SubArrayAlignment::Align, LinearizeArrayDimsFunctor>;
+        = SoA<ArrayExtents, RecordDim, Blobs::Single, SubArrayAlignment::Align, LinearizeArrayIndexFunctor>;
 
     /// Struct of array mapping storing the entire layout in a single blob. The sub arrays are tightly packed,
     /// violating the type's alignment requirements. \see SoA
-    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
+    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
     using PackedSingleBlobSoA
-        = SoA<ArrayExtents, RecordDim, Blobs::Single, SubArrayAlignment::Pack, LinearizeArrayDimsFunctor>;
+        = SoA<ArrayExtents, RecordDim, Blobs::Single, SubArrayAlignment::Pack, LinearizeArrayIndexFunctor>;
 
     /// Struct of array mapping storing each attribute of the record dimension in a separate blob.
     /// \see SoA
-    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
+    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
     using MultiBlobSoA
-        = SoA<ArrayExtents, RecordDim, Blobs::OnePerField, SubArrayAlignment::Pack, LinearizeArrayDimsFunctor>;
+        = SoA<ArrayExtents, RecordDim, Blobs::OnePerField, SubArrayAlignment::Pack, LinearizeArrayIndexFunctor>;
 
     /// Binds parameters to an \ref SoA mapping except for array and record dimension, producing a quoted
     /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
     template<
         Blobs Blobs = Blobs::OnePerField,
         SubArrayAlignment SubArrayAlignment = SubArrayAlignment::Pack,
-        typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
+        typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
     struct BindSoA
     {
         template<typename ArrayExtents, typename RecordDim>
-        using fn = SoA<ArrayExtents, RecordDim, Blobs, SubArrayAlignment, LinearizeArrayDimsFunctor>;
+        using fn = SoA<ArrayExtents, RecordDim, Blobs, SubArrayAlignment, LinearizeArrayIndexFunctor>;
     };
 
     template<typename Mapping>
@@ -220,7 +220,7 @@ namespace llama::mapping
         typename RecordDim,
         Blobs Blobs,
         SubArrayAlignment SubArrayAlignment,
-        typename LinearizeArrayDimsFunctor>
-    inline constexpr bool isSoA<SoA<ArrayExtents, RecordDim, Blobs, SubArrayAlignment, LinearizeArrayDimsFunctor>>
+        typename LinearizeArrayIndexFunctor>
+    inline constexpr bool isSoA<SoA<ArrayExtents, RecordDim, Blobs, SubArrayAlignment, LinearizeArrayIndexFunctor>>
         = true;
 } // namespace llama::mapping

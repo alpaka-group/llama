@@ -191,11 +191,11 @@ RecordDim field permuters
 Common utilities
 ^^^^^^^^^^^^^^^^
 
-.. doxygenstruct:: llama::mapping::LinearizeArrayDimsCpp
+.. doxygenstruct:: llama::mapping::LinearizeArrayIndexRight
    :members:
-.. doxygenstruct:: llama::mapping::LinearizeArrayDimsFortran
+.. doxygenstruct:: llama::mapping::LinearizeArrayIndexLeft
    :members:
-.. doxygenstruct:: llama::mapping::LinearizeArrayDimsMorton
+.. doxygenstruct:: llama::mapping::LinearizeArrayIndexMorton
    :members:
 
 Tree mapping (deprecated)

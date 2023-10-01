@@ -318,14 +318,14 @@ TEMPLATE_TEST_CASE(
         std::uint32_t,
         unsigned,
         llama::mapping::SignBit::Keep,
-        llama::mapping::LinearizeArrayDimsCpp,
+        llama::mapping::LinearizeArrayIndexRight,
         std::uint32_t>),
     (llama::mapping::BitPackedIntAoS<
         llama::ArrayExtents<std::size_t, 16>,
         std::uint32_t,
         unsigned,
         llama::mapping::SignBit::Keep,
-        llama::mapping::LinearizeArrayDimsCpp,
+        llama::mapping::LinearizeArrayIndexRight,
         llama::mapping::PermuteFieldsInOrder,
         std::uint32_t>) )
 {

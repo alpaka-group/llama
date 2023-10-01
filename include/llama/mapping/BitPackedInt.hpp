@@ -236,13 +236,13 @@ namespace llama::mapping
             typename TRecordDim,
             typename Bits,
             SignBit SignBit,
-            typename TLinearizeArrayDimsFunctor,
+            typename TLinearizeArrayIndexFunctor,
             typename TStoredIntegral>
         struct BitPackedIntCommon
             : MappingBase<TArrayExtents, TRecordDim>
             , protected llama::internal::BoxedValue<Bits>
         {
-            using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
+            using LinearizeArrayIndexFunctor = TLinearizeArrayIndexFunctor;
             using StoredIntegral = TStoredIntegral;
 
             static_assert(std::is_integral_v<StoredIntegral>);
@@ -350,7 +350,7 @@ namespace llama::mapping
     /// Must not be zero and must not be bigger than the bits of TStoredIntegral.
     /// @tparam SignBit When set to SignBit::Discard, discards the sign bit when storing signed integers. All
     /// numbers will be read back positive.
-    /// \tparam TLinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
+    /// \tparam TLinearizeArrayIndexFunctor Defines how the array dimensions should be mapped into linear numbers and
     /// how big the linear domain gets.
     /// \tparam TStoredIntegral Integral type used as storage of reduced precision integers. Must be std::uint32_t or
     /// std::uint64_t.
@@ -359,15 +359,20 @@ namespace llama::mapping
         typename TRecordDim,
         typename Bits = typename TArrayExtents::value_type,
         SignBit SignBit = SignBit::Keep,
-        typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
+        typename TLinearizeArrayIndexFunctor = LinearizeArrayIndexRight,
         typename TStoredIntegral = internal::StoredUnsignedFor<TRecordDim>>
     struct BitPackedIntSoA
-        : internal::
-              BitPackedIntCommon<TArrayExtents, TRecordDim, Bits, SignBit, TLinearizeArrayDimsFunctor, TStoredIntegral>
+        : internal::BitPackedIntCommon<
+              TArrayExtents,
+              TRecordDim,
+              Bits,
+              SignBit,
+              TLinearizeArrayIndexFunctor,
+              TStoredIntegral>
     {
     private:
         using Base = internal::
-            BitPackedIntCommon<TArrayExtents, TRecordDim, Bits, SignBit, TLinearizeArrayDimsFunctor, TStoredIntegral>;
+            BitPackedIntCommon<TArrayExtents, TRecordDim, Bits, SignBit, TLinearizeArrayIndexFunctor, TStoredIntegral>;
 
     public:
         using Base::Base;
@@ -380,7 +385,7 @@ namespace llama::mapping
         constexpr auto blobSize(size_type /*blobIndex*/) const -> size_type
         {
             constexpr auto bitsPerStoredIntegral = static_cast<size_type>(sizeof(TStoredIntegral) * CHAR_BIT);
-            const auto bitsNeeded = TLinearizeArrayDimsFunctor{}.size(Base::extents()) * VHBits::value();
+            const auto bitsNeeded = TLinearizeArrayIndexFunctor{}.size(Base::extents()) * VHBits::value();
             return roundUpToMultiple(bitsNeeded, bitsPerStoredIntegral) / CHAR_BIT;
         }
 
@@ -391,7 +396,7 @@ namespace llama::mapping
             Blobs& blobs) const
         {
             constexpr auto blob = flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>;
-            const auto bitOffset = TLinearizeArrayDimsFunctor{}(ai, Base::extents()) * VHBits::value();
+            const auto bitOffset = TLinearizeArrayIndexFunctor{}(ai, Base::extents()) * VHBits::value();
 
             using QualifiedStoredIntegral = CopyConst<Blobs, TStoredIntegral>;
             using DstType = GetType<TRecordDim, RecordCoord<RecordCoords...>>;
@@ -409,7 +414,7 @@ namespace llama::mapping
     template<
         typename Bits = void,
         SignBit SignBit = SignBit::Keep,
-        typename LinearizeArrayDimsFunctor = mapping::LinearizeArrayDimsCpp,
+        typename LinearizeArrayIndexFunctor = mapping::LinearizeArrayIndexRight,
         typename StoredIntegral = void>
     struct BindBitPackedIntSoA
     {
@@ -419,7 +424,7 @@ namespace llama::mapping
             RecordDim,
             std::conditional_t<!std::is_void_v<Bits>, Bits, typename ArrayExtents::value_type>,
             SignBit,
-            LinearizeArrayDimsFunctor,
+            LinearizeArrayIndexFunctor,
             std::conditional_t<
                 !std::is_void_v<StoredIntegral>,
                 StoredIntegral,
@@ -434,10 +439,10 @@ namespace llama::mapping
         typename RecordDim,
         typename Bits,
         SignBit SignBit,
-        typename LinearizeArrayDimsFunctor,
+        typename LinearizeArrayIndexFunctor,
         typename StoredIntegral>
     inline constexpr bool isBitPackedIntSoA<
-        BitPackedIntSoA<ArrayExtents, RecordDim, Bits, SignBit, LinearizeArrayDimsFunctor, StoredIntegral>>
+        BitPackedIntSoA<ArrayExtents, RecordDim, Bits, SignBit, LinearizeArrayIndexFunctor, StoredIntegral>>
         = true;
 
     /// Array of struct mapping using bit packing to reduce size/precision of integral data types. If your record
@@ -447,7 +452,7 @@ namespace llama::mapping
     /// Must not be zero and must not be bigger than the bits of TStoredIntegral.
     /// @tparam SignBit When set to SignBit::Discard, discards the sign bit when storing signed integers. All
     /// numbers will be read back positive.
-    /// \tparam TLinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
+    /// \tparam TLinearizeArrayIndexFunctor Defines how the array dimensions should be mapped into linear numbers and
     /// how big the linear domain gets.
     /// \tparam PermuteFields Defines how the record dimension's fields should be permuted. See \ref
     //  PermuteFieldsInOrder, \ref PermuteFieldsIncreasingAlignment, \ref PermuteFieldsDecreasingAlignment and
@@ -459,16 +464,21 @@ namespace llama::mapping
         typename TRecordDim,
         typename Bits = typename TArrayExtents::value_type,
         SignBit SignBit = SignBit::Keep,
-        typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
+        typename TLinearizeArrayIndexFunctor = LinearizeArrayIndexRight,
         template<typename> typename PermuteFields = PermuteFieldsInOrder,
         typename TStoredIntegral = internal::StoredUnsignedFor<TRecordDim>>
     struct BitPackedIntAoS
-        : internal::
-              BitPackedIntCommon<TArrayExtents, TRecordDim, Bits, SignBit, TLinearizeArrayDimsFunctor, TStoredIntegral>
+        : internal::BitPackedIntCommon<
+              TArrayExtents,
+              TRecordDim,
+              Bits,
+              SignBit,
+              TLinearizeArrayIndexFunctor,
+              TStoredIntegral>
     {
     private:
         using Base = internal::
-            BitPackedIntCommon<TArrayExtents, TRecordDim, Bits, SignBit, TLinearizeArrayDimsFunctor, TStoredIntegral>;
+            BitPackedIntCommon<TArrayExtents, TRecordDim, Bits, SignBit, TLinearizeArrayIndexFunctor, TStoredIntegral>;
 
     public:
         using Base::Base;
@@ -482,7 +492,7 @@ namespace llama::mapping
         constexpr auto blobSize(size_type /*blobIndex*/) const -> size_type
         {
             constexpr auto bitsPerStoredIntegral = static_cast<size_type>(sizeof(TStoredIntegral) * CHAR_BIT);
-            const auto bitsNeeded = TLinearizeArrayDimsFunctor{}.size(Base::extents())
+            const auto bitsNeeded = TLinearizeArrayIndexFunctor{}.size(Base::extents())
                 * static_cast<size_type>(VHBits::value()) * static_cast<size_type>(flatFieldCount<TRecordDim>);
             return roundUpToMultiple(bitsNeeded, bitsPerStoredIntegral) / CHAR_BIT;
         }
@@ -495,7 +505,7 @@ namespace llama::mapping
         {
             constexpr auto flatFieldIndex = static_cast<size_type>(
                 Permuter::template permute<flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>>);
-            const auto bitOffset = ((TLinearizeArrayDimsFunctor{}(ai, Base::extents())
+            const auto bitOffset = ((TLinearizeArrayIndexFunctor{}(ai, Base::extents())
                                      * static_cast<size_type>(flatFieldCount<TRecordDim>))
                                     + flatFieldIndex)
                 * static_cast<size_type>(VHBits::value());
@@ -516,7 +526,7 @@ namespace llama::mapping
     template<
         typename Bits = void,
         SignBit SignBit = SignBit::Keep,
-        typename LinearizeArrayDimsFunctor = mapping::LinearizeArrayDimsCpp,
+        typename LinearizeArrayIndexFunctor = mapping::LinearizeArrayIndexRight,
         template<typename> typename PermuteFields = PermuteFieldsInOrder,
         typename StoredIntegral = void>
     struct BindBitPackedIntAoS
@@ -527,7 +537,7 @@ namespace llama::mapping
             RecordDim,
             std::conditional_t<!std::is_void_v<Bits>, Bits, typename ArrayExtents::value_type>,
             SignBit,
-            LinearizeArrayDimsFunctor,
+            LinearizeArrayIndexFunctor,
             PermuteFields,
             std::conditional_t<
                 !std::is_void_v<StoredIntegral>,
@@ -543,7 +553,7 @@ namespace llama::mapping
         typename RecordDim,
         typename Bits,
         SignBit SignBit,
-        typename LinearizeArrayDimsFunctor,
+        typename LinearizeArrayIndexFunctor,
         template<typename>
         typename PermuteFields,
         typename StoredIntegral>
@@ -552,7 +562,7 @@ namespace llama::mapping
         RecordDim,
         Bits,
         SignBit,
-        LinearizeArrayDimsFunctor,
+        LinearizeArrayIndexFunctor,
         PermuteFields,
         StoredIntegral>>
         = true;

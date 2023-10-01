@@ -193,7 +193,7 @@ namespace llama::mapping
     /// use to store the exponent. If ExponentBits is llama::Value<T>, the number of bits is specified at runtime,
     /// passed to the constructor and stored as type T. Must not be zero.
     /// \tparam MantissaBits Like ExponentBits but for the mantissa bits. Must not be zero (otherwise values turn INF).
-    /// \tparam TLinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
+    /// \tparam TLinearizeArrayIndexFunctor Defines how the array dimensions should be mapped into linear numbers and
     /// how big the linear domain gets.
     /// \tparam TStoredIntegral Integral type used as storage of reduced precision floating-point values.
     template<
@@ -201,7 +201,7 @@ namespace llama::mapping
         typename TRecordDim,
         typename ExponentBits = typename TArrayExtents::value_type,
         typename MantissaBits = ExponentBits,
-        typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
+        typename TLinearizeArrayIndexFunctor = LinearizeArrayIndexRight,
         typename TStoredIntegral = internal::StoredIntegralFor<TRecordDim>>
     struct LLAMA_DECLSPEC_EMPTY_BASES BitPackedFloatSoA
         : MappingBase<TArrayExtents, TRecordDim>
@@ -215,7 +215,7 @@ namespace llama::mapping
         using size_type = typename TArrayExtents::value_type;
 
     public:
-        using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
+        using LinearizeArrayIndexFunctor = TLinearizeArrayIndexFunctor;
         using StoredIntegral = TStoredIntegral;
         static constexpr std::size_t blobCount = mp_size<FlatRecordDim<TRecordDim>>::value;
 
@@ -249,7 +249,7 @@ namespace llama::mapping
         {
             constexpr auto bitsPerStoredIntegral = static_cast<size_type>(sizeof(StoredIntegral) * CHAR_BIT);
             const auto bitsNeeded
-                = LinearizeArrayDimsFunctor{}.size(Base::extents()) * (exponentBits() + mantissaBits() + 1);
+                = LinearizeArrayIndexFunctor{}.size(Base::extents()) * (exponentBits() + mantissaBits() + 1);
             return roundUpToMultiple(bitsNeeded, bitsPerStoredIntegral) / CHAR_BIT;
         }
 
@@ -267,7 +267,7 @@ namespace llama::mapping
         {
             constexpr auto blob = llama::flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>;
             const auto bitOffset
-                = LinearizeArrayDimsFunctor{}(ai, Base::extents()) * (exponentBits() + mantissaBits() + 1);
+                = LinearizeArrayIndexFunctor{}(ai, Base::extents()) * (exponentBits() + mantissaBits() + 1);
 
             using QualifiedStoredIntegral = CopyConst<Blobs, StoredIntegral>;
             using DstType = GetType<TRecordDim, RecordCoord<RecordCoords...>>;
@@ -286,7 +286,7 @@ namespace llama::mapping
     template<
         typename ExponentBits = unsigned,
         typename MantissaBits = ExponentBits,
-        typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
+        typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight,
         typename StoredIntegral = void>
     struct BindBitPackedFloatSoA
     {
@@ -296,7 +296,7 @@ namespace llama::mapping
             RecordDim,
             ExponentBits,
             MantissaBits,
-            LinearizeArrayDimsFunctor,
+            LinearizeArrayIndexFunctor,
             std::conditional_t<
                 !std::is_void_v<StoredIntegral>,
                 StoredIntegral,
@@ -314,7 +314,7 @@ namespace llama::mapping
         typename TRecordDim,
         typename ExponentBits = typename TArrayExtents::value_type,
         typename MantissaBits = ExponentBits,
-        typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
+        typename TLinearizeArrayIndexFunctor = LinearizeArrayIndexRight,
         template<typename> typename PermuteFields = PermuteFieldsInOrder,
         typename TStoredIntegral = internal::StoredIntegralFor<TRecordDim>>
     struct LLAMA_DECLSPEC_EMPTY_BASES BitPackedFloatAoS
@@ -329,7 +329,7 @@ namespace llama::mapping
         using size_type = typename TArrayExtents::value_type;
 
     public:
-        using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
+        using LinearizeArrayIndexFunctor = TLinearizeArrayIndexFunctor;
         using StoredIntegral = TStoredIntegral;
 
         using Permuter = PermuteFields<FlatRecordDim<TRecordDim>>;
@@ -364,7 +364,7 @@ namespace llama::mapping
         constexpr auto blobSize(size_type /*blobIndex*/) const -> size_type
         {
             constexpr auto bitsPerStoredIntegral = static_cast<size_type>(sizeof(StoredIntegral) * CHAR_BIT);
-            const auto bitsNeeded = TLinearizeArrayDimsFunctor{}.size(Base::extents())
+            const auto bitsNeeded = TLinearizeArrayIndexFunctor{}.size(Base::extents())
                 * static_cast<size_type>(exponentBits() + mantissaBits() + 1)
                 * static_cast<size_type>(flatFieldCount<TRecordDim>);
             return roundUpToMultiple(bitsNeeded, bitsPerStoredIntegral) / CHAR_BIT;
@@ -384,7 +384,7 @@ namespace llama::mapping
         {
             constexpr auto flatFieldIndex = static_cast<size_type>(
                 Permuter::template permute<flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>>);
-            const auto bitOffset = ((TLinearizeArrayDimsFunctor{}(ai, Base::extents())
+            const auto bitOffset = ((TLinearizeArrayIndexFunctor{}(ai, Base::extents())
                                      * static_cast<size_type>(flatFieldCount<TRecordDim>))
                                     + flatFieldIndex)
                 * static_cast<size_type>(exponentBits() + mantissaBits() + 1);
@@ -404,7 +404,7 @@ namespace llama::mapping
     template<
         typename ExponentBits = unsigned,
         typename MantissaBits = ExponentBits,
-        typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
+        typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight,
         template<typename> typename PermuteFields = PermuteFieldsInOrder,
         typename StoredIntegral = void>
     struct BindBitPackedFloatAoS
@@ -415,7 +415,7 @@ namespace llama::mapping
             RecordDim,
             ExponentBits,
             MantissaBits,
-            LinearizeArrayDimsFunctor,
+            LinearizeArrayIndexFunctor,
             PermuteFields,
             std::conditional_t<
                 !std::is_void_v<StoredIntegral>,
@@ -431,7 +431,7 @@ namespace llama::mapping
         typename RecordDim,
         typename ExponentBits,
         typename MantissaBits,
-        typename LinearizeArrayDimsFunctor,
+        typename LinearizeArrayIndexFunctor,
         template<typename>
         typename PermuteFields,
         typename StoredIntegral>
@@ -440,7 +440,7 @@ namespace llama::mapping
         RecordDim,
         ExponentBits,
         MantissaBits,
-        LinearizeArrayDimsFunctor,
+        LinearizeArrayIndexFunctor,
         PermuteFields,
         StoredIntegral>>
         = true;

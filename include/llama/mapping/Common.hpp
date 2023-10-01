@@ -37,10 +37,10 @@ namespace llama::mapping
         }
     };
 
-    /// Functor that maps an \ref ArrayIndex into linear numbers the way C++ arrays work. The fast moving index of the
-    /// ArrayIndex object should be the last one. E.g. ArrayIndex<3> a; stores 3 indices where a[2] should be
-    /// incremented in the innermost loop.
-    struct LinearizeArrayDimsCpp
+    /// Functor that maps an \ref ArrayIndex into linear numbers, where the fast moving index should be the rightmost
+    /// one, which models how C++ arrays work and is analogous to mdspan's layout_right. E.g. ArrayIndex<3> a; stores 3
+    /// indices where a[2] should be incremented in the innermost loop.
+    struct LinearizeArrayIndexRight
     {
         template<typename ArrayExtents>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const ArrayExtents& extents) -> typename ArrayExtents::value_type
@@ -71,10 +71,12 @@ namespace llama::mapping
         }
     };
 
+    using LinearizeArrayIndexCpp = LinearizeArrayIndexRight;
+
     /// Functor that maps a \ref ArrayIndex into linear numbers the way Fortran arrays work. The fast moving index of
-    /// the ArrayIndex object should be the last one. E.g. ArrayIndex<3> a; stores 3 indices where a[2] should be
+    /// the ArrayIndex object should be the last one. E.g. ArrayIndex<3> a; stores 3 indices where a[0] should be
     /// incremented in the innermost loop.
-    struct LinearizeArrayDimsFortran
+    struct LinearizeArrayIndexLeft
     {
         template<typename ArrayExtents>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const ArrayExtents& extents) -> typename ArrayExtents::value_type
@@ -105,8 +107,10 @@ namespace llama::mapping
         }
     };
 
+    using LinearizeArrayIndexFortran = LinearizeArrayIndexLeft;
+
     /// Functor that maps an \ref ArrayIndex into linear numbers using the Z-order space filling curve (Morton codes).
-    struct LinearizeArrayDimsMorton
+    struct LinearizeArrayIndexMorton
     {
         template<typename ArrayExtents>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const ArrayExtents& extents) const ->

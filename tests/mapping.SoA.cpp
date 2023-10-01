@@ -74,7 +74,7 @@ TEST_CASE("mapping.SoA.SingleBlob.Packed.fortran.address")
         CAPTURE(arrayExtents);
 
         using Mapping = llama::mapping::
-            PackedSingleBlobSoA<decltype(arrayExtents), Particle, llama::mapping::LinearizeArrayDimsFortran>;
+            PackedSingleBlobSoA<decltype(arrayExtents), Particle, llama::mapping::LinearizeArrayIndexLeft>;
         auto mapping = Mapping{arrayExtents};
         using ArrayIndex = typename Mapping::ArrayExtents::Index;
 
@@ -139,7 +139,7 @@ TEST_CASE("mapping.SoA.SingleBlob.Packed.morton.address")
         CAPTURE(arrayExtents);
 
         using Mapping = llama::mapping::
-            PackedSingleBlobSoA<decltype(arrayExtents), Particle, llama::mapping::LinearizeArrayDimsMorton>;
+            PackedSingleBlobSoA<decltype(arrayExtents), Particle, llama::mapping::LinearizeArrayIndexMorton>;
         auto mapping = Mapping{arrayExtents};
         using ArrayIndex = typename Mapping::ArrayExtents::Index;
 
@@ -271,7 +271,7 @@ TEST_CASE("mapping.SoA.SingleBlob.Aligned.fortran.address")
         CAPTURE(arrayExtents);
 
         using Mapping = llama::mapping::
-            AlignedSingleBlobSoA<decltype(arrayExtents), Particle, llama::mapping::LinearizeArrayDimsFortran>;
+            AlignedSingleBlobSoA<decltype(arrayExtents), Particle, llama::mapping::LinearizeArrayIndexLeft>;
         auto mapping = Mapping{arrayExtents};
         using ArrayIndex = typename Mapping::ArrayExtents::Index;
 
@@ -339,7 +339,7 @@ TEST_CASE("mapping.SoA.SingleBlob.Aligned.morton.address")
         CAPTURE(arrayExtents);
 
         using Mapping = llama::mapping::
-            AlignedSingleBlobSoA<decltype(arrayExtents), Particle, llama::mapping::LinearizeArrayDimsMorton>;
+            AlignedSingleBlobSoA<decltype(arrayExtents), Particle, llama::mapping::LinearizeArrayIndexMorton>;
         auto mapping = Mapping{arrayExtents};
         using ArrayIndex = typename Mapping::ArrayExtents::Index;
 
