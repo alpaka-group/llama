@@ -33,7 +33,7 @@ namespace llama::mapping
         typename TArrayExtents,
         typename TRecordDim,
         typename TArrayExtents::value_type Lanes,
-        typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
+        typename TLinearizeArrayIndexFunctor = LinearizeArrayIndexRight,
         template<typename> typename PermuteFields = PermuteFieldsInOrder>
     struct AoSoA : MappingBase<TArrayExtents, TRecordDim>
     {
@@ -43,7 +43,7 @@ namespace llama::mapping
 
     public:
         inline static constexpr typename TArrayExtents::value_type lanes = Lanes;
-        using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
+        using LinearizeArrayIndexFunctor = TLinearizeArrayIndexFunctor;
         using Permuter = PermuteFields<FlatRecordDim<TRecordDim>>;
         inline static constexpr std::size_t blobCount = 1;
 
@@ -60,7 +60,7 @@ namespace llama::mapping
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(size_type) const -> size_type
         {
             const auto rs = static_cast<size_type>(sizeOf<TRecordDim>);
-            return roundUpToMultiple(LinearizeArrayDimsFunctor{}.size(Base::extents()) * rs, Lanes * rs);
+            return roundUpToMultiple(LinearizeArrayIndexFunctor{}.size(Base::extents()) * rs, Lanes * rs);
         }
 
         template<std::size_t... RecordCoords>
@@ -73,7 +73,7 @@ namespace llama::mapping
                 *& // mess with nvcc compiler state to workaround bug
 #endif
                  Permuter::template permute<flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>>;
-            const auto flatArrayIndex = LinearizeArrayDimsFunctor{}(ai, Base::extents());
+            const auto flatArrayIndex = LinearizeArrayIndexFunctor{}(ai, Base::extents());
             const auto blockIndex = flatArrayIndex / Lanes;
             const auto laneIndex = flatArrayIndex % Lanes;
             const auto offset = static_cast<size_type>(sizeOf<TRecordDim> * Lanes) * blockIndex
@@ -85,11 +85,11 @@ namespace llama::mapping
 
     /// Binds parameters to an \ref AoSoA mapping except for array and record dimension, producing a quoted meta
     /// function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
-    template<std::size_t Lanes, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
+    template<std::size_t Lanes, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
     struct BindAoSoA
     {
         template<typename ArrayExtents, typename RecordDim>
-        using fn = AoSoA<ArrayExtents, RecordDim, Lanes, LinearizeArrayDimsFunctor>;
+        using fn = AoSoA<ArrayExtents, RecordDim, Lanes, LinearizeArrayIndexFunctor>;
     };
 
     template<typename Mapping>

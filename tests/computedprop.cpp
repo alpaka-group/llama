@@ -87,7 +87,7 @@ namespace
     template<
         typename TArrayExtents,
         typename TRecordDim,
-        typename LinearizeArrayDimsFunctor = llama::mapping::LinearizeArrayDimsCpp>
+        typename LinearizeArrayIndexFunctor = llama::mapping::LinearizeArrayIndexRight>
     struct CompressedBoolMapping : TArrayExtents
     {
         using ArrayExtents = TArrayExtents;
@@ -131,7 +131,7 @@ namespace
                 [](auto rc) constexpr
                 { static_assert(std::is_same_v<llama::GetType<RecordDim, decltype(rc)>, bool>); });
             constexpr std::size_t wordBytes = sizeof(Word);
-            return (LinearizeArrayDimsFunctor{}.size(extents()) + wordBytes - 1) / wordBytes;
+            return (LinearizeArrayIndexFunctor{}.size(extents()) + wordBytes - 1) / wordBytes;
         }
 
         template<std::size_t... RecordCoords>
@@ -146,7 +146,7 @@ namespace
             llama::RecordCoord<RecordCoords...>,
             llama::Array<Blob, blobCount>& blobs) const -> BoolRef
         {
-            const auto bitOffset = LinearizeArrayDimsFunctor{}(ai, extents());
+            const auto bitOffset = LinearizeArrayIndexFunctor{}(ai, extents());
             const auto blob = llama::flatRecordCoord<RecordDim, llama::RecordCoord<RecordCoords...>>;
 
             constexpr std::size_t wordBits = sizeof(Word) * CHAR_BIT;

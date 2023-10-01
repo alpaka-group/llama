@@ -114,9 +114,9 @@ However, they do not vectorize well in practice.
     llama::mapping::AoS<ArrayExtents, RecordDim> mapping{extents}; 
     llama::mapping::AoS<ArrayExtents, RecordDim, false> mapping{extents}; // pack fields (violates alignment)
     llama::mapping::AoS<ArrayExtents, RecordDim, false
-        llama::mapping::LinearizeArrayDimsFortran> mapping{extents}; // pack fields, column major
+        llama::mapping::LinearizeArrayIndexLeft> mapping{extents}; // pack fields, column major
 
-By default, the array dimensions spanned by :cpp:`ArrayExtents` are linearized using :cpp:`llama::mapping::LinearizeArrayDimsCpp`.
+By default, the array dimensions spanned by :cpp:`ArrayExtents` are linearized using :cpp:`llama::mapping::LinearizeArrayIndexRight`.
 LLAMA provides the aliases :cpp:`llama::mapping::AlignedAoS` and :cpp:`llama::mapping::PackedAoS` for convenience.
 
 
@@ -132,9 +132,9 @@ This layout auto-vectorizes well in practice.
     llama::mapping::SoA<ArrayExtents, RecordDim> mapping{extents};
     llama::mapping::SoA<ArrayExtents, RecordDim, true> mapping{extents}; // separate blob for each attribute
     llama::mapping::SoA<ArrayExtents, RecordDim, true,
-        llama::mapping::LinearizeArrayDimsFortran> mapping{extents}; // separate blob for each attribute, column major
+        llama::mapping::LinearizeArrayIndexLeft> mapping{extents}; // separate blob for each attribute, column major
 
-By default, the array dimensions spanned by :cpp:`ArrayExtents` are linearized using :cpp:`llama::mapping::LinearizeArrayDimsCpp` and the layout is mapped into a single blob.
+By default, the array dimensions spanned by :cpp:`ArrayExtents` are linearized using :cpp:`llama::mapping::LinearizeArrayIndexRight` and the layout is mapped into a single blob.
 LLAMA provides the aliases :cpp:`llama::mapping::SingleBlobSoA` and :cpp:`llama::mapping::MultiBlobSoA` for convenience.
 
 
@@ -150,9 +150,9 @@ The AoSoA mapping has a mandatory additional parameter specifying the number of 
 
     llama::mapping::AoSoA<ArrayExtents, RecordDim, 8> mapping{extents}; // inner array has 8 values
     llama::mapping::AoSoA<ArrayExtents, RecordDim, 8,
-        llama::mapping::LinearizeArrayDimsFortran> mapping{extents}; // inner array has 8 values, column major
+        llama::mapping::LinearizeArrayIndexLeft> mapping{extents}; // inner array has 8 values, column major
 
-By default, the array dimensions spanned by :cpp:`ArrayExtents` are linearized using :cpp:`llama::mapping::LinearizeArrayDimsCpp`.
+By default, the array dimensions spanned by :cpp:`ArrayExtents` are linearized using :cpp:`llama::mapping::LinearizeArrayIndexRight`.
 
 LLAMA also provides a helper :cpp:`llama::mapping::maxLanes` which can be used to determine the maximum vector lanes which can be used for a given record dimension and vector register size.
 In this example, the inner array a size of N so even the largest type in the record dimension can fit N times into a vector register of 256bits size (e.g. AVX2).

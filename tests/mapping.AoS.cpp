@@ -70,7 +70,7 @@ TEST_CASE("mapping.AoS.Packed.fortran.address")
     auto test = [](auto arrayExtents)
     {
         using Mapping
-            = llama::mapping::PackedAoS<decltype(arrayExtents), Particle, llama::mapping::LinearizeArrayDimsFortran>;
+            = llama::mapping::PackedAoS<decltype(arrayExtents), Particle, llama::mapping::LinearizeArrayIndexLeft>;
         auto mapping = Mapping{arrayExtents};
         using ArrayIndex = typename Mapping::ArrayExtents::Index;
 
@@ -133,7 +133,7 @@ TEST_CASE("mapping.AoS.Packed.morton.address")
     auto test = [](auto arrayExtents)
     {
         using Mapping
-            = llama::mapping::PackedAoS<decltype(arrayExtents), Particle, llama::mapping::LinearizeArrayDimsMorton>;
+            = llama::mapping::PackedAoS<decltype(arrayExtents), Particle, llama::mapping::LinearizeArrayIndexMorton>;
         auto mapping = Mapping{arrayExtents};
         using ArrayIndex = typename Mapping::ArrayExtents::Index;
 

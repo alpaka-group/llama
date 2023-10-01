@@ -10,7 +10,7 @@ namespace llama::mapping
     /// Array of struct mapping. Used to create a \ref View via \ref allocView.
     /// \tparam Alignment If Align, padding bytes are inserted to guarantee that struct members are properly aligned.
     /// If Pack, struct members are tightly packed.
-    /// \tparam TLinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
+    /// \tparam TLinearizeArrayIndexFunctor Defines how the array dimensions should be mapped into linear numbers and
     /// how big the linear domain gets.
     /// \tparam PermuteFields Defines how the record dimension's fields should be permuted. See \ref
     /// PermuteFieldsInOrder, \ref PermuteFieldsIncreasingAlignment, \ref PermuteFieldsDecreasingAlignment and
@@ -19,7 +19,7 @@ namespace llama::mapping
         typename TArrayExtents,
         typename TRecordDim,
         FieldAlignment TFieldAlignment = FieldAlignment::Align,
-        typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
+        typename TLinearizeArrayIndexFunctor = LinearizeArrayIndexRight,
         template<typename> typename PermuteFields = PermuteFieldsInOrder>
     struct AoS : MappingBase<TArrayExtents, TRecordDim>
     {
@@ -29,7 +29,7 @@ namespace llama::mapping
 
     public:
         inline static constexpr FieldAlignment fieldAlignment = TFieldAlignment;
-        using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
+        using LinearizeArrayIndexFunctor = TLinearizeArrayIndexFunctor;
         using Permuter = PermuteFields<FlatRecordDim<TRecordDim>>;
         inline static constexpr std::size_t blobCount = 1;
 
@@ -37,7 +37,7 @@ namespace llama::mapping
 
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(size_type) const -> size_type
         {
-            return LinearizeArrayDimsFunctor{}.size(Base::extents())
+            return LinearizeArrayIndexFunctor{}.size(Base::extents())
                 * flatSizeOf<typename Permuter::FlatRecordDim, fieldAlignment == FieldAlignment::Align>;
         }
 
@@ -52,7 +52,7 @@ namespace llama::mapping
 #endif
                  Permuter::template permute<flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>>;
             const auto offset
-                = LinearizeArrayDimsFunctor{}(ai, Base::extents())
+                = LinearizeArrayIndexFunctor{}(ai, Base::extents())
                     * static_cast<size_type>(
                         flatSizeOf<typename Permuter::FlatRecordDim, fieldAlignment == FieldAlignment::Align>)
                 + static_cast<size_type>(flatOffsetOf<
@@ -69,29 +69,33 @@ namespace llama::mapping
 
     /// Array of struct mapping preserving the alignment of the field types by inserting padding.
     /// \see AoS
-    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
-    using AlignedAoS = AoS<ArrayExtents, RecordDim, FieldAlignment::Align, LinearizeArrayDimsFunctor>;
+    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
+    using AlignedAoS = AoS<ArrayExtents, RecordDim, FieldAlignment::Align, LinearizeArrayIndexFunctor>;
 
     /// Array of struct mapping preserving the alignment of the field types by inserting padding and permuting the
     /// field order to minimize this padding. \see AoS
-    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
-    using MinAlignedAoS
-        = AoS<ArrayExtents, RecordDim, FieldAlignment::Align, LinearizeArrayDimsFunctor, PermuteFieldsMinimizePadding>;
+    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
+    using MinAlignedAoS = AoS<
+        ArrayExtents,
+        RecordDim,
+        FieldAlignment::Align,
+        LinearizeArrayIndexFunctor,
+        PermuteFieldsMinimizePadding>;
 
     /// Array of struct mapping packing the field types tightly, violating the type's alignment requirements.
     /// \see AoS
-    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
-    using PackedAoS = AoS<ArrayExtents, RecordDim, FieldAlignment::Pack, LinearizeArrayDimsFunctor>;
+    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
+    using PackedAoS = AoS<ArrayExtents, RecordDim, FieldAlignment::Pack, LinearizeArrayIndexFunctor>;
 
     /// Binds parameters to an \ref AoS mapping except for array and record dimension, producing a quoted meta
     /// function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
     template<
         FieldAlignment Alignment = FieldAlignment::Align,
-        typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
+        typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
     struct BindAoS
     {
         template<typename ArrayExtents, typename RecordDim>
-        using fn = AoS<ArrayExtents, RecordDim, Alignment, LinearizeArrayDimsFunctor>;
+        using fn = AoS<ArrayExtents, RecordDim, Alignment, LinearizeArrayIndexFunctor>;
     };
 
     template<typename Mapping>
@@ -101,9 +105,10 @@ namespace llama::mapping
         typename ArrayExtents,
         typename RecordDim,
         FieldAlignment FieldAlignment,
-        typename LinearizeArrayDimsFunctor,
+        typename LinearizeArrayIndexFunctor,
         template<typename>
         typename PermuteFields>
-    inline constexpr bool isAoS<AoS<ArrayExtents, RecordDim, FieldAlignment, LinearizeArrayDimsFunctor, PermuteFields>>
+    inline constexpr bool
+        isAoS<AoS<ArrayExtents, RecordDim, FieldAlignment, LinearizeArrayIndexFunctor, PermuteFields>>
         = true;
 } // namespace llama::mapping

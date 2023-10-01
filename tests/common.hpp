@@ -220,7 +220,7 @@ struct ModulusMapping : TArrayExtents
         -> llama::NrAndOffset<std::size_t>
     {
         const auto blob = llama::flatRecordCoord<RecordDim, llama::RecordCoord<RecordCoords...>>;
-        const auto offset = (llama::mapping::LinearizeArrayDimsCpp{}(ai, extents()) % Modulus)
+        const auto offset = (llama::mapping::LinearizeArrayIndexRight{}(ai, extents()) % Modulus)
             * sizeof(llama::GetType<RecordDim, llama::RecordCoord<RecordCoords...>>);
         return {blob, offset};
     }
