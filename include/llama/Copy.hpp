@@ -191,15 +191,6 @@ namespace llama
             throw std::runtime_error{"Destination SoA mapping's total array elements must be evenly divisible by the "
                                      "source AoSoA Lane count."};
 
-        // the same as AoSoA::blobNrAndOffset but takes a flat array index
-        auto mapAoSoA = [](std::size_t flatArrayIndex, auto rc, std::size_t Lanes) LLAMA_LAMBDA_INLINE
-        {
-            const auto blockIndex = flatArrayIndex / Lanes;
-            const auto laneIndex = flatArrayIndex % Lanes;
-            const auto offset = (sizeOf<RecordDim> * Lanes) * blockIndex + offsetOf<RecordDim, decltype(rc)> * Lanes
-                + sizeof(GetType<RecordDim, decltype(rc)>) * laneIndex;
-            return offset;
-        };
         // the same as SoA::blobNrAndOffset but takes a flat array index
         auto mapSoA = [&](std::size_t flatArrayIndex, auto rc, bool mb) LLAMA_LAMBDA_INLINE
         {
@@ -212,7 +203,7 @@ namespace llama
         auto mapSrc = [&](std::size_t flatArrayIndex, auto rc) LLAMA_LAMBDA_INLINE
         {
             if constexpr(srcIsAoSoA)
-                return &srcView.blobs()[0][0] + mapAoSoA(flatArrayIndex, rc, lanesSrc);
+                return &srcView.blobs()[0][0] + srcView.mapping().blobNrAndOffset(flatArrayIndex, rc).offset;
             else
             {
                 const auto [blob, off] = mapSoA(flatArrayIndex, rc, isSrcMB);
@@ -222,7 +213,7 @@ namespace llama
         auto mapDst = [&](std::size_t flatArrayIndex, auto rc) LLAMA_LAMBDA_INLINE
         {
             if constexpr(dstIsAoSoA)
-                return &dstView.blobs()[0][0] + mapAoSoA(flatArrayIndex, rc, lanesDst);
+                return &dstView.blobs()[0][0] + dstView.mapping().blobNrAndOffset(flatArrayIndex, rc).offset;
             else
             {
                 const auto [blob, off] = mapSoA(flatArrayIndex, rc, isDstMB);

@@ -68,6 +68,15 @@ namespace llama::mapping
         template<std::size_t... RecordCoords>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
             typename Base::ArrayIndex ai,
+            RecordCoord<RecordCoords...> rc = {}) const -> NrAndOffset<size_type>
+        {
+            return blobNrAndOffset(LinearizeArrayIndexFunctor{}(ai, Base::extents()), rc);
+        }
+
+        // Exposed for aosoaCommonBlockCopy. Should be private ...
+        template<std::size_t... RecordCoords>
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
+            size_type flatArrayIndex,
             RecordCoord<RecordCoords...> = {}) const -> NrAndOffset<size_type>
         {
             constexpr std::size_t flatFieldIndex =
@@ -75,7 +84,6 @@ namespace llama::mapping
                 *& // mess with nvcc compiler state to workaround bug
 #endif
                  Permuter::template permute<flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>>;
-            const auto flatArrayIndex = LinearizeArrayIndexFunctor{}(ai, Base::extents());
             const auto blockIndex = flatArrayIndex / Lanes;
             const auto laneIndex = flatArrayIndex % Lanes;
             const auto offset = static_cast<size_type>(sizeOf<TRecordDim> * Lanes) * blockIndex
