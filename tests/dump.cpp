@@ -82,14 +82,24 @@ TEST_CASE("dump.Particle.SoA_MB")
     dump(llama::mapping::MultiBlobSoA<ArrayExtents, Particle>{extents});
 }
 
-TEST_CASE("dump.Particle.AoSoA8")
+TEST_CASE("dump.Particle.AoSoA8.Align")
 {
-    dump(llama::mapping::AoSoA<ArrayExtents, Particle, 8>{extents});
+    dump(llama::mapping::AoSoA<ArrayExtents, Particle, 8, llama::mapping::FieldAlignment::Align>{extents});
 }
 
-TEST_CASE("dump.Particle.AoSoA32")
+TEST_CASE("dump.Particle.AoSoA8.Pack")
 {
-    dump(llama::mapping::AoSoA<ArrayExtents, Particle, 32>{extents});
+    dump(llama::mapping::AoSoA<ArrayExtents, Particle, 8, llama::mapping::FieldAlignment::Pack>{extents});
+}
+
+TEST_CASE("dump.Particle.AoSoA32.Align")
+{
+    dump(llama::mapping::AoSoA<ArrayExtents, Particle, 32, llama::mapping::FieldAlignment::Align>{extents});
+}
+
+TEST_CASE("dump.Particle.AoSoA32.Pack")
+{
+    dump(llama::mapping::AoSoA<ArrayExtents, Particle, 32, llama::mapping::FieldAlignment::Pack>{extents});
 }
 
 TEST_CASE("dump.Particle.Split.SoA.AoS.1Buffer")

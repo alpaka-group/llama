@@ -65,10 +65,20 @@ namespace
             llama::mapping::LinearizeArrayIndexRight>,
         // llama::mapping::SoA<ArrayExtents, RecordDim, llama::mapping::Blobs::Single,
         // llama::mapping::SubArrayAlignment::Align, llama::mapping::LinearizeArrayIndexLeft>,
-        llama::mapping::AoSoA<ArrayExtents, RecordDim, 4, llama::mapping::LinearizeArrayIndexRight>,
+        llama::mapping::AoSoA<
+            ArrayExtents,
+            RecordDim,
+            4,
+            llama::mapping::FieldAlignment::Align,
+            llama::mapping::LinearizeArrayIndexRight>,
         // llama::mapping::AoSoA<ArrayExtents, RecordDim, 4, llama::mapping::LinearizeArrayIndexLeft>,
         // llama::mapping::AoSoA<ArrayExtents, RecordDim, 8, llama::mapping::LinearizeArrayIndexRight>,
-        llama::mapping::AoSoA<ArrayExtents, RecordDim, 8, llama::mapping::LinearizeArrayIndexLeft>>;
+        llama::mapping::AoSoA<
+            ArrayExtents,
+            RecordDim,
+            8,
+            llama::mapping::FieldAlignment::Pack,
+            llama::mapping::LinearizeArrayIndexLeft>>;
 
     using AllMappings = mp_append<AoSMappings, OtherMappings>;
 

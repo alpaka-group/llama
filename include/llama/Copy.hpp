@@ -172,11 +172,12 @@ namespace llama
             typename ArrayExtents,
             typename RecordDim,
             typename ArrayExtents::value_type Lanes,
+            mapping::FieldAlignment FA,
             typename LinearizeArrayIndexFunctor,
             template<typename>
             typename PermuteFields>
         inline constexpr std::size_t
-            aosoaLanes<mapping::AoSoA<ArrayExtents, RecordDim, Lanes, LinearizeArrayIndexFunctor, PermuteFields>>
+            aosoaLanes<mapping::AoSoA<ArrayExtents, RecordDim, Lanes, FA, LinearizeArrayIndexFunctor, PermuteFields>>
             = Lanes;
     } // namespace internal
 
@@ -364,19 +365,23 @@ namespace llama
         typename LinearizeArrayIndex,
         typename ArrayExtents::value_type LanesSrc,
         typename ArrayExtents::value_type LanesDst,
+        mapping::FieldAlignment AlignSrc,
+        mapping::FieldAlignment AlignDst,
         template<typename>
         typename PermuteFields>
     struct Copy<
-        mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex, PermuteFields>,
-        mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex, PermuteFields>,
+        mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, AlignSrc, LinearizeArrayIndex, PermuteFields>,
+        mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, AlignDst, LinearizeArrayIndex, PermuteFields>,
         std::enable_if_t<LanesSrc != LanesDst>>
     {
         template<typename SrcBlob, typename DstBlob>
         void operator()(
-            const View<mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex, PermuteFields>, SrcBlob>&
-                srcView,
-            View<mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex, PermuteFields>, DstBlob>&
-                dstView,
+            const View<
+                mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, AlignSrc, LinearizeArrayIndex, PermuteFields>,
+                SrcBlob>& srcView,
+            View<
+                mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, AlignDst, LinearizeArrayIndex, PermuteFields>,
+                DstBlob>& dstView,
             std::size_t threadId,
             std::size_t threadCount)
         {
@@ -393,16 +398,18 @@ namespace llama
         template<typename>
         typename PermuteFields,
         typename ArrayExtents::value_type LanesSrc,
+        mapping::FieldAlignment AlignSrc,
         mapping::Blobs DstBlobs,
         mapping::SubArrayAlignment DstSubArrayAlignment>
     struct Copy<
-        mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex, PermuteFields>,
+        mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, AlignSrc, LinearizeArrayIndex, PermuteFields>,
         mapping::SoA<ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex, PermuteFields>>
     {
         template<typename SrcBlob, typename DstBlob>
         void operator()(
-            const View<mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex, PermuteFields>, SrcBlob>&
-                srcView,
+            const View<
+                mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, AlignSrc, LinearizeArrayIndex, PermuteFields>,
+                SrcBlob>& srcView,
             View<
                 mapping::
                     SoA<ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex, PermuteFields>,
@@ -423,11 +430,12 @@ namespace llama
         template<typename>
         typename PermuteFields,
         typename ArrayExtents::value_type LanesDst,
+        mapping::FieldAlignment AlignDst,
         mapping::Blobs SrcBlobs,
         mapping::SubArrayAlignment SrcSubArrayAlignment>
     struct Copy<
         mapping::SoA<ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex, PermuteFields>,
-        mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex, PermuteFields>>
+        mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, AlignDst, LinearizeArrayIndex, PermuteFields>>
     {
         template<typename SrcBlob, typename DstBlob>
         void operator()(
@@ -435,8 +443,9 @@ namespace llama
                 mapping::
                     SoA<ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex, PermuteFields>,
                 SrcBlob>& srcView,
-            View<mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex, PermuteFields>, DstBlob>&
-                dstView,
+            View<
+                mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, AlignDst, LinearizeArrayIndex, PermuteFields>,
+                DstBlob>& dstView,
             std::size_t threadId,
             std::size_t threadCount)
         {
