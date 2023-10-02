@@ -3594,10 +3594,10 @@ namespace llama
 				        }
 				    };
 
-				    /// Functor that maps an \ref ArrayIndex into linear numbers the way C++ arrays work. The fast moving index of the
-				    /// ArrayIndex object should be the last one. E.g. ArrayIndex<3> a; stores 3 indices where a[2] should be
-				    /// incremented in the innermost loop.
-				    struct LinearizeArrayDimsCpp
+				    /// Functor that maps an \ref ArrayIndex into linear numbers, where the fast moving index should be the rightmost
+				    /// one, which models how C++ arrays work and is analogous to mdspan's layout_right. E.g. ArrayIndex<3> a; stores 3
+				    /// indices where a[2] should be incremented in the innermost loop.
+				    struct LinearizeArrayIndexRight
 				    {
 				        template<typename ArrayExtents>
 				        LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const ArrayExtents& extents) -> typename ArrayExtents::value_type
@@ -3628,10 +3628,12 @@ namespace llama
 				        }
 				    };
 
+				    using LinearizeArrayIndexCpp = LinearizeArrayIndexRight;
+
 				    /// Functor that maps a \ref ArrayIndex into linear numbers the way Fortran arrays work. The fast moving index of
-				    /// the ArrayIndex object should be the last one. E.g. ArrayIndex<3> a; stores 3 indices where a[2] should be
+				    /// the ArrayIndex object should be the last one. E.g. ArrayIndex<3> a; stores 3 indices where a[0] should be
 				    /// incremented in the innermost loop.
-				    struct LinearizeArrayDimsFortran
+				    struct LinearizeArrayIndexLeft
 				    {
 				        template<typename ArrayExtents>
 				        LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const ArrayExtents& extents) -> typename ArrayExtents::value_type
@@ -3662,8 +3664,10 @@ namespace llama
 				        }
 				    };
 
+				    using LinearizeArrayIndexFortran = LinearizeArrayIndexLeft;
+
 				    /// Functor that maps an \ref ArrayIndex into linear numbers using the Z-order space filling curve (Morton codes).
-				    struct LinearizeArrayDimsMorton
+				    struct LinearizeArrayIndexMorton
 				    {
 				        template<typename ArrayExtents>
 				        LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const ArrayExtents& extents) const ->
@@ -4780,7 +4784,7 @@ namespace llama
 		        typename TArrayExtents,
 		        typename TRecordDim,
 		        typename TArrayExtents::value_type Lanes,
-		        typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
+		        typename TLinearizeArrayIndexFunctor = LinearizeArrayIndexRight,
 		        template<typename> typename PermuteFields = PermuteFieldsInOrder>
 		    struct AoSoA : MappingBase<TArrayExtents, TRecordDim>
 		    {
@@ -4790,7 +4794,7 @@ namespace llama
 
 		    public:
 		        inline static constexpr typename TArrayExtents::value_type lanes = Lanes;
-		        using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
+		        using LinearizeArrayIndexFunctor = TLinearizeArrayIndexFunctor;
 		        using Permuter = PermuteFields<FlatRecordDim<TRecordDim>>;
 		        inline static constexpr std::size_t blobCount = 1;
 
@@ -4807,7 +4811,7 @@ namespace llama
 		        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(size_type) const -> size_type
 		        {
 		            const auto rs = static_cast<size_type>(sizeOf<TRecordDim>);
-		            return roundUpToMultiple(LinearizeArrayDimsFunctor{}.size(Base::extents()) * rs, Lanes * rs);
+		            return roundUpToMultiple(LinearizeArrayIndexFunctor{}.size(Base::extents()) * rs, Lanes * rs);
 		        }
 
 		        template<std::size_t... RecordCoords>
@@ -4820,7 +4824,7 @@ namespace llama
 		                *& // mess with nvcc compiler state to workaround bug
 		#endif
 		                 Permuter::template permute<flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>>;
-		            const auto flatArrayIndex = LinearizeArrayDimsFunctor{}(ai, Base::extents());
+		            const auto flatArrayIndex = LinearizeArrayIndexFunctor{}(ai, Base::extents());
 		            const auto blockIndex = flatArrayIndex / Lanes;
 		            const auto laneIndex = flatArrayIndex % Lanes;
 		            const auto offset = static_cast<size_type>(sizeOf<TRecordDim> * Lanes) * blockIndex
@@ -4832,11 +4836,11 @@ namespace llama
 
 		    /// Binds parameters to an \ref AoSoA mapping except for array and record dimension, producing a quoted meta
 		    /// function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
-		    template<std::size_t Lanes, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
+		    template<std::size_t Lanes, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
 		    struct BindAoSoA
 		    {
 		        template<typename ArrayExtents, typename RecordDim>
-		        using fn = AoSoA<ArrayExtents, RecordDim, Lanes, LinearizeArrayDimsFunctor>;
+		        using fn = AoSoA<ArrayExtents, RecordDim, Lanes, LinearizeArrayIndexFunctor>;
 		    };
 
 		    template<typename Mapping>
@@ -4881,7 +4885,7 @@ namespace llama
 		    /// \tparam TSubArrayAlignment Only relevant when TBlobs == Single, ignored otherwise. If Align, aligns the sub
 		    /// arrays created within the single blob by inserting padding. If the array extents are dynamic, this may add some
 		    /// overhead to the mapping logic.
-		    /// \tparam TLinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
+		    /// \tparam TLinearizeArrayIndexFunctor Defines how the array dimensions should be mapped into linear numbers and
 		    /// how big the linear domain gets.
 		    /// \tparam PermuteFieldsSingleBlob Defines how the record dimension's fields should be permuted if Blobs is
 		    /// Single. See \ref PermuteFieldsInOrder, \ref PermuteFieldsIncreasingAlignment, \ref
@@ -4892,7 +4896,7 @@ namespace llama
 		        Blobs TBlobs = Blobs::OnePerField,
 		        SubArrayAlignment TSubArrayAlignment
 		        = TBlobs == Blobs::Single ? SubArrayAlignment::Align : SubArrayAlignment::Pack,
-		        typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
+		        typename TLinearizeArrayIndexFunctor = LinearizeArrayIndexRight,
 		        template<typename> typename PermuteFieldsSingleBlob = PermuteFieldsInOrder>
 		    struct SoA : MappingBase<TArrayExtents, TRecordDim>
 		    {
@@ -4903,7 +4907,7 @@ namespace llama
 		    public:
 		        inline static constexpr Blobs blobs = TBlobs;
 		        inline static constexpr SubArrayAlignment subArrayAlignment = TSubArrayAlignment;
-		        using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
+		        using LinearizeArrayIndexFunctor = TLinearizeArrayIndexFunctor;
 		        using Permuter = PermuteFieldsSingleBlob<FlatRecordDim<TRecordDim>>;
 		        inline static constexpr std::size_t blobCount
 		            = blobs == Blobs::OnePerField ? mp_size<FlatRecordDim<TRecordDim>>::value : 1;
@@ -4921,7 +4925,7 @@ namespace llama
 		        LLAMA_FN_HOST_ACC_INLINE
 		        constexpr auto blobSize([[maybe_unused]] size_type blobIndex) const -> size_type
 		        {
-		            const auto flatSize = LinearizeArrayDimsFunctor{}.size(Base::extents());
+		            const auto flatSize = LinearizeArrayIndexFunctor{}.size(Base::extents());
 		            if constexpr(blobs == Blobs::OnePerField)
 		            {
 		                constexpr auto typeSizes = []() constexpr
@@ -4956,7 +4960,7 @@ namespace llama
 		        static LLAMA_CONSTEVAL auto computeSubArrayOffsets()
 		        {
 		            using FRD = typename Permuter::FlatRecordDim;
-		            constexpr auto staticFlatSize = LinearizeArrayDimsFunctor{}.size(TArrayExtents{});
+		            constexpr auto staticFlatSize = LinearizeArrayIndexFunctor{}.size(TArrayExtents{});
 		            constexpr auto subArrays = mp_size<FRD>::value;
 		            Array<size_type, subArrays> r{};
 		            // r[0] == 0, only compute the following offsets
@@ -4979,7 +4983,7 @@ namespace llama
 		            typename Base::ArrayIndex ai,
 		            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset<size_type>
 		        {
-		            const size_type elementOffset = LinearizeArrayDimsFunctor{}(ai, Base::extents())
+		            const size_type elementOffset = LinearizeArrayIndexFunctor{}(ai, Base::extents())
 		                * static_cast<size_type>(sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>));
 		            if constexpr(blobs == Blobs::OnePerField)
 		            {
@@ -4993,7 +4997,7 @@ namespace llama
 		                    *& // mess with nvcc compiler state to workaround bug
 		#endif
 		                     Permuter::template permute<flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>>;
-		                const size_type flatSize = LinearizeArrayDimsFunctor{}.size(Base::extents());
+		                const size_type flatSize = LinearizeArrayIndexFunctor{}.size(Base::extents());
 		                using FRD = typename Permuter::FlatRecordDim;
 		                if constexpr(subArrayAlignment == SubArrayAlignment::Align)
 		                {
@@ -5038,32 +5042,32 @@ namespace llama
 
 		    /// Struct of array mapping storing the entire layout in a single blob. The starts of the sub arrays are aligned by
 		    /// inserting padding. \see SoA
-		    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
+		    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
 		    using AlignedSingleBlobSoA
-		        = SoA<ArrayExtents, RecordDim, Blobs::Single, SubArrayAlignment::Align, LinearizeArrayDimsFunctor>;
+		        = SoA<ArrayExtents, RecordDim, Blobs::Single, SubArrayAlignment::Align, LinearizeArrayIndexFunctor>;
 
 		    /// Struct of array mapping storing the entire layout in a single blob. The sub arrays are tightly packed,
 		    /// violating the type's alignment requirements. \see SoA
-		    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
+		    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
 		    using PackedSingleBlobSoA
-		        = SoA<ArrayExtents, RecordDim, Blobs::Single, SubArrayAlignment::Pack, LinearizeArrayDimsFunctor>;
+		        = SoA<ArrayExtents, RecordDim, Blobs::Single, SubArrayAlignment::Pack, LinearizeArrayIndexFunctor>;
 
 		    /// Struct of array mapping storing each attribute of the record dimension in a separate blob.
 		    /// \see SoA
-		    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
+		    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
 		    using MultiBlobSoA
-		        = SoA<ArrayExtents, RecordDim, Blobs::OnePerField, SubArrayAlignment::Pack, LinearizeArrayDimsFunctor>;
+		        = SoA<ArrayExtents, RecordDim, Blobs::OnePerField, SubArrayAlignment::Pack, LinearizeArrayIndexFunctor>;
 
 		    /// Binds parameters to an \ref SoA mapping except for array and record dimension, producing a quoted
 		    /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
 		    template<
 		        Blobs Blobs = Blobs::OnePerField,
 		        SubArrayAlignment SubArrayAlignment = SubArrayAlignment::Pack,
-		        typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
+		        typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
 		    struct BindSoA
 		    {
 		        template<typename ArrayExtents, typename RecordDim>
-		        using fn = SoA<ArrayExtents, RecordDim, Blobs, SubArrayAlignment, LinearizeArrayDimsFunctor>;
+		        using fn = SoA<ArrayExtents, RecordDim, Blobs, SubArrayAlignment, LinearizeArrayIndexFunctor>;
 		    };
 
 		    template<typename Mapping>
@@ -5074,8 +5078,8 @@ namespace llama
 		        typename RecordDim,
 		        Blobs Blobs,
 		        SubArrayAlignment SubArrayAlignment,
-		        typename LinearizeArrayDimsFunctor>
-		    inline constexpr bool isSoA<SoA<ArrayExtents, RecordDim, Blobs, SubArrayAlignment, LinearizeArrayDimsFunctor>>
+		        typename LinearizeArrayIndexFunctor>
+		    inline constexpr bool isSoA<SoA<ArrayExtents, RecordDim, Blobs, SubArrayAlignment, LinearizeArrayIndexFunctor>>
 		        = true;
 		} // namespace llama::mapping
 		// ==
@@ -5195,14 +5199,14 @@ namespace llama
 	            typename RecordDim,
 	            mapping::Blobs Blobs,
 	            mapping::SubArrayAlignment SubArrayAlignment,
-	            typename LinearizeArrayDimsFunctor>
+	            typename LinearizeArrayIndexFunctor>
 	        inline constexpr std::size_t
-	            aosoaLanes<mapping::SoA<ArrayExtents, RecordDim, Blobs, SubArrayAlignment, LinearizeArrayDimsFunctor>>
+	            aosoaLanes<mapping::SoA<ArrayExtents, RecordDim, Blobs, SubArrayAlignment, LinearizeArrayIndexFunctor>>
 	            = std::numeric_limits<std::size_t>::max();
 
-	        template<typename ArrayExtents, typename RecordDim, std::size_t Lanes, typename LinearizeArrayDimsFunctor>
+	        template<typename ArrayExtents, typename RecordDim, std::size_t Lanes, typename LinearizeArrayIndexFunctor>
 	        inline constexpr std::size_t
-	            aosoaLanes<mapping::AoSoA<ArrayExtents, RecordDim, Lanes, LinearizeArrayDimsFunctor>>
+	            aosoaLanes<mapping::AoSoA<ArrayExtents, RecordDim, Lanes, LinearizeArrayIndexFunctor>>
 	            = Lanes;
 	    } // namespace internal
 
@@ -5224,8 +5228,8 @@ namespace llama
 	            "The source and destination record dimensions must be the same");
 	        static_assert(
 	            std::is_same_v<
-	                typename SrcMapping::LinearizeArrayDimsFunctor,
-	                typename DstMapping::LinearizeArrayDimsFunctor>,
+	                typename SrcMapping::LinearizeArrayIndexFunctor,
+	                typename DstMapping::LinearizeArrayIndexFunctor>,
 	            "Source and destination mapping need to use the same array dimensions linearizer");
 	        using RecordDim = typename SrcMapping::RecordDim;
 	        internal::assertTrivialCopyable<RecordDim>();
@@ -5405,18 +5409,18 @@ namespace llama
 	    template<
 	        typename ArrayExtents,
 	        typename RecordDim,
-	        typename LinearizeArrayDims,
+	        typename LinearizeArrayIndex,
 	        std::size_t LanesSrc,
 	        std::size_t LanesDst>
 	    struct Copy<
-	        mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayDims>,
-	        mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayDims>,
+	        mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex>,
+	        mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex>,
 	        std::enable_if_t<LanesSrc != LanesDst>>
 	    {
 	        template<typename SrcBlob, typename DstBlob>
 	        void operator()(
-	            const View<mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayDims>, SrcBlob>& srcView,
-	            View<mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayDims>, DstBlob>& dstView,
+	            const View<mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex>, SrcBlob>& srcView,
+	            View<mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex>, DstBlob>& dstView,
 	            std::size_t threadId,
 	            std::size_t threadCount)
 	        {
@@ -5428,18 +5432,18 @@ namespace llama
 	    template<
 	        typename ArrayExtents,
 	        typename RecordDim,
-	        typename LinearizeArrayDims,
+	        typename LinearizeArrayIndex,
 	        std::size_t LanesSrc,
 	        mapping::Blobs DstBlobs,
 	        mapping::SubArrayAlignment DstSubArrayAlignment>
 	    struct Copy<
-	        mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayDims>,
-	        mapping::SoA<ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayDims>>
+	        mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex>,
+	        mapping::SoA<ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex>>
 	    {
 	        template<typename SrcBlob, typename DstBlob>
 	        void operator()(
-	            const View<mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayDims>, SrcBlob>& srcView,
-	            View<mapping::SoA<ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayDims>, DstBlob>&
+	            const View<mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex>, SrcBlob>& srcView,
+	            View<mapping::SoA<ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex>, DstBlob>&
 	                dstView,
 	            std::size_t threadId,
 	            std::size_t threadCount)
@@ -5452,20 +5456,20 @@ namespace llama
 	    template<
 	        typename ArrayExtents,
 	        typename RecordDim,
-	        typename LinearizeArrayDims,
+	        typename LinearizeArrayIndex,
 	        std::size_t LanesDst,
 	        mapping::Blobs SrcBlobs,
 	        mapping::SubArrayAlignment SrcSubArrayAlignment>
 	    struct Copy<
-	        mapping::SoA<ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayDims>,
-	        mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayDims>>
+	        mapping::SoA<ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex>,
+	        mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex>>
 	    {
 	        template<typename SrcBlob, typename DstBlob>
 	        void operator()(
 	            const View<
-	                mapping::SoA<ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayDims>,
+	                mapping::SoA<ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex>,
 	                SrcBlob>& srcView,
-	            View<mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayDims>, DstBlob>& dstView,
+	            View<mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex>, DstBlob>& dstView,
 	            std::size_t threadId,
 	            std::size_t threadCount)
 	        {
@@ -7071,7 +7075,7 @@ namespace llama
 		    /// Array of struct mapping. Used to create a \ref View via \ref allocView.
 		    /// \tparam Alignment If Align, padding bytes are inserted to guarantee that struct members are properly aligned.
 		    /// If Pack, struct members are tightly packed.
-		    /// \tparam TLinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
+		    /// \tparam TLinearizeArrayIndexFunctor Defines how the array dimensions should be mapped into linear numbers and
 		    /// how big the linear domain gets.
 		    /// \tparam PermuteFields Defines how the record dimension's fields should be permuted. See \ref
 		    /// PermuteFieldsInOrder, \ref PermuteFieldsIncreasingAlignment, \ref PermuteFieldsDecreasingAlignment and
@@ -7080,7 +7084,7 @@ namespace llama
 		        typename TArrayExtents,
 		        typename TRecordDim,
 		        FieldAlignment TFieldAlignment = FieldAlignment::Align,
-		        typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
+		        typename TLinearizeArrayIndexFunctor = LinearizeArrayIndexRight,
 		        template<typename> typename PermuteFields = PermuteFieldsInOrder>
 		    struct AoS : MappingBase<TArrayExtents, TRecordDim>
 		    {
@@ -7090,7 +7094,7 @@ namespace llama
 
 		    public:
 		        inline static constexpr FieldAlignment fieldAlignment = TFieldAlignment;
-		        using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
+		        using LinearizeArrayIndexFunctor = TLinearizeArrayIndexFunctor;
 		        using Permuter = PermuteFields<FlatRecordDim<TRecordDim>>;
 		        inline static constexpr std::size_t blobCount = 1;
 
@@ -7098,7 +7102,7 @@ namespace llama
 
 		        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(size_type) const -> size_type
 		        {
-		            return LinearizeArrayDimsFunctor{}.size(Base::extents())
+		            return LinearizeArrayIndexFunctor{}.size(Base::extents())
 		                * flatSizeOf<typename Permuter::FlatRecordDim, fieldAlignment == FieldAlignment::Align>;
 		        }
 
@@ -7113,7 +7117,7 @@ namespace llama
 		#endif
 		                 Permuter::template permute<flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>>;
 		            const auto offset
-		                = LinearizeArrayDimsFunctor{}(ai, Base::extents())
+		                = LinearizeArrayIndexFunctor{}(ai, Base::extents())
 		                    * static_cast<size_type>(
 		                        flatSizeOf<typename Permuter::FlatRecordDim, fieldAlignment == FieldAlignment::Align>)
 		                + static_cast<size_type>(flatOffsetOf<
@@ -7130,29 +7134,33 @@ namespace llama
 
 		    /// Array of struct mapping preserving the alignment of the field types by inserting padding.
 		    /// \see AoS
-		    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
-		    using AlignedAoS = AoS<ArrayExtents, RecordDim, FieldAlignment::Align, LinearizeArrayDimsFunctor>;
+		    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
+		    using AlignedAoS = AoS<ArrayExtents, RecordDim, FieldAlignment::Align, LinearizeArrayIndexFunctor>;
 
 		    /// Array of struct mapping preserving the alignment of the field types by inserting padding and permuting the
 		    /// field order to minimize this padding. \see AoS
-		    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
-		    using MinAlignedAoS
-		        = AoS<ArrayExtents, RecordDim, FieldAlignment::Align, LinearizeArrayDimsFunctor, PermuteFieldsMinimizePadding>;
+		    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
+		    using MinAlignedAoS = AoS<
+		        ArrayExtents,
+		        RecordDim,
+		        FieldAlignment::Align,
+		        LinearizeArrayIndexFunctor,
+		        PermuteFieldsMinimizePadding>;
 
 		    /// Array of struct mapping packing the field types tightly, violating the type's alignment requirements.
 		    /// \see AoS
-		    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
-		    using PackedAoS = AoS<ArrayExtents, RecordDim, FieldAlignment::Pack, LinearizeArrayDimsFunctor>;
+		    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
+		    using PackedAoS = AoS<ArrayExtents, RecordDim, FieldAlignment::Pack, LinearizeArrayIndexFunctor>;
 
 		    /// Binds parameters to an \ref AoS mapping except for array and record dimension, producing a quoted meta
 		    /// function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
 		    template<
 		        FieldAlignment Alignment = FieldAlignment::Align,
-		        typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp>
+		        typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
 		    struct BindAoS
 		    {
 		        template<typename ArrayExtents, typename RecordDim>
-		        using fn = AoS<ArrayExtents, RecordDim, Alignment, LinearizeArrayDimsFunctor>;
+		        using fn = AoS<ArrayExtents, RecordDim, Alignment, LinearizeArrayIndexFunctor>;
 		    };
 
 		    template<typename Mapping>
@@ -7162,10 +7170,11 @@ namespace llama
 		        typename ArrayExtents,
 		        typename RecordDim,
 		        FieldAlignment FieldAlignment,
-		        typename LinearizeArrayDimsFunctor,
+		        typename LinearizeArrayIndexFunctor,
 		        template<typename>
 		        typename PermuteFields>
-		    inline constexpr bool isAoS<AoS<ArrayExtents, RecordDim, FieldAlignment, LinearizeArrayDimsFunctor, PermuteFields>>
+		    inline constexpr bool
+		        isAoS<AoS<ArrayExtents, RecordDim, FieldAlignment, LinearizeArrayIndexFunctor, PermuteFields>>
 		        = true;
 		} // namespace llama::mapping
 		// ==
@@ -8367,13 +8376,13 @@ namespace llama
 		            typename TRecordDim,
 		            typename Bits,
 		            SignBit SignBit,
-		            typename TLinearizeArrayDimsFunctor,
+		            typename TLinearizeArrayIndexFunctor,
 		            typename TStoredIntegral>
 		        struct BitPackedIntCommon
 		            : MappingBase<TArrayExtents, TRecordDim>
 		            , protected llama::internal::BoxedValue<Bits>
 		        {
-		            using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
+		            using LinearizeArrayIndexFunctor = TLinearizeArrayIndexFunctor;
 		            using StoredIntegral = TStoredIntegral;
 
 		            static_assert(std::is_integral_v<StoredIntegral>);
@@ -8481,7 +8490,7 @@ namespace llama
 		    /// Must not be zero and must not be bigger than the bits of TStoredIntegral.
 		    /// @tparam SignBit When set to SignBit::Discard, discards the sign bit when storing signed integers. All
 		    /// numbers will be read back positive.
-		    /// \tparam TLinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
+		    /// \tparam TLinearizeArrayIndexFunctor Defines how the array dimensions should be mapped into linear numbers and
 		    /// how big the linear domain gets.
 		    /// \tparam TStoredIntegral Integral type used as storage of reduced precision integers. Must be std::uint32_t or
 		    /// std::uint64_t.
@@ -8490,15 +8499,20 @@ namespace llama
 		        typename TRecordDim,
 		        typename Bits = typename TArrayExtents::value_type,
 		        SignBit SignBit = SignBit::Keep,
-		        typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
+		        typename TLinearizeArrayIndexFunctor = LinearizeArrayIndexRight,
 		        typename TStoredIntegral = internal::StoredUnsignedFor<TRecordDim>>
 		    struct BitPackedIntSoA
-		        : internal::
-		              BitPackedIntCommon<TArrayExtents, TRecordDim, Bits, SignBit, TLinearizeArrayDimsFunctor, TStoredIntegral>
+		        : internal::BitPackedIntCommon<
+		              TArrayExtents,
+		              TRecordDim,
+		              Bits,
+		              SignBit,
+		              TLinearizeArrayIndexFunctor,
+		              TStoredIntegral>
 		    {
 		    private:
 		        using Base = internal::
-		            BitPackedIntCommon<TArrayExtents, TRecordDim, Bits, SignBit, TLinearizeArrayDimsFunctor, TStoredIntegral>;
+		            BitPackedIntCommon<TArrayExtents, TRecordDim, Bits, SignBit, TLinearizeArrayIndexFunctor, TStoredIntegral>;
 
 		    public:
 		        using Base::Base;
@@ -8511,7 +8525,7 @@ namespace llama
 		        constexpr auto blobSize(size_type /*blobIndex*/) const -> size_type
 		        {
 		            constexpr auto bitsPerStoredIntegral = static_cast<size_type>(sizeof(TStoredIntegral) * CHAR_BIT);
-		            const auto bitsNeeded = TLinearizeArrayDimsFunctor{}.size(Base::extents()) * VHBits::value();
+		            const auto bitsNeeded = TLinearizeArrayIndexFunctor{}.size(Base::extents()) * VHBits::value();
 		            return roundUpToMultiple(bitsNeeded, bitsPerStoredIntegral) / CHAR_BIT;
 		        }
 
@@ -8522,7 +8536,7 @@ namespace llama
 		            Blobs& blobs) const
 		        {
 		            constexpr auto blob = flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>;
-		            const auto bitOffset = TLinearizeArrayDimsFunctor{}(ai, Base::extents()) * VHBits::value();
+		            const auto bitOffset = TLinearizeArrayIndexFunctor{}(ai, Base::extents()) * VHBits::value();
 
 		            using QualifiedStoredIntegral = CopyConst<Blobs, TStoredIntegral>;
 		            using DstType = GetType<TRecordDim, RecordCoord<RecordCoords...>>;
@@ -8540,7 +8554,7 @@ namespace llama
 		    template<
 		        typename Bits = void,
 		        SignBit SignBit = SignBit::Keep,
-		        typename LinearizeArrayDimsFunctor = mapping::LinearizeArrayDimsCpp,
+		        typename LinearizeArrayIndexFunctor = mapping::LinearizeArrayIndexRight,
 		        typename StoredIntegral = void>
 		    struct BindBitPackedIntSoA
 		    {
@@ -8550,7 +8564,7 @@ namespace llama
 		            RecordDim,
 		            std::conditional_t<!std::is_void_v<Bits>, Bits, typename ArrayExtents::value_type>,
 		            SignBit,
-		            LinearizeArrayDimsFunctor,
+		            LinearizeArrayIndexFunctor,
 		            std::conditional_t<
 		                !std::is_void_v<StoredIntegral>,
 		                StoredIntegral,
@@ -8565,10 +8579,10 @@ namespace llama
 		        typename RecordDim,
 		        typename Bits,
 		        SignBit SignBit,
-		        typename LinearizeArrayDimsFunctor,
+		        typename LinearizeArrayIndexFunctor,
 		        typename StoredIntegral>
 		    inline constexpr bool isBitPackedIntSoA<
-		        BitPackedIntSoA<ArrayExtents, RecordDim, Bits, SignBit, LinearizeArrayDimsFunctor, StoredIntegral>>
+		        BitPackedIntSoA<ArrayExtents, RecordDim, Bits, SignBit, LinearizeArrayIndexFunctor, StoredIntegral>>
 		        = true;
 
 		    /// Array of struct mapping using bit packing to reduce size/precision of integral data types. If your record
@@ -8578,7 +8592,7 @@ namespace llama
 		    /// Must not be zero and must not be bigger than the bits of TStoredIntegral.
 		    /// @tparam SignBit When set to SignBit::Discard, discards the sign bit when storing signed integers. All
 		    /// numbers will be read back positive.
-		    /// \tparam TLinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
+		    /// \tparam TLinearizeArrayIndexFunctor Defines how the array dimensions should be mapped into linear numbers and
 		    /// how big the linear domain gets.
 		    /// \tparam PermuteFields Defines how the record dimension's fields should be permuted. See \ref
 		    //  PermuteFieldsInOrder, \ref PermuteFieldsIncreasingAlignment, \ref PermuteFieldsDecreasingAlignment and
@@ -8590,16 +8604,21 @@ namespace llama
 		        typename TRecordDim,
 		        typename Bits = typename TArrayExtents::value_type,
 		        SignBit SignBit = SignBit::Keep,
-		        typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
+		        typename TLinearizeArrayIndexFunctor = LinearizeArrayIndexRight,
 		        template<typename> typename PermuteFields = PermuteFieldsInOrder,
 		        typename TStoredIntegral = internal::StoredUnsignedFor<TRecordDim>>
 		    struct BitPackedIntAoS
-		        : internal::
-		              BitPackedIntCommon<TArrayExtents, TRecordDim, Bits, SignBit, TLinearizeArrayDimsFunctor, TStoredIntegral>
+		        : internal::BitPackedIntCommon<
+		              TArrayExtents,
+		              TRecordDim,
+		              Bits,
+		              SignBit,
+		              TLinearizeArrayIndexFunctor,
+		              TStoredIntegral>
 		    {
 		    private:
 		        using Base = internal::
-		            BitPackedIntCommon<TArrayExtents, TRecordDim, Bits, SignBit, TLinearizeArrayDimsFunctor, TStoredIntegral>;
+		            BitPackedIntCommon<TArrayExtents, TRecordDim, Bits, SignBit, TLinearizeArrayIndexFunctor, TStoredIntegral>;
 
 		    public:
 		        using Base::Base;
@@ -8613,7 +8632,7 @@ namespace llama
 		        constexpr auto blobSize(size_type /*blobIndex*/) const -> size_type
 		        {
 		            constexpr auto bitsPerStoredIntegral = static_cast<size_type>(sizeof(TStoredIntegral) * CHAR_BIT);
-		            const auto bitsNeeded = TLinearizeArrayDimsFunctor{}.size(Base::extents())
+		            const auto bitsNeeded = TLinearizeArrayIndexFunctor{}.size(Base::extents())
 		                * static_cast<size_type>(VHBits::value()) * static_cast<size_type>(flatFieldCount<TRecordDim>);
 		            return roundUpToMultiple(bitsNeeded, bitsPerStoredIntegral) / CHAR_BIT;
 		        }
@@ -8626,7 +8645,7 @@ namespace llama
 		        {
 		            constexpr auto flatFieldIndex = static_cast<size_type>(
 		                Permuter::template permute<flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>>);
-		            const auto bitOffset = ((TLinearizeArrayDimsFunctor{}(ai, Base::extents())
+		            const auto bitOffset = ((TLinearizeArrayIndexFunctor{}(ai, Base::extents())
 		                                     * static_cast<size_type>(flatFieldCount<TRecordDim>))
 		                                    + flatFieldIndex)
 		                * static_cast<size_type>(VHBits::value());
@@ -8647,7 +8666,7 @@ namespace llama
 		    template<
 		        typename Bits = void,
 		        SignBit SignBit = SignBit::Keep,
-		        typename LinearizeArrayDimsFunctor = mapping::LinearizeArrayDimsCpp,
+		        typename LinearizeArrayIndexFunctor = mapping::LinearizeArrayIndexRight,
 		        template<typename> typename PermuteFields = PermuteFieldsInOrder,
 		        typename StoredIntegral = void>
 		    struct BindBitPackedIntAoS
@@ -8658,7 +8677,7 @@ namespace llama
 		            RecordDim,
 		            std::conditional_t<!std::is_void_v<Bits>, Bits, typename ArrayExtents::value_type>,
 		            SignBit,
-		            LinearizeArrayDimsFunctor,
+		            LinearizeArrayIndexFunctor,
 		            PermuteFields,
 		            std::conditional_t<
 		                !std::is_void_v<StoredIntegral>,
@@ -8674,7 +8693,7 @@ namespace llama
 		        typename RecordDim,
 		        typename Bits,
 		        SignBit SignBit,
-		        typename LinearizeArrayDimsFunctor,
+		        typename LinearizeArrayIndexFunctor,
 		        template<typename>
 		        typename PermuteFields,
 		        typename StoredIntegral>
@@ -8683,7 +8702,7 @@ namespace llama
 		        RecordDim,
 		        Bits,
 		        SignBit,
-		        LinearizeArrayDimsFunctor,
+		        LinearizeArrayIndexFunctor,
 		        PermuteFields,
 		        StoredIntegral>>
 		        = true;
@@ -8880,7 +8899,7 @@ namespace llama
 	    /// use to store the exponent. If ExponentBits is llama::Value<T>, the number of bits is specified at runtime,
 	    /// passed to the constructor and stored as type T. Must not be zero.
 	    /// \tparam MantissaBits Like ExponentBits but for the mantissa bits. Must not be zero (otherwise values turn INF).
-	    /// \tparam TLinearizeArrayDimsFunctor Defines how the array dimensions should be mapped into linear numbers and
+	    /// \tparam TLinearizeArrayIndexFunctor Defines how the array dimensions should be mapped into linear numbers and
 	    /// how big the linear domain gets.
 	    /// \tparam TStoredIntegral Integral type used as storage of reduced precision floating-point values.
 	    template<
@@ -8888,7 +8907,7 @@ namespace llama
 	        typename TRecordDim,
 	        typename ExponentBits = typename TArrayExtents::value_type,
 	        typename MantissaBits = ExponentBits,
-	        typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
+	        typename TLinearizeArrayIndexFunctor = LinearizeArrayIndexRight,
 	        typename TStoredIntegral = internal::StoredIntegralFor<TRecordDim>>
 	    struct LLAMA_DECLSPEC_EMPTY_BASES BitPackedFloatSoA
 	        : MappingBase<TArrayExtents, TRecordDim>
@@ -8902,7 +8921,7 @@ namespace llama
 	        using size_type = typename TArrayExtents::value_type;
 
 	    public:
-	        using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
+	        using LinearizeArrayIndexFunctor = TLinearizeArrayIndexFunctor;
 	        using StoredIntegral = TStoredIntegral;
 	        static constexpr std::size_t blobCount = mp_size<FlatRecordDim<TRecordDim>>::value;
 
@@ -8936,7 +8955,7 @@ namespace llama
 	        {
 	            constexpr auto bitsPerStoredIntegral = static_cast<size_type>(sizeof(StoredIntegral) * CHAR_BIT);
 	            const auto bitsNeeded
-	                = LinearizeArrayDimsFunctor{}.size(Base::extents()) * (exponentBits() + mantissaBits() + 1);
+	                = LinearizeArrayIndexFunctor{}.size(Base::extents()) * (exponentBits() + mantissaBits() + 1);
 	            return roundUpToMultiple(bitsNeeded, bitsPerStoredIntegral) / CHAR_BIT;
 	        }
 
@@ -8954,7 +8973,7 @@ namespace llama
 	        {
 	            constexpr auto blob = llama::flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>;
 	            const auto bitOffset
-	                = LinearizeArrayDimsFunctor{}(ai, Base::extents()) * (exponentBits() + mantissaBits() + 1);
+	                = LinearizeArrayIndexFunctor{}(ai, Base::extents()) * (exponentBits() + mantissaBits() + 1);
 
 	            using QualifiedStoredIntegral = CopyConst<Blobs, StoredIntegral>;
 	            using DstType = GetType<TRecordDim, RecordCoord<RecordCoords...>>;
@@ -8973,7 +8992,7 @@ namespace llama
 	    template<
 	        typename ExponentBits = unsigned,
 	        typename MantissaBits = ExponentBits,
-	        typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
+	        typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight,
 	        typename StoredIntegral = void>
 	    struct BindBitPackedFloatSoA
 	    {
@@ -8983,7 +9002,7 @@ namespace llama
 	            RecordDim,
 	            ExponentBits,
 	            MantissaBits,
-	            LinearizeArrayDimsFunctor,
+	            LinearizeArrayIndexFunctor,
 	            std::conditional_t<
 	                !std::is_void_v<StoredIntegral>,
 	                StoredIntegral,
@@ -9001,7 +9020,7 @@ namespace llama
 	        typename TRecordDim,
 	        typename ExponentBits = typename TArrayExtents::value_type,
 	        typename MantissaBits = ExponentBits,
-	        typename TLinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
+	        typename TLinearizeArrayIndexFunctor = LinearizeArrayIndexRight,
 	        template<typename> typename PermuteFields = PermuteFieldsInOrder,
 	        typename TStoredIntegral = internal::StoredIntegralFor<TRecordDim>>
 	    struct LLAMA_DECLSPEC_EMPTY_BASES BitPackedFloatAoS
@@ -9016,7 +9035,7 @@ namespace llama
 	        using size_type = typename TArrayExtents::value_type;
 
 	    public:
-	        using LinearizeArrayDimsFunctor = TLinearizeArrayDimsFunctor;
+	        using LinearizeArrayIndexFunctor = TLinearizeArrayIndexFunctor;
 	        using StoredIntegral = TStoredIntegral;
 
 	        using Permuter = PermuteFields<FlatRecordDim<TRecordDim>>;
@@ -9051,7 +9070,7 @@ namespace llama
 	        constexpr auto blobSize(size_type /*blobIndex*/) const -> size_type
 	        {
 	            constexpr auto bitsPerStoredIntegral = static_cast<size_type>(sizeof(StoredIntegral) * CHAR_BIT);
-	            const auto bitsNeeded = TLinearizeArrayDimsFunctor{}.size(Base::extents())
+	            const auto bitsNeeded = TLinearizeArrayIndexFunctor{}.size(Base::extents())
 	                * static_cast<size_type>(exponentBits() + mantissaBits() + 1)
 	                * static_cast<size_type>(flatFieldCount<TRecordDim>);
 	            return roundUpToMultiple(bitsNeeded, bitsPerStoredIntegral) / CHAR_BIT;
@@ -9071,7 +9090,7 @@ namespace llama
 	        {
 	            constexpr auto flatFieldIndex = static_cast<size_type>(
 	                Permuter::template permute<flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>>);
-	            const auto bitOffset = ((TLinearizeArrayDimsFunctor{}(ai, Base::extents())
+	            const auto bitOffset = ((TLinearizeArrayIndexFunctor{}(ai, Base::extents())
 	                                     * static_cast<size_type>(flatFieldCount<TRecordDim>))
 	                                    + flatFieldIndex)
 	                * static_cast<size_type>(exponentBits() + mantissaBits() + 1);
@@ -9091,7 +9110,7 @@ namespace llama
 	    template<
 	        typename ExponentBits = unsigned,
 	        typename MantissaBits = ExponentBits,
-	        typename LinearizeArrayDimsFunctor = LinearizeArrayDimsCpp,
+	        typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight,
 	        template<typename> typename PermuteFields = PermuteFieldsInOrder,
 	        typename StoredIntegral = void>
 	    struct BindBitPackedFloatAoS
@@ -9102,7 +9121,7 @@ namespace llama
 	            RecordDim,
 	            ExponentBits,
 	            MantissaBits,
-	            LinearizeArrayDimsFunctor,
+	            LinearizeArrayIndexFunctor,
 	            PermuteFields,
 	            std::conditional_t<
 	                !std::is_void_v<StoredIntegral>,
@@ -9118,7 +9137,7 @@ namespace llama
 	        typename RecordDim,
 	        typename ExponentBits,
 	        typename MantissaBits,
-	        typename LinearizeArrayDimsFunctor,
+	        typename LinearizeArrayIndexFunctor,
 	        template<typename>
 	        typename PermuteFields,
 	        typename StoredIntegral>
@@ -9127,7 +9146,7 @@ namespace llama
 	        RecordDim,
 	        ExponentBits,
 	        MantissaBits,
-	        LinearizeArrayDimsFunctor,
+	        LinearizeArrayIndexFunctor,
 	        PermuteFields,
 	        StoredIntegral>>
 	        = true;
