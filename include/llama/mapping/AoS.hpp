@@ -8,8 +8,8 @@
 namespace llama::mapping
 {
     /// Array of struct mapping. Used to create a \ref View via \ref allocView.
-    /// \tparam Alignment If Align, padding bytes are inserted to guarantee that struct members are properly aligned.
-    /// If Pack, struct members are tightly packed.
+    /// \tparam TFieldAlignment If Align, padding bytes are inserted to guarantee that struct members are properly
+    /// aligned. If Pack, struct members are tightly packed.
     /// \tparam TLinearizeArrayIndexFunctor Defines how the array dimensions should be mapped into linear numbers and
     /// how big the linear domain gets.
     /// \tparam PermuteFields Defines how the record dimension's fields should be permuted. See \ref
