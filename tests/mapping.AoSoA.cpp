@@ -24,11 +24,12 @@ TEST_CASE("mapping.maxLanes")
     STATIC_REQUIRE(llama::mapping::maxLanes<RecordDim2, 512> == 32);
 }
 
-TEST_CASE("mapping.AoSoA.4.address")
+TEST_CASE("mapping.AoSoA.4.Pack.address")
 {
     auto test = [](auto arrayExtents)
     {
-        using Mapping = llama::mapping::AoSoA<decltype(arrayExtents), Particle, 4>;
+        using Mapping
+            = llama::mapping::AoSoA<decltype(arrayExtents), Particle, 4, llama::mapping::FieldAlignment::Pack>;
         auto mapping = Mapping{arrayExtents};
         using ArrayIndex = typename Mapping::ArrayExtents::Index;
 
@@ -86,10 +87,73 @@ TEST_CASE("mapping.AoSoA.4.address")
     test(llama::ArrayExtents<int, 16, 16>{});
 }
 
+TEST_CASE("mapping.AoSoA.4.Align.address")
+{
+    auto test = [](auto arrayExtents)
+    {
+        using Mapping
+            = llama::mapping::AoSoA<decltype(arrayExtents), Particle, 4, llama::mapping::FieldAlignment::Align>;
+        auto mapping = Mapping{arrayExtents};
+        using ArrayIndex = typename Mapping::ArrayExtents::Index;
+
+        {
+            const auto ai = ArrayIndex{0, 0};
+            CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 0);
+            CHECK(mapping.template blobNrAndOffset<0, 1>(ai).offset == 32);
+            CHECK(mapping.template blobNrAndOffset<0, 2>(ai).offset == 64);
+            CHECK(mapping.template blobNrAndOffset<1>(ai).offset == 96);
+            CHECK(mapping.template blobNrAndOffset<2, 0>(ai).offset == 128);
+            CHECK(mapping.template blobNrAndOffset<2, 1>(ai).offset == 160);
+            CHECK(mapping.template blobNrAndOffset<2, 2>(ai).offset == 192);
+            CHECK(mapping.template blobNrAndOffset<3, 0>(ai).offset == 224);
+            CHECK(mapping.template blobNrAndOffset<3, 1>(ai).offset == 228);
+            CHECK(mapping.template blobNrAndOffset<3, 2>(ai).offset == 232);
+            CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 236);
+        }
+
+        {
+            const auto ai = ArrayIndex{0, 1};
+            CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 8);
+            CHECK(mapping.template blobNrAndOffset<0, 1>(ai).offset == 40);
+            CHECK(mapping.template blobNrAndOffset<0, 2>(ai).offset == 72);
+            CHECK(mapping.template blobNrAndOffset<1>(ai).offset == 100);
+            CHECK(mapping.template blobNrAndOffset<2, 0>(ai).offset == 136);
+            CHECK(mapping.template blobNrAndOffset<2, 1>(ai).offset == 168);
+            CHECK(mapping.template blobNrAndOffset<2, 2>(ai).offset == 200);
+            CHECK(mapping.template blobNrAndOffset<3, 0>(ai).offset == 225);
+            CHECK(mapping.template blobNrAndOffset<3, 1>(ai).offset == 229);
+            CHECK(mapping.template blobNrAndOffset<3, 2>(ai).offset == 233);
+            CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 237);
+        }
+
+        {
+            const auto ai = ArrayIndex{1, 0};
+            CHECK(mapping.template blobNrAndOffset<0, 0>(ai).offset == 1024);
+            CHECK(mapping.template blobNrAndOffset<0, 1>(ai).offset == 1056);
+            CHECK(mapping.template blobNrAndOffset<0, 2>(ai).offset == 1088);
+            CHECK(mapping.template blobNrAndOffset<1>(ai).offset == 1120);
+            CHECK(mapping.template blobNrAndOffset<2, 0>(ai).offset == 1152);
+            CHECK(mapping.template blobNrAndOffset<2, 1>(ai).offset == 1184);
+            CHECK(mapping.template blobNrAndOffset<2, 2>(ai).offset == 1216);
+            CHECK(mapping.template blobNrAndOffset<3, 0>(ai).offset == 1248);
+            CHECK(mapping.template blobNrAndOffset<3, 1>(ai).offset == 1252);
+            CHECK(mapping.template blobNrAndOffset<3, 2>(ai).offset == 1256);
+            CHECK(mapping.template blobNrAndOffset<3, 3>(ai).offset == 1260);
+        }
+
+        STATIC_REQUIRE(mapping.blobCount == 1);
+        CHECK(mapping.blobSize(0) == 16384);
+    };
+    test(llama::ArrayExtentsDynamic<std::size_t, 2>{16, 16});
+    test(llama::ArrayExtents<int, 16, llama::dyn>{16});
+    test(llama::ArrayExtents<int, llama::dyn, 16>{16});
+    test(llama::ArrayExtents<int, 16, 16>{});
+}
+
 TEST_CASE("AoSoA.size_round_up")
 {
     using AoSoA = llama::mapping::AoSoA<llama::ArrayExtentsDynamic<std::size_t, 1>, Particle, 4>;
-    constexpr auto psize = llama::sizeOf<Particle>;
+    constexpr auto psize = llama::sizeOf<Particle, true>;
 
     CHECK(AoSoA{{0}}.blobSize(0) == 0 * psize);
     CHECK(AoSoA{{1}}.blobSize(0) == 4 * psize);

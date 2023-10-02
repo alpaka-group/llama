@@ -27,6 +27,8 @@ namespace llama::mapping
 
     /// Array of struct of arrays mapping. Used to create a \ref View via \ref allocView.
     /// \tparam Lanes The size of the inner arrays of this array of struct of arrays.
+    /// \tparam TFieldAlignment If Align, padding bytes are inserted to guarantee that struct members are properly
+    /// aligned. If Pack, struct members are tightly packed.
     /// \tparam PermuteFields Defines how the record dimension's fields should be permuted. See \ref
     /// PermuteFieldsInOrder, \ref PermuteFieldsIncreasingAlignment, \ref PermuteFieldsDecreasingAlignment and
     /// \ref PermuteFieldsMinimizePadding.
@@ -35,6 +37,7 @@ namespace llama::mapping
         typename TArrayExtents,
         typename TRecordDim,
         typename TArrayExtents::value_type Lanes,
+        FieldAlignment TFieldAlignment = FieldAlignment::Align,
         typename TLinearizeArrayIndexFunctor = LinearizeArrayIndexRight,
         template<typename> typename PermuteFields = PermuteFieldsInOrder>
     struct AoSoA : MappingBase<TArrayExtents, TRecordDim>
@@ -45,6 +48,7 @@ namespace llama::mapping
 
     public:
         inline static constexpr typename TArrayExtents::value_type lanes = Lanes;
+        inline static constexpr FieldAlignment fieldAlignment = TFieldAlignment;
         using LinearizeArrayIndexFunctor = TLinearizeArrayIndexFunctor;
         using Permuter = PermuteFields<FlatRecordDim<TRecordDim>>;
         inline static constexpr std::size_t blobCount = 1;
@@ -61,7 +65,8 @@ namespace llama::mapping
 
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(size_type) const -> size_type
         {
-            const auto rs = static_cast<size_type>(sizeOf<TRecordDim>);
+            const auto rs = static_cast<size_type>(
+                flatSizeOf<typename Permuter::FlatRecordDim, fieldAlignment == FieldAlignment::Align>);
             return roundUpToMultiple(LinearizeArrayIndexFunctor{}.size(Base::extents()) * rs, Lanes * rs);
         }
 
@@ -86,8 +91,15 @@ namespace llama::mapping
                  Permuter::template permute<flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>>;
             const auto blockIndex = flatArrayIndex / Lanes;
             const auto laneIndex = flatArrayIndex % Lanes;
-            const auto offset = static_cast<size_type>(sizeOf<TRecordDim> * Lanes) * blockIndex
-                + static_cast<size_type>(flatOffsetOf<typename Permuter::FlatRecordDim, flatFieldIndex, false>) * Lanes
+            const auto offset
+                = static_cast<size_type>(
+                      flatSizeOf<typename Permuter::FlatRecordDim, fieldAlignment == FieldAlignment::Align> * Lanes)
+                    * blockIndex
+                + static_cast<size_type>(flatOffsetOf<
+                                         typename Permuter::FlatRecordDim,
+                                         flatFieldIndex,
+                                         fieldAlignment == FieldAlignment::Align>)
+                    * Lanes
                 + static_cast<size_type>(sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>)) * laneIndex;
             return {0, offset};
         }
@@ -98,12 +110,13 @@ namespace llama::mapping
     LLAMA_EXPORT
     template<
         std::size_t Lanes,
+        FieldAlignment Alignment = FieldAlignment::Align,
         typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight,
         template<typename> typename PermuteFields = PermuteFieldsInOrder>
     struct BindAoSoA
     {
         template<typename ArrayExtents, typename RecordDim>
-        using fn = AoSoA<ArrayExtents, RecordDim, Lanes, LinearizeArrayIndexFunctor, PermuteFields>;
+        using fn = AoSoA<ArrayExtents, RecordDim, Lanes, Alignment, LinearizeArrayIndexFunctor, PermuteFields>;
     };
 
     LLAMA_EXPORT
@@ -111,6 +124,13 @@ namespace llama::mapping
     inline constexpr bool isAoSoA = false;
 
     LLAMA_EXPORT
-    template<typename AD, typename RD, typename AD::value_type L, typename Lin, template<typename> typename Perm>
-    inline constexpr bool isAoSoA<AoSoA<AD, RD, L, Lin, Perm>> = true;
+    template<
+        typename AD,
+        typename RD,
+        typename AD::value_type L,
+        FieldAlignment A,
+        typename Lin,
+        template<typename>
+        typename Perm>
+    inline constexpr bool isAoSoA<AoSoA<AD, RD, L, A, Lin, Perm>> = true;
 } // namespace llama::mapping
