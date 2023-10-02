@@ -1,12 +1,12 @@
 var structllama_1_1mapping_1_1SoA =
 [
-    [ "LinearizeArrayDimsFunctor", "structllama_1_1mapping_1_1SoA.html#ad0e0d552a9a3bb1243adfb58feeb63dc", null ],
-    [ "Permuter", "structllama_1_1mapping_1_1SoA.html#a7858d45469e17011da2db53366a0f867", null ],
-    [ "SoA", "structllama_1_1mapping_1_1SoA.html#a6ee84cf6c225784614bb4f0580363d8f", null ],
-    [ "SoA", "structllama_1_1mapping_1_1SoA.html#a177bb163d075695d7533ee1dad7c25ae", null ],
-    [ "blobNrAndOffset", "structllama_1_1mapping_1_1SoA.html#a81db038842d175a66960b5b26a963e7e", null ],
-    [ "blobSize", "structllama_1_1mapping_1_1SoA.html#a245d9e06c5d3245761ee8a89044e9c2f", null ],
-    [ "blobCount", "structllama_1_1mapping_1_1SoA.html#a9ece447fe530c2524998ad3569b3e0c7", null ],
-    [ "blobs", "structllama_1_1mapping_1_1SoA.html#a8f5e7d1cb77b840d87e78b59898d325d", null ],
-    [ "subArrayAlignment", "structllama_1_1mapping_1_1SoA.html#af27b23c4e734c6632aa8359fe810cc26", null ]
+    [ "LinearizeArrayIndexFunctor", "structllama_1_1mapping_1_1SoA.html#a1a71d2b5ba2fcf52330d4fc2b81d3b14", null ],
+    [ "Permuter", "structllama_1_1mapping_1_1SoA.html#afd72fdba9190da7776f85d2b26eff59d", null ],
+    [ "SoA", "structllama_1_1mapping_1_1SoA.html#a8d24fbf3384e98a7d2ab29eae10ab574", null ],
+    [ "SoA", "structllama_1_1mapping_1_1SoA.html#a04140d78f8ceb0cc1dfcfc20371df451", null ],
+    [ "blobNrAndOffset", "structllama_1_1mapping_1_1SoA.html#a9c6d65ee4a2707bcd73e743a3db91106", null ],
+    [ "blobSize", "structllama_1_1mapping_1_1SoA.html#aacf707ff2a56f7bc9868f2bade3f356f", null ],
+    [ "blobCount", "structllama_1_1mapping_1_1SoA.html#a7494bb262ad1e084b5d1d35c42058b0e", null ],
+    [ "blobs", "structllama_1_1mapping_1_1SoA.html#ae9ecdd1f31be1c6b469d2346562c9e33", null ],
+    [ "subArrayAlignment", "structllama_1_1mapping_1_1SoA.html#a659605ce7833cad161df99cbcd3d7665", null ]
 ];

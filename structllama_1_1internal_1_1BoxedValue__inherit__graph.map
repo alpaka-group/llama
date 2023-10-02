@@ -1,0 +1,6 @@
+<map id="llama::internal::BoxedValue&lt; T, I &gt;" name="llama::internal::BoxedValue&lt; T, I &gt;">
+<area shape="rect" id="node1" title=" " alt="" coords="5,82,207,123"/>
+<area shape="rect" id="node2" href="$structllama_1_1mapping_1_1internal_1_1BitPackedIntCommon.html" title=" " alt="" coords="255,60,625,145"/>
+<area shape="rect" id="node3" href="$structllama_1_1mapping_1_1BitPackedIntAoS.html" title=" " alt="" coords="673,5,916,91"/>
+<area shape="rect" id="node4" href="$structllama_1_1mapping_1_1BitPackedIntSoA.html" title=" " alt="" coords="687,115,903,200"/>
+</map>

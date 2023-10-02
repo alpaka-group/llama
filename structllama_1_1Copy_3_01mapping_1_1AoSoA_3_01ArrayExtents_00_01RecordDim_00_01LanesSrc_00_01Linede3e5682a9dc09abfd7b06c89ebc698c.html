@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Low-Level Abstraction of Memory Access: llama::Copy&lt; mapping::SoA&lt; ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayDims &gt;, mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesDst, LinearizeArrayDims &gt; &gt; Struct Template Reference</title>
+<title>Low-Level Abstraction of Memory Access: llama::Copy&lt; mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex &gt;, mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex &gt;, std::enable_if_t&lt; LanesSrc !=LanesDst &gt; &gt; Struct Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -63,7 +63,7 @@ $(function() {
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
-$(document).ready(function(){initNavTree('structllama_1_1Copy_3_01mapping_1_1SoA_3_01ArrayExtents_00_01RecordDim_00_01SrcBlobs_00_01SrcSub188205056335a1384df501fb670c7830.html',''); initResizable(); });
+$(document).ready(function(){initNavTree('structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayExtents_00_01RecordDim_00_01LanesSrc_00_01Linede3e5682a9dc09abfd7b06c89ebc698c.html',''); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -84,9 +84,9 @@ $(document).ready(function(){initNavTree('structllama_1_1Copy_3_01mapping_1_1SoA
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="structllama_1_1Copy_3_01mapping_1_1SoA_3_01ArrayExtents_00_01RecordDim_00_01SrcBlobs_00_01SrcSubb8eaa4383b411f0193f1929cc9bb5a2a.html">List of all members</a>  </div>
+<a href="structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayExtents_00_01RecordDim_00_01LanesSrc_00_01Line123d72ed9799826c8b5308a3a09be253.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">llama::Copy&lt; mapping::SoA&lt; ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayDims &gt;, mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesDst, LinearizeArrayDims &gt; &gt; Struct Template Reference</div>  </div>
+<div class="title">llama::Copy&lt; mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex &gt;, mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex &gt;, std::enable_if_t&lt; LanesSrc !=LanesDst &gt; &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -94,24 +94,24 @@ $(document).ready(function(){initNavTree('structllama_1_1Copy_3_01mapping_1_1SoA
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a6ee675630872a51a82a8de399f7cee16"><td class="memTemplParams" colspan="2">template&lt;typename SrcBlob , typename DstBlob &gt; </td></tr>
-<tr class="memitem:a6ee675630872a51a82a8de399f7cee16"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1Copy_3_01mapping_1_1SoA_3_01ArrayExtents_00_01RecordDim_00_01SrcBlobs_00_01SrcSub188205056335a1384df501fb670c7830.html#a6ee675630872a51a82a8de399f7cee16">operator()</a> (const <a class="el" href="structllama_1_1View.html">View</a>&lt; <a class="el" href="structllama_1_1mapping_1_1SoA.html">mapping::SoA</a>&lt; <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayDims &gt;, SrcBlob &gt; &amp;srcView, <a class="el" href="structllama_1_1View.html">View</a>&lt; <a class="el" href="structllama_1_1mapping_1_1AoSoA.html">mapping::AoSoA</a>&lt; <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, LanesDst, LinearizeArrayDims &gt;, DstBlob &gt; &amp;dstView, std::size_t threadId, std::size_t threadCount)</td></tr>
-<tr class="separator:a6ee675630872a51a82a8de399f7cee16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac15271aeaa643e6a09f93851b1beca92"><td class="memTemplParams" colspan="2">template&lt;typename SrcBlob , typename DstBlob &gt; </td></tr>
+<tr class="memitem:ac15271aeaa643e6a09f93851b1beca92"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayExtents_00_01RecordDim_00_01LanesSrc_00_01Linede3e5682a9dc09abfd7b06c89ebc698c.html#ac15271aeaa643e6a09f93851b1beca92">operator()</a> (const <a class="el" href="structllama_1_1View.html">View</a>&lt; <a class="el" href="structllama_1_1mapping_1_1AoSoA.html">mapping::AoSoA</a>&lt; <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, LanesSrc, LinearizeArrayIndex &gt;, SrcBlob &gt; &amp;srcView, <a class="el" href="structllama_1_1View.html">View</a>&lt; <a class="el" href="structllama_1_1mapping_1_1AoSoA.html">mapping::AoSoA</a>&lt; <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, LanesDst, LinearizeArrayIndex &gt;, DstBlob &gt; &amp;dstView, std::size_t threadId, std::size_t threadCount)</td></tr>
+<tr class="separator:ac15271aeaa643e6a09f93851b1beca92"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename ArrayExtents, typename RecordDim, typename LinearizeArrayDims, std::size_t LanesDst, mapping::Blobs SrcBlobs, mapping::SubArrayAlignment SrcSubArrayAlignment&gt;<br />
-struct llama::Copy&lt; mapping::SoA&lt; ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayDims &gt;, mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesDst, LinearizeArrayDims &gt; &gt;</h3>
+<div class="textblock"><h3>template&lt;typename ArrayExtents, typename RecordDim, typename LinearizeArrayIndex, std::size_t LanesSrc, std::size_t LanesDst&gt;<br />
+struct llama::Copy&lt; mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex &gt;, mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex &gt;, std::enable_if_t&lt; LanesSrc !=LanesDst &gt; &gt;</h3>
 
 
-<p class="definition">Definition at line <a class="el" href="Copy_8hpp_source.html#l00383">383</a> of file <a class="el" href="Copy_8hpp_source.html">Copy.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Copy_8hpp_source.html#l00335">335</a> of file <a class="el" href="Copy_8hpp_source.html">Copy.hpp</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a6ee675630872a51a82a8de399f7cee16"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6ee675630872a51a82a8de399f7cee16">&#9670;&nbsp;</a></span>operator()()</h2>
+<a id="ac15271aeaa643e6a09f93851b1beca92"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac15271aeaa643e6a09f93851b1beca92">&#9670;&nbsp;</a></span>operator()()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename ArrayExtents , typename RecordDim , typename LinearizeArrayDims , std::size_t LanesDst, mapping::Blobs SrcBlobs, mapping::SubArrayAlignment SrcSubArrayAlignment&gt; </div>
+template&lt;typename ArrayExtents , typename RecordDim , typename LinearizeArrayIndex , std::size_t LanesSrc, std::size_t LanesDst&gt; </div>
 <div class="memtemplate">
 template&lt;typename SrcBlob , typename DstBlob &gt; </div>
 <table class="mlabels">
@@ -119,15 +119,15 @@ template&lt;typename SrcBlob , typename DstBlob &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="structllama_1_1Copy.html">llama::Copy</a>&lt; <a class="el" href="structllama_1_1mapping_1_1SoA.html">mapping::SoA</a>&lt; <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayDims &gt;, <a class="el" href="structllama_1_1mapping_1_1AoSoA.html">mapping::AoSoA</a>&lt; <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, LanesDst, LinearizeArrayDims &gt; &gt;::operator() </td>
+          <td class="memname">void <a class="el" href="structllama_1_1Copy.html">llama::Copy</a>&lt; <a class="el" href="structllama_1_1mapping_1_1AoSoA.html">mapping::AoSoA</a>&lt; <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, LanesSrc, LinearizeArrayIndex &gt;, <a class="el" href="structllama_1_1mapping_1_1AoSoA.html">mapping::AoSoA</a>&lt; <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, LanesDst, LinearizeArrayIndex &gt;, std::enable_if_t&lt; LanesSrc !=LanesDst &gt; &gt;::operator() </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="structllama_1_1View.html">View</a>&lt; <a class="el" href="structllama_1_1mapping_1_1SoA.html">mapping::SoA</a>&lt; <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayDims &gt;, SrcBlob &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1View.html">View</a>&lt; <a class="el" href="structllama_1_1mapping_1_1AoSoA.html">mapping::AoSoA</a>&lt; <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, LanesSrc, LinearizeArrayIndex &gt;, SrcBlob &gt; &amp;&#160;</td>
           <td class="paramname"><em>srcView</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="structllama_1_1View.html">View</a>&lt; <a class="el" href="structllama_1_1mapping_1_1AoSoA.html">mapping::AoSoA</a>&lt; <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, LanesDst, LinearizeArrayDims &gt;, DstBlob &gt; &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1View.html">View</a>&lt; <a class="el" href="structllama_1_1mapping_1_1AoSoA.html">mapping::AoSoA</a>&lt; <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, LanesDst, LinearizeArrayIndex &gt;, DstBlob &gt; &amp;&#160;</td>
           <td class="paramname"><em>dstView</em>, </td>
         </tr>
         <tr>
@@ -155,7 +155,7 @@ template&lt;typename SrcBlob , typename DstBlob &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Copy_8hpp_source.html#l00388">388</a> of file <a class="el" href="Copy_8hpp_source.html">Copy.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Copy_8hpp_source.html#l00341">341</a> of file <a class="el" href="Copy_8hpp_source.html">Copy.hpp</a>.</p>
 
 </div>
 </div>
@@ -167,8 +167,8 @@ template&lt;typename SrcBlob , typename DstBlob &gt; </div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="structllama_1_1Copy_3_01mapping_1_1SoA_3_01ArrayExtents_00_01RecordDim_00_01SrcBlobs_00_01SrcSub188205056335a1384df501fb670c7830.html">Copy&lt; mapping::SoA&lt; ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayDims &gt;, mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesDst, LinearizeArrayDims &gt; &gt;</a></li>
-    <li class="footer">Generated on Fri Sep 29 2023 20:09:41 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayExtents_00_01RecordDim_00_01LanesSrc_00_01Linede3e5682a9dc09abfd7b06c89ebc698c.html">Copy&lt; mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex &gt;, mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex &gt;, std::enable_if_t&lt; LanesSrc !=LanesDst &gt; &gt;</a></li>
+    <li class="footer">Generated on Mon Oct 2 2023 09:59:39 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

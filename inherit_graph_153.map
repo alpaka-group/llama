@@ -1,5 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structllama_1_1ProxyRefOpMixin.html" title=" " alt="" coords="5,5,231,76"/>
-<area shape="rect" id="node2" href="$structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html" title=" " alt="" coords="279,43,480,113"/>
-<area shape="rect" id="node3" title=" " alt="" coords="85,101,151,127"/>
+<area shape="rect" id="node1" href="$structllama_1_1ProxyRefOpMixin.html" title=" " alt="" coords="5,5,228,61"/>
+<area shape="rect" id="node2" href="$structllama_1_1mapping_1_1internal_1_1FieldAccessCountReference.html" title=" " alt="" coords="276,5,487,61"/>
 </map>

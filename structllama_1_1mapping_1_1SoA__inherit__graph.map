@@ -1,4 +1,4 @@
-<map id="llama::mapping::SoA&lt; TArrayExtents, TRecordDim, TBlobs, TSubArrayAlignment, TLinearizeArrayDimsFunctor, PermuteFieldsSingleBlob &gt;" name="llama::mapping::SoA&lt; TArrayExtents, TRecordDim, TBlobs, TSubArrayAlignment, TLinearizeArrayDimsFunctor, PermuteFieldsSingleBlob &gt;">
+<map id="llama::mapping::SoA&lt; TArrayExtents, TRecordDim, TBlobs, TSubArrayAlignment, TLinearizeArrayIndexFunctor, PermuteFieldsSingleBlob &gt;" name="llama::mapping::SoA&lt; TArrayExtents, TRecordDim, TBlobs, TSubArrayAlignment, TLinearizeArrayIndexFunctor, PermuteFieldsSingleBlob &gt;">
 <area shape="rect" id="node1" title=" " alt="" coords="11,169,231,255"/>
 <area shape="rect" id="node2" href="$structllama_1_1mapping_1_1MappingBase.html" title=" " alt="" coords="5,80,236,121"/>
 <area shape="rect" id="node3" title=" " alt="" coords="64,5,177,32"/>

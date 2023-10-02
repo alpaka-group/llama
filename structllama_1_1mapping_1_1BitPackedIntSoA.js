@@ -1,9 +1,9 @@
 var structllama_1_1mapping_1_1BitPackedIntSoA =
 [
-    [ "Base", "structllama_1_1mapping_1_1BitPackedIntSoA.html#a469f6dd1ec24bd3c656232f5fc196a36", null ],
-    [ "size_type", "structllama_1_1mapping_1_1BitPackedIntSoA.html#a0ac6db017ec98d6511860308bda2dffc", null ],
-    [ "VHBits", "structllama_1_1mapping_1_1BitPackedIntSoA.html#a4ebfbdd7bfea21f2ce0194b09c36460f", null ],
-    [ "blobSize", "structllama_1_1mapping_1_1BitPackedIntSoA.html#ac00c317d801559e021a494f198725dca", null ],
-    [ "compute", "structllama_1_1mapping_1_1BitPackedIntSoA.html#a36127747a6ccd85385cba177123553d8", null ],
-    [ "blobCount", "structllama_1_1mapping_1_1BitPackedIntSoA.html#a9387e7adaa94f238f7b0e625bb72b444", null ]
+    [ "Base", "structllama_1_1mapping_1_1BitPackedIntSoA.html#a1f3189f1a9d7021e4774c7c13e51b68f", null ],
+    [ "size_type", "structllama_1_1mapping_1_1BitPackedIntSoA.html#a2cbefd0cb2908d81a99eaf3d919ca269", null ],
+    [ "VHBits", "structllama_1_1mapping_1_1BitPackedIntSoA.html#a7de3f59fbe4900973609d003707039a2", null ],
+    [ "blobSize", "structllama_1_1mapping_1_1BitPackedIntSoA.html#ac9ec0a3a918ab366a9b3db774998ce3e", null ],
+    [ "compute", "structllama_1_1mapping_1_1BitPackedIntSoA.html#a85eb8d6fcc8604ff3654f62491a5832a", null ],
+    [ "blobCount", "structllama_1_1mapping_1_1BitPackedIntSoA.html#a941a1bdaf02f75270950ed455d1444d7", null ]
 ];

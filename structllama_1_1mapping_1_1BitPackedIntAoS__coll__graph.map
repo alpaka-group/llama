@@ -1,4 +1,7 @@
-<map id="llama::mapping::BitPackedIntAoS&lt; TArrayExtents, TRecordDim, Bits, SignBit, TLinearizeArrayDimsFunctor, PermuteFields, TStoredIntegral &gt;" name="llama::mapping::BitPackedIntAoS&lt; TArrayExtents, TRecordDim, Bits, SignBit, TLinearizeArrayDimsFunctor, PermuteFields, TStoredIntegral &gt;">
-<area shape="rect" id="node1" title=" " alt="" coords="328,20,571,105"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,280,120"/>
+<map id="llama::mapping::BitPackedIntAoS&lt; TArrayExtents, TRecordDim, Bits, SignBit, TLinearizeArrayIndexFunctor, PermuteFields, TStoredIntegral &gt;" name="llama::mapping::BitPackedIntAoS&lt; TArrayExtents, TRecordDim, Bits, SignBit, TLinearizeArrayIndexFunctor, PermuteFields, TStoredIntegral &gt;">
+<area shape="rect" id="node1" title=" " alt="" coords="864,17,1107,102"/>
+<area shape="rect" id="node2" href="$structllama_1_1mapping_1_1internal_1_1BitPackedIntCommon.html" title=" " alt="" coords="445,17,816,102"/>
+<area shape="rect" id="node3" href="$structllama_1_1mapping_1_1MappingBase.html" title=" " alt="" coords="167,5,397,47"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,13,119,39"/>
+<area shape="rect" id="node5" href="$structllama_1_1internal_1_1BoxedValue.html" title=" " alt="" coords="181,71,383,112"/>
 </map>

@@ -86,16 +86,16 @@ $(document).ready(function(){initNavTree('functions_l.html',''); initResizable()
 
 <h3><a id="index_l"></a>- l -</h3><ul>
 <li>lanes
-: <a class="el" href="structllama_1_1mapping_1_1AoSoA.html#a56293796f4510c11cfb674369adf3691">llama::mapping::AoSoA&lt; TArrayExtents, TRecordDim, Lanes, TLinearizeArrayDimsFunctor, PermuteFields &gt;</a>
+: <a class="el" href="structllama_1_1mapping_1_1AoSoA.html#a25e8b7f91620ec5b3e8d39dad5f049df">llama::mapping::AoSoA&lt; TArrayExtents, TRecordDim, Lanes, TLinearizeArrayIndexFunctor, PermuteFields &gt;</a>
 , <a class="el" href="structllama_1_1SimdTraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__arithmetic__v_3_01T_01_4_01_4_01_4.html#a3bb036cdf786ba6944bd0b26321597b5">llama::SimdTraits&lt; T, std::enable_if_t&lt; std::is_arithmetic_v&lt; T &gt; &gt; &gt;</a>
 </li>
-<li>LinearizeArrayDimsFunctor
-: <a class="el" href="structllama_1_1mapping_1_1AoS.html#a775a2c83b87e0b3f88b62de1e1d43193">llama::mapping::AoS&lt; TArrayExtents, TRecordDim, TFieldAlignment, TLinearizeArrayDimsFunctor, PermuteFields &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1AoSoA.html#a82e5a4d714451eb74b40d983528fb827">llama::mapping::AoSoA&lt; TArrayExtents, TRecordDim, Lanes, TLinearizeArrayDimsFunctor, PermuteFields &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1BitPackedFloatAoS.html#a3014e253909362775cbc03808cdf4df6">llama::mapping::BitPackedFloatAoS&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, TLinearizeArrayDimsFunctor, PermuteFields, TStoredIntegral &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html#a287217c94c182935a74a35938562f356">llama::mapping::BitPackedFloatSoA&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, TLinearizeArrayDimsFunctor, TStoredIntegral &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedIntCommon.html#adfac6d6127a7429b35681556ccaf86a1">llama::mapping::internal::BitPackedIntCommon&lt; TArrayExtents, TRecordDim, Bits, SignBit, TLinearizeArrayDimsFunctor, TStoredIntegral &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1SoA.html#ad0e0d552a9a3bb1243adfb58feeb63dc">llama::mapping::SoA&lt; TArrayExtents, TRecordDim, TBlobs, TSubArrayAlignment, TLinearizeArrayDimsFunctor, PermuteFieldsSingleBlob &gt;</a>
+<li>LinearizeArrayIndexFunctor
+: <a class="el" href="structllama_1_1mapping_1_1AoS.html#a201c5660fa554b1fa51ac570b550182e">llama::mapping::AoS&lt; TArrayExtents, TRecordDim, TFieldAlignment, TLinearizeArrayIndexFunctor, PermuteFields &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1AoSoA.html#ad601750ae27c86b60baa77e52690e977">llama::mapping::AoSoA&lt; TArrayExtents, TRecordDim, Lanes, TLinearizeArrayIndexFunctor, PermuteFields &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1BitPackedFloatAoS.html#a8e5278acd858c456284f0d22b2a60b06">llama::mapping::BitPackedFloatAoS&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, TLinearizeArrayIndexFunctor, PermuteFields, TStoredIntegral &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1BitPackedFloatSoA.html#aa2e1181f91f2906b1dd40a1b14c011ff">llama::mapping::BitPackedFloatSoA&lt; TArrayExtents, TRecordDim, ExponentBits, MantissaBits, TLinearizeArrayIndexFunctor, TStoredIntegral &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedIntCommon.html#a87be171e82345d6da98b5dc5a886a9d6">llama::mapping::internal::BitPackedIntCommon&lt; TArrayExtents, TRecordDim, Bits, SignBit, TLinearizeArrayIndexFunctor, TStoredIntegral &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1SoA.html#a1a71d2b5ba2fcf52330d4fc2b81d3b14">llama::mapping::SoA&lt; TArrayExtents, TRecordDim, TBlobs, TSubArrayAlignment, TLinearizeArrayIndexFunctor, PermuteFieldsSingleBlob &gt;</a>
 </li>
 <li>List
 : <a class="el" href="structllama_1_1RecordCoord.html#a685a368d5b00931fb77af19012b10b4b">llama::RecordCoord&lt; Coords &gt;</a>
@@ -118,7 +118,7 @@ $(document).ready(function(){initNavTree('functions_l.html',''); initResizable()
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri Sep 29 2023 20:09:42 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Mon Oct 2 2023 09:59:39 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

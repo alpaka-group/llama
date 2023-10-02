@@ -1,12 +1,15 @@
 <map id="llama::mapping::MappingBase&lt; TArrayExtents, TRecordDim &gt;" name="llama::mapping::MappingBase&lt; TArrayExtents, TRecordDim &gt;">
-<area shape="rect" id="node1" title=" " alt="" coords="167,371,397,412"/>
-<area shape="rect" id="node3" href="$structllama_1_1mapping_1_1AoS.html" title=" " alt="" coords="475,5,718,76"/>
-<area shape="rect" id="node4" href="$structllama_1_1mapping_1_1AoSoA.html" title=" " alt="" coords="467,100,727,171"/>
-<area shape="rect" id="node5" href="$structllama_1_1mapping_1_1BitPackedFloatAoS.html" title=" " alt="" coords="449,195,744,281"/>
-<area shape="rect" id="node6" href="$structllama_1_1mapping_1_1BitPackedFloatSoA.html" title=" " alt="" coords="469,305,724,390"/>
-<area shape="rect" id="node7" href="$structllama_1_1mapping_1_1Null.html" title=" " alt="" coords="481,415,712,456"/>
-<area shape="rect" id="node8" href="$structllama_1_1mapping_1_1One.html" title=" " alt="" coords="473,481,721,537"/>
-<area shape="rect" id="node9" href="$structllama_1_1mapping_1_1SoA.html" title=" " alt="" coords="487,561,707,646"/>
-<area shape="rect" id="node10" href="$structllama_1_1mapping_1_1internal_1_1BitPackedIntCommon.html" title=" " alt="" coords="445,671,748,741"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,378,119,405"/>
+<area shape="rect" id="node1" title=" " alt="" coords="167,491,397,533"/>
+<area shape="rect" id="node3" href="$structllama_1_1mapping_1_1internal_1_1BitPackedIntCommon.html" title=" " alt="" coords="445,60,816,145"/>
+<area shape="rect" id="node6" href="$structllama_1_1mapping_1_1AoS.html" title=" " alt="" coords="509,170,752,241"/>
+<area shape="rect" id="node7" href="$structllama_1_1mapping_1_1AoSoA.html" title=" " alt="" coords="499,265,762,335"/>
+<area shape="rect" id="node8" href="$structllama_1_1mapping_1_1BitPackedFloatAoS.html" title=" " alt="" coords="483,360,778,445"/>
+<area shape="rect" id="node9" href="$structllama_1_1mapping_1_1BitPackedFloatSoA.html" title=" " alt="" coords="503,469,759,555"/>
+<area shape="rect" id="node10" href="$structllama_1_1mapping_1_1Null.html" title=" " alt="" coords="515,579,746,621"/>
+<area shape="rect" id="node11" href="$structllama_1_1mapping_1_1One.html" title=" " alt="" coords="507,645,755,701"/>
+<area shape="rect" id="node12" href="$structllama_1_1mapping_1_1SoA.html" title=" " alt="" coords="521,725,741,811"/>
+<area shape="rect" id="node13" href="$structllama_1_1mapping_1_1internal_1_1BitPackedIntCommon.html" title=" " alt="" coords="479,835,782,906"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,499,119,525"/>
+<area shape="rect" id="node4" href="$structllama_1_1mapping_1_1BitPackedIntAoS.html" title=" " alt="" coords="864,5,1107,91"/>
+<area shape="rect" id="node5" href="$structllama_1_1mapping_1_1BitPackedIntSoA.html" title=" " alt="" coords="877,115,1093,200"/>
 </map>

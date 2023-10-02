@@ -1,16 +1,3 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structllama_1_1internal_1_1BoxedValue.html" title=" " alt="" coords="187,239,389,281"/>
-<area shape="rect" id="node2" href="$structllama_1_1mapping_1_1internal_1_1BitPackedIntCommon.html" title=" " alt="" coords="457,225,760,295"/>
-<area shape="rect" id="node3" href="$structllama_1_1internal_1_1BoxedValue.html" title=" " alt="" coords="187,123,389,179"/>
-<area shape="rect" id="node4" href="$structllama_1_1mapping_1_1BitPackedFloatAoS.html" title=" " alt="" coords="461,5,756,91"/>
-<area shape="rect" id="node5" href="$structllama_1_1mapping_1_1BitPackedFloatSoA.html" title=" " alt="" coords="481,115,736,200"/>
-<area shape="rect" id="node6" href="$structllama_1_1internal_1_1BoxedValue.html" title=" " alt="" coords="187,28,389,84"/>
-<area shape="rect" id="node7" title=" " alt="" coords="5,371,119,397"/>
-<area shape="rect" id="node8" href="$structllama_1_1mapping_1_1MappingBase.html" title=" " alt="" coords="173,399,403,441"/>
-<area shape="rect" id="node14" href="$structllama_1_1mapping_1_1tree_1_1Mapping.html" title=" " alt="" coords="167,319,409,375"/>
-<area shape="rect" id="node9" href="$structllama_1_1mapping_1_1AoS.html" title=" " alt="" coords="487,670,730,741"/>
-<area shape="rect" id="node10" href="$structllama_1_1mapping_1_1AoSoA.html" title=" " alt="" coords="479,319,739,390"/>
-<area shape="rect" id="node11" href="$structllama_1_1mapping_1_1Null.html" title=" " alt="" coords="493,414,724,455"/>
-<area shape="rect" id="node12" href="$structllama_1_1mapping_1_1One.html" title=" " alt="" coords="485,480,733,536"/>
-<area shape="rect" id="node13" href="$structllama_1_1mapping_1_1SoA.html" title=" " alt="" coords="499,560,719,645"/>
+<area shape="rect" id="node1" href="$structllama_1_1internal_1_1BoxedValue_3_01Constant_3_01V_01_4_00_01I_01_4.html" title=" " alt="" coords="5,5,207,47"/>
 </map>

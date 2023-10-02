@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Low-Level Abstraction of Memory Access: llama::mapping::LinearizeArrayDimsMorton Struct Reference</title>
+<title>Low-Level Abstraction of Memory Access: llama::mapping::LinearizeArrayIndexLeft Struct Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -63,7 +63,7 @@ $(function() {
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
-$(document).ready(function(){initNavTree('structllama_1_1mapping_1_1LinearizeArrayDimsMorton.html',''); initResizable(); });
+$(document).ready(function(){initNavTree('structllama_1_1mapping_1_1LinearizeArrayIndexLeft.html',''); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -84,33 +84,30 @@ $(document).ready(function(){initNavTree('structllama_1_1mapping_1_1LinearizeArr
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="structllama_1_1mapping_1_1LinearizeArrayDimsMorton-members.html">List of all members</a>  </div>
+<a href="structllama_1_1mapping_1_1LinearizeArrayIndexLeft-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">llama::mapping::LinearizeArrayDimsMorton Struct Reference</div>  </div>
+<div class="title">llama::mapping::LinearizeArrayIndexLeft Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p>Functor that maps an <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a> into linear numbers using the Z-order space filling curve (Morton codes).  
- <a href="structllama_1_1mapping_1_1LinearizeArrayDimsMorton.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="Common_8hpp_source.html">Common.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:afe93c064033b97dffcee41fd635dbc50"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents &gt; </td></tr>
-<tr class="memitem:afe93c064033b97dffcee41fd635dbc50"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1LinearizeArrayDimsMorton.html#afe93c064033b97dffcee41fd635dbc50">size</a> (const <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a> &amp;extents) const -&gt; typename <a class="el" href="structllama_1_1ArrayExtents.html#a26ddad4db80efe93143b86c766b9a69f">ArrayExtents::value_type</a></td></tr>
-<tr class="separator:afe93c064033b97dffcee41fd635dbc50"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adeeb93904e5c9ff34b97046f26471a3a"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents &gt; </td></tr>
-<tr class="memitem:adeeb93904e5c9ff34b97046f26471a3a"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1LinearizeArrayDimsMorton.html#adeeb93904e5c9ff34b97046f26471a3a">operator()</a> (const typename <a class="el" href="structllama_1_1ArrayExtents.html#abce5defd13fa5853289a5b1f744eb243">ArrayExtents::Index</a> &amp;ai, [[maybe_unused]] const <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a> &amp;extents) const -&gt; typename <a class="el" href="structllama_1_1ArrayExtents.html#a26ddad4db80efe93143b86c766b9a69f">ArrayExtents::value_type</a></td></tr>
-<tr class="separator:adeeb93904e5c9ff34b97046f26471a3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c5bdbeecd45d51599cd390dbbeb8849"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents &gt; </td></tr>
+<tr class="memitem:a0c5bdbeecd45d51599cd390dbbeb8849"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1LinearizeArrayIndexLeft.html#a0c5bdbeecd45d51599cd390dbbeb8849">size</a> (const <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a> &amp;extents) -&gt; typename <a class="el" href="structllama_1_1ArrayExtents.html#a26ddad4db80efe93143b86c766b9a69f">ArrayExtents::value_type</a></td></tr>
+<tr class="separator:a0c5bdbeecd45d51599cd390dbbeb8849"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6494312cef4828f0bf1360f585c22843"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents &gt; </td></tr>
+<tr class="memitem:a6494312cef4828f0bf1360f585c22843"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1LinearizeArrayIndexLeft.html#a6494312cef4828f0bf1360f585c22843">operator()</a> (const typename <a class="el" href="structllama_1_1ArrayExtents.html#abce5defd13fa5853289a5b1f744eb243">ArrayExtents::Index</a> &amp;ai, const <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a> &amp;extents) const -&gt; typename <a class="el" href="structllama_1_1ArrayExtents.html#a26ddad4db80efe93143b86c766b9a69f">ArrayExtents::value_type</a></td></tr>
+<tr class="separator:a6494312cef4828f0bf1360f585c22843"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Functor that maps an <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a> into linear numbers using the Z-order space filling curve (Morton codes). </p>
+<div class="textblock"><p>Functor that maps a <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a> into linear numbers the way Fortran arrays work. The fast moving index of the <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a> object should be the last one. E.g. ArrayIndex&lt;3&gt; a; stores 3 indices where a[0] should be incremented in the innermost loop. </p>
 
-<p class="definition">Definition at line <a class="el" href="Common_8hpp_source.html#l00109">109</a> of file <a class="el" href="Common_8hpp_source.html">Common.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Common_8hpp_source.html#l00079">79</a> of file <a class="el" href="Common_8hpp_source.html">Common.hpp</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="adeeb93904e5c9ff34b97046f26471a3a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adeeb93904e5c9ff34b97046f26471a3a">&#9670;&nbsp;</a></span>operator()()</h2>
+<a id="a6494312cef4828f0bf1360f585c22843"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6494312cef4828f0bf1360f585c22843">&#9670;&nbsp;</a></span>operator()()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -121,7 +118,7 @@ template&lt;typename ArrayExtents &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr auto llama::mapping::LinearizeArrayDimsMorton::operator() </td>
+          <td class="memname">constexpr auto llama::mapping::LinearizeArrayIndexLeft::operator() </td>
           <td>(</td>
           <td class="paramtype">const typename <a class="el" href="structllama_1_1ArrayExtents.html#abce5defd13fa5853289a5b1f744eb243">ArrayExtents::Index</a> &amp;&#160;</td>
           <td class="paramname"><em>ai</em>, </td>
@@ -129,7 +126,7 @@ template&lt;typename ArrayExtents &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">[[maybe_unused] ] const <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a> &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a> &amp;&#160;</td>
           <td class="paramname"><em>extents</em>&#160;</td>
         </tr>
         <tr>
@@ -147,19 +144,19 @@ template&lt;typename ArrayExtents &gt; </div>
 </div><div class="memdoc">
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">ai</td><td>Coordinate in the array dimensions. </td></tr>
+    <tr><td class="paramname">ai</td><td>Index in the array dimensions. </td></tr>
     <tr><td class="paramname">extents</td><td>Total size of the array dimensions. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Linearized index. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Common_8hpp_source.html#l00131">131</a> of file <a class="el" href="Common_8hpp_source.html">Common.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Common_8hpp_source.html#l00091">91</a> of file <a class="el" href="Common_8hpp_source.html">Common.hpp</a>.</p>
 
 </div>
 </div>
-<a id="afe93c064033b97dffcee41fd635dbc50"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afe93c064033b97dffcee41fd635dbc50">&#9670;&nbsp;</a></span>size()</h2>
+<a id="a0c5bdbeecd45d51599cd390dbbeb8849"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c5bdbeecd45d51599cd390dbbeb8849">&#9670;&nbsp;</a></span>size()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -170,11 +167,11 @@ template&lt;typename ArrayExtents &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr auto llama::mapping::LinearizeArrayDimsMorton::size </td>
+          <td class="memname">constexpr auto llama::mapping::LinearizeArrayIndexLeft::size </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a> &amp;&#160;</td>
           <td class="paramname"><em>extents</em></td><td>)</td>
-          <td> const -&gt; typename <a class="el" href="structllama_1_1ArrayExtents.html#a26ddad4db80efe93143b86c766b9a69f">ArrayExtents::value_type</a>
+          <td> -&gt; typename <a class="el" href="structllama_1_1ArrayExtents.html#a26ddad4db80efe93143b86c766b9a69f">ArrayExtents::value_type</a>
         </td>
         </tr>
       </table>
@@ -185,7 +182,7 @@ template&lt;typename ArrayExtents &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Common_8hpp_source.html#l00112">112</a> of file <a class="el" href="Common_8hpp_source.html">Common.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Common_8hpp_source.html#l00082">82</a> of file <a class="el" href="Common_8hpp_source.html">Common.hpp</a>.</p>
 
 </div>
 </div>
@@ -197,8 +194,8 @@ template&lt;typename ArrayExtents &gt; </div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1LinearizeArrayDimsMorton.html">LinearizeArrayDimsMorton</a></li>
-    <li class="footer">Generated on Fri Sep 29 2023 20:09:42 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1LinearizeArrayIndexLeft.html">LinearizeArrayIndexLeft</a></li>
+    <li class="footer">Generated on Mon Oct 2 2023 09:59:39 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
