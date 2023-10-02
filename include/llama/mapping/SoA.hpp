@@ -126,10 +126,19 @@ namespace llama::mapping
         template<std::size_t... RecordCoords>
         LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
             typename Base::ArrayIndex ai,
+            RecordCoord<RecordCoords...> rc = {}) const -> NrAndOffset<size_type>
+        {
+            return blobNrAndOffset(LinearizeArrayIndexFunctor{}(ai, Base::extents()), rc);
+        }
+
+        // Exposed for aosoaCommonBlockCopy. Should be private ...
+        template<std::size_t... RecordCoords>
+        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
+            size_type flatArrayIndex,
             RecordCoord<RecordCoords...> = {}) const -> NrAndOffset<size_type>
         {
-            const size_type elementOffset = LinearizeArrayIndexFunctor{}(ai, Base::extents())
-                * static_cast<size_type>(sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>));
+            const size_type elementOffset
+                = flatArrayIndex * static_cast<size_type>(sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>));
             if constexpr(blobs == Blobs::OnePerField)
             {
                 constexpr auto blob = flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>;
