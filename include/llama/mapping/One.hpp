@@ -15,6 +15,7 @@ namespace llama::mapping
     /// \tparam PermuteFields Defines how the record dimension's fields should be permuted. See \ref
     /// PermuteFieldsInOrder, \ref PermuteFieldsIncreasingAlignment, \ref PermuteFieldsDecreasingAlignment and
     /// \ref PermuteFieldsMinimizePadding.
+    LLAMA_EXPORT
     template<
         typename TArrayExtents,
         typename TRecordDim,
@@ -69,22 +70,26 @@ namespace llama::mapping
 
     /// One mapping preserving the alignment of the field types by inserting padding.
     /// \see One
+    LLAMA_EXPORT
     template<typename ArrayExtents, typename RecordDim>
     using AlignedOne = One<ArrayExtents, RecordDim, FieldAlignment::Align, PermuteFieldsInOrder>;
 
     /// One mapping preserving the alignment of the field types by inserting padding and permuting the field order to
     /// minimize this padding.
     /// \see One
+    LLAMA_EXPORT
     template<typename ArrayExtents, typename RecordDim>
     using MinAlignedOne = One<ArrayExtents, RecordDim, FieldAlignment::Align, PermuteFieldsMinimizePadding>;
 
     /// One mapping packing the field types tightly, violating the types' alignment requirements.
     /// \see One
+    LLAMA_EXPORT
     template<typename ArrayExtents, typename RecordDim>
     using PackedOne = One<ArrayExtents, RecordDim, FieldAlignment::Pack, PermuteFieldsInOrder>;
 
     /// Binds parameters to a \ref One mapping except for array and record dimension, producing a quoted
     /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
+    LLAMA_EXPORT
     template<
         FieldAlignment FieldAlignment = FieldAlignment::Align,
         template<typename> typename PermuteFields = PermuteFieldsMinimizePadding>
@@ -94,9 +99,11 @@ namespace llama::mapping
         using fn = One<ArrayExtents, RecordDim, FieldAlignment, PermuteFields>;
     };
 
+    LLAMA_EXPORT
     template<typename Mapping>
     inline constexpr bool isOne = false;
 
+    LLAMA_EXPORT
     template<
         typename ArrayExtents,
         typename RecordDim,

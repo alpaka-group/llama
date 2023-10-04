@@ -23,6 +23,7 @@ namespace llama::mapping
     /// individually. A value of e.g. 64, counts accesses per 64 byte block.
     /// @tparam TCountType Data type used to count the number of accesses. Atomic increments must be supported for this
     /// type.
+    LLAMA_EXPORT
     template<
         typename Mapping,
         typename Mapping::ArrayExtents::value_type Granularity = 1,
@@ -222,9 +223,11 @@ EOF
 )";
     };
 
+    LLAMA_EXPORT
     template<typename Mapping>
     inline constexpr bool isHeatmap = false;
 
+    LLAMA_EXPORT
     template<typename Mapping, typename Mapping::ArrayExtents::value_type Granularity, typename CountType>
     inline constexpr bool isHeatmap<Heatmap<Mapping, Granularity, CountType>> = true;
 } // namespace llama::mapping

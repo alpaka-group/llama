@@ -15,6 +15,7 @@ namespace llama::mapping
     /// \tparam PermuteFields Defines how the record dimension's fields should be permuted. See \ref
     /// PermuteFieldsInOrder, \ref PermuteFieldsIncreasingAlignment, \ref PermuteFieldsDecreasingAlignment and
     /// \ref PermuteFieldsMinimizePadding.
+    LLAMA_EXPORT
     template<
         typename TArrayExtents,
         typename TRecordDim,
@@ -64,16 +65,19 @@ namespace llama::mapping
     };
 
     // we can drop this when inherited ctors also inherit deduction guides
+    LLAMA_EXPORT
     template<typename TArrayExtents, typename TRecordDim>
     AoS(TArrayExtents, TRecordDim) -> AoS<TArrayExtents, TRecordDim>;
 
     /// Array of struct mapping preserving the alignment of the field types by inserting padding.
     /// \see AoS
+    LLAMA_EXPORT
     template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
     using AlignedAoS = AoS<ArrayExtents, RecordDim, FieldAlignment::Align, LinearizeArrayIndexFunctor>;
 
     /// Array of struct mapping preserving the alignment of the field types by inserting padding and permuting the
     /// field order to minimize this padding. \see AoS
+    LLAMA_EXPORT
     template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
     using MinAlignedAoS = AoS<
         ArrayExtents,
@@ -84,11 +88,13 @@ namespace llama::mapping
 
     /// Array of struct mapping packing the field types tightly, violating the type's alignment requirements.
     /// \see AoS
+    LLAMA_EXPORT
     template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
     using PackedAoS = AoS<ArrayExtents, RecordDim, FieldAlignment::Pack, LinearizeArrayIndexFunctor>;
 
     /// Binds parameters to an \ref AoS mapping except for array and record dimension, producing a quoted meta
     /// function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
+    LLAMA_EXPORT
     template<
         FieldAlignment Alignment = FieldAlignment::Align,
         typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
@@ -98,9 +104,11 @@ namespace llama::mapping
         using fn = AoS<ArrayExtents, RecordDim, Alignment, LinearizeArrayIndexFunctor>;
     };
 
+    LLAMA_EXPORT
     template<typename Mapping>
     inline constexpr bool isAoS = false;
 
+    LLAMA_EXPORT
     template<
         typename ArrayExtents,
         typename RecordDim,

@@ -11,6 +11,7 @@ namespace llama::mapping
     /// changed.
     /// @tparam Permutation The pack of integrals describing the permutation of the array indices. The inner mapping
     /// will be called with an ArrayIndex{ai[Permutation]...}.
+    LLAMA_EXPORT
     template<typename Mapping, std::size_t... Permutation>
     struct PermuteArrayIndex : Mapping
     {
@@ -53,12 +54,15 @@ namespace llama::mapping
         }
     };
 
+    LLAMA_EXPORT
     template<typename Mapping>
     PermuteArrayIndex(Mapping) -> PermuteArrayIndex<Mapping>;
 
+    LLAMA_EXPORT
     template<typename Mapping>
     inline constexpr bool isPermuteArrayIndex = false;
 
+    LLAMA_EXPORT
     template<typename Mapping, std::size_t... Permutation>
     inline constexpr bool isPermuteArrayIndex<PermuteArrayIndex<Mapping, Permutation...>> = true;
 } // namespace llama::mapping

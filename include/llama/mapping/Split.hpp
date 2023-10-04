@@ -94,6 +94,7 @@ namespace llama::mapping
     /// \tparam MappingTemplate1 The mapping used for the selected part of the record dimension.
     /// \tparam MappingTemplate2 The mapping used for the not selected part of the record dimension.
     /// \tparam SeparateBlobs If true, both pieces of the record dimension are mapped to separate blobs.
+    LLAMA_EXPORT
     template<
         typename TArrayExtents,
         typename TRecordDim,
@@ -222,6 +223,7 @@ namespace llama::mapping
 
     /// Binds parameters to a \ref Split mapping except for array and record dimension, producing a quoted
     /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
+    LLAMA_EXPORT
     template<
         typename SelectorForMapping1,
         template<typename...>
@@ -236,9 +238,11 @@ namespace llama::mapping
             = Split<ArrayExtents, RecordDim, SelectorForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs>;
     };
 
+    LLAMA_EXPORT
     template<typename Mapping>
     inline constexpr bool isSplit = false;
 
+    LLAMA_EXPORT
     template<
         typename ArrayExtents,
         typename RecordDim,

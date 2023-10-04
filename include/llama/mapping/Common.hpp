@@ -13,6 +13,7 @@
 
 namespace llama::mapping
 {
+    LLAMA_EXPORT
     template<typename TArrayExtents, typename TRecordDim>
     struct MappingBase : protected TArrayExtents
     {
@@ -40,6 +41,7 @@ namespace llama::mapping
     /// Functor that maps an \ref ArrayIndex into linear numbers, where the fast moving index should be the rightmost
     /// one, which models how C++ arrays work and is analogous to mdspan's layout_right. E.g. ArrayIndex<3> a; stores 3
     /// indices where a[2] should be incremented in the innermost loop.
+    LLAMA_EXPORT
     struct LinearizeArrayIndexRight
     {
         template<typename ArrayExtents>
@@ -71,11 +73,13 @@ namespace llama::mapping
         }
     };
 
+    LLAMA_EXPORT
     using LinearizeArrayIndexCpp = LinearizeArrayIndexRight;
 
     /// Functor that maps a \ref ArrayIndex into linear numbers the way Fortran arrays work. The fast moving index of
     /// the ArrayIndex object should be the last one. E.g. ArrayIndex<3> a; stores 3 indices where a[0] should be
     /// incremented in the innermost loop.
+    LLAMA_EXPORT
     struct LinearizeArrayIndexLeft
     {
         template<typename ArrayExtents>
@@ -107,9 +111,11 @@ namespace llama::mapping
         }
     };
 
+    LLAMA_EXPORT
     using LinearizeArrayIndexFortran = LinearizeArrayIndexLeft;
 
     /// Functor that maps an \ref ArrayIndex into linear numbers using the Z-order space filling curve (Morton codes).
+    LLAMA_EXPORT
     struct LinearizeArrayIndexMorton
     {
         template<typename ArrayExtents>
@@ -170,6 +176,7 @@ namespace llama::mapping
     };
 
     /// Retains the order of the record dimension's fields.
+    LLAMA_EXPORT
     template<typename TFlatRecordDim>
     struct PermuteFieldsInOrder
     {
@@ -182,6 +189,7 @@ namespace llama::mapping
     /// Sorts the record dimension's the fields according to a given predicate on the field types.
     /// @tparam Less A binary predicate accepting two field types, which exposes a member value. Value must be true if
     /// the first field type is less than the second one, otherwise false.
+    LLAMA_EXPORT
     template<typename FlatOrigRecordDim, template<typename, typename> typename Less>
     struct PermuteFieldsSorted
     {
@@ -218,14 +226,17 @@ namespace llama::mapping
     } // namespace internal
 
     /// Sorts the record dimension fields by increasing alignment of its fields.
+    LLAMA_EXPORT
     template<typename FlatRecordDim>
     using PermuteFieldsIncreasingAlignment = PermuteFieldsSorted<FlatRecordDim, internal::LessAlignment>;
 
     /// Sorts the record dimension fields by decreasing alignment of its fields.
+    LLAMA_EXPORT
     template<typename FlatRecordDim>
     using PermuteFieldsDecreasingAlignment = PermuteFieldsSorted<FlatRecordDim, internal::MoreAlignment>;
 
     /// Sorts the record dimension fields by the alignment of its fields to minimize padding.
+    LLAMA_EXPORT
     template<typename FlatRecordDim>
     using PermuteFieldsMinimizePadding = PermuteFieldsIncreasingAlignment<FlatRecordDim>;
 
@@ -256,7 +267,7 @@ namespace llama::mapping
         }
     } // namespace internal
 
-
+    LLAMA_EXPORT
     enum class FieldAlignment
     {
         Pack,

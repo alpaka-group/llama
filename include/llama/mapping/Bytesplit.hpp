@@ -19,6 +19,7 @@ namespace llama::mapping
 
     /// Meta mapping splitting each field in the record dimension into an array of bytes and mapping the resulting
     /// record dimension using a further mapping.
+    LLAMA_EXPORT
     template<typename TArrayExtents, typename TRecordDim, template<typename, typename> typename InnerMapping>
     struct Bytesplit : private InnerMapping<TArrayExtents, internal::SplitBytes<TRecordDim>>
     {
@@ -131,6 +132,7 @@ namespace llama::mapping
 
     /// Binds parameters to a \ref Bytesplit mapping except for array and record dimension, producing a quoted
     /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
+    LLAMA_EXPORT
     template<template<typename, typename> typename InnerMapping>
     struct BindBytesplit
     {
@@ -138,9 +140,11 @@ namespace llama::mapping
         using fn = Bytesplit<ArrayExtents, RecordDim, InnerMapping>;
     };
 
+    LLAMA_EXPORT
     template<typename Mapping>
     inline constexpr bool isBytesplit = false;
 
+    LLAMA_EXPORT
     template<typename TArrayExtents, typename TRecordDim, template<typename, typename> typename InnerMapping>
     inline constexpr bool isBytesplit<Bytesplit<TArrayExtents, TRecordDim, InnerMapping>> = true;
 } // namespace llama::mapping

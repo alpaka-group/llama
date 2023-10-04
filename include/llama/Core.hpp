@@ -17,12 +17,14 @@
 namespace llama
 {
     /// Anonymous naming for a \ref Field.
+    LLAMA_EXPORT
     struct NoName
     {
     };
 
     /// @brief Tells whether the given type is allowed as a field type in LLAMA. Such types need to be trivially
     /// constructible and trivially destructible.
+    LLAMA_EXPORT
     template<typename T>
     inline constexpr bool isAllowedFieldType = std::is_trivially_destructible_v<T>;
 
@@ -33,19 +35,23 @@ namespace llama
     /// Record. 2. an array of static size of any type, in which case a Record with as many \ref Field as the array
     /// size is created, named \ref RecordCoord specialized on consecutive numbers I. 3. A scalar type different from
     /// \ref Record, making this node a leaf of this type.
+    LLAMA_EXPORT
     template<typename Tag, typename Type>
     struct Field
     {
         static_assert(isAllowedFieldType<Type>, "This field's type is not allowed");
     };
 
+    LLAMA_EXPORT
     template<typename T>
     inline constexpr bool isField = false;
 
+    LLAMA_EXPORT
     template<typename Tag, typename Type>
     inline constexpr bool isField<Field<Tag, Type>> = true;
 
     /// A type list of \ref Field%s which may be used to define a record dimension.
+    LLAMA_EXPORT
     template<typename... Fields>
 #if __cpp_concepts
     // Cannot use a fold expression here, because clang/nvcc/icx cannot handle more than 256 arguments.
@@ -86,6 +92,7 @@ namespace llama
     inline namespace literals
     {
         /// Literal operator for converting a string literal "abc"_Name to a StringTag<"Name">.
+        LLAMA_EXPORT
         template<internal::FixedString Name>
         auto operator"" _Name()
         {
@@ -95,6 +102,7 @@ namespace llama
 
     /// Alternative to \ref Field. Use with string literals, e.g. NamedField<"x", float>. Access at the \ref View
     /// requires to use "x"_Name then.
+    LLAMA_EXPORT
     template<internal::FixedString Tag, typename Type>
     using NamedField = Field<internal::StringTag<Tag>, Type>;
 
@@ -136,11 +144,13 @@ namespace llama
     } // namespace internal
 
     /// Reflects the given type T using Boost.Describe and creates a record dimension for it.
+    LLAMA_EXPORT
     template<typename T>
     using ReflectToRecordDim = decltype(internal::reflectToRecordDim<T>());
 #    endif
 #endif
 
+    LLAMA_EXPORT
     template<typename T>
     struct NrAndOffset
     {
@@ -153,15 +163,18 @@ namespace llama
         }
     };
 
+    LLAMA_EXPORT
     template<typename Int>
     NrAndOffset(Int, Int) -> NrAndOffset<Int>;
 
+    LLAMA_EXPORT
     template<typename TA, typename TB>
     auto operator==(const NrAndOffset<TA>& a, const NrAndOffset<TB>& b) -> bool
     {
         return a.nr == b.nr && a.offset == b.offset;
     }
 
+    LLAMA_EXPORT
     template<typename TA, typename TB>
     auto operator!=(const NrAndOffset<TA>& a, const NrAndOffset<TB>& b) -> bool
     {
@@ -169,16 +182,20 @@ namespace llama
     }
 
     /// Get the tag from a \ref Field.
+    LLAMA_EXPORT
     template<typename Field>
     using GetFieldTag = mp_first<Field>;
 
     /// Get the type from a \ref Field.
+    LLAMA_EXPORT
     template<typename Field>
     using GetFieldType = mp_second<Field>;
 
+    LLAMA_EXPORT
     template<typename T>
     inline constexpr auto isRecord = false;
 
+    LLAMA_EXPORT
     template<typename... Fields>
     inline constexpr auto isRecord<Record<Fields...>> = true;
 
@@ -212,6 +229,7 @@ namespace llama
 
     /// Get the tags of all \ref Field%s from the root of the record dimension tree until to the node identified by
     /// \ref RecordCoord.
+    LLAMA_EXPORT
     template<typename RecordDim, typename RecordCoord>
     using GetTags = typename internal::GetTagsImpl<RecordDim, RecordCoord>::type;
 
@@ -231,6 +249,7 @@ namespace llama
     } // namespace internal
 
     /// Get the tag of the \ref Field at a \ref RecordCoord inside the record dimension tree.
+    LLAMA_EXPORT
     template<typename RecordDim, typename RecordCoord>
     using GetTag = typename internal::GetTagImpl<RecordDim, RecordCoord>::type;
 
@@ -240,6 +259,7 @@ namespace llama
     /// \tparam RecordCoordA \ref RecordCoord based on RecordDimA along which the tags are compared.
     /// \tparam RecordDimB second record dimension.
     /// \tparam RecordCoordB \ref RecordCoord based on RecordDimB along which the tags are compared.
+    LLAMA_EXPORT
     template<typename RecordDimA, typename RecordCoordA, typename RecordDimB, typename RecordCoordB>
     inline constexpr auto hasSameTags = []() constexpr
     {
@@ -328,6 +348,7 @@ namespace llama
 
     /// Converts a series of tags, or a list of tags, navigating down a record dimension into a \ref RecordCoord. A
     /// RecordCoord will be passed through unmodified.
+    LLAMA_EXPORT
     template<typename RecordDim, typename... TagsOrTagList>
     using GetCoordFromTags = typename internal::GetCoordFromTagsImpl<RecordDim, RecordCoord<>, TagsOrTagList...>::type;
 
@@ -362,6 +383,7 @@ namespace llama
 
     /// Returns the type of a node in a record dimension tree identified by a given \ref RecordCoord or a series of
     /// tags.
+    LLAMA_EXPORT
     template<typename RecordDim, typename... RecordCoordOrTags>
     using GetType = typename internal::GetTypeImpl<RecordDim, RecordCoordOrTags...>::type;
 
@@ -401,6 +423,7 @@ namespace llama
     } // namespace internal
 
     /// Returns a flat type list containing all record coordinates to all leaves of the given record dimension.
+    LLAMA_EXPORT
     template<typename RecordDim>
     using LeafRecordCoords = typename internal::LeafRecordCoordsImpl<RecordDim, RecordCoord<>>::type;
 
@@ -409,6 +432,7 @@ namespace llama
     /// the \ref RecordCoord in the record dimension tree.
     /// \param baseCoord \ref RecordCoord at which the iteration should be started. The functor is called on elements
     /// beneath this coordinate.
+    LLAMA_EXPORT
     template<typename RecordDim, typename Functor, std::size_t... Coords>
     LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeafCoord(Functor&& functor, RecordCoord<Coords...> baseCoord)
     {
@@ -425,6 +449,7 @@ namespace llama
     /// the \ref RecordCoord in the record dimension tree.
     /// \param baseTags Tags used to define where the iteration should be started. The functor is called on elements
     /// beneath this coordinate.
+    LLAMA_EXPORT
     template<typename RecordDim, typename Functor, typename... Tags>
     LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeafCoord(Functor&& functor, Tags... /*baseTags*/)
     {
@@ -452,17 +477,21 @@ namespace llama
     } // namespace internal
 
     /// Returns a flat type list containing all leaf field types of the given record dimension.
+    LLAMA_EXPORT
     template<typename RecordDim>
     using FlatRecordDim = typename internal::FlattenRecordDimImpl<RecordDim>::type;
 
     /// The total number of fields in the recursively expanded record dimension.
+    LLAMA_EXPORT
     template<typename RecordDim>
     inline constexpr std::size_t flatFieldCount = 1;
 
+    LLAMA_EXPORT
     template<typename... Children>
     inline constexpr std::size_t flatFieldCount<Record<Children...>>
         = (flatFieldCount<GetFieldType<Children>> + ... + 0);
 
+    LLAMA_EXPORT
     template<typename Child, std::size_t N>
     inline constexpr std::size_t flatFieldCount<Child[N]> = flatFieldCount<Child> * N;
 
@@ -484,17 +513,21 @@ namespace llama
 
     /// The equivalent zero based index into a flat record dimension (\ref FlatRecordDim) of the given hierarchical
     /// record coordinate.
+    LLAMA_EXPORT
     template<typename RecordDim, typename RecordCoord>
     inline constexpr std::size_t flatRecordCoord = 0;
 
+    LLAMA_EXPORT
     template<typename T>
     inline constexpr std::size_t flatRecordCoord<T, RecordCoord<>> = 0;
 
+    LLAMA_EXPORT
     template<typename... Children, std::size_t I, std::size_t... Is>
     inline constexpr std::size_t flatRecordCoord<Record<Children...>, RecordCoord<I, Is...>>
         = internal::flatFieldCountBefore<I, Record<Children...>>
         + flatRecordCoord<GetFieldType<mp_at_c<Record<Children...>, I>>, RecordCoord<Is...>>;
 
+    LLAMA_EXPORT
     template<typename Child, std::size_t N, std::size_t I, std::size_t... Is>
     inline constexpr std::size_t flatRecordCoord<Child[N], RecordCoord<I, Is...>>
         = flatFieldCount<Child> * I + flatRecordCoord<Child, RecordCoord<Is...>>;
@@ -517,19 +550,23 @@ namespace llama
 
     /// The alignment of a type list if its elements would be in a normal struct. Effectively returns the maximum
     /// alignment value in the type list.
+    LLAMA_EXPORT
     template<typename TypeList>
     inline constexpr std::size_t flatAlignOf = internal::flatAlignOfImpl<TypeList>();
 
     /// The alignment of a type T.
+    LLAMA_EXPORT
     template<typename T>
     inline constexpr std::size_t alignOf = alignof(T);
 
     /// The alignment of a record dimension if its fields would be in a normal struct. Effectively returns the maximum
     /// alignment value in the type list.
+    LLAMA_EXPORT
     template<typename... Fields>
     inline constexpr std::size_t alignOf<Record<Fields...>> = flatAlignOf<FlatRecordDim<Record<Fields...>>>;
 
     /// Returns the ceiling of a / b.
+    LLAMA_EXPORT
     template<typename Integral>
     [[nodiscard]] LLAMA_FN_HOST_ACC_INLINE constexpr auto divCeil(Integral a, Integral b) -> Integral
     {
@@ -537,6 +574,7 @@ namespace llama
     }
 
     /// Returns the integral n rounded up to be a multiple of mult.
+    LLAMA_EXPORT
     template<typename Integral>
     [[nodiscard]] LLAMA_FN_HOST_ACC_INLINE constexpr auto roundUpToMultiple(Integral n, Integral mult) -> Integral
     {
@@ -575,19 +613,23 @@ namespace llama
     } // namespace internal
 
     /// The size of a type list if its elements would be in a normal struct.
+    LLAMA_EXPORT
     template<typename TypeList, bool Align, bool IncludeTailPadding = true>
     inline constexpr std::size_t flatSizeOf = internal::sizeOfImpl<TypeList, Align, IncludeTailPadding>();
 
     /// The size of a type T.
+    LLAMA_EXPORT
     template<typename T, bool Align = false, bool IncludeTailPadding = true>
     inline constexpr std::size_t sizeOf = sizeof(T);
 
     /// The size of a record dimension if its fields would be in a normal struct.
+    LLAMA_EXPORT
     template<typename... Fields, bool Align, bool IncludeTailPadding>
     inline constexpr std::size_t sizeOf<Record<Fields...>, Align, IncludeTailPadding>
         = flatSizeOf<FlatRecordDim<Record<Fields...>>, Align, IncludeTailPadding>;
 
     /// The byte offset of an element in a type list ifs elements would be in a normal struct.
+    LLAMA_EXPORT
     template<typename TypeList, std::size_t I, bool Align>
     inline constexpr std::size_t flatOffsetOf = internal::offsetOfImplWorkaround<TypeList, I, Align>();
 
@@ -614,6 +656,7 @@ namespace llama
     /// The byte offset of an element in a record dimension if it would be a normal struct.
     /// \tparam RecordDim Record dimension tree.
     /// \tparam RecordCoord Record coordinate of an element inrecord dimension tree.
+    LLAMA_EXPORT
     template<typename RecordDim, typename RecordCoord, bool Align = false>
     inline constexpr std::size_t offsetOf
         = flatOffsetOf<FlatRecordDim<RecordDim>, flatRecordCoord<RecordDim, RecordCoord>, Align>;
@@ -650,6 +693,7 @@ namespace llama
     } // namespace internal
 
     /// True if the T is a record dimension. That is, T is either a llama::Record or a bounded array.
+    LLAMA_EXPORT
     template<typename T>
     inline constexpr bool isRecordDim = isRecord<T> || internal::IsBoundedArray<T>::value;
 
@@ -701,12 +745,14 @@ namespace llama
 
     /// Creates a new record dimension where each new leaf field's type is the result of applying FieldTypeFunctor to
     /// the original leaf's \ref RecordCoord and field's type.
+    LLAMA_EXPORT
     template<typename RecordDim, template<typename, typename> typename FieldTypeFunctor>
     using TransformLeavesWithCoord =
         typename internal::TransformLeavesWithCoordImpl<RecordCoord<>, RecordDim, FieldTypeFunctor>::type;
 
     /// Creates a new record dimension where each new leaf field's type is the result of applying FieldTypeFunctor to
     /// the original leaf field's type.
+    LLAMA_EXPORT
     template<typename RecordDim, template<typename> typename FieldTypeFunctor>
     using TransformLeaves
         = TransformLeavesWithCoord<RecordDim, internal::MakePassSecond<FieldTypeFunctor>::template fn>;
@@ -767,15 +813,18 @@ namespace llama
     } // namespace internal
 
     /// Creates a merged record dimension, where duplicated, nested fields are unified.
+    LLAMA_EXPORT
     template<typename RecordDimA, typename RecordDimB>
     using MergedRecordDims =
         typename decltype(internal::mergeRecordDimsImpl(mp_identity<RecordDimA>{}, mp_identity<RecordDimB>{}))::type;
 
     /// Alias for ToT, adding `const` if FromT is const qualified.
+    LLAMA_EXPORT
     template<typename FromT, typename ToT>
     using CopyConst = std::conditional_t<std::is_const_v<FromT>, const ToT, ToT>;
 
     /// Used as template argument to specify a constant/compile-time value.
+    LLAMA_EXPORT
     template<auto V>
     using Constant = std::integral_constant<decltype(V), V>;
 
@@ -792,6 +841,7 @@ namespace llama
         };
     } // namespace internal
 
+    LLAMA_EXPORT
     template<typename T>
     inline constexpr bool isConstant = internal::IsConstant<T>::value;
 
@@ -838,6 +888,7 @@ namespace llama
         };
     } // namespace internal
 
+    LLAMA_EXPORT
     struct PrettySize
     {
         double size;
@@ -846,6 +897,7 @@ namespace llama
 
     /// Repeatedly divides the given size (in bytes) until it fits below 1000. Returns the new size and a string
     /// literal with the corresponding unit.
+    LLAMA_EXPORT
     inline auto prettySize(double size) -> PrettySize
     {
         static const char* unit[] = {"B ", "KB", "MB", "GB", "TB", "PB", "EB"};

@@ -59,6 +59,7 @@ namespace llama::mapping
     } // namespace internal
 
     /// Mapping that swaps the byte order of all values when loading/storing.
+    LLAMA_EXPORT
     template<typename ArrayExtents, typename RecordDim, template<typename, typename> typename InnerMapping>
     struct Byteswap : Projection<ArrayExtents, RecordDim, InnerMapping, internal::MakeByteswapProjectionMap<RecordDim>>
     {
@@ -71,6 +72,7 @@ namespace llama::mapping
 
     /// Binds parameters to a \ref ChangeType mapping except for array and record dimension, producing a quoted
     /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
+    LLAMA_EXPORT
     template<template<typename, typename> typename InnerMapping>
     struct BindByteswap
     {
@@ -78,9 +80,11 @@ namespace llama::mapping
         using fn = Byteswap<ArrayExtents, RecordDim, InnerMapping>;
     };
 
+    LLAMA_EXPORT
     template<typename Mapping>
     inline constexpr bool isByteswap = false;
 
+    LLAMA_EXPORT
     template<typename TArrayExtents, typename TRecordDim, template<typename, typename> typename InnerMapping>
     inline constexpr bool isByteswap<Byteswap<TArrayExtents, TRecordDim, InnerMapping>> = true;
 } // namespace llama::mapping

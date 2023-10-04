@@ -14,6 +14,7 @@
 namespace llama::accessor
 {
     /// Default accessor. Passes through the given reference.
+    LLAMA_EXPORT
     struct Default
     {
         template<typename Reference>
@@ -24,6 +25,7 @@ namespace llama::accessor
     };
 
     /// Allows only read access and returns values instead of references to memory.
+    LLAMA_EXPORT
     struct ByValue
     {
         template<typename Reference>
@@ -38,6 +40,7 @@ namespace llama::accessor
     };
 
     /// Allows only read access by qualifying the references to memory with const.
+    LLAMA_EXPORT
     struct Const
     {
         // for l-value references
@@ -93,6 +96,7 @@ namespace llama::accessor
     };
 
     /// Qualifies references to memory with __restrict. Only works on l-value references.
+    LLAMA_EXPORT
     struct Restrict
     {
         template<typename T>
@@ -104,6 +108,7 @@ namespace llama::accessor
 
 #ifdef __cpp_lib_atomic_ref
     /// Accessor wrapping a reference into a std::atomic_ref. Can only wrap l-value references.
+    LLAMA_EXPORT
     struct Atomic
     {
         template<typename T>
@@ -115,6 +120,7 @@ namespace llama::accessor
 #endif
 
     /// Locks a mutex during each access to the data structure.
+    LLAMA_EXPORT
     template<typename Mutex = std::mutex>
     struct Locked
     {
@@ -177,11 +183,13 @@ namespace llama::accessor
 
     /// Accessor combining multiple other accessors. The contained accessors are applied in left to right order to the
     /// memory location when forming the reference returned from a view.
+    LLAMA_EXPORT
     template<typename... Accessors>
     struct Stacked : internal::StackedLeave<0, Default>
     {
     };
 
+    LLAMA_EXPORT
     template<typename FirstAccessor, typename... MoreAccessors>
     struct Stacked<FirstAccessor, MoreAccessors...>
         : internal::StackedLeave<1 + sizeof...(MoreAccessors), FirstAccessor>

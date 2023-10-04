@@ -186,6 +186,12 @@
 #    define LLAMA_CONSTEVAL constexpr
 #endif
 
+#ifndef LLAMA_EXPORT
+/// Annotation of all LLAMA public APIs. Expands to nothing by default. Can be defined to 'export' when building LLAMA
+/// as a C++20 module.
+#    define LLAMA_EXPORT
+#endif
+
 // TODO(bgruber): clang 10-15 (libstdc++ from gcc 11.2 or gcc 12.1) fail to compile this currently with the issue
 // described here:
 // https://stackoverflow.com/questions/64300832/why-does-clang-think-gccs-subrange-does-not-satisfy-gccs-ranges-begin-functi

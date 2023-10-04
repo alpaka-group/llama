@@ -8,6 +8,7 @@
 namespace llama
 {
     /// CRTP mixin for proxy reference types to support all compound assignment and increment/decrement operators.
+    LLAMA_EXPORT
     template<typename Derived, typename ValueType>
     struct ProxyRefOpMixin
     {

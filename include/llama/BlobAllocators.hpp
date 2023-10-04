@@ -21,6 +21,7 @@ namespace llama::bloballoc
 {
     /// Allocates statically sized memory for a \ref View, which is copied each time a \ref View is copied.
     /// \tparam BytesToReserve the amount of memory to reserve.
+    LLAMA_EXPORT
     template<std::size_t BytesToReserve>
     struct Array
     {
@@ -44,6 +45,7 @@ namespace llama::bloballoc
 
     /// Allocates heap memory managed by a `std::unique_ptr` for a \ref View. This memory can only be uniquely owned by
     /// a single \ref View.
+    LLAMA_EXPORT
     struct UniquePtr
     {
         template<std::size_t Alignment>
@@ -61,6 +63,7 @@ namespace llama::bloballoc
 
     /// Allocates heap memory managed by a `std::shared_ptr` for a \ref View. This memory is shared between all copies
     /// of a \ref View.
+    LLAMA_EXPORT
     struct SharedPtr
     {
         template<std::size_t Alignment>
@@ -78,6 +81,7 @@ namespace llama::bloballoc
 #endif
 
     /// An STL compatible allocator allowing to specify alignment.
+    LLAMA_EXPORT
     template<typename T, std::size_t Alignment>
     struct AlignedAllocator
     {
@@ -119,6 +123,7 @@ namespace llama::bloballoc
 
     /// Allocates heap memory managed by a `std::vector` for a \ref View, which is copied each time a \ref View is
     /// copied.
+    LLAMA_EXPORT
     struct Vector
     {
         template<std::size_t Alignment>
@@ -135,6 +140,7 @@ namespace llama::bloballoc
     /// Allocates GPU device memory using cudaMalloc. The memory is managed by a std::unique_ptr with a deleter that
     /// calles cudaFree. If you want to use a view created with this allocator in a CUDA kernel, call \ref shallowCopy
     /// on the view before passing it to the kernel.
+    LLAMA_EXPORT
     struct CudaMalloc
     {
         inline static const auto deleter = [](void* p)
@@ -157,6 +163,7 @@ namespace llama::bloballoc
 #endif
 
 #if __has_include(<alpaka/alpaka.hpp>)
+    LLAMA_EXPORT
     template<typename Size, typename Dev>
     struct AlpakaBuf
     {

@@ -14,6 +14,7 @@ namespace llama
 {
     /// Represents a coordinate for a record inside the record dimension tree.
     /// \tparam Coords... the compile time coordinate.
+    LLAMA_EXPORT
     template<std::size_t... Coords>
     struct RecordCoord
     {
@@ -25,6 +26,7 @@ namespace llama
         static constexpr std::size_t size = sizeof...(Coords);
     };
 
+    LLAMA_EXPORT
     template<>
     struct RecordCoord<>
     {
@@ -33,30 +35,36 @@ namespace llama
         static constexpr std::size_t size = 0;
     };
 
+    LLAMA_EXPORT
     template<std::size_t... CoordsA, std::size_t... CoordsB>
     LLAMA_FN_HOST_ACC_INLINE constexpr auto operator==(RecordCoord<CoordsA...>, RecordCoord<CoordsB...>)
     {
         return false;
     }
 
+    LLAMA_EXPORT
     template<std::size_t... Coords>
     LLAMA_FN_HOST_ACC_INLINE constexpr auto operator==(RecordCoord<Coords...>, RecordCoord<Coords...>)
     {
         return true;
     }
 
+    LLAMA_EXPORT
     template<std::size_t... CoordsA, std::size_t... CoordsB>
     LLAMA_FN_HOST_ACC_INLINE constexpr auto operator!=(RecordCoord<CoordsA...> a, RecordCoord<CoordsB...> b)
     {
         return !(a == b);
     }
 
+    LLAMA_EXPORT
     template<typename T>
     inline constexpr bool isRecordCoord = false;
 
+    LLAMA_EXPORT
     template<std::size_t... Coords>
     inline constexpr bool isRecordCoord<RecordCoord<Coords...>> = true;
 
+    LLAMA_EXPORT
     template<std::size_t... RCs>
     auto operator<<(std::ostream& os, RecordCoord<RCs...>) -> std::ostream&
     {
@@ -77,6 +85,7 @@ namespace llama
     inline namespace literals
     {
         /// Literal operator for converting a numeric literal into a \ref RecordCoord.
+        LLAMA_EXPORT
         template<char... Digits>
         constexpr auto operator"" _RC()
         {
@@ -97,14 +106,17 @@ namespace llama
     } // namespace literals
 
     /// Converts a type list of integral constants into a \ref RecordCoord.
+    LLAMA_EXPORT
     template<typename L>
     using RecordCoordFromList = internal::mp_unwrap_values_into<L, RecordCoord>;
 
     /// Concatenate a set of \ref RecordCoord%s.
+    LLAMA_EXPORT
     template<typename... RecordCoords>
     using Cat = RecordCoordFromList<mp_append<typename RecordCoords::List...>>;
 
     /// Concatenate a set of \ref RecordCoord%s instances.
+    LLAMA_EXPORT
     template<typename... RecordCoords>
     LLAMA_FN_HOST_ACC_INLINE constexpr auto cat(RecordCoords...)
     {
@@ -112,6 +124,7 @@ namespace llama
     }
 
     /// RecordCoord without first coordinate component.
+    LLAMA_EXPORT
     template<typename RecordCoord>
     using PopFront = RecordCoordFromList<mp_pop_front<typename RecordCoord::List>>;
 
@@ -135,6 +148,7 @@ namespace llama
     } // namespace internal
 
     /// Checks wether the first RecordCoord is bigger than the second.
+    LLAMA_EXPORT
     template<typename First, typename Second>
     inline constexpr auto recordCoordCommonPrefixIsBigger
         = internal::recordCoordCommonPrefixIsBiggerImpl(First{}, Second{});
@@ -155,6 +169,7 @@ namespace llama
     } // namespace internal
 
     /// Checks whether two \ref RecordCoord%s are the same or one is the prefix of the other.
+    LLAMA_EXPORT
     template<typename First, typename Second>
     inline constexpr auto recordCoordCommonPrefixIsSame
         = internal::recordCoordCommonPrefixIsSameImpl(First{}, Second{});

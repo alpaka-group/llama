@@ -15,9 +15,11 @@
 namespace llama
 {
 #ifdef __cpp_lib_concepts
+    LLAMA_EXPORT
     template<auto I>
     concept isConstexpr = requires { std::integral_constant<decltype(I), I>{}; };
 
+    LLAMA_EXPORT
     template<typename M>
     concept Mapping = requires(M m) {
         typename M::ArrayExtents;
@@ -34,6 +36,7 @@ namespace llama
         } -> std::same_as<typename M::ArrayExtents::value_type>;
     };
 
+    LLAMA_EXPORT
     template<typename M, typename RC>
     concept PhysicalField = requires(M m, typename M::ArrayExtents::Index ai) {
         {
@@ -48,19 +51,24 @@ namespace llama
         using fn = mp_bool<PhysicalField<M, RC>>;
     };
 
+    LLAMA_EXPORT
     template<typename M>
     inline constexpr bool allFieldsArePhysical
         = mp_all_of<LeafRecordCoords<typename M::RecordDim>, MakeIsPhysical<M>::template fn>::value;
 
+    LLAMA_EXPORT
     template<typename M>
     concept PhysicalMapping = Mapping<M> && allFieldsArePhysical<M>;
 
+    LLAMA_EXPORT
     template<typename R>
     concept LValueReference = std::is_lvalue_reference_v<R>;
 
+    LLAMA_EXPORT
     template<typename R>
     concept AdlTwoStepSwappable = requires(R a, R b) { swap(a, b); } || requires(R a, R b) { std::swap(a, b); };
 
+    LLAMA_EXPORT
     template<typename R>
     concept ProxyReference = std::is_copy_constructible_v<R> && std::is_copy_assignable_v<R> && requires(R r) {
         typename R::value_type;
@@ -72,13 +80,16 @@ namespace llama
         } -> std::same_as<R&>;
     } && AdlTwoStepSwappable<R>;
 
+    LLAMA_EXPORT
     template<typename R>
     concept AnyReference = LValueReference<R> || ProxyReference<R>;
 
+    LLAMA_EXPORT
     template<typename R, typename T>
     concept AnyReferenceTo = (LValueReference<R> && std::is_same_v<std::remove_cvref_t<R>, T>)
         || (ProxyReference<R> && std::is_same_v<typename R::value_type, T>);
 
+    LLAMA_EXPORT
     template<typename M, typename RC>
     concept ComputedField
         = M::isComputed(RC{}) && requires(M m, typename M::ArrayExtents::Index ai, std::byte** blobs) {
@@ -94,13 +105,16 @@ namespace llama
         using fn = mp_bool<ComputedField<M, RC>>;
     };
 
+    LLAMA_EXPORT
     template<typename M>
     inline constexpr bool allFieldsAreComputed
         = mp_all_of<LeafRecordCoords<typename M::RecordDim>, MakeIsComputed<M>::template fn>::value;
 
+    LLAMA_EXPORT
     template<typename M>
     concept FullyComputedMapping = Mapping<M> && allFieldsAreComputed<M>;
 
+    LLAMA_EXPORT
     template<
         typename M,
         typename LeafCoords = LeafRecordCoords<typename M::RecordDim>,
@@ -112,10 +126,12 @@ namespace llama
                               // because we cannot check whether the call to blobNrOrOffset()
                               // or compute() is actually valid
 
+    LLAMA_EXPORT
     template<typename M>
     concept PartiallyComputedMapping = Mapping<M> && allFieldsArePhysicalOrComputed<M>;
 
     /// Additional semantic requirement: &b[i] + j == &b[i + j] for any integral i and j in range of the blob
+    LLAMA_EXPORT
     template<typename B>
     concept Blob = requires(B b, std::size_t i) {
         // according to http://eel.is/c++draft/intro.object#3 only std::byte and unsigned char can
@@ -126,6 +142,7 @@ namespace llama
             || std::same_as<std::remove_cvref_t<decltype(b[i])>, unsigned char>;
     };
 
+    LLAMA_EXPORT
     template<typename BA>
     concept BlobAllocator = requires(BA ba, std::size_t size) {
         {
@@ -133,6 +150,7 @@ namespace llama
         } -> Blob;
     };
 
+    LLAMA_EXPORT
     template<typename V>
     concept AnyView = requires(V v, const V cv) {
         typename V::Mapping;
@@ -209,6 +227,7 @@ namespace llama
         };
     } // namespace internal
 
+    LLAMA_EXPORT
     template<typename R>
 #ifdef __cpp_lib_concepts
     inline constexpr bool isProxyReference = ProxyReference<R>;

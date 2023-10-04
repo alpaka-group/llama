@@ -17,6 +17,7 @@ namespace llama
     /// exception guarantee.
     /// WARNING: This class is experimental.
     /// @tparam Mapping The mapping to be used for the underlying view. Needs to have 1 array dimension.
+    LLAMA_EXPORT
     template<typename Mapping>
     struct Vector
     {
@@ -307,6 +308,4 @@ namespace llama
         ViewType m_view = {};
         size_type m_size = 0;
     };
-
-
 } // namespace llama

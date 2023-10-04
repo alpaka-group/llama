@@ -15,16 +15,20 @@
 
 namespace llama
 {
+    LLAMA_EXPORT
     template<typename View, typename BoundRecordCoord, bool OwnView>
     struct RecordRef;
 
+    LLAMA_EXPORT
     template<typename View>
     inline constexpr auto isRecordRef = false;
 
+    LLAMA_EXPORT
     template<typename View, typename BoundRecordCoord, bool OwnView>
     inline constexpr auto isRecordRef<RecordRef<View, BoundRecordCoord, OwnView>> = true;
 
     /// Returns a \ref One with the same record dimension as the given record ref, with values copyied from rr.
+    LLAMA_EXPORT
     template<typename View, typename BoundRecordCoord, bool OwnView>
     LLAMA_FN_HOST_ACC_INLINE auto copyRecord(const RecordRef<View, BoundRecordCoord, OwnView>& rr)
     {
@@ -336,6 +340,7 @@ namespace llama
     /// (array dimensions coord and partial record coord) to retrieve it later from a \ref View. Records references
     /// should not be created by the user. They are returned from various access functions in \ref View and RecordRef
     /// itself.
+    LLAMA_EXPORT
     template<typename TView, typename TBoundRecordCoord, bool OwnView>
     struct RecordRef : private TView::Mapping::ArrayExtents::Index
     {
@@ -761,6 +766,7 @@ namespace llama
     };
 
     // swap for heterogeneous RecordRef
+    LLAMA_EXPORT
     template<
         typename ViewA,
         typename BoundRecordDimA,
@@ -784,6 +790,7 @@ namespace llama
             });
     }
 
+    LLAMA_EXPORT
     template<typename View, typename BoundRecordCoord, bool OwnView>
     auto operator<<(std::ostream& os, const RecordRef<View, BoundRecordCoord, OwnView>& vr) -> std::ostream&
     {
@@ -816,6 +823,7 @@ namespace llama
         return os;
     }
 
+    LLAMA_EXPORT
     template<typename RecordRefFwd, typename Functor>
     LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeaf(RecordRefFwd&& vr, Functor&& functor)
     {
@@ -859,6 +867,7 @@ namespace llama
     } // namespace internal
 
     /// Pulls a copy of the given value or reference. Proxy references are resolved to their value types.
+    LLAMA_EXPORT
     template<typename T>
     auto decayCopy(T&& valueOrRef) -> typename internal::ValueOf<T>::type
     {
@@ -869,6 +878,7 @@ namespace llama
     /// construction. The stored value is written back when ScopedUpdate is destroyed. ScopedUpdate tries to act like
     /// the stored value as much as possible, exposing member functions of the stored value and acting like a proxy
     /// reference if the stored value is a primitive type.
+    LLAMA_EXPORT
     template<typename Reference, typename = void>
     struct ScopedUpdate : internal::ValueOf<Reference>::type
     {
@@ -909,6 +919,7 @@ namespace llama
         Reference ref;
     };
 
+    LLAMA_EXPORT
     template<typename Reference>
     struct ScopedUpdate<
         Reference,
@@ -990,28 +1001,33 @@ namespace llama
         };
     } // namespace internal
 
+    LLAMA_EXPORT
     template<typename T>
     ScopedUpdate(T) -> ScopedUpdate<typename internal::ReferenceTo<std::remove_reference_t<T>>::type>;
 } // namespace llama
 
+LLAMA_EXPORT
 template<typename View, typename BoundRecordCoord, bool OwnView>
 struct std::tuple_size<llama::RecordRef<View, BoundRecordCoord, OwnView>> // NOLINT(cert-dcl58-cpp)
     : boost::mp11::mp_size<typename llama::RecordRef<View, BoundRecordCoord, OwnView>::AccessibleRecordDim>
 {
 };
 
+LLAMA_EXPORT
 template<std::size_t I, typename View, typename BoundRecordCoord, bool OwnView>
 struct std::tuple_element<I, llama::RecordRef<View, BoundRecordCoord, OwnView>> // NOLINT(cert-dcl58-cpp)
 {
     using type = decltype(std::declval<llama::RecordRef<View, BoundRecordCoord, OwnView>>().template get<I>());
 };
 
+LLAMA_EXPORT
 template<std::size_t I, typename View, typename BoundRecordCoord, bool OwnView>
 struct std::tuple_element<I, const llama::RecordRef<View, BoundRecordCoord, OwnView>> // NOLINT(cert-dcl58-cpp)
 {
     using type = decltype(std::declval<const llama::RecordRef<View, BoundRecordCoord, OwnView>>().template get<I>());
 };
 
+LLAMA_EXPORT
 template<typename View, typename BoundRecordCoord, bool OwnView>
 struct std::hash<llama::RecordRef<View, BoundRecordCoord, OwnView>> // NOLINT(cert-dcl58-cpp)
 {
@@ -1027,6 +1043,7 @@ struct std::hash<llama::RecordRef<View, BoundRecordCoord, OwnView>> // NOLINT(ce
 };
 
 #if CAN_USE_RANGES
+LLAMA_EXPORT
 template<
     typename ViewA,
     typename BoundA,

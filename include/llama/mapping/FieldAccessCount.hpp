@@ -12,6 +12,7 @@
 
 namespace llama::mapping
 {
+    LLAMA_EXPORT
     template<typename CountType>
     struct AccessCounts
     {
@@ -79,6 +80,7 @@ namespace llama::mapping
     /// @tparam TCountType The type used for counting the number of accesses.
     /// @tparam MyCodeHandlesProxyReferences If false, FieldAccessCount will avoid proxy references but can then only
     /// count the number of address computations
+    LLAMA_EXPORT
     template<typename Mapping, typename TCountType = std::size_t, bool MyCodeHandlesProxyReferences = true>
     struct FieldAccessCount : Mapping
     {
@@ -363,9 +365,11 @@ namespace llama::mapping
         }
     };
 
+    LLAMA_EXPORT
     template<typename Mapping>
     inline constexpr bool isFieldAccessCount = false;
 
+    LLAMA_EXPORT
     template<typename Mapping, typename CountType, bool MyCodeHandlesProxyReferences>
     inline constexpr bool isFieldAccessCount<FieldAccessCount<Mapping, CountType, MyCodeHandlesProxyReferences>>
         = true;

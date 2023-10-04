@@ -194,6 +194,7 @@ namespace llama
         inline constexpr auto typeNameStorage = typeNameAsArray<T>();
     } // namespace internal
 
+    LLAMA_EXPORT
     template<typename T>
     inline constexpr auto qualifiedTypeName = []
     {
@@ -272,6 +273,7 @@ namespace llama
         }();
     } // namespace internal
 
+    LLAMA_EXPORT
     template<typename T>
     constexpr auto structName(T = {}) -> std::string_view
     {
@@ -366,6 +368,7 @@ namespace llama
 
     /// Returns a pretty representation of the record coordinate inside the given record dimension. Tags are
     /// interspersed by '.' and arrays are represented using subscript notation ("[123]").
+    LLAMA_EXPORT
     template<typename RecordDim, std::size_t... Coords>
     constexpr auto prettyRecordCoord(RecordCoord<Coords...> = {}) -> std::string_view
     {
@@ -373,6 +376,7 @@ namespace llama
         return std::string_view{value.data(), value.size()};
     }
 
+    LLAMA_EXPORT
     template<typename RecordDim>
     constexpr auto prettyRecordCoord(RecordCoord<>) -> std::string_view
     {

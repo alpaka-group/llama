@@ -49,6 +49,7 @@ namespace llama::mapping
     /// load and store.
     /// @tparam ReplacementMap A type list of binary type lists (a map) specifiying which type or the type at a \ref
     /// RecordCoord (map key) to replace by which other type (mapped value).
+    LLAMA_EXPORT
     template<
         typename ArrayExtents,
         typename RecordDim,
@@ -71,6 +72,7 @@ namespace llama::mapping
 
     /// Binds parameters to a \ref ChangeType mapping except for array and record dimension, producing a quoted
     /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
+    LLAMA_EXPORT
     template<template<typename, typename> typename InnerMapping, typename ReplacementMap>
     struct BindChangeType
     {
@@ -78,9 +80,11 @@ namespace llama::mapping
         using fn = ChangeType<ArrayExtents, RecordDim, InnerMapping, ReplacementMap>;
     };
 
+    LLAMA_EXPORT
     template<typename Mapping>
     inline constexpr bool isChangeType = false;
 
+    LLAMA_EXPORT
     template<
         typename TArrayExtents,
         typename TRecordDim,
