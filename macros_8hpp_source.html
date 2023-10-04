@@ -248,26 +248,30 @@ $(document).ready(function(){initNavTree('macros_8hpp_source.html',''); initResi
 <div class="line"><a name="l00186"></a><span class="lineno"><a class="line" href="macros_8hpp.html#ac52095b6b237dbc727a93f91dba623b2">  186</a></span>&#160;<span class="preprocessor">#    define LLAMA_CONSTEVAL constexpr</span></div>
 <div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160; </div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;<span class="comment">// TODO(bgruber): clang 10-15 (libstdc++ from gcc 11.2 or gcc 12.1) fail to compile this currently with the issue</span></div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;<span class="comment">// described here:</span></div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;<span class="comment">// https://stackoverflow.com/questions/64300832/why-does-clang-think-gccs-subrange-does-not-satisfy-gccs-ranges-begin-functi</span></div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;<span class="comment">// Intel LLVM compiler is also using the clang frontend</span></div>
-<div class="line"><a name="l00193"></a><span class="lineno"><a class="line" href="macros_8hpp.html#a46ce794a2a02ddc4a84b9119b5f66ab8">  193</a></span>&#160;<span class="preprocessor">#define CAN_USE_RANGES 0</span></div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;<span class="preprocessor">#if __has_include(&lt;version&gt;)</span></div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;<span class="preprocessor">#    include &lt;version&gt;</span></div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;<span class="preprocessor">#    if defined(__cpp_concepts) &amp;&amp; defined(__cpp_lib_ranges) &amp;&amp; (!defined(__clang__) || __clang_major__ &gt;= 16)        \</span></div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;<span class="preprocessor">        &amp;&amp; !defined(__INTEL_LLVM_COMPILER) &amp;&amp; (!defined(_MSC_VER) || _MSC_VER &gt; 1932) &amp;&amp; !defined(__NVCOMPILER)</span></div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;<span class="preprocessor">#        undef CAN_USE_RANGES</span></div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;<span class="preprocessor">#        define CAN_USE_RANGES 1</span></div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;<span class="preprocessor">#    endif</span></div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;<span class="preprocessor">#ifndef LLAMA_EXPORT</span></div>
+<div class="line"><a name="l00192"></a><span class="lineno"><a class="line" href="macros_8hpp.html#a331ec86158a0a6dd5c81714f9766eae1">  192</a></span>&#160;<span class="preprocessor">#    define LLAMA_EXPORT</span></div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160; </div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;<span class="comment">// TODO(bgruber): clang 10-15 (libstdc++ from gcc 11.2 or gcc 12.1) fail to compile this currently with the issue</span></div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;<span class="comment">// described here:</span></div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;<span class="comment">// https://stackoverflow.com/questions/64300832/why-does-clang-think-gccs-subrange-does-not-satisfy-gccs-ranges-begin-functi</span></div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;<span class="comment">// Intel LLVM compiler is also using the clang frontend</span></div>
+<div class="line"><a name="l00199"></a><span class="lineno"><a class="line" href="macros_8hpp.html#a46ce794a2a02ddc4a84b9119b5f66ab8">  199</a></span>&#160;<span class="preprocessor">#define CAN_USE_RANGES 0</span></div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;<span class="preprocessor">#if __has_include(&lt;version&gt;)</span></div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;<span class="preprocessor">#    include &lt;version&gt;</span></div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;<span class="preprocessor">#    if defined(__cpp_concepts) &amp;&amp; defined(__cpp_lib_ranges) &amp;&amp; (!defined(__clang__) || __clang_major__ &gt;= 16)        \</span></div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;<span class="preprocessor">        &amp;&amp; !defined(__INTEL_LLVM_COMPILER) &amp;&amp; (!defined(_MSC_VER) || _MSC_VER &gt; 1932) &amp;&amp; !defined(__NVCOMPILER)</span></div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;<span class="preprocessor">#        undef CAN_USE_RANGES</span></div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;<span class="preprocessor">#        define CAN_USE_RANGES 1</span></div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;<span class="preprocessor">#    endif</span></div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="macros_8hpp.html">macros.hpp</a></li>
-    <li class="footer">Generated on Mon Oct 2 2023 14:10:42 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Wed Oct 4 2023 14:13:43 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
