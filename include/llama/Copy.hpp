@@ -47,6 +47,7 @@ namespace llama
     /// the same array dimensions.
     /// @param threadId Optional. Zero-based id of calling thread for multi-threaded invocations.
     /// @param threadCount Optional. Thread count in case of multi-threaded invocation.
+    LLAMA_EXPORT
     template<typename Mapping, typename SrcBlob, typename DstBlob>
     void blobMemcpy(
         const View<Mapping, SrcBlob>& srcView,
@@ -73,6 +74,7 @@ namespace llama
     /// Field-wise copy from source to destination view. Both views need to have the same array and record dimensions.
     /// @param threadId Optional. Thread id in case of multi-threaded copy.
     /// @param threadCount Optional. Thread count in case of multi-threaded copy.
+    LLAMA_EXPORT
     template<typename SrcMapping, typename SrcBlob, typename DstMapping, typename DstBlob>
     void fieldWiseCopy(
         const View<SrcMapping, SrcBlob>& srcView,
@@ -134,6 +136,7 @@ namespace llama
     /// argument.
     /// @param threadId Optional. Zero-based id of calling thread for multi-threaded invocations.
     /// @param threadCount Optional. Thread count in case of multi-threaded invocation.
+    LLAMA_EXPORT
     template<typename SrcMapping, typename SrcBlob, typename DstMapping, typename DstBlob>
     void aosoaCommonBlockCopy(
         const View<SrcMapping, SrcBlob>& srcView,
@@ -306,6 +309,7 @@ namespace llama
     /// specializations of this construct for specific mappings. Users are encouraged to also specialize this template
     /// with better copy algorithms for further combinations of mappings, if they can and want to provide a better
     /// implementation.
+    LLAMA_EXPORT
     template<typename SrcMapping, typename DstMapping, typename SFINAE = void>
     struct Copy
     {
@@ -316,6 +320,7 @@ namespace llama
         }
     };
 
+    LLAMA_EXPORT
     template<typename Mapping>
     struct Copy<Mapping, Mapping>
     {
@@ -326,6 +331,7 @@ namespace llama
         }
     };
 
+    LLAMA_EXPORT
     template<
         typename ArrayExtents,
         typename RecordDim,
@@ -349,6 +355,7 @@ namespace llama
         }
     };
 
+    LLAMA_EXPORT
     template<
         typename ArrayExtents,
         typename RecordDim,
@@ -373,6 +380,7 @@ namespace llama
         }
     };
 
+    LLAMA_EXPORT
     template<
         typename ArrayExtents,
         typename RecordDim,
@@ -402,6 +410,7 @@ namespace llama
     /// dimensions. Delegates to \ref Copy to choose an implementation.
     /// @param threadId Optional. Zero-based id of calling thread for multi-threaded invocations.
     /// @param threadCount Optional. Thread count in case of multi-threaded invocation.
+    LLAMA_EXPORT
     template<typename SrcMapping, typename SrcBlob, typename DstMapping, typename DstBlob>
     void copy(
         const View<SrcMapping, SrcBlob>& srcView,

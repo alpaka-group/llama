@@ -29,6 +29,7 @@ namespace llama::mapping
 
     /// The Null mappings maps all elements to nothing. Writing data through a reference obtained from the Null mapping
     /// discards the value. Reading through such a reference returns a default constructed object.
+    LLAMA_EXPORT
     template<typename TArrayExtents, typename TRecordDim>
     struct Null : MappingBase<TArrayExtents, TRecordDim>
     {
@@ -64,9 +65,11 @@ namespace llama::mapping
         }
     };
 
+    LLAMA_EXPORT
     template<typename Mapping>
     inline constexpr bool isNull = false;
 
+    LLAMA_EXPORT
     template<typename ArrayExtents, typename RecordDim>
     inline constexpr bool isNull<Null<ArrayExtents, RecordDim>> = true;
 } // namespace llama::mapping

@@ -52,6 +52,7 @@ namespace llama
         };
     } // namespace internal
 
+    LLAMA_EXPORT
     template<typename Expression, typename... Args>
     using ReplacePlaceholders = typename internal::ReplacePlaceholdersImpl<Expression, Args...>::type;
 } // namespace llama

@@ -12,6 +12,7 @@
 
 namespace llama::mapping
 {
+    LLAMA_EXPORT
     enum class SignBit
     {
         Keep,
@@ -354,6 +355,7 @@ namespace llama::mapping
     /// how big the linear domain gets.
     /// \tparam TStoredIntegral Integral type used as storage of reduced precision integers. Must be std::uint32_t or
     /// std::uint64_t.
+    LLAMA_EXPORT
     template<
         typename TArrayExtents,
         typename TRecordDim,
@@ -411,6 +413,7 @@ namespace llama::mapping
 
     /// Binds parameters to a \ref BitPackedIntSoA mapping except for array and record dimension, producing a quoted
     /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
+    LLAMA_EXPORT
     template<
         typename Bits = void,
         SignBit SignBit = SignBit::Keep,
@@ -431,9 +434,11 @@ namespace llama::mapping
                 internal::StoredUnsignedFor<RecordDim>>>;
     };
 
+    LLAMA_EXPORT
     template<typename Mapping>
     inline constexpr bool isBitPackedIntSoA = false;
 
+    LLAMA_EXPORT
     template<
         typename ArrayExtents,
         typename RecordDim,
@@ -459,6 +464,7 @@ namespace llama::mapping
     //  \ref PermuteFieldsMinimizePadding.
     /// \tparam TStoredIntegral Integral type used as storage of reduced precision integers. Must be std::uint32_t or
     /// std::uint64_t.
+    LLAMA_EXPORT
     template<
         typename TArrayExtents,
         typename TRecordDim,
@@ -523,6 +529,7 @@ namespace llama::mapping
 
     /// Binds parameters to a \ref BitPackedIntAoS mapping except for array and record dimension, producing a quoted
     /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
+    LLAMA_EXPORT
     template<
         typename Bits = void,
         SignBit SignBit = SignBit::Keep,
@@ -545,6 +552,7 @@ namespace llama::mapping
                 internal::StoredUnsignedFor<RecordDim>>>;
     };
 
+    LLAMA_EXPORT
     template<typename Mapping>
     inline constexpr bool isBitPackedIntAoS = false;
 

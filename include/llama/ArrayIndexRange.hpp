@@ -17,6 +17,7 @@
 namespace llama
 {
     /// Iterator supporting \ref ArrayIndexRange.
+    LLAMA_EXPORT
     template<typename ArrayExtents>
     struct ArrayIndexIterator
     {
@@ -244,6 +245,7 @@ namespace llama
     };
 
     /// Range allowing to iterate over all indices in an \ref ArrayExtents.
+    LLAMA_EXPORT
     template<typename ArrayExtents>
     struct ArrayIndexRange
         : private ArrayExtents

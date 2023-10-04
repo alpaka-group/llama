@@ -9,12 +9,14 @@
 
 namespace llama::mapping
 {
+    LLAMA_EXPORT
     enum class Blobs
     {
         Single,
         OnePerField
     };
 
+    LLAMA_EXPORT
     enum class SubArrayAlignment
     {
         Pack,
@@ -32,6 +34,7 @@ namespace llama::mapping
     /// \tparam PermuteFieldsSingleBlob Defines how the record dimension's fields should be permuted if Blobs is
     /// Single. See \ref PermuteFieldsInOrder, \ref PermuteFieldsIncreasingAlignment, \ref
     /// PermuteFieldsDecreasingAlignment and \ref PermuteFieldsMinimizePadding.
+    LLAMA_EXPORT
     template<
         typename TArrayExtents,
         typename TRecordDim,
@@ -179,29 +182,34 @@ namespace llama::mapping
     };
 
     // we can drop this when inherited ctors also inherit deduction guides
+    LLAMA_EXPORT
     template<typename TArrayExtents, typename TRecordDim>
     SoA(TArrayExtents, TRecordDim) -> SoA<TArrayExtents, TRecordDim>;
 
     /// Struct of array mapping storing the entire layout in a single blob. The starts of the sub arrays are aligned by
     /// inserting padding. \see SoA
+    LLAMA_EXPORT
     template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
     using AlignedSingleBlobSoA
         = SoA<ArrayExtents, RecordDim, Blobs::Single, SubArrayAlignment::Align, LinearizeArrayIndexFunctor>;
 
     /// Struct of array mapping storing the entire layout in a single blob. The sub arrays are tightly packed,
     /// violating the type's alignment requirements. \see SoA
+    LLAMA_EXPORT
     template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
     using PackedSingleBlobSoA
         = SoA<ArrayExtents, RecordDim, Blobs::Single, SubArrayAlignment::Pack, LinearizeArrayIndexFunctor>;
 
     /// Struct of array mapping storing each attribute of the record dimension in a separate blob.
     /// \see SoA
+    LLAMA_EXPORT
     template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
     using MultiBlobSoA
         = SoA<ArrayExtents, RecordDim, Blobs::OnePerField, SubArrayAlignment::Pack, LinearizeArrayIndexFunctor>;
 
     /// Binds parameters to an \ref SoA mapping except for array and record dimension, producing a quoted
     /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
+    LLAMA_EXPORT
     template<
         Blobs Blobs = Blobs::OnePerField,
         SubArrayAlignment SubArrayAlignment = SubArrayAlignment::Pack,
@@ -212,9 +220,11 @@ namespace llama::mapping
         using fn = SoA<ArrayExtents, RecordDim, Blobs, SubArrayAlignment, LinearizeArrayIndexFunctor>;
     };
 
+    LLAMA_EXPORT
     template<typename Mapping>
     inline constexpr bool isSoA = false;
 
+    LLAMA_EXPORT
     template<
         typename ArrayExtents,
         typename RecordDim,

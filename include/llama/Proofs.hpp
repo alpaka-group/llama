@@ -45,6 +45,7 @@ namespace llama
     /// Proofs by exhaustion of the array and record dimensions, that all values mapped to memory do not overlap.
     // Unfortunately, this only works for smallish array dimensions, because of compiler limits on constexpr evaluation
     // depth.
+    LLAMA_EXPORT
     template<typename Mapping>
     constexpr auto mapsNonOverlappingly(const Mapping& m) -> bool
     {
@@ -87,6 +88,7 @@ namespace llama
     /// contiguously.
     // Unfortunately, this only works for smallish array dimensions, because of compiler limits on constexpr evaluation
     // depth.
+    LLAMA_EXPORT
     template<std::size_t PieceLength, typename Mapping>
     constexpr auto mapsPiecewiseContiguous(const Mapping& m) -> bool
     {

@@ -121,6 +121,7 @@ namespace llama::mapping
     ///   static auto load(auto&& fromMem);
     ///   static auto store(auto&& toMem);
     /// };
+    LLAMA_EXPORT
     template<
         typename TArrayExtents,
         typename TRecordDim,
@@ -180,6 +181,7 @@ namespace llama::mapping
 
     /// Binds parameters to a \ref Projection mapping except for array and record dimension, producing a quoted
     /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
+    LLAMA_EXPORT
     template<template<typename, typename> typename InnerMapping, typename ProjectionMap>
     struct BindProjection
     {
@@ -187,9 +189,11 @@ namespace llama::mapping
         using fn = Projection<ArrayExtents, RecordDim, InnerMapping, ProjectionMap>;
     };
 
+    LLAMA_EXPORT
     template<typename Mapping>
     inline constexpr bool isProjection = false;
 
+    LLAMA_EXPORT
     template<
         typename TArrayExtents,
         typename TRecordDim,

@@ -196,6 +196,7 @@ namespace llama::mapping
     /// \tparam TLinearizeArrayIndexFunctor Defines how the array dimensions should be mapped into linear numbers and
     /// how big the linear domain gets.
     /// \tparam TStoredIntegral Integral type used as storage of reduced precision floating-point values.
+    LLAMA_EXPORT
     template<
         typename TArrayExtents,
         typename TRecordDim,
@@ -283,6 +284,7 @@ namespace llama::mapping
 
     /// Binds parameters to a \ref BitPackedFloatSoA mapping except for array and record dimension, producing a quoted
     /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
+    LLAMA_EXPORT
     template<
         typename ExponentBits = unsigned,
         typename MantissaBits = ExponentBits,
@@ -303,12 +305,15 @@ namespace llama::mapping
                 internal::StoredIntegralFor<RecordDim>>>;
     };
 
+    LLAMA_EXPORT
     template<typename Mapping>
     inline constexpr bool isBitPackedFloatSoA = false;
 
+    LLAMA_EXPORT
     template<typename... Ts>
     inline constexpr bool isBitPackedFloatSoA<BitPackedFloatSoA<Ts...>> = true;
 
+    LLAMA_EXPORT
     template<
         typename TArrayExtents,
         typename TRecordDim,
@@ -401,6 +406,7 @@ namespace llama::mapping
         }
     };
 
+    LLAMA_EXPORT
     template<
         typename ExponentBits = unsigned,
         typename MantissaBits = ExponentBits,
@@ -423,9 +429,11 @@ namespace llama::mapping
                 internal::StoredIntegralFor<RecordDim>>>;
     };
 
+    LLAMA_EXPORT
     template<typename Mapping>
     inline constexpr bool isBitPackedFloatAoS = false;
 
+    LLAMA_EXPORT
     template<
         typename ArrayExtents,
         typename RecordDim,

@@ -13,6 +13,7 @@ namespace llama
     /// Array class like `std::array` but suitable for use with offloading devices like GPUs.
     /// \tparam T type if array elements.
     /// \tparam N rank of the array.
+    LLAMA_EXPORT
     template<typename T, std::size_t N>
     // NOLINTNEXTLINE(bugprone-reserved-identifier,cert-dcl37-c,cert-dcl51-cpp,readability-identifier-naming)
     struct Array
@@ -126,6 +127,7 @@ namespace llama
         }
     };
 
+    LLAMA_EXPORT
     template<typename T>
     struct Array<T, 0>
     {
@@ -237,9 +239,11 @@ namespace llama
         }
     };
 
+    LLAMA_EXPORT
     template<typename First, typename... Args>
     Array(First, Args... args) -> Array<First, sizeof...(Args) + 1>;
 
+    LLAMA_EXPORT
     template<typename T, std::size_t N>
     auto operator<<(std::ostream& os, const Array<T, N>& a) -> std::ostream&
     {
@@ -257,6 +261,7 @@ namespace llama
         return os;
     }
 
+    LLAMA_EXPORT
     template<typename T, std::size_t N>
     LLAMA_FN_HOST_ACC_INLINE constexpr auto pushFront([[maybe_unused]] Array<T, N> a, T v) -> Array<T, N + 1>
     {
@@ -268,6 +273,7 @@ namespace llama
         return r;
     }
 
+    LLAMA_EXPORT
     template<typename T, std::size_t N>
     LLAMA_FN_HOST_ACC_INLINE constexpr auto pushBack([[maybe_unused]] Array<T, N> a, T v) -> Array<T, N + 1>
     {
@@ -279,6 +285,7 @@ namespace llama
         return r;
     }
 
+    LLAMA_EXPORT
     template<typename T, std::size_t N>
     LLAMA_FN_HOST_ACC_INLINE constexpr auto popBack([[maybe_unused]] Array<T, N> a)
     {
@@ -290,6 +297,7 @@ namespace llama
         return r;
     }
 
+    LLAMA_EXPORT
     template<typename T, std::size_t N>
     LLAMA_FN_HOST_ACC_INLINE constexpr auto popFront([[maybe_unused]] Array<T, N> a)
     {
@@ -301,6 +309,7 @@ namespace llama
         return r;
     }
 
+    LLAMA_EXPORT
     template<typename T, std::size_t N>
     LLAMA_FN_HOST_ACC_INLINE constexpr auto product(Array<T, N> a) -> T
     {
@@ -310,6 +319,7 @@ namespace llama
         return prod;
     }
 
+    LLAMA_EXPORT
     template<typename T, std::size_t N>
     LLAMA_FN_HOST_ACC_INLINE constexpr auto dot([[maybe_unused]] Array<T, N> a, [[maybe_unused]] Array<T, N> b) -> T
     {
@@ -321,11 +331,13 @@ namespace llama
     }
 } // namespace llama
 
+LLAMA_EXPORT
 template<typename T, size_t N>
 struct std::tuple_size<llama::Array<T, N>> : std::integral_constant<size_t, N> // NOLINT(cert-dcl58-cpp)
 {
 };
 
+LLAMA_EXPORT
 template<size_t I, typename T, size_t N>
 struct std::tuple_element<I, llama::Array<T, N>> // NOLINT(cert-dcl58-cpp)
 {

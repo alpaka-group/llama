@@ -11,6 +11,7 @@ namespace llama::mapping
 {
     /// The maximum number of vector lanes that can be used to fetch each leaf type in the record dimension into a
     /// vector register of the given size in bits.
+    LLAMA_EXPORT
     template<typename RecordDim, std::size_t VectorRegisterBits>
     inline constexpr std::size_t maxLanes = []() constexpr
     {
@@ -29,6 +30,7 @@ namespace llama::mapping
     /// \tparam PermuteFields Defines how the record dimension's fields should be permuted. See \ref
     /// PermuteFieldsInOrder, \ref PermuteFieldsIncreasingAlignment, \ref PermuteFieldsDecreasingAlignment and
     /// \ref PermuteFieldsMinimizePadding.
+    LLAMA_EXPORT
     template<
         typename TArrayExtents,
         typename TRecordDim,
@@ -85,6 +87,7 @@ namespace llama::mapping
 
     /// Binds parameters to an \ref AoSoA mapping except for array and record dimension, producing a quoted meta
     /// function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
+    LLAMA_EXPORT
     template<std::size_t Lanes, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
     struct BindAoSoA
     {
@@ -92,10 +95,11 @@ namespace llama::mapping
         using fn = AoSoA<ArrayExtents, RecordDim, Lanes, LinearizeArrayIndexFunctor>;
     };
 
+    LLAMA_EXPORT
     template<typename Mapping>
     inline constexpr bool isAoSoA = false;
 
+    LLAMA_EXPORT
     template<typename AD, typename RD, typename AD::value_type L>
     inline constexpr bool isAoSoA<AoSoA<AD, RD, L>> = true;
-
 } // namespace llama::mapping

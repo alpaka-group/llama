@@ -16,6 +16,7 @@
 
 namespace llama
 {
+    LLAMA_EXPORT
 #ifdef __cpp_lib_concepts
     template<typename TMapping, Blob BlobType, typename TAccessor>
 #else
@@ -45,6 +46,7 @@ namespace llama
     } // namespace internal
 
     /// Same as \ref allocView but does not run field constructors.
+    LLAMA_EXPORT
 #ifdef __cpp_lib_concepts
     template<typename Mapping, BlobAllocator Allocator = bloballoc::Vector, typename Accessor = accessor::Default>
 #else
@@ -77,16 +79,19 @@ namespace llama
     } // namespace internal
 
     /// Returns true if the field accessed via the given mapping and record coordinate is a computed value.
+    LLAMA_EXPORT
     template<typename Mapping, typename RecordCoord>
     inline constexpr bool isComputed = internal::IsComputed<Mapping, RecordCoord>::value;
 
     /// Returns true if any field accessed via the given mapping is a computed value.
     // TODO(bgruber): harmonize this with LLAMA's concepts from Concepts.hpp
+    LLAMA_EXPORT
     template<typename Mapping>
     inline constexpr bool hasAnyComputedField = mp_any_of<
         LeafRecordCoords<typename Mapping::RecordDim>,
         mp_bind_front<internal::IsComputed, Mapping>::template fn>::value;
 
+    LLAMA_EXPORT
     template<typename Mapping, typename BlobType, typename Accessor, std::size_t... RCs>
     LLAMA_FN_HOST_ACC_INLINE void constructField(
         View<Mapping, BlobType, Accessor>& view,
@@ -127,6 +132,7 @@ namespace llama
     /// Value-initializes all fields reachable through the given view. That is, constructors are run and fundamental
     /// types are zero-initialized. Computed fields are constructed if they return l-value references and assigned a
     /// default constructed value if they return a proxy reference.
+    LLAMA_EXPORT
     template<typename Mapping, typename BlobType, typename Accessor>
     LLAMA_FN_HOST_ACC_INLINE void constructFields(View<Mapping, BlobType, Accessor>& view)
     {
@@ -143,6 +149,7 @@ namespace llama
     /// allocator callable is called with the alignment and size of bytes to allocate for each blob of the mapping.
     /// Value-initialization is performed for all fields by calling \ref constructFields. This function is the
     /// preferred way to create a \ref View. See also \ref allocViewUninitialized.
+    LLAMA_EXPORT
 #ifdef __cpp_lib_concepts
     template<typename Mapping, BlobAllocator Allocator = bloballoc::Vector, typename Accessor = accessor::Default>
 #else
@@ -157,6 +164,7 @@ namespace llama
     }
 
     /// Same as \ref allocViewStack but does not run field constructors.
+    LLAMA_EXPORT
     template<std::size_t Dim, typename RecordDim>
     LLAMA_FN_HOST_ACC_INLINE auto allocViewStackUninitialized() -> decltype(auto)
     {
@@ -166,6 +174,7 @@ namespace llama
 
     /// Allocates a \ref View holding a single record backed by stack memory (\ref bloballoc::Array).
     /// \tparam Dim Dimension of the \ref ArrayExtents of the \ref View.
+    LLAMA_EXPORT
     template<std::size_t Dim, typename RecordDim>
     LLAMA_FN_HOST_ACC_INLINE auto allocViewStack() -> decltype(auto)
     {
@@ -174,17 +183,21 @@ namespace llama
         return view;
     }
 
+    LLAMA_EXPORT
     template<typename View, typename BoundRecordCoord = RecordCoord<>, bool OwnView = false>
     struct RecordRef;
 
     /// A \ref RecordRef that owns and holds a single value.
+    LLAMA_EXPORT
     template<typename RecordDim>
     using One = RecordRef<decltype(allocViewStack<0, RecordDim>()), RecordCoord<>, true>;
 
     /// Is true, if T is an instance of \ref One.
+    LLAMA_EXPORT
     template<typename T>
     inline constexpr bool isOne = false;
 
+    LLAMA_EXPORT
     template<typename View, typename BoundRecordCoord>
     inline constexpr bool isOne<RecordRef<View, BoundRecordCoord, true>> = true;
 
@@ -192,6 +205,7 @@ namespace llama
     // superior to a single iterator over multiple dimensions. At least compilers are able to produce better code.
     // std::mdspan also discovered similar difficulties and there was a discussion in WG21 in Oulu 2016 to
     // remove/postpone iterators from the design. In std::mdspan's design, the iterator iterated over the co-domain.
+    LLAMA_EXPORT
     template<typename View>
     struct Iterator
     {
@@ -345,6 +359,7 @@ namespace llama
     /// Using a mapping, maps the given array index and record coordinate to a memory reference onto the given blobs.
     /// \return Either an l-value reference if the record coord maps to a physical field or a proxy reference if mapped
     /// to a computed field.
+    LLAMA_EXPORT
     template<typename Mapping, typename RecordCoord, typename Blobs>
     LLAMA_FN_HOST_ACC_INLINE auto mapToMemory(
         Mapping& mapping,
@@ -369,6 +384,7 @@ namespace llama
     /// mapping. A view should be created using \ref allocView. \tparam TMapping The mapping used by the view to
     /// map accesses into memory. \tparam TBlobType The storage type used by the view holding memory. \tparam
     /// TAccessor The accessor to use when an access is made through this view.
+    LLAMA_EXPORT
 #ifdef __cpp_lib_concepts
     template<typename TMapping, Blob TBlobType, typename TAccessor = accessor::Default>
 #else
@@ -580,6 +596,7 @@ namespace llama
         Array<BlobType, Mapping::blobCount> m_blobs;
     };
 
+    LLAMA_EXPORT
 #ifdef __cpp_lib_concepts
     template<typename View>
     inline constexpr auto isView = AnyView<View>;
@@ -630,6 +647,7 @@ namespace llama
 
     /// Applies the given transformation to the blobs of a view and creates a new view with the transformed blobs
     /// and the same mapping and accessor as the old view.
+    LLAMA_EXPORT
     template<typename ViewFwd, typename TransformBlobFunc, typename = std::enable_if_t<isView<std::decay_t<ViewFwd>>>>
     LLAMA_FN_HOST_ACC_INLINE auto transformBlobs(ViewFwd&& view, const TransformBlobFunc& transformBlob)
     {
@@ -649,6 +667,7 @@ namespace llama
     /// Creates a shallow copy of a view. This copy must not outlive the view, since it references its blob array.
     /// \tparam NewBlobType The blob type of the shallow copy. Must be a non owning pointer like type.
     /// \return A new view with the same mapping as view, where each blob refers to the blob in view.
+    LLAMA_EXPORT
     template<
         typename View,
         typename NewBlobType = CopyConst<std::remove_reference_t<View>, std::byte>*,
@@ -670,6 +689,7 @@ namespace llama
 
     // Creates a new view from an existing view with the given accessor.
     // \param view A view which's mapping and blobs are forwarded into a new view with the different accessor.
+    LLAMA_EXPORT
     template<typename NewAccessor, typename ViewFwd, typename = std::enable_if_t<isView<std::decay_t<ViewFwd>>>>
     LLAMA_FN_HOST_ACC_INLINE auto withAccessor(ViewFwd&& view, NewAccessor newAccessor = {})
     {
@@ -682,6 +702,7 @@ namespace llama
 
     // Creates a new view from an existing view with the given mapping.
     // \param view A view which's accessor and blobs are forwarded into a new view with the different mapping.
+    LLAMA_EXPORT
     template<typename NewMapping, typename ViewFwd, typename = std::enable_if_t<isView<std::decay_t<ViewFwd>>>>
     LLAMA_FN_HOST_ACC_INLINE auto withMapping(ViewFwd&& view, NewMapping newMapping = {})
     {
@@ -700,6 +721,7 @@ namespace llama
 
     /// Like a \ref View, but array indices are shifted.
     /// @tparam TStoredParentView Type of the underlying view. May be cv qualified and/or a reference type.
+    LLAMA_EXPORT
     template<typename TStoredParentView>
     struct SubView
     {
@@ -822,6 +844,7 @@ namespace llama
 
     /// SubView vview(view); will store a reference to view.
     /// SubView vview(std::move(view)); will store the view.
+    LLAMA_EXPORT
     template<typename TStoredParentView>
     SubView(TStoredParentView&&, typename std::remove_reference_t<TStoredParentView>::Mapping::ArrayExtents::Index)
         -> SubView<TStoredParentView>;

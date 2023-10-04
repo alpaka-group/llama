@@ -22,12 +22,14 @@ namespace llama
     /// address.
     /// * a `static void storeUnaligned(Simd simd, value_type* mem)` function, storing the given Simd to a given
     /// memory address.
+    LLAMA_EXPORT
     template<typename Simd, typename SFINAE = void>
     struct SimdTraits
     {
         static_assert(sizeof(Simd) == 0, "Please specialize SimdTraits for the type Simd");
     };
 
+    LLAMA_EXPORT
     template<typename T>
     struct SimdTraits<T, std::enable_if_t<std::is_arithmetic_v<T>>>
     {
@@ -48,6 +50,7 @@ namespace llama
 
     /// The number of SIMD simdLanes the given SIMD vector or \ref Simd<T> has. If Simd is not a structural \ref Simd
     /// or \ref SimdN, this is a shortcut for SimdTraits<Simd>::lanes.
+    LLAMA_EXPORT
     template<typename Simd, typename SFINAE = void>
     inline constexpr auto simdLanes = SimdTraits<Simd>::lanes;
 
@@ -55,6 +58,7 @@ namespace llama
     /// then reducing their sizes.
     /// @tparam MakeSimd Type function creating a SIMD type given a field type from the record dimension.
     /// @param reduce Binary reduction function to reduce the SIMD lanes.
+    LLAMA_EXPORT
     template<typename RecordDim, template<typename> typename MakeSimd, typename BinaryReductionFunction>
     LLAMA_CONSTEVAL auto chooseSimdLanes(BinaryReductionFunction reduce) -> std::size_t
     {
@@ -75,6 +79,7 @@ namespace llama
     /// multiple SIMD vectors for some field types.
     /// @tparam RecordDim The record dimension to simdize
     /// @tparam MakeSimd Type function creating a SIMD type given a field type from the record dimension.
+    LLAMA_EXPORT
     template<typename RecordDim, template<typename> typename MakeSimd>
     inline constexpr std::size_t simdLanesWithFullVectorsFor
         = chooseSimdLanes<RecordDim, MakeSimd>([](auto a, auto b) { return std::max(a, b); });
@@ -84,6 +89,7 @@ namespace llama
     /// registers for some data types.
     /// @tparam RecordDim The record dimension to simdize
     /// @tparam MakeSimd Type function creating a SIMD type given a field type from the record dimension.
+    LLAMA_EXPORT
     template<typename RecordDim, template<typename> typename MakeSimd>
     inline constexpr std::size_t simdLanesWithLeastRegistersFor
         = chooseSimdLanes<RecordDim, MakeSimd>([](auto a, auto b) { return std::min(a, b); });
@@ -117,11 +123,13 @@ namespace llama
     /// Transforms the given record dimension into a SIMD version of it. Each leaf field type will be replaced by a
     /// sized SIMD vector with length N, as determined by MakeSizedSimd. If N is 1, SimdizeN<T, 1, ...> is an alias for
     /// T.
+    LLAMA_EXPORT
     template<typename RecordDim, std::size_t N, template<typename, /* std::integral */ auto> typename MakeSizedSimd>
     using SimdizeN = typename internal::SimdizeNImpl<RecordDim, N, MakeSizedSimd>::type;
 
     /// Transforms the given record dimension into a SIMD version of it. Each leaf field type will be replaced by a
     /// SIMD vector, as determined by MakeSimd.
+    LLAMA_EXPORT
     template<typename RecordDim, template<typename> typename MakeSimd>
     using Simdize = TransformLeaves<RecordDim, MakeSimd>;
 
@@ -129,6 +137,7 @@ namespace llama
     /// SIMD type of the original field type. The SIMD vectors have length N. If N is 1, an ordinary \ref One of the
     /// record dimension T is created. If T is not a record dimension, a SIMD vector with value T and length N is
     /// created. If N is 1 (and T is not a record dimension), then T is produced.
+    LLAMA_EXPORT
     template<typename T, std::size_t N, template<typename, /* std::integral */ auto> typename MakeSizedSimd>
     using SimdN = typename std::conditional_t<
         isRecordDim<T>,
@@ -137,6 +146,7 @@ namespace llama
 
     /// Creates a SIMD version of the given type. Of T is a record dimension, creates a \ref One where each field is a
     /// SIMD type of the original field type.
+    LLAMA_EXPORT
     template<typename T, template<typename> typename MakeSimd>
     using Simd = typename std::
         conditional_t<isRecordDim<T>, mp_identity<One<Simdize<T, MakeSimd>>>, mp_identity<Simdize<T, MakeSimd>>>::type;
@@ -153,6 +163,7 @@ namespace llama
 
     /// Specialization for Simd<RecordDim>. Only works if all SIMD types in the fields of the record dimension have the
     /// same size.
+    LLAMA_EXPORT
     template<typename Simd>
     inline constexpr std::size_t simdLanes<Simd, std::enable_if_t<isRecordRef<Simd>>> = []
     {
@@ -260,6 +271,7 @@ namespace llama
     /// RecordRef are loaded. If Simd contains multiple fields of SIMD types, a SIMD vector will be fetched for each of
     /// the fields. The number of elements fetched per SIMD vector depends on the SIMD width of the vector. Simd is
     /// allowed to have different vector lengths per element.
+    LLAMA_EXPORT
     template<typename T, typename Simd>
     LLAMA_FN_HOST_ACC_INLINE void loadSimd(const T& srcRef, Simd& dstSimd)
     {
@@ -287,6 +299,7 @@ namespace llama
     /// reference. Only field tags occurring in RecordRef are stored. If Simd contains multiple fields of SIMD types, a
     /// SIMD vector will be stored for each of the fields. The number of elements stored per SIMD vector depends on the
     /// SIMD width of the vector. Simd is allowed to have different vector lengths per element.
+    LLAMA_EXPORT
     template<typename Simd, typename T>
     LLAMA_FN_HOST_ACC_INLINE void storeSimd(const Simd& srcSimd, T&& dstRef)
     {
@@ -310,6 +323,7 @@ namespace llama
         }
     }
 
+    LLAMA_EXPORT
     template<
         std::size_t N,
         template<typename, /* std::integral */ auto>
@@ -347,6 +361,7 @@ namespace llama
         }
     }
 
+    LLAMA_EXPORT
     template<
         template<typename>
         typename MakeSimd,

@@ -42,12 +42,14 @@ namespace llama
         };
     } // namespace internal
 
+    LLAMA_EXPORT
     template<typename... Elements>
     struct LLAMA_DECLSPEC_EMPTY_BASES Tuple
     {
     };
 
     /// Tuple class like `std::tuple` but suitable for use with offloading devices like GPUs.
+    LLAMA_EXPORT
     template<typename TFirstElement, typename... RestElements>
     struct LLAMA_DECLSPEC_EMPTY_BASES Tuple<TFirstElement, RestElements...>
         : internal::TupleLeaf<1 + sizeof...(RestElements), TFirstElement>
@@ -110,9 +112,11 @@ namespace llama
         }
     };
 
+    LLAMA_EXPORT
     template<typename... Elements>
     LLAMA_HOST_ACC Tuple(Elements...) -> Tuple<std::remove_cv_t<std::remove_reference_t<Elements>>...>;
 
+    LLAMA_EXPORT
     template<std::size_t I, typename... Elements>
     LLAMA_FN_HOST_ACC_INLINE constexpr auto get(Tuple<Elements...>& tuple) -> auto&
     {
@@ -121,6 +125,7 @@ namespace llama
         return tuple.Base::value();
     }
 
+    LLAMA_EXPORT
     template<std::size_t I, typename... Elements>
     LLAMA_FN_HOST_ACC_INLINE constexpr auto get(const Tuple<Elements...>& tuple) -> const auto&
     {
@@ -130,12 +135,14 @@ namespace llama
     }
 } // namespace llama
 
+LLAMA_EXPORT
 template<typename... Elements>
 struct std::tuple_size<llama::Tuple<Elements...>> // NOLINT(cert-dcl58-cpp)
 {
     static constexpr auto value = sizeof...(Elements);
 };
 
+LLAMA_EXPORT
 template<std::size_t I, typename... Elements>
 struct std::tuple_element<I, llama::Tuple<Elements...>> // NOLINT(cert-dcl58-cpp)
 {
@@ -156,6 +163,7 @@ namespace llama
         }
     } // namespace internal
 
+    LLAMA_EXPORT
     template<typename... ElementsA, typename... ElementsB>
     LLAMA_FN_HOST_ACC_INLINE constexpr auto operator==(const Tuple<ElementsA...>& a, const Tuple<ElementsB...>& b)
         -> bool
@@ -167,6 +175,7 @@ namespace llama
         return false;
     }
 
+    LLAMA_EXPORT
     template<typename... ElementsA, typename... ElementsB>
     LLAMA_FN_HOST_ACC_INLINE constexpr auto operator!=(const Tuple<ElementsA...>& a, const Tuple<ElementsB...>& b)
         -> bool
@@ -187,6 +196,7 @@ namespace llama
         }
     } // namespace internal
 
+    LLAMA_EXPORT
     template<typename Tuple1, typename Tuple2>
     LLAMA_FN_HOST_ACC_INLINE constexpr auto tupleCat(const Tuple1& t1, const Tuple2& t2)
     {
@@ -219,6 +229,7 @@ namespace llama
     } // namespace internal
 
     /// Creates a copy of a tuple with the element at position Pos replaced by replacement.
+    LLAMA_EXPORT
     template<std::size_t Pos, typename Tuple, typename Replacement>
     LLAMA_FN_HOST_ACC_INLINE constexpr auto tupleReplace(Tuple&& tuple, Replacement&& replacement)
     {
@@ -245,6 +256,7 @@ namespace llama
 
     /// Applies a functor to every element of a tuple, creating a new tuple with the result of the element
     /// transformations. The functor needs to implement a template `operator()` to which all tuple elements are passed.
+    LLAMA_EXPORT
     template<typename... Elements, typename Functor>
     LLAMA_FN_HOST_ACC_INLINE constexpr auto tupleTransform(const Tuple<Elements...>& tuple, const Functor& functor)
     {
@@ -253,6 +265,7 @@ namespace llama
     }
 
     /// Returns a copy of the tuple without the first element.
+    LLAMA_EXPORT
     template<typename... Elements>
     LLAMA_FN_HOST_ACC_INLINE constexpr auto popFront(const Tuple<Elements...>& tuple)
     {
