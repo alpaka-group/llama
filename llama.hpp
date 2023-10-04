@@ -218,6 +218,12 @@
 				#    define LLAMA_CONSTEVAL constexpr
 				#endif
 
+				#ifndef LLAMA_EXPORT
+				/// Annotation of all LLAMA public APIs. Expands to nothing by default. Can be defined to 'export' when building LLAMA
+				/// as a C++20 module.
+				#    define LLAMA_EXPORT
+				#endif
+
 				// TODO(bgruber): clang 10-15 (libstdc++ from gcc 11.2 or gcc 12.1) fail to compile this currently with the issue
 				// described here:
 				// https://stackoverflow.com/questions/64300832/why-does-clang-think-gccs-subrange-does-not-satisfy-gccs-ranges-begin-functi
@@ -244,6 +250,7 @@
 			    /// Array class like `std::array` but suitable for use with offloading devices like GPUs.
 			    /// \tparam T type if array elements.
 			    /// \tparam N rank of the array.
+			    LLAMA_EXPORT
 			    template<typename T, std::size_t N>
 			    // NOLINTNEXTLINE(bugprone-reserved-identifier,cert-dcl37-c,cert-dcl51-cpp,readability-identifier-naming)
 			    struct Array
@@ -357,6 +364,7 @@
 			        }
 			    };
 
+			    LLAMA_EXPORT
 			    template<typename T>
 			    struct Array<T, 0>
 			    {
@@ -468,9 +476,11 @@
 			        }
 			    };
 
+			    LLAMA_EXPORT
 			    template<typename First, typename... Args>
 			    Array(First, Args... args) -> Array<First, sizeof...(Args) + 1>;
 
+			    LLAMA_EXPORT
 			    template<typename T, std::size_t N>
 			    auto operator<<(std::ostream& os, const Array<T, N>& a) -> std::ostream&
 			    {
@@ -488,6 +498,7 @@
 			        return os;
 			    }
 
+			    LLAMA_EXPORT
 			    template<typename T, std::size_t N>
 			    LLAMA_FN_HOST_ACC_INLINE constexpr auto pushFront([[maybe_unused]] Array<T, N> a, T v) -> Array<T, N + 1>
 			    {
@@ -499,6 +510,7 @@
 			        return r;
 			    }
 
+			    LLAMA_EXPORT
 			    template<typename T, std::size_t N>
 			    LLAMA_FN_HOST_ACC_INLINE constexpr auto pushBack([[maybe_unused]] Array<T, N> a, T v) -> Array<T, N + 1>
 			    {
@@ -510,6 +522,7 @@
 			        return r;
 			    }
 
+			    LLAMA_EXPORT
 			    template<typename T, std::size_t N>
 			    LLAMA_FN_HOST_ACC_INLINE constexpr auto popBack([[maybe_unused]] Array<T, N> a)
 			    {
@@ -521,6 +534,7 @@
 			        return r;
 			    }
 
+			    LLAMA_EXPORT
 			    template<typename T, std::size_t N>
 			    LLAMA_FN_HOST_ACC_INLINE constexpr auto popFront([[maybe_unused]] Array<T, N> a)
 			    {
@@ -532,6 +546,7 @@
 			        return r;
 			    }
 
+			    LLAMA_EXPORT
 			    template<typename T, std::size_t N>
 			    LLAMA_FN_HOST_ACC_INLINE constexpr auto product(Array<T, N> a) -> T
 			    {
@@ -541,6 +556,7 @@
 			        return prod;
 			    }
 
+			    LLAMA_EXPORT
 			    template<typename T, std::size_t N>
 			    LLAMA_FN_HOST_ACC_INLINE constexpr auto dot([[maybe_unused]] Array<T, N> a, [[maybe_unused]] Array<T, N> b) -> T
 			    {
@@ -552,11 +568,13 @@
 			    }
 			} // namespace llama
 
+			LLAMA_EXPORT
 			template<typename T, size_t N>
 			struct std::tuple_size<llama::Array<T, N>> : std::integral_constant<size_t, N> // NOLINT(cert-dcl58-cpp)
 			{
 			};
 
+			LLAMA_EXPORT
 			template<size_t I, typename T, size_t N>
 			struct std::tuple_element<I, llama::Array<T, N>> // NOLINT(cert-dcl58-cpp)
 			{
@@ -622,6 +640,7 @@
 			        };
 			    } // namespace internal
 
+			    LLAMA_EXPORT
 			    template<typename Expression, typename... Args>
 			    using ReplacePlaceholders = typename internal::ReplacePlaceholdersImpl<Expression, Args...>::type;
 			} // namespace llama
@@ -638,6 +657,7 @@
 		    // TODO(bgruber): make this an alias in C++20, when we have CTAD for aliases
 		    /// Represents a run-time index into the array dimensions.
 		    /// \tparam Dim Compile-time number of dimensions.
+		    LLAMA_EXPORT
 		    template<typename T, std::size_t Dim>
 		    struct ArrayIndex : Array<T, Dim>
 		    {
@@ -645,6 +665,7 @@
 		    };
 
 		    // allow comparing ArrayIndex with different size types:
+		    LLAMA_EXPORT
 		    template<std::size_t Dim, typename TA, typename TB>
 		    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator==(ArrayIndex<TA, Dim> a, ArrayIndex<TB, Dim> b) -> bool
 		    {
@@ -654,6 +675,7 @@
 		        return true;
 		    }
 
+		    LLAMA_EXPORT
 		    template<std::size_t Dim, typename TA, typename TB>
 		    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator!=(ArrayIndex<TA, Dim> a, ArrayIndex<TB, Dim> b) -> bool
 		    {
@@ -685,16 +707,19 @@
 		        };
 		    } // namespace internal
 
+		    LLAMA_EXPORT
 		    template<typename... Args>
 		    ArrayIndex(Args...)
 		        -> ArrayIndex<typename internal::IndexTypeFromArgs<std::size_t, Args...>::type, sizeof...(Args)>;
 		} // namespace llama
 
+		LLAMA_EXPORT
 		template<typename V, size_t N>
 		struct std::tuple_size<llama::ArrayIndex<V, N>> : std::integral_constant<size_t, N> // NOLINT(cert-dcl58-cpp)
 		{
 		};
 
+		LLAMA_EXPORT
 		template<size_t I, typename V, size_t N>
 		struct std::tuple_element<I, llama::ArrayIndex<V, N>> // NOLINT(cert-dcl58-cpp)
 		{
@@ -740,12 +765,14 @@
 		        };
 		    } // namespace internal
 
+		    LLAMA_EXPORT
 		    /// Used as a template argument to \ref ArrayExtents to mark a dynamic extent.
 		    inline constexpr auto dyn = internal::Dyn{};
 
 		    /// ArrayExtents holding compile and runtime indices. This is conceptually equivalent to the std::extent of
 		    /// std::mdspan (@see: https://wg21.link/P0009) including the changes to make the size_type controllable (@see:
 		    /// https://wg21.link/P2553).
+		    LLAMA_EXPORT
 		    template<typename T = std::size_t, T... Sizes>
 		    struct ArrayExtents : Array<T, ((Sizes == dyn) + ... + 0)>
 		    {
@@ -787,6 +814,7 @@
 		        }
 		    };
 
+		    LLAMA_EXPORT
 		    template<typename T>
 		    struct ArrayExtents<T>
 		    {
@@ -803,6 +831,7 @@
 		        }
 		    };
 
+		    LLAMA_EXPORT
 		    template<typename... Args>
 		    ArrayExtents(Args...) -> ArrayExtents<
 		        typename internal::IndexTypeFromArgs<std::size_t, Args...>::type,
@@ -815,6 +844,7 @@
 		    static_assert(std::is_trivially_move_assignable_v<ArrayExtents<std::size_t, 1>>);
 		    static_assert(std::is_empty_v<ArrayExtents<std::size_t, 1>>);
 
+		    LLAMA_EXPORT
 		    template<typename SizeTypeA, SizeTypeA... SizesA, typename SizeTypeB, SizeTypeB... SizesB>
 		    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator==(
 		        ArrayExtents<SizeTypeA, SizesA...> a,
@@ -823,6 +853,7 @@
 		        return a.toArray() == b.toArray();
 		    }
 
+		    LLAMA_EXPORT
 		    template<typename SizeTypeA, SizeTypeA... SizesA, typename SizeTypeB, SizeTypeB... SizesB>
 		    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator!=(
 		        ArrayExtents<SizeTypeA, SizesA...> a,
@@ -831,6 +862,7 @@
 		        return !(a == b);
 		    }
 
+		    LLAMA_EXPORT
 		    template<typename SizeType, SizeType... Sizes>
 		    LLAMA_FN_HOST_ACC_INLINE constexpr auto product(ArrayExtents<SizeType, Sizes...> e) -> SizeType
 		    {
@@ -846,14 +878,17 @@
 		        }
 		    } // namespace internal
 
+		    LLAMA_EXPORT
 		    /// N-dimensional ArrayExtents where all N extents are Extent.
 		    template<typename SizeType, std::size_t N, SizeType Extent>
 		    using ArrayExtentsNCube = decltype(internal::makeArrayExtents<SizeType, Extent>(std::make_index_sequence<N>{}));
 
+		    LLAMA_EXPORT
 		    /// N-dimensional ArrayExtents where all values are dynamic.
 		    template<typename SizeType, std::size_t N>
 		    using ArrayExtentsDynamic = ArrayExtentsNCube<SizeType, N, dyn>;
 
+		    LLAMA_EXPORT
 		    template<typename SizeType, std::size_t Dim, typename Func, typename... OuterIndices>
 		    LLAMA_FN_HOST_ACC_INLINE void forEachArrayIndex(
 		        [[maybe_unused]] const ArrayIndex<SizeType, Dim>& extents,
@@ -874,6 +909,7 @@
 		        LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
 		    }
 
+		    LLAMA_EXPORT
 		    template<typename SizeType, SizeType... Sizes, typename Func>
 		    LLAMA_FN_HOST_ACC_INLINE void forEachArrayIndex(ArrayExtents<SizeType, Sizes...> extents, Func&& func)
 		    {
@@ -881,12 +917,14 @@
 		    }
 		} // namespace llama
 
+		LLAMA_EXPORT
 		template<typename SizeType, SizeType... Sizes>
 		struct std::tuple_size<llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(cert-dcl58-cpp)
 		    : std::integral_constant<std::size_t, sizeof...(Sizes)>
 		{
 		};
 
+		LLAMA_EXPORT
 		template<typename SizeType, std::size_t I, SizeType... Sizes>
 		struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(cert-dcl58-cpp)
 		{
@@ -915,6 +953,7 @@
 		{
 		    /// Represents a coordinate for a record inside the record dimension tree.
 		    /// \tparam Coords... the compile time coordinate.
+		    LLAMA_EXPORT
 		    template<std::size_t... Coords>
 		    struct RecordCoord
 		    {
@@ -926,6 +965,7 @@
 		        static constexpr std::size_t size = sizeof...(Coords);
 		    };
 
+		    LLAMA_EXPORT
 		    template<>
 		    struct RecordCoord<>
 		    {
@@ -934,30 +974,36 @@
 		        static constexpr std::size_t size = 0;
 		    };
 
+		    LLAMA_EXPORT
 		    template<std::size_t... CoordsA, std::size_t... CoordsB>
 		    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator==(RecordCoord<CoordsA...>, RecordCoord<CoordsB...>)
 		    {
 		        return false;
 		    }
 
+		    LLAMA_EXPORT
 		    template<std::size_t... Coords>
 		    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator==(RecordCoord<Coords...>, RecordCoord<Coords...>)
 		    {
 		        return true;
 		    }
 
+		    LLAMA_EXPORT
 		    template<std::size_t... CoordsA, std::size_t... CoordsB>
 		    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator!=(RecordCoord<CoordsA...> a, RecordCoord<CoordsB...> b)
 		    {
 		        return !(a == b);
 		    }
 
+		    LLAMA_EXPORT
 		    template<typename T>
 		    inline constexpr bool isRecordCoord = false;
 
+		    LLAMA_EXPORT
 		    template<std::size_t... Coords>
 		    inline constexpr bool isRecordCoord<RecordCoord<Coords...>> = true;
 
+		    LLAMA_EXPORT
 		    template<std::size_t... RCs>
 		    auto operator<<(std::ostream& os, RecordCoord<RCs...>) -> std::ostream&
 		    {
@@ -978,6 +1024,7 @@
 		    inline namespace literals
 		    {
 		        /// Literal operator for converting a numeric literal into a \ref RecordCoord.
+		        LLAMA_EXPORT
 		        template<char... Digits>
 		        constexpr auto operator"" _RC()
 		        {
@@ -998,14 +1045,17 @@
 		    } // namespace literals
 
 		    /// Converts a type list of integral constants into a \ref RecordCoord.
+		    LLAMA_EXPORT
 		    template<typename L>
 		    using RecordCoordFromList = internal::mp_unwrap_values_into<L, RecordCoord>;
 
 		    /// Concatenate a set of \ref RecordCoord%s.
+		    LLAMA_EXPORT
 		    template<typename... RecordCoords>
 		    using Cat = RecordCoordFromList<mp_append<typename RecordCoords::List...>>;
 
 		    /// Concatenate a set of \ref RecordCoord%s instances.
+		    LLAMA_EXPORT
 		    template<typename... RecordCoords>
 		    LLAMA_FN_HOST_ACC_INLINE constexpr auto cat(RecordCoords...)
 		    {
@@ -1013,6 +1063,7 @@
 		    }
 
 		    /// RecordCoord without first coordinate component.
+		    LLAMA_EXPORT
 		    template<typename RecordCoord>
 		    using PopFront = RecordCoordFromList<mp_pop_front<typename RecordCoord::List>>;
 
@@ -1036,6 +1087,7 @@
 		    } // namespace internal
 
 		    /// Checks wether the first RecordCoord is bigger than the second.
+		    LLAMA_EXPORT
 		    template<typename First, typename Second>
 		    inline constexpr auto recordCoordCommonPrefixIsBigger
 		        = internal::recordCoordCommonPrefixIsBiggerImpl(First{}, Second{});
@@ -1056,6 +1108,7 @@
 		    } // namespace internal
 
 		    /// Checks whether two \ref RecordCoord%s are the same or one is the prefix of the other.
+		    LLAMA_EXPORT
 		    template<typename First, typename Second>
 		    inline constexpr auto recordCoordCommonPrefixIsSame
 		        = internal::recordCoordCommonPrefixIsSameImpl(First{}, Second{});
@@ -1075,12 +1128,14 @@
 	namespace llama
 	{
 	    /// Anonymous naming for a \ref Field.
+	    LLAMA_EXPORT
 	    struct NoName
 	    {
 	    };
 
 	    /// @brief Tells whether the given type is allowed as a field type in LLAMA. Such types need to be trivially
 	    /// constructible and trivially destructible.
+	    LLAMA_EXPORT
 	    template<typename T>
 	    inline constexpr bool isAllowedFieldType = std::is_trivially_destructible_v<T>;
 
@@ -1091,19 +1146,23 @@
 	    /// Record. 2. an array of static size of any type, in which case a Record with as many \ref Field as the array
 	    /// size is created, named \ref RecordCoord specialized on consecutive numbers I. 3. A scalar type different from
 	    /// \ref Record, making this node a leaf of this type.
+	    LLAMA_EXPORT
 	    template<typename Tag, typename Type>
 	    struct Field
 	    {
 	        static_assert(isAllowedFieldType<Type>, "This field's type is not allowed");
 	    };
 
+	    LLAMA_EXPORT
 	    template<typename T>
 	    inline constexpr bool isField = false;
 
+	    LLAMA_EXPORT
 	    template<typename Tag, typename Type>
 	    inline constexpr bool isField<Field<Tag, Type>> = true;
 
 	    /// A type list of \ref Field%s which may be used to define a record dimension.
+	    LLAMA_EXPORT
 	    template<typename... Fields>
 	#if __cpp_concepts
 	    // Cannot use a fold expression here, because clang/nvcc/icx cannot handle more than 256 arguments.
@@ -1144,6 +1203,7 @@
 	    inline namespace literals
 	    {
 	        /// Literal operator for converting a string literal "abc"_Name to a StringTag<"Name">.
+	        LLAMA_EXPORT
 	        template<internal::FixedString Name>
 	        auto operator"" _Name()
 	        {
@@ -1153,6 +1213,7 @@
 
 	    /// Alternative to \ref Field. Use with string literals, e.g. NamedField<"x", float>. Access at the \ref View
 	    /// requires to use "x"_Name then.
+	    LLAMA_EXPORT
 	    template<internal::FixedString Tag, typename Type>
 	    using NamedField = Field<internal::StringTag<Tag>, Type>;
 
@@ -1194,11 +1255,13 @@
 	    } // namespace internal
 
 	    /// Reflects the given type T using Boost.Describe and creates a record dimension for it.
+	    LLAMA_EXPORT
 	    template<typename T>
 	    using ReflectToRecordDim = decltype(internal::reflectToRecordDim<T>());
 	#    endif
 	#endif
 
+	    LLAMA_EXPORT
 	    template<typename T>
 	    struct NrAndOffset
 	    {
@@ -1211,15 +1274,18 @@
 	        }
 	    };
 
+	    LLAMA_EXPORT
 	    template<typename Int>
 	    NrAndOffset(Int, Int) -> NrAndOffset<Int>;
 
+	    LLAMA_EXPORT
 	    template<typename TA, typename TB>
 	    auto operator==(const NrAndOffset<TA>& a, const NrAndOffset<TB>& b) -> bool
 	    {
 	        return a.nr == b.nr && a.offset == b.offset;
 	    }
 
+	    LLAMA_EXPORT
 	    template<typename TA, typename TB>
 	    auto operator!=(const NrAndOffset<TA>& a, const NrAndOffset<TB>& b) -> bool
 	    {
@@ -1227,16 +1293,20 @@
 	    }
 
 	    /// Get the tag from a \ref Field.
+	    LLAMA_EXPORT
 	    template<typename Field>
 	    using GetFieldTag = mp_first<Field>;
 
 	    /// Get the type from a \ref Field.
+	    LLAMA_EXPORT
 	    template<typename Field>
 	    using GetFieldType = mp_second<Field>;
 
+	    LLAMA_EXPORT
 	    template<typename T>
 	    inline constexpr auto isRecord = false;
 
+	    LLAMA_EXPORT
 	    template<typename... Fields>
 	    inline constexpr auto isRecord<Record<Fields...>> = true;
 
@@ -1270,6 +1340,7 @@
 
 	    /// Get the tags of all \ref Field%s from the root of the record dimension tree until to the node identified by
 	    /// \ref RecordCoord.
+	    LLAMA_EXPORT
 	    template<typename RecordDim, typename RecordCoord>
 	    using GetTags = typename internal::GetTagsImpl<RecordDim, RecordCoord>::type;
 
@@ -1289,6 +1360,7 @@
 	    } // namespace internal
 
 	    /// Get the tag of the \ref Field at a \ref RecordCoord inside the record dimension tree.
+	    LLAMA_EXPORT
 	    template<typename RecordDim, typename RecordCoord>
 	    using GetTag = typename internal::GetTagImpl<RecordDim, RecordCoord>::type;
 
@@ -1298,6 +1370,7 @@
 	    /// \tparam RecordCoordA \ref RecordCoord based on RecordDimA along which the tags are compared.
 	    /// \tparam RecordDimB second record dimension.
 	    /// \tparam RecordCoordB \ref RecordCoord based on RecordDimB along which the tags are compared.
+	    LLAMA_EXPORT
 	    template<typename RecordDimA, typename RecordCoordA, typename RecordDimB, typename RecordCoordB>
 	    inline constexpr auto hasSameTags = []() constexpr
 	    {
@@ -1386,6 +1459,7 @@
 
 	    /// Converts a series of tags, or a list of tags, navigating down a record dimension into a \ref RecordCoord. A
 	    /// RecordCoord will be passed through unmodified.
+	    LLAMA_EXPORT
 	    template<typename RecordDim, typename... TagsOrTagList>
 	    using GetCoordFromTags = typename internal::GetCoordFromTagsImpl<RecordDim, RecordCoord<>, TagsOrTagList...>::type;
 
@@ -1420,6 +1494,7 @@
 
 	    /// Returns the type of a node in a record dimension tree identified by a given \ref RecordCoord or a series of
 	    /// tags.
+	    LLAMA_EXPORT
 	    template<typename RecordDim, typename... RecordCoordOrTags>
 	    using GetType = typename internal::GetTypeImpl<RecordDim, RecordCoordOrTags...>::type;
 
@@ -1459,6 +1534,7 @@
 	    } // namespace internal
 
 	    /// Returns a flat type list containing all record coordinates to all leaves of the given record dimension.
+	    LLAMA_EXPORT
 	    template<typename RecordDim>
 	    using LeafRecordCoords = typename internal::LeafRecordCoordsImpl<RecordDim, RecordCoord<>>::type;
 
@@ -1467,6 +1543,7 @@
 	    /// the \ref RecordCoord in the record dimension tree.
 	    /// \param baseCoord \ref RecordCoord at which the iteration should be started. The functor is called on elements
 	    /// beneath this coordinate.
+	    LLAMA_EXPORT
 	    template<typename RecordDim, typename Functor, std::size_t... Coords>
 	    LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeafCoord(Functor&& functor, RecordCoord<Coords...> baseCoord)
 	    {
@@ -1483,6 +1560,7 @@
 	    /// the \ref RecordCoord in the record dimension tree.
 	    /// \param baseTags Tags used to define where the iteration should be started. The functor is called on elements
 	    /// beneath this coordinate.
+	    LLAMA_EXPORT
 	    template<typename RecordDim, typename Functor, typename... Tags>
 	    LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeafCoord(Functor&& functor, Tags... /*baseTags*/)
 	    {
@@ -1510,17 +1588,21 @@
 	    } // namespace internal
 
 	    /// Returns a flat type list containing all leaf field types of the given record dimension.
+	    LLAMA_EXPORT
 	    template<typename RecordDim>
 	    using FlatRecordDim = typename internal::FlattenRecordDimImpl<RecordDim>::type;
 
 	    /// The total number of fields in the recursively expanded record dimension.
+	    LLAMA_EXPORT
 	    template<typename RecordDim>
 	    inline constexpr std::size_t flatFieldCount = 1;
 
+	    LLAMA_EXPORT
 	    template<typename... Children>
 	    inline constexpr std::size_t flatFieldCount<Record<Children...>>
 	        = (flatFieldCount<GetFieldType<Children>> + ... + 0);
 
+	    LLAMA_EXPORT
 	    template<typename Child, std::size_t N>
 	    inline constexpr std::size_t flatFieldCount<Child[N]> = flatFieldCount<Child> * N;
 
@@ -1542,17 +1624,21 @@
 
 	    /// The equivalent zero based index into a flat record dimension (\ref FlatRecordDim) of the given hierarchical
 	    /// record coordinate.
+	    LLAMA_EXPORT
 	    template<typename RecordDim, typename RecordCoord>
 	    inline constexpr std::size_t flatRecordCoord = 0;
 
+	    LLAMA_EXPORT
 	    template<typename T>
 	    inline constexpr std::size_t flatRecordCoord<T, RecordCoord<>> = 0;
 
+	    LLAMA_EXPORT
 	    template<typename... Children, std::size_t I, std::size_t... Is>
 	    inline constexpr std::size_t flatRecordCoord<Record<Children...>, RecordCoord<I, Is...>>
 	        = internal::flatFieldCountBefore<I, Record<Children...>>
 	        + flatRecordCoord<GetFieldType<mp_at_c<Record<Children...>, I>>, RecordCoord<Is...>>;
 
+	    LLAMA_EXPORT
 	    template<typename Child, std::size_t N, std::size_t I, std::size_t... Is>
 	    inline constexpr std::size_t flatRecordCoord<Child[N], RecordCoord<I, Is...>>
 	        = flatFieldCount<Child> * I + flatRecordCoord<Child, RecordCoord<Is...>>;
@@ -1575,19 +1661,23 @@
 
 	    /// The alignment of a type list if its elements would be in a normal struct. Effectively returns the maximum
 	    /// alignment value in the type list.
+	    LLAMA_EXPORT
 	    template<typename TypeList>
 	    inline constexpr std::size_t flatAlignOf = internal::flatAlignOfImpl<TypeList>();
 
 	    /// The alignment of a type T.
+	    LLAMA_EXPORT
 	    template<typename T>
 	    inline constexpr std::size_t alignOf = alignof(T);
 
 	    /// The alignment of a record dimension if its fields would be in a normal struct. Effectively returns the maximum
 	    /// alignment value in the type list.
+	    LLAMA_EXPORT
 	    template<typename... Fields>
 	    inline constexpr std::size_t alignOf<Record<Fields...>> = flatAlignOf<FlatRecordDim<Record<Fields...>>>;
 
 	    /// Returns the ceiling of a / b.
+	    LLAMA_EXPORT
 	    template<typename Integral>
 	    [[nodiscard]] LLAMA_FN_HOST_ACC_INLINE constexpr auto divCeil(Integral a, Integral b) -> Integral
 	    {
@@ -1595,6 +1685,7 @@
 	    }
 
 	    /// Returns the integral n rounded up to be a multiple of mult.
+	    LLAMA_EXPORT
 	    template<typename Integral>
 	    [[nodiscard]] LLAMA_FN_HOST_ACC_INLINE constexpr auto roundUpToMultiple(Integral n, Integral mult) -> Integral
 	    {
@@ -1633,19 +1724,23 @@
 	    } // namespace internal
 
 	    /// The size of a type list if its elements would be in a normal struct.
+	    LLAMA_EXPORT
 	    template<typename TypeList, bool Align, bool IncludeTailPadding = true>
 	    inline constexpr std::size_t flatSizeOf = internal::sizeOfImpl<TypeList, Align, IncludeTailPadding>();
 
 	    /// The size of a type T.
+	    LLAMA_EXPORT
 	    template<typename T, bool Align = false, bool IncludeTailPadding = true>
 	    inline constexpr std::size_t sizeOf = sizeof(T);
 
 	    /// The size of a record dimension if its fields would be in a normal struct.
+	    LLAMA_EXPORT
 	    template<typename... Fields, bool Align, bool IncludeTailPadding>
 	    inline constexpr std::size_t sizeOf<Record<Fields...>, Align, IncludeTailPadding>
 	        = flatSizeOf<FlatRecordDim<Record<Fields...>>, Align, IncludeTailPadding>;
 
 	    /// The byte offset of an element in a type list ifs elements would be in a normal struct.
+	    LLAMA_EXPORT
 	    template<typename TypeList, std::size_t I, bool Align>
 	    inline constexpr std::size_t flatOffsetOf = internal::offsetOfImplWorkaround<TypeList, I, Align>();
 
@@ -1672,6 +1767,7 @@
 	    /// The byte offset of an element in a record dimension if it would be a normal struct.
 	    /// \tparam RecordDim Record dimension tree.
 	    /// \tparam RecordCoord Record coordinate of an element inrecord dimension tree.
+	    LLAMA_EXPORT
 	    template<typename RecordDim, typename RecordCoord, bool Align = false>
 	    inline constexpr std::size_t offsetOf
 	        = flatOffsetOf<FlatRecordDim<RecordDim>, flatRecordCoord<RecordDim, RecordCoord>, Align>;
@@ -1708,6 +1804,7 @@
 	    } // namespace internal
 
 	    /// True if the T is a record dimension. That is, T is either a llama::Record or a bounded array.
+	    LLAMA_EXPORT
 	    template<typename T>
 	    inline constexpr bool isRecordDim = isRecord<T> || internal::IsBoundedArray<T>::value;
 
@@ -1759,12 +1856,14 @@
 
 	    /// Creates a new record dimension where each new leaf field's type is the result of applying FieldTypeFunctor to
 	    /// the original leaf's \ref RecordCoord and field's type.
+	    LLAMA_EXPORT
 	    template<typename RecordDim, template<typename, typename> typename FieldTypeFunctor>
 	    using TransformLeavesWithCoord =
 	        typename internal::TransformLeavesWithCoordImpl<RecordCoord<>, RecordDim, FieldTypeFunctor>::type;
 
 	    /// Creates a new record dimension where each new leaf field's type is the result of applying FieldTypeFunctor to
 	    /// the original leaf field's type.
+	    LLAMA_EXPORT
 	    template<typename RecordDim, template<typename> typename FieldTypeFunctor>
 	    using TransformLeaves
 	        = TransformLeavesWithCoord<RecordDim, internal::MakePassSecond<FieldTypeFunctor>::template fn>;
@@ -1825,15 +1924,18 @@
 	    } // namespace internal
 
 	    /// Creates a merged record dimension, where duplicated, nested fields are unified.
+	    LLAMA_EXPORT
 	    template<typename RecordDimA, typename RecordDimB>
 	    using MergedRecordDims =
 	        typename decltype(internal::mergeRecordDimsImpl(mp_identity<RecordDimA>{}, mp_identity<RecordDimB>{}))::type;
 
 	    /// Alias for ToT, adding `const` if FromT is const qualified.
+	    LLAMA_EXPORT
 	    template<typename FromT, typename ToT>
 	    using CopyConst = std::conditional_t<std::is_const_v<FromT>, const ToT, ToT>;
 
 	    /// Used as template argument to specify a constant/compile-time value.
+	    LLAMA_EXPORT
 	    template<auto V>
 	    using Constant = std::integral_constant<decltype(V), V>;
 
@@ -1850,6 +1952,7 @@
 	        };
 	    } // namespace internal
 
+	    LLAMA_EXPORT
 	    template<typename T>
 	    inline constexpr bool isConstant = internal::IsConstant<T>::value;
 
@@ -1896,6 +1999,7 @@
 	        };
 	    } // namespace internal
 
+	    LLAMA_EXPORT
 	    struct PrettySize
 	    {
 	        double size;
@@ -1904,6 +2008,7 @@
 
 	    /// Repeatedly divides the given size (in bytes) until it fits below 1000. Returns the new size and a string
 	    /// literal with the corresponding unit.
+	    LLAMA_EXPORT
 	    inline auto prettySize(double size) -> PrettySize
 	    {
 	        static const char* unit[] = {"B ", "KB", "MB", "GB", "TB", "PB", "EB"};
@@ -2111,6 +2216,7 @@ namespace llama
         inline constexpr auto typeNameStorage = typeNameAsArray<T>();
     } // namespace internal
 
+    LLAMA_EXPORT
     template<typename T>
     inline constexpr auto qualifiedTypeName = []
     {
@@ -2189,6 +2295,7 @@ namespace llama
         }();
     } // namespace internal
 
+    LLAMA_EXPORT
     template<typename T>
     constexpr auto structName(T = {}) -> std::string_view
     {
@@ -2283,6 +2390,7 @@ namespace llama
 
     /// Returns a pretty representation of the record coordinate inside the given record dimension. Tags are
     /// interspersed by '.' and arrays are represented using subscript notation ("[123]").
+    LLAMA_EXPORT
     template<typename RecordDim, std::size_t... Coords>
     constexpr auto prettyRecordCoord(RecordCoord<Coords...> = {}) -> std::string_view
     {
@@ -2290,6 +2398,7 @@ namespace llama
         return std::string_view{value.data(), value.size()};
     }
 
+    LLAMA_EXPORT
     template<typename RecordDim>
     constexpr auto prettyRecordCoord(RecordCoord<>) -> std::string_view
     {
@@ -2328,6 +2437,7 @@ namespace llama
 	namespace llama
 	{
 	    /// Iterator supporting \ref ArrayIndexRange.
+	    LLAMA_EXPORT
 	    template<typename ArrayExtents>
 	    struct ArrayIndexIterator
 	    {
@@ -2555,6 +2665,7 @@ namespace llama
 	    };
 
 	    /// Range allowing to iterate over all indices in an \ref ArrayExtents.
+	    LLAMA_EXPORT
 	    template<typename ArrayExtents>
 	    struct ArrayIndexRange
 	        : private ArrayExtents
@@ -2631,6 +2742,7 @@ namespace llama
     /// Proofs by exhaustion of the array and record dimensions, that all values mapped to memory do not overlap.
     // Unfortunately, this only works for smallish array dimensions, because of compiler limits on constexpr evaluation
     // depth.
+    LLAMA_EXPORT
     template<typename Mapping>
     constexpr auto mapsNonOverlappingly(const Mapping& m) -> bool
     {
@@ -2673,6 +2785,7 @@ namespace llama
     /// contiguously.
     // Unfortunately, this only works for smallish array dimensions, because of compiler limits on constexpr evaluation
     // depth.
+    LLAMA_EXPORT
     template<std::size_t PieceLength, typename Mapping>
     constexpr auto mapsPiecewiseContiguous(const Mapping& m) -> bool
     {
@@ -2716,6 +2829,7 @@ namespace llama
 namespace llama
 {
     /// CRTP mixin for proxy reference types to support all compound assignment and increment/decrement operators.
+    LLAMA_EXPORT
     template<typename Derived, typename ValueType>
     struct ProxyRefOpMixin
     {
@@ -2938,9 +3052,11 @@ namespace llama
 		namespace llama
 		{
 		#ifdef __cpp_lib_concepts
+		    LLAMA_EXPORT
 		    template<auto I>
 		    concept isConstexpr = requires { std::integral_constant<decltype(I), I>{}; };
 
+		    LLAMA_EXPORT
 		    template<typename M>
 		    concept Mapping = requires(M m) {
 		        typename M::ArrayExtents;
@@ -2957,6 +3073,7 @@ namespace llama
 		        } -> std::same_as<typename M::ArrayExtents::value_type>;
 		    };
 
+		    LLAMA_EXPORT
 		    template<typename M, typename RC>
 		    concept PhysicalField = requires(M m, typename M::ArrayExtents::Index ai) {
 		        {
@@ -2971,19 +3088,24 @@ namespace llama
 		        using fn = mp_bool<PhysicalField<M, RC>>;
 		    };
 
+		    LLAMA_EXPORT
 		    template<typename M>
 		    inline constexpr bool allFieldsArePhysical
 		        = mp_all_of<LeafRecordCoords<typename M::RecordDim>, MakeIsPhysical<M>::template fn>::value;
 
+		    LLAMA_EXPORT
 		    template<typename M>
 		    concept PhysicalMapping = Mapping<M> && allFieldsArePhysical<M>;
 
+		    LLAMA_EXPORT
 		    template<typename R>
 		    concept LValueReference = std::is_lvalue_reference_v<R>;
 
+		    LLAMA_EXPORT
 		    template<typename R>
 		    concept AdlTwoStepSwappable = requires(R a, R b) { swap(a, b); } || requires(R a, R b) { std::swap(a, b); };
 
+		    LLAMA_EXPORT
 		    template<typename R>
 		    concept ProxyReference = std::is_copy_constructible_v<R> && std::is_copy_assignable_v<R> && requires(R r) {
 		        typename R::value_type;
@@ -2995,13 +3117,16 @@ namespace llama
 		        } -> std::same_as<R&>;
 		    } && AdlTwoStepSwappable<R>;
 
+		    LLAMA_EXPORT
 		    template<typename R>
 		    concept AnyReference = LValueReference<R> || ProxyReference<R>;
 
+		    LLAMA_EXPORT
 		    template<typename R, typename T>
 		    concept AnyReferenceTo = (LValueReference<R> && std::is_same_v<std::remove_cvref_t<R>, T>)
 		        || (ProxyReference<R> && std::is_same_v<typename R::value_type, T>);
 
+		    LLAMA_EXPORT
 		    template<typename M, typename RC>
 		    concept ComputedField
 		        = M::isComputed(RC{}) && requires(M m, typename M::ArrayExtents::Index ai, std::byte** blobs) {
@@ -3017,13 +3142,16 @@ namespace llama
 		        using fn = mp_bool<ComputedField<M, RC>>;
 		    };
 
+		    LLAMA_EXPORT
 		    template<typename M>
 		    inline constexpr bool allFieldsAreComputed
 		        = mp_all_of<LeafRecordCoords<typename M::RecordDim>, MakeIsComputed<M>::template fn>::value;
 
+		    LLAMA_EXPORT
 		    template<typename M>
 		    concept FullyComputedMapping = Mapping<M> && allFieldsAreComputed<M>;
 
+		    LLAMA_EXPORT
 		    template<
 		        typename M,
 		        typename LeafCoords = LeafRecordCoords<typename M::RecordDim>,
@@ -3035,10 +3163,12 @@ namespace llama
 		                              // because we cannot check whether the call to blobNrOrOffset()
 		                              // or compute() is actually valid
 
+		    LLAMA_EXPORT
 		    template<typename M>
 		    concept PartiallyComputedMapping = Mapping<M> && allFieldsArePhysicalOrComputed<M>;
 
 		    /// Additional semantic requirement: &b[i] + j == &b[i + j] for any integral i and j in range of the blob
+		    LLAMA_EXPORT
 		    template<typename B>
 		    concept Blob = requires(B b, std::size_t i) {
 		        // according to http://eel.is/c++draft/intro.object#3 only std::byte and unsigned char can
@@ -3049,6 +3179,7 @@ namespace llama
 		            || std::same_as<std::remove_cvref_t<decltype(b[i])>, unsigned char>;
 		    };
 
+		    LLAMA_EXPORT
 		    template<typename BA>
 		    concept BlobAllocator = requires(BA ba, std::size_t size) {
 		        {
@@ -3056,6 +3187,7 @@ namespace llama
 		        } -> Blob;
 		    };
 
+		    LLAMA_EXPORT
 		    template<typename V>
 		    concept AnyView = requires(V v, const V cv) {
 		        typename V::Mapping;
@@ -3132,6 +3264,7 @@ namespace llama
 		        };
 		    } // namespace internal
 
+		    LLAMA_EXPORT
 		    template<typename R>
 		#ifdef __cpp_lib_concepts
 		    inline constexpr bool isProxyReference = ProxyReference<R>;
@@ -3159,6 +3292,7 @@ namespace llama
 	{
 	    /// Allocates statically sized memory for a \ref View, which is copied each time a \ref View is copied.
 	    /// \tparam BytesToReserve the amount of memory to reserve.
+	    LLAMA_EXPORT
 	    template<std::size_t BytesToReserve>
 	    struct Array
 	    {
@@ -3182,6 +3316,7 @@ namespace llama
 
 	    /// Allocates heap memory managed by a `std::unique_ptr` for a \ref View. This memory can only be uniquely owned by
 	    /// a single \ref View.
+	    LLAMA_EXPORT
 	    struct UniquePtr
 	    {
 	        template<std::size_t Alignment>
@@ -3199,6 +3334,7 @@ namespace llama
 
 	    /// Allocates heap memory managed by a `std::shared_ptr` for a \ref View. This memory is shared between all copies
 	    /// of a \ref View.
+	    LLAMA_EXPORT
 	    struct SharedPtr
 	    {
 	        template<std::size_t Alignment>
@@ -3216,6 +3352,7 @@ namespace llama
 	#endif
 
 	    /// An STL compatible allocator allowing to specify alignment.
+	    LLAMA_EXPORT
 	    template<typename T, std::size_t Alignment>
 	    struct AlignedAllocator
 	    {
@@ -3257,6 +3394,7 @@ namespace llama
 
 	    /// Allocates heap memory managed by a `std::vector` for a \ref View, which is copied each time a \ref View is
 	    /// copied.
+	    LLAMA_EXPORT
 	    struct Vector
 	    {
 	        template<std::size_t Alignment>
@@ -3273,6 +3411,7 @@ namespace llama
 	    /// Allocates GPU device memory using cudaMalloc. The memory is managed by a std::unique_ptr with a deleter that
 	    /// calles cudaFree. If you want to use a view created with this allocator in a CUDA kernel, call \ref shallowCopy
 	    /// on the view before passing it to the kernel.
+	    LLAMA_EXPORT
 	    struct CudaMalloc
 	    {
 	        inline static const auto deleter = [](void* p)
@@ -3295,6 +3434,7 @@ namespace llama
 	#endif
 
 	#if __has_include(<alpaka/alpaka.hpp>)
+	    LLAMA_EXPORT
 	    template<typename Size, typename Dev>
 	    struct AlpakaBuf
 	    {
@@ -3344,6 +3484,7 @@ namespace llama
 			namespace llama::accessor
 			{
 			    /// Default accessor. Passes through the given reference.
+			    LLAMA_EXPORT
 			    struct Default
 			    {
 			        template<typename Reference>
@@ -3354,6 +3495,7 @@ namespace llama
 			    };
 
 			    /// Allows only read access and returns values instead of references to memory.
+			    LLAMA_EXPORT
 			    struct ByValue
 			    {
 			        template<typename Reference>
@@ -3368,6 +3510,7 @@ namespace llama
 			    };
 
 			    /// Allows only read access by qualifying the references to memory with const.
+			    LLAMA_EXPORT
 			    struct Const
 			    {
 			        // for l-value references
@@ -3423,6 +3566,7 @@ namespace llama
 			    };
 
 			    /// Qualifies references to memory with __restrict. Only works on l-value references.
+			    LLAMA_EXPORT
 			    struct Restrict
 			    {
 			        template<typename T>
@@ -3434,6 +3578,7 @@ namespace llama
 
 			#ifdef __cpp_lib_atomic_ref
 			    /// Accessor wrapping a reference into a std::atomic_ref. Can only wrap l-value references.
+			    LLAMA_EXPORT
 			    struct Atomic
 			    {
 			        template<typename T>
@@ -3445,6 +3590,7 @@ namespace llama
 			#endif
 
 			    /// Locks a mutex during each access to the data structure.
+			    LLAMA_EXPORT
 			    template<typename Mutex = std::mutex>
 			    struct Locked
 			    {
@@ -3507,11 +3653,13 @@ namespace llama
 
 			    /// Accessor combining multiple other accessors. The contained accessors are applied in left to right order to the
 			    /// memory location when forming the reference returned from a view.
+			    LLAMA_EXPORT
 			    template<typename... Accessors>
 			    struct Stacked : internal::StackedLeave<0, Default>
 			    {
 			    };
 
+			    LLAMA_EXPORT
 			    template<typename FirstAccessor, typename... MoreAccessors>
 			    struct Stacked<FirstAccessor, MoreAccessors...>
 			        : internal::StackedLeave<1 + sizeof...(MoreAccessors), FirstAccessor>
@@ -3570,6 +3718,7 @@ namespace llama
 
 				namespace llama::mapping
 				{
+				    LLAMA_EXPORT
 				    template<typename TArrayExtents, typename TRecordDim>
 				    struct MappingBase : protected TArrayExtents
 				    {
@@ -3597,6 +3746,7 @@ namespace llama
 				    /// Functor that maps an \ref ArrayIndex into linear numbers, where the fast moving index should be the rightmost
 				    /// one, which models how C++ arrays work and is analogous to mdspan's layout_right. E.g. ArrayIndex<3> a; stores 3
 				    /// indices where a[2] should be incremented in the innermost loop.
+				    LLAMA_EXPORT
 				    struct LinearizeArrayIndexRight
 				    {
 				        template<typename ArrayExtents>
@@ -3628,11 +3778,13 @@ namespace llama
 				        }
 				    };
 
+				    LLAMA_EXPORT
 				    using LinearizeArrayIndexCpp = LinearizeArrayIndexRight;
 
 				    /// Functor that maps a \ref ArrayIndex into linear numbers the way Fortran arrays work. The fast moving index of
 				    /// the ArrayIndex object should be the last one. E.g. ArrayIndex<3> a; stores 3 indices where a[0] should be
 				    /// incremented in the innermost loop.
+				    LLAMA_EXPORT
 				    struct LinearizeArrayIndexLeft
 				    {
 				        template<typename ArrayExtents>
@@ -3664,9 +3816,11 @@ namespace llama
 				        }
 				    };
 
+				    LLAMA_EXPORT
 				    using LinearizeArrayIndexFortran = LinearizeArrayIndexLeft;
 
 				    /// Functor that maps an \ref ArrayIndex into linear numbers using the Z-order space filling curve (Morton codes).
+				    LLAMA_EXPORT
 				    struct LinearizeArrayIndexMorton
 				    {
 				        template<typename ArrayExtents>
@@ -3727,6 +3881,7 @@ namespace llama
 				    };
 
 				    /// Retains the order of the record dimension's fields.
+				    LLAMA_EXPORT
 				    template<typename TFlatRecordDim>
 				    struct PermuteFieldsInOrder
 				    {
@@ -3739,6 +3894,7 @@ namespace llama
 				    /// Sorts the record dimension's the fields according to a given predicate on the field types.
 				    /// @tparam Less A binary predicate accepting two field types, which exposes a member value. Value must be true if
 				    /// the first field type is less than the second one, otherwise false.
+				    LLAMA_EXPORT
 				    template<typename FlatOrigRecordDim, template<typename, typename> typename Less>
 				    struct PermuteFieldsSorted
 				    {
@@ -3775,14 +3931,17 @@ namespace llama
 				    } // namespace internal
 
 				    /// Sorts the record dimension fields by increasing alignment of its fields.
+				    LLAMA_EXPORT
 				    template<typename FlatRecordDim>
 				    using PermuteFieldsIncreasingAlignment = PermuteFieldsSorted<FlatRecordDim, internal::LessAlignment>;
 
 				    /// Sorts the record dimension fields by decreasing alignment of its fields.
+				    LLAMA_EXPORT
 				    template<typename FlatRecordDim>
 				    using PermuteFieldsDecreasingAlignment = PermuteFieldsSorted<FlatRecordDim, internal::MoreAlignment>;
 
 				    /// Sorts the record dimension fields by the alignment of its fields to minimize padding.
+				    LLAMA_EXPORT
 				    template<typename FlatRecordDim>
 				    using PermuteFieldsMinimizePadding = PermuteFieldsIncreasingAlignment<FlatRecordDim>;
 
@@ -3813,7 +3972,7 @@ namespace llama
 				        }
 				    } // namespace internal
 
-
+				    LLAMA_EXPORT
 				    enum class FieldAlignment
 				    {
 				        Pack,
@@ -3834,6 +3993,7 @@ namespace llama
 			    /// \tparam PermuteFields Defines how the record dimension's fields should be permuted. See \ref
 			    /// PermuteFieldsInOrder, \ref PermuteFieldsIncreasingAlignment, \ref PermuteFieldsDecreasingAlignment and
 			    /// \ref PermuteFieldsMinimizePadding.
+			    LLAMA_EXPORT
 			    template<
 			        typename TArrayExtents,
 			        typename TRecordDim,
@@ -3888,22 +4048,26 @@ namespace llama
 
 			    /// One mapping preserving the alignment of the field types by inserting padding.
 			    /// \see One
+			    LLAMA_EXPORT
 			    template<typename ArrayExtents, typename RecordDim>
 			    using AlignedOne = One<ArrayExtents, RecordDim, FieldAlignment::Align, PermuteFieldsInOrder>;
 
 			    /// One mapping preserving the alignment of the field types by inserting padding and permuting the field order to
 			    /// minimize this padding.
 			    /// \see One
+			    LLAMA_EXPORT
 			    template<typename ArrayExtents, typename RecordDim>
 			    using MinAlignedOne = One<ArrayExtents, RecordDim, FieldAlignment::Align, PermuteFieldsMinimizePadding>;
 
 			    /// One mapping packing the field types tightly, violating the types' alignment requirements.
 			    /// \see One
+			    LLAMA_EXPORT
 			    template<typename ArrayExtents, typename RecordDim>
 			    using PackedOne = One<ArrayExtents, RecordDim, FieldAlignment::Pack, PermuteFieldsInOrder>;
 
 			    /// Binds parameters to a \ref One mapping except for array and record dimension, producing a quoted
 			    /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
+			    LLAMA_EXPORT
 			    template<
 			        FieldAlignment FieldAlignment = FieldAlignment::Align,
 			        template<typename> typename PermuteFields = PermuteFieldsMinimizePadding>
@@ -3913,9 +4077,11 @@ namespace llama
 			        using fn = One<ArrayExtents, RecordDim, FieldAlignment, PermuteFields>;
 			    };
 
+			    LLAMA_EXPORT
 			    template<typename Mapping>
 			    inline constexpr bool isOne = false;
 
+			    LLAMA_EXPORT
 			    template<
 			        typename ArrayExtents,
 			        typename RecordDim,
@@ -3933,6 +4099,7 @@ namespace llama
 
 		namespace llama
 		{
+		    LLAMA_EXPORT
 		#ifdef __cpp_lib_concepts
 		    template<typename TMapping, Blob BlobType, typename TAccessor>
 		#else
@@ -3962,6 +4129,7 @@ namespace llama
 		    } // namespace internal
 
 		    /// Same as \ref allocView but does not run field constructors.
+		    LLAMA_EXPORT
 		#ifdef __cpp_lib_concepts
 		    template<typename Mapping, BlobAllocator Allocator = bloballoc::Vector, typename Accessor = accessor::Default>
 		#else
@@ -3994,16 +4162,19 @@ namespace llama
 		    } // namespace internal
 
 		    /// Returns true if the field accessed via the given mapping and record coordinate is a computed value.
+		    LLAMA_EXPORT
 		    template<typename Mapping, typename RecordCoord>
 		    inline constexpr bool isComputed = internal::IsComputed<Mapping, RecordCoord>::value;
 
 		    /// Returns true if any field accessed via the given mapping is a computed value.
 		    // TODO(bgruber): harmonize this with LLAMA's concepts from Concepts.hpp
+		    LLAMA_EXPORT
 		    template<typename Mapping>
 		    inline constexpr bool hasAnyComputedField = mp_any_of<
 		        LeafRecordCoords<typename Mapping::RecordDim>,
 		        mp_bind_front<internal::IsComputed, Mapping>::template fn>::value;
 
+		    LLAMA_EXPORT
 		    template<typename Mapping, typename BlobType, typename Accessor, std::size_t... RCs>
 		    LLAMA_FN_HOST_ACC_INLINE void constructField(
 		        View<Mapping, BlobType, Accessor>& view,
@@ -4044,6 +4215,7 @@ namespace llama
 		    /// Value-initializes all fields reachable through the given view. That is, constructors are run and fundamental
 		    /// types are zero-initialized. Computed fields are constructed if they return l-value references and assigned a
 		    /// default constructed value if they return a proxy reference.
+		    LLAMA_EXPORT
 		    template<typename Mapping, typename BlobType, typename Accessor>
 		    LLAMA_FN_HOST_ACC_INLINE void constructFields(View<Mapping, BlobType, Accessor>& view)
 		    {
@@ -4060,6 +4232,7 @@ namespace llama
 		    /// allocator callable is called with the alignment and size of bytes to allocate for each blob of the mapping.
 		    /// Value-initialization is performed for all fields by calling \ref constructFields. This function is the
 		    /// preferred way to create a \ref View. See also \ref allocViewUninitialized.
+		    LLAMA_EXPORT
 		#ifdef __cpp_lib_concepts
 		    template<typename Mapping, BlobAllocator Allocator = bloballoc::Vector, typename Accessor = accessor::Default>
 		#else
@@ -4074,6 +4247,7 @@ namespace llama
 		    }
 
 		    /// Same as \ref allocViewStack but does not run field constructors.
+		    LLAMA_EXPORT
 		    template<std::size_t Dim, typename RecordDim>
 		    LLAMA_FN_HOST_ACC_INLINE auto allocViewStackUninitialized() -> decltype(auto)
 		    {
@@ -4083,6 +4257,7 @@ namespace llama
 
 		    /// Allocates a \ref View holding a single record backed by stack memory (\ref bloballoc::Array).
 		    /// \tparam Dim Dimension of the \ref ArrayExtents of the \ref View.
+		    LLAMA_EXPORT
 		    template<std::size_t Dim, typename RecordDim>
 		    LLAMA_FN_HOST_ACC_INLINE auto allocViewStack() -> decltype(auto)
 		    {
@@ -4091,17 +4266,21 @@ namespace llama
 		        return view;
 		    }
 
+		    LLAMA_EXPORT
 		    template<typename View, typename BoundRecordCoord = RecordCoord<>, bool OwnView = false>
 		    struct RecordRef;
 
 		    /// A \ref RecordRef that owns and holds a single value.
+		    LLAMA_EXPORT
 		    template<typename RecordDim>
 		    using One = RecordRef<decltype(allocViewStack<0, RecordDim>()), RecordCoord<>, true>;
 
 		    /// Is true, if T is an instance of \ref One.
+		    LLAMA_EXPORT
 		    template<typename T>
 		    inline constexpr bool isOne = false;
 
+		    LLAMA_EXPORT
 		    template<typename View, typename BoundRecordCoord>
 		    inline constexpr bool isOne<RecordRef<View, BoundRecordCoord, true>> = true;
 
@@ -4109,6 +4288,7 @@ namespace llama
 		    // superior to a single iterator over multiple dimensions. At least compilers are able to produce better code.
 		    // std::mdspan also discovered similar difficulties and there was a discussion in WG21 in Oulu 2016 to
 		    // remove/postpone iterators from the design. In std::mdspan's design, the iterator iterated over the co-domain.
+		    LLAMA_EXPORT
 		    template<typename View>
 		    struct Iterator
 		    {
@@ -4262,6 +4442,7 @@ namespace llama
 		    /// Using a mapping, maps the given array index and record coordinate to a memory reference onto the given blobs.
 		    /// \return Either an l-value reference if the record coord maps to a physical field or a proxy reference if mapped
 		    /// to a computed field.
+		    LLAMA_EXPORT
 		    template<typename Mapping, typename RecordCoord, typename Blobs>
 		    LLAMA_FN_HOST_ACC_INLINE auto mapToMemory(
 		        Mapping& mapping,
@@ -4286,6 +4467,7 @@ namespace llama
 		    /// mapping. A view should be created using \ref allocView. \tparam TMapping The mapping used by the view to
 		    /// map accesses into memory. \tparam TBlobType The storage type used by the view holding memory. \tparam
 		    /// TAccessor The accessor to use when an access is made through this view.
+		    LLAMA_EXPORT
 		#ifdef __cpp_lib_concepts
 		    template<typename TMapping, Blob TBlobType, typename TAccessor = accessor::Default>
 		#else
@@ -4497,6 +4679,7 @@ namespace llama
 		        Array<BlobType, Mapping::blobCount> m_blobs;
 		    };
 
+		    LLAMA_EXPORT
 		#ifdef __cpp_lib_concepts
 		    template<typename View>
 		    inline constexpr auto isView = AnyView<View>;
@@ -4547,6 +4730,7 @@ namespace llama
 
 		    /// Applies the given transformation to the blobs of a view and creates a new view with the transformed blobs
 		    /// and the same mapping and accessor as the old view.
+		    LLAMA_EXPORT
 		    template<typename ViewFwd, typename TransformBlobFunc, typename = std::enable_if_t<isView<std::decay_t<ViewFwd>>>>
 		    LLAMA_FN_HOST_ACC_INLINE auto transformBlobs(ViewFwd&& view, const TransformBlobFunc& transformBlob)
 		    {
@@ -4566,6 +4750,7 @@ namespace llama
 		    /// Creates a shallow copy of a view. This copy must not outlive the view, since it references its blob array.
 		    /// \tparam NewBlobType The blob type of the shallow copy. Must be a non owning pointer like type.
 		    /// \return A new view with the same mapping as view, where each blob refers to the blob in view.
+		    LLAMA_EXPORT
 		    template<
 		        typename View,
 		        typename NewBlobType = CopyConst<std::remove_reference_t<View>, std::byte>*,
@@ -4587,6 +4772,7 @@ namespace llama
 
 		    // Creates a new view from an existing view with the given accessor.
 		    // \param view A view which's mapping and blobs are forwarded into a new view with the different accessor.
+		    LLAMA_EXPORT
 		    template<typename NewAccessor, typename ViewFwd, typename = std::enable_if_t<isView<std::decay_t<ViewFwd>>>>
 		    LLAMA_FN_HOST_ACC_INLINE auto withAccessor(ViewFwd&& view, NewAccessor newAccessor = {})
 		    {
@@ -4599,6 +4785,7 @@ namespace llama
 
 		    // Creates a new view from an existing view with the given mapping.
 		    // \param view A view which's accessor and blobs are forwarded into a new view with the different mapping.
+		    LLAMA_EXPORT
 		    template<typename NewMapping, typename ViewFwd, typename = std::enable_if_t<isView<std::decay_t<ViewFwd>>>>
 		    LLAMA_FN_HOST_ACC_INLINE auto withMapping(ViewFwd&& view, NewMapping newMapping = {})
 		    {
@@ -4617,6 +4804,7 @@ namespace llama
 
 		    /// Like a \ref View, but array indices are shifted.
 		    /// @tparam TStoredParentView Type of the underlying view. May be cv qualified and/or a reference type.
+		    LLAMA_EXPORT
 		    template<typename TStoredParentView>
 		    struct SubView
 		    {
@@ -4739,6 +4927,7 @@ namespace llama
 
 		    /// SubView vview(view); will store a reference to view.
 		    /// SubView vview(std::move(view)); will store the view.
+		    LLAMA_EXPORT
 		    template<typename TStoredParentView>
 		    SubView(TStoredParentView&&, typename std::remove_reference_t<TStoredParentView>::Mapping::ArrayExtents::Index)
 		        -> SubView<TStoredParentView>;
@@ -4762,6 +4951,7 @@ namespace llama
 		{
 		    /// The maximum number of vector lanes that can be used to fetch each leaf type in the record dimension into a
 		    /// vector register of the given size in bits.
+		    LLAMA_EXPORT
 		    template<typename RecordDim, std::size_t VectorRegisterBits>
 		    inline constexpr std::size_t maxLanes = []() constexpr
 		    {
@@ -4780,6 +4970,7 @@ namespace llama
 		    /// \tparam PermuteFields Defines how the record dimension's fields should be permuted. See \ref
 		    /// PermuteFieldsInOrder, \ref PermuteFieldsIncreasingAlignment, \ref PermuteFieldsDecreasingAlignment and
 		    /// \ref PermuteFieldsMinimizePadding.
+		    LLAMA_EXPORT
 		    template<
 		        typename TArrayExtents,
 		        typename TRecordDim,
@@ -4836,6 +5027,7 @@ namespace llama
 
 		    /// Binds parameters to an \ref AoSoA mapping except for array and record dimension, producing a quoted meta
 		    /// function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
+		    LLAMA_EXPORT
 		    template<std::size_t Lanes, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
 		    struct BindAoSoA
 		    {
@@ -4843,12 +5035,13 @@ namespace llama
 		        using fn = AoSoA<ArrayExtents, RecordDim, Lanes, LinearizeArrayIndexFunctor>;
 		    };
 
+		    LLAMA_EXPORT
 		    template<typename Mapping>
 		    inline constexpr bool isAoSoA = false;
 
+		    LLAMA_EXPORT
 		    template<typename AD, typename RD, typename AD::value_type L>
 		    inline constexpr bool isAoSoA<AoSoA<AD, RD, L>> = true;
-
 		} // namespace llama::mapping
 		// ==
 		// == ./include/llama/mapping/AoSoA.hpp ==
@@ -4867,12 +5060,14 @@ namespace llama
 
 		namespace llama::mapping
 		{
+		    LLAMA_EXPORT
 		    enum class Blobs
 		    {
 		        Single,
 		        OnePerField
 		    };
 
+		    LLAMA_EXPORT
 		    enum class SubArrayAlignment
 		    {
 		        Pack,
@@ -4890,6 +5085,7 @@ namespace llama
 		    /// \tparam PermuteFieldsSingleBlob Defines how the record dimension's fields should be permuted if Blobs is
 		    /// Single. See \ref PermuteFieldsInOrder, \ref PermuteFieldsIncreasingAlignment, \ref
 		    /// PermuteFieldsDecreasingAlignment and \ref PermuteFieldsMinimizePadding.
+		    LLAMA_EXPORT
 		    template<
 		        typename TArrayExtents,
 		        typename TRecordDim,
@@ -5037,29 +5233,34 @@ namespace llama
 		    };
 
 		    // we can drop this when inherited ctors also inherit deduction guides
+		    LLAMA_EXPORT
 		    template<typename TArrayExtents, typename TRecordDim>
 		    SoA(TArrayExtents, TRecordDim) -> SoA<TArrayExtents, TRecordDim>;
 
 		    /// Struct of array mapping storing the entire layout in a single blob. The starts of the sub arrays are aligned by
 		    /// inserting padding. \see SoA
+		    LLAMA_EXPORT
 		    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
 		    using AlignedSingleBlobSoA
 		        = SoA<ArrayExtents, RecordDim, Blobs::Single, SubArrayAlignment::Align, LinearizeArrayIndexFunctor>;
 
 		    /// Struct of array mapping storing the entire layout in a single blob. The sub arrays are tightly packed,
 		    /// violating the type's alignment requirements. \see SoA
+		    LLAMA_EXPORT
 		    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
 		    using PackedSingleBlobSoA
 		        = SoA<ArrayExtents, RecordDim, Blobs::Single, SubArrayAlignment::Pack, LinearizeArrayIndexFunctor>;
 
 		    /// Struct of array mapping storing each attribute of the record dimension in a separate blob.
 		    /// \see SoA
+		    LLAMA_EXPORT
 		    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
 		    using MultiBlobSoA
 		        = SoA<ArrayExtents, RecordDim, Blobs::OnePerField, SubArrayAlignment::Pack, LinearizeArrayIndexFunctor>;
 
 		    /// Binds parameters to an \ref SoA mapping except for array and record dimension, producing a quoted
 		    /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
+		    LLAMA_EXPORT
 		    template<
 		        Blobs Blobs = Blobs::OnePerField,
 		        SubArrayAlignment SubArrayAlignment = SubArrayAlignment::Pack,
@@ -5070,9 +5271,11 @@ namespace llama
 		        using fn = SoA<ArrayExtents, RecordDim, Blobs, SubArrayAlignment, LinearizeArrayIndexFunctor>;
 		    };
 
+		    LLAMA_EXPORT
 		    template<typename Mapping>
 		    inline constexpr bool isSoA = false;
 
+		    LLAMA_EXPORT
 		    template<
 		        typename ArrayExtents,
 		        typename RecordDim,
@@ -5127,6 +5330,7 @@ namespace llama
 	    /// the same array dimensions.
 	    /// @param threadId Optional. Zero-based id of calling thread for multi-threaded invocations.
 	    /// @param threadCount Optional. Thread count in case of multi-threaded invocation.
+	    LLAMA_EXPORT
 	    template<typename Mapping, typename SrcBlob, typename DstBlob>
 	    void blobMemcpy(
 	        const View<Mapping, SrcBlob>& srcView,
@@ -5153,6 +5357,7 @@ namespace llama
 	    /// Field-wise copy from source to destination view. Both views need to have the same array and record dimensions.
 	    /// @param threadId Optional. Thread id in case of multi-threaded copy.
 	    /// @param threadCount Optional. Thread count in case of multi-threaded copy.
+	    LLAMA_EXPORT
 	    template<typename SrcMapping, typename SrcBlob, typename DstMapping, typename DstBlob>
 	    void fieldWiseCopy(
 	        const View<SrcMapping, SrcBlob>& srcView,
@@ -5214,6 +5419,7 @@ namespace llama
 	    /// argument.
 	    /// @param threadId Optional. Zero-based id of calling thread for multi-threaded invocations.
 	    /// @param threadCount Optional. Thread count in case of multi-threaded invocation.
+	    LLAMA_EXPORT
 	    template<typename SrcMapping, typename SrcBlob, typename DstMapping, typename DstBlob>
 	    void aosoaCommonBlockCopy(
 	        const View<SrcMapping, SrcBlob>& srcView,
@@ -5386,6 +5592,7 @@ namespace llama
 	    /// specializations of this construct for specific mappings. Users are encouraged to also specialize this template
 	    /// with better copy algorithms for further combinations of mappings, if they can and want to provide a better
 	    /// implementation.
+	    LLAMA_EXPORT
 	    template<typename SrcMapping, typename DstMapping, typename SFINAE = void>
 	    struct Copy
 	    {
@@ -5396,6 +5603,7 @@ namespace llama
 	        }
 	    };
 
+	    LLAMA_EXPORT
 	    template<typename Mapping>
 	    struct Copy<Mapping, Mapping>
 	    {
@@ -5406,6 +5614,7 @@ namespace llama
 	        }
 	    };
 
+	    LLAMA_EXPORT
 	    template<
 	        typename ArrayExtents,
 	        typename RecordDim,
@@ -5429,6 +5638,7 @@ namespace llama
 	        }
 	    };
 
+	    LLAMA_EXPORT
 	    template<
 	        typename ArrayExtents,
 	        typename RecordDim,
@@ -5453,6 +5663,7 @@ namespace llama
 	        }
 	    };
 
+	    LLAMA_EXPORT
 	    template<
 	        typename ArrayExtents,
 	        typename RecordDim,
@@ -5482,6 +5693,7 @@ namespace llama
 	    /// dimensions. Delegates to \ref Copy to choose an implementation.
 	    /// @param threadId Optional. Zero-based id of calling thread for multi-threaded invocations.
 	    /// @param threadCount Optional. Thread count in case of multi-threaded invocation.
+	    LLAMA_EXPORT
 	    template<typename SrcMapping, typename SrcBlob, typename DstMapping, typename DstBlob>
 	    void copy(
 	        const View<SrcMapping, SrcBlob>& srcView,
@@ -5735,6 +5947,7 @@ namespace llama
 
 	    /// Returns an SVG image visualizing the memory layout created by the given mapping. The created memory blocks are
 	    /// wrapped after wrapByteCount bytes.
+	    LLAMA_EXPORT
 	    template<typename Mapping>
 	    auto toSvg(const Mapping& mapping, std::size_t wrapByteCount = 64, bool breakBoxes = true) -> std::string
 	    {
@@ -5885,6 +6098,7 @@ namespace llama
 
 	    /// Returns an HTML document visualizing the memory layout created by the given mapping. The visualization is
 	    /// resizeable.
+	    LLAMA_EXPORT
 	    template<typename Mapping>
 	    auto toHtml(const Mapping& mapping) -> std::string
 	    {
@@ -6013,16 +6227,20 @@ namespace llama
 
 	namespace llama
 	{
+	    LLAMA_EXPORT
 	    template<typename View, typename BoundRecordCoord, bool OwnView>
 	    struct RecordRef;
 
+	    LLAMA_EXPORT
 	    template<typename View>
 	    inline constexpr auto isRecordRef = false;
 
+	    LLAMA_EXPORT
 	    template<typename View, typename BoundRecordCoord, bool OwnView>
 	    inline constexpr auto isRecordRef<RecordRef<View, BoundRecordCoord, OwnView>> = true;
 
 	    /// Returns a \ref One with the same record dimension as the given record ref, with values copyied from rr.
+	    LLAMA_EXPORT
 	    template<typename View, typename BoundRecordCoord, bool OwnView>
 	    LLAMA_FN_HOST_ACC_INLINE auto copyRecord(const RecordRef<View, BoundRecordCoord, OwnView>& rr)
 	    {
@@ -6334,6 +6552,7 @@ namespace llama
 	    /// (array dimensions coord and partial record coord) to retrieve it later from a \ref View. Records references
 	    /// should not be created by the user. They are returned from various access functions in \ref View and RecordRef
 	    /// itself.
+	    LLAMA_EXPORT
 	    template<typename TView, typename TBoundRecordCoord, bool OwnView>
 	    struct RecordRef : private TView::Mapping::ArrayExtents::Index
 	    {
@@ -6759,6 +6978,7 @@ namespace llama
 	    };
 
 	    // swap for heterogeneous RecordRef
+	    LLAMA_EXPORT
 	    template<
 	        typename ViewA,
 	        typename BoundRecordDimA,
@@ -6782,6 +7002,7 @@ namespace llama
 	            });
 	    }
 
+	    LLAMA_EXPORT
 	    template<typename View, typename BoundRecordCoord, bool OwnView>
 	    auto operator<<(std::ostream& os, const RecordRef<View, BoundRecordCoord, OwnView>& vr) -> std::ostream&
 	    {
@@ -6814,6 +7035,7 @@ namespace llama
 	        return os;
 	    }
 
+	    LLAMA_EXPORT
 	    template<typename RecordRefFwd, typename Functor>
 	    LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeaf(RecordRefFwd&& vr, Functor&& functor)
 	    {
@@ -6857,6 +7079,7 @@ namespace llama
 	    } // namespace internal
 
 	    /// Pulls a copy of the given value or reference. Proxy references are resolved to their value types.
+	    LLAMA_EXPORT
 	    template<typename T>
 	    auto decayCopy(T&& valueOrRef) -> typename internal::ValueOf<T>::type
 	    {
@@ -6867,6 +7090,7 @@ namespace llama
 	    /// construction. The stored value is written back when ScopedUpdate is destroyed. ScopedUpdate tries to act like
 	    /// the stored value as much as possible, exposing member functions of the stored value and acting like a proxy
 	    /// reference if the stored value is a primitive type.
+	    LLAMA_EXPORT
 	    template<typename Reference, typename = void>
 	    struct ScopedUpdate : internal::ValueOf<Reference>::type
 	    {
@@ -6907,6 +7131,7 @@ namespace llama
 	        Reference ref;
 	    };
 
+	    LLAMA_EXPORT
 	    template<typename Reference>
 	    struct ScopedUpdate<
 	        Reference,
@@ -6988,28 +7213,33 @@ namespace llama
 	        };
 	    } // namespace internal
 
+	    LLAMA_EXPORT
 	    template<typename T>
 	    ScopedUpdate(T) -> ScopedUpdate<typename internal::ReferenceTo<std::remove_reference_t<T>>::type>;
 	} // namespace llama
 
+	LLAMA_EXPORT
 	template<typename View, typename BoundRecordCoord, bool OwnView>
 	struct std::tuple_size<llama::RecordRef<View, BoundRecordCoord, OwnView>> // NOLINT(cert-dcl58-cpp)
 	    : boost::mp11::mp_size<typename llama::RecordRef<View, BoundRecordCoord, OwnView>::AccessibleRecordDim>
 	{
 	};
 
+	LLAMA_EXPORT
 	template<std::size_t I, typename View, typename BoundRecordCoord, bool OwnView>
 	struct std::tuple_element<I, llama::RecordRef<View, BoundRecordCoord, OwnView>> // NOLINT(cert-dcl58-cpp)
 	{
 	    using type = decltype(std::declval<llama::RecordRef<View, BoundRecordCoord, OwnView>>().template get<I>());
 	};
 
+	LLAMA_EXPORT
 	template<std::size_t I, typename View, typename BoundRecordCoord, bool OwnView>
 	struct std::tuple_element<I, const llama::RecordRef<View, BoundRecordCoord, OwnView>> // NOLINT(cert-dcl58-cpp)
 	{
 	    using type = decltype(std::declval<const llama::RecordRef<View, BoundRecordCoord, OwnView>>().template get<I>());
 	};
 
+	LLAMA_EXPORT
 	template<typename View, typename BoundRecordCoord, bool OwnView>
 	struct std::hash<llama::RecordRef<View, BoundRecordCoord, OwnView>> // NOLINT(cert-dcl58-cpp)
 	{
@@ -7025,6 +7255,7 @@ namespace llama
 	};
 
 	#if CAN_USE_RANGES
+	LLAMA_EXPORT
 	template<
 	    typename ViewA,
 	    typename BoundA,
@@ -7080,6 +7311,7 @@ namespace llama
 		    /// \tparam PermuteFields Defines how the record dimension's fields should be permuted. See \ref
 		    /// PermuteFieldsInOrder, \ref PermuteFieldsIncreasingAlignment, \ref PermuteFieldsDecreasingAlignment and
 		    /// \ref PermuteFieldsMinimizePadding.
+		    LLAMA_EXPORT
 		    template<
 		        typename TArrayExtents,
 		        typename TRecordDim,
@@ -7129,16 +7361,19 @@ namespace llama
 		    };
 
 		    // we can drop this when inherited ctors also inherit deduction guides
+		    LLAMA_EXPORT
 		    template<typename TArrayExtents, typename TRecordDim>
 		    AoS(TArrayExtents, TRecordDim) -> AoS<TArrayExtents, TRecordDim>;
 
 		    /// Array of struct mapping preserving the alignment of the field types by inserting padding.
 		    /// \see AoS
+		    LLAMA_EXPORT
 		    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
 		    using AlignedAoS = AoS<ArrayExtents, RecordDim, FieldAlignment::Align, LinearizeArrayIndexFunctor>;
 
 		    /// Array of struct mapping preserving the alignment of the field types by inserting padding and permuting the
 		    /// field order to minimize this padding. \see AoS
+		    LLAMA_EXPORT
 		    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
 		    using MinAlignedAoS = AoS<
 		        ArrayExtents,
@@ -7149,11 +7384,13 @@ namespace llama
 
 		    /// Array of struct mapping packing the field types tightly, violating the type's alignment requirements.
 		    /// \see AoS
+		    LLAMA_EXPORT
 		    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
 		    using PackedAoS = AoS<ArrayExtents, RecordDim, FieldAlignment::Pack, LinearizeArrayIndexFunctor>;
 
 		    /// Binds parameters to an \ref AoS mapping except for array and record dimension, producing a quoted meta
 		    /// function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
+		    LLAMA_EXPORT
 		    template<
 		        FieldAlignment Alignment = FieldAlignment::Align,
 		        typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
@@ -7163,9 +7400,11 @@ namespace llama
 		        using fn = AoS<ArrayExtents, RecordDim, Alignment, LinearizeArrayIndexFunctor>;
 		    };
 
+		    LLAMA_EXPORT
 		    template<typename Mapping>
 		    inline constexpr bool isAoS = false;
 
+		    LLAMA_EXPORT
 		    template<
 		        typename ArrayExtents,
 		        typename RecordDim,
@@ -7196,12 +7435,14 @@ namespace llama
 	    /// address.
 	    /// * a `static void storeUnaligned(Simd simd, value_type* mem)` function, storing the given Simd to a given
 	    /// memory address.
+	    LLAMA_EXPORT
 	    template<typename Simd, typename SFINAE = void>
 	    struct SimdTraits
 	    {
 	        static_assert(sizeof(Simd) == 0, "Please specialize SimdTraits for the type Simd");
 	    };
 
+	    LLAMA_EXPORT
 	    template<typename T>
 	    struct SimdTraits<T, std::enable_if_t<std::is_arithmetic_v<T>>>
 	    {
@@ -7222,6 +7463,7 @@ namespace llama
 
 	    /// The number of SIMD simdLanes the given SIMD vector or \ref Simd<T> has. If Simd is not a structural \ref Simd
 	    /// or \ref SimdN, this is a shortcut for SimdTraits<Simd>::lanes.
+	    LLAMA_EXPORT
 	    template<typename Simd, typename SFINAE = void>
 	    inline constexpr auto simdLanes = SimdTraits<Simd>::lanes;
 
@@ -7229,6 +7471,7 @@ namespace llama
 	    /// then reducing their sizes.
 	    /// @tparam MakeSimd Type function creating a SIMD type given a field type from the record dimension.
 	    /// @param reduce Binary reduction function to reduce the SIMD lanes.
+	    LLAMA_EXPORT
 	    template<typename RecordDim, template<typename> typename MakeSimd, typename BinaryReductionFunction>
 	    LLAMA_CONSTEVAL auto chooseSimdLanes(BinaryReductionFunction reduce) -> std::size_t
 	    {
@@ -7249,6 +7492,7 @@ namespace llama
 	    /// multiple SIMD vectors for some field types.
 	    /// @tparam RecordDim The record dimension to simdize
 	    /// @tparam MakeSimd Type function creating a SIMD type given a field type from the record dimension.
+	    LLAMA_EXPORT
 	    template<typename RecordDim, template<typename> typename MakeSimd>
 	    inline constexpr std::size_t simdLanesWithFullVectorsFor
 	        = chooseSimdLanes<RecordDim, MakeSimd>([](auto a, auto b) { return std::max(a, b); });
@@ -7258,6 +7502,7 @@ namespace llama
 	    /// registers for some data types.
 	    /// @tparam RecordDim The record dimension to simdize
 	    /// @tparam MakeSimd Type function creating a SIMD type given a field type from the record dimension.
+	    LLAMA_EXPORT
 	    template<typename RecordDim, template<typename> typename MakeSimd>
 	    inline constexpr std::size_t simdLanesWithLeastRegistersFor
 	        = chooseSimdLanes<RecordDim, MakeSimd>([](auto a, auto b) { return std::min(a, b); });
@@ -7291,11 +7536,13 @@ namespace llama
 	    /// Transforms the given record dimension into a SIMD version of it. Each leaf field type will be replaced by a
 	    /// sized SIMD vector with length N, as determined by MakeSizedSimd. If N is 1, SimdizeN<T, 1, ...> is an alias for
 	    /// T.
+	    LLAMA_EXPORT
 	    template<typename RecordDim, std::size_t N, template<typename, /* std::integral */ auto> typename MakeSizedSimd>
 	    using SimdizeN = typename internal::SimdizeNImpl<RecordDim, N, MakeSizedSimd>::type;
 
 	    /// Transforms the given record dimension into a SIMD version of it. Each leaf field type will be replaced by a
 	    /// SIMD vector, as determined by MakeSimd.
+	    LLAMA_EXPORT
 	    template<typename RecordDim, template<typename> typename MakeSimd>
 	    using Simdize = TransformLeaves<RecordDim, MakeSimd>;
 
@@ -7303,6 +7550,7 @@ namespace llama
 	    /// SIMD type of the original field type. The SIMD vectors have length N. If N is 1, an ordinary \ref One of the
 	    /// record dimension T is created. If T is not a record dimension, a SIMD vector with value T and length N is
 	    /// created. If N is 1 (and T is not a record dimension), then T is produced.
+	    LLAMA_EXPORT
 	    template<typename T, std::size_t N, template<typename, /* std::integral */ auto> typename MakeSizedSimd>
 	    using SimdN = typename std::conditional_t<
 	        isRecordDim<T>,
@@ -7311,6 +7559,7 @@ namespace llama
 
 	    /// Creates a SIMD version of the given type. Of T is a record dimension, creates a \ref One where each field is a
 	    /// SIMD type of the original field type.
+	    LLAMA_EXPORT
 	    template<typename T, template<typename> typename MakeSimd>
 	    using Simd = typename std::
 	        conditional_t<isRecordDim<T>, mp_identity<One<Simdize<T, MakeSimd>>>, mp_identity<Simdize<T, MakeSimd>>>::type;
@@ -7327,6 +7576,7 @@ namespace llama
 
 	    /// Specialization for Simd<RecordDim>. Only works if all SIMD types in the fields of the record dimension have the
 	    /// same size.
+	    LLAMA_EXPORT
 	    template<typename Simd>
 	    inline constexpr std::size_t simdLanes<Simd, std::enable_if_t<isRecordRef<Simd>>> = []
 	    {
@@ -7434,6 +7684,7 @@ namespace llama
 	    /// RecordRef are loaded. If Simd contains multiple fields of SIMD types, a SIMD vector will be fetched for each of
 	    /// the fields. The number of elements fetched per SIMD vector depends on the SIMD width of the vector. Simd is
 	    /// allowed to have different vector lengths per element.
+	    LLAMA_EXPORT
 	    template<typename T, typename Simd>
 	    LLAMA_FN_HOST_ACC_INLINE void loadSimd(const T& srcRef, Simd& dstSimd)
 	    {
@@ -7461,6 +7712,7 @@ namespace llama
 	    /// reference. Only field tags occurring in RecordRef are stored. If Simd contains multiple fields of SIMD types, a
 	    /// SIMD vector will be stored for each of the fields. The number of elements stored per SIMD vector depends on the
 	    /// SIMD width of the vector. Simd is allowed to have different vector lengths per element.
+	    LLAMA_EXPORT
 	    template<typename Simd, typename T>
 	    LLAMA_FN_HOST_ACC_INLINE void storeSimd(const Simd& srcSimd, T&& dstRef)
 	    {
@@ -7484,6 +7736,7 @@ namespace llama
 	        }
 	    }
 
+	    LLAMA_EXPORT
 	    template<
 	        std::size_t N,
 	        template<typename, /* std::integral */ auto>
@@ -7521,6 +7774,7 @@ namespace llama
 	        }
 	    }
 
+	    LLAMA_EXPORT
 	    template<
 	        template<typename>
 	        typename MakeSimd,
@@ -7585,12 +7839,14 @@ namespace llama
 	        };
 	    } // namespace internal
 
+	    LLAMA_EXPORT
 	    template<typename... Elements>
 	    struct LLAMA_DECLSPEC_EMPTY_BASES Tuple
 	    {
 	    };
 
 	    /// Tuple class like `std::tuple` but suitable for use with offloading devices like GPUs.
+	    LLAMA_EXPORT
 	    template<typename TFirstElement, typename... RestElements>
 	    struct LLAMA_DECLSPEC_EMPTY_BASES Tuple<TFirstElement, RestElements...>
 	        : internal::TupleLeaf<1 + sizeof...(RestElements), TFirstElement>
@@ -7653,9 +7909,11 @@ namespace llama
 	        }
 	    };
 
+	    LLAMA_EXPORT
 	    template<typename... Elements>
 	    LLAMA_HOST_ACC Tuple(Elements...) -> Tuple<std::remove_cv_t<std::remove_reference_t<Elements>>...>;
 
+	    LLAMA_EXPORT
 	    template<std::size_t I, typename... Elements>
 	    LLAMA_FN_HOST_ACC_INLINE constexpr auto get(Tuple<Elements...>& tuple) -> auto&
 	    {
@@ -7664,6 +7922,7 @@ namespace llama
 	        return tuple.Base::value();
 	    }
 
+	    LLAMA_EXPORT
 	    template<std::size_t I, typename... Elements>
 	    LLAMA_FN_HOST_ACC_INLINE constexpr auto get(const Tuple<Elements...>& tuple) -> const auto&
 	    {
@@ -7673,12 +7932,14 @@ namespace llama
 	    }
 	} // namespace llama
 
+	LLAMA_EXPORT
 	template<typename... Elements>
 	struct std::tuple_size<llama::Tuple<Elements...>> // NOLINT(cert-dcl58-cpp)
 	{
 	    static constexpr auto value = sizeof...(Elements);
 	};
 
+	LLAMA_EXPORT
 	template<std::size_t I, typename... Elements>
 	struct std::tuple_element<I, llama::Tuple<Elements...>> // NOLINT(cert-dcl58-cpp)
 	{
@@ -7699,6 +7960,7 @@ namespace llama
 	        }
 	    } // namespace internal
 
+	    LLAMA_EXPORT
 	    template<typename... ElementsA, typename... ElementsB>
 	    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator==(const Tuple<ElementsA...>& a, const Tuple<ElementsB...>& b)
 	        -> bool
@@ -7710,6 +7972,7 @@ namespace llama
 	        return false;
 	    }
 
+	    LLAMA_EXPORT
 	    template<typename... ElementsA, typename... ElementsB>
 	    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator!=(const Tuple<ElementsA...>& a, const Tuple<ElementsB...>& b)
 	        -> bool
@@ -7730,6 +7993,7 @@ namespace llama
 	        }
 	    } // namespace internal
 
+	    LLAMA_EXPORT
 	    template<typename Tuple1, typename Tuple2>
 	    LLAMA_FN_HOST_ACC_INLINE constexpr auto tupleCat(const Tuple1& t1, const Tuple2& t2)
 	    {
@@ -7762,6 +8026,7 @@ namespace llama
 	    } // namespace internal
 
 	    /// Creates a copy of a tuple with the element at position Pos replaced by replacement.
+	    LLAMA_EXPORT
 	    template<std::size_t Pos, typename Tuple, typename Replacement>
 	    LLAMA_FN_HOST_ACC_INLINE constexpr auto tupleReplace(Tuple&& tuple, Replacement&& replacement)
 	    {
@@ -7788,6 +8053,7 @@ namespace llama
 
 	    /// Applies a functor to every element of a tuple, creating a new tuple with the result of the element
 	    /// transformations. The functor needs to implement a template `operator()` to which all tuple elements are passed.
+	    LLAMA_EXPORT
 	    template<typename... Elements, typename Functor>
 	    LLAMA_FN_HOST_ACC_INLINE constexpr auto tupleTransform(const Tuple<Elements...>& tuple, const Functor& functor)
 	    {
@@ -7796,6 +8062,7 @@ namespace llama
 	    }
 
 	    /// Returns a copy of the tuple without the first element.
+	    LLAMA_EXPORT
 	    template<typename... Elements>
 	    LLAMA_FN_HOST_ACC_INLINE constexpr auto popFront(const Tuple<Elements...>& tuple)
 	    {
@@ -7827,6 +8094,7 @@ namespace llama
 	    /// exception guarantee.
 	    /// WARNING: This class is experimental.
 	    /// @tparam Mapping The mapping to be used for the underlying view. Needs to have 1 array dimension.
+	    LLAMA_EXPORT
 	    template<typename Mapping>
 	    struct Vector
 	    {
@@ -8117,8 +8385,6 @@ namespace llama
 	        ViewType m_view = {};
 	        size_type m_size = 0;
 	    };
-
-
 	} // namespace llama
 	// ==
 	// == ./include/llama/Vector.hpp ==
@@ -8152,6 +8418,7 @@ namespace llama
 
 		namespace llama::mapping
 		{
+		    LLAMA_EXPORT
 		    enum class SignBit
 		    {
 		        Keep,
@@ -8494,6 +8761,7 @@ namespace llama
 		    /// how big the linear domain gets.
 		    /// \tparam TStoredIntegral Integral type used as storage of reduced precision integers. Must be std::uint32_t or
 		    /// std::uint64_t.
+		    LLAMA_EXPORT
 		    template<
 		        typename TArrayExtents,
 		        typename TRecordDim,
@@ -8551,6 +8819,7 @@ namespace llama
 
 		    /// Binds parameters to a \ref BitPackedIntSoA mapping except for array and record dimension, producing a quoted
 		    /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
+		    LLAMA_EXPORT
 		    template<
 		        typename Bits = void,
 		        SignBit SignBit = SignBit::Keep,
@@ -8571,9 +8840,11 @@ namespace llama
 		                internal::StoredUnsignedFor<RecordDim>>>;
 		    };
 
+		    LLAMA_EXPORT
 		    template<typename Mapping>
 		    inline constexpr bool isBitPackedIntSoA = false;
 
+		    LLAMA_EXPORT
 		    template<
 		        typename ArrayExtents,
 		        typename RecordDim,
@@ -8599,6 +8870,7 @@ namespace llama
 		    //  \ref PermuteFieldsMinimizePadding.
 		    /// \tparam TStoredIntegral Integral type used as storage of reduced precision integers. Must be std::uint32_t or
 		    /// std::uint64_t.
+		    LLAMA_EXPORT
 		    template<
 		        typename TArrayExtents,
 		        typename TRecordDim,
@@ -8663,6 +8935,7 @@ namespace llama
 
 		    /// Binds parameters to a \ref BitPackedIntAoS mapping except for array and record dimension, producing a quoted
 		    /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
+		    LLAMA_EXPORT
 		    template<
 		        typename Bits = void,
 		        SignBit SignBit = SignBit::Keep,
@@ -8685,6 +8958,7 @@ namespace llama
 		                internal::StoredUnsignedFor<RecordDim>>>;
 		    };
 
+		    LLAMA_EXPORT
 		    template<typename Mapping>
 		    inline constexpr bool isBitPackedIntAoS = false;
 
@@ -8902,6 +9176,7 @@ namespace llama
 	    /// \tparam TLinearizeArrayIndexFunctor Defines how the array dimensions should be mapped into linear numbers and
 	    /// how big the linear domain gets.
 	    /// \tparam TStoredIntegral Integral type used as storage of reduced precision floating-point values.
+	    LLAMA_EXPORT
 	    template<
 	        typename TArrayExtents,
 	        typename TRecordDim,
@@ -8989,6 +9264,7 @@ namespace llama
 
 	    /// Binds parameters to a \ref BitPackedFloatSoA mapping except for array and record dimension, producing a quoted
 	    /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
+	    LLAMA_EXPORT
 	    template<
 	        typename ExponentBits = unsigned,
 	        typename MantissaBits = ExponentBits,
@@ -9009,12 +9285,15 @@ namespace llama
 	                internal::StoredIntegralFor<RecordDim>>>;
 	    };
 
+	    LLAMA_EXPORT
 	    template<typename Mapping>
 	    inline constexpr bool isBitPackedFloatSoA = false;
 
+	    LLAMA_EXPORT
 	    template<typename... Ts>
 	    inline constexpr bool isBitPackedFloatSoA<BitPackedFloatSoA<Ts...>> = true;
 
+	    LLAMA_EXPORT
 	    template<
 	        typename TArrayExtents,
 	        typename TRecordDim,
@@ -9107,6 +9386,7 @@ namespace llama
 	        }
 	    };
 
+	    LLAMA_EXPORT
 	    template<
 	        typename ExponentBits = unsigned,
 	        typename MantissaBits = ExponentBits,
@@ -9129,9 +9409,11 @@ namespace llama
 	                internal::StoredIntegralFor<RecordDim>>>;
 	    };
 
+	    LLAMA_EXPORT
 	    template<typename Mapping>
 	    inline constexpr bool isBitPackedFloatAoS = false;
 
+	    LLAMA_EXPORT
 	    template<
 	        typename ArrayExtents,
 	        typename RecordDim,
@@ -9179,6 +9461,7 @@ namespace llama
 
 	    /// Meta mapping splitting each field in the record dimension into an array of bytes and mapping the resulting
 	    /// record dimension using a further mapping.
+	    LLAMA_EXPORT
 	    template<typename TArrayExtents, typename TRecordDim, template<typename, typename> typename InnerMapping>
 	    struct Bytesplit : private InnerMapping<TArrayExtents, internal::SplitBytes<TRecordDim>>
 	    {
@@ -9291,6 +9574,7 @@ namespace llama
 
 	    /// Binds parameters to a \ref Bytesplit mapping except for array and record dimension, producing a quoted
 	    /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
+	    LLAMA_EXPORT
 	    template<template<typename, typename> typename InnerMapping>
 	    struct BindBytesplit
 	    {
@@ -9298,9 +9582,11 @@ namespace llama
 	        using fn = Bytesplit<ArrayExtents, RecordDim, InnerMapping>;
 	    };
 
+	    LLAMA_EXPORT
 	    template<typename Mapping>
 	    inline constexpr bool isBytesplit = false;
 
+	    LLAMA_EXPORT
 	    template<typename TArrayExtents, typename TRecordDim, template<typename, typename> typename InnerMapping>
 	    inline constexpr bool isBytesplit<Bytesplit<TArrayExtents, TRecordDim, InnerMapping>> = true;
 	} // namespace llama::mapping
@@ -9443,6 +9729,7 @@ namespace llama
 		    ///   static auto load(auto&& fromMem);
 		    ///   static auto store(auto&& toMem);
 		    /// };
+		    LLAMA_EXPORT
 		    template<
 		        typename TArrayExtents,
 		        typename TRecordDim,
@@ -9502,6 +9789,7 @@ namespace llama
 
 		    /// Binds parameters to a \ref Projection mapping except for array and record dimension, producing a quoted
 		    /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
+		    LLAMA_EXPORT
 		    template<template<typename, typename> typename InnerMapping, typename ProjectionMap>
 		    struct BindProjection
 		    {
@@ -9509,9 +9797,11 @@ namespace llama
 		        using fn = Projection<ArrayExtents, RecordDim, InnerMapping, ProjectionMap>;
 		    };
 
+		    LLAMA_EXPORT
 		    template<typename Mapping>
 		    inline constexpr bool isProjection = false;
 
+		    LLAMA_EXPORT
 		    template<
 		        typename TArrayExtents,
 		        typename TRecordDim,
@@ -9576,6 +9866,7 @@ namespace llama
 	    } // namespace internal
 
 	    /// Mapping that swaps the byte order of all values when loading/storing.
+	    LLAMA_EXPORT
 	    template<typename ArrayExtents, typename RecordDim, template<typename, typename> typename InnerMapping>
 	    struct Byteswap : Projection<ArrayExtents, RecordDim, InnerMapping, internal::MakeByteswapProjectionMap<RecordDim>>
 	    {
@@ -9588,6 +9879,7 @@ namespace llama
 
 	    /// Binds parameters to a \ref ChangeType mapping except for array and record dimension, producing a quoted
 	    /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
+	    LLAMA_EXPORT
 	    template<template<typename, typename> typename InnerMapping>
 	    struct BindByteswap
 	    {
@@ -9595,9 +9887,11 @@ namespace llama
 	        using fn = Byteswap<ArrayExtents, RecordDim, InnerMapping>;
 	    };
 
+	    LLAMA_EXPORT
 	    template<typename Mapping>
 	    inline constexpr bool isByteswap = false;
 
+	    LLAMA_EXPORT
 	    template<typename TArrayExtents, typename TRecordDim, template<typename, typename> typename InnerMapping>
 	    inline constexpr bool isByteswap<Byteswap<TArrayExtents, TRecordDim, InnerMapping>> = true;
 	} // namespace llama::mapping
@@ -9658,6 +9952,7 @@ namespace llama
 	    /// load and store.
 	    /// @tparam ReplacementMap A type list of binary type lists (a map) specifiying which type or the type at a \ref
 	    /// RecordCoord (map key) to replace by which other type (mapped value).
+	    LLAMA_EXPORT
 	    template<
 	        typename ArrayExtents,
 	        typename RecordDim,
@@ -9680,6 +9975,7 @@ namespace llama
 
 	    /// Binds parameters to a \ref ChangeType mapping except for array and record dimension, producing a quoted
 	    /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
+	    LLAMA_EXPORT
 	    template<template<typename, typename> typename InnerMapping, typename ReplacementMap>
 	    struct BindChangeType
 	    {
@@ -9687,9 +9983,11 @@ namespace llama
 	        using fn = ChangeType<ArrayExtents, RecordDim, InnerMapping, ReplacementMap>;
 	    };
 
+	    LLAMA_EXPORT
 	    template<typename Mapping>
 	    inline constexpr bool isChangeType = false;
 
+	    LLAMA_EXPORT
 	    template<
 	        typename TArrayExtents,
 	        typename TRecordDim,
@@ -9718,6 +10016,7 @@ namespace llama
 
 	namespace llama::mapping
 	{
+	    LLAMA_EXPORT
 	    template<typename CountType>
 	    struct AccessCounts
 	    {
@@ -9785,6 +10084,7 @@ namespace llama
 	    /// @tparam TCountType The type used for counting the number of accesses.
 	    /// @tparam MyCodeHandlesProxyReferences If false, FieldAccessCount will avoid proxy references but can then only
 	    /// count the number of address computations
+	    LLAMA_EXPORT
 	    template<typename Mapping, typename TCountType = std::size_t, bool MyCodeHandlesProxyReferences = true>
 	    struct FieldAccessCount : Mapping
 	    {
@@ -10069,9 +10369,11 @@ namespace llama
 	        }
 	    };
 
+	    LLAMA_EXPORT
 	    template<typename Mapping>
 	    inline constexpr bool isFieldAccessCount = false;
 
+	    LLAMA_EXPORT
 	    template<typename Mapping, typename CountType, bool MyCodeHandlesProxyReferences>
 	    inline constexpr bool isFieldAccessCount<FieldAccessCount<Mapping, CountType, MyCodeHandlesProxyReferences>>
 	        = true;
@@ -10107,6 +10409,7 @@ namespace llama
 	    /// individually. A value of e.g. 64, counts accesses per 64 byte block.
 	    /// @tparam TCountType Data type used to count the number of accesses. Atomic increments must be supported for this
 	    /// type.
+	    LLAMA_EXPORT
 	    template<
 	        typename Mapping,
 	        typename Mapping::ArrayExtents::value_type Granularity = 1,
@@ -10306,9 +10609,11 @@ namespace llama
 	)";
 	    };
 
+	    LLAMA_EXPORT
 	    template<typename Mapping>
 	    inline constexpr bool isHeatmap = false;
 
+	    LLAMA_EXPORT
 	    template<typename Mapping, typename Mapping::ArrayExtents::value_type Granularity, typename CountType>
 	    inline constexpr bool isHeatmap<Heatmap<Mapping, Granularity, CountType>> = true;
 	} // namespace llama::mapping
@@ -10349,6 +10654,7 @@ namespace llama
 
 	    /// The Null mappings maps all elements to nothing. Writing data through a reference obtained from the Null mapping
 	    /// discards the value. Reading through such a reference returns a default constructed object.
+	    LLAMA_EXPORT
 	    template<typename TArrayExtents, typename TRecordDim>
 	    struct Null : MappingBase<TArrayExtents, TRecordDim>
 	    {
@@ -10384,9 +10690,11 @@ namespace llama
 	        }
 	    };
 
+	    LLAMA_EXPORT
 	    template<typename Mapping>
 	    inline constexpr bool isNull = false;
 
+	    LLAMA_EXPORT
 	    template<typename ArrayExtents, typename RecordDim>
 	    inline constexpr bool isNull<Null<ArrayExtents, RecordDim>> = true;
 	} // namespace llama::mapping
@@ -10410,6 +10718,7 @@ namespace llama
 	    /// changed.
 	    /// @tparam Permutation The pack of integrals describing the permutation of the array indices. The inner mapping
 	    /// will be called with an ArrayIndex{ai[Permutation]...}.
+	    LLAMA_EXPORT
 	    template<typename Mapping, std::size_t... Permutation>
 	    struct PermuteArrayIndex : Mapping
 	    {
@@ -10452,12 +10761,15 @@ namespace llama
 	        }
 	    };
 
+	    LLAMA_EXPORT
 	    template<typename Mapping>
 	    PermuteArrayIndex(Mapping) -> PermuteArrayIndex<Mapping>;
 
+	    LLAMA_EXPORT
 	    template<typename Mapping>
 	    inline constexpr bool isPermuteArrayIndex = false;
 
+	    LLAMA_EXPORT
 	    template<typename Mapping, std::size_t... Permutation>
 	    inline constexpr bool isPermuteArrayIndex<PermuteArrayIndex<Mapping, Permutation...>> = true;
 	} // namespace llama::mapping
@@ -10565,6 +10877,7 @@ namespace llama
 	    /// \tparam MappingTemplate1 The mapping used for the selected part of the record dimension.
 	    /// \tparam MappingTemplate2 The mapping used for the not selected part of the record dimension.
 	    /// \tparam SeparateBlobs If true, both pieces of the record dimension are mapped to separate blobs.
+	    LLAMA_EXPORT
 	    template<
 	        typename TArrayExtents,
 	        typename TRecordDim,
@@ -10693,6 +11006,7 @@ namespace llama
 
 	    /// Binds parameters to a \ref Split mapping except for array and record dimension, producing a quoted
 	    /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
+	    LLAMA_EXPORT
 	    template<
 	        typename SelectorForMapping1,
 	        template<typename...>
@@ -10707,9 +11021,11 @@ namespace llama
 	            = Split<ArrayExtents, RecordDim, SelectorForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs>;
 	    };
 
+	    LLAMA_EXPORT
 	    template<typename Mapping>
 	    inline constexpr bool isSplit = false;
 
+	    LLAMA_EXPORT
 	    template<
 	        typename ArrayExtents,
 	        typename RecordDim,
