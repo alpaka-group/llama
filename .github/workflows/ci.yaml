@@ -195,22 +195,28 @@ jobs:
             add_toolchain_repo: true
             asan: ON
             install_extra: g++-13
+            # clang 11 to 15 can no longer compile libstdc++ from g++-13, which is the default on Github actions
           - name: build-ubuntu-clang11
             cxx: clang++-11
-            install_extra: clang-11 libomp-11-dev
+            install_extra: clang-11 libomp-11-dev libc++-11-dev libc++abi-11-dev
+            cxx_flags: -stdlib=libc++
           - name: build-ubuntu-clang12
             cxx: clang++-12
-            install_extra: clang-12 libomp-12-dev
+            install_extra: clang-12 libomp-12-dev libc++-12-dev libc++abi-12-dev
+            cxx_flags: -stdlib=libc++
           - name: build-ubuntu-clang13
             cxx: clang++-13
-            install_extra: clang-13 libomp-13-dev
+            install_extra: clang-13 libomp-13-dev libc++-13-dev libc++abi-13-dev
+            cxx_flags: -stdlib=libc++
           - name: build-ubuntu-clang14
             cxx: clang++-14
-            install_extra: clang-14 libomp-14-dev
+            install_extra: clang-14 libomp-14-dev libc++-14-dev libc++abi-14-dev
+            cxx_flags: -stdlib=libc++
           - name: build-ubuntu-clang15
             cxx: clang++-15
-            install_extra: clang-15 libomp-15-dev
+            install_extra: clang-15 libomp-15-dev libc++-15-dev libc++abi-15-dev
             add_llvm_repo: true
+            cxx_flags: -stdlib=libc++
           - name: build-ubuntu-clang16
             cxx: clang++-16
             install_extra: clang-16 libomp-16-dev
