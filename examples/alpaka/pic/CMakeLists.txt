@@ -4,6 +4,12 @@
 cmake_minimum_required (VERSION 3.18.3)
 project(llama-alpaka-pic)
 
+if (MSVC AND MSVC_VERSION VERSION_GREATER_EQUAL 19.37)
+	# a failing MSVC version is 19.37.32825.0. A working version was 19.35.32217.1.
+	message(WARNING "MSVC 19.37 or higher fails with an internal error on the alpaka pic example, so it is disabled.")
+	return()
+endif()
+
 if (NOT TARGET llama::llama)
 	find_package(llama REQUIRED)
 endif()
