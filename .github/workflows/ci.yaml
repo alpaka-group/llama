@@ -273,6 +273,12 @@ jobs:
         if: ${{ matrix.install_extra }}
         run: |
           sudo apt install ${{ matrix.install_extra }}
+      - name: remove g++-13 to fix old clang builds
+        if: ${{ matrix.cxx == 'clang++-11' || matrix.cxx == 'clang++-12' || matrix.cxx == 'clang++-13' || matrix.cxx == 'clang++-14' || matrix.cxx == 'clang++-15' }}
+        run: |
+          sudo apt remove gcc-13 g++-13 libstdc++-13-dev gcc g++ libstdc++-dev
+          sudo apt autoremove
+          sudo apt install g++-12
       - name: download CUDA
         if: matrix.cuda_url
         run: |
@@ -302,6 +308,8 @@ jobs:
             CXX_FLAGS+=" -noswitcherror"
           fi
 
+          $CXX -v
+
           cmake .. -DBUILD_TESTING=ON \
                    -DLLAMA_BUILD_EXAMPLES=ON \
                    -DCMAKE_BUILD_TYPE=$CONFIG \
@@ -314,7 +322,10 @@ jobs:
                    -DCMAKE_CUDA_HOST_COMPILER=$CXX \
                    -DCMAKE_CXX_FLAGS="$CXX_FLAGS" \
                    -DCMAKE_CUDA_FLAGS="${{ matrix.cuda_flags }}" \
-                   -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
+                   -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake || true
+
+          cat /usr/local/share/vcpkg/buildtrees/detect_compiler/config-x64-linux-rel-out.log || true
+          cat /usr/local/share/vcpkg/buildtrees/detect_compiler/config-x64-linux-rel-err.log || true
       - name: build tests + examples
         run: |
           if [ ${{ matrix.add_oneapi_repo }} ]; then source /opt/intel/oneapi/setvars.sh; fi
