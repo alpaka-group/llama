@@ -87,9 +87,6 @@ if (BUILD_TESTING)
 		endforeach()
 	endif()
 
-	# clang-10 does not link pthreads by default, which is needed by std::thread in the tests
-	find_package(Threads REQUIRED)
-
 	file(GLOB_RECURSE testSources "${CMAKE_CURRENT_SOURCE_DIR}/tests/**")
 	add_executable(tests ${testSources})
 	catch_discover_tests(tests)
@@ -129,7 +126,7 @@ if (BUILD_TESTING)
 			target_compile_options(tests PRIVATE -Wno-dangling-reference) # triggered by an access involving RecordRef, so basically everywhere
 		endif()
 	endif()
-	target_link_libraries(tests PRIVATE Catch2::Catch2WithMain Threads::Threads llama::llama)
+	target_link_libraries(tests PRIVATE Catch2::Catch2WithMain llama::llama)
 
 	option(LLAMA_ENABLE_ASAN_FOR_TESTS "Enables address sanitizer for tests" OFF)
 	if (LLAMA_ENABLE_ASAN_FOR_TESTS)

@@ -38,7 +38,7 @@ The following compilers are supported by LLAMA and tested as part of our CI:
 
 | Linux                                                                                        | Windows                                             | MacOS                            |
 |----------------------------------------------------------------------------------------------|-----------------------------------------------------|----------------------------------|
-| g++ 9 - 13 </br> clang++ 10 - 16 </br> icpx (latest) </br> nvc++ 23.5 </br> nvcc 11.4 - 12.2 | Visual Studio 2022 </br> (latest on GitHub actions) | clang++ </br> (latest from brew) |
+| g++ 9 - 13 </br> clang++ 11 - 17 </br> icpx (latest) </br> nvc++ 23.5 </br> nvcc 11.4 - 12.2 | Visual Studio 2022 </br> (latest on GitHub actions) | clang++ </br> (latest from brew) |
 
 
 Single header

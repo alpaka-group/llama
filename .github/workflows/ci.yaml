@@ -204,10 +204,6 @@ jobs:
             add_toolchain_repo: true
             asan: ON
             install_extra: g++-13
-          - name: build-ubuntu-clang10
-            os: ubuntu-20.04 # clang-10 is not available on ubuntu-22.04
-            cxx: clang++-10
-            install_extra: clang-10 libomp-10-dev
           - name: build-ubuntu-clang11
             cxx: clang++-11
             install_extra: clang-11 libomp-11-dev
