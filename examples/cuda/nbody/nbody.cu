@@ -53,6 +53,7 @@ namespace tag
     struct Y{};
     struct Z{};
     struct Mass{};
+    struct Padding{};
 } // namespace tag
 
 using Vec3 = llama::Record<
@@ -176,7 +177,9 @@ try
         if(m == 4)
             return "Split SoA";
         if(m == 5)
-            return "Split AoS";
+            return "Split AoS"; // similar to GPU Gems, but no padding float in velocity
+        if(m == 6)
+            return "SplitGpuGems";
         std::abort();
     };
     auto title = "GM " + mappingName(Mapping);
@@ -209,11 +212,34 @@ try
                 ArrayExtents,
                 Particle,
                 llama::RecordCoord<1>,
-                llama::mapping::BindSoA<>::fn,
-                llama::mapping::BindSoA<>::fn,
-
+                llama::mapping::BindAoS<>::fn,
+                llama::mapping::BindAoS<>::fn,
                 true>{extents};
+        if constexpr(Mapping == 6)
+        {
+            using boost::mp11::mp_list;
+            using Vec4 = llama::Record<
+                llama::Field<tag::X, FP>,
+                llama::Field<tag::Y, FP>,
+                llama::Field<tag::Z, FP>,
+                llama::Field<tag::Padding, FP>>; // dummy
+            using ParticlePadded = llama::
+                Record<llama::Field<tag::Pos, Vec3>, llama::Field<tag::Vel, Vec4>, llama::Field<tag::Mass, FP>>;
+            return llama::mapping::Split<
+                ArrayExtents,
+                ParticlePadded,
+                mp_list<
+                    mp_list<tag::Pos, tag::X>,
+                    mp_list<tag::Pos, tag::Y>,
+                    mp_list<tag::Pos, tag::Z>,
+                    mp_list<tag::Mass>>,
+                llama::mapping::BindAoS<>::fn,
+                llama::mapping::BindAoS<>::fn,
+                true>{extents};
+        }
     }();
+    std::ofstream{"nbody_cuda_mapping_" + mappingName(Mapping) + ".svg"}
+        << llama::toSvg(decltype(mapping){llama::ArrayExtentsDynamic<int, 1>{32}});
     auto tmapping = [&]
     {
         if constexpr(countFieldAccesses)
@@ -343,7 +369,7 @@ catch(const std::exception& e)
 // based on:
 // https://developer.nvidia.com/gpugems/gpugems3/part-v-physics-simulation/chapter-31-fast-n-body-simulation-cuda
 // The original GPU gems implementation is with THREADS_PER_BLOCK == SHARED_ELEMENTS_PER_BLOCK
-namespace manual
+namespace gpugems
 {
     using FP3 = std::conditional_t<std::is_same_v<FP, float>, float3, double3>;
     using FP4 = std::conditional_t<std::is_same_v<FP, float>, float4, double4>;
@@ -492,7 +518,7 @@ namespace manual
     {
         std::cerr << "Exception: " << e.what() << std::endl;
     }
-} // namespace manual
+} // namespace gpugems
 
 auto main() -> int
 try
@@ -500,7 +526,7 @@ try
     std::cout << problemSize / 1024 << "ki particles (" << problemSize * llama::sizeOf<Particle> / 1024 << "kiB)\n"
               << "Caching " << sharedElementsPerBlock << " particles ("
               << sharedElementsPerBlock * llama::sizeOf<SharedMemoryParticle> / 1024 << " kiB) in shared memory\n"
-              << "Using " << threadsPerBlock << " per block\n";
+              << "Using " << threadsPerBlock << " threads per block\n";
     int device = 0;
     cudaGetDevice(&device);
     cudaDeviceProp prop{};
@@ -537,7 +563,7 @@ $data << EOD
     mp_for_each<mp_iota_c<6>>(
         [&](auto i)
         { mp_for_each<mp_iota_c<4>>([&](auto j) { run<decltype(i)::value, decltype(j)::value>(plotFile, true); }); });
-    manual::run(plotFile);
+    gpugems::run(plotFile);
 
     plotFile <<
         R"(EOD
