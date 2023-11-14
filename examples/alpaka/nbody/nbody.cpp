@@ -96,6 +96,7 @@ namespace tag
     struct Y{};
     struct Z{};
     struct Mass{};
+    struct Padding{};
 } // namespace tag
 
 using Vec3 = llama::Record<
@@ -120,7 +121,8 @@ enum Mapping
     AoS,
     SoA_SB,
     SoA_MB,
-    AoSoA
+    AoSoA,
+    SplitGpuGems
 };
 
 template<typename Acc, typename ParticleRefI, typename ParticleRefJ>
@@ -229,6 +231,8 @@ void run(std::ostream& plotFile)
             return "SoA MB";
         if(m == 3)
             return "AoSoA" + std::to_string(aosoaLanes);
+        if(m == 4)
+            return "SplitGpuGems";
         std::abort();
     };
     const auto title = "GM " + mappingName(MappingGM) + " SM " + mappingName(MappingSM);
@@ -252,7 +256,31 @@ void run(std::ostream& plotFile)
             return llama::mapping::SoA<ArrayExtents, Particle, llama::mapping::Blobs::OnePerField>{extents};
         if constexpr(MappingGM == AoSoA)
             return llama::mapping::AoSoA<ArrayExtents, Particle, aosoaLanes>{extents};
+        using boost::mp11::mp_list;
+        if constexpr(MappingGM == SplitGpuGems)
+        {
+            using Vec4 = llama::Record<
+                llama::Field<tag::X, FP>,
+                llama::Field<tag::Y, FP>,
+                llama::Field<tag::Z, FP>,
+                llama::Field<tag::Padding, FP>>; // dummy
+            using ParticlePadded = llama::
+                Record<llama::Field<tag::Pos, Vec3>, llama::Field<tag::Vel, Vec4>, llama::Field<tag::Mass, FP>>;
+            return llama::mapping::Split<
+                ArrayExtents,
+                ParticlePadded,
+                mp_list<
+                    mp_list<tag::Pos, tag::X>,
+                    mp_list<tag::Pos, tag::Y>,
+                    mp_list<tag::Pos, tag::Z>,
+                    mp_list<tag::Mass>>,
+                llama::mapping::BindAoS<>::fn,
+                llama::mapping::BindAoS<>::fn,
+                true>{extents};
+        }
     }();
+    std::ofstream{"nbody_alpaka_mapping_" + mappingName(MappingGM) + ".svg"}
+        << llama::toSvg(decltype(mapping){llama::ArrayExtentsDynamic<int, 1>{32}});
 
     Stopwatch watch;
 
@@ -351,6 +379,7 @@ $data << EOD
     run<alpaka::ExampleDefaultAcc, AoSoA, AoS>(plotFile);
     run<alpaka::ExampleDefaultAcc, AoSoA, SoA_SB>(plotFile);
     run<alpaka::ExampleDefaultAcc, AoSoA, AoSoA>(plotFile);
+    run<alpaka::ExampleDefaultAcc, SplitGpuGems, AoS>(plotFile);
 
     plotFile << R"(EOD
 plot $data using 2:xtic(1) ti col axis x1y1, "" using 3 ti col axis x1y2
