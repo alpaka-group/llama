@@ -3,6 +3,16 @@
 
 #include "common.hpp"
 
+TEST_CASE("flatSizeOf")
+{
+    STATIC_REQUIRE(llama::flatSizeOf<mp_list<std::int32_t>, true, true> == 4);
+    STATIC_REQUIRE(llama::flatSizeOf<mp_list<char, std::int32_t, char>, true, true> == 12);
+    STATIC_REQUIRE(llama::flatSizeOf<mp_list<char, std::int32_t, char>, false, true> == 6);
+    STATIC_REQUIRE(llama::flatSizeOf<mp_list<char, std::int32_t, char>, true, false> == 9);
+    STATIC_REQUIRE(llama::flatSizeOf<mp_list<char, std::int32_t, char>, false, false> == 6);
+    STATIC_REQUIRE(llama::flatSizeOf<mp_list<>, true, true> == 0);
+}
+
 TEST_CASE("prettyPrintType")
 {
     auto str = prettyPrintType<Particle>();
