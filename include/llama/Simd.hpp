@@ -278,8 +278,8 @@ namespace llama
         // structured dstSimd type and record reference
         if constexpr(isRecordRef<Simd> && isRecordRef<T>)
         {
-            forEachLeafCoord<typename T::AccessibleRecordDim>([&](auto rc) LLAMA_LAMBDA_INLINE
-                                                              { internal::loadSimdRecord(srcRef, dstSimd, rc); });
+            forEachLeafCoord<typename Simd::AccessibleRecordDim>([&](auto rc) LLAMA_LAMBDA_INLINE
+                                                                 { internal::loadSimdRecord(srcRef, dstSimd, rc); });
         }
         // unstructured dstSimd and reference type
         else if constexpr(!isRecordRef<Simd> && !isRecordRef<T>)
