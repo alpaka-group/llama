@@ -1722,8 +1722,9 @@
 
 		            // final padding, so next struct can start right away
 		            if constexpr(Align && IncludeTailPadding)
-		                size = roundUpToMultiple(size, maxAlign); // TODO(bgruber): we could use flatAlignOf<TypeList> here, at
-		                                                          // the cost of more template instantiations
+		                if(maxAlign > 0)
+		                    size = roundUpToMultiple(size, maxAlign); // TODO(bgruber): we could use flatAlignOf<TypeList>
+		                                                              // here, at the cost of more template instantiations
 		            return size;
 		        }
 
