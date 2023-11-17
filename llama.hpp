@@ -1,2692 +1,584 @@
 #pragma once
 
 // ============================================================================
-// == ./include/llama/Proofs.hpp ==
+// == ./include/llama/ArrayIndexRange.hpp ==
 // ==
 // Copyright 2022 Bernhard Manfred Gruber
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 // #pragma once
 	// ============================================================================
-	// == ./include/llama/ArrayIndexRange.hpp ==
+	// == ./include/llama/ArrayExtents.hpp ==
 	// ==
 	// Copyright 2022 Bernhard Manfred Gruber
 	// SPDX-License-Identifier: LGPL-3.0-or-later
 
 	// #pragma once
 		// ============================================================================
-		// == ./include/llama/ArrayExtents.hpp ==
+		// == ./include/llama/Array.hpp ==
 		// ==
-		// Copyright 2022 Bernhard Manfred Gruber
+		// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
 		// SPDX-License-Identifier: LGPL-3.0-or-later
 
 		// #pragma once
 			// ============================================================================
-			// == ./include/llama/Array.hpp ==
+			// == ./include/llama/macros.hpp ==
 			// ==
 			// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
 			// SPDX-License-Identifier: LGPL-3.0-or-later
 
 			// #pragma once
-				// ============================================================================
-				// == ./include/llama/macros.hpp ==
-				// ==
-				// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
-				// SPDX-License-Identifier: LGPL-3.0-or-later
-
-				// #pragma once
-				#ifdef __INTEL_COMPILER
-				#    error LLAMA has stopped supporting the Intel Classic Compiler after Intel announced its planned deprecation and \
-				 replacement by the Intel LLVM-based compiler. Please migrate to the Intel LLVM-based compiler.
-				#endif
-
-				#if defined(__INTEL_LLVM_COMPILER)
-				// icx supports #pragma ivdep, but it will issue a diagnostic that it needs vectorize(assume_safety) to vectorize.
-				// Let's keep both pragmas for now.
-				#    define LLAMA_INDEPENDENT_DATA                                                                                    \
-				        _Pragma("ivdep") _Pragma("clang loop vectorize(assume_safety) interleave(assume_safety)")
-				#elif defined(__clang__)
-				#    define LLAMA_INDEPENDENT_DATA _Pragma("clang loop vectorize(assume_safety) interleave(assume_safety)")
-				#elif defined(__NVCOMPILER)
-				#    define LLAMA_INDEPENDENT_DATA _Pragma("ivdep")
-				#elif defined(__GNUC__)
-				#    define LLAMA_INDEPENDENT_DATA _Pragma("GCC ivdep")
-				#elif defined(_MSC_VER)
-				#    define LLAMA_INDEPENDENT_DATA __pragma(loop(ivdep))
-				#else
-				/// May be put in front of a loop statement. Indicates that all (!) data access inside the loop is indepent, so the
-				/// loop can be safely vectorized. Example: \code{.cpp}
-				///     LLAMA_INDEPENDENT_DATA
-				///     for(int i = 0; i < N; ++i)
-				///         // because of LLAMA_INDEPENDENT_DATA the compiler knows that a and b
-				///         // do not overlap and the operation can safely be vectorized
-				///         a[i] += b[i];
-				/// \endcode
-				#    define LLAMA_INDEPENDENT_DATA
-				#endif
-
-				#ifndef LLAMA_FORCE_INLINE
-				#    if defined(__NVCC__) || defined(__HIP__)
-				#        define LLAMA_FORCE_INLINE __forceinline__
-				#    elif defined(__GNUC__) || defined(__clang__)
-				#        define LLAMA_FORCE_INLINE inline __attribute__((always_inline))
-				#    elif defined(_MSC_VER) || defined(__INTEL_LLVM_COMPILER)
-				#        define LLAMA_FORCE_INLINE __forceinline
-				#    else
-				/// Forces the compiler to inline a function annotated with this macro
-				#        define LLAMA_FORCE_INLINE inline
-				#        warning LLAMA_FORCE_INLINE is only defined to "inline" for this compiler
-				#    endif
-				#endif
-
-				#ifndef LLAMA_PRAGMA
-				#    define LLAMA_PRAGMA(tokens) _Pragma(#tokens)
-				#endif
-
-				#ifndef LLAMA_UNROLL
-				#    if defined(__HIP__) || defined(__NVCC__) || defined(__NVCOMPILER) || defined(__clang__)                          \
-				        || defined(__INTEL_LLVM_COMPILER)
-				#        define LLAMA_UNROLL(...) LLAMA_PRAGMA(unroll __VA_ARGS__)
-				#    elif defined(__GNUG__)
-				#        define LLAMA_UNROLL(...) LLAMA_PRAGMA(GCC unroll __VA_ARGS__)
-				#    elif defined(_MSC_VER)
-				// MSVC does not support a pragma for unrolling
-				#        define LLAMA_UNROLL(...)
-				#    else
-				/// Requests the compiler to unroll the loop following this directive. An optional unrolling count may be provided as
-				/// argument, which must be a constant expression.
-				#        define LLAMA_UNROLL(...)
-				#        warning LLAMA_UNROLL is not implemented for your compiler
-				#    endif
-				#endif
-
-				#ifndef LLAMA_ACC
-				#    if defined(__HIP__) || defined(__NVCC__) || (defined(__clang__) && defined(__CUDA__))
-				#        define LLAMA_ACC __device__
-				#    elif defined(__GNUC__) || defined(__clang__) || defined(_MSC_VER) || defined(__INTEL_LLVM_COMPILER)
-				#        define LLAMA_ACC
-				#    else
-				#        define LLAMA_ACC
-				#        warning LLAMA_HOST_ACC is only defined empty for this compiler
-				#    endif
-				#endif
-
-				#ifndef LLAMA_HOST_ACC
-				#    if defined(__HIP__) || defined(__NVCC__) || (defined(__clang__) && defined(__CUDA__))
-				#        define LLAMA_HOST_ACC __host__ __device__
-				#    elif defined(__GNUC__) || defined(__clang__) || defined(_MSC_VER) || defined(__INTEL_LLVM_COMPILER)
-				#        define LLAMA_HOST_ACC
-				#    else
-				/// Some offloading parallelization language extensions such a CUDA, OpenACC or OpenMP 4.5 need to specify whether a
-				/// class, struct, function or method "resides" on the host, the accelerator (the offloading device) or both. LLAMA
-				/// supports this with marking every function needed on an accelerator with `LLAMA_HOST_ACC`.
-				#        define LLAMA_HOST_ACC
-				#        warning LLAMA_HOST_ACC is only defined empty for this compiler
-				#    endif
-				#endif
-
-				#define LLAMA_FN_HOST_ACC_INLINE LLAMA_FORCE_INLINE LLAMA_HOST_ACC
-
-				#ifndef LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS
-				#    if defined(__clang__) || defined(__INTEL_LLVM_COMPILER)
-				#        define LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(...) __attribute__((always_inline)) __VA_ARGS__
-				#    elif defined(__GNUC__) || (defined(__NVCC__) && !defined(_MSC_VER))
-				#        define LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(...) __VA_ARGS__ __attribute__((always_inline))
-				#    elif defined(_MSC_VER)
-				#        define LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(...)                                                              \
-				            __VA_ARGS__ /* FIXME: MSVC cannot combine constexpr and [[msvc::forceinline]] */
-				#    else
-				#        define LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(...) __VA_ARGS__
-				#        warning LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS not defined for this compiler
-				#    endif
-				#endif
-				#ifndef LLAMA_LAMBDA_INLINE
-				/// Gives strong indication to the compiler to inline the attributed lambda.
-				#    define LLAMA_LAMBDA_INLINE LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS()
-				#endif
-
-				#ifndef LLAMA_SUPPRESS_HOST_DEVICE_WARNING
-				#    if defined(__NVCC__) && !defined(__clang__)
-				#        define LLAMA_SUPPRESS_HOST_DEVICE_WARNING _Pragma("nv_exec_check_disable")
-				#    else
-				/// Suppresses the nvcc warning: 'calling a __host__ function from __host__ __device__ function.'
-				/// This macro can be applied to function declarations
-				#        define LLAMA_SUPPRESS_HOST_DEVICE_WARNING
-				#    endif
-				#endif
-
-				#ifndef LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-				#    ifdef __NVCC__
-				#        ifdef __NVCC_DIAG_PRAGMA_SUPPORT__
-				#            define LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING                                                          \
-				                _Pragma("nv_diag_suppress 20011") _Pragma("nv_diag_suppress 20014")
-				#        else
-				#            define LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING                                                          \
-				                _Pragma("diag_suppress 20011") _Pragma("diag_suppress 20014")
-				#        endif
-				#    else
-				/// Suppresses the nvcc warnings:
-				/// 'calling a __host__ function from a __host__ __device__ function is not allowed' and
-				/// 'calling a __host__ function("...") from a __host__ __device__ function("...") is not allowed'
-				/// This macro can be applied before the concerned code block, which then needs to be ended with \ref
-				/// LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING.
-				#        define LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-				#    endif
-				#endif
-				#ifndef LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
-				#    ifdef __NVCC__
-				#        ifdef __NVCC_DIAG_PRAGMA_SUPPORT__
-				#            define LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING                                                            \
-				                _Pragma("nv_diag_default 20011") _Pragma("nv_diag_default 20014")
-				#        else
-				#            define LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING _Pragma("diag_default 20011") _Pragma("diag_default 20014")
-				#        endif
-				#    else
-				#        define LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
-				#    endif
-				#endif
-
-				/// Forces a copy of a value. This is useful to prevent ODR usage of constants when compiling for GPU targets.
-				#define LLAMA_COPY(x) decltype(x)(x)
-
-				// https://devblogs.microsoft.com/cppblog/optimizing-the-layout-of-empty-base-classes-in-vs2015-update-2-3/
-				#if defined(_MSC_VER)
-				#    define LLAMA_DECLSPEC_EMPTY_BASES __declspec(empty_bases)
-				#else
-				#    define LLAMA_DECLSPEC_EMPTY_BASES
-				#endif
-
-				/// Expands to likely if [[likely]] supported by the compiler. Use as [[LLAMA_LIKELY]].
-				#if __has_cpp_attribute(likely)
-				#    define LLAMA_LIKELY likely
-				#else
-				#    define LLAMA_LIKELY
-				#endif
-
-				/// Expands to unlikely if [[unlikely]] supported by the compiler. Use as [[LLAMA_UNLIKELY]].
-				#if __has_cpp_attribute(unlikely)
-				#    define LLAMA_UNLIKELY unlikely
-				#else
-				#    define LLAMA_UNLIKELY
-				#endif
-
-				/// Expands to consteval if the compilers supports the keyword, otherwise to constexpr.
-				// TODO(bgruber): reevalute with nvhpc in the future or find workaround
-				#if defined(__cpp_consteval) && !defined(__NVCOMPILER)
-				#    define LLAMA_CONSTEVAL consteval
-				#else
-				#    define LLAMA_CONSTEVAL constexpr
-				#endif
-
-				#ifndef LLAMA_EXPORT
-				/// Annotation of all LLAMA public APIs. Expands to nothing by default. Can be defined to 'export' when building LLAMA
-				/// as a C++20 module.
-				#    define LLAMA_EXPORT
-				#endif
-
-				// TODO(bgruber): clang 10-15 (libstdc++ from gcc 11.2 or gcc 12.1) fail to compile this currently with the issue
-				// described here:
-				// https://stackoverflow.com/questions/64300832/why-does-clang-think-gccs-subrange-does-not-satisfy-gccs-ranges-begin-functi
-				// Intel LLVM compiler is also using the clang frontend
-				#define CAN_USE_RANGES 0
-				#if __has_include(<version>)
-				#    include <version>
-				#    if defined(__cpp_concepts) && defined(__cpp_lib_ranges) && (!defined(__clang__) || __clang_major__ >= 16)        \
-				        && !defined(__INTEL_LLVM_COMPILER) && (!defined(_MSC_VER) || _MSC_VER > 1932) && !defined(__NVCOMPILER)
-				#        undef CAN_USE_RANGES
-				#        define CAN_USE_RANGES 1
-				#    endif
-				#endif
-				// ==
-				// == ./include/llama/macros.hpp ==
-				// ============================================================================
-
-
-			#include <ostream>
-			#include <tuple>
-
-			namespace llama
-			{
-			    /// Array class like `std::array` but suitable for use with offloading devices like GPUs.
-			    /// \tparam T type if array elements.
-			    /// \tparam N rank of the array.
-			    LLAMA_EXPORT
-			    template<typename T, std::size_t N>
-			    // NOLINTNEXTLINE(bugprone-reserved-identifier,cert-dcl37-c,cert-dcl51-cpp,readability-identifier-naming)
-			    struct Array
-			    {
-			        using value_type = T;
-			        T element[N];
-
-			        LLAMA_FN_HOST_ACC_INLINE constexpr auto size() const
-			        {
-			            return N;
-			        }
-
-			        LLAMA_FN_HOST_ACC_INLINE constexpr auto empty() const -> bool
-			        {
-			            return N == 0;
-			        }
-
-			        LLAMA_FN_HOST_ACC_INLINE constexpr auto begin() -> T*
-			        {
-			            return &element[0];
-			        }
-
-			        LLAMA_FN_HOST_ACC_INLINE constexpr auto begin() const -> const T*
-			        {
-			            return &element[0];
-			        }
-
-			        LLAMA_FN_HOST_ACC_INLINE constexpr auto end() -> T*
-			        {
-			            return &element[0] + N;
-			        }
-
-			        LLAMA_FN_HOST_ACC_INLINE constexpr auto end() const -> const T*
-			        {
-			            return &element[0] + N;
-			        }
-
-			        LLAMA_FN_HOST_ACC_INLINE constexpr auto front() -> T&
-			        {
-			            return element[0];
-			        }
-
-			        LLAMA_FN_HOST_ACC_INLINE constexpr auto front() const -> const T&
-			        {
-			            return element[0];
-			        }
-
-			        LLAMA_FN_HOST_ACC_INLINE constexpr auto back() -> T&
-			        {
-			            return element[N - 1];
-			        }
-
-			        LLAMA_FN_HOST_ACC_INLINE constexpr auto back() const -> const T&
-			        {
-			            return element[N - 1];
-			        }
-
-			        template<typename IndexType>
-			        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator[](IndexType&& idx) -> T&
-			        {
-			            return element[idx];
-			        }
-
-			        template<typename IndexType>
-			        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator[](IndexType&& idx) const -> const T&
-			        {
-			            return element[idx];
-			        }
-
-			        LLAMA_FN_HOST_ACC_INLINE constexpr auto data() -> T*
-			        {
-			            return &element[0];
-			        }
-
-			        LLAMA_FN_HOST_ACC_INLINE constexpr auto data() const -> const T*
-			        {
-			            return &element[0];
-			        }
-
-			        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator==(const Array& a, const Array& b) -> bool
-			        {
-			            for(std::size_t i = 0; i < N; ++i)
-			                if(a.element[i] != b.element[i])
-			                    return false;
-			            return true;
-			        }
-
-			        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator!=(const Array& a, const Array& b) -> bool
-			        {
-			            return !(a == b);
-			        }
-
-			        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator+(const Array& a, const Array& b) -> Array
-			        {
-			            Array temp{};
-			            for(std::size_t i = 0; i < N; ++i)
-			                temp[i] = a[i] + b[i];
-			            return temp;
-			        }
-
-			        template<std::size_t I>
-			        LLAMA_FN_HOST_ACC_INLINE constexpr auto get() -> T&
-			        {
-			            return element[I];
-			        }
-
-			        template<std::size_t I>
-			        LLAMA_FN_HOST_ACC_INLINE constexpr auto get() const -> const T&
-			        {
-			            return element[I];
-			        }
-			    };
-
-			    LLAMA_EXPORT
-			    template<typename T>
-			    struct Array<T, 0>
-			    {
-			        using value_type = T;
-
-			        LLAMA_FN_HOST_ACC_INLINE constexpr auto size() const
-			        {
-			            return 0;
-			        }
-
-			        LLAMA_FN_HOST_ACC_INLINE constexpr auto empty() const -> bool
-			        {
-			            return true;
-			        }
-
-			        LLAMA_FN_HOST_ACC_INLINE constexpr auto begin() -> T*
-			        {
-			            return nullptr;
-			        }
-
-			        LLAMA_FN_HOST_ACC_INLINE constexpr auto begin() const -> const T*
-			        {
-			            return nullptr;
-			        }
-
-			        LLAMA_FN_HOST_ACC_INLINE constexpr auto end() -> T*
-			        {
-			            return nullptr;
-			        }
-
-			        LLAMA_FN_HOST_ACC_INLINE constexpr auto end() const -> const T*
-			        {
-			            return nullptr;
-			        }
-
-			        LLAMA_FN_HOST_ACC_INLINE constexpr auto front() -> T&
-			        {
-			            outOfRange();
-			        }
-
-			        LLAMA_FN_HOST_ACC_INLINE constexpr auto front() const -> const T&
-			        {
-			            outOfRange();
-			        }
-
-			        LLAMA_FN_HOST_ACC_INLINE constexpr auto back() -> T&
-			        {
-			            outOfRange();
-			        }
-
-			        LLAMA_FN_HOST_ACC_INLINE constexpr auto back() const -> const T&
-			        {
-			            outOfRange();
-			        }
-
-			        template<typename IndexType>
-			        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator[](IndexType&&) -> T&
-			        {
-			            outOfRange();
-			        }
-
-			        template<typename IndexType>
-			        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator[](IndexType&&) const -> const T&
-			        {
-			            outOfRange();
-			        }
-
-			        LLAMA_FN_HOST_ACC_INLINE constexpr auto data() -> T*
-			        {
-			            return nullptr;
-			        }
-
-			        LLAMA_FN_HOST_ACC_INLINE constexpr auto data() const -> const T*
-			        {
-			            return nullptr;
-			        }
-
-			        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator==(const Array&, const Array&) -> bool
-			        {
-			            return true;
-			        }
-
-			        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator!=(const Array&, const Array&) -> bool
-			        {
-			            return false;
-			        }
-
-			        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator+(const Array&, const Array&) -> Array
-			        {
-			            return {};
-			        }
-
-			        template<std::size_t I>
-			        LLAMA_FN_HOST_ACC_INLINE constexpr auto get() -> T&
-			        {
-			            outOfRange();
-			        }
-
-			        template<std::size_t I>
-			        LLAMA_FN_HOST_ACC_INLINE constexpr auto get() const -> const T&
-			        {
-			            outOfRange();
-			        }
-
-			    private:
-			        [[noreturn]] void outOfRange() const
-			        {
-			            throw std::out_of_range{"Array has zero length"};
-			        }
-			    };
-
-			    LLAMA_EXPORT
-			    template<typename First, typename... Args>
-			    Array(First, Args... args) -> Array<First, sizeof...(Args) + 1>;
-
-			    LLAMA_EXPORT
-			    template<typename T, std::size_t N>
-			    auto operator<<(std::ostream& os, const Array<T, N>& a) -> std::ostream&
-			    {
-			        os << "Array{";
-			        bool first = true;
-			        for(auto e : a)
-			        {
-			            if(first)
-			                first = false;
-			            else
-			                os << ", ";
-			            os << e;
-			        }
-			        os << "}";
-			        return os;
-			    }
-
-			    LLAMA_EXPORT
-			    template<typename T, std::size_t N>
-			    LLAMA_FN_HOST_ACC_INLINE constexpr auto pushFront([[maybe_unused]] Array<T, N> a, T v) -> Array<T, N + 1>
-			    {
-			        Array<T, N + 1> r{};
-			        r[0] = v;
-			        if constexpr(N > 0)
-			            for(std::size_t i = 0; i < N; i++)
-			                r[i + 1] = a[i];
-			        return r;
-			    }
-
-			    LLAMA_EXPORT
-			    template<typename T, std::size_t N>
-			    LLAMA_FN_HOST_ACC_INLINE constexpr auto pushBack([[maybe_unused]] Array<T, N> a, T v) -> Array<T, N + 1>
-			    {
-			        Array<T, N + 1> r{};
-			        if constexpr(N > 0)
-			            for(std::size_t i = 0; i < N; i++)
-			                r[i] = a[i];
-			        r[N] = v;
-			        return r;
-			    }
-
-			    LLAMA_EXPORT
-			    template<typename T, std::size_t N>
-			    LLAMA_FN_HOST_ACC_INLINE constexpr auto popBack([[maybe_unused]] Array<T, N> a)
-			    {
-			        static_assert(N > 0);
-			        Array<T, N - 1> r{};
-			        if constexpr(N > 1)
-			            for(std::size_t i = 0; i < N - 1; i++)
-			                r[i] = a[i];
-			        return r;
-			    }
-
-			    LLAMA_EXPORT
-			    template<typename T, std::size_t N>
-			    LLAMA_FN_HOST_ACC_INLINE constexpr auto popFront([[maybe_unused]] Array<T, N> a)
-			    {
-			        static_assert(N > 0);
-			        Array<T, N - 1> r{};
-			        if constexpr(N > 1)
-			            for(std::size_t i = 0; i < N - 1; i++)
-			                r[i] = a[i + 1];
-			        return r;
-			    }
-
-			    LLAMA_EXPORT
-			    template<typename T, std::size_t N>
-			    LLAMA_FN_HOST_ACC_INLINE constexpr auto product(Array<T, N> a) -> T
-			    {
-			        T prod = 1;
-			        for(auto s : a)
-			            prod *= s;
-			        return prod;
-			    }
-
-			    LLAMA_EXPORT
-			    template<typename T, std::size_t N>
-			    LLAMA_FN_HOST_ACC_INLINE constexpr auto dot([[maybe_unused]] Array<T, N> a, [[maybe_unused]] Array<T, N> b) -> T
-			    {
-			        T r = 0;
-			        if constexpr(N > 0)
-			            for(std::size_t i = 0; i < N; i++)
-			                r += a[i] * b[i];
-			        return r;
-			    }
-			} // namespace llama
-
-			LLAMA_EXPORT
-			template<typename T, size_t N>
-			struct std::tuple_size<llama::Array<T, N>> : std::integral_constant<size_t, N> // NOLINT(cert-dcl58-cpp)
-			{
-			};
-
-			LLAMA_EXPORT
-			template<size_t I, typename T, size_t N>
-			struct std::tuple_element<I, llama::Array<T, N>> // NOLINT(cert-dcl58-cpp)
-			{
-			    using type = T;
-			};
+			#ifdef __INTEL_COMPILER
+			#    error LLAMA has stopped supporting the Intel Classic Compiler after Intel announced its planned deprecation and \
+			 replacement by the Intel LLVM-based compiler. Please migrate to the Intel LLVM-based compiler.
+			#endif
+
+			#if defined(__INTEL_LLVM_COMPILER)
+			// icx supports #pragma ivdep, but it will issue a diagnostic that it needs vectorize(assume_safety) to vectorize.
+			// Let's keep both pragmas for now.
+			#    define LLAMA_INDEPENDENT_DATA                                                                                    \
+			        _Pragma("ivdep") _Pragma("clang loop vectorize(assume_safety) interleave(assume_safety)")
+			#elif defined(__clang__)
+			#    define LLAMA_INDEPENDENT_DATA _Pragma("clang loop vectorize(assume_safety) interleave(assume_safety)")
+			#elif defined(__NVCOMPILER)
+			#    define LLAMA_INDEPENDENT_DATA _Pragma("ivdep")
+			#elif defined(__GNUC__)
+			#    define LLAMA_INDEPENDENT_DATA _Pragma("GCC ivdep")
+			#elif defined(_MSC_VER)
+			#    define LLAMA_INDEPENDENT_DATA __pragma(loop(ivdep))
+			#else
+			/// May be put in front of a loop statement. Indicates that all (!) data access inside the loop is indepent, so the
+			/// loop can be safely vectorized. Example: \code{.cpp}
+			///     LLAMA_INDEPENDENT_DATA
+			///     for(int i = 0; i < N; ++i)
+			///         // because of LLAMA_INDEPENDENT_DATA the compiler knows that a and b
+			///         // do not overlap and the operation can safely be vectorized
+			///         a[i] += b[i];
+			/// \endcode
+			#    define LLAMA_INDEPENDENT_DATA
+			#endif
+
+			#ifndef LLAMA_FORCE_INLINE
+			#    if defined(__NVCC__) || defined(__HIP__)
+			#        define LLAMA_FORCE_INLINE __forceinline__
+			#    elif defined(__GNUC__) || defined(__clang__)
+			#        define LLAMA_FORCE_INLINE inline __attribute__((always_inline))
+			#    elif defined(_MSC_VER) || defined(__INTEL_LLVM_COMPILER)
+			#        define LLAMA_FORCE_INLINE __forceinline
+			#    else
+			/// Forces the compiler to inline a function annotated with this macro
+			#        define LLAMA_FORCE_INLINE inline
+			#        warning LLAMA_FORCE_INLINE is only defined to "inline" for this compiler
+			#    endif
+			#endif
+
+			#ifndef LLAMA_PRAGMA
+			#    define LLAMA_PRAGMA(tokens) _Pragma(#tokens)
+			#endif
+
+			#ifndef LLAMA_UNROLL
+			#    if defined(__HIP__) || defined(__NVCC__) || defined(__NVCOMPILER) || defined(__clang__)                          \
+			        || defined(__INTEL_LLVM_COMPILER)
+			#        define LLAMA_UNROLL(...) LLAMA_PRAGMA(unroll __VA_ARGS__)
+			#    elif defined(__GNUG__)
+			#        define LLAMA_UNROLL(...) LLAMA_PRAGMA(GCC unroll __VA_ARGS__)
+			#    elif defined(_MSC_VER)
+			// MSVC does not support a pragma for unrolling
+			#        define LLAMA_UNROLL(...)
+			#    else
+			/// Requests the compiler to unroll the loop following this directive. An optional unrolling count may be provided as
+			/// argument, which must be a constant expression.
+			#        define LLAMA_UNROLL(...)
+			#        warning LLAMA_UNROLL is not implemented for your compiler
+			#    endif
+			#endif
+
+			#ifndef LLAMA_ACC
+			#    if defined(__HIP__) || defined(__NVCC__) || (defined(__clang__) && defined(__CUDA__))
+			#        define LLAMA_ACC __device__
+			#    elif defined(__GNUC__) || defined(__clang__) || defined(_MSC_VER) || defined(__INTEL_LLVM_COMPILER)
+			#        define LLAMA_ACC
+			#    else
+			#        define LLAMA_ACC
+			#        warning LLAMA_HOST_ACC is only defined empty for this compiler
+			#    endif
+			#endif
+
+			#ifndef LLAMA_HOST_ACC
+			#    if defined(__HIP__) || defined(__NVCC__) || (defined(__clang__) && defined(__CUDA__))
+			#        define LLAMA_HOST_ACC __host__ __device__
+			#    elif defined(__GNUC__) || defined(__clang__) || defined(_MSC_VER) || defined(__INTEL_LLVM_COMPILER)
+			#        define LLAMA_HOST_ACC
+			#    else
+			/// Some offloading parallelization language extensions such a CUDA, OpenACC or OpenMP 4.5 need to specify whether a
+			/// class, struct, function or method "resides" on the host, the accelerator (the offloading device) or both. LLAMA
+			/// supports this with marking every function needed on an accelerator with `LLAMA_HOST_ACC`.
+			#        define LLAMA_HOST_ACC
+			#        warning LLAMA_HOST_ACC is only defined empty for this compiler
+			#    endif
+			#endif
+
+			#define LLAMA_FN_HOST_ACC_INLINE LLAMA_FORCE_INLINE LLAMA_HOST_ACC
+
+			#ifndef LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS
+			#    if defined(__clang__) || defined(__INTEL_LLVM_COMPILER)
+			#        define LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(...) __attribute__((always_inline)) __VA_ARGS__
+			#    elif defined(__GNUC__) || (defined(__NVCC__) && !defined(_MSC_VER))
+			#        define LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(...) __VA_ARGS__ __attribute__((always_inline))
+			#    elif defined(_MSC_VER)
+			#        define LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(...)                                                              \
+			            __VA_ARGS__ /* FIXME: MSVC cannot combine constexpr and [[msvc::forceinline]] */
+			#    else
+			#        define LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(...) __VA_ARGS__
+			#        warning LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS not defined for this compiler
+			#    endif
+			#endif
+			#ifndef LLAMA_LAMBDA_INLINE
+			/// Gives strong indication to the compiler to inline the attributed lambda.
+			#    define LLAMA_LAMBDA_INLINE LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS()
+			#endif
+
+			#ifndef LLAMA_SUPPRESS_HOST_DEVICE_WARNING
+			#    if defined(__NVCC__) && !defined(__clang__)
+			#        define LLAMA_SUPPRESS_HOST_DEVICE_WARNING _Pragma("nv_exec_check_disable")
+			#    else
+			/// Suppresses the nvcc warning: 'calling a __host__ function from __host__ __device__ function.'
+			/// This macro can be applied to function declarations
+			#        define LLAMA_SUPPRESS_HOST_DEVICE_WARNING
+			#    endif
+			#endif
+
+			#ifndef LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
+			#    ifdef __NVCC__
+			#        ifdef __NVCC_DIAG_PRAGMA_SUPPORT__
+			#            define LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING                                                          \
+			                _Pragma("nv_diag_suppress 20011") _Pragma("nv_diag_suppress 20014")
+			#        else
+			#            define LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING                                                          \
+			                _Pragma("diag_suppress 20011") _Pragma("diag_suppress 20014")
+			#        endif
+			#    else
+			/// Suppresses the nvcc warnings:
+			/// 'calling a __host__ function from a __host__ __device__ function is not allowed' and
+			/// 'calling a __host__ function("...") from a __host__ __device__ function("...") is not allowed'
+			/// This macro can be applied before the concerned code block, which then needs to be ended with \ref
+			/// LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING.
+			#        define LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
+			#    endif
+			#endif
+			#ifndef LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
+			#    ifdef __NVCC__
+			#        ifdef __NVCC_DIAG_PRAGMA_SUPPORT__
+			#            define LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING                                                            \
+			                _Pragma("nv_diag_default 20011") _Pragma("nv_diag_default 20014")
+			#        else
+			#            define LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING _Pragma("diag_default 20011") _Pragma("diag_default 20014")
+			#        endif
+			#    else
+			#        define LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
+			#    endif
+			#endif
+
+			/// Forces a copy of a value. This is useful to prevent ODR usage of constants when compiling for GPU targets.
+			#define LLAMA_COPY(x) decltype(x)(x)
+
+			// https://devblogs.microsoft.com/cppblog/optimizing-the-layout-of-empty-base-classes-in-vs2015-update-2-3/
+			#if defined(_MSC_VER)
+			#    define LLAMA_DECLSPEC_EMPTY_BASES __declspec(empty_bases)
+			#else
+			#    define LLAMA_DECLSPEC_EMPTY_BASES
+			#endif
+
+			/// Expands to likely if [[likely]] supported by the compiler. Use as [[LLAMA_LIKELY]].
+			#if __has_cpp_attribute(likely)
+			#    define LLAMA_LIKELY likely
+			#else
+			#    define LLAMA_LIKELY
+			#endif
+
+			/// Expands to unlikely if [[unlikely]] supported by the compiler. Use as [[LLAMA_UNLIKELY]].
+			#if __has_cpp_attribute(unlikely)
+			#    define LLAMA_UNLIKELY unlikely
+			#else
+			#    define LLAMA_UNLIKELY
+			#endif
+
+			/// Expands to consteval if the compilers supports the keyword, otherwise to constexpr.
+			// TODO(bgruber): reevalute with nvhpc in the future or find workaround
+			#if defined(__cpp_consteval) && !defined(__NVCOMPILER)
+			#    define LLAMA_CONSTEVAL consteval
+			#else
+			#    define LLAMA_CONSTEVAL constexpr
+			#endif
+
+			#ifndef LLAMA_EXPORT
+			/// Annotation of all LLAMA public APIs. Expands to nothing by default. Can be defined to 'export' when building LLAMA
+			/// as a C++20 module.
+			#    define LLAMA_EXPORT
+			#endif
+
+			// TODO(bgruber): clang 10-15 (libstdc++ from gcc 11.2 or gcc 12.1) fail to compile this currently with the issue
+			// described here:
+			// https://stackoverflow.com/questions/64300832/why-does-clang-think-gccs-subrange-does-not-satisfy-gccs-ranges-begin-functi
+			// Intel LLVM compiler is also using the clang frontend
+			#define CAN_USE_RANGES 0
+			#if __has_include(<version>)
+			#    include <version>
+			#    if defined(__cpp_concepts) && defined(__cpp_lib_ranges) && (!defined(__clang__) || __clang_major__ >= 16)        \
+			        && !defined(__INTEL_LLVM_COMPILER) && (!defined(_MSC_VER) || _MSC_VER > 1932) && !defined(__NVCOMPILER)
+			#        undef CAN_USE_RANGES
+			#        define CAN_USE_RANGES 1
+			#    endif
+			#endif
 			// ==
-			// == ./include/llama/Array.hpp ==
-			// ============================================================================
-
-			// ============================================================================
-			// == ./include/llama/Meta.hpp ==
-			// ==
-			// Copyright 2022 Bernhard Manfred Gruber
-			// SPDX-License-Identifier: LGPL-3.0-or-later
-
-			// #pragma once
-			// #include "macros.hpp"    // amalgamate: file already inlined
-
-			#include <boost/mp11.hpp>
-
-			namespace llama
-			{
-			    // make mp11 directly available in the llama namespace
-			    using namespace boost::mp11;
-
-			    namespace internal
-			    {
-			        // adapted from boost::mp11, but with LLAMA_FN_HOST_ACC_INLINE
-			        template<template<typename...> typename L, typename... T, typename F>
-			        LLAMA_FN_HOST_ACC_INLINE constexpr void mpForEachInlined(L<T...>, F&& f)
-			        {
-			            using A = int[sizeof...(T)];
-			            (void) A{((void) f(T{}), 0)...};
-			        }
-
-			        template<typename FromList, template<auto...> class ToList>
-			        struct mp_unwrap_values_into_impl;
-
-			        template<template<class...> class FromList, typename... Values, template<auto...> class ToList>
-			        struct mp_unwrap_values_into_impl<FromList<Values...>, ToList>
-			        {
-			            using type = ToList<Values::value...>;
-			        };
-
-			        template<typename FromList, template<auto...> class ToList>
-			        using mp_unwrap_values_into = typename mp_unwrap_values_into_impl<FromList, ToList>::type;
-
-			        template<typename E, typename... Args>
-			        struct ReplacePlaceholdersImpl
-			        {
-			            using type = E;
-			        };
-			        template<std::size_t I, typename... Args>
-			        struct ReplacePlaceholdersImpl<mp_arg<I>, Args...>
-			        {
-			            using type = mp_at_c<mp_list<Args...>, I>;
-			        };
-
-			        template<template<typename...> typename E, typename... Ts, typename... Args>
-			        struct ReplacePlaceholdersImpl<E<Ts...>, Args...>
-			        {
-			            using type = E<typename ReplacePlaceholdersImpl<Ts, Args...>::type...>;
-			        };
-			    } // namespace internal
-
-			    LLAMA_EXPORT
-			    template<typename Expression, typename... Args>
-			    using ReplacePlaceholders = typename internal::ReplacePlaceholdersImpl<Expression, Args...>::type;
-			} // namespace llama
-			// ==
-			// == ./include/llama/Meta.hpp ==
+			// == ./include/llama/macros.hpp ==
 			// ============================================================================
 
 
-		#include <limits>
-		#include <type_traits>
+		#include <ostream>
+		#include <tuple>
 
 		namespace llama
 		{
-		    // TODO(bgruber): make this an alias in C++20, when we have CTAD for aliases
-		    /// Represents a run-time index into the array dimensions.
-		    /// \tparam Dim Compile-time number of dimensions.
+		    /// Array class like `std::array` but suitable for use with offloading devices like GPUs.
+		    /// \tparam T type if array elements.
+		    /// \tparam N rank of the array.
 		    LLAMA_EXPORT
-		    template<typename T, std::size_t Dim>
-		    struct ArrayIndex : Array<T, Dim>
+		    template<typename T, std::size_t N>
+		    // NOLINTNEXTLINE(bugprone-reserved-identifier,cert-dcl37-c,cert-dcl51-cpp,readability-identifier-naming)
+		    struct Array
 		    {
-		        static constexpr std::size_t rank = Dim;
-		    };
-
-		    // allow comparing ArrayIndex with different size types:
-		    LLAMA_EXPORT
-		    template<std::size_t Dim, typename TA, typename TB>
-		    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator==(ArrayIndex<TA, Dim> a, ArrayIndex<TB, Dim> b) -> bool
-		    {
-		        for(std::size_t i = 0; i < Dim; ++i)
-		            if(a[i] != b[i])
-		                return false;
-		        return true;
-		    }
-
-		    LLAMA_EXPORT
-		    template<std::size_t Dim, typename TA, typename TB>
-		    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator!=(ArrayIndex<TA, Dim> a, ArrayIndex<TB, Dim> b) -> bool
-		    {
-		        return !(a == b);
-		    }
-
-		    static_assert(
-		        std::is_trivially_default_constructible_v<ArrayIndex<int, 1>>); // so ArrayIndex<1>{} will produce a zeroed
-		                                                                        // index. Should hold for all dimensions,
-		                                                                        // but just checking for <1> here.
-		    static_assert(std::is_trivially_copy_constructible_v<ArrayIndex<int, 1>>);
-		    static_assert(std::is_trivially_move_constructible_v<ArrayIndex<int, 1>>);
-		    static_assert(std::is_trivially_copy_assignable_v<ArrayIndex<int, 1>>);
-		    static_assert(std::is_trivially_move_assignable_v<ArrayIndex<int, 1>>);
-
-		    namespace internal
-		    {
-		        template<typename Default, typename... Ints>
-		        struct IndexTypeFromArgs
-		        {
-		            using type = Default;
-		        };
-
-		        template<typename Default, typename FirstInt, typename... Ints>
-		        struct IndexTypeFromArgs<Default, FirstInt, Ints...>
-		        {
-		            static_assert(std::conjunction_v<std::is_same<FirstInt, Ints>...>, "All index types must be the same");
-		            using type = FirstInt;
-		        };
-		    } // namespace internal
-
-		    LLAMA_EXPORT
-		    template<typename... Args>
-		    ArrayIndex(Args...)
-		        -> ArrayIndex<typename internal::IndexTypeFromArgs<std::size_t, Args...>::type, sizeof...(Args)>;
-		} // namespace llama
-
-		LLAMA_EXPORT
-		template<typename V, size_t N>
-		struct std::tuple_size<llama::ArrayIndex<V, N>> : std::integral_constant<size_t, N> // NOLINT(cert-dcl58-cpp)
-		{
-		};
-
-		LLAMA_EXPORT
-		template<size_t I, typename V, size_t N>
-		struct std::tuple_element<I, llama::ArrayIndex<V, N>> // NOLINT(cert-dcl58-cpp)
-		{
-		    using type = V;
-		};
-
-		namespace llama
-		{
-		    namespace internal
-		    {
-		        struct Dyn
-		        {
-		            template<typename T, std::enable_if_t<std::is_integral_v<T>, int> = 0>
-		            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
-		            LLAMA_FN_HOST_ACC_INLINE constexpr operator T() const
-		            {
-		                return static_cast<T>(-1);
-		            }
-
-		            template<typename T>
-		            LLAMA_FN_HOST_ACC_INLINE friend constexpr auto operator==(T i, Dyn) -> bool
-		            {
-		                return i == static_cast<T>(-1);
-		            }
-
-		            template<typename T>
-		            LLAMA_FN_HOST_ACC_INLINE friend constexpr auto operator==(Dyn d, T i) -> bool
-		            {
-		                return i == d;
-		            }
-
-		            template<typename T>
-		            LLAMA_FN_HOST_ACC_INLINE friend constexpr auto operator!=(T i, Dyn d) -> bool
-		            {
-		                return !(i == d);
-		            }
-
-		            template<typename T>
-		            LLAMA_FN_HOST_ACC_INLINE friend constexpr auto operator!=(Dyn d, T i) -> bool
-		            {
-		                return !(i == d);
-		            }
-		        };
-		    } // namespace internal
-
-		    LLAMA_EXPORT
-		    /// Used as a template argument to \ref ArrayExtents to mark a dynamic extent.
-		    inline constexpr auto dyn = internal::Dyn{};
-
-		    /// ArrayExtents holding compile and runtime indices. This is conceptually equivalent to the std::extent of
-		    /// std::mdspan (@see: https://wg21.link/P0009) including the changes to make the size_type controllable (@see:
-		    /// https://wg21.link/P2553).
-		    LLAMA_EXPORT
-		    template<typename T = std::size_t, T... Sizes>
-		    struct ArrayExtents : Array<T, ((Sizes == dyn) + ... + 0)>
-		    {
-		        static constexpr std::size_t rank = sizeof...(Sizes);
-		        static constexpr auto rankDynamic = ((Sizes == dyn) + ... + 0);
-		        static constexpr auto rankStatic = rank - rankDynamic;
-
-		        using Index = ArrayIndex<T, rank>;
 		        using value_type = T;
+		        T element[N];
+
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto size() const
+		        {
+		            return N;
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto empty() const -> bool
+		        {
+		            return N == 0;
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto begin() -> T*
+		        {
+		            return &element[0];
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto begin() const -> const T*
+		        {
+		            return &element[0];
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto end() -> T*
+		        {
+		            return &element[0] + N;
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto end() const -> const T*
+		        {
+		            return &element[0] + N;
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto front() -> T&
+		        {
+		            return element[0];
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto front() const -> const T&
+		        {
+		            return element[0];
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto back() -> T&
+		        {
+		            return element[N - 1];
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto back() const -> const T&
+		        {
+		            return element[N - 1];
+		        }
+
+		        template<typename IndexType>
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator[](IndexType&& idx) -> T&
+		        {
+		            return element[idx];
+		        }
+
+		        template<typename IndexType>
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator[](IndexType&& idx) const -> const T&
+		        {
+		            return element[idx];
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto data() -> T*
+		        {
+		            return &element[0];
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto data() const -> const T*
+		        {
+		            return &element[0];
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator==(const Array& a, const Array& b) -> bool
+		        {
+		            for(std::size_t i = 0; i < N; ++i)
+		                if(a.element[i] != b.element[i])
+		                    return false;
+		            return true;
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator!=(const Array& a, const Array& b) -> bool
+		        {
+		            return !(a == b);
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator+(const Array& a, const Array& b) -> Array
+		        {
+		            Array temp{};
+		            for(std::size_t i = 0; i < N; ++i)
+		                temp[i] = a[i] + b[i];
+		            return temp;
+		        }
 
 		        template<std::size_t I>
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto get() const -> value_type
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto get() -> T&
 		        {
-		            using TypeList = mp_list_c<T, Sizes...>;
-		            constexpr auto extent = mp_at_c<TypeList, I>::value;
-		            if constexpr(extent != dyn)
-		                return extent;
-		            else
-		                return static_cast<const Array<value_type, rankDynamic>&>(
-		                    *this)[+mp_count<mp_take_c<TypeList, I>, std::integral_constant<T, dyn>>::value];
+		            return element[I];
 		        }
 
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator[](T i) const -> value_type
+		        template<std::size_t I>
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto get() const -> const T&
 		        {
-		            return mp_with_index<rank>(i, [&](auto ic) LLAMA_LAMBDA_INLINE { return get<decltype(ic)::value>(); });
-		        }
-
-		    private:
-		        template<std::size_t... Is>
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto toArray(std::index_sequence<Is...>) const -> Index
-		        {
-		            return {get<Is>()...};
-		        }
-
-		    public:
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto toArray() const -> Index
-		        {
-		            return toArray(std::make_index_sequence<rank>{});
+		            return element[I];
 		        }
 		    };
 
 		    LLAMA_EXPORT
 		    template<typename T>
-		    struct ArrayExtents<T>
+		    struct Array<T, 0>
 		    {
-		        static constexpr std::size_t rank = 0;
-		        static constexpr auto rankDynamic = 0;
-		        static constexpr auto rankStatic = 0;
-
-		        using Index = ArrayIndex<T, 0>;
 		        using value_type = T;
 
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto toArray() const -> Index
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto size() const
+		        {
+		            return 0;
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto empty() const -> bool
+		        {
+		            return true;
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto begin() -> T*
+		        {
+		            return nullptr;
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto begin() const -> const T*
+		        {
+		            return nullptr;
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto end() -> T*
+		        {
+		            return nullptr;
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto end() const -> const T*
+		        {
+		            return nullptr;
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto front() -> T&
+		        {
+		            outOfRange();
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto front() const -> const T&
+		        {
+		            outOfRange();
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto back() -> T&
+		        {
+		            outOfRange();
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto back() const -> const T&
+		        {
+		            outOfRange();
+		        }
+
+		        template<typename IndexType>
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator[](IndexType&&) -> T&
+		        {
+		            outOfRange();
+		        }
+
+		        template<typename IndexType>
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator[](IndexType&&) const -> const T&
+		        {
+		            outOfRange();
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto data() -> T*
+		        {
+		            return nullptr;
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto data() const -> const T*
+		        {
+		            return nullptr;
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator==(const Array&, const Array&) -> bool
+		        {
+		            return true;
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator!=(const Array&, const Array&) -> bool
+		        {
+		            return false;
+		        }
+
+		        LLAMA_FN_HOST_ACC_INLINE constexpr friend auto operator+(const Array&, const Array&) -> Array
 		        {
 		            return {};
 		        }
+
+		        template<std::size_t I>
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto get() -> T&
+		        {
+		            outOfRange();
+		        }
+
+		        template<std::size_t I>
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto get() const -> const T&
+		        {
+		            outOfRange();
+		        }
+
+		    private:
+		        [[noreturn]] void outOfRange() const
+		        {
+		            throw std::out_of_range{"Array has zero length"};
+		        }
 		    };
 
 		    LLAMA_EXPORT
-		    template<typename... Args>
-		    ArrayExtents(Args...) -> ArrayExtents<
-		        typename internal::IndexTypeFromArgs<std::size_t, Args...>::type,
-		        (Args{}, dyn)...>; // we just use Args to repeat dyn as often as Args is big
-
-		    static_assert(std::is_trivially_default_constructible_v<ArrayExtents<std::size_t, 1>>);
-		    static_assert(std::is_trivially_copy_constructible_v<ArrayExtents<std::size_t, 1>>);
-		    static_assert(std::is_trivially_move_constructible_v<ArrayExtents<std::size_t, 1>>);
-		    static_assert(std::is_trivially_copy_assignable_v<ArrayExtents<std::size_t, 1>>);
-		    static_assert(std::is_trivially_move_assignable_v<ArrayExtents<std::size_t, 1>>);
-		    static_assert(std::is_empty_v<ArrayExtents<std::size_t, 1>>);
+		    template<typename First, typename... Args>
+		    Array(First, Args... args) -> Array<First, sizeof...(Args) + 1>;
 
 		    LLAMA_EXPORT
-		    template<typename SizeTypeA, SizeTypeA... SizesA, typename SizeTypeB, SizeTypeB... SizesB>
-		    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator==(
-		        ArrayExtents<SizeTypeA, SizesA...> a,
-		        ArrayExtents<SizeTypeB, SizesB...> b) -> bool
+		    template<typename T, std::size_t N>
+		    auto operator<<(std::ostream& os, const Array<T, N>& a) -> std::ostream&
 		    {
-		        return a.toArray() == b.toArray();
-		    }
-
-		    LLAMA_EXPORT
-		    template<typename SizeTypeA, SizeTypeA... SizesA, typename SizeTypeB, SizeTypeB... SizesB>
-		    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator!=(
-		        ArrayExtents<SizeTypeA, SizesA...> a,
-		        ArrayExtents<SizeTypeB, SizesB...> b) -> bool
-		    {
-		        return !(a == b);
-		    }
-
-		    LLAMA_EXPORT
-		    template<typename SizeType, SizeType... Sizes>
-		    LLAMA_FN_HOST_ACC_INLINE constexpr auto product(ArrayExtents<SizeType, Sizes...> e) -> SizeType
-		    {
-		        return product(e.toArray());
-		    }
-
-		    namespace internal
-		    {
-		        template<typename SizeType, SizeType Extent, std::size_t... Is>
-		        constexpr auto makeArrayExtents(std::index_sequence<Is...>)
+		        os << "Array{";
+		        bool first = true;
+		        for(auto e : a)
 		        {
-		            return ArrayExtents<SizeType, (static_cast<void>(Is), Extent)...>{};
+		            if(first)
+		                first = false;
+		            else
+		                os << ", ";
+		            os << e;
 		        }
-		    } // namespace internal
-
-		    LLAMA_EXPORT
-		    /// N-dimensional ArrayExtents where all N extents are Extent.
-		    template<typename SizeType, std::size_t N, SizeType Extent>
-		    using ArrayExtentsNCube = decltype(internal::makeArrayExtents<SizeType, Extent>(std::make_index_sequence<N>{}));
-
-		    LLAMA_EXPORT
-		    /// N-dimensional ArrayExtents where all values are dynamic.
-		    template<typename SizeType, std::size_t N>
-		    using ArrayExtentsDynamic = ArrayExtentsNCube<SizeType, N, dyn>;
-
-		    LLAMA_EXPORT
-		    template<typename SizeType, std::size_t Dim, typename Func, typename... OuterIndices>
-		    LLAMA_FN_HOST_ACC_INLINE void forEachArrayIndex(
-		        [[maybe_unused]] const ArrayIndex<SizeType, Dim>& extents,
-		        Func&& func,
-		        OuterIndices... outerIndices)
-		    {
-		        constexpr auto fixedIndices = sizeof...(outerIndices);
-		        LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-		        if constexpr(fixedIndices < Dim)
-		        {
-		            for(SizeType i = 0; i < extents[fixedIndices]; i++)
-		                forEachArrayIndex(extents, std::forward<Func>(func), outerIndices..., i);
-		        }
-		        else
-		        {
-		            std::forward<Func>(func)(ArrayIndex<SizeType, fixedIndices>{outerIndices...});
-		        }
-		        LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
+		        os << "}";
+		        return os;
 		    }
 
 		    LLAMA_EXPORT
-		    template<typename SizeType, SizeType... Sizes, typename Func>
-		    LLAMA_FN_HOST_ACC_INLINE void forEachArrayIndex(ArrayExtents<SizeType, Sizes...> extents, Func&& func)
+		    template<typename T, std::size_t N>
+		    LLAMA_FN_HOST_ACC_INLINE constexpr auto pushFront([[maybe_unused]] Array<T, N> a, T v) -> Array<T, N + 1>
 		    {
-		        forEachArrayIndex(extents.toArray(), std::forward<Func>(func));
+		        Array<T, N + 1> r{};
+		        r[0] = v;
+		        if constexpr(N > 0)
+		            for(std::size_t i = 0; i < N; i++)
+		                r[i + 1] = a[i];
+		        return r;
+		    }
+
+		    LLAMA_EXPORT
+		    template<typename T, std::size_t N>
+		    LLAMA_FN_HOST_ACC_INLINE constexpr auto pushBack([[maybe_unused]] Array<T, N> a, T v) -> Array<T, N + 1>
+		    {
+		        Array<T, N + 1> r{};
+		        if constexpr(N > 0)
+		            for(std::size_t i = 0; i < N; i++)
+		                r[i] = a[i];
+		        r[N] = v;
+		        return r;
+		    }
+
+		    LLAMA_EXPORT
+		    template<typename T, std::size_t N>
+		    LLAMA_FN_HOST_ACC_INLINE constexpr auto popBack([[maybe_unused]] Array<T, N> a)
+		    {
+		        static_assert(N > 0);
+		        Array<T, N - 1> r{};
+		        if constexpr(N > 1)
+		            for(std::size_t i = 0; i < N - 1; i++)
+		                r[i] = a[i];
+		        return r;
+		    }
+
+		    LLAMA_EXPORT
+		    template<typename T, std::size_t N>
+		    LLAMA_FN_HOST_ACC_INLINE constexpr auto popFront([[maybe_unused]] Array<T, N> a)
+		    {
+		        static_assert(N > 0);
+		        Array<T, N - 1> r{};
+		        if constexpr(N > 1)
+		            for(std::size_t i = 0; i < N - 1; i++)
+		                r[i] = a[i + 1];
+		        return r;
+		    }
+
+		    LLAMA_EXPORT
+		    template<typename T, std::size_t N>
+		    LLAMA_FN_HOST_ACC_INLINE constexpr auto product(Array<T, N> a) -> T
+		    {
+		        T prod = 1;
+		        for(auto s : a)
+		            prod *= s;
+		        return prod;
+		    }
+
+		    LLAMA_EXPORT
+		    template<typename T, std::size_t N>
+		    LLAMA_FN_HOST_ACC_INLINE constexpr auto dot([[maybe_unused]] Array<T, N> a, [[maybe_unused]] Array<T, N> b) -> T
+		    {
+		        T r = 0;
+		        if constexpr(N > 0)
+		            for(std::size_t i = 0; i < N; i++)
+		                r += a[i] * b[i];
+		        return r;
 		    }
 		} // namespace llama
 
 		LLAMA_EXPORT
-		template<typename SizeType, SizeType... Sizes>
-		struct std::tuple_size<llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(cert-dcl58-cpp)
-		    : std::integral_constant<std::size_t, sizeof...(Sizes)>
+		template<typename T, size_t N>
+		struct std::tuple_size<llama::Array<T, N>> : std::integral_constant<size_t, N> // NOLINT(cert-dcl58-cpp)
 		{
 		};
 
 		LLAMA_EXPORT
-		template<typename SizeType, std::size_t I, SizeType... Sizes>
-		struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(cert-dcl58-cpp)
+		template<size_t I, typename T, size_t N>
+		struct std::tuple_element<I, llama::Array<T, N>> // NOLINT(cert-dcl58-cpp)
 		{
-		    using type = SizeType;
+		    using type = T;
 		};
 		// ==
-		// == ./include/llama/ArrayExtents.hpp ==
+		// == ./include/llama/Array.hpp ==
 		// ============================================================================
 
 		// ============================================================================
-		// == ./include/llama/Core.hpp ==
-		// ==
-		// Copyright 2023 Alexander Matthes, Bernhard Manfred Gruber
-		// SPDX-License-Identifier: LGPL-3.0-or-later
-
-		// #pragma once
-		// #include "ArrayExtents.hpp"    // amalgamate: file already inlined
-		// #include "Meta.hpp"    // amalgamate: file already inlined
-			// ============================================================================
-			// == ./include/llama/RecordCoord.hpp ==
-			// ==
-			// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
-			// SPDX-License-Identifier: LGPL-3.0-or-later
-
-			// #pragma once
-			// #include "Meta.hpp"    // amalgamate: file already inlined
-			// #include "macros.hpp"    // amalgamate: file already inlined
-
-			#include <array>
-			// #include <ostream>    // amalgamate: file already included
-			// #include <type_traits>    // amalgamate: file already included
-
-			namespace llama
-			{
-			    /// Represents a coordinate for a record inside the record dimension tree.
-			    /// \tparam Coords... the compile time coordinate.
-			    LLAMA_EXPORT
-			    template<std::size_t... Coords>
-			    struct RecordCoord
-			    {
-			        /// The list of integral coordinates as `mp_list`.
-			        using List = mp_list_c<std::size_t, Coords...>;
-
-			        static constexpr std::size_t front = mp_front<List>::value;
-			        static constexpr std::size_t back = mp_back<List>::value;
-			        static constexpr std::size_t size = sizeof...(Coords);
-			    };
-
-			    LLAMA_EXPORT
-			    template<>
-			    struct RecordCoord<>
-			    {
-			        using List = mp_list_c<std::size_t>;
-
-			        static constexpr std::size_t size = 0;
-			    };
-
-			    LLAMA_EXPORT
-			    template<std::size_t... CoordsA, std::size_t... CoordsB>
-			    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator==(RecordCoord<CoordsA...>, RecordCoord<CoordsB...>)
-			    {
-			        return false;
-			    }
-
-			    LLAMA_EXPORT
-			    template<std::size_t... Coords>
-			    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator==(RecordCoord<Coords...>, RecordCoord<Coords...>)
-			    {
-			        return true;
-			    }
-
-			    LLAMA_EXPORT
-			    template<std::size_t... CoordsA, std::size_t... CoordsB>
-			    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator!=(RecordCoord<CoordsA...> a, RecordCoord<CoordsB...> b)
-			    {
-			        return !(a == b);
-			    }
-
-			    LLAMA_EXPORT
-			    template<typename T>
-			    inline constexpr bool isRecordCoord = false;
-
-			    LLAMA_EXPORT
-			    template<std::size_t... Coords>
-			    inline constexpr bool isRecordCoord<RecordCoord<Coords...>> = true;
-
-			    LLAMA_EXPORT
-			    template<std::size_t... RCs>
-			    auto operator<<(std::ostream& os, RecordCoord<RCs...>) -> std::ostream&
-			    {
-			        os << "RecordCoord<";
-			        bool first = true;
-			        for(auto rc : std::array<std::size_t, sizeof...(RCs)>{RCs...})
-			        {
-			            if(first)
-			                first = false;
-			            else
-			                os << ", ";
-			            os << rc;
-			        }
-			        os << ">";
-			        return os;
-			    }
-
-			    inline namespace literals
-			    {
-			        /// Literal operator for converting a numeric literal into a \ref RecordCoord.
-			        LLAMA_EXPORT
-			        template<char... Digits>
-			        constexpr auto operator"" _RC()
-			        {
-			            constexpr auto coord = []() constexpr
-			            {
-			                const char digits[] = {(Digits - 48)...};
-			                std::size_t acc = 0;
-			                std ::size_t powerOf10 = 1;
-			                for(int i = sizeof...(Digits) - 1; i >= 0; i--)
-			                {
-			                    acc += digits[i] * powerOf10;
-			                    powerOf10 *= 10;
-			                }
-			                return acc;
-			            }();
-			            return RecordCoord<coord>{};
-			        }
-			    } // namespace literals
-
-			    /// Converts a type list of integral constants into a \ref RecordCoord.
-			    LLAMA_EXPORT
-			    template<typename L>
-			    using RecordCoordFromList = internal::mp_unwrap_values_into<L, RecordCoord>;
-
-			    /// Concatenate a set of \ref RecordCoord%s.
-			    LLAMA_EXPORT
-			    template<typename... RecordCoords>
-			    using Cat = RecordCoordFromList<mp_append<typename RecordCoords::List...>>;
-
-			    /// Concatenate a set of \ref RecordCoord%s instances.
-			    LLAMA_EXPORT
-			    template<typename... RecordCoords>
-			    LLAMA_FN_HOST_ACC_INLINE constexpr auto cat(RecordCoords...)
-			    {
-			        return Cat<RecordCoords...>{};
-			    }
-
-			    /// RecordCoord without first coordinate component.
-			    LLAMA_EXPORT
-			    template<typename RecordCoord>
-			    using PopFront = RecordCoordFromList<mp_pop_front<typename RecordCoord::List>>;
-
-			    namespace internal
-			    {
-			        template<std::size_t... Coords1, std::size_t... Coords2>
-			        constexpr auto recordCoordCommonPrefixIsBiggerImpl(RecordCoord<Coords1...>, RecordCoord<Coords2...>) -> bool
-			        {
-			            // CTAD does not work if Coords1/2 is an empty pack
-			            std::array<std::size_t, sizeof...(Coords1)> a1{Coords1...};
-			            std::array<std::size_t, sizeof...(Coords2)> a2{Coords2...};
-			            for(std::size_t i = 0; i < std::min(a1.size(), a2.size()); i++)
-			            {
-			                if(a1[i] > a2[i])
-			                    return true;
-			                if(a1[i] < a2[i])
-			                    return false;
-			            }
-			            return false;
-			        };
-			    } // namespace internal
-
-			    /// Checks wether the first RecordCoord is bigger than the second.
-			    LLAMA_EXPORT
-			    template<typename First, typename Second>
-			    inline constexpr auto recordCoordCommonPrefixIsBigger
-			        = internal::recordCoordCommonPrefixIsBiggerImpl(First{}, Second{});
-
-			    namespace internal
-			    {
-			        template<std::size_t... Coords1, std::size_t... Coords2>
-			        constexpr auto recordCoordCommonPrefixIsSameImpl(RecordCoord<Coords1...>, RecordCoord<Coords2...>) -> bool
-			        {
-			            // CTAD does not work if Coords1/2 is an empty pack
-			            std::array<std::size_t, sizeof...(Coords1)> a1{Coords1...};
-			            std::array<std::size_t, sizeof...(Coords2)> a2{Coords2...};
-			            for(std::size_t i = 0; i < std::min(a1.size(), a2.size()); i++)
-			                if(a1[i] != a2[i])
-			                    return false;
-			            return true;
-			        };
-			    } // namespace internal
-
-			    /// Checks whether two \ref RecordCoord%s are the same or one is the prefix of the other.
-			    LLAMA_EXPORT
-			    template<typename First, typename Second>
-			    inline constexpr auto recordCoordCommonPrefixIsSame
-			        = internal::recordCoordCommonPrefixIsSameImpl(First{}, Second{});
-			} // namespace llama
-			// ==
-			// == ./include/llama/RecordCoord.hpp ==
-			// ============================================================================
-
-
-		#include <iostream>
-		#include <string>
-		// #include <type_traits>    // amalgamate: file already included
-		#if __has_include(<boost/describe/members.hpp>)
-		#    include <boost/describe/members.hpp>
-		#endif
-
-		namespace llama
-		{
-		    /// Anonymous naming for a \ref Field.
-		    LLAMA_EXPORT
-		    struct NoName
-		    {
-		    };
-
-		    /// @brief Tells whether the given type is allowed as a field type in LLAMA. Such types need to be trivially
-		    /// constructible and trivially destructible.
-		    LLAMA_EXPORT
-		    template<typename T>
-		    inline constexpr bool isAllowedFieldType = std::is_trivially_destructible_v<T>;
-
-		    /// Record dimension tree node which may either be a leaf or refer to a child tree presented as another \ref
-		    /// Record.
-		    /// \tparam Tag Name of the node. May be any type (struct, class).
-		    /// \tparam Type Type of the node. May be one of three cases. 1. another sub tree consisting of a nested \ref
-		    /// Record. 2. an array of static size of any type, in which case a Record with as many \ref Field as the array
-		    /// size is created, named \ref RecordCoord specialized on consecutive numbers I. 3. A scalar type different from
-		    /// \ref Record, making this node a leaf of this type.
-		    LLAMA_EXPORT
-		    template<typename Tag, typename Type>
-		    struct Field
-		    {
-		        static_assert(isAllowedFieldType<Type>, "This field's type is not allowed");
-		    };
-
-		    LLAMA_EXPORT
-		    template<typename T>
-		    inline constexpr bool isField = false;
-
-		    LLAMA_EXPORT
-		    template<typename Tag, typename Type>
-		    inline constexpr bool isField<Field<Tag, Type>> = true;
-
-		    /// A type list of \ref Field%s which may be used to define a record dimension.
-		    LLAMA_EXPORT
-		    template<typename... Fields>
-		#if __cpp_concepts
-		    // Cannot use a fold expression here, because clang/nvcc/icx cannot handle more than 256 arguments.
-		    // If you get an error here, then you passed a type which is not llama::Field as argument to Record
-		        requires(mp_all<mp_bool<isField<Fields>>...>::value)
-		#endif
-		    struct Record
-		    {
-		    };
-
-		#if __cpp_nontype_template_args >= 201911L && !defined(__EDG__)
-		    /// Defined when string literals are supported in the record dimension. See also \ref NamedField.
-		#    define LLAMA_HAS_STRING_FIELDS
-
-		    namespace internal
-		    {
-		        // N includes the char to store the null-terminator
-		        template<std::size_t N>
-		        struct FixedString
-		        {
-		            constexpr FixedString(const char* str)
-		            {
-		                std::copy(str, str + N, data);
-		            }
-
-		            char data[N];
-		        };
-
-		        template<std::size_t N>
-		        FixedString(const char (&str)[N]) -> FixedString<N>;
-
-		        template<FixedString Name>
-		        struct StringTag
-		        {
-		        };
-		    } // namespace internal
-
-		    inline namespace literals
-		    {
-		        /// Literal operator for converting a string literal "abc"_Name to a StringTag<"Name">.
-		        LLAMA_EXPORT
-		        template<internal::FixedString Name>
-		        auto operator"" _Name()
-		        {
-		            return internal::StringTag<Name>{};
-		        }
-		    } // namespace literals
-
-		    /// Alternative to \ref Field. Use with string literals, e.g. NamedField<"x", float>. Access at the \ref View
-		    /// requires to use "x"_Name then.
-		    LLAMA_EXPORT
-		    template<internal::FixedString Tag, typename Type>
-		    using NamedField = Field<internal::StringTag<Tag>, Type>;
-
-		#    if __has_include(<boost/describe/members.hpp>)
-		    /// Defined when LLAMA has support to reflect a C++ struct into a record dimension using Boost.Describe.
-		#        define LLAMA_CAN_REFLECT_RECORD_DIM
-		    namespace internal
-		    {
-		        template<typename T>
-		        auto reflectToRecordDim();
-
-		        template<class C, typename T>
-		        auto memberPointerPointeeType(T C::*) -> T;
-
-		        constexpr auto constexpr_strlen(const char* s)
-		        {
-		            const char* end = s;
-		            while(*end != 0)
-		                end++;
-		            return end - s;
-		        }
-
-		        template<typename Member>
-		        using MakeFieldFromMemberDescriptor = NamedField<
-		            FixedString<constexpr_strlen(Member::name) + 1>(Member::name),
-		            decltype(reflectToRecordDim<decltype(memberPointerPointeeType(Member::pointer))>())>;
-
-		        template<typename T>
-		        auto reflectToRecordDim()
-		        {
-		            if constexpr(boost::describe::has_describe_members<T>::value)
-		            {
-		                using MemberList = boost::describe::describe_members<T, boost::describe::mod_public>;
-		                return mp_rename<mp_transform<MakeFieldFromMemberDescriptor, MemberList>, llama::Record>{};
-		            }
-		            else
-		                return T{};
-		        }
-		    } // namespace internal
-
-		    /// Reflects the given type T using Boost.Describe and creates a record dimension for it.
-		    LLAMA_EXPORT
-		    template<typename T>
-		    using ReflectToRecordDim = decltype(internal::reflectToRecordDim<T>());
-		#    endif
-		#endif
-
-		    LLAMA_EXPORT
-		    template<typename T>
-		    struct NrAndOffset
-		    {
-		        T nr;
-		        T offset;
-
-		        friend auto operator<<(std::ostream& os, const NrAndOffset& value) -> std::ostream&
-		        {
-		            return os << "NrAndOffset{" << value.nr << ", " << value.offset << "}";
-		        }
-		    };
-
-		    LLAMA_EXPORT
-		    template<typename Int>
-		    NrAndOffset(Int, Int) -> NrAndOffset<Int>;
-
-		    LLAMA_EXPORT
-		    template<typename TA, typename TB>
-		    auto operator==(const NrAndOffset<TA>& a, const NrAndOffset<TB>& b) -> bool
-		    {
-		        return a.nr == b.nr && a.offset == b.offset;
-		    }
-
-		    LLAMA_EXPORT
-		    template<typename TA, typename TB>
-		    auto operator!=(const NrAndOffset<TA>& a, const NrAndOffset<TB>& b) -> bool
-		    {
-		        return !(a == b);
-		    }
-
-		    /// Get the tag from a \ref Field.
-		    LLAMA_EXPORT
-		    template<typename Field>
-		    using GetFieldTag = mp_first<Field>;
-
-		    /// Get the type from a \ref Field.
-		    LLAMA_EXPORT
-		    template<typename Field>
-		    using GetFieldType = mp_second<Field>;
-
-		    LLAMA_EXPORT
-		    template<typename T>
-		    inline constexpr auto isRecord = false;
-
-		    LLAMA_EXPORT
-		    template<typename... Fields>
-		    inline constexpr auto isRecord<Record<Fields...>> = true;
-
-		    namespace internal
-		    {
-		        template<typename RecordDim, typename RecordCoord>
-		        struct GetTagsImpl;
-
-		        template<typename... Fields, std::size_t FirstCoord, std::size_t... Coords>
-		        struct GetTagsImpl<Record<Fields...>, RecordCoord<FirstCoord, Coords...>>
-		        {
-		            using Field = mp_at_c<mp_list<Fields...>, FirstCoord>;
-		            using ChildTag = GetFieldTag<Field>;
-		            using ChildType = GetFieldType<Field>;
-		            using type = mp_push_front<typename GetTagsImpl<ChildType, RecordCoord<Coords...>>::type, ChildTag>;
-		        };
-
-		        template<typename ChildType, std::size_t Count, std::size_t FirstCoord, std::size_t... Coords>
-		        struct GetTagsImpl<ChildType[Count], RecordCoord<FirstCoord, Coords...>>
-		        {
-		            using ChildTag = RecordCoord<FirstCoord>;
-		            using type = mp_push_front<typename GetTagsImpl<ChildType, RecordCoord<Coords...>>::type, ChildTag>;
-		        };
-
-		        template<typename T>
-		        struct GetTagsImpl<T, RecordCoord<>>
-		        {
-		            using type = mp_list<>;
-		        };
-		    } // namespace internal
-
-		    /// Get the tags of all \ref Field%s from the root of the record dimension tree until to the node identified by
-		    /// \ref RecordCoord.
-		    LLAMA_EXPORT
-		    template<typename RecordDim, typename RecordCoord>
-		    using GetTags = typename internal::GetTagsImpl<RecordDim, RecordCoord>::type;
-
-		    namespace internal
-		    {
-		        template<typename RecordDim, typename RecordCoord>
-		        struct GetTagImpl
-		        {
-		            using type = mp_back<GetTags<RecordDim, RecordCoord>>;
-		        };
-
-		        template<typename RecordDim>
-		        struct GetTagImpl<RecordDim, RecordCoord<>>
-		        {
-		            using type = NoName;
-		        };
-		    } // namespace internal
-
-		    /// Get the tag of the \ref Field at a \ref RecordCoord inside the record dimension tree.
-		    LLAMA_EXPORT
-		    template<typename RecordDim, typename RecordCoord>
-		    using GetTag = typename internal::GetTagImpl<RecordDim, RecordCoord>::type;
-
-		    /// Is true if, starting at two coordinates in two record dimensions, all subsequent nodes in the record dimension
-		    /// tree have the same tag.
-		    /// \tparam RecordDimA First record dimension.
-		    /// \tparam RecordCoordA \ref RecordCoord based on RecordDimA along which the tags are compared.
-		    /// \tparam RecordDimB second record dimension.
-		    /// \tparam RecordCoordB \ref RecordCoord based on RecordDimB along which the tags are compared.
-		    LLAMA_EXPORT
-		    template<typename RecordDimA, typename RecordCoordA, typename RecordDimB, typename RecordCoordB>
-		    inline constexpr auto hasSameTags = []() constexpr
-		    {
-		        if constexpr(RecordCoordA::size != RecordCoordB::size)
-		            return false;
-		        else if constexpr(RecordCoordA::size == 0 && RecordCoordB::size == 0)
-		            return true;
-		        else
-		            return std::is_same_v<GetTags<RecordDimA, RecordCoordA>, GetTags<RecordDimB, RecordCoordB>>;
-		    }();
-
-		    namespace internal
-		    {
-		        template<typename FieldList, typename Tag>
-		        struct FindFieldByTag
-		        {
-		            template<typename Field>
-		            using HasTag = std::is_same<GetFieldTag<Field>, Tag>;
-
-		            static constexpr auto value = mp_find_if<FieldList, HasTag>::value;
-		        };
-
-		        template<typename RecordDim, typename RecordCoord, typename... Tags>
-		        struct GetCoordFromTagsImpl
-		        {
-		            static_assert(mp_size<RecordDim>::value != 0, "Tag combination is not valid");
-		        };
-
-		        template<typename... Fields, std::size_t... ResultCoords, typename FirstTag, typename... Tags>
-		        struct GetCoordFromTagsImpl<Record<Fields...>, RecordCoord<ResultCoords...>, FirstTag, Tags...>
-		        {
-		            static constexpr auto tagIndex = FindFieldByTag<mp_list<Fields...>, FirstTag>::value;
-		            static_assert(
-		                tagIndex < sizeof...(Fields),
-		                "FirstTag was not found inside this Record. Does your record dimension contain the tag you access "
-		                "with?");
-
-		            using ChildType = GetFieldType<mp_at_c<Record<Fields...>, tagIndex>>;
-
-		            using type =
-		                typename GetCoordFromTagsImpl<ChildType, RecordCoord<ResultCoords..., tagIndex>, Tags...>::type;
-		        };
-
-		        template<
-		            typename ChildType,
-		            std::size_t Count,
-		            std::size_t... ResultCoords,
-		            typename FirstTag,
-		            typename... Tags>
-		        struct GetCoordFromTagsImpl<ChildType[Count], RecordCoord<ResultCoords...>, FirstTag, Tags...>
-		        {
-		            static_assert(isRecordCoord<FirstTag>, "Please use a RecordCoord<I> to index into static arrays");
-		            static_assert(FirstTag::size == 1, "Expected RecordCoord with 1 coordinate");
-		            static_assert(FirstTag::front < Count, "Index out of bounds");
-
-		            using type =
-		                typename GetCoordFromTagsImpl<ChildType, RecordCoord<ResultCoords..., FirstTag::front>, Tags...>::type;
-		        };
-
-		        template<typename RecordDim, typename RecordCoord>
-		        struct GetCoordFromTagsImpl<RecordDim, RecordCoord>
-		        {
-		            using type = RecordCoord;
-		        };
-
-		        // unpack a list of tags
-		        template<typename... Fields, typename... Tags>
-		        struct GetCoordFromTagsImpl<Record<Fields...>, RecordCoord<>, mp_list<Tags...>>
-		            : GetCoordFromTagsImpl<Record<Fields...>, RecordCoord<>, Tags...>
-		        {
-		        };
-
-		        template<typename ChildType, std::size_t Count, typename... Tags>
-		        struct GetCoordFromTagsImpl<ChildType[Count], RecordCoord<>, mp_list<Tags...>>
-		            : GetCoordFromTagsImpl<ChildType[Count], RecordCoord<>, Tags...>
-		        {
-		        };
-
-		        // pass through a RecordCoord
-		        template<typename... Fields, std::size_t... RCs>
-		        struct GetCoordFromTagsImpl<Record<Fields...>, RecordCoord<>, RecordCoord<RCs...>>
-		        {
-		            using type = RecordCoord<RCs...>;
-		        };
-		    } // namespace internal
-
-		    /// Converts a series of tags, or a list of tags, navigating down a record dimension into a \ref RecordCoord. A
-		    /// RecordCoord will be passed through unmodified.
-		    LLAMA_EXPORT
-		    template<typename RecordDim, typename... TagsOrTagList>
-		    using GetCoordFromTags = typename internal::GetCoordFromTagsImpl<RecordDim, RecordCoord<>, TagsOrTagList...>::type;
-
-		    namespace internal
-		    {
-		        template<typename RecordDim, typename... RecordCoordOrTags>
-		        struct GetTypeImpl
-		        {
-		            using type = typename GetTypeImpl<RecordDim, GetCoordFromTags<RecordDim, RecordCoordOrTags...>>::type;
-		        };
-
-		        template<typename... Children, std::size_t HeadCoord, std::size_t... TailCoords>
-		        struct GetTypeImpl<Record<Children...>, RecordCoord<HeadCoord, TailCoords...>>
-		        {
-		            using ChildType = GetFieldType<mp_at_c<Record<Children...>, HeadCoord>>;
-		            using type = typename GetTypeImpl<ChildType, RecordCoord<TailCoords...>>::type;
-		        };
-
-		        template<typename ChildType, std::size_t N, std::size_t HeadCoord, std::size_t... TailCoords>
-		        struct GetTypeImpl<ChildType[N], RecordCoord<HeadCoord, TailCoords...>>
-		        {
-		            using type = typename GetTypeImpl<ChildType, RecordCoord<TailCoords...>>::type;
-		        };
-
-		        template<typename T>
-		        struct GetTypeImpl<T, RecordCoord<>>
-		        {
-		            static_assert(isAllowedFieldType<T>);
-		            using type = T;
-		        };
-		    } // namespace internal
-
-		    /// Returns the type of a node in a record dimension tree identified by a given \ref RecordCoord or a series of
-		    /// tags.
-		    LLAMA_EXPORT
-		    template<typename RecordDim, typename... RecordCoordOrTags>
-		    using GetType = typename internal::GetTypeImpl<RecordDim, RecordCoordOrTags...>::type;
-
-		    namespace internal
-		    {
-		        template<typename RecordDim, typename RecordCoord>
-		        struct LeafRecordCoordsImpl;
-
-		        template<typename T, std::size_t... RCs>
-		        struct LeafRecordCoordsImpl<T, RecordCoord<RCs...>>
-		        {
-		            using type = mp_list<RecordCoord<RCs...>>;
-		        };
-
-		        template<typename... Fields, std::size_t... RCs>
-		        struct LeafRecordCoordsImpl<Record<Fields...>, RecordCoord<RCs...>>
-		        {
-		            template<std::size_t... Is>
-		            static auto help(std::index_sequence<Is...>)
-		            {
-		                return mp_append<
-		                    typename LeafRecordCoordsImpl<GetFieldType<Fields>, RecordCoord<RCs..., Is>>::type...>{};
-		            }
-		            using type = decltype(help(std::make_index_sequence<sizeof...(Fields)>{}));
-		        };
-
-		        template<typename Child, std::size_t N, std::size_t... RCs>
-		        struct LeafRecordCoordsImpl<Child[N], RecordCoord<RCs...>>
-		        {
-		            template<std::size_t... Is>
-		            static auto help(std::index_sequence<Is...>)
-		            {
-		                return mp_append<typename LeafRecordCoordsImpl<Child, RecordCoord<RCs..., Is>>::type...>{};
-		            }
-		            using type = decltype(help(std::make_index_sequence<N>{}));
-		        };
-		    } // namespace internal
-
-		    /// Returns a flat type list containing all record coordinates to all leaves of the given record dimension.
-		    LLAMA_EXPORT
-		    template<typename RecordDim>
-		    using LeafRecordCoords = typename internal::LeafRecordCoordsImpl<RecordDim, RecordCoord<>>::type;
-
-		    /// Iterates over the record dimension tree and calls a functor on each element.
-		    /// \param functor Functor to execute at each element of. Needs to have `operator()` with a template parameter for
-		    /// the \ref RecordCoord in the record dimension tree.
-		    /// \param baseCoord \ref RecordCoord at which the iteration should be started. The functor is called on elements
-		    /// beneath this coordinate.
-		    LLAMA_EXPORT
-		    template<typename RecordDim, typename Functor, std::size_t... Coords>
-		    LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeafCoord(Functor&& functor, RecordCoord<Coords...> baseCoord)
-		    {
-		        LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-		        internal::mpForEachInlined(
-		            LeafRecordCoords<GetType<RecordDim, RecordCoord<Coords...>>>{},
-		            [&](auto innerCoord) LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(constexpr)
-		            { std::forward<Functor>(functor)(cat(baseCoord, innerCoord)); });
-		        LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
-		    }
-
-		    /// Iterates over the record dimension tree and calls a functor on each element.
-		    /// \param functor Functor to execute at each element of. Needs to have `operator()` with a template parameter for
-		    /// the \ref RecordCoord in the record dimension tree.
-		    /// \param baseTags Tags used to define where the iteration should be started. The functor is called on elements
-		    /// beneath this coordinate.
-		    LLAMA_EXPORT
-		    template<typename RecordDim, typename Functor, typename... Tags>
-		    LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeafCoord(Functor&& functor, Tags... /*baseTags*/)
-		    {
-		        forEachLeafCoord<RecordDim>(std::forward<Functor>(functor), GetCoordFromTags<RecordDim, Tags...>{});
-		    }
-
-		    namespace internal
-		    {
-		        template<typename T>
-		        struct FlattenRecordDimImpl
-		        {
-		            using type = mp_list<T>;
-		        };
-
-		        template<typename... Fields>
-		        struct FlattenRecordDimImpl<Record<Fields...>>
-		        {
-		            using type = mp_append<typename FlattenRecordDimImpl<GetFieldType<Fields>>::type...>;
-		        };
-		        template<typename Child, std::size_t N>
-		        struct FlattenRecordDimImpl<Child[N]>
-		        {
-		            using type = mp_repeat_c<typename FlattenRecordDimImpl<Child>::type, N>;
-		        };
-		    } // namespace internal
-
-		    /// Returns a flat type list containing all leaf field types of the given record dimension.
-		    LLAMA_EXPORT
-		    template<typename RecordDim>
-		    using FlatRecordDim = typename internal::FlattenRecordDimImpl<RecordDim>::type;
-
-		    /// The total number of fields in the recursively expanded record dimension.
-		    LLAMA_EXPORT
-		    template<typename RecordDim>
-		    inline constexpr std::size_t flatFieldCount = 1;
-
-		    LLAMA_EXPORT
-		    template<typename... Children>
-		    inline constexpr std::size_t flatFieldCount<Record<Children...>>
-		        = (flatFieldCount<GetFieldType<Children>> + ... + 0);
-
-		    LLAMA_EXPORT
-		    template<typename Child, std::size_t N>
-		    inline constexpr std::size_t flatFieldCount<Child[N]> = flatFieldCount<Child> * N;
-
-		    namespace internal
-		    {
-		        template<std::size_t I, typename RecordDim>
-		        inline constexpr std::size_t flatFieldCountBefore = 0;
-
-		        template<typename... Children>
-		        inline constexpr std::size_t flatFieldCountBefore<0, Record<Children...>> = 0;
-
-		        // recursive formulation to benefit from template instantiation memoization
-		        // this massively improves compilation time when this template is instantiated with a lot of different I
-		        template<std::size_t I, typename... Children>
-		        inline constexpr std::size_t flatFieldCountBefore<I, Record<Children...>>
-		            = flatFieldCountBefore<I - 1, Record<Children...>>
-		            + flatFieldCount<GetFieldType<mp_at_c<Record<Children...>, I - 1>>>;
-		    } // namespace internal
-
-		    /// The equivalent zero based index into a flat record dimension (\ref FlatRecordDim) of the given hierarchical
-		    /// record coordinate.
-		    LLAMA_EXPORT
-		    template<typename RecordDim, typename RecordCoord>
-		    inline constexpr std::size_t flatRecordCoord = 0;
-
-		    LLAMA_EXPORT
-		    template<typename T>
-		    inline constexpr std::size_t flatRecordCoord<T, RecordCoord<>> = 0;
-
-		    LLAMA_EXPORT
-		    template<typename... Children, std::size_t I, std::size_t... Is>
-		    inline constexpr std::size_t flatRecordCoord<Record<Children...>, RecordCoord<I, Is...>>
-		        = internal::flatFieldCountBefore<I, Record<Children...>>
-		        + flatRecordCoord<GetFieldType<mp_at_c<Record<Children...>, I>>, RecordCoord<Is...>>;
-
-		    LLAMA_EXPORT
-		    template<typename Child, std::size_t N, std::size_t I, std::size_t... Is>
-		    inline constexpr std::size_t flatRecordCoord<Child[N], RecordCoord<I, Is...>>
-		        = flatFieldCount<Child> * I + flatRecordCoord<Child, RecordCoord<Is...>>;
-
-		    namespace internal
-		    {
-		        template<typename TypeList>
-		        constexpr auto flatAlignOfImpl()
-		        {
-		            std::size_t maxAlign = 0;
-		            mp_for_each<mp_transform<mp_identity, TypeList>>(
-		                [&](auto e) constexpr
-		                {
-		                    using T = typename decltype(e)::type;
-		                    maxAlign = std::max(maxAlign, alignof(T));
-		                });
-		            return maxAlign;
-		        }
-		    } // namespace internal
-
-		    /// The alignment of a type list if its elements would be in a normal struct. Effectively returns the maximum
-		    /// alignment value in the type list.
-		    LLAMA_EXPORT
-		    template<typename TypeList>
-		    inline constexpr std::size_t flatAlignOf = internal::flatAlignOfImpl<TypeList>();
-
-		    /// The alignment of a type T.
-		    LLAMA_EXPORT
-		    template<typename T>
-		    inline constexpr std::size_t alignOf = alignof(T);
-
-		    /// The alignment of a record dimension if its fields would be in a normal struct. Effectively returns the maximum
-		    /// alignment value in the type list.
-		    LLAMA_EXPORT
-		    template<typename... Fields>
-		    inline constexpr std::size_t alignOf<Record<Fields...>> = flatAlignOf<FlatRecordDim<Record<Fields...>>>;
-
-		    /// Returns the ceiling of a / b.
-		    LLAMA_EXPORT
-		    template<typename Integral>
-		    [[nodiscard]] LLAMA_FN_HOST_ACC_INLINE constexpr auto divCeil(Integral a, Integral b) -> Integral
-		    {
-		        return (a + b - 1) / b;
-		    }
-
-		    /// Returns the integral n rounded up to be a multiple of mult.
-		    LLAMA_EXPORT
-		    template<typename Integral>
-		    [[nodiscard]] LLAMA_FN_HOST_ACC_INLINE constexpr auto roundUpToMultiple(Integral n, Integral mult) -> Integral
-		    {
-		        return divCeil(n, mult) * mult;
-		    }
-
-		    namespace internal
-		    {
-		        template<typename TypeList, bool Align, bool IncludeTailPadding>
-		        constexpr auto sizeOfImpl() -> std::size_t
-		        {
-		            std::size_t size = 0;
-		            std::size_t maxAlign = 0; // NOLINT(misc-const-correctness)
-		            mp_for_each<mp_transform<mp_identity, TypeList>>(
-		                [&](auto e) constexpr
-		                {
-		                    using T = typename decltype(e)::type;
-		                    if constexpr(Align)
-		                    {
-		                        size = roundUpToMultiple(size, alignof(T));
-		                        maxAlign = std::max(maxAlign, alignof(T));
-		                    }
-		                    // NOLINTNEXTLINE(readability-misleading-indentation)
-		                    size += sizeof(T);
-		                });
-
-		            // final padding, so next struct can start right away
-		            if constexpr(Align && IncludeTailPadding)
-		                if(maxAlign > 0)
-		                    size = roundUpToMultiple(size, maxAlign); // TODO(bgruber): we could use flatAlignOf<TypeList>
-		                                                              // here, at the cost of more template instantiations
-		            return size;
-		        }
-
-		        template<typename TypeList, std::size_t I, bool Align>
-		        constexpr auto offsetOfImplWorkaround() -> std::size_t;
-		    } // namespace internal
-
-		    /// The size of a type list if its elements would be in a normal struct.
-		    LLAMA_EXPORT
-		    template<typename TypeList, bool Align, bool IncludeTailPadding = true>
-		    inline constexpr std::size_t flatSizeOf = internal::sizeOfImpl<TypeList, Align, IncludeTailPadding>();
-
-		    /// The size of a type T.
-		    LLAMA_EXPORT
-		    template<typename T, bool Align = false, bool IncludeTailPadding = true>
-		    inline constexpr std::size_t sizeOf = sizeof(T);
-
-		    /// The size of a record dimension if its fields would be in a normal struct.
-		    LLAMA_EXPORT
-		    template<typename... Fields, bool Align, bool IncludeTailPadding>
-		    inline constexpr std::size_t sizeOf<Record<Fields...>, Align, IncludeTailPadding>
-		        = flatSizeOf<FlatRecordDim<Record<Fields...>>, Align, IncludeTailPadding>;
-
-		    /// The byte offset of an element in a type list ifs elements would be in a normal struct.
-		    LLAMA_EXPORT
-		    template<typename TypeList, std::size_t I, bool Align>
-		    inline constexpr std::size_t flatOffsetOf = internal::offsetOfImplWorkaround<TypeList, I, Align>();
-
-		    namespace internal
-		    {
-		        // unfortunately, we cannot inline this function as an IILE, as MSVC complains:
-		        // fatal error C1202: recursive type or function dependency context too complex
-		        template<typename TypeList, std::size_t I, bool Align>
-		        constexpr auto offsetOfImplWorkaround() -> std::size_t
-		        {
-		            if constexpr(I == 0)
-		                return 0;
-		            else
-		            {
-		                std::size_t offset // NOLINT(misc-const-correctness)
-		                    = flatOffsetOf<TypeList, I - 1, Align> + sizeof(mp_at_c<TypeList, I - 1>);
-		                if constexpr(Align)
-		                    offset = roundUpToMultiple(offset, alignof(mp_at_c<TypeList, I>));
-		                return offset;
-		            }
-		        }
-		    } // namespace internal
-
-		    /// The byte offset of an element in a record dimension if it would be a normal struct.
-		    /// \tparam RecordDim Record dimension tree.
-		    /// \tparam RecordCoord Record coordinate of an element inrecord dimension tree.
-		    LLAMA_EXPORT
-		    template<typename RecordDim, typename RecordCoord, bool Align = false>
-		    inline constexpr std::size_t offsetOf
-		        = flatOffsetOf<FlatRecordDim<RecordDim>, flatRecordCoord<RecordDim, RecordCoord>, Align>;
-
-		    namespace internal
-		    {
-		        // Such a class is also known as arraw_proxy: https://quuxplusone.github.io/blog/2019/02/06/arrow-proxy/
-		        template<typename T>
-		        struct IndirectValue
-		        {
-		            T value;
-
-		            LLAMA_FN_HOST_ACC_INLINE auto operator->() -> T*
-		            {
-		                return &value;
-		            }
-
-		            LLAMA_FN_HOST_ACC_INLINE auto operator->() const -> const T*
-		            {
-		                return &value;
-		            }
-		        };
-
-		        // TODO(bgruber): replace in C++20
-		        template<class T>
-		        struct IsBoundedArray : std::false_type
-		        {
-		        };
-
-		        template<class T, std::size_t N>
-		        struct IsBoundedArray<T[N]> : std::true_type
-		        {
-		        };
-		    } // namespace internal
-
-		    /// True if the T is a record dimension. That is, T is either a llama::Record or a bounded array.
-		    LLAMA_EXPORT
-		    template<typename T>
-		    inline constexpr bool isRecordDim = isRecord<T> || internal::IsBoundedArray<T>::value;
-
-		    namespace internal
-		    {
-		        template<typename Coord, typename T, template<typename, typename> typename TypeFunctor>
-		        struct TransformLeavesWithCoordImpl
-		        {
-		            using type = TypeFunctor<Coord, T>;
-		        };
-
-		        template<std::size_t... Is, typename... Fields, template<typename, typename> typename TypeFunctor>
-		        struct TransformLeavesWithCoordImpl<RecordCoord<Is...>, Record<Fields...>, TypeFunctor>
-		        {
-		            template<std::size_t... Js>
-		            static auto f(std::index_sequence<Js...>)
-		            {
-		                return Record<Field<
-		                    GetFieldTag<Fields>,
-		                    typename TransformLeavesWithCoordImpl<RecordCoord<Is..., Js>, GetFieldType<Fields>, TypeFunctor>::
-		                        type>...>{};
-		            }
-
-		            using type = decltype(f(std::index_sequence_for<Fields...>{}));
-		        };
-		        template<std::size_t... Is, typename Child, std::size_t N, template<typename, typename> typename TypeFunctor>
-		        struct TransformLeavesWithCoordImpl<RecordCoord<Is...>, Child[N], TypeFunctor>
-		        {
-		            template<std::size_t... Js>
-		            static void f(std::index_sequence<Js...>)
-		            {
-		                static_assert(
-		                    mp_same<typename TransformLeavesWithCoordImpl<RecordCoord<Is..., Js>, Child, TypeFunctor>::
-		                                type...>::value,
-		                    "Leave transformations beneath an array node must return the same type");
-		            }
-		            using dummy = decltype(f(std::make_index_sequence<N>{}));
-
-		            using type = typename TransformLeavesWithCoordImpl<RecordCoord<Is..., 0>, Child, TypeFunctor>::type[N];
-		        };
-
-		        template<template<typename> typename F>
-		        struct MakePassSecond
-		        {
-		            template<typename A, typename B>
-		            using fn = F<B>;
-		        };
-		    } // namespace internal
-
-		    /// Creates a new record dimension where each new leaf field's type is the result of applying FieldTypeFunctor to
-		    /// the original leaf's \ref RecordCoord and field's type.
-		    LLAMA_EXPORT
-		    template<typename RecordDim, template<typename, typename> typename FieldTypeFunctor>
-		    using TransformLeavesWithCoord =
-		        typename internal::TransformLeavesWithCoordImpl<RecordCoord<>, RecordDim, FieldTypeFunctor>::type;
-
-		    /// Creates a new record dimension where each new leaf field's type is the result of applying FieldTypeFunctor to
-		    /// the original leaf field's type.
-		    LLAMA_EXPORT
-		    template<typename RecordDim, template<typename> typename FieldTypeFunctor>
-		    using TransformLeaves
-		        = TransformLeavesWithCoord<RecordDim, internal::MakePassSecond<FieldTypeFunctor>::template fn>;
-
-		    namespace internal
-		    {
-		        // TODO(bgruber): we might implement this better by expanding a record dim into a list of tag lists and then
-		        // computing a real set union of the two tag list lists
-
-		        template<typename A, typename B>
-		        auto mergeRecordDimsImpl(mp_identity<A> a, mp_identity<B>)
-		        {
-		            static_assert(std::is_same_v<A, B>, "Cannot merge record and non-record or fields with different types");
-		            return a;
-		        }
-
-		        template<typename A, std::size_t NA, typename B, std::size_t NB>
-		        auto mergeRecordDimsImpl([[maybe_unused]] mp_identity<A[NA]> a, [[maybe_unused]] mp_identity<B[NB]> b)
-		        {
-		            static_assert(std::is_same_v<A, B>, "Cannot merge arrays of different type");
-		            if constexpr(NA < NB)
-		                return b;
-		            else
-		                return a;
-		        }
-
-		        template<typename... FieldsA>
-		        auto mergeRecordDimsImpl(mp_identity<Record<FieldsA...>> a, mp_identity<Record<>>)
-		        {
-		            return a;
-		        }
-
-		        template<
-		            typename... FieldsA,
-		            typename FieldB,
-		            typename... FieldsB,
-		            auto Pos = FindFieldByTag<Record<FieldsA...>, GetFieldTag<FieldB>>::value>
-		        auto mergeRecordDimsImpl(mp_identity<Record<FieldsA...>>, mp_identity<Record<FieldB, FieldsB...>>)
-		        {
-		            if constexpr(Pos == sizeof...(FieldsA))
-		            {
-		                return mergeRecordDimsImpl(
-		                    mp_identity<Record<FieldsA..., FieldB>>{},
-		                    mp_identity<Record<FieldsB...>>{});
-		            }
-		            else
-		            {
-		                using OldFieldA = mp_at_c<Record<FieldsA...>, Pos>;
-		                using NewFieldA = Field<
-		                    GetFieldTag<OldFieldA>,
-		                    typename decltype(mergeRecordDimsImpl(
-		                        mp_identity<GetFieldType<OldFieldA>>{},
-		                        mp_identity<GetFieldType<FieldB>>{}))::type>;
-		                using NewRecordA = mp_replace_at_c<Record<FieldsA...>, Pos, NewFieldA>;
-		                return mergeRecordDimsImpl(mp_identity<NewRecordA>{}, mp_identity<Record<FieldsB...>>{});
-		            }
-		        }
-		    } // namespace internal
-
-		    /// Creates a merged record dimension, where duplicated, nested fields are unified.
-		    LLAMA_EXPORT
-		    template<typename RecordDimA, typename RecordDimB>
-		    using MergedRecordDims =
-		        typename decltype(internal::mergeRecordDimsImpl(mp_identity<RecordDimA>{}, mp_identity<RecordDimB>{}))::type;
-
-		    /// Alias for ToT, adding `const` if FromT is const qualified.
-		    LLAMA_EXPORT
-		    template<typename FromT, typename ToT>
-		    using CopyConst = std::conditional_t<std::is_const_v<FromT>, const ToT, ToT>;
-
-		    /// Used as template argument to specify a constant/compile-time value.
-		    LLAMA_EXPORT
-		    template<auto V>
-		    using Constant = std::integral_constant<decltype(V), V>;
-
-		    namespace internal
-		    {
-		        template<typename T>
-		        struct IsConstant : std::false_type
-		        {
-		        };
-
-		        template<typename T, T V>
-		        struct IsConstant<std::integral_constant<T, V>> : std::true_type
-		        {
-		        };
-		    } // namespace internal
-
-		    LLAMA_EXPORT
-		    template<typename T>
-		    inline constexpr bool isConstant = internal::IsConstant<T>::value;
-
-		    namespace internal
-		    {
-		        /// Holds a value of type T. Is useful as a base class. Is specialized for llama::Constant to not store the
-		        /// value at runtime. \tparam T Type of value to store. \tparam I Is used to disambiguate multiple BoxedValue
-		        /// base classes.
-		        template<typename T, int I = 0>
-		        struct BoxedValue
-		        {
-		            BoxedValue() = default;
-
-		            // we don't make this ctor explicit so a Value appearing in a ctor list can just be created by passing a T
-		            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
-		            LLAMA_FN_HOST_ACC_INLINE BoxedValue(T value) : val(value)
-		            {
-		            }
-
-		            LLAMA_FN_HOST_ACC_INLINE constexpr auto value() const
-		            {
-		                return val;
-		            }
-
-		        private:
-		            T val = {};
-		        };
-
-		        template<auto V, int I>
-		        struct BoxedValue<Constant<V>, I>
-		        {
-		            BoxedValue() = default;
-
-		            // we don't make this ctor explicit so a Value appearing in a ctor list can just be created by passing a T
-		            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
-		            LLAMA_FN_HOST_ACC_INLINE BoxedValue(Constant<V>)
-		            {
-		            }
-
-		            LLAMA_FN_HOST_ACC_INLINE static constexpr auto value()
-		            {
-		                return V;
-		            }
-		        };
-		    } // namespace internal
-
-		    LLAMA_EXPORT
-		    struct PrettySize
-		    {
-		        double size;
-		        const char* unit;
-		    };
-
-		    /// Repeatedly divides the given size (in bytes) until it fits below 1000. Returns the new size and a string
-		    /// literal with the corresponding unit.
-		    LLAMA_EXPORT
-		    inline auto prettySize(double size) -> PrettySize
-		    {
-		        static const char* unit[] = {"B ", "KB", "MB", "GB", "TB", "PB", "EB"};
-		        unsigned unitIndex = 0;
-		        while(size > 1000.0)
-		        {
-		            size /= 1000.0;
-		            unitIndex++;
-		        }
-		        assert(unitIndex < std::size(unit));
-		        return {size, unit[unitIndex]};
-		    }
-		} // namespace llama
-		// ==
-		// == ./include/llama/Core.hpp ==
-		// ============================================================================
-
-	// #include "macros.hpp"    // amalgamate: file already inlined
-
-	#include <algorithm>
-	#include <iterator>
-	// #include <limits>    // amalgamate: file already included
-	#if CAN_USE_RANGES
-	#    include <ranges>
-	#endif
-
-	namespace llama
-	{
-	    /// Iterator supporting \ref ArrayIndexRange.
-	    LLAMA_EXPORT
-	    template<typename ArrayExtents>
-	    struct ArrayIndexIterator
-	    {
-	        static_assert(!std::is_const_v<ArrayExtents>);
-
-	        using value_type = typename ArrayExtents::Index;
-	        using difference_type = std::ptrdiff_t;
-	        using reference = value_type;
-	        using pointer = internal::IndirectValue<value_type>;
-	        using iterator_category = std::random_access_iterator_tag;
-
-	        static constexpr std::size_t rank = ArrayExtents::rank;
-
-	        constexpr ArrayIndexIterator() noexcept = default;
-
-	        LLAMA_FN_HOST_ACC_INLINE constexpr ArrayIndexIterator(ArrayExtents extents, value_type current) noexcept
-	            : extents(extents)
-	            , current(current)
-	        {
-	        }
-
-	        LLAMA_FN_HOST_ACC_INLINE
-	        constexpr auto operator*() const noexcept -> value_type
-	        {
-	            return current;
-	        }
-
-	        LLAMA_FN_HOST_ACC_INLINE
-	        constexpr auto operator->() const noexcept -> pointer
-	        {
-	            return {**this};
-	        }
-
-	        LLAMA_FN_HOST_ACC_INLINE
-	        constexpr auto operator++() noexcept -> ArrayIndexIterator&
-	        {
-	            current[rank - 1]++;
-	            for(auto i = static_cast<int>(rank) - 2; i >= 0; i--)
-	            {
-	                if(current[i + 1] != extents[i + 1])
-	                    return *this;
-	                current[i + 1] = 0;
-	                current[i]++;
-	            }
-	            return *this;
-	        }
-
-	        LLAMA_FN_HOST_ACC_INLINE
-	        constexpr auto operator++(int) noexcept -> ArrayIndexIterator
-	        {
-	            auto tmp = *this;
-	            ++*this;
-	            return tmp;
-	        }
-
-	        LLAMA_FN_HOST_ACC_INLINE
-	        constexpr auto operator--() noexcept -> ArrayIndexIterator&
-	        {
-	            current[rank - 1]--;
-	            for(auto i = static_cast<int>(rank) - 2; i >= 0; i--)
-	            {
-	                // return if no underflow
-	                if(current[i + 1] != static_cast<typename ArrayExtents::value_type>(-1))
-	                    return *this;
-	                current[i + 1] = extents[i] - 1;
-	                current[i]--;
-	            }
-	            // decrementing beyond [0, 0, ..., 0] is UB
-	            return *this;
-	        }
-
-	        LLAMA_FN_HOST_ACC_INLINE
-	        constexpr auto operator--(int) noexcept -> ArrayIndexIterator
-	        {
-	            auto tmp = *this;
-	            --*this;
-	            return tmp;
-	        }
-
-	        LLAMA_FN_HOST_ACC_INLINE
-	        constexpr auto operator[](difference_type i) const noexcept -> reference
-	        {
-	            return *(*this + i);
-	        }
-
-	        LLAMA_FN_HOST_ACC_INLINE
-	        constexpr auto operator+=(difference_type n) noexcept -> ArrayIndexIterator&
-	        {
-	            // add n to all lower dimensions with carry
-	            for(auto i = static_cast<int>(rank) - 1; i > 0 && n != 0; i--)
-	            {
-	                n += static_cast<difference_type>(current[i]);
-	                const auto s = static_cast<difference_type>(extents[i]);
-	                auto mod = n % s;
-	                n /= s;
-	                if(mod < 0)
-	                {
-	                    mod += s;
-	                    n--;
-	                }
-	                current[i] = mod;
-	                assert(current[i] < extents[i]);
-	            }
-
-	            current[0] = static_cast<difference_type>(current[0]) + n;
-	            // current is either within bounds or at the end ([last + 1, 0, 0, ..., 0])
-	            assert(
-	                (current[0] < extents[0]
-	                 || (current[0] == extents[0]
-	                     && std::all_of(std::begin(current) + 1, std::end(current), [](auto c) { return c == 0; })))
-	                && "Iterator was moved past the end");
-
-	            return *this;
-	        }
-
-	        LLAMA_FN_HOST_ACC_INLINE
-	        friend constexpr auto operator+(ArrayIndexIterator it, difference_type n) noexcept -> ArrayIndexIterator
-	        {
-	            it += n;
-	            return it;
-	        }
-
-	        LLAMA_FN_HOST_ACC_INLINE
-	        friend constexpr auto operator+(difference_type n, ArrayIndexIterator it) noexcept -> ArrayIndexIterator
-	        {
-	            return it + n;
-	        }
-
-	        LLAMA_FN_HOST_ACC_INLINE
-	        constexpr auto operator-=(difference_type n) noexcept -> ArrayIndexIterator&
-	        {
-	            return operator+=(-n);
-	        }
-
-	        LLAMA_FN_HOST_ACC_INLINE
-	        friend constexpr auto operator-(ArrayIndexIterator it, difference_type n) noexcept -> ArrayIndexIterator
-	        {
-	            it -= n;
-	            return it;
-	        }
-
-	        LLAMA_FN_HOST_ACC_INLINE
-	        friend constexpr auto operator-(const ArrayIndexIterator& a, const ArrayIndexIterator& b) noexcept
-	            -> difference_type
-	        {
-	            assert(a.extents == b.extents);
-
-	            difference_type n = a.current[rank - 1] - b.current[rank - 1];
-	            difference_type size = a.extents[rank - 1];
-	            for(auto i = static_cast<int>(rank) - 2; i >= 0; i--)
-	            {
-	                n += (a.current[i] - b.current[i]) * size;
-	                size *= a.extents[i];
-	            }
-
-	            return n;
-	        }
-
-	        LLAMA_FN_HOST_ACC_INLINE
-	        friend constexpr auto operator==(
-	            const ArrayIndexIterator<ArrayExtents>& a,
-	            const ArrayIndexIterator<ArrayExtents>& b) noexcept -> bool
-	        {
-	            assert(a.extents == b.extents);
-	            return a.current == b.current;
-	        }
-
-	        LLAMA_FN_HOST_ACC_INLINE
-	        friend constexpr auto operator!=(
-	            const ArrayIndexIterator<ArrayExtents>& a,
-	            const ArrayIndexIterator<ArrayExtents>& b) noexcept -> bool
-	        {
-	            return !(a == b);
-	        }
-
-	        LLAMA_FN_HOST_ACC_INLINE
-	        friend constexpr auto operator<(const ArrayIndexIterator& a, const ArrayIndexIterator& b) noexcept -> bool
-	        {
-	            assert(a.extents == b.extents);
-	#ifdef __NVCC__
-	            // from: https://en.cppreference.com/w/cpp/algorithm/lexicographical_compare
-	            auto first1 = std::begin(a.current);
-	            auto last1 = std::end(a.current);
-	            auto first2 = std::begin(b.current);
-	            auto last2 = std::end(b.current);
-	            for(; (first1 != last1) && (first2 != last2); ++first1, (void) ++first2)
-	            {
-	                if(*first1 < *first2)
-	                    return true;
-	                if(*first2 < *first1)
-	                    return false;
-	            }
-
-	            return (first1 == last1) && (first2 != last2);
-	#else
-	            return std::lexicographical_compare(
-	                std::begin(a.current),
-	                std::end(a.current),
-	                std::begin(b.current),
-	                std::end(b.current));
-	#endif
-	        }
-
-	        LLAMA_FN_HOST_ACC_INLINE
-	        friend constexpr auto operator>(const ArrayIndexIterator& a, const ArrayIndexIterator& b) noexcept -> bool
-	        {
-	            return b < a;
-	        }
-
-	        LLAMA_FN_HOST_ACC_INLINE
-	        friend constexpr auto operator<=(const ArrayIndexIterator& a, const ArrayIndexIterator& b) noexcept -> bool
-	        {
-	            return !(a > b);
-	        }
-
-	        LLAMA_FN_HOST_ACC_INLINE
-	        friend constexpr auto operator>=(const ArrayIndexIterator& a, const ArrayIndexIterator& b) noexcept -> bool
-	        {
-	            return !(a < b);
-	        }
-
-	    private:
-	        ArrayExtents extents; // TODO(bgruber): we only need to store rank - 1 sizes
-	        value_type current;
-	    };
-
-	    /// Range allowing to iterate over all indices in an \ref ArrayExtents.
-	    LLAMA_EXPORT
-	    template<typename ArrayExtents>
-	    struct ArrayIndexRange
-	        : private ArrayExtents
-	#if CAN_USE_RANGES
-	        , std::ranges::view_base
-	#endif
-	    {
-	        static_assert(!std::is_const_v<ArrayExtents>);
-
-	        constexpr ArrayIndexRange() noexcept = default;
-
-	        LLAMA_FN_HOST_ACC_INLINE
-	        constexpr explicit ArrayIndexRange(ArrayExtents extents) noexcept : ArrayExtents(extents)
-	        {
-	        }
-
-	        LLAMA_FN_HOST_ACC_INLINE
-	        constexpr auto begin() const noexcept -> ArrayIndexIterator<ArrayExtents>
-	        {
-	            return {*this, typename ArrayExtents::Index{}};
-	        }
-
-	        LLAMA_FN_HOST_ACC_INLINE
-	        constexpr auto end() const noexcept -> ArrayIndexIterator<ArrayExtents>
-	        {
-	            auto endPos = typename ArrayExtents::Index{};
-	            endPos[0] = this->toArray()[0];
-	            return {*this, endPos};
-	        }
-	    };
-	} // namespace llama
-	// ==
-	// == ./include/llama/ArrayIndexRange.hpp ==
-	// ============================================================================
-
-// #include "Core.hpp"    // amalgamate: file already inlined
-
-namespace llama
-{
-// FIXME(bgruber): this test is actually not correct, because __cpp_constexpr_dynamic_alloc only guarantees constexpr
-// std::allocator
-#ifdef __cpp_constexpr_dynamic_alloc
-    namespace internal
-    {
-        template<typename T>
-        struct DynArray
-        {
-            constexpr DynArray() = default;
-
-            constexpr explicit DynArray(std::size_t n) : data(new T[n]{})
-            {
-            }
-
-            DynArray(const DynArray&) = delete;
-            DynArray(DynArray&&) = delete;
-            auto operator=(const DynArray&) -> DynArray& = delete;
-            auto operator=(DynArray&&) -> DynArray& = delete;
-
-            constexpr ~DynArray()
-            {
-                delete[] data;
-            }
-
-            constexpr void resize(std::size_t n)
-            {
-                delete[] data;
-                data = new T[n]{};
-            }
-
-            T* data = nullptr; // TODO(bgruber): replace by std::unique_ptr in C++23
-        };
-    } // namespace internal
-
-    /// Proofs by exhaustion of the array and record dimensions, that all values mapped to memory do not overlap.
-    // Unfortunately, this only works for smallish array dimensions, because of compiler limits on constexpr evaluation
-    // depth.
-    LLAMA_EXPORT
-    template<typename Mapping>
-    constexpr auto mapsNonOverlappingly(const Mapping& m) -> bool
-    {
-        internal::DynArray<internal::DynArray<std::uint64_t>> blobByteMapped(m.blobCount);
-        for(std::size_t i = 0; i < m.blobCount; i++)
-            blobByteMapped.data[i].resize(divCeil(m.blobSize(i), std::size_t{64}));
-
-        auto testAndSet = [&](auto blob, auto offset) constexpr
-        {
-            const auto bit = std::uint64_t{1} << (offset % 64);
-            if(blobByteMapped.data[blob].data[offset / 64] & bit)
-                return true;
-            blobByteMapped.data[blob].data[offset / 64] |= bit;
-            return false;
-        };
-
-        bool collision = false;
-        forEachLeafCoord<typename Mapping::RecordDim>(
-            [&](auto rc) constexpr
-            {
-                if(collision)
-                    return;
-                for(auto ai : ArrayIndexRange{m.extents()})
-                {
-                    using Type = GetType<typename Mapping::RecordDim, decltype(rc)>;
-                    const auto [blob, offset] = m.blobNrAndOffset(ai, rc);
-                    for(std::size_t b = 0; b < sizeof(Type); b++)
-                        if(testAndSet(blob, offset + b))
-                        {
-                            collision = true;
-                            break;
-                        }
-                }
-            });
-        return !collision;
-    }
-#endif
-
-    /// Proofs by exhaustion of the array and record dimensions, that at least PieceLength elements are always stored
-    /// contiguously.
-    // Unfortunately, this only works for smallish array dimensions, because of compiler limits on constexpr evaluation
-    // depth.
-    LLAMA_EXPORT
-    template<std::size_t PieceLength, typename Mapping>
-    constexpr auto mapsPiecewiseContiguous(const Mapping& m) -> bool
-    {
-        bool collision = false;
-        forEachLeafCoord<typename Mapping::RecordDim>(
-            [&](auto rc) constexpr
-            {
-                std::size_t flatIndex = 0;
-                std::size_t lastBlob = std::numeric_limits<std::size_t>::max();
-                std::size_t lastOffset = std::numeric_limits<std::size_t>::max();
-                for(auto ai : ArrayIndexRange{m.extents()})
-                {
-                    using Type = GetType<typename Mapping::RecordDim, decltype(rc)>;
-                    const auto [blob, offset] = m.blobNrAndOffset(ai, rc);
-                    if(flatIndex % PieceLength != 0 && (lastBlob != blob || lastOffset + sizeof(Type) != offset))
-                    {
-                        collision = true;
-                        break;
-                    }
-                    lastBlob = blob;
-                    lastOffset = offset;
-                    flatIndex++;
-                }
-            });
-        return !collision;
-    }
-} // namespace llama
-// ==
-// == ./include/llama/Proofs.hpp ==
-// ============================================================================
-
-// ============================================================================
-// == ./include/llama/Simd.hpp ==
-// ==
-// Copyright 2022 Bernhard Manfred Gruber
-// SPDX-License-Identifier: LGPL-3.0-or-later
-
-// #pragma once
-// #include "Core.hpp"    // amalgamate: file already inlined
-	// ============================================================================
-	// == ./include/llama/RecordRef.hpp ==
-	// ==
-	// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
-	// SPDX-License-Identifier: LGPL-3.0-or-later
-
-	// #pragma once
-		// ============================================================================
-		// == ./include/llama/Concepts.hpp ==
-		// ==
-		// Copyright 2022 Bernhard Manfred Gruber
-		// SPDX-License-Identifier: LGPL-3.0-or-later
-
-		// #pragma once
-		// #include "Array.hpp"    // amalgamate: file already inlined
-		// #include "Core.hpp"    // amalgamate: file already inlined
-		// #include "RecordCoord.hpp"    // amalgamate: file already inlined
-
-		// #include <type_traits>    // amalgamate: file already included
-
-		#if __has_include(<concepts>)
-		#    include <concepts>
-		#endif
-		namespace llama
-		{
-		#ifdef __cpp_lib_concepts
-		    LLAMA_EXPORT
-		    template<auto I>
-		    concept isConstexpr = requires { std::integral_constant<decltype(I), I>{}; };
-
-		    LLAMA_EXPORT
-		    template<typename M>
-		    concept Mapping = requires(M m) {
-		        typename M::ArrayExtents;
-		        typename M::RecordDim;
-		        {
-		            m.extents()
-		        } -> std::same_as<typename M::ArrayExtents>;
-		        {
-		            +M::blobCount
-		        } -> std::same_as<std::size_t>;
-		        requires isConstexpr<M::blobCount>;
-		        {
-		            m.blobSize(typename M::ArrayExtents::value_type{})
-		        } -> std::same_as<typename M::ArrayExtents::value_type>;
-		    };
-
-		    LLAMA_EXPORT
-		    template<typename M, typename RC>
-		    concept PhysicalField = requires(M m, typename M::ArrayExtents::Index ai) {
-		        {
-		            m.blobNrAndOffset(ai, RC{})
-		        } -> std::same_as<NrAndOffset<typename M::ArrayExtents::value_type>>;
-		    };
-
-		    template<typename M>
-		    struct MakeIsPhysical
-		    {
-		        template<typename RC>
-		        using fn = mp_bool<PhysicalField<M, RC>>;
-		    };
-
-		    LLAMA_EXPORT
-		    template<typename M>
-		    inline constexpr bool allFieldsArePhysical
-		        = mp_all_of<LeafRecordCoords<typename M::RecordDim>, MakeIsPhysical<M>::template fn>::value;
-
-		    LLAMA_EXPORT
-		    template<typename M>
-		    concept PhysicalMapping = Mapping<M> && allFieldsArePhysical<M>;
-
-		    LLAMA_EXPORT
-		    template<typename R>
-		    concept LValueReference = std::is_lvalue_reference_v<R>;
-
-		    LLAMA_EXPORT
-		    template<typename R>
-		    concept AdlTwoStepSwappable = requires(R a, R b) { swap(a, b); } || requires(R a, R b) { std::swap(a, b); };
-
-		    LLAMA_EXPORT
-		    template<typename R>
-		    concept ProxyReference = std::is_copy_constructible_v<R> && std::is_copy_assignable_v<R> && requires(R r) {
-		        typename R::value_type;
-		        {
-		            static_cast<typename R::value_type>(r)
-		        } -> std::same_as<typename R::value_type>;
-		        {
-		            r = std::declval<typename R::value_type>()
-		        } -> std::same_as<R&>;
-		    } && AdlTwoStepSwappable<R>;
-
-		    LLAMA_EXPORT
-		    template<typename R>
-		    concept AnyReference = LValueReference<R> || ProxyReference<R>;
-
-		    LLAMA_EXPORT
-		    template<typename R, typename T>
-		    concept AnyReferenceTo = (LValueReference<R> && std::is_same_v<std::remove_cvref_t<R>, T>)
-		        || (ProxyReference<R> && std::is_same_v<typename R::value_type, T>);
-
-		    LLAMA_EXPORT
-		    template<typename M, typename RC>
-		    concept ComputedField
-		        = M::isComputed(RC{}) && requires(M m, typename M::ArrayExtents::Index ai, std::byte** blobs) {
-		              {
-		                  m.compute(ai, RC{}, blobs)
-		              } -> AnyReferenceTo<GetType<typename M::RecordDim, RC>>;
-		          };
-
-		    template<typename M>
-		    struct MakeIsComputed
-		    {
-		        template<typename RC>
-		        using fn = mp_bool<ComputedField<M, RC>>;
-		    };
-
-		    LLAMA_EXPORT
-		    template<typename M>
-		    inline constexpr bool allFieldsAreComputed
-		        = mp_all_of<LeafRecordCoords<typename M::RecordDim>, MakeIsComputed<M>::template fn>::value;
-
-		    LLAMA_EXPORT
-		    template<typename M>
-		    concept FullyComputedMapping = Mapping<M> && allFieldsAreComputed<M>;
-
-		    LLAMA_EXPORT
-		    template<
-		        typename M,
-		        typename LeafCoords = LeafRecordCoords<typename M::RecordDim>,
-		        std::size_t PhysicalCount = mp_count_if<LeafCoords, MakeIsPhysical<M>::template fn>::value,
-		        std::size_t ComputedCount = mp_count_if<LeafCoords, MakeIsComputed<M>::template fn>::value>
-		    inline constexpr bool allFieldsArePhysicalOrComputed
-		        = (PhysicalCount + ComputedCount) >= mp_size<LeafCoords>::value && PhysicalCount > 0
-		        && ComputedCount > 0; // == instead of >= would be better, but it's not easy to count correctly,
-		                              // because we cannot check whether the call to blobNrOrOffset()
-		                              // or compute() is actually valid
-
-		    LLAMA_EXPORT
-		    template<typename M>
-		    concept PartiallyComputedMapping = Mapping<M> && allFieldsArePhysicalOrComputed<M>;
-
-		    /// Additional semantic requirement: &b[i] + j == &b[i + j] for any integral i and j in range of the blob
-		    LLAMA_EXPORT
-		    template<typename B>
-		    concept Blob = requires(B b, std::size_t i) {
-		        // according to http://eel.is/c++draft/intro.object#3 only std::byte and unsigned char can
-		        // provide storage for
-		        // other types
-		        requires std::is_lvalue_reference_v<decltype(b[i])>;
-		        requires std::same_as<std::remove_cvref_t<decltype(b[i])>, std::byte>
-		            || std::same_as<std::remove_cvref_t<decltype(b[i])>, unsigned char>;
-		    };
-
-		    LLAMA_EXPORT
-		    template<typename BA>
-		    concept BlobAllocator = requires(BA ba, std::size_t size) {
-		        {
-		            ba(std::integral_constant<std::size_t, 16>{}, size)
-		        } -> Blob;
-		    };
-
-		    LLAMA_EXPORT
-		    template<typename V>
-		    concept AnyView = requires(V v, const V cv) {
-		        typename V::Mapping;
-		        typename V::BlobType;
-		        typename V::ArrayExtents;
-		        typename V::ArrayIndex;
-		        typename V::RecordDim;
-		        typename V::Accessor;
-
-		        typename V::iterator;
-		        typename V::const_iterator;
-
-		        {
-		            v.mapping()
-		        } -> std::same_as<typename V::Mapping&>;
-
-		        {
-		            cv.mapping()
-		        } -> std::same_as<const typename V::Mapping&>;
-
-		        {
-		            v.accessor()
-		        } -> std::same_as<typename V::Accessor&>;
-
-		        {
-		            cv.accessor()
-		        } -> std::same_as<const typename V::Accessor&>;
-
-		        {
-		            cv.extents()
-		        } -> std::same_as<typename V::ArrayExtents>;
-
-		        {
-		            v.begin()
-		        } -> std::same_as<typename V::iterator>;
-
-		        {
-		            cv.begin()
-		        } -> std::same_as<typename V::const_iterator>;
-
-		        {
-		            v.end()
-		        } -> std::same_as<typename V::iterator>;
-
-		        {
-		            cv.end()
-		        } -> std::same_as<typename V::const_iterator>;
-
-		        {
-		            v.blobs()
-		        } -> std::same_as<Array<typename V::BlobType, V::Mapping::blobCount>&>;
-		        {
-		            cv.blobs()
-		        } -> std::same_as<const Array<typename V::BlobType, V::Mapping::blobCount>&>;
-		    };
-		#endif
-
-		    namespace internal
-		    {
-		        template<typename R, typename = void>
-		        struct IsProxyReferenceImpl : std::false_type
-		        {
-		        };
-
-		        template<typename R>
-		        struct IsProxyReferenceImpl<
-		            R,
-		            std::void_t<
-		                typename R::value_type,
-		                decltype(static_cast<typename R::value_type>(std::declval<R&>())),
-		                decltype(std::declval<R&>() = std::declval<typename R::value_type>())>>
-		            : std::bool_constant<std::is_copy_constructible_v<R> && std::is_copy_assignable_v<R>>
-		        {
-		        };
-		    } // namespace internal
-
-		    LLAMA_EXPORT
-		    template<typename R>
-		#ifdef __cpp_lib_concepts
-		    inline constexpr bool isProxyReference = ProxyReference<R>;
-		#else
-		    inline constexpr bool isProxyReference = internal::IsProxyReferenceImpl<R>::value;
-		#endif
-		} // namespace llama
-		// ==
-		// == ./include/llama/Concepts.hpp ==
-		// ============================================================================
-
-		// ============================================================================
-		// == ./include/llama/ProxyRefOpMixin.hpp ==
+		// == ./include/llama/Meta.hpp ==
 		// ==
 		// Copyright 2022 Bernhard Manfred Gruber
 		// SPDX-License-Identifier: LGPL-3.0-or-later
@@ -2694,156 +586,4626 @@ namespace llama
 		// #pragma once
 		// #include "macros.hpp"    // amalgamate: file already inlined
 
+		#include <boost/mp11.hpp>
+
 		namespace llama
 		{
-		    /// CRTP mixin for proxy reference types to support all compound assignment and increment/decrement operators.
-		    LLAMA_EXPORT
-		    template<typename Derived, typename ValueType>
-		    struct ProxyRefOpMixin
+		    // make mp11 directly available in the llama namespace
+		    using namespace boost::mp11;
+
+		    namespace internal
 		    {
-		    private:
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto derived() -> Derived&
+		        // adapted from boost::mp11, but with LLAMA_FN_HOST_ACC_INLINE
+		        template<template<typename...> typename L, typename... T, typename F>
+		        LLAMA_FN_HOST_ACC_INLINE constexpr void mpForEachInlined(L<T...>, F&& f)
 		        {
-		            return static_cast<Derived&>(*this);
+		            using A = int[sizeof...(T)];
+		            (void) A{((void) f(T{}), 0)...};
 		        }
 
-		        // in principle, load() could be const, but we use it only from non-const functions
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto load() -> ValueType
-		        {
-		            return static_cast<ValueType>(derived());
-		        }
+		        template<typename FromList, template<auto...> class ToList>
+		        struct mp_unwrap_values_into_impl;
 
-		        LLAMA_FN_HOST_ACC_INLINE constexpr void store(ValueType t)
+		        template<template<class...> class FromList, typename... Values, template<auto...> class ToList>
+		        struct mp_unwrap_values_into_impl<FromList<Values...>, ToList>
 		        {
-		            derived() = std::move(t);
-		        }
+		            using type = ToList<Values::value...>;
+		        };
 
-		    public:
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator+=(const ValueType& rhs) -> Derived&
-		        {
-		            ValueType lhs = load();
-		            lhs += rhs;
-		            store(lhs);
-		            return derived();
-		        }
+		        template<typename FromList, template<auto...> class ToList>
+		        using mp_unwrap_values_into = typename mp_unwrap_values_into_impl<FromList, ToList>::type;
 
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator-=(const ValueType& rhs) -> Derived&
+		        template<typename E, typename... Args>
+		        struct ReplacePlaceholdersImpl
 		        {
-		            ValueType lhs = load();
-		            lhs -= rhs;
-		            store(lhs);
-		            return derived();
-		        }
+		            using type = E;
+		        };
+		        template<std::size_t I, typename... Args>
+		        struct ReplacePlaceholdersImpl<mp_arg<I>, Args...>
+		        {
+		            using type = mp_at_c<mp_list<Args...>, I>;
+		        };
 
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator*=(const ValueType& rhs) -> Derived&
+		        template<template<typename...> typename E, typename... Ts, typename... Args>
+		        struct ReplacePlaceholdersImpl<E<Ts...>, Args...>
 		        {
-		            ValueType lhs = load();
-		            lhs *= rhs;
-		            store(lhs);
-		            return derived();
-		        }
+		            using type = E<typename ReplacePlaceholdersImpl<Ts, Args...>::type...>;
+		        };
+		    } // namespace internal
 
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator/=(const ValueType& rhs) -> Derived&
-		        {
-		            ValueType lhs = load();
-		            lhs /= rhs;
-		            store(lhs);
-		            return derived();
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator%=(const ValueType& rhs) -> Derived&
-		        {
-		            ValueType lhs = load();
-		            lhs %= rhs;
-		            store(lhs);
-		            return derived();
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator<<=(const ValueType& rhs) -> Derived&
-		        {
-		            ValueType lhs = load();
-		            lhs <<= rhs;
-		            store(lhs);
-		            return derived();
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator>>=(const ValueType& rhs) -> Derived&
-		        {
-		            ValueType lhs = load();
-		            lhs >>= rhs;
-		            store(lhs);
-		            return derived();
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator&=(const ValueType& rhs) -> Derived&
-		        {
-		            ValueType lhs = load();
-		            lhs &= rhs;
-		            store(lhs);
-		            return derived();
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator|=(const ValueType& rhs) -> Derived&
-		        {
-		            ValueType lhs = load();
-		            lhs |= rhs;
-		            store(lhs);
-		            return derived();
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator^=(const ValueType& rhs) -> Derived&
-		        {
-		            ValueType lhs = load();
-		            lhs ^= rhs;
-		            store(lhs);
-		            return derived();
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator++() -> Derived&
-		        {
-		            ValueType v = load();
-		            ++v;
-		            store(v);
-		            return derived();
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator++(int) -> ValueType
-		        {
-		            ValueType v = load();
-		            ValueType old = v++;
-		            store(v);
-		            return old;
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator--() -> Derived&
-		        {
-		            ValueType v = load();
-		            --v;
-		            store(v);
-		            return derived();
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator--(int) -> ValueType
-		        {
-		            ValueType v = load();
-		            ValueType old = v--;
-		            store(v);
-		            return old;
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE friend constexpr void swap(Derived a, Derived b) noexcept
-		        {
-		            const auto va = static_cast<ValueType>(a);
-		            const auto vb = static_cast<ValueType>(b);
-		            a = vb;
-		            b = va;
-		        }
-		    };
+		    LLAMA_EXPORT
+		    template<typename Expression, typename... Args>
+		    using ReplacePlaceholders = typename internal::ReplacePlaceholdersImpl<Expression, Args...>::type;
 		} // namespace llama
 		// ==
-		// == ./include/llama/ProxyRefOpMixin.hpp ==
+		// == ./include/llama/Meta.hpp ==
 		// ============================================================================
 
+
+	#include <limits>
+	#include <type_traits>
+
+	namespace llama
+	{
+	    // TODO(bgruber): make this an alias in C++20, when we have CTAD for aliases
+	    /// Represents a run-time index into the array dimensions.
+	    /// \tparam Dim Compile-time number of dimensions.
+	    LLAMA_EXPORT
+	    template<typename T, std::size_t Dim>
+	    struct ArrayIndex : Array<T, Dim>
+	    {
+	        static constexpr std::size_t rank = Dim;
+	    };
+
+	    // allow comparing ArrayIndex with different size types:
+	    LLAMA_EXPORT
+	    template<std::size_t Dim, typename TA, typename TB>
+	    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator==(ArrayIndex<TA, Dim> a, ArrayIndex<TB, Dim> b) -> bool
+	    {
+	        for(std::size_t i = 0; i < Dim; ++i)
+	            if(a[i] != b[i])
+	                return false;
+	        return true;
+	    }
+
+	    LLAMA_EXPORT
+	    template<std::size_t Dim, typename TA, typename TB>
+	    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator!=(ArrayIndex<TA, Dim> a, ArrayIndex<TB, Dim> b) -> bool
+	    {
+	        return !(a == b);
+	    }
+
+	    static_assert(
+	        std::is_trivially_default_constructible_v<ArrayIndex<int, 1>>); // so ArrayIndex<1>{} will produce a zeroed
+	                                                                        // index. Should hold for all dimensions,
+	                                                                        // but just checking for <1> here.
+	    static_assert(std::is_trivially_copy_constructible_v<ArrayIndex<int, 1>>);
+	    static_assert(std::is_trivially_move_constructible_v<ArrayIndex<int, 1>>);
+	    static_assert(std::is_trivially_copy_assignable_v<ArrayIndex<int, 1>>);
+	    static_assert(std::is_trivially_move_assignable_v<ArrayIndex<int, 1>>);
+
+	    namespace internal
+	    {
+	        template<typename Default, typename... Ints>
+	        struct IndexTypeFromArgs
+	        {
+	            using type = Default;
+	        };
+
+	        template<typename Default, typename FirstInt, typename... Ints>
+	        struct IndexTypeFromArgs<Default, FirstInt, Ints...>
+	        {
+	            static_assert(std::conjunction_v<std::is_same<FirstInt, Ints>...>, "All index types must be the same");
+	            using type = FirstInt;
+	        };
+	    } // namespace internal
+
+	    LLAMA_EXPORT
+	    template<typename... Args>
+	    ArrayIndex(Args...)
+	        -> ArrayIndex<typename internal::IndexTypeFromArgs<std::size_t, Args...>::type, sizeof...(Args)>;
+	} // namespace llama
+
+	LLAMA_EXPORT
+	template<typename V, size_t N>
+	struct std::tuple_size<llama::ArrayIndex<V, N>> : std::integral_constant<size_t, N> // NOLINT(cert-dcl58-cpp)
+	{
+	};
+
+	LLAMA_EXPORT
+	template<size_t I, typename V, size_t N>
+	struct std::tuple_element<I, llama::ArrayIndex<V, N>> // NOLINT(cert-dcl58-cpp)
+	{
+	    using type = V;
+	};
+
+	namespace llama
+	{
+	    namespace internal
+	    {
+	        struct Dyn
+	        {
+	            template<typename T, std::enable_if_t<std::is_integral_v<T>, int> = 0>
+	            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
+	            LLAMA_FN_HOST_ACC_INLINE constexpr operator T() const
+	            {
+	                return static_cast<T>(-1);
+	            }
+
+	            template<typename T>
+	            LLAMA_FN_HOST_ACC_INLINE friend constexpr auto operator==(T i, Dyn) -> bool
+	            {
+	                return i == static_cast<T>(-1);
+	            }
+
+	            template<typename T>
+	            LLAMA_FN_HOST_ACC_INLINE friend constexpr auto operator==(Dyn d, T i) -> bool
+	            {
+	                return i == d;
+	            }
+
+	            template<typename T>
+	            LLAMA_FN_HOST_ACC_INLINE friend constexpr auto operator!=(T i, Dyn d) -> bool
+	            {
+	                return !(i == d);
+	            }
+
+	            template<typename T>
+	            LLAMA_FN_HOST_ACC_INLINE friend constexpr auto operator!=(Dyn d, T i) -> bool
+	            {
+	                return !(i == d);
+	            }
+	        };
+	    } // namespace internal
+
+	    LLAMA_EXPORT
+	    /// Used as a template argument to \ref ArrayExtents to mark a dynamic extent.
+	    inline constexpr auto dyn = internal::Dyn{};
+
+	    /// ArrayExtents holding compile and runtime indices. This is conceptually equivalent to the std::extent of
+	    /// std::mdspan (@see: https://wg21.link/P0009) including the changes to make the size_type controllable (@see:
+	    /// https://wg21.link/P2553).
+	    LLAMA_EXPORT
+	    template<typename T = std::size_t, T... Sizes>
+	    struct ArrayExtents : Array<T, ((Sizes == dyn) + ... + 0)>
+	    {
+	        static constexpr std::size_t rank = sizeof...(Sizes);
+	        static constexpr auto rankDynamic = ((Sizes == dyn) + ... + 0);
+	        static constexpr auto rankStatic = rank - rankDynamic;
+
+	        using Index = ArrayIndex<T, rank>;
+	        using value_type = T;
+
+	        template<std::size_t I>
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto get() const -> value_type
+	        {
+	            using TypeList = mp_list_c<T, Sizes...>;
+	            constexpr auto extent = mp_at_c<TypeList, I>::value;
+	            if constexpr(extent != dyn)
+	                return extent;
+	            else
+	                return static_cast<const Array<value_type, rankDynamic>&>(
+	                    *this)[+mp_count<mp_take_c<TypeList, I>, std::integral_constant<T, dyn>>::value];
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator[](T i) const -> value_type
+	        {
+	            return mp_with_index<rank>(i, [&](auto ic) LLAMA_LAMBDA_INLINE { return get<decltype(ic)::value>(); });
+	        }
+
+	    private:
+	        template<std::size_t... Is>
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto toArray(std::index_sequence<Is...>) const -> Index
+	        {
+	            return {get<Is>()...};
+	        }
+
+	    public:
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto toArray() const -> Index
+	        {
+	            return toArray(std::make_index_sequence<rank>{});
+	        }
+	    };
+
+	    LLAMA_EXPORT
+	    template<typename T>
+	    struct ArrayExtents<T>
+	    {
+	        static constexpr std::size_t rank = 0;
+	        static constexpr auto rankDynamic = 0;
+	        static constexpr auto rankStatic = 0;
+
+	        using Index = ArrayIndex<T, 0>;
+	        using value_type = T;
+
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto toArray() const -> Index
+	        {
+	            return {};
+	        }
+	    };
+
+	    LLAMA_EXPORT
+	    template<typename... Args>
+	    ArrayExtents(Args...) -> ArrayExtents<
+	        typename internal::IndexTypeFromArgs<std::size_t, Args...>::type,
+	        (Args{}, dyn)...>; // we just use Args to repeat dyn as often as Args is big
+
+	    static_assert(std::is_trivially_default_constructible_v<ArrayExtents<std::size_t, 1>>);
+	    static_assert(std::is_trivially_copy_constructible_v<ArrayExtents<std::size_t, 1>>);
+	    static_assert(std::is_trivially_move_constructible_v<ArrayExtents<std::size_t, 1>>);
+	    static_assert(std::is_trivially_copy_assignable_v<ArrayExtents<std::size_t, 1>>);
+	    static_assert(std::is_trivially_move_assignable_v<ArrayExtents<std::size_t, 1>>);
+	    static_assert(std::is_empty_v<ArrayExtents<std::size_t, 1>>);
+
+	    LLAMA_EXPORT
+	    template<typename SizeTypeA, SizeTypeA... SizesA, typename SizeTypeB, SizeTypeB... SizesB>
+	    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator==(
+	        ArrayExtents<SizeTypeA, SizesA...> a,
+	        ArrayExtents<SizeTypeB, SizesB...> b) -> bool
+	    {
+	        return a.toArray() == b.toArray();
+	    }
+
+	    LLAMA_EXPORT
+	    template<typename SizeTypeA, SizeTypeA... SizesA, typename SizeTypeB, SizeTypeB... SizesB>
+	    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator!=(
+	        ArrayExtents<SizeTypeA, SizesA...> a,
+	        ArrayExtents<SizeTypeB, SizesB...> b) -> bool
+	    {
+	        return !(a == b);
+	    }
+
+	    LLAMA_EXPORT
+	    template<typename SizeType, SizeType... Sizes>
+	    LLAMA_FN_HOST_ACC_INLINE constexpr auto product(ArrayExtents<SizeType, Sizes...> e) -> SizeType
+	    {
+	        return product(e.toArray());
+	    }
+
+	    namespace internal
+	    {
+	        template<typename SizeType, SizeType Extent, std::size_t... Is>
+	        constexpr auto makeArrayExtents(std::index_sequence<Is...>)
+	        {
+	            return ArrayExtents<SizeType, (static_cast<void>(Is), Extent)...>{};
+	        }
+	    } // namespace internal
+
+	    LLAMA_EXPORT
+	    /// N-dimensional ArrayExtents where all N extents are Extent.
+	    template<typename SizeType, std::size_t N, SizeType Extent>
+	    using ArrayExtentsNCube = decltype(internal::makeArrayExtents<SizeType, Extent>(std::make_index_sequence<N>{}));
+
+	    LLAMA_EXPORT
+	    /// N-dimensional ArrayExtents where all values are dynamic.
+	    template<typename SizeType, std::size_t N>
+	    using ArrayExtentsDynamic = ArrayExtentsNCube<SizeType, N, dyn>;
+
+	    LLAMA_EXPORT
+	    template<typename SizeType, std::size_t Dim, typename Func, typename... OuterIndices>
+	    LLAMA_FN_HOST_ACC_INLINE void forEachArrayIndex(
+	        [[maybe_unused]] const ArrayIndex<SizeType, Dim>& extents,
+	        Func&& func,
+	        OuterIndices... outerIndices)
+	    {
+	        constexpr auto fixedIndices = sizeof...(outerIndices);
+	        LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
+	        if constexpr(fixedIndices < Dim)
+	        {
+	            for(SizeType i = 0; i < extents[fixedIndices]; i++)
+	                forEachArrayIndex(extents, std::forward<Func>(func), outerIndices..., i);
+	        }
+	        else
+	        {
+	            std::forward<Func>(func)(ArrayIndex<SizeType, fixedIndices>{outerIndices...});
+	        }
+	        LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
+	    }
+
+	    LLAMA_EXPORT
+	    template<typename SizeType, SizeType... Sizes, typename Func>
+	    LLAMA_FN_HOST_ACC_INLINE void forEachArrayIndex(ArrayExtents<SizeType, Sizes...> extents, Func&& func)
+	    {
+	        forEachArrayIndex(extents.toArray(), std::forward<Func>(func));
+	    }
+	} // namespace llama
+
+	LLAMA_EXPORT
+	template<typename SizeType, SizeType... Sizes>
+	struct std::tuple_size<llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(cert-dcl58-cpp)
+	    : std::integral_constant<std::size_t, sizeof...(Sizes)>
+	{
+	};
+
+	LLAMA_EXPORT
+	template<typename SizeType, std::size_t I, SizeType... Sizes>
+	struct std::tuple_element<I, llama::ArrayExtents<SizeType, Sizes...>> // NOLINT(cert-dcl58-cpp)
+	{
+	    using type = SizeType;
+	};
+	// ==
+	// == ./include/llama/ArrayExtents.hpp ==
+	// ============================================================================
+
+	// ============================================================================
+	// == ./include/llama/Core.hpp ==
+	// ==
+	// Copyright 2023 Alexander Matthes, Bernhard Manfred Gruber
+	// SPDX-License-Identifier: LGPL-3.0-or-later
+
+	// #pragma once
+	// #include "ArrayExtents.hpp"    // amalgamate: file already inlined
+	// #include "Meta.hpp"    // amalgamate: file already inlined
+		// ============================================================================
+		// == ./include/llama/RecordCoord.hpp ==
+		// ==
+		// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
+		// SPDX-License-Identifier: LGPL-3.0-or-later
+
+		// #pragma once
+		// #include "Meta.hpp"    // amalgamate: file already inlined
+		// #include "macros.hpp"    // amalgamate: file already inlined
+
+		#include <array>
+		// #include <ostream>    // amalgamate: file already included
+		// #include <type_traits>    // amalgamate: file already included
+
+		namespace llama
+		{
+		    /// Represents a coordinate for a record inside the record dimension tree.
+		    /// \tparam Coords... the compile time coordinate.
+		    LLAMA_EXPORT
+		    template<std::size_t... Coords>
+		    struct RecordCoord
+		    {
+		        /// The list of integral coordinates as `mp_list`.
+		        using List = mp_list_c<std::size_t, Coords...>;
+
+		        static constexpr std::size_t front = mp_front<List>::value;
+		        static constexpr std::size_t back = mp_back<List>::value;
+		        static constexpr std::size_t size = sizeof...(Coords);
+		    };
+
+		    LLAMA_EXPORT
+		    template<>
+		    struct RecordCoord<>
+		    {
+		        using List = mp_list_c<std::size_t>;
+
+		        static constexpr std::size_t size = 0;
+		    };
+
+		    LLAMA_EXPORT
+		    template<std::size_t... CoordsA, std::size_t... CoordsB>
+		    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator==(RecordCoord<CoordsA...>, RecordCoord<CoordsB...>)
+		    {
+		        return false;
+		    }
+
+		    LLAMA_EXPORT
+		    template<std::size_t... Coords>
+		    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator==(RecordCoord<Coords...>, RecordCoord<Coords...>)
+		    {
+		        return true;
+		    }
+
+		    LLAMA_EXPORT
+		    template<std::size_t... CoordsA, std::size_t... CoordsB>
+		    LLAMA_FN_HOST_ACC_INLINE constexpr auto operator!=(RecordCoord<CoordsA...> a, RecordCoord<CoordsB...> b)
+		    {
+		        return !(a == b);
+		    }
+
+		    LLAMA_EXPORT
+		    template<typename T>
+		    inline constexpr bool isRecordCoord = false;
+
+		    LLAMA_EXPORT
+		    template<std::size_t... Coords>
+		    inline constexpr bool isRecordCoord<RecordCoord<Coords...>> = true;
+
+		    LLAMA_EXPORT
+		    template<std::size_t... RCs>
+		    auto operator<<(std::ostream& os, RecordCoord<RCs...>) -> std::ostream&
+		    {
+		        os << "RecordCoord<";
+		        bool first = true;
+		        for(auto rc : std::array<std::size_t, sizeof...(RCs)>{RCs...})
+		        {
+		            if(first)
+		                first = false;
+		            else
+		                os << ", ";
+		            os << rc;
+		        }
+		        os << ">";
+		        return os;
+		    }
+
+		    inline namespace literals
+		    {
+		        /// Literal operator for converting a numeric literal into a \ref RecordCoord.
+		        LLAMA_EXPORT
+		        template<char... Digits>
+		        constexpr auto operator"" _RC()
+		        {
+		            constexpr auto coord = []() constexpr
+		            {
+		                const char digits[] = {(Digits - 48)...};
+		                std::size_t acc = 0;
+		                std ::size_t powerOf10 = 1;
+		                for(int i = sizeof...(Digits) - 1; i >= 0; i--)
+		                {
+		                    acc += digits[i] * powerOf10;
+		                    powerOf10 *= 10;
+		                }
+		                return acc;
+		            }();
+		            return RecordCoord<coord>{};
+		        }
+		    } // namespace literals
+
+		    /// Converts a type list of integral constants into a \ref RecordCoord.
+		    LLAMA_EXPORT
+		    template<typename L>
+		    using RecordCoordFromList = internal::mp_unwrap_values_into<L, RecordCoord>;
+
+		    /// Concatenate a set of \ref RecordCoord%s.
+		    LLAMA_EXPORT
+		    template<typename... RecordCoords>
+		    using Cat = RecordCoordFromList<mp_append<typename RecordCoords::List...>>;
+
+		    /// Concatenate a set of \ref RecordCoord%s instances.
+		    LLAMA_EXPORT
+		    template<typename... RecordCoords>
+		    LLAMA_FN_HOST_ACC_INLINE constexpr auto cat(RecordCoords...)
+		    {
+		        return Cat<RecordCoords...>{};
+		    }
+
+		    /// RecordCoord without first coordinate component.
+		    LLAMA_EXPORT
+		    template<typename RecordCoord>
+		    using PopFront = RecordCoordFromList<mp_pop_front<typename RecordCoord::List>>;
+
+		    namespace internal
+		    {
+		        template<std::size_t... Coords1, std::size_t... Coords2>
+		        constexpr auto recordCoordCommonPrefixIsBiggerImpl(RecordCoord<Coords1...>, RecordCoord<Coords2...>) -> bool
+		        {
+		            // CTAD does not work if Coords1/2 is an empty pack
+		            std::array<std::size_t, sizeof...(Coords1)> a1{Coords1...};
+		            std::array<std::size_t, sizeof...(Coords2)> a2{Coords2...};
+		            for(std::size_t i = 0; i < std::min(a1.size(), a2.size()); i++)
+		            {
+		                if(a1[i] > a2[i])
+		                    return true;
+		                if(a1[i] < a2[i])
+		                    return false;
+		            }
+		            return false;
+		        };
+		    } // namespace internal
+
+		    /// Checks wether the first RecordCoord is bigger than the second.
+		    LLAMA_EXPORT
+		    template<typename First, typename Second>
+		    inline constexpr auto recordCoordCommonPrefixIsBigger
+		        = internal::recordCoordCommonPrefixIsBiggerImpl(First{}, Second{});
+
+		    namespace internal
+		    {
+		        template<std::size_t... Coords1, std::size_t... Coords2>
+		        constexpr auto recordCoordCommonPrefixIsSameImpl(RecordCoord<Coords1...>, RecordCoord<Coords2...>) -> bool
+		        {
+		            // CTAD does not work if Coords1/2 is an empty pack
+		            std::array<std::size_t, sizeof...(Coords1)> a1{Coords1...};
+		            std::array<std::size_t, sizeof...(Coords2)> a2{Coords2...};
+		            for(std::size_t i = 0; i < std::min(a1.size(), a2.size()); i++)
+		                if(a1[i] != a2[i])
+		                    return false;
+		            return true;
+		        };
+		    } // namespace internal
+
+		    /// Checks whether two \ref RecordCoord%s are the same or one is the prefix of the other.
+		    LLAMA_EXPORT
+		    template<typename First, typename Second>
+		    inline constexpr auto recordCoordCommonPrefixIsSame
+		        = internal::recordCoordCommonPrefixIsSameImpl(First{}, Second{});
+		} // namespace llama
+		// ==
+		// == ./include/llama/RecordCoord.hpp ==
+		// ============================================================================
+
+
+	#include <iostream>
+	#include <string>
+	// #include <type_traits>    // amalgamate: file already included
+	#if __has_include(<boost/describe/members.hpp>)
+	#    include <boost/describe/members.hpp>
+	#endif
+
+	namespace llama
+	{
+	    /// Anonymous naming for a \ref Field.
+	    LLAMA_EXPORT
+	    struct NoName
+	    {
+	    };
+
+	    /// @brief Tells whether the given type is allowed as a field type in LLAMA. Such types need to be trivially
+	    /// constructible and trivially destructible.
+	    LLAMA_EXPORT
+	    template<typename T>
+	    inline constexpr bool isAllowedFieldType = std::is_trivially_destructible_v<T>;
+
+	    /// Record dimension tree node which may either be a leaf or refer to a child tree presented as another \ref
+	    /// Record.
+	    /// \tparam Tag Name of the node. May be any type (struct, class).
+	    /// \tparam Type Type of the node. May be one of three cases. 1. another sub tree consisting of a nested \ref
+	    /// Record. 2. an array of static size of any type, in which case a Record with as many \ref Field as the array
+	    /// size is created, named \ref RecordCoord specialized on consecutive numbers I. 3. A scalar type different from
+	    /// \ref Record, making this node a leaf of this type.
+	    LLAMA_EXPORT
+	    template<typename Tag, typename Type>
+	    struct Field
+	    {
+	        static_assert(isAllowedFieldType<Type>, "This field's type is not allowed");
+	    };
+
+	    LLAMA_EXPORT
+	    template<typename T>
+	    inline constexpr bool isField = false;
+
+	    LLAMA_EXPORT
+	    template<typename Tag, typename Type>
+	    inline constexpr bool isField<Field<Tag, Type>> = true;
+
+	    /// A type list of \ref Field%s which may be used to define a record dimension.
+	    LLAMA_EXPORT
+	    template<typename... Fields>
+	#if __cpp_concepts
+	    // Cannot use a fold expression here, because clang/nvcc/icx cannot handle more than 256 arguments.
+	    // If you get an error here, then you passed a type which is not llama::Field as argument to Record
+	        requires(mp_all<mp_bool<isField<Fields>>...>::value)
+	#endif
+	    struct Record
+	    {
+	    };
+
+	#if __cpp_nontype_template_args >= 201911L && !defined(__EDG__)
+	    /// Defined when string literals are supported in the record dimension. See also \ref NamedField.
+	#    define LLAMA_HAS_STRING_FIELDS
+
+	    namespace internal
+	    {
+	        // N includes the char to store the null-terminator
+	        template<std::size_t N>
+	        struct FixedString
+	        {
+	            constexpr FixedString(const char* str)
+	            {
+	                std::copy(str, str + N, data);
+	            }
+
+	            char data[N];
+	        };
+
+	        template<std::size_t N>
+	        FixedString(const char (&str)[N]) -> FixedString<N>;
+
+	        template<FixedString Name>
+	        struct StringTag
+	        {
+	        };
+	    } // namespace internal
+
+	    inline namespace literals
+	    {
+	        /// Literal operator for converting a string literal "abc"_Name to a StringTag<"Name">.
+	        LLAMA_EXPORT
+	        template<internal::FixedString Name>
+	        auto operator"" _Name()
+	        {
+	            return internal::StringTag<Name>{};
+	        }
+	    } // namespace literals
+
+	    /// Alternative to \ref Field. Use with string literals, e.g. NamedField<"x", float>. Access at the \ref View
+	    /// requires to use "x"_Name then.
+	    LLAMA_EXPORT
+	    template<internal::FixedString Tag, typename Type>
+	    using NamedField = Field<internal::StringTag<Tag>, Type>;
+
+	#    if __has_include(<boost/describe/members.hpp>)
+	    /// Defined when LLAMA has support to reflect a C++ struct into a record dimension using Boost.Describe.
+	#        define LLAMA_CAN_REFLECT_RECORD_DIM
+	    namespace internal
+	    {
+	        template<typename T>
+	        auto reflectToRecordDim();
+
+	        template<class C, typename T>
+	        auto memberPointerPointeeType(T C::*) -> T;
+
+	        constexpr auto constexpr_strlen(const char* s)
+	        {
+	            const char* end = s;
+	            while(*end != 0)
+	                end++;
+	            return end - s;
+	        }
+
+	        template<typename Member>
+	        using MakeFieldFromMemberDescriptor = NamedField<
+	            FixedString<constexpr_strlen(Member::name) + 1>(Member::name),
+	            decltype(reflectToRecordDim<decltype(memberPointerPointeeType(Member::pointer))>())>;
+
+	        template<typename T>
+	        auto reflectToRecordDim()
+	        {
+	            if constexpr(boost::describe::has_describe_members<T>::value)
+	            {
+	                using MemberList = boost::describe::describe_members<T, boost::describe::mod_public>;
+	                return mp_rename<mp_transform<MakeFieldFromMemberDescriptor, MemberList>, llama::Record>{};
+	            }
+	            else
+	                return T{};
+	        }
+	    } // namespace internal
+
+	    /// Reflects the given type T using Boost.Describe and creates a record dimension for it.
+	    LLAMA_EXPORT
+	    template<typename T>
+	    using ReflectToRecordDim = decltype(internal::reflectToRecordDim<T>());
+	#    endif
+	#endif
+
+	    LLAMA_EXPORT
+	    template<typename T>
+	    struct NrAndOffset
+	    {
+	        T nr;
+	        T offset;
+
+	        friend auto operator<<(std::ostream& os, const NrAndOffset& value) -> std::ostream&
+	        {
+	            return os << "NrAndOffset{" << value.nr << ", " << value.offset << "}";
+	        }
+	    };
+
+	    LLAMA_EXPORT
+	    template<typename Int>
+	    NrAndOffset(Int, Int) -> NrAndOffset<Int>;
+
+	    LLAMA_EXPORT
+	    template<typename TA, typename TB>
+	    auto operator==(const NrAndOffset<TA>& a, const NrAndOffset<TB>& b) -> bool
+	    {
+	        return a.nr == b.nr && a.offset == b.offset;
+	    }
+
+	    LLAMA_EXPORT
+	    template<typename TA, typename TB>
+	    auto operator!=(const NrAndOffset<TA>& a, const NrAndOffset<TB>& b) -> bool
+	    {
+	        return !(a == b);
+	    }
+
+	    /// Get the tag from a \ref Field.
+	    LLAMA_EXPORT
+	    template<typename Field>
+	    using GetFieldTag = mp_first<Field>;
+
+	    /// Get the type from a \ref Field.
+	    LLAMA_EXPORT
+	    template<typename Field>
+	    using GetFieldType = mp_second<Field>;
+
+	    LLAMA_EXPORT
+	    template<typename T>
+	    inline constexpr auto isRecord = false;
+
+	    LLAMA_EXPORT
+	    template<typename... Fields>
+	    inline constexpr auto isRecord<Record<Fields...>> = true;
+
+	    namespace internal
+	    {
+	        template<typename RecordDim, typename RecordCoord>
+	        struct GetTagsImpl;
+
+	        template<typename... Fields, std::size_t FirstCoord, std::size_t... Coords>
+	        struct GetTagsImpl<Record<Fields...>, RecordCoord<FirstCoord, Coords...>>
+	        {
+	            using Field = mp_at_c<mp_list<Fields...>, FirstCoord>;
+	            using ChildTag = GetFieldTag<Field>;
+	            using ChildType = GetFieldType<Field>;
+	            using type = mp_push_front<typename GetTagsImpl<ChildType, RecordCoord<Coords...>>::type, ChildTag>;
+	        };
+
+	        template<typename ChildType, std::size_t Count, std::size_t FirstCoord, std::size_t... Coords>
+	        struct GetTagsImpl<ChildType[Count], RecordCoord<FirstCoord, Coords...>>
+	        {
+	            using ChildTag = RecordCoord<FirstCoord>;
+	            using type = mp_push_front<typename GetTagsImpl<ChildType, RecordCoord<Coords...>>::type, ChildTag>;
+	        };
+
+	        template<typename T>
+	        struct GetTagsImpl<T, RecordCoord<>>
+	        {
+	            using type = mp_list<>;
+	        };
+	    } // namespace internal
+
+	    /// Get the tags of all \ref Field%s from the root of the record dimension tree until to the node identified by
+	    /// \ref RecordCoord.
+	    LLAMA_EXPORT
+	    template<typename RecordDim, typename RecordCoord>
+	    using GetTags = typename internal::GetTagsImpl<RecordDim, RecordCoord>::type;
+
+	    namespace internal
+	    {
+	        template<typename RecordDim, typename RecordCoord>
+	        struct GetTagImpl
+	        {
+	            using type = mp_back<GetTags<RecordDim, RecordCoord>>;
+	        };
+
+	        template<typename RecordDim>
+	        struct GetTagImpl<RecordDim, RecordCoord<>>
+	        {
+	            using type = NoName;
+	        };
+	    } // namespace internal
+
+	    /// Get the tag of the \ref Field at a \ref RecordCoord inside the record dimension tree.
+	    LLAMA_EXPORT
+	    template<typename RecordDim, typename RecordCoord>
+	    using GetTag = typename internal::GetTagImpl<RecordDim, RecordCoord>::type;
+
+	    /// Is true if, starting at two coordinates in two record dimensions, all subsequent nodes in the record dimension
+	    /// tree have the same tag.
+	    /// \tparam RecordDimA First record dimension.
+	    /// \tparam RecordCoordA \ref RecordCoord based on RecordDimA along which the tags are compared.
+	    /// \tparam RecordDimB second record dimension.
+	    /// \tparam RecordCoordB \ref RecordCoord based on RecordDimB along which the tags are compared.
+	    LLAMA_EXPORT
+	    template<typename RecordDimA, typename RecordCoordA, typename RecordDimB, typename RecordCoordB>
+	    inline constexpr auto hasSameTags = []() constexpr
+	    {
+	        if constexpr(RecordCoordA::size != RecordCoordB::size)
+	            return false;
+	        else if constexpr(RecordCoordA::size == 0 && RecordCoordB::size == 0)
+	            return true;
+	        else
+	            return std::is_same_v<GetTags<RecordDimA, RecordCoordA>, GetTags<RecordDimB, RecordCoordB>>;
+	    }();
+
+	    namespace internal
+	    {
+	        template<typename FieldList, typename Tag>
+	        struct FindFieldByTag
+	        {
+	            template<typename Field>
+	            using HasTag = std::is_same<GetFieldTag<Field>, Tag>;
+
+	            static constexpr auto value = mp_find_if<FieldList, HasTag>::value;
+	        };
+
+	        template<typename RecordDim, typename RecordCoord, typename... Tags>
+	        struct GetCoordFromTagsImpl
+	        {
+	            static_assert(mp_size<RecordDim>::value != 0, "Tag combination is not valid");
+	        };
+
+	        template<typename... Fields, std::size_t... ResultCoords, typename FirstTag, typename... Tags>
+	        struct GetCoordFromTagsImpl<Record<Fields...>, RecordCoord<ResultCoords...>, FirstTag, Tags...>
+	        {
+	            static constexpr auto tagIndex = FindFieldByTag<mp_list<Fields...>, FirstTag>::value;
+	            static_assert(
+	                tagIndex < sizeof...(Fields),
+	                "FirstTag was not found inside this Record. Does your record dimension contain the tag you access "
+	                "with?");
+
+	            using ChildType = GetFieldType<mp_at_c<Record<Fields...>, tagIndex>>;
+
+	            using type =
+	                typename GetCoordFromTagsImpl<ChildType, RecordCoord<ResultCoords..., tagIndex>, Tags...>::type;
+	        };
+
+	        template<
+	            typename ChildType,
+	            std::size_t Count,
+	            std::size_t... ResultCoords,
+	            typename FirstTag,
+	            typename... Tags>
+	        struct GetCoordFromTagsImpl<ChildType[Count], RecordCoord<ResultCoords...>, FirstTag, Tags...>
+	        {
+	            static_assert(isRecordCoord<FirstTag>, "Please use a RecordCoord<I> to index into static arrays");
+	            static_assert(FirstTag::size == 1, "Expected RecordCoord with 1 coordinate");
+	            static_assert(FirstTag::front < Count, "Index out of bounds");
+
+	            using type =
+	                typename GetCoordFromTagsImpl<ChildType, RecordCoord<ResultCoords..., FirstTag::front>, Tags...>::type;
+	        };
+
+	        template<typename RecordDim, typename RecordCoord>
+	        struct GetCoordFromTagsImpl<RecordDim, RecordCoord>
+	        {
+	            using type = RecordCoord;
+	        };
+
+	        // unpack a list of tags
+	        template<typename... Fields, typename... Tags>
+	        struct GetCoordFromTagsImpl<Record<Fields...>, RecordCoord<>, mp_list<Tags...>>
+	            : GetCoordFromTagsImpl<Record<Fields...>, RecordCoord<>, Tags...>
+	        {
+	        };
+
+	        template<typename ChildType, std::size_t Count, typename... Tags>
+	        struct GetCoordFromTagsImpl<ChildType[Count], RecordCoord<>, mp_list<Tags...>>
+	            : GetCoordFromTagsImpl<ChildType[Count], RecordCoord<>, Tags...>
+	        {
+	        };
+
+	        // pass through a RecordCoord
+	        template<typename... Fields, std::size_t... RCs>
+	        struct GetCoordFromTagsImpl<Record<Fields...>, RecordCoord<>, RecordCoord<RCs...>>
+	        {
+	            using type = RecordCoord<RCs...>;
+	        };
+	    } // namespace internal
+
+	    /// Converts a series of tags, or a list of tags, navigating down a record dimension into a \ref RecordCoord. A
+	    /// RecordCoord will be passed through unmodified.
+	    LLAMA_EXPORT
+	    template<typename RecordDim, typename... TagsOrTagList>
+	    using GetCoordFromTags = typename internal::GetCoordFromTagsImpl<RecordDim, RecordCoord<>, TagsOrTagList...>::type;
+
+	    namespace internal
+	    {
+	        template<typename RecordDim, typename... RecordCoordOrTags>
+	        struct GetTypeImpl
+	        {
+	            using type = typename GetTypeImpl<RecordDim, GetCoordFromTags<RecordDim, RecordCoordOrTags...>>::type;
+	        };
+
+	        template<typename... Children, std::size_t HeadCoord, std::size_t... TailCoords>
+	        struct GetTypeImpl<Record<Children...>, RecordCoord<HeadCoord, TailCoords...>>
+	        {
+	            using ChildType = GetFieldType<mp_at_c<Record<Children...>, HeadCoord>>;
+	            using type = typename GetTypeImpl<ChildType, RecordCoord<TailCoords...>>::type;
+	        };
+
+	        template<typename ChildType, std::size_t N, std::size_t HeadCoord, std::size_t... TailCoords>
+	        struct GetTypeImpl<ChildType[N], RecordCoord<HeadCoord, TailCoords...>>
+	        {
+	            using type = typename GetTypeImpl<ChildType, RecordCoord<TailCoords...>>::type;
+	        };
+
+	        template<typename T>
+	        struct GetTypeImpl<T, RecordCoord<>>
+	        {
+	            static_assert(isAllowedFieldType<T>);
+	            using type = T;
+	        };
+	    } // namespace internal
+
+	    /// Returns the type of a node in a record dimension tree identified by a given \ref RecordCoord or a series of
+	    /// tags.
+	    LLAMA_EXPORT
+	    template<typename RecordDim, typename... RecordCoordOrTags>
+	    using GetType = typename internal::GetTypeImpl<RecordDim, RecordCoordOrTags...>::type;
+
+	    namespace internal
+	    {
+	        template<typename RecordDim, typename RecordCoord>
+	        struct LeafRecordCoordsImpl;
+
+	        template<typename T, std::size_t... RCs>
+	        struct LeafRecordCoordsImpl<T, RecordCoord<RCs...>>
+	        {
+	            using type = mp_list<RecordCoord<RCs...>>;
+	        };
+
+	        template<typename... Fields, std::size_t... RCs>
+	        struct LeafRecordCoordsImpl<Record<Fields...>, RecordCoord<RCs...>>
+	        {
+	            template<std::size_t... Is>
+	            static auto help(std::index_sequence<Is...>)
+	            {
+	                return mp_append<
+	                    typename LeafRecordCoordsImpl<GetFieldType<Fields>, RecordCoord<RCs..., Is>>::type...>{};
+	            }
+	            using type = decltype(help(std::make_index_sequence<sizeof...(Fields)>{}));
+	        };
+
+	        template<typename Child, std::size_t N, std::size_t... RCs>
+	        struct LeafRecordCoordsImpl<Child[N], RecordCoord<RCs...>>
+	        {
+	            template<std::size_t... Is>
+	            static auto help(std::index_sequence<Is...>)
+	            {
+	                return mp_append<typename LeafRecordCoordsImpl<Child, RecordCoord<RCs..., Is>>::type...>{};
+	            }
+	            using type = decltype(help(std::make_index_sequence<N>{}));
+	        };
+	    } // namespace internal
+
+	    /// Returns a flat type list containing all record coordinates to all leaves of the given record dimension.
+	    LLAMA_EXPORT
+	    template<typename RecordDim>
+	    using LeafRecordCoords = typename internal::LeafRecordCoordsImpl<RecordDim, RecordCoord<>>::type;
+
+	    /// Iterates over the record dimension tree and calls a functor on each element.
+	    /// \param functor Functor to execute at each element of. Needs to have `operator()` with a template parameter for
+	    /// the \ref RecordCoord in the record dimension tree.
+	    /// \param baseCoord \ref RecordCoord at which the iteration should be started. The functor is called on elements
+	    /// beneath this coordinate.
+	    LLAMA_EXPORT
+	    template<typename RecordDim, typename Functor, std::size_t... Coords>
+	    LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeafCoord(Functor&& functor, RecordCoord<Coords...> baseCoord)
+	    {
+	        LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
+	        internal::mpForEachInlined(
+	            LeafRecordCoords<GetType<RecordDim, RecordCoord<Coords...>>>{},
+	            [&](auto innerCoord) LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(constexpr)
+	            { std::forward<Functor>(functor)(cat(baseCoord, innerCoord)); });
+	        LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
+	    }
+
+	    /// Iterates over the record dimension tree and calls a functor on each element.
+	    /// \param functor Functor to execute at each element of. Needs to have `operator()` with a template parameter for
+	    /// the \ref RecordCoord in the record dimension tree.
+	    /// \param baseTags Tags used to define where the iteration should be started. The functor is called on elements
+	    /// beneath this coordinate.
+	    LLAMA_EXPORT
+	    template<typename RecordDim, typename Functor, typename... Tags>
+	    LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeafCoord(Functor&& functor, Tags... /*baseTags*/)
+	    {
+	        forEachLeafCoord<RecordDim>(std::forward<Functor>(functor), GetCoordFromTags<RecordDim, Tags...>{});
+	    }
+
+	    namespace internal
+	    {
+	        template<typename T>
+	        struct FlattenRecordDimImpl
+	        {
+	            using type = mp_list<T>;
+	        };
+
+	        template<typename... Fields>
+	        struct FlattenRecordDimImpl<Record<Fields...>>
+	        {
+	            using type = mp_append<typename FlattenRecordDimImpl<GetFieldType<Fields>>::type...>;
+	        };
+	        template<typename Child, std::size_t N>
+	        struct FlattenRecordDimImpl<Child[N]>
+	        {
+	            using type = mp_repeat_c<typename FlattenRecordDimImpl<Child>::type, N>;
+	        };
+	    } // namespace internal
+
+	    /// Returns a flat type list containing all leaf field types of the given record dimension.
+	    LLAMA_EXPORT
+	    template<typename RecordDim>
+	    using FlatRecordDim = typename internal::FlattenRecordDimImpl<RecordDim>::type;
+
+	    /// The total number of fields in the recursively expanded record dimension.
+	    LLAMA_EXPORT
+	    template<typename RecordDim>
+	    inline constexpr std::size_t flatFieldCount = 1;
+
+	    LLAMA_EXPORT
+	    template<typename... Children>
+	    inline constexpr std::size_t flatFieldCount<Record<Children...>>
+	        = (flatFieldCount<GetFieldType<Children>> + ... + 0);
+
+	    LLAMA_EXPORT
+	    template<typename Child, std::size_t N>
+	    inline constexpr std::size_t flatFieldCount<Child[N]> = flatFieldCount<Child> * N;
+
+	    namespace internal
+	    {
+	        template<std::size_t I, typename RecordDim>
+	        inline constexpr std::size_t flatFieldCountBefore = 0;
+
+	        template<typename... Children>
+	        inline constexpr std::size_t flatFieldCountBefore<0, Record<Children...>> = 0;
+
+	        // recursive formulation to benefit from template instantiation memoization
+	        // this massively improves compilation time when this template is instantiated with a lot of different I
+	        template<std::size_t I, typename... Children>
+	        inline constexpr std::size_t flatFieldCountBefore<I, Record<Children...>>
+	            = flatFieldCountBefore<I - 1, Record<Children...>>
+	            + flatFieldCount<GetFieldType<mp_at_c<Record<Children...>, I - 1>>>;
+	    } // namespace internal
+
+	    /// The equivalent zero based index into a flat record dimension (\ref FlatRecordDim) of the given hierarchical
+	    /// record coordinate.
+	    LLAMA_EXPORT
+	    template<typename RecordDim, typename RecordCoord>
+	    inline constexpr std::size_t flatRecordCoord = 0;
+
+	    LLAMA_EXPORT
+	    template<typename T>
+	    inline constexpr std::size_t flatRecordCoord<T, RecordCoord<>> = 0;
+
+	    LLAMA_EXPORT
+	    template<typename... Children, std::size_t I, std::size_t... Is>
+	    inline constexpr std::size_t flatRecordCoord<Record<Children...>, RecordCoord<I, Is...>>
+	        = internal::flatFieldCountBefore<I, Record<Children...>>
+	        + flatRecordCoord<GetFieldType<mp_at_c<Record<Children...>, I>>, RecordCoord<Is...>>;
+
+	    LLAMA_EXPORT
+	    template<typename Child, std::size_t N, std::size_t I, std::size_t... Is>
+	    inline constexpr std::size_t flatRecordCoord<Child[N], RecordCoord<I, Is...>>
+	        = flatFieldCount<Child> * I + flatRecordCoord<Child, RecordCoord<Is...>>;
+
+	    namespace internal
+	    {
+	        template<typename TypeList>
+	        constexpr auto flatAlignOfImpl()
+	        {
+	            std::size_t maxAlign = 0;
+	            mp_for_each<mp_transform<mp_identity, TypeList>>(
+	                [&](auto e) constexpr
+	                {
+	                    using T = typename decltype(e)::type;
+	                    maxAlign = std::max(maxAlign, alignof(T));
+	                });
+	            return maxAlign;
+	        }
+	    } // namespace internal
+
+	    /// The alignment of a type list if its elements would be in a normal struct. Effectively returns the maximum
+	    /// alignment value in the type list.
+	    LLAMA_EXPORT
+	    template<typename TypeList>
+	    inline constexpr std::size_t flatAlignOf = internal::flatAlignOfImpl<TypeList>();
+
+	    /// The alignment of a type T.
+	    LLAMA_EXPORT
+	    template<typename T>
+	    inline constexpr std::size_t alignOf = alignof(T);
+
+	    /// The alignment of a record dimension if its fields would be in a normal struct. Effectively returns the maximum
+	    /// alignment value in the type list.
+	    LLAMA_EXPORT
+	    template<typename... Fields>
+	    inline constexpr std::size_t alignOf<Record<Fields...>> = flatAlignOf<FlatRecordDim<Record<Fields...>>>;
+
+	    /// Returns the ceiling of a / b.
+	    LLAMA_EXPORT
+	    template<typename Integral>
+	    [[nodiscard]] LLAMA_FN_HOST_ACC_INLINE constexpr auto divCeil(Integral a, Integral b) -> Integral
+	    {
+	        return (a + b - 1) / b;
+	    }
+
+	    /// Returns the integral n rounded up to be a multiple of mult.
+	    LLAMA_EXPORT
+	    template<typename Integral>
+	    [[nodiscard]] LLAMA_FN_HOST_ACC_INLINE constexpr auto roundUpToMultiple(Integral n, Integral mult) -> Integral
+	    {
+	        return divCeil(n, mult) * mult;
+	    }
+
+	    namespace internal
+	    {
+	        template<typename TypeList, bool Align, bool IncludeTailPadding>
+	        constexpr auto sizeOfImpl() -> std::size_t
+	        {
+	            std::size_t size = 0;
+	            std::size_t maxAlign = 0; // NOLINT(misc-const-correctness)
+	            mp_for_each<mp_transform<mp_identity, TypeList>>(
+	                [&](auto e) constexpr
+	                {
+	                    using T = typename decltype(e)::type;
+	                    if constexpr(Align)
+	                    {
+	                        size = roundUpToMultiple(size, alignof(T));
+	                        maxAlign = std::max(maxAlign, alignof(T));
+	                    }
+	                    // NOLINTNEXTLINE(readability-misleading-indentation)
+	                    size += sizeof(T);
+	                });
+
+	            // final padding, so next struct can start right away
+	            if constexpr(Align && IncludeTailPadding)
+	                if(maxAlign > 0)
+	                    size = roundUpToMultiple(size, maxAlign); // TODO(bgruber): we could use flatAlignOf<TypeList>
+	                                                              // here, at the cost of more template instantiations
+	            return size;
+	        }
+
+	        template<typename TypeList, std::size_t I, bool Align>
+	        constexpr auto offsetOfImplWorkaround() -> std::size_t;
+	    } // namespace internal
+
+	    /// The size of a type list if its elements would be in a normal struct.
+	    LLAMA_EXPORT
+	    template<typename TypeList, bool Align, bool IncludeTailPadding = true>
+	    inline constexpr std::size_t flatSizeOf = internal::sizeOfImpl<TypeList, Align, IncludeTailPadding>();
+
+	    /// The size of a type T.
+	    LLAMA_EXPORT
+	    template<typename T, bool Align = false, bool IncludeTailPadding = true>
+	    inline constexpr std::size_t sizeOf = sizeof(T);
+
+	    /// The size of a record dimension if its fields would be in a normal struct.
+	    LLAMA_EXPORT
+	    template<typename... Fields, bool Align, bool IncludeTailPadding>
+	    inline constexpr std::size_t sizeOf<Record<Fields...>, Align, IncludeTailPadding>
+	        = flatSizeOf<FlatRecordDim<Record<Fields...>>, Align, IncludeTailPadding>;
+
+	    /// The byte offset of an element in a type list ifs elements would be in a normal struct.
+	    LLAMA_EXPORT
+	    template<typename TypeList, std::size_t I, bool Align>
+	    inline constexpr std::size_t flatOffsetOf = internal::offsetOfImplWorkaround<TypeList, I, Align>();
+
+	    namespace internal
+	    {
+	        // unfortunately, we cannot inline this function as an IILE, as MSVC complains:
+	        // fatal error C1202: recursive type or function dependency context too complex
+	        template<typename TypeList, std::size_t I, bool Align>
+	        constexpr auto offsetOfImplWorkaround() -> std::size_t
+	        {
+	            if constexpr(I == 0)
+	                return 0;
+	            else
+	            {
+	                std::size_t offset // NOLINT(misc-const-correctness)
+	                    = flatOffsetOf<TypeList, I - 1, Align> + sizeof(mp_at_c<TypeList, I - 1>);
+	                if constexpr(Align)
+	                    offset = roundUpToMultiple(offset, alignof(mp_at_c<TypeList, I>));
+	                return offset;
+	            }
+	        }
+	    } // namespace internal
+
+	    /// The byte offset of an element in a record dimension if it would be a normal struct.
+	    /// \tparam RecordDim Record dimension tree.
+	    /// \tparam RecordCoord Record coordinate of an element inrecord dimension tree.
+	    LLAMA_EXPORT
+	    template<typename RecordDim, typename RecordCoord, bool Align = false>
+	    inline constexpr std::size_t offsetOf
+	        = flatOffsetOf<FlatRecordDim<RecordDim>, flatRecordCoord<RecordDim, RecordCoord>, Align>;
+
+	    namespace internal
+	    {
+	        // Such a class is also known as arraw_proxy: https://quuxplusone.github.io/blog/2019/02/06/arrow-proxy/
+	        template<typename T>
+	        struct IndirectValue
+	        {
+	            T value;
+
+	            LLAMA_FN_HOST_ACC_INLINE auto operator->() -> T*
+	            {
+	                return &value;
+	            }
+
+	            LLAMA_FN_HOST_ACC_INLINE auto operator->() const -> const T*
+	            {
+	                return &value;
+	            }
+	        };
+
+	        // TODO(bgruber): replace in C++20
+	        template<class T>
+	        struct IsBoundedArray : std::false_type
+	        {
+	        };
+
+	        template<class T, std::size_t N>
+	        struct IsBoundedArray<T[N]> : std::true_type
+	        {
+	        };
+	    } // namespace internal
+
+	    /// True if the T is a record dimension. That is, T is either a llama::Record or a bounded array.
+	    LLAMA_EXPORT
+	    template<typename T>
+	    inline constexpr bool isRecordDim = isRecord<T> || internal::IsBoundedArray<T>::value;
+
+	    namespace internal
+	    {
+	        template<typename Coord, typename T, template<typename, typename> typename TypeFunctor>
+	        struct TransformLeavesWithCoordImpl
+	        {
+	            using type = TypeFunctor<Coord, T>;
+	        };
+
+	        template<std::size_t... Is, typename... Fields, template<typename, typename> typename TypeFunctor>
+	        struct TransformLeavesWithCoordImpl<RecordCoord<Is...>, Record<Fields...>, TypeFunctor>
+	        {
+	            template<std::size_t... Js>
+	            static auto f(std::index_sequence<Js...>)
+	            {
+	                return Record<Field<
+	                    GetFieldTag<Fields>,
+	                    typename TransformLeavesWithCoordImpl<RecordCoord<Is..., Js>, GetFieldType<Fields>, TypeFunctor>::
+	                        type>...>{};
+	            }
+
+	            using type = decltype(f(std::index_sequence_for<Fields...>{}));
+	        };
+	        template<std::size_t... Is, typename Child, std::size_t N, template<typename, typename> typename TypeFunctor>
+	        struct TransformLeavesWithCoordImpl<RecordCoord<Is...>, Child[N], TypeFunctor>
+	        {
+	            template<std::size_t... Js>
+	            static void f(std::index_sequence<Js...>)
+	            {
+	                static_assert(
+	                    mp_same<typename TransformLeavesWithCoordImpl<RecordCoord<Is..., Js>, Child, TypeFunctor>::
+	                                type...>::value,
+	                    "Leave transformations beneath an array node must return the same type");
+	            }
+	            using dummy = decltype(f(std::make_index_sequence<N>{}));
+
+	            using type = typename TransformLeavesWithCoordImpl<RecordCoord<Is..., 0>, Child, TypeFunctor>::type[N];
+	        };
+
+	        template<template<typename> typename F>
+	        struct MakePassSecond
+	        {
+	            template<typename A, typename B>
+	            using fn = F<B>;
+	        };
+	    } // namespace internal
+
+	    /// Creates a new record dimension where each new leaf field's type is the result of applying FieldTypeFunctor to
+	    /// the original leaf's \ref RecordCoord and field's type.
+	    LLAMA_EXPORT
+	    template<typename RecordDim, template<typename, typename> typename FieldTypeFunctor>
+	    using TransformLeavesWithCoord =
+	        typename internal::TransformLeavesWithCoordImpl<RecordCoord<>, RecordDim, FieldTypeFunctor>::type;
+
+	    /// Creates a new record dimension where each new leaf field's type is the result of applying FieldTypeFunctor to
+	    /// the original leaf field's type.
+	    LLAMA_EXPORT
+	    template<typename RecordDim, template<typename> typename FieldTypeFunctor>
+	    using TransformLeaves
+	        = TransformLeavesWithCoord<RecordDim, internal::MakePassSecond<FieldTypeFunctor>::template fn>;
+
+	    namespace internal
+	    {
+	        // TODO(bgruber): we might implement this better by expanding a record dim into a list of tag lists and then
+	        // computing a real set union of the two tag list lists
+
+	        template<typename A, typename B>
+	        auto mergeRecordDimsImpl(mp_identity<A> a, mp_identity<B>)
+	        {
+	            static_assert(std::is_same_v<A, B>, "Cannot merge record and non-record or fields with different types");
+	            return a;
+	        }
+
+	        template<typename A, std::size_t NA, typename B, std::size_t NB>
+	        auto mergeRecordDimsImpl([[maybe_unused]] mp_identity<A[NA]> a, [[maybe_unused]] mp_identity<B[NB]> b)
+	        {
+	            static_assert(std::is_same_v<A, B>, "Cannot merge arrays of different type");
+	            if constexpr(NA < NB)
+	                return b;
+	            else
+	                return a;
+	        }
+
+	        template<typename... FieldsA>
+	        auto mergeRecordDimsImpl(mp_identity<Record<FieldsA...>> a, mp_identity<Record<>>)
+	        {
+	            return a;
+	        }
+
+	        template<
+	            typename... FieldsA,
+	            typename FieldB,
+	            typename... FieldsB,
+	            auto Pos = FindFieldByTag<Record<FieldsA...>, GetFieldTag<FieldB>>::value>
+	        auto mergeRecordDimsImpl(mp_identity<Record<FieldsA...>>, mp_identity<Record<FieldB, FieldsB...>>)
+	        {
+	            if constexpr(Pos == sizeof...(FieldsA))
+	            {
+	                return mergeRecordDimsImpl(
+	                    mp_identity<Record<FieldsA..., FieldB>>{},
+	                    mp_identity<Record<FieldsB...>>{});
+	            }
+	            else
+	            {
+	                using OldFieldA = mp_at_c<Record<FieldsA...>, Pos>;
+	                using NewFieldA = Field<
+	                    GetFieldTag<OldFieldA>,
+	                    typename decltype(mergeRecordDimsImpl(
+	                        mp_identity<GetFieldType<OldFieldA>>{},
+	                        mp_identity<GetFieldType<FieldB>>{}))::type>;
+	                using NewRecordA = mp_replace_at_c<Record<FieldsA...>, Pos, NewFieldA>;
+	                return mergeRecordDimsImpl(mp_identity<NewRecordA>{}, mp_identity<Record<FieldsB...>>{});
+	            }
+	        }
+	    } // namespace internal
+
+	    /// Creates a merged record dimension, where duplicated, nested fields are unified.
+	    LLAMA_EXPORT
+	    template<typename RecordDimA, typename RecordDimB>
+	    using MergedRecordDims =
+	        typename decltype(internal::mergeRecordDimsImpl(mp_identity<RecordDimA>{}, mp_identity<RecordDimB>{}))::type;
+
+	    /// Alias for ToT, adding `const` if FromT is const qualified.
+	    LLAMA_EXPORT
+	    template<typename FromT, typename ToT>
+	    using CopyConst = std::conditional_t<std::is_const_v<FromT>, const ToT, ToT>;
+
+	    /// Used as template argument to specify a constant/compile-time value.
+	    LLAMA_EXPORT
+	    template<auto V>
+	    using Constant = std::integral_constant<decltype(V), V>;
+
+	    namespace internal
+	    {
+	        template<typename T>
+	        struct IsConstant : std::false_type
+	        {
+	        };
+
+	        template<typename T, T V>
+	        struct IsConstant<std::integral_constant<T, V>> : std::true_type
+	        {
+	        };
+	    } // namespace internal
+
+	    LLAMA_EXPORT
+	    template<typename T>
+	    inline constexpr bool isConstant = internal::IsConstant<T>::value;
+
+	    namespace internal
+	    {
+	        /// Holds a value of type T. Is useful as a base class. Is specialized for llama::Constant to not store the
+	        /// value at runtime. \tparam T Type of value to store. \tparam I Is used to disambiguate multiple BoxedValue
+	        /// base classes.
+	        template<typename T, int I = 0>
+	        struct BoxedValue
+	        {
+	            BoxedValue() = default;
+
+	            // we don't make this ctor explicit so a Value appearing in a ctor list can just be created by passing a T
+	            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
+	            LLAMA_FN_HOST_ACC_INLINE BoxedValue(T value) : val(value)
+	            {
+	            }
+
+	            LLAMA_FN_HOST_ACC_INLINE constexpr auto value() const
+	            {
+	                return val;
+	            }
+
+	        private:
+	            T val = {};
+	        };
+
+	        template<auto V, int I>
+	        struct BoxedValue<Constant<V>, I>
+	        {
+	            BoxedValue() = default;
+
+	            // we don't make this ctor explicit so a Value appearing in a ctor list can just be created by passing a T
+	            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
+	            LLAMA_FN_HOST_ACC_INLINE BoxedValue(Constant<V>)
+	            {
+	            }
+
+	            LLAMA_FN_HOST_ACC_INLINE static constexpr auto value()
+	            {
+	                return V;
+	            }
+	        };
+	    } // namespace internal
+
+	    LLAMA_EXPORT
+	    struct PrettySize
+	    {
+	        double size;
+	        const char* unit;
+	    };
+
+	    /// Repeatedly divides the given size (in bytes) until it fits below 1000. Returns the new size and a string
+	    /// literal with the corresponding unit.
+	    LLAMA_EXPORT
+	    inline auto prettySize(double size) -> PrettySize
+	    {
+	        static const char* unit[] = {"B ", "KB", "MB", "GB", "TB", "PB", "EB"};
+	        unsigned unitIndex = 0;
+	        while(size > 1000.0)
+	        {
+	            size /= 1000.0;
+	            unitIndex++;
+	        }
+	        assert(unitIndex < std::size(unit));
+	        return {size, unit[unitIndex]};
+	    }
+	} // namespace llama
+	// ==
+	// == ./include/llama/Core.hpp ==
+	// ============================================================================
+
+// #include "macros.hpp"    // amalgamate: file already inlined
+
+#include <algorithm>
+#include <iterator>
+// #include <limits>    // amalgamate: file already included
+#if CAN_USE_RANGES
+#    include <ranges>
+#endif
+
+namespace llama
+{
+    /// Iterator supporting \ref ArrayIndexRange.
+    LLAMA_EXPORT
+    template<typename ArrayExtents>
+    struct ArrayIndexIterator
+    {
+        static_assert(!std::is_const_v<ArrayExtents>);
+
+        using value_type = typename ArrayExtents::Index;
+        using difference_type = std::ptrdiff_t;
+        using reference = value_type;
+        using pointer = internal::IndirectValue<value_type>;
+        using iterator_category = std::random_access_iterator_tag;
+
+        static constexpr std::size_t rank = ArrayExtents::rank;
+
+        constexpr ArrayIndexIterator() noexcept = default;
+
+        LLAMA_FN_HOST_ACC_INLINE constexpr ArrayIndexIterator(ArrayExtents extents, value_type current) noexcept
+            : extents(extents)
+            , current(current)
+        {
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE
+        constexpr auto operator*() const noexcept -> value_type
+        {
+            return current;
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE
+        constexpr auto operator->() const noexcept -> pointer
+        {
+            return {**this};
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE
+        constexpr auto operator++() noexcept -> ArrayIndexIterator&
+        {
+            current[rank - 1]++;
+            for(auto i = static_cast<int>(rank) - 2; i >= 0; i--)
+            {
+                if(current[i + 1] != extents[i + 1])
+                    return *this;
+                current[i + 1] = 0;
+                current[i]++;
+            }
+            return *this;
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE
+        constexpr auto operator++(int) noexcept -> ArrayIndexIterator
+        {
+            auto tmp = *this;
+            ++*this;
+            return tmp;
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE
+        constexpr auto operator--() noexcept -> ArrayIndexIterator&
+        {
+            current[rank - 1]--;
+            for(auto i = static_cast<int>(rank) - 2; i >= 0; i--)
+            {
+                // return if no underflow
+                if(current[i + 1] != static_cast<typename ArrayExtents::value_type>(-1))
+                    return *this;
+                current[i + 1] = extents[i] - 1;
+                current[i]--;
+            }
+            // decrementing beyond [0, 0, ..., 0] is UB
+            return *this;
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE
+        constexpr auto operator--(int) noexcept -> ArrayIndexIterator
+        {
+            auto tmp = *this;
+            --*this;
+            return tmp;
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE
+        constexpr auto operator[](difference_type i) const noexcept -> reference
+        {
+            return *(*this + i);
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE
+        constexpr auto operator+=(difference_type n) noexcept -> ArrayIndexIterator&
+        {
+            // add n to all lower dimensions with carry
+            for(auto i = static_cast<int>(rank) - 1; i > 0 && n != 0; i--)
+            {
+                n += static_cast<difference_type>(current[i]);
+                const auto s = static_cast<difference_type>(extents[i]);
+                auto mod = n % s;
+                n /= s;
+                if(mod < 0)
+                {
+                    mod += s;
+                    n--;
+                }
+                current[i] = mod;
+                assert(current[i] < extents[i]);
+            }
+
+            current[0] = static_cast<difference_type>(current[0]) + n;
+            // current is either within bounds or at the end ([last + 1, 0, 0, ..., 0])
+            assert(
+                (current[0] < extents[0]
+                 || (current[0] == extents[0]
+                     && std::all_of(std::begin(current) + 1, std::end(current), [](auto c) { return c == 0; })))
+                && "Iterator was moved past the end");
+
+            return *this;
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE
+        friend constexpr auto operator+(ArrayIndexIterator it, difference_type n) noexcept -> ArrayIndexIterator
+        {
+            it += n;
+            return it;
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE
+        friend constexpr auto operator+(difference_type n, ArrayIndexIterator it) noexcept -> ArrayIndexIterator
+        {
+            return it + n;
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE
+        constexpr auto operator-=(difference_type n) noexcept -> ArrayIndexIterator&
+        {
+            return operator+=(-n);
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE
+        friend constexpr auto operator-(ArrayIndexIterator it, difference_type n) noexcept -> ArrayIndexIterator
+        {
+            it -= n;
+            return it;
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE
+        friend constexpr auto operator-(const ArrayIndexIterator& a, const ArrayIndexIterator& b) noexcept
+            -> difference_type
+        {
+            assert(a.extents == b.extents);
+
+            difference_type n = a.current[rank - 1] - b.current[rank - 1];
+            difference_type size = a.extents[rank - 1];
+            for(auto i = static_cast<int>(rank) - 2; i >= 0; i--)
+            {
+                n += (a.current[i] - b.current[i]) * size;
+                size *= a.extents[i];
+            }
+
+            return n;
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE
+        friend constexpr auto operator==(
+            const ArrayIndexIterator<ArrayExtents>& a,
+            const ArrayIndexIterator<ArrayExtents>& b) noexcept -> bool
+        {
+            assert(a.extents == b.extents);
+            return a.current == b.current;
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE
+        friend constexpr auto operator!=(
+            const ArrayIndexIterator<ArrayExtents>& a,
+            const ArrayIndexIterator<ArrayExtents>& b) noexcept -> bool
+        {
+            return !(a == b);
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE
+        friend constexpr auto operator<(const ArrayIndexIterator& a, const ArrayIndexIterator& b) noexcept -> bool
+        {
+            assert(a.extents == b.extents);
+#ifdef __NVCC__
+            // from: https://en.cppreference.com/w/cpp/algorithm/lexicographical_compare
+            auto first1 = std::begin(a.current);
+            auto last1 = std::end(a.current);
+            auto first2 = std::begin(b.current);
+            auto last2 = std::end(b.current);
+            for(; (first1 != last1) && (first2 != last2); ++first1, (void) ++first2)
+            {
+                if(*first1 < *first2)
+                    return true;
+                if(*first2 < *first1)
+                    return false;
+            }
+
+            return (first1 == last1) && (first2 != last2);
+#else
+            return std::lexicographical_compare(
+                std::begin(a.current),
+                std::end(a.current),
+                std::begin(b.current),
+                std::end(b.current));
+#endif
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE
+        friend constexpr auto operator>(const ArrayIndexIterator& a, const ArrayIndexIterator& b) noexcept -> bool
+        {
+            return b < a;
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE
+        friend constexpr auto operator<=(const ArrayIndexIterator& a, const ArrayIndexIterator& b) noexcept -> bool
+        {
+            return !(a > b);
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE
+        friend constexpr auto operator>=(const ArrayIndexIterator& a, const ArrayIndexIterator& b) noexcept -> bool
+        {
+            return !(a < b);
+        }
+
+    private:
+        ArrayExtents extents; // TODO(bgruber): we only need to store rank - 1 sizes
+        value_type current;
+    };
+
+    /// Range allowing to iterate over all indices in an \ref ArrayExtents.
+    LLAMA_EXPORT
+    template<typename ArrayExtents>
+    struct ArrayIndexRange
+        : private ArrayExtents
+#if CAN_USE_RANGES
+        , std::ranges::view_base
+#endif
+    {
+        static_assert(!std::is_const_v<ArrayExtents>);
+
+        constexpr ArrayIndexRange() noexcept = default;
+
+        LLAMA_FN_HOST_ACC_INLINE
+        constexpr explicit ArrayIndexRange(ArrayExtents extents) noexcept : ArrayExtents(extents)
+        {
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE
+        constexpr auto begin() const noexcept -> ArrayIndexIterator<ArrayExtents>
+        {
+            return {*this, typename ArrayExtents::Index{}};
+        }
+
+        LLAMA_FN_HOST_ACC_INLINE
+        constexpr auto end() const noexcept -> ArrayIndexIterator<ArrayExtents>
+        {
+            auto endPos = typename ArrayExtents::Index{};
+            endPos[0] = this->toArray()[0];
+            return {*this, endPos};
+        }
+    };
+} // namespace llama
+// ==
+// == ./include/llama/ArrayIndexRange.hpp ==
+// ============================================================================
+
+// ============================================================================
+// == ./include/llama/Copy.hpp ==
+// ==
+// Copyright 2021 Bernhard Manfred Gruber
+// SPDX-License-Identifier: LGPL-3.0-or-later
+
+// #pragma once
+	// ============================================================================
+	// == ./include/llama/View.hpp ==
+	// ==
+	// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
+	// SPDX-License-Identifier: LGPL-3.0-or-later
+
+	// #pragma once
+		// ============================================================================
+		// == ./include/llama/Accessors.hpp ==
+		// ==
+		// Copyright 2023 Bernhard Manfred Gruber
+		// SPDX-License-Identifier: LGPL-3.0-or-later
+
+		// #pragma once
+			// ============================================================================
+			// == ./include/llama/Concepts.hpp ==
+			// ==
+			// Copyright 2022 Bernhard Manfred Gruber
+			// SPDX-License-Identifier: LGPL-3.0-or-later
+
+			// #pragma once
+			// #include "Array.hpp"    // amalgamate: file already inlined
+			// #include "Core.hpp"    // amalgamate: file already inlined
+			// #include "RecordCoord.hpp"    // amalgamate: file already inlined
+
+			// #include <type_traits>    // amalgamate: file already included
+
+			#if __has_include(<concepts>)
+			#    include <concepts>
+			#endif
+			namespace llama
+			{
+			#ifdef __cpp_lib_concepts
+			    LLAMA_EXPORT
+			    template<auto I>
+			    concept isConstexpr = requires { std::integral_constant<decltype(I), I>{}; };
+
+			    LLAMA_EXPORT
+			    template<typename M>
+			    concept Mapping = requires(M m) {
+			        typename M::ArrayExtents;
+			        typename M::RecordDim;
+			        {
+			            m.extents()
+			        } -> std::same_as<typename M::ArrayExtents>;
+			        {
+			            +M::blobCount
+			        } -> std::same_as<std::size_t>;
+			        requires isConstexpr<M::blobCount>;
+			        {
+			            m.blobSize(typename M::ArrayExtents::value_type{})
+			        } -> std::same_as<typename M::ArrayExtents::value_type>;
+			    };
+
+			    LLAMA_EXPORT
+			    template<typename M, typename RC>
+			    concept PhysicalField = requires(M m, typename M::ArrayExtents::Index ai) {
+			        {
+			            m.blobNrAndOffset(ai, RC{})
+			        } -> std::same_as<NrAndOffset<typename M::ArrayExtents::value_type>>;
+			    };
+
+			    template<typename M>
+			    struct MakeIsPhysical
+			    {
+			        template<typename RC>
+			        using fn = mp_bool<PhysicalField<M, RC>>;
+			    };
+
+			    LLAMA_EXPORT
+			    template<typename M>
+			    inline constexpr bool allFieldsArePhysical
+			        = mp_all_of<LeafRecordCoords<typename M::RecordDim>, MakeIsPhysical<M>::template fn>::value;
+
+			    LLAMA_EXPORT
+			    template<typename M>
+			    concept PhysicalMapping = Mapping<M> && allFieldsArePhysical<M>;
+
+			    LLAMA_EXPORT
+			    template<typename R>
+			    concept LValueReference = std::is_lvalue_reference_v<R>;
+
+			    LLAMA_EXPORT
+			    template<typename R>
+			    concept AdlTwoStepSwappable = requires(R a, R b) { swap(a, b); } || requires(R a, R b) { std::swap(a, b); };
+
+			    LLAMA_EXPORT
+			    template<typename R>
+			    concept ProxyReference = std::is_copy_constructible_v<R> && std::is_copy_assignable_v<R> && requires(R r) {
+			        typename R::value_type;
+			        {
+			            static_cast<typename R::value_type>(r)
+			        } -> std::same_as<typename R::value_type>;
+			        {
+			            r = std::declval<typename R::value_type>()
+			        } -> std::same_as<R&>;
+			    } && AdlTwoStepSwappable<R>;
+
+			    LLAMA_EXPORT
+			    template<typename R>
+			    concept AnyReference = LValueReference<R> || ProxyReference<R>;
+
+			    LLAMA_EXPORT
+			    template<typename R, typename T>
+			    concept AnyReferenceTo = (LValueReference<R> && std::is_same_v<std::remove_cvref_t<R>, T>)
+			        || (ProxyReference<R> && std::is_same_v<typename R::value_type, T>);
+
+			    LLAMA_EXPORT
+			    template<typename M, typename RC>
+			    concept ComputedField
+			        = M::isComputed(RC{}) && requires(M m, typename M::ArrayExtents::Index ai, std::byte** blobs) {
+			              {
+			                  m.compute(ai, RC{}, blobs)
+			              } -> AnyReferenceTo<GetType<typename M::RecordDim, RC>>;
+			          };
+
+			    template<typename M>
+			    struct MakeIsComputed
+			    {
+			        template<typename RC>
+			        using fn = mp_bool<ComputedField<M, RC>>;
+			    };
+
+			    LLAMA_EXPORT
+			    template<typename M>
+			    inline constexpr bool allFieldsAreComputed
+			        = mp_all_of<LeafRecordCoords<typename M::RecordDim>, MakeIsComputed<M>::template fn>::value;
+
+			    LLAMA_EXPORT
+			    template<typename M>
+			    concept FullyComputedMapping = Mapping<M> && allFieldsAreComputed<M>;
+
+			    LLAMA_EXPORT
+			    template<
+			        typename M,
+			        typename LeafCoords = LeafRecordCoords<typename M::RecordDim>,
+			        std::size_t PhysicalCount = mp_count_if<LeafCoords, MakeIsPhysical<M>::template fn>::value,
+			        std::size_t ComputedCount = mp_count_if<LeafCoords, MakeIsComputed<M>::template fn>::value>
+			    inline constexpr bool allFieldsArePhysicalOrComputed
+			        = (PhysicalCount + ComputedCount) >= mp_size<LeafCoords>::value && PhysicalCount > 0
+			        && ComputedCount > 0; // == instead of >= would be better, but it's not easy to count correctly,
+			                              // because we cannot check whether the call to blobNrOrOffset()
+			                              // or compute() is actually valid
+
+			    LLAMA_EXPORT
+			    template<typename M>
+			    concept PartiallyComputedMapping = Mapping<M> && allFieldsArePhysicalOrComputed<M>;
+
+			    /// Additional semantic requirement: &b[i] + j == &b[i + j] for any integral i and j in range of the blob
+			    LLAMA_EXPORT
+			    template<typename B>
+			    concept Blob = requires(B b, std::size_t i) {
+			        // according to http://eel.is/c++draft/intro.object#3 only std::byte and unsigned char can
+			        // provide storage for
+			        // other types
+			        requires std::is_lvalue_reference_v<decltype(b[i])>;
+			        requires std::same_as<std::remove_cvref_t<decltype(b[i])>, std::byte>
+			            || std::same_as<std::remove_cvref_t<decltype(b[i])>, unsigned char>;
+			    };
+
+			    LLAMA_EXPORT
+			    template<typename BA>
+			    concept BlobAllocator = requires(BA ba, std::size_t size) {
+			        {
+			            ba(std::integral_constant<std::size_t, 16>{}, size)
+			        } -> Blob;
+			    };
+
+			    LLAMA_EXPORT
+			    template<typename V>
+			    concept AnyView = requires(V v, const V cv) {
+			        typename V::Mapping;
+			        typename V::BlobType;
+			        typename V::ArrayExtents;
+			        typename V::ArrayIndex;
+			        typename V::RecordDim;
+			        typename V::Accessor;
+
+			        typename V::iterator;
+			        typename V::const_iterator;
+
+			        {
+			            v.mapping()
+			        } -> std::same_as<typename V::Mapping&>;
+
+			        {
+			            cv.mapping()
+			        } -> std::same_as<const typename V::Mapping&>;
+
+			        {
+			            v.accessor()
+			        } -> std::same_as<typename V::Accessor&>;
+
+			        {
+			            cv.accessor()
+			        } -> std::same_as<const typename V::Accessor&>;
+
+			        {
+			            cv.extents()
+			        } -> std::same_as<typename V::ArrayExtents>;
+
+			        {
+			            v.begin()
+			        } -> std::same_as<typename V::iterator>;
+
+			        {
+			            cv.begin()
+			        } -> std::same_as<typename V::const_iterator>;
+
+			        {
+			            v.end()
+			        } -> std::same_as<typename V::iterator>;
+
+			        {
+			            cv.end()
+			        } -> std::same_as<typename V::const_iterator>;
+
+			        {
+			            v.blobs()
+			        } -> std::same_as<Array<typename V::BlobType, V::Mapping::blobCount>&>;
+			        {
+			            cv.blobs()
+			        } -> std::same_as<const Array<typename V::BlobType, V::Mapping::blobCount>&>;
+			    };
+			#endif
+
+			    namespace internal
+			    {
+			        template<typename R, typename = void>
+			        struct IsProxyReferenceImpl : std::false_type
+			        {
+			        };
+
+			        template<typename R>
+			        struct IsProxyReferenceImpl<
+			            R,
+			            std::void_t<
+			                typename R::value_type,
+			                decltype(static_cast<typename R::value_type>(std::declval<R&>())),
+			                decltype(std::declval<R&>() = std::declval<typename R::value_type>())>>
+			            : std::bool_constant<std::is_copy_constructible_v<R> && std::is_copy_assignable_v<R>>
+			        {
+			        };
+			    } // namespace internal
+
+			    LLAMA_EXPORT
+			    template<typename R>
+			#ifdef __cpp_lib_concepts
+			    inline constexpr bool isProxyReference = ProxyReference<R>;
+			#else
+			    inline constexpr bool isProxyReference = internal::IsProxyReferenceImpl<R>::value;
+			#endif
+			} // namespace llama
+			// ==
+			// == ./include/llama/Concepts.hpp ==
+			// ============================================================================
+
+			// ============================================================================
+			// == ./include/llama/ProxyRefOpMixin.hpp ==
+			// ==
+			// Copyright 2022 Bernhard Manfred Gruber
+			// SPDX-License-Identifier: LGPL-3.0-or-later
+
+			// #pragma once
+			// #include "macros.hpp"    // amalgamate: file already inlined
+
+			namespace llama
+			{
+			    /// CRTP mixin for proxy reference types to support all compound assignment and increment/decrement operators.
+			    LLAMA_EXPORT
+			    template<typename Derived, typename ValueType>
+			    struct ProxyRefOpMixin
+			    {
+			    private:
+			        LLAMA_FN_HOST_ACC_INLINE constexpr auto derived() -> Derived&
+			        {
+			            return static_cast<Derived&>(*this);
+			        }
+
+			        // in principle, load() could be const, but we use it only from non-const functions
+			        LLAMA_FN_HOST_ACC_INLINE constexpr auto load() -> ValueType
+			        {
+			            return static_cast<ValueType>(derived());
+			        }
+
+			        LLAMA_FN_HOST_ACC_INLINE constexpr void store(ValueType t)
+			        {
+			            derived() = std::move(t);
+			        }
+
+			    public:
+			        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator+=(const ValueType& rhs) -> Derived&
+			        {
+			            ValueType lhs = load();
+			            lhs += rhs;
+			            store(lhs);
+			            return derived();
+			        }
+
+			        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator-=(const ValueType& rhs) -> Derived&
+			        {
+			            ValueType lhs = load();
+			            lhs -= rhs;
+			            store(lhs);
+			            return derived();
+			        }
+
+			        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator*=(const ValueType& rhs) -> Derived&
+			        {
+			            ValueType lhs = load();
+			            lhs *= rhs;
+			            store(lhs);
+			            return derived();
+			        }
+
+			        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator/=(const ValueType& rhs) -> Derived&
+			        {
+			            ValueType lhs = load();
+			            lhs /= rhs;
+			            store(lhs);
+			            return derived();
+			        }
+
+			        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator%=(const ValueType& rhs) -> Derived&
+			        {
+			            ValueType lhs = load();
+			            lhs %= rhs;
+			            store(lhs);
+			            return derived();
+			        }
+
+			        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator<<=(const ValueType& rhs) -> Derived&
+			        {
+			            ValueType lhs = load();
+			            lhs <<= rhs;
+			            store(lhs);
+			            return derived();
+			        }
+
+			        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator>>=(const ValueType& rhs) -> Derived&
+			        {
+			            ValueType lhs = load();
+			            lhs >>= rhs;
+			            store(lhs);
+			            return derived();
+			        }
+
+			        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator&=(const ValueType& rhs) -> Derived&
+			        {
+			            ValueType lhs = load();
+			            lhs &= rhs;
+			            store(lhs);
+			            return derived();
+			        }
+
+			        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator|=(const ValueType& rhs) -> Derived&
+			        {
+			            ValueType lhs = load();
+			            lhs |= rhs;
+			            store(lhs);
+			            return derived();
+			        }
+
+			        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator^=(const ValueType& rhs) -> Derived&
+			        {
+			            ValueType lhs = load();
+			            lhs ^= rhs;
+			            store(lhs);
+			            return derived();
+			        }
+
+			        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator++() -> Derived&
+			        {
+			            ValueType v = load();
+			            ++v;
+			            store(v);
+			            return derived();
+			        }
+
+			        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator++(int) -> ValueType
+			        {
+			            ValueType v = load();
+			            ValueType old = v++;
+			            store(v);
+			            return old;
+			        }
+
+			        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator--() -> Derived&
+			        {
+			            ValueType v = load();
+			            --v;
+			            store(v);
+			            return derived();
+			        }
+
+			        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator--(int) -> ValueType
+			        {
+			            ValueType v = load();
+			            ValueType old = v--;
+			            store(v);
+			            return old;
+			        }
+
+			        LLAMA_FN_HOST_ACC_INLINE friend constexpr void swap(Derived a, Derived b) noexcept
+			        {
+			            const auto va = static_cast<ValueType>(a);
+			            const auto vb = static_cast<ValueType>(b);
+			            a = vb;
+			            b = va;
+			        }
+			    };
+			} // namespace llama
+			// ==
+			// == ./include/llama/ProxyRefOpMixin.hpp ==
+			// ============================================================================
+
+		// #include "macros.hpp"    // amalgamate: file already inlined
+
+		#include <atomic>
+		#include <memory>
+		#include <mutex>
+
+		namespace llama::accessor
+		{
+		    /// Default accessor. Passes through the given reference.
+		    LLAMA_EXPORT
+		    struct Default
+		    {
+		        template<typename Reference>
+		        LLAMA_FN_HOST_ACC_INLINE auto operator()(Reference&& r) const -> Reference
+		        {
+		            return std::forward<Reference>(r);
+		        }
+		    };
+
+		    /// Allows only read access and returns values instead of references to memory.
+		    LLAMA_EXPORT
+		    struct ByValue
+		    {
+		        template<typename Reference>
+		        LLAMA_FN_HOST_ACC_INLINE auto operator()(Reference&& r) const
+		        {
+		            using ValueType = std::decay_t<Reference>;
+		            if constexpr(isProxyReference<ValueType>)
+		                return static_cast<typename ValueType::value_type>(r);
+		            else
+		                return ValueType{r};
+		        }
+		    };
+
+		    /// Allows only read access by qualifying the references to memory with const.
+		    LLAMA_EXPORT
+		    struct Const
+		    {
+		        // for l-value references
+		        template<typename T>
+		        LLAMA_FN_HOST_ACC_INLINE auto operator()(T& r) const -> const T&
+		        {
+		            return r;
+		        }
+
+		        template<typename Ref>
+		        // NOLINTNEXTLINE(cppcoreguidelines-special-member-functions,hicpp-special-member-functions)
+		        struct Reference : ProxyRefOpMixin<Reference<Ref>, typename Ref::value_type>
+		        {
+		        private:
+		            Ref ref;
+
+		        public:
+		            using value_type = typename Ref::value_type;
+
+		            LLAMA_FN_HOST_ACC_INLINE constexpr explicit Reference(Ref ref) : ref{ref}
+		            {
+		            }
+
+		            Reference(const Reference&) = default;
+
+		            // NOLINTNEXTLINE(bugprone-unhandled-self-assignment,cert-oop54-cpp)
+		            LLAMA_FN_HOST_ACC_INLINE constexpr auto operator=(const Reference& other) -> Reference&
+		            {
+		                *this = static_cast<value_type>(other);
+		                return *this;
+		            }
+
+		            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
+		            LLAMA_FN_HOST_ACC_INLINE operator value_type() const
+		            {
+		                return static_cast<value_type>(ref);
+		            }
+
+		            template<typename T>
+		            LLAMA_FN_HOST_ACC_INLINE auto operator=(T) -> Reference&
+		            {
+		                static_assert(sizeof(T) == 0, "You cannot write through a Const accessor");
+		                return *this;
+		            }
+		        };
+
+		        // for proxy references
+		        template<typename ProxyReference, std::enable_if_t<llama::isProxyReference<ProxyReference>, int> = 0>
+		        LLAMA_FN_HOST_ACC_INLINE auto operator()(ProxyReference r) const
+		        {
+		            return Reference<ProxyReference>{std::move(r)};
+		        }
+		    };
+
+		    /// Qualifies references to memory with __restrict. Only works on l-value references.
+		    LLAMA_EXPORT
+		    struct Restrict
+		    {
+		        template<typename T>
+		        LLAMA_FN_HOST_ACC_INLINE auto operator()(T& r) const -> T& __restrict
+		        {
+		            return r;
+		        }
+		    };
+
+		#ifdef __cpp_lib_atomic_ref
+		    /// Accessor wrapping a reference into a std::atomic_ref. Can only wrap l-value references.
+		    LLAMA_EXPORT
+		    struct Atomic
+		    {
+		        template<typename T>
+		        LLAMA_FORCE_INLINE auto operator()(T& r) const -> std::atomic_ref<T>
+		        {
+		            return std::atomic_ref<T>{r};
+		        }
+		    };
+		#endif
+
+		    /// Locks a mutex during each access to the data structure.
+		    LLAMA_EXPORT
+		    template<typename Mutex = std::mutex>
+		    struct Locked
+		    {
+		        // mutexes are usually not movable, so we put them on the heap, so the accessor is movable
+		        std::unique_ptr<Mutex> m = std::make_unique<Mutex>();
+
+		        template<typename Ref, typename Value>
+		        // NOLINTNEXTLINE(cppcoreguidelines-special-member-functions,hicpp-special-member-functions)
+		        struct Reference : ProxyRefOpMixin<Reference<Ref, Value>, Value>
+		        {
+		            Ref ref;
+		            Mutex& m;
+
+		            using value_type = Value;
+
+		            // NOLINTNEXTLINE(bugprone-unhandled-self-assignment,cert-oop54-cpp)
+		            LLAMA_FORCE_INLINE constexpr auto operator=(const Reference& other) -> Reference&
+		            {
+		                const std::lock_guard<Mutex> lock(m);
+		                *this = static_cast<value_type>(other);
+		                return *this;
+		            }
+
+		            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
+		            LLAMA_FORCE_INLINE operator value_type() const
+		            {
+		                const std::lock_guard<Mutex> lock(m);
+		                return static_cast<value_type>(ref);
+		            }
+
+		            template<typename T>
+		            LLAMA_FORCE_INLINE auto operator=(T t) -> Reference&
+		            {
+		                const std::lock_guard<Mutex> lock(m);
+		                ref = t;
+		                return *this;
+		            }
+		        };
+
+		        template<typename PR>
+		        LLAMA_FORCE_INLINE auto operator()(PR r) const -> Reference<PR, typename PR::value_type>
+		        {
+		            return {{}, r, *m};
+		        }
+
+		        template<typename T>
+		        LLAMA_FORCE_INLINE auto operator()(T& r) const -> Reference<T&, std::remove_cv_t<T>>
+		        {
+		            return {{}, r, *m};
+		        }
+		    };
+
+		    namespace internal
+		    {
+		        template<std::size_t I, typename Accessor>
+		        struct StackedLeave : Accessor
+		        {
+		        };
+		    } // namespace internal
+
+		    /// Accessor combining multiple other accessors. The contained accessors are applied in left to right order to the
+		    /// memory location when forming the reference returned from a view.
+		    LLAMA_EXPORT
+		    template<typename... Accessors>
+		    struct Stacked : internal::StackedLeave<0, Default>
+		    {
+		    };
+
+		    LLAMA_EXPORT
+		    template<typename FirstAccessor, typename... MoreAccessors>
+		    struct Stacked<FirstAccessor, MoreAccessors...>
+		        : internal::StackedLeave<1 + sizeof...(MoreAccessors), FirstAccessor>
+		        , Stacked<MoreAccessors...>
+		    {
+		        using First = internal::StackedLeave<1 + sizeof...(MoreAccessors), FirstAccessor>;
+		        using Rest = Stacked<MoreAccessors...>;
+
+		        LLAMA_FN_HOST_ACC_INLINE Stacked() = default;
+
+		        LLAMA_FN_HOST_ACC_INLINE explicit Stacked(FirstAccessor first, MoreAccessors... rest)
+		            : First{std::move(first)}
+		            , Rest{std::move(rest)...}
+		        {
+		        }
+
+		        template<typename Reference>
+		        LLAMA_FN_HOST_ACC_INLINE auto operator()(Reference&& r) const -> decltype(auto)
+		        {
+		            return static_cast<const Rest&>(*this)(static_cast<const First&>(*this)(std::forward<Reference>(r)));
+		        }
+		    };
+		} // namespace llama::accessor
+		// ==
+		// == ./include/llama/Accessors.hpp ==
+		// ============================================================================
+
+	// #include "Array.hpp"    // amalgamate: file already inlined
+	// #include "ArrayIndexRange.hpp"    // amalgamate: file already inlined
+		// ============================================================================
+		// == ./include/llama/BlobAllocators.hpp ==
+		// ==
+		// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
+		// SPDX-License-Identifier: LGPL-3.0-or-later
+
+		// #pragma once
+		// #include "Array.hpp"    // amalgamate: file already inlined
+		// #include "Concepts.hpp"    // amalgamate: file already inlined
+		// #include "macros.hpp"    // amalgamate: file already inlined
+
+		#include <cstddef>
+		// #include <memory>    // amalgamate: file already included
+		#include <vector>
+		#if __has_include(<cuda_runtime.h>)
+		#    include <cuda_runtime.h>
+		#endif
+		#if __has_include(<alpaka/alpaka.hpp>)
+		#    include <alpaka/alpaka.hpp>
+		#endif
+
+		namespace llama::bloballoc
+		{
+		    /// Allocates statically sized memory for a \ref View, which is copied each time a \ref View is copied.
+		    /// \tparam BytesToReserve the amount of memory to reserve.
+		    LLAMA_EXPORT
+		    template<std::size_t BytesToReserve>
+		    struct Array
+		    {
+		        template<std::size_t Alignment>
+		        struct alignas(Alignment) AlignedArray : llama::Array<std::byte, BytesToReserve>
+		        {
+		        };
+
+		        template<std::size_t Alignment>
+		        LLAMA_FN_HOST_ACC_INLINE auto operator()(
+		            std::integral_constant<std::size_t, Alignment>,
+		            [[maybe_unused]] std::size_t count) const -> AlignedArray<Alignment>
+		        {
+		            assert(count == BytesToReserve);
+		            return {};
+		        }
+		    };
+		#ifdef __cpp_lib_concepts
+		    static_assert(BlobAllocator<Array<64>>);
+		#endif
+
+		    /// Allocates heap memory managed by a `std::unique_ptr` for a \ref View. This memory can only be uniquely owned by
+		    /// a single \ref View.
+		    LLAMA_EXPORT
+		    struct UniquePtr
+		    {
+		        template<std::size_t Alignment>
+		        auto operator()(std::integral_constant<std::size_t, Alignment>, std::size_t count) const
+		        {
+		            auto* ptr
+		                = static_cast<std::byte*>(::operator new[](count * sizeof(std::byte), std::align_val_t{Alignment}));
+		            auto deleter = [](std::byte* ptr) { ::operator delete[](ptr, std::align_val_t{Alignment}); };
+		            return std::unique_ptr<std::byte[], decltype(deleter)>{ptr, deleter};
+		        }
+		    };
+		#ifdef __cpp_lib_concepts
+		    static_assert(BlobAllocator<UniquePtr>);
+		#endif
+
+		    /// Allocates heap memory managed by a `std::shared_ptr` for a \ref View. This memory is shared between all copies
+		    /// of a \ref View.
+		    LLAMA_EXPORT
+		    struct SharedPtr
+		    {
+		        template<std::size_t Alignment>
+		        auto operator()(std::integral_constant<std::size_t, Alignment>, std::size_t count) const
+		            -> std::shared_ptr<std::byte[]>
+		        {
+		            auto* ptr
+		                = static_cast<std::byte*>(::operator new[](count * sizeof(std::byte), std::align_val_t{Alignment}));
+		            auto deleter = [](std::byte* ptr) { ::operator delete[](ptr, std::align_val_t{Alignment}); };
+		            return {ptr, deleter};
+		        }
+		    };
+		#ifdef __cpp_lib_concepts
+		    static_assert(BlobAllocator<SharedPtr>);
+		#endif
+
+		    /// An STL compatible allocator allowing to specify alignment.
+		    LLAMA_EXPORT
+		    template<typename T, std::size_t Alignment>
+		    struct AlignedAllocator
+		    {
+		        using value_type = T;
+
+		        inline AlignedAllocator() noexcept = default;
+
+		        template<typename T2>
+		        inline explicit AlignedAllocator(const AlignedAllocator<T2, Alignment>&) noexcept
+		        {
+		        }
+
+		        inline auto allocate(std::size_t n) -> T*
+		        {
+		            return static_cast<T*>(::operator new[](n * sizeof(T), std::align_val_t{Alignment}));
+		        }
+
+		        inline void deallocate(T* p, std::size_t)
+		        {
+		            ::operator delete[](p, std::align_val_t{Alignment});
+		        }
+
+		        template<typename T2>
+		        struct rebind // NOLINT(readability-identifier-naming)
+		        {
+		            using other = AlignedAllocator<T2, Alignment>;
+		        };
+
+		        auto operator!=(const AlignedAllocator<T, Alignment>& other) const -> bool
+		        {
+		            return !(*this == other);
+		        }
+
+		        auto operator==(const AlignedAllocator<T, Alignment>&) const -> bool
+		        {
+		            return true;
+		        }
+		    };
+
+		    /// Allocates heap memory managed by a `std::vector` for a \ref View, which is copied each time a \ref View is
+		    /// copied.
+		    LLAMA_EXPORT
+		    struct Vector
+		    {
+		        template<std::size_t Alignment>
+		        inline auto operator()(std::integral_constant<std::size_t, Alignment>, std::size_t count) const
+		        {
+		            return std::vector<std::byte, AlignedAllocator<std::byte, Alignment>>(count);
+		        }
+		    };
+		#ifdef __cpp_lib_concepts
+		    static_assert(BlobAllocator<Vector>);
+		#endif
+
+		#if __has_include(<cuda_runtime.h>)
+		    /// Allocates GPU device memory using cudaMalloc. The memory is managed by a std::unique_ptr with a deleter that
+		    /// calles cudaFree. If you want to use a view created with this allocator in a CUDA kernel, call \ref shallowCopy
+		    /// on the view before passing it to the kernel.
+		    LLAMA_EXPORT
+		    struct CudaMalloc
+		    {
+		        inline static const auto deleter = [](void* p)
+		        {
+		            if(const auto code = cudaFree(p); code != cudaSuccess)
+		                throw std::runtime_error(std::string{"cudaFree failed with code "} + cudaGetErrorString(code));
+		        };
+
+		        template<std::size_t FieldAlignment>
+		        inline auto operator()(std::integral_constant<std::size_t, FieldAlignment>, std::size_t count) const
+		        {
+		            std::byte* p = nullptr;
+		            if(const auto code = cudaMalloc(&p, count); code != cudaSuccess)
+		                throw std::runtime_error(std::string{"cudaMalloc failed with code "} + cudaGetErrorString(code));
+		            if(reinterpret_cast<std::uintptr_t>(p) & (FieldAlignment - 1 != 0u))
+		                throw std::runtime_error{"cudaMalloc does not align sufficiently"};
+		            return std::unique_ptr<std::byte[], decltype(deleter)>(p, deleter);
+		        }
+		    };
+		#endif
+
+		#if __has_include(<alpaka/alpaka.hpp>)
+		    LLAMA_EXPORT
+		    template<typename Size, typename Dev>
+		    struct AlpakaBuf
+		    {
+		        Dev& dev;
+
+		        template<std::size_t Alignment>
+		        inline auto operator()(std::integral_constant<std::size_t, Alignment>, std::size_t count) const
+		        {
+		            return alpaka::allocBuf<std::byte, Size>(dev, static_cast<Size>(count));
+		        }
+		    };
+		#endif
+		} // namespace llama::bloballoc
+		// ==
+		// == ./include/llama/BlobAllocators.hpp ==
+		// ============================================================================
+
+	// #include "Concepts.hpp"    // amalgamate: file already inlined
+	// #include "Core.hpp"    // amalgamate: file already inlined
+	// #include "macros.hpp"    // amalgamate: file already inlined
+		// ============================================================================
+		// == ./include/llama/mapping/One.hpp ==
+		// ==
+		// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
+		// SPDX-License-Identifier: LGPL-3.0-or-later
+
+		// #pragma once
+		// #include "../Core.hpp"    // amalgamate: file already inlined
+			// ============================================================================
+			// == ./include/llama/mapping/Common.hpp ==
+			// ==
+			// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
+			// SPDX-License-Identifier: LGPL-3.0-or-later
+
+			// #pragma once
+			// #include "../Core.hpp"    // amalgamate: file already inlined
+
+			// #include <atomic>    // amalgamate: file already included
+			#include <climits>
+			#ifndef __cpp_lib_atomic_ref
+			#    include <boost/atomic/atomic_ref.hpp>
+			#endif
+
+			namespace llama::mapping
+			{
+			    LLAMA_EXPORT
+			    template<typename TArrayExtents, typename TRecordDim>
+			    struct MappingBase : protected TArrayExtents
+			    {
+			        using ArrayExtents = TArrayExtents;
+			        using RecordDim = TRecordDim;
+
+			    protected:
+			        using ArrayIndex = typename ArrayExtents::Index;
+			        using size_type = typename ArrayExtents::value_type;
+
+			    public:
+			        constexpr MappingBase() = default;
+
+			        LLAMA_FN_HOST_ACC_INLINE
+			        constexpr explicit MappingBase(ArrayExtents extents, RecordDim = {}) : ArrayExtents(extents)
+			        {
+			        }
+
+			        LLAMA_FN_HOST_ACC_INLINE constexpr auto extents() const -> ArrayExtents
+			        {
+			            return static_cast<const ArrayExtents&>(*this);
+			        }
+			    };
+
+			    /// Functor that maps an \ref ArrayIndex into linear numbers, where the fast moving index should be the rightmost
+			    /// one, which models how C++ arrays work and is analogous to mdspan's layout_right. E.g. ArrayIndex<3> a; stores 3
+			    /// indices where a[2] should be incremented in the innermost loop.
+			    LLAMA_EXPORT
+			    struct LinearizeArrayIndexRight
+			    {
+			        template<typename ArrayExtents>
+			        LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const ArrayExtents& extents) -> typename ArrayExtents::value_type
+			        {
+			            return product(extents);
+			        }
+
+			        /// \param ai Index in the array dimensions.
+			        /// \param extents Total size of the array dimensions.
+			        /// \return Linearized index.
+			        template<typename ArrayExtents>
+			        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator()(
+			            const typename ArrayExtents::Index& ai,
+			            const ArrayExtents& extents) const -> typename ArrayExtents::value_type
+			        {
+			            if constexpr(ArrayExtents::rank == 0)
+			                return 0;
+			            else
+			            {
+			                auto address = ai[0];
+			                for(int i = 1; i < static_cast<int>(ArrayExtents::rank); i++)
+			                {
+			                    address *= extents[i];
+			                    address += ai[i];
+			                }
+			                return address;
+			            }
+			        }
+			    };
+
+			    LLAMA_EXPORT
+			    using LinearizeArrayIndexCpp = LinearizeArrayIndexRight;
+
+			    /// Functor that maps a \ref ArrayIndex into linear numbers the way Fortran arrays work. The fast moving index of
+			    /// the ArrayIndex object should be the last one. E.g. ArrayIndex<3> a; stores 3 indices where a[0] should be
+			    /// incremented in the innermost loop.
+			    LLAMA_EXPORT
+			    struct LinearizeArrayIndexLeft
+			    {
+			        template<typename ArrayExtents>
+			        LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const ArrayExtents& extents) -> typename ArrayExtents::value_type
+			        {
+			            return product(extents);
+			        }
+
+			        /// \param ai Index in the array dimensions.
+			        /// \param extents Total size of the array dimensions.
+			        /// \return Linearized index.
+			        template<typename ArrayExtents>
+			        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator()(
+			            const typename ArrayExtents::Index& ai,
+			            const ArrayExtents& extents) const -> typename ArrayExtents::value_type
+			        {
+			            if constexpr(ArrayExtents::rank == 0)
+			                return 0;
+			            else
+			            {
+			                auto address = ai[ArrayExtents::rank - 1];
+			                for(int i = static_cast<int>(ArrayExtents::rank) - 2; i >= 0; i--)
+			                {
+			                    address *= extents[i];
+			                    address += ai[i];
+			                }
+			                return address;
+			            }
+			        }
+			    };
+
+			    LLAMA_EXPORT
+			    using LinearizeArrayIndexFortran = LinearizeArrayIndexLeft;
+
+			    /// Functor that maps an \ref ArrayIndex into linear numbers using the Z-order space filling curve (Morton codes).
+			    LLAMA_EXPORT
+			    struct LinearizeArrayIndexMorton
+			    {
+			        template<typename ArrayExtents>
+			        LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const ArrayExtents& extents) const ->
+			            typename ArrayExtents::value_type
+			        {
+			            if constexpr(ArrayExtents::rank == 0)
+			                return 0;
+			            else
+			            {
+			                auto longest = extents[0];
+			                for(int i = 1; i < static_cast<int>(ArrayExtents::rank); i++)
+			                    longest = std::max(longest, extents[i]);
+			                const auto longestPO2 = bitCeil(longest);
+			                return intPow(longestPO2, static_cast<typename ArrayExtents::value_type>(ArrayExtents::rank));
+			            }
+			        }
+
+			        /// \param ai Coordinate in the array dimensions.
+			        /// \param extents Total size of the array dimensions.
+			        /// \return Linearized index.
+			        template<typename ArrayExtents>
+			        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator()(
+			            const typename ArrayExtents::Index& ai,
+			            [[maybe_unused]] const ArrayExtents& extents) const -> typename ArrayExtents::value_type
+			        {
+			            using size_type = typename ArrayExtents::value_type;
+			            constexpr auto rank = static_cast<size_type>(ArrayExtents::rank);
+			            size_type r = 0;
+			            for(size_type bit = 0; bit < (static_cast<size_type>(sizeof(size_type)) * CHAR_BIT) / rank; bit++)
+			                for(size_type i = 0; i < rank; i++)
+			                    r |= (ai[i] & (size_type{1} << bit)) << ((bit + 1) * (rank - 1) - i);
+			            return r;
+			        }
+
+			    private:
+			        template<typename T>
+			        LLAMA_FN_HOST_ACC_INLINE static constexpr auto bitCeil(T n) -> T
+			        {
+			            T r = 1u;
+			            while(r < n)
+			                r <<= 1u;
+			            return r;
+			        }
+
+			        template<typename T>
+			        LLAMA_FN_HOST_ACC_INLINE static constexpr auto intPow(T b, T e) -> T
+			        {
+			            e--;
+			            auto r = b;
+			            while(e != 0u)
+			            {
+			                r *= b;
+			                e--;
+			            }
+			            return r;
+			        }
+			    };
+
+			    /// Retains the order of the record dimension's fields.
+			    LLAMA_EXPORT
+			    template<typename TFlatRecordDim>
+			    struct PermuteFieldsInOrder
+			    {
+			        using FlatRecordDim = TFlatRecordDim;
+
+			        template<std::size_t FlatRecordCoord>
+			        static constexpr std::size_t permute = FlatRecordCoord;
+			    };
+
+			    /// Sorts the record dimension's the fields according to a given predicate on the field types.
+			    /// @tparam Less A binary predicate accepting two field types, which exposes a member value. Value must be true if
+			    /// the first field type is less than the second one, otherwise false.
+			    LLAMA_EXPORT
+			    template<typename FlatOrigRecordDim, template<typename, typename> typename Less>
+			    struct PermuteFieldsSorted
+			    {
+			    private:
+			        using FlatSortedRecordDim = mp_sort<FlatOrigRecordDim, Less>;
+
+			        template<typename A, typename B>
+			        using LessWithIndices = Less<mp_at<FlatOrigRecordDim, A>, mp_at<FlatOrigRecordDim, B>>;
+
+			        // A permutation from new FlatSortedRecordDim index to old FlatOrigRecordDim index
+			        using PermutedIndices = mp_sort<mp_iota<mp_size<FlatOrigRecordDim>>, LessWithIndices>;
+
+			        template<typename A, typename B>
+			        using LessInvertPermutation
+			            = std::bool_constant<(mp_at<PermutedIndices, A>::value < mp_at<PermutedIndices, B>::value)>;
+
+			        // A permutation from old FlatOrigRecordDim index to new FlatSortedRecordDim index
+			        using InversePermutedIndices = mp_sort<mp_iota<mp_size<FlatOrigRecordDim>>, LessInvertPermutation>;
+
+			    public:
+			        using FlatRecordDim = FlatSortedRecordDim;
+
+			        template<std::size_t FlatRecordCoord>
+			        static constexpr std::size_t permute = mp_at_c<InversePermutedIndices, FlatRecordCoord>::value;
+			    };
+
+			    namespace internal
+			    {
+			        template<typename A, typename B>
+			        using LessAlignment = std::bool_constant<alignof(A) < alignof(B)>;
+
+			        template<typename A, typename B>
+			        using MoreAlignment = std::bool_constant<(alignof(A) > alignof(B))>;
+			    } // namespace internal
+
+			    /// Sorts the record dimension fields by increasing alignment of its fields.
+			    LLAMA_EXPORT
+			    template<typename FlatRecordDim>
+			    using PermuteFieldsIncreasingAlignment = PermuteFieldsSorted<FlatRecordDim, internal::LessAlignment>;
+
+			    /// Sorts the record dimension fields by decreasing alignment of its fields.
+			    LLAMA_EXPORT
+			    template<typename FlatRecordDim>
+			    using PermuteFieldsDecreasingAlignment = PermuteFieldsSorted<FlatRecordDim, internal::MoreAlignment>;
+
+			    /// Sorts the record dimension fields by the alignment of its fields to minimize padding.
+			    LLAMA_EXPORT
+			    template<typename FlatRecordDim>
+			    using PermuteFieldsMinimizePadding = PermuteFieldsIncreasingAlignment<FlatRecordDim>;
+
+			    namespace internal
+			    {
+			        template<auto I>
+			        struct S;
+
+			        template<typename CountType>
+			        LLAMA_FN_HOST_ACC_INLINE void atomicInc(CountType& i)
+			        {
+			#ifdef __CUDA_ARCH__
+			            // if you get an error here that there is no overload of atomicAdd, your CMAKE_CUDA_ARCHITECTURE might be
+			            // too low or you need to use a smaller CountType for the FieldAccessCount or Heatmap mapping.
+			            if constexpr(mp_contains<mp_list<int, unsigned int, unsigned long long int>, CountType>::value)
+			                atomicAdd(&i, CountType{1});
+			            else if constexpr(sizeof(CountType) == sizeof(unsigned int))
+			                atomicAdd(reinterpret_cast<unsigned int*>(&i), 1u);
+			            else if constexpr(sizeof(CountType) == sizeof(unsigned long long int))
+			                atomicAdd(reinterpret_cast<unsigned long long int*>(&i), 1ull);
+			            else
+			                static_assert(sizeof(CountType) == 0, "There is no CUDA atomicAdd for your CountType");
+			#elif defined(__cpp_lib_atomic_ref)
+			            ++std::atomic_ref<CountType>{i};
+			#else
+			            ++boost::atomic_ref<CountType>{i};
+			#endif
+			        }
+			    } // namespace internal
+
+			    LLAMA_EXPORT
+			    enum class FieldAlignment
+			    {
+			        Pack,
+			        Align
+			    };
+			} // namespace llama::mapping
+			// ==
+			// == ./include/llama/mapping/Common.hpp ==
+			// ============================================================================
+
+
+		namespace llama::mapping
+		{
+		    /// Maps all array dimension indices to the same location and layouts struct members consecutively. This mapping is
+		    /// used for temporary, single element views.
+		    /// \tparam TFieldAlignment If Align, padding bytes are inserted to guarantee that struct members are properly
+		    /// aligned. If false, struct members are tightly packed.
+		    /// \tparam PermuteFields Defines how the record dimension's fields should be permuted. See \ref
+		    /// PermuteFieldsInOrder, \ref PermuteFieldsIncreasingAlignment, \ref PermuteFieldsDecreasingAlignment and
+		    /// \ref PermuteFieldsMinimizePadding.
+		    LLAMA_EXPORT
+		    template<
+		        typename TArrayExtents,
+		        typename TRecordDim,
+		        FieldAlignment TFieldAlignment = FieldAlignment::Align,
+		        template<typename> typename PermuteFields = PermuteFieldsMinimizePadding>
+		    struct One : MappingBase<TArrayExtents, TRecordDim>
+		    {
+		    private:
+		        using Base = MappingBase<TArrayExtents, TRecordDim>;
+		        using size_type = typename Base::size_type;
+
+		    public:
+		        inline static constexpr FieldAlignment fieldAlignment = TFieldAlignment;
+		        using Permuter = PermuteFields<FlatRecordDim<TRecordDim>>;
+		        static constexpr std::size_t blobCount = 1;
+
+		#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ >= 12
+		        using Base::Base;
+		#else
+		        constexpr One() = default;
+
+		        LLAMA_FN_HOST_ACC_INLINE constexpr explicit One(TArrayExtents extents, TRecordDim = {}) : Base(extents)
+		        {
+		        }
+		#endif
+
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(size_type) const -> size_type
+		        {
+		            return flatSizeOf<
+		                typename Permuter::FlatRecordDim,
+		                fieldAlignment == FieldAlignment::Align,
+		                false>; // no tail padding
+		        }
+
+		        template<std::size_t... RecordCoords>
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
+		            typename Base::ArrayIndex,
+		            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset<size_type>
+		        {
+		            constexpr std::size_t flatFieldIndex =
+		#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ <= 6
+		                *& // mess with nvcc compiler state to workaround bug
+		#endif
+		                 Permuter::template permute<flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>>;
+		            constexpr auto offset = static_cast<size_type>(flatOffsetOf<
+		                                                           typename Permuter::FlatRecordDim,
+		                                                           flatFieldIndex,
+		                                                           fieldAlignment == FieldAlignment::Align>);
+		            return {size_type{0}, offset};
+		        }
+		    };
+
+		    /// One mapping preserving the alignment of the field types by inserting padding.
+		    /// \see One
+		    LLAMA_EXPORT
+		    template<typename ArrayExtents, typename RecordDim>
+		    using AlignedOne = One<ArrayExtents, RecordDim, FieldAlignment::Align, PermuteFieldsInOrder>;
+
+		    /// One mapping preserving the alignment of the field types by inserting padding and permuting the field order to
+		    /// minimize this padding.
+		    /// \see One
+		    LLAMA_EXPORT
+		    template<typename ArrayExtents, typename RecordDim>
+		    using MinAlignedOne = One<ArrayExtents, RecordDim, FieldAlignment::Align, PermuteFieldsMinimizePadding>;
+
+		    /// One mapping packing the field types tightly, violating the types' alignment requirements.
+		    /// \see One
+		    LLAMA_EXPORT
+		    template<typename ArrayExtents, typename RecordDim>
+		    using PackedOne = One<ArrayExtents, RecordDim, FieldAlignment::Pack, PermuteFieldsInOrder>;
+
+		    /// Binds parameters to a \ref One mapping except for array and record dimension, producing a quoted
+		    /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
+		    LLAMA_EXPORT
+		    template<
+		        FieldAlignment FieldAlignment = FieldAlignment::Align,
+		        template<typename> typename PermuteFields = PermuteFieldsMinimizePadding>
+		    struct BindOne
+		    {
+		        template<typename ArrayExtents, typename RecordDim>
+		        using fn = One<ArrayExtents, RecordDim, FieldAlignment, PermuteFields>;
+		    };
+
+		    LLAMA_EXPORT
+		    template<typename Mapping>
+		    inline constexpr bool isOne = false;
+
+		    LLAMA_EXPORT
+		    template<
+		        typename ArrayExtents,
+		        typename RecordDim,
+		        FieldAlignment FieldAlignment,
+		        template<typename>
+		        typename PermuteFields>
+		    inline constexpr bool isOne<One<ArrayExtents, RecordDim, FieldAlignment, PermuteFields>> = true;
+		} // namespace llama::mapping
+		// ==
+		// == ./include/llama/mapping/One.hpp ==
+		// ============================================================================
+
+
+	// #include <type_traits>    // amalgamate: file already included
+
+	namespace llama
+	{
+	    LLAMA_EXPORT
+	#ifdef __cpp_lib_concepts
+	    template<typename TMapping, Blob BlobType, typename TAccessor>
+	#else
+	    template<typename TMapping, typename BlobType, typename TAccessor>
+	#endif
+	    struct View;
+
+	    namespace internal
+	    {
+	        template<typename Allocator, typename RecordDim>
+	        using AllocatorBlobType
+	            = decltype(std::declval<Allocator>()(std::integral_constant<std::size_t, alignOf<RecordDim>>{}, 0));
+
+	        template<typename Allocator, typename Mapping, std::size_t... Is>
+	        LLAMA_FN_HOST_ACC_INLINE auto makeBlobArray(
+	            const Allocator& alloc,
+	            const Mapping& mapping,
+	            std::integer_sequence<std::size_t, Is...>)
+	            -> Array<AllocatorBlobType<Allocator, typename Mapping::RecordDim>, Mapping::blobCount>
+	        {
+	            [[maybe_unused]] constexpr auto alignment
+	                = alignOf<typename Mapping::RecordDim>; // g++-12 warns that alignment is unused
+	            LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
+	            return {alloc(std::integral_constant<std::size_t, alignment>{}, mapping.blobSize(Is))...};
+	            LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
+	        } // NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
+	    } // namespace internal
+
+	    /// Same as \ref allocView but does not run field constructors.
+	    LLAMA_EXPORT
+	#ifdef __cpp_lib_concepts
+	    template<typename Mapping, BlobAllocator Allocator = bloballoc::Vector, typename Accessor = accessor::Default>
+	#else
+	    template<typename Mapping, typename Allocator = bloballoc::Vector, typename Accessor = accessor::Default>
+	#endif
+	    LLAMA_FN_HOST_ACC_INLINE auto allocViewUninitialized(
+	        Mapping mapping = {},
+	        const Allocator& alloc = {},
+	        Accessor accessor = {})
+	    {
+	        auto blobs = internal::makeBlobArray(alloc, mapping, std::make_index_sequence<Mapping::blobCount>{});
+	        return View<Mapping, internal::AllocatorBlobType<Allocator, typename Mapping::RecordDim>, Accessor>{
+	            std::move(mapping),
+	            std::move(blobs),
+	            std::move(accessor)};
+	    }
+
+	    namespace internal
+	    {
+	        template<typename Mapping, typename RecordCoord, typename = void>
+	        struct IsComputed : std::false_type
+	        {
+	        };
+
+	        template<typename Mapping, typename RecordCoord>
+	        struct IsComputed<Mapping, RecordCoord, std::void_t<decltype(Mapping::isComputed(RecordCoord{}))>>
+	            : std::bool_constant<Mapping::isComputed(RecordCoord{})>
+	        {
+	        };
+	    } // namespace internal
+
+	    /// Returns true if the field accessed via the given mapping and record coordinate is a computed value.
+	    LLAMA_EXPORT
+	    template<typename Mapping, typename RecordCoord>
+	    inline constexpr bool isComputed = internal::IsComputed<Mapping, RecordCoord>::value;
+
+	    /// Returns true if any field accessed via the given mapping is a computed value.
+	    // TODO(bgruber): harmonize this with LLAMA's concepts from Concepts.hpp
+	    LLAMA_EXPORT
+	    template<typename Mapping>
+	    inline constexpr bool hasAnyComputedField = mp_any_of<
+	        LeafRecordCoords<typename Mapping::RecordDim>,
+	        mp_bind_front<internal::IsComputed, Mapping>::template fn>::value;
+
+	    LLAMA_EXPORT
+	    template<typename Mapping, typename BlobType, typename Accessor, std::size_t... RCs>
+	    LLAMA_FN_HOST_ACC_INLINE void constructField(
+	        View<Mapping, BlobType, Accessor>& view,
+	        typename Mapping::ArrayExtents::Index ai,
+	        RecordCoord<RCs...> rc)
+	    {
+	        using FieldType = GetType<typename Mapping::RecordDim, decltype(rc)>;
+
+	        // this handles physical and computed mappings
+	        if constexpr(sizeof...(RCs) == 0)
+	        {
+	            using RefType = decltype(view(ai));
+	            if constexpr(isProxyReference<RefType>)
+	            {
+	                view(ai) = FieldType{};
+	            }
+	            else if constexpr(
+	                std::is_lvalue_reference_v<RefType> && !std::is_const_v<std::remove_reference_t<RefType>>)
+	            {
+	                new(&view(ai)) FieldType{};
+	            }
+	        }
+	        else
+	        {
+	            using RefType = decltype(view(ai)(rc));
+	            if constexpr(isProxyReference<RefType>)
+	            {
+	                view(ai)(rc) = FieldType{};
+	            }
+	            else if constexpr(
+	                std::is_lvalue_reference_v<RefType> && !std::is_const_v<std::remove_reference_t<RefType>>)
+	            {
+	                new(&view(ai)(rc)) FieldType{};
+	            }
+	        }
+	    }
+
+	    /// Value-initializes all fields reachable through the given view. That is, constructors are run and fundamental
+	    /// types are zero-initialized. Computed fields are constructed if they return l-value references and assigned a
+	    /// default constructed value if they return a proxy reference.
+	    LLAMA_EXPORT
+	    template<typename Mapping, typename BlobType, typename Accessor>
+	    LLAMA_FN_HOST_ACC_INLINE void constructFields(View<Mapping, BlobType, Accessor>& view)
+	    {
+	        using View = View<Mapping, BlobType, Accessor>;
+	        using RecordDim = typename View::RecordDim;
+	        forEachArrayIndex(
+	            view.extents(),
+	            [&](typename View::ArrayIndex ai) LLAMA_LAMBDA_INLINE
+	            { forEachLeafCoord<RecordDim>([&](auto rc) LLAMA_LAMBDA_INLINE { constructField(view, ai, rc); }); });
+	    }
+
+	    /// Creates a view based on the given mapping, e.g. \ref AoS or \ref :SoA. For allocating the view's underlying
+	    /// memory, the specified allocator callable is used (or the default one, which is \ref bloballoc::Vector). The
+	    /// allocator callable is called with the alignment and size of bytes to allocate for each blob of the mapping.
+	    /// Value-initialization is performed for all fields by calling \ref constructFields. This function is the
+	    /// preferred way to create a \ref View. See also \ref allocViewUninitialized.
+	    LLAMA_EXPORT
+	#ifdef __cpp_lib_concepts
+	    template<typename Mapping, BlobAllocator Allocator = bloballoc::Vector, typename Accessor = accessor::Default>
+	#else
+	    template<typename Mapping, typename Allocator = bloballoc::Vector, typename Accessor = accessor::Default>
+	#endif
+	    LLAMA_FN_HOST_ACC_INLINE auto allocView(Mapping mapping = {}, const Allocator& alloc = {}, Accessor accessor = {})
+	        -> View<Mapping, internal::AllocatorBlobType<Allocator, typename Mapping::RecordDim>, Accessor>
+	    {
+	        auto view = allocViewUninitialized(std::move(mapping), alloc, std::move(accessor));
+	        constructFields(view);
+	        return view;
+	    }
+
+	    /// Same as \ref allocViewStack but does not run field constructors.
+	    LLAMA_EXPORT
+	    template<std::size_t Dim, typename RecordDim>
+	    LLAMA_FN_HOST_ACC_INLINE auto allocViewStackUninitialized() -> decltype(auto)
+	    {
+	        constexpr auto mapping = mapping::MinAlignedOne<ArrayExtentsNCube<int, Dim, 1>, RecordDim>{};
+	        return allocViewUninitialized(mapping, bloballoc::Array<mapping.blobSize(0)>{});
+	    }
+
+	    /// Allocates a \ref View holding a single record backed by stack memory (\ref bloballoc::Array).
+	    /// \tparam Dim Dimension of the \ref ArrayExtents of the \ref View.
+	    LLAMA_EXPORT
+	    template<std::size_t Dim, typename RecordDim>
+	    LLAMA_FN_HOST_ACC_INLINE auto allocViewStack() -> decltype(auto)
+	    {
+	        auto view = allocViewStackUninitialized<Dim, RecordDim>();
+	        constructFields(view);
+	        return view;
+	    }
+
+	    LLAMA_EXPORT
+	    template<typename View, typename BoundRecordCoord = RecordCoord<>, bool OwnView = false>
+	    struct RecordRef;
+
+	    /// A \ref RecordRef that owns and holds a single value.
+	    LLAMA_EXPORT
+	    template<typename RecordDim>
+	    using One = RecordRef<decltype(allocViewStack<0, RecordDim>()), RecordCoord<>, true>;
+
+	    /// Is true, if T is an instance of \ref One.
+	    LLAMA_EXPORT
+	    template<typename T>
+	    inline constexpr bool isOne = false;
+
+	    LLAMA_EXPORT
+	    template<typename View, typename BoundRecordCoord>
+	    inline constexpr bool isOne<RecordRef<View, BoundRecordCoord, true>> = true;
+
+	    // TODO(bgruber): Higher dimensional iterators might not have good codegen. Multiple nested loops seem to be
+	    // superior to a single iterator over multiple dimensions. At least compilers are able to produce better code.
+	    // std::mdspan also discovered similar difficulties and there was a discussion in WG21 in Oulu 2016 to
+	    // remove/postpone iterators from the design. In std::mdspan's design, the iterator iterated over the co-domain.
+	    LLAMA_EXPORT
+	    template<typename View>
+	    struct Iterator
+	    {
+	        using ArrayIndexIterator = llama::ArrayIndexIterator<typename View::ArrayExtents>;
+
+	        using iterator_category = std::random_access_iterator_tag;
+	        using value_type = One<typename View::RecordDim>;
+	        using difference_type = typename ArrayIndexIterator::difference_type;
+	        using pointer = internal::IndirectValue<RecordRef<View>>;
+	        using reference = RecordRef<View>;
+
+	        constexpr Iterator() = default;
+
+	        LLAMA_FN_HOST_ACC_INLINE constexpr Iterator(ArrayIndexIterator arrayIndex, View* view)
+	            : arrayIndex(arrayIndex)
+	            , view(view)
+	        {
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        constexpr auto operator++() -> Iterator&
+	        {
+	            ++arrayIndex;
+	            return *this;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        constexpr auto operator++(int) -> Iterator
+	        {
+	            auto tmp = *this;
+	            ++*this;
+	            return tmp;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        constexpr auto operator--() -> Iterator&
+	        {
+	            --arrayIndex;
+	            return *this;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        constexpr auto operator--(int) -> Iterator
+	        {
+	            auto tmp{*this};
+	            --*this;
+	            return tmp;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        constexpr auto operator*() const -> reference
+	        {
+	            return (*view)(*arrayIndex);
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        constexpr auto operator->() const -> pointer
+	        {
+	            return {**this};
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        constexpr auto operator[](difference_type i) const -> reference
+	        {
+	            return *(*this + i);
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        constexpr auto operator+=(difference_type n) -> Iterator&
+	        {
+	            arrayIndex += n;
+	            return *this;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        friend constexpr auto operator+(Iterator it, difference_type n) -> Iterator
+	        {
+	            it += n;
+	            return it;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        friend constexpr auto operator+(difference_type n, Iterator it) -> Iterator
+	        {
+	            return it + n;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        constexpr auto operator-=(difference_type n) -> Iterator&
+	        {
+	            arrayIndex -= n;
+	            return *this;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        friend constexpr auto operator-(Iterator it, difference_type n) -> Iterator
+	        {
+	            it -= n;
+	            return it;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        friend constexpr auto operator-(const Iterator& a, const Iterator& b) -> difference_type
+	        {
+	            assert(a.view == b.view);
+	            return static_cast<std::ptrdiff_t>(a.arrayIndex - b.arrayIndex);
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        friend constexpr auto operator==(const Iterator& a, const Iterator& b) -> bool
+	        {
+	            assert(a.view == b.view);
+	            return a.arrayIndex == b.arrayIndex;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        friend constexpr auto operator!=(const Iterator& a, const Iterator& b) -> bool
+	        {
+	            return !(a == b);
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        friend constexpr auto operator<(const Iterator& a, const Iterator& b) -> bool
+	        {
+	            assert(a.view == b.view);
+	            return a.arrayIndex < b.arrayIndex;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        friend constexpr auto operator>(const Iterator& a, const Iterator& b) -> bool
+	        {
+	            return b < a;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        friend constexpr auto operator<=(const Iterator& a, const Iterator& b) -> bool
+	        {
+	            return !(a > b);
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        friend constexpr auto operator>=(const Iterator& a, const Iterator& b) -> bool
+	        {
+	            return !(a < b);
+	        }
+
+	        ArrayIndexIterator arrayIndex;
+	        View* view;
+	    };
+
+	    /// Using a mapping, maps the given array index and record coordinate to a memory reference onto the given blobs.
+	    /// \return Either an l-value reference if the record coord maps to a physical field or a proxy reference if mapped
+	    /// to a computed field.
+	    LLAMA_EXPORT
+	    template<typename Mapping, typename RecordCoord, typename Blobs>
+	    LLAMA_FN_HOST_ACC_INLINE auto mapToMemory(
+	        Mapping& mapping,
+	        typename Mapping::ArrayExtents::Index ai,
+	        RecordCoord rc,
+	        Blobs& blobs) -> decltype(auto)
+	    {
+	        if constexpr(llama::isComputed<Mapping, RecordCoord>)
+	            return mapping.compute(ai, rc, blobs);
+	        else
+	        {
+	            const auto [nr, offset] = mapping.blobNrAndOffset(ai, rc);
+	            using Type = GetType<typename Mapping::RecordDim, RecordCoord>;
+	            LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
+	            return reinterpret_cast<CopyConst<std::remove_reference_t<decltype(blobs[nr][offset])>, Type>&>(
+	                blobs[nr][offset]);
+	            LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
+	        }
+	    }
+
+	    /// Central LLAMA class holding memory for storage and giving access to values stored there defined by a
+	    /// mapping. A view should be created using \ref allocView. \tparam TMapping The mapping used by the view to
+	    /// map accesses into memory. \tparam TBlobType The storage type used by the view holding memory. \tparam
+	    /// TAccessor The accessor to use when an access is made through this view.
+	    LLAMA_EXPORT
+	#ifdef __cpp_lib_concepts
+	    template<typename TMapping, Blob TBlobType, typename TAccessor = accessor::Default>
+	#else
+	    template<typename TMapping, typename TBlobType, typename TAccessor = accessor::Default>
+	#endif
+	    struct LLAMA_DECLSPEC_EMPTY_BASES View
+	        : private TMapping
+	        , private TAccessor
+	#if CAN_USE_RANGES
+	        , std::ranges::view_base
+	#endif
+	    {
+	        static_assert(!std::is_const_v<TMapping>);
+	        using Mapping = TMapping;
+	        using BlobType = TBlobType;
+	        using ArrayExtents = typename Mapping::ArrayExtents;
+	        using ArrayIndex = typename ArrayExtents::Index;
+	        using RecordDim = typename Mapping::RecordDim;
+	        using Accessor = TAccessor;
+	        using iterator = Iterator<View>;
+	        using const_iterator = Iterator<const View>;
+
+	    private:
+	        using size_type = typename ArrayExtents::value_type;
+
+	    public:
+	        static_assert(
+	            std::is_same_v<Mapping, std::decay_t<Mapping>>,
+	            "Mapping must not be const qualified or a reference. Are you using decltype(...) as View template "
+	            "argument?");
+	        static_assert(
+	            std::is_same_v<ArrayExtents, std::decay_t<ArrayExtents>>,
+	            "Mapping::ArrayExtents must not be const qualified or a reference. Are you using decltype(...) as "
+	            "mapping "
+	            "template argument?");
+
+	        /// Performs default initialization of the blob array.
+	        // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init,hicpp-member-init)
+	        View() = default;
+
+	        /// Creates a LLAMA View manually. Prefer the allocations functions \ref allocView and \ref
+	        /// allocViewUninitialized if possible.
+	        /// \param mapping The mapping used by the view to map accesses into memory.
+	        /// \param blobs An array of blobs providing storage space for the mapped data.
+	        /// \param accessor The accessor to use when an access is made through this view.
+	        LLAMA_FN_HOST_ACC_INLINE
+	        explicit View(Mapping mapping, Array<BlobType, Mapping::blobCount> blobs = {}, Accessor accessor = {})
+	            : Mapping(std::move(mapping))
+	            , Accessor(std::move(accessor))
+	            , m_blobs(std::move(blobs))
+	        {
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE auto mapping() -> Mapping&
+	        {
+	            return static_cast<Mapping&>(*this);
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE auto mapping() const -> const Mapping&
+	        {
+	            return static_cast<const Mapping&>(*this);
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE auto accessor() -> Accessor&
+	        {
+	            return static_cast<Accessor&>(*this);
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE auto accessor() const -> const Accessor&
+	        {
+	            return static_cast<const Accessor&>(*this);
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE auto extents() const -> ArrayExtents
+	        {
+	            return mapping().extents();
+	        }
+
+	#if !(defined(_MSC_VER) && defined(__NVCC__))
+	        template<typename V>
+	        auto operator()(llama::ArrayIndex<V, ArrayIndex::rank>) const
+	        {
+	            static_assert(!sizeof(V), "Passed ArrayIndex with SizeType different than Mapping::ArrayExtent");
+	        }
+	#endif
+
+	        /// Retrieves the \ref RecordRef at the given \ref ArrayIndex index.
+	        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayIndex ai) const -> decltype(auto)
+	        {
+	            if constexpr(isRecordDim<RecordDim>)
+	                return RecordRef<const View>{ai, *this};
+	            else
+	                return access(ai, RecordCoord<>{});
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayIndex ai) -> decltype(auto)
+	        {
+	            if constexpr(isRecordDim<RecordDim>)
+	                return RecordRef<View>{ai, *this};
+	            else
+	                return access(ai, RecordCoord<>{});
+	        }
+
+	        /// Retrieves the \ref RecordRef at the \ref ArrayIndex index constructed from the passed component
+	        /// indices.
+	        template<
+	            typename... Indices,
+	            std::enable_if_t<std::conjunction_v<std::is_convertible<Indices, size_type>...>, int> = 0>
+	        LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) const -> decltype(auto)
+	        {
+	            static_assert(
+	                sizeof...(Indices) == ArrayIndex::rank,
+	                "Please specify as many indices as you have array dimensions");
+	            return (*this)(ArrayIndex{static_cast<typename ArrayIndex::value_type>(indices)...});
+	        }
+
+	        template<
+	            typename... Indices,
+	            std::enable_if_t<std::conjunction_v<std::is_convertible<Indices, size_type>...>, int> = 0>
+	        LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) -> decltype(auto)
+	        {
+	            static_assert(
+	                sizeof...(Indices) == ArrayIndex::rank,
+	                "Please specify as many indices as you have array dimensions");
+	            return (*this)(ArrayIndex{static_cast<typename ArrayIndex::value_type>(indices)...});
+	        }
+
+	        /// Retrieves the \ref RecordRef at the \ref ArrayIndex index constructed from the passed component
+	        /// indices.
+	        LLAMA_FN_HOST_ACC_INLINE auto operator[](ArrayIndex ai) const -> decltype(auto)
+	        {
+	            return (*this)(ai);
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE auto operator[](ArrayIndex ai) -> decltype(auto)
+	        {
+	            return (*this)(ai);
+	        }
+
+	#if !(defined(_MSC_VER) && defined(__NVCC__))
+	        template<typename V>
+	        auto operator[](llama::ArrayIndex<V, ArrayIndex::rank>) const
+	        {
+	            static_assert(!sizeof(V), "Passed ArrayIndex with SizeType different than Mapping::ArrayExtent");
+	        }
+	#endif
+
+	        /// Retrieves the \ref RecordRef at the 1D \ref ArrayIndex index constructed from the passed index.
+	        LLAMA_FN_HOST_ACC_INLINE auto operator[](size_type index) const -> decltype(auto)
+	        {
+	            return (*this)(index);
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE auto operator[](size_type index) -> decltype(auto)
+	        {
+	            return (*this)(index);
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        auto begin() -> iterator
+	        {
+	            return {ArrayIndexRange<ArrayExtents>{extents()}.begin(), this};
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        auto begin() const -> const_iterator
+	        {
+	            return {ArrayIndexRange<ArrayExtents>{extents()}.begin(), this};
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        auto end() -> iterator
+	        {
+	            return {ArrayIndexRange<ArrayExtents>{extents()}.end(), this};
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        auto end() const -> const_iterator
+	        {
+	            return {ArrayIndexRange<ArrayExtents>{extents()}.end(), this};
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE auto blobs() -> Array<BlobType, Mapping::blobCount>&
+	        {
+	            return m_blobs;
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE auto blobs() const -> const Array<BlobType, Mapping::blobCount>&
+	        {
+	            return m_blobs;
+	        }
+
+	    private:
+	        template<typename TView, typename TBoundRecordCoord, bool OwnView>
+	        friend struct RecordRef;
+
+	        template<std::size_t... Coords>
+	        LLAMA_FN_HOST_ACC_INLINE auto access(ArrayIndex ai, RecordCoord<Coords...> rc = {}) const -> decltype(auto)
+	        {
+	            return accessor()(mapToMemory(mapping(), ai, rc, m_blobs));
+	        }
+
+	        template<std::size_t... Coords>
+	        LLAMA_FN_HOST_ACC_INLINE auto access(ArrayIndex ai, RecordCoord<Coords...> rc = {}) -> decltype(auto)
+	        {
+	            return accessor()(mapToMemory(mapping(), ai, rc, m_blobs));
+	        }
+
+	        Array<BlobType, Mapping::blobCount> m_blobs;
+	    };
+
+	    LLAMA_EXPORT
+	#ifdef __cpp_lib_concepts
+	    template<typename View>
+	    inline constexpr auto isView = AnyView<View>;
+	#else
+	    template<typename View>
+	    inline constexpr auto isView = false;
+
+	    // this definition does neither capture SubView nor user defined view's, but the issue resolves itself with a C++20
+	    // upgrade.
+	    template<typename Mapping, typename BlobType, typename Accessor>
+	    inline constexpr auto isView<View<Mapping, BlobType, Accessor>> = true;
+	#endif
+
+	    namespace internal
+	    {
+	        // remove in C++23, from: https://en.cppreference.com/w/cpp/utility/forward_like
+	        // NOLINTBEGIN
+	        template<class T, class U>
+	        [[nodiscard]] LLAMA_FN_HOST_ACC_INLINE constexpr auto&& forward_like(U&& x) noexcept
+	        {
+	            constexpr bool is_adding_const = std::is_const_v<std::remove_reference_t<T>>;
+	            if constexpr(std::is_lvalue_reference_v<T&&>)
+	            {
+	                if constexpr(is_adding_const)
+	                    return std::as_const(x);
+	                else
+	                    return static_cast<U&>(x);
+	            }
+	            else
+	            {
+	                if constexpr(is_adding_const)
+	                    return std::move(std::as_const(x));
+	                else
+	                    return std::move(x);
+	            }
+	        }
+	        // NOLINTEND
+
+	        template<typename Blobs, typename TransformBlobFunc, std::size_t... Is>
+	        LLAMA_FN_HOST_ACC_INLINE auto makeTransformedBlobArray(
+	            Blobs&& blobs,
+	            const TransformBlobFunc& transformBlob,
+	            std::integer_sequence<std::size_t, Is...>)
+	        {
+	            return llama::Array{transformBlob(forward_like<Blobs>(blobs[Is]))...};
+	        }
+	    } // namespace internal
+
+	    /// Applies the given transformation to the blobs of a view and creates a new view with the transformed blobs
+	    /// and the same mapping and accessor as the old view.
+	    LLAMA_EXPORT
+	    template<typename ViewFwd, typename TransformBlobFunc, typename = std::enable_if_t<isView<std::decay_t<ViewFwd>>>>
+	    LLAMA_FN_HOST_ACC_INLINE auto transformBlobs(ViewFwd&& view, const TransformBlobFunc& transformBlob)
+	    {
+	        using View = std::decay_t<ViewFwd>;
+	        constexpr auto blobCount = View::Mapping::blobCount;
+
+	        auto blobs = internal::makeTransformedBlobArray(
+	            internal::forward_like<ViewFwd>(view.blobs()),
+	            transformBlob,
+	            std::make_index_sequence<blobCount>{});
+	        return llama::View<typename View::Mapping, typename decltype(blobs)::value_type, typename View::Accessor>{
+	            view.mapping(),
+	            std::move(blobs),
+	            view.accessor()};
+	    }
+
+	    /// Creates a shallow copy of a view. This copy must not outlive the view, since it references its blob array.
+	    /// \tparam NewBlobType The blob type of the shallow copy. Must be a non owning pointer like type.
+	    /// \return A new view with the same mapping as view, where each blob refers to the blob in view.
+	    LLAMA_EXPORT
+	    template<
+	        typename View,
+	        typename NewBlobType = CopyConst<std::remove_reference_t<View>, std::byte>*,
+	        typename = std::enable_if_t<isView<std::decay_t<View>>>>
+	    LLAMA_FN_HOST_ACC_INLINE auto shallowCopy(View&& view)
+	    {
+	        if constexpr(std::is_same_v<typename std::decay_t<View>::BlobType, NewBlobType>)
+	            return view;
+	        else
+	            return transformBlobs(
+	                std::forward<View>(view),
+	                [](auto& blob)
+	                {
+	                    LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
+	                    return static_cast<NewBlobType>(&blob[0]);
+	                    LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
+	                });
+	    }
+
+	    // Creates a new view from an existing view with the given accessor.
+	    // \param view A view which's mapping and blobs are forwarded into a new view with the different accessor.
+	    LLAMA_EXPORT
+	    template<typename NewAccessor, typename ViewFwd, typename = std::enable_if_t<isView<std::decay_t<ViewFwd>>>>
+	    LLAMA_FN_HOST_ACC_INLINE auto withAccessor(ViewFwd&& view, NewAccessor newAccessor = {})
+	    {
+	        using OldView = std::decay_t<ViewFwd>;
+	        return View<typename OldView::Mapping, typename OldView::BlobType, NewAccessor>{
+	            internal::forward_like<ViewFwd>(view.mapping()),
+	            internal::forward_like<ViewFwd>(view.blobs()),
+	            std::move(newAccessor)};
+	    }
+
+	    // Creates a new view from an existing view with the given mapping.
+	    // \param view A view which's accessor and blobs are forwarded into a new view with the different mapping.
+	    LLAMA_EXPORT
+	    template<typename NewMapping, typename ViewFwd, typename = std::enable_if_t<isView<std::decay_t<ViewFwd>>>>
+	    LLAMA_FN_HOST_ACC_INLINE auto withMapping(ViewFwd&& view, NewMapping newMapping = {})
+	    {
+	        using OldView = std::decay_t<ViewFwd>;
+	        static_assert(OldView::Mapping::blobCount == NewMapping::blobCount);
+	        for(std::size_t i = 0; i < NewMapping::blobCount; i++)
+	        {
+	            assert(view.mapping().blobSize(i) == newMapping.blobSize(i));
+	        }
+
+	        return View<NewMapping, typename OldView::BlobType, typename OldView::Accessor>{
+	            std::move(newMapping),
+	            internal::forward_like<ViewFwd>(view.blobs()),
+	            internal::forward_like<ViewFwd>(view.accessor())};
+	    }
+
+	    /// Like a \ref View, but array indices are shifted.
+	    /// @tparam TStoredParentView Type of the underlying view. May be cv qualified and/or a reference type.
+	    LLAMA_EXPORT
+	    template<typename TStoredParentView>
+	    struct SubView
+	    {
+	        using StoredParentView = TStoredParentView;
+	        using ParentView = std::remove_const_t<std::remove_reference_t<StoredParentView>>; ///< type of the parent view
+
+	        using Mapping = typename ParentView::Mapping;
+	        using ArrayExtents = typename ParentView::ArrayExtents;
+	        using ArrayIndex = typename ParentView::ArrayIndex;
+	        using BlobType = typename ParentView::BlobType;
+	        using RecordDim = typename ParentView::RecordDim;
+	        using Accessor = typename ParentView::Accessor;
+	        using iterator = typename ParentView::iterator;
+	        using const_iterator = typename ParentView::const_iterator;
+
+	    private:
+	        using size_type = typename ArrayExtents::value_type;
+
+	    public:
+	        /// Creates a SubView given a parent \ref View and offset.
+	        template<typename StoredParentViewFwd>
+	        LLAMA_FN_HOST_ACC_INLINE SubView(StoredParentViewFwd&& parentView, ArrayIndex offset)
+	            : parentView(std::forward<StoredParentViewFwd>(parentView))
+	            , offset(offset)
+	        {
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE auto mapping() -> Mapping&
+	        {
+	            return parentView.mapping();
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE auto mapping() const -> const Mapping&
+	        {
+	            return parentView.mapping();
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE auto accessor() -> Accessor&
+	        {
+	            return parentView.accessor();
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE auto accessor() const -> const Accessor&
+	        {
+	            return parentView.accessor();
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE auto extents() const -> ArrayExtents
+	        {
+	            return parentView.extents();
+	        }
+
+	        /// Same as \ref View::operator()(ArrayIndex), but shifted by the offset of this \ref SubView.
+	        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayIndex ai) const -> decltype(auto)
+	        {
+	            return parentView(ArrayIndex{ai + offset});
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayIndex ai) -> decltype(auto)
+	        {
+	            return parentView(ArrayIndex{ai + offset});
+	        }
+
+	        /// Same as corresponding operator in \ref View, but shifted by the offset of this \ref SubView.
+	        template<typename... Indices>
+	        LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) const -> decltype(auto)
+	        {
+	            static_assert(
+	                sizeof...(Indices) == ArrayIndex::rank,
+	                "Please specify as many indices as you have array dimensions");
+	            static_assert(
+	                std::conjunction_v<std::is_convertible<Indices, size_type>...>,
+	                "Indices must be convertible to ArrayExtents::size_type");
+	            return parentView(
+	                ArrayIndex{ArrayIndex{static_cast<typename ArrayIndex::value_type>(indices)...} + offset});
+	        }
+
+	        template<typename... Indices>
+	        LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) -> decltype(auto)
+	        {
+	            static_assert(
+	                sizeof...(Indices) == ArrayIndex::rank,
+	                "Please specify as many indices as you have array dimensions");
+	            static_assert(
+	                std::conjunction_v<std::is_convertible<Indices, size_type>...>,
+	                "Indices must be convertible to ArrayExtents::size_type");
+	            return parentView(
+	                ArrayIndex{ArrayIndex{static_cast<typename ArrayIndex::value_type>(indices)...} + offset});
+	        }
+
+	        template<std::size_t... Coords>
+	        LLAMA_FN_HOST_ACC_INLINE auto operator()(RecordCoord<Coords...> rc = {}) const -> decltype(auto)
+	        {
+	            return parentView(ArrayIndex{} + offset, rc);
+	        }
+
+	        template<std::size_t... Coords>
+	        LLAMA_FN_HOST_ACC_INLINE auto operator()(RecordCoord<Coords...> rc = {}) -> decltype(auto)
+	        {
+	            return parentView(ArrayIndex{} + offset, rc);
+	        }
+
+	        // TODO(bgruber): implement iterators. Those would be transform iterators on top of the parent view's
+	        // iterators, applying the offset on access.
+
+	        LLAMA_FN_HOST_ACC_INLINE auto blobs() -> Array<BlobType, Mapping::blobCount>&
+	        {
+	            return parentView.blobs();
+	        }
+
+	        LLAMA_FN_HOST_ACC_INLINE auto blobs() const -> const Array<BlobType, Mapping::blobCount>&
+	        {
+	            return parentView.blobs();
+	        }
+
+	        StoredParentView parentView;
+	        const ArrayIndex offset; ///< offset by which this view's \ref ArrayIndex indices are shifted when passed
+	                                 ///< to the parent view.
+	    };
+
+	    /// SubView vview(view); will store a reference to view.
+	    /// SubView vview(std::move(view)); will store the view.
+	    LLAMA_EXPORT
+	    template<typename TStoredParentView>
+	    SubView(TStoredParentView&&, typename std::remove_reference_t<TStoredParentView>::Mapping::ArrayExtents::Index)
+	        -> SubView<TStoredParentView>;
+	} // namespace llama
+	// ==
+	// == ./include/llama/View.hpp ==
+	// ============================================================================
+
+	// ============================================================================
+	// == ./include/llama/mapping/AoSoA.hpp ==
+	// ==
+	// Copyright 2022 Bernhard Manfred Gruber
+	// SPDX-License-Identifier: LGPL-3.0-or-later
+
+	// #pragma once
+	// #include "Common.hpp"    // amalgamate: file already inlined
+
+	// #include <limits>    // amalgamate: file already included
+
+	namespace llama::mapping
+	{
+	    /// The maximum number of vector lanes that can be used to fetch each leaf type in the record dimension into a
+	    /// vector register of the given size in bits.
+	    LLAMA_EXPORT
+	    template<typename RecordDim, std::size_t VectorRegisterBits>
+	    inline constexpr std::size_t maxLanes = []() constexpr
+	    {
+	        auto max = std::numeric_limits<std::size_t>::max();
+	        forEachLeafCoord<RecordDim>(
+	            [&](auto rc)
+	            {
+	                using AttributeType = GetType<RecordDim, decltype(rc)>;
+	                max = std::min(max, VectorRegisterBits / (sizeof(AttributeType) * CHAR_BIT));
+	            });
+	        return max;
+	    }();
+
+	    /// Array of struct of arrays mapping. Used to create a \ref View via \ref allocView.
+	    /// \tparam Lanes The size of the inner arrays of this array of struct of arrays.
+	    /// \tparam PermuteFields Defines how the record dimension's fields should be permuted. See \ref
+	    /// PermuteFieldsInOrder, \ref PermuteFieldsIncreasingAlignment, \ref PermuteFieldsDecreasingAlignment and
+	    /// \ref PermuteFieldsMinimizePadding.
+	    LLAMA_EXPORT
+	    template<
+	        typename TArrayExtents,
+	        typename TRecordDim,
+	        typename TArrayExtents::value_type Lanes,
+	        typename TLinearizeArrayIndexFunctor = LinearizeArrayIndexRight,
+	        template<typename> typename PermuteFields = PermuteFieldsInOrder>
+	    struct AoSoA : MappingBase<TArrayExtents, TRecordDim>
+	    {
+	    private:
+	        using Base = MappingBase<TArrayExtents, TRecordDim>;
+	        using size_type = typename Base::size_type;
+
+	    public:
+	        inline static constexpr typename TArrayExtents::value_type lanes = Lanes;
+	        using LinearizeArrayIndexFunctor = TLinearizeArrayIndexFunctor;
+	        using Permuter = PermuteFields<FlatRecordDim<TRecordDim>>;
+	        inline static constexpr std::size_t blobCount = 1;
+
+	#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ >= 12
+	        using Base::Base;
+	#else
+	        constexpr AoSoA() = default;
+
+	        LLAMA_FN_HOST_ACC_INLINE constexpr explicit AoSoA(TArrayExtents extents, TRecordDim = {}) : Base(extents)
+	        {
+	        }
+	#endif
+
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(size_type) const -> size_type
+	        {
+	            const auto rs = static_cast<size_type>(sizeOf<TRecordDim>);
+	            return roundUpToMultiple(LinearizeArrayIndexFunctor{}.size(Base::extents()) * rs, Lanes * rs);
+	        }
+
+	        template<std::size_t... RecordCoords>
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
+	            typename Base::ArrayIndex ai,
+	            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset<size_type>
+	        {
+	            constexpr std::size_t flatFieldIndex =
+	#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ <= 6
+	                *& // mess with nvcc compiler state to workaround bug
+	#endif
+	                 Permuter::template permute<flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>>;
+	            const auto flatArrayIndex = LinearizeArrayIndexFunctor{}(ai, Base::extents());
+	            const auto blockIndex = flatArrayIndex / Lanes;
+	            const auto laneIndex = flatArrayIndex % Lanes;
+	            const auto offset = static_cast<size_type>(sizeOf<TRecordDim> * Lanes) * blockIndex
+	                + static_cast<size_type>(flatOffsetOf<typename Permuter::FlatRecordDim, flatFieldIndex, false>) * Lanes
+	                + static_cast<size_type>(sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>)) * laneIndex;
+	            return {0, offset};
+	        }
+	    };
+
+	    /// Binds parameters to an \ref AoSoA mapping except for array and record dimension, producing a quoted meta
+	    /// function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
+	    LLAMA_EXPORT
+	    template<std::size_t Lanes, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
+	    struct BindAoSoA
+	    {
+	        template<typename ArrayExtents, typename RecordDim>
+	        using fn = AoSoA<ArrayExtents, RecordDim, Lanes, LinearizeArrayIndexFunctor>;
+	    };
+
+	    LLAMA_EXPORT
+	    template<typename Mapping>
+	    inline constexpr bool isAoSoA = false;
+
+	    LLAMA_EXPORT
+	    template<typename AD, typename RD, typename AD::value_type L>
+	    inline constexpr bool isAoSoA<AoSoA<AD, RD, L>> = true;
+	} // namespace llama::mapping
+	// ==
+	// == ./include/llama/mapping/AoSoA.hpp ==
+	// ============================================================================
+
+	// ============================================================================
+	// == ./include/llama/mapping/SoA.hpp ==
+	// ==
+	// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
+	// SPDX-License-Identifier: LGPL-3.0-or-later
+
+	// #pragma once
+	// #include "Common.hpp"    // amalgamate: file already inlined
+
+	// #include <limits>    // amalgamate: file already included
+
+	namespace llama::mapping
+	{
+	    LLAMA_EXPORT
+	    enum class Blobs
+	    {
+	        Single,
+	        OnePerField
+	    };
+
+	    LLAMA_EXPORT
+	    enum class SubArrayAlignment
+	    {
+	        Pack,
+	        Align
+	    };
+
+	    /// Struct of array mapping. Used to create a \ref View via \ref allocView. We recommend to use multiple blobs when
+	    /// the array extents are dynamic and an aligned single blob version when they are static.
+	    /// \tparam TBlobs If OnePerField, every element of the record dimension is mapped to its own blob.
+	    /// \tparam TSubArrayAlignment Only relevant when TBlobs == Single, ignored otherwise. If Align, aligns the sub
+	    /// arrays created within the single blob by inserting padding. If the array extents are dynamic, this may add some
+	    /// overhead to the mapping logic.
+	    /// \tparam TLinearizeArrayIndexFunctor Defines how the array dimensions should be mapped into linear numbers and
+	    /// how big the linear domain gets.
+	    /// \tparam PermuteFieldsSingleBlob Defines how the record dimension's fields should be permuted if Blobs is
+	    /// Single. See \ref PermuteFieldsInOrder, \ref PermuteFieldsIncreasingAlignment, \ref
+	    /// PermuteFieldsDecreasingAlignment and \ref PermuteFieldsMinimizePadding.
+	    LLAMA_EXPORT
+	    template<
+	        typename TArrayExtents,
+	        typename TRecordDim,
+	        Blobs TBlobs = Blobs::OnePerField,
+	        SubArrayAlignment TSubArrayAlignment
+	        = TBlobs == Blobs::Single ? SubArrayAlignment::Align : SubArrayAlignment::Pack,
+	        typename TLinearizeArrayIndexFunctor = LinearizeArrayIndexRight,
+	        template<typename> typename PermuteFieldsSingleBlob = PermuteFieldsInOrder>
+	    struct SoA : MappingBase<TArrayExtents, TRecordDim>
+	    {
+	    private:
+	        using Base = MappingBase<TArrayExtents, TRecordDim>;
+	        using size_type = typename TArrayExtents::value_type;
+
+	    public:
+	        inline static constexpr Blobs blobs = TBlobs;
+	        inline static constexpr SubArrayAlignment subArrayAlignment = TSubArrayAlignment;
+	        using LinearizeArrayIndexFunctor = TLinearizeArrayIndexFunctor;
+	        using Permuter = PermuteFieldsSingleBlob<FlatRecordDim<TRecordDim>>;
+	        inline static constexpr std::size_t blobCount
+	            = blobs == Blobs::OnePerField ? mp_size<FlatRecordDim<TRecordDim>>::value : 1;
+
+	#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ >= 12
+	        using Base::Base;
+	#else
+	        constexpr SoA() = default;
+
+	        LLAMA_FN_HOST_ACC_INLINE constexpr explicit SoA(TArrayExtents extents, TRecordDim = {}) : Base(extents)
+	        {
+	        }
+	#endif
+
+	        LLAMA_FN_HOST_ACC_INLINE
+	        constexpr auto blobSize([[maybe_unused]] size_type blobIndex) const -> size_type
+	        {
+	            const auto flatSize = LinearizeArrayIndexFunctor{}.size(Base::extents());
+	            if constexpr(blobs == Blobs::OnePerField)
+	            {
+	                constexpr auto typeSizes = []() constexpr
+	                {
+	                    Array<size_type, blobCount> r{};
+	                    forEachLeafCoord<TRecordDim>([&r, i = 0](auto rc) mutable constexpr
+	                                                 { r[i++] = sizeof(GetType<TRecordDim, decltype(rc)>); });
+	                    return r;
+	                }();
+	                return flatSize * typeSizes[blobIndex];
+	            }
+	            else if constexpr(subArrayAlignment == SubArrayAlignment::Align)
+	            {
+	                size_type size = 0;
+	                using FRD = typename Permuter::FlatRecordDim;
+	                mp_for_each<mp_transform<mp_identity, FRD>>(
+	                    [&](auto ti) LLAMA_LAMBDA_INLINE
+	                    {
+	                        using FieldType = typename decltype(ti)::type;
+	                        size = roundUpToMultiple(size, static_cast<size_type>(alignof(FieldType)));
+	                        size += static_cast<size_type>(sizeof(FieldType)) * flatSize;
+	                    });
+	                return size;
+	            }
+	            else
+	            {
+	                return flatSize * static_cast<size_type>(sizeOf<TRecordDim>);
+	            }
+	        }
+
+	    private:
+	        static LLAMA_CONSTEVAL auto computeSubArrayOffsets()
+	        {
+	            using FRD = typename Permuter::FlatRecordDim;
+	            constexpr auto staticFlatSize = LinearizeArrayIndexFunctor{}.size(TArrayExtents{});
+	            constexpr auto subArrays = mp_size<FRD>::value;
+	            Array<size_type, subArrays> r{};
+	            // r[0] == 0, only compute the following offsets
+	            mp_for_each<mp_iota_c<subArrays - 1>>(
+	                [&](auto ic)
+	                {
+	                    constexpr auto i = decltype(ic)::value;
+	                    r[i + 1] = r[i];
+	                    using ThisFieldType = mp_at_c<FRD, i>;
+	                    r[i + 1] += static_cast<size_type>(sizeof(ThisFieldType)) * staticFlatSize;
+	                    using NextFieldType = mp_at_c<FRD, i + 1>;
+	                    r[i + 1] = roundUpToMultiple(r[i + 1], static_cast<size_type>(alignof(NextFieldType)));
+	                });
+	            return r;
+	        }
+
+	    public:
+	        template<std::size_t... RecordCoords>
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
+	            typename Base::ArrayIndex ai,
+	            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset<size_type>
+	        {
+	            const size_type elementOffset = LinearizeArrayIndexFunctor{}(ai, Base::extents())
+	                * static_cast<size_type>(sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>));
+	            if constexpr(blobs == Blobs::OnePerField)
+	            {
+	                constexpr auto blob = flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>;
+	                return {blob, elementOffset};
+	            }
+	            else
+	            {
+	                constexpr std::size_t flatFieldIndex =
+	#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ <= 6
+	                    *& // mess with nvcc compiler state to workaround bug
+	#endif
+	                     Permuter::template permute<flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>>;
+	                const size_type flatSize = LinearizeArrayIndexFunctor{}.size(Base::extents());
+	                using FRD = typename Permuter::FlatRecordDim;
+	                if constexpr(subArrayAlignment == SubArrayAlignment::Align)
+	                {
+	                    if constexpr(TArrayExtents::rankStatic == TArrayExtents::rank)
+	                    {
+	                        // full array extents are known statically, we can precompute the sub array offsets
+	                        constexpr auto subArrayOffsets = computeSubArrayOffsets();
+	                        return {0, subArrayOffsets[flatFieldIndex] + elementOffset};
+	                    }
+	                    else
+	                    {
+	                        // TODO(bgruber): we can take a shortcut here if we know that flatSize is a multiple of all
+	                        // type's alignment. We can also precompute a table of sub array starts (and maybe store it),
+	                        // or rely on the compiler it out of loops.
+	                        size_type offset = 0;
+	                        mp_for_each<mp_iota_c<flatFieldIndex>>(
+	                            [&](auto ic) LLAMA_LAMBDA_INLINE
+	                            {
+	                                constexpr auto i = decltype(ic)::value;
+	                                using ThisFieldType = mp_at_c<FRD, i>;
+	                                offset += static_cast<size_type>(sizeof(ThisFieldType)) * flatSize;
+	                                using NextFieldType = mp_at_c<FRD, i + 1>;
+	                                offset = roundUpToMultiple(offset, static_cast<size_type>(alignof(NextFieldType)));
+	                            });
+	                        offset += elementOffset;
+	                        return {0, offset};
+	                    }
+	                }
+	                else
+	                {
+	                    const auto offset
+	                        = elementOffset + static_cast<size_type>(flatOffsetOf<FRD, flatFieldIndex, false>) * flatSize;
+	                    return {0, offset};
+	                }
+	            }
+	        }
+	    };
+
+	    // we can drop this when inherited ctors also inherit deduction guides
+	    LLAMA_EXPORT
+	    template<typename TArrayExtents, typename TRecordDim>
+	    SoA(TArrayExtents, TRecordDim) -> SoA<TArrayExtents, TRecordDim>;
+
+	    /// Struct of array mapping storing the entire layout in a single blob. The starts of the sub arrays are aligned by
+	    /// inserting padding. \see SoA
+	    LLAMA_EXPORT
+	    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
+	    using AlignedSingleBlobSoA
+	        = SoA<ArrayExtents, RecordDim, Blobs::Single, SubArrayAlignment::Align, LinearizeArrayIndexFunctor>;
+
+	    /// Struct of array mapping storing the entire layout in a single blob. The sub arrays are tightly packed,
+	    /// violating the type's alignment requirements. \see SoA
+	    LLAMA_EXPORT
+	    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
+	    using PackedSingleBlobSoA
+	        = SoA<ArrayExtents, RecordDim, Blobs::Single, SubArrayAlignment::Pack, LinearizeArrayIndexFunctor>;
+
+	    /// Struct of array mapping storing each attribute of the record dimension in a separate blob.
+	    /// \see SoA
+	    LLAMA_EXPORT
+	    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
+	    using MultiBlobSoA
+	        = SoA<ArrayExtents, RecordDim, Blobs::OnePerField, SubArrayAlignment::Pack, LinearizeArrayIndexFunctor>;
+
+	    /// Binds parameters to an \ref SoA mapping except for array and record dimension, producing a quoted
+	    /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
+	    LLAMA_EXPORT
+	    template<
+	        Blobs Blobs = Blobs::OnePerField,
+	        SubArrayAlignment SubArrayAlignment = SubArrayAlignment::Pack,
+	        typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
+	    struct BindSoA
+	    {
+	        template<typename ArrayExtents, typename RecordDim>
+	        using fn = SoA<ArrayExtents, RecordDim, Blobs, SubArrayAlignment, LinearizeArrayIndexFunctor>;
+	    };
+
+	    LLAMA_EXPORT
+	    template<typename Mapping>
+	    inline constexpr bool isSoA = false;
+
+	    LLAMA_EXPORT
+	    template<
+	        typename ArrayExtents,
+	        typename RecordDim,
+	        Blobs Blobs,
+	        SubArrayAlignment SubArrayAlignment,
+	        typename LinearizeArrayIndexFunctor>
+	    inline constexpr bool isSoA<SoA<ArrayExtents, RecordDim, Blobs, SubArrayAlignment, LinearizeArrayIndexFunctor>>
+	        = true;
+	} // namespace llama::mapping
+	// ==
+	// == ./include/llama/mapping/SoA.hpp ==
+	// ============================================================================
+
+
+#include <cstring>
+#include <numeric>
+
+namespace llama
+{
+    namespace internal
+    {
+        template<typename RecordDim>
+        void assertTrivialCopyable()
+        {
+            forEachLeafCoord<RecordDim>(
+                [](auto rc)
+                {
+                    static_assert(
+                        std::is_trivially_copyable_v<GetType<RecordDim, decltype(rc)>>,
+                        "All types in the record dimension must be trivially copyable");
+                });
+        }
+
+        using memcopyFunc = void* (*) (void*, const void*, std::size_t);
+
+        inline void parallelMemcpy(
+            std::byte* dst,
+            const std::byte* src,
+            std::size_t size,
+            std::size_t threadId = 0,
+            std::size_t threadCount = 1,
+            memcopyFunc singleThreadMemcpy = std::memcpy)
+        {
+            const auto sizePerThread = size / threadCount;
+            const auto sizeLastThread = sizePerThread + size % threadCount;
+            const auto sizeThisThread = threadId == threadCount - 1 ? sizeLastThread : sizePerThread;
+            singleThreadMemcpy(dst + threadId * sizePerThread, src + threadId * sizePerThread, sizeThisThread);
+        }
+    } // namespace internal
+
+    /// Direct memcpy from source view blobs to destination view blobs. Both views need to have the same mappings with
+    /// the same array dimensions.
+    /// @param threadId Optional. Zero-based id of calling thread for multi-threaded invocations.
+    /// @param threadCount Optional. Thread count in case of multi-threaded invocation.
+    LLAMA_EXPORT
+    template<typename Mapping, typename SrcBlob, typename DstBlob>
+    void blobMemcpy(
+        const View<Mapping, SrcBlob>& srcView,
+        View<Mapping, DstBlob>& dstView,
+        std::size_t threadId = 0,
+        std::size_t threadCount = 1)
+    {
+        internal::assertTrivialCopyable<typename Mapping::RecordDim>();
+
+        // TODO(bgruber): we do not verify if the mappings have other runtime state than the array dimensions
+        if(srcView.extents() != dstView.extents())
+            throw std::runtime_error{"Array dimensions sizes are different"};
+
+        // TODO(bgruber): this is maybe not the best parallel copying strategy
+        for(std::size_t i = 0; i < Mapping::blobCount; i++)
+            internal::parallelMemcpy(
+                &dstView.blobs()[i][0],
+                &srcView.blobs()[i][0],
+                dstView.mapping().blobSize(i),
+                threadId,
+                threadCount);
+    }
+
+    /// Field-wise copy from source to destination view. Both views need to have the same array and record dimensions.
+    /// @param threadId Optional. Thread id in case of multi-threaded copy.
+    /// @param threadCount Optional. Thread count in case of multi-threaded copy.
+    LLAMA_EXPORT
+    template<typename SrcMapping, typename SrcBlob, typename DstMapping, typename DstBlob>
+    void fieldWiseCopy(
+        const View<SrcMapping, SrcBlob>& srcView,
+        View<DstMapping, DstBlob>& dstView,
+        std::size_t threadId = 0,
+        std::size_t threadCount = 1)
+    {
+        // TODO(bgruber): think if we can remove this restriction
+        static_assert(
+            std::is_same_v<typename SrcMapping::RecordDim, typename DstMapping::RecordDim>,
+            "The source and destination record dimensions must be the same");
+
+        if(srcView.extents() != dstView.extents())
+            throw std::runtime_error{"Array dimensions sizes are different"};
+
+        auto copyOne = [&](auto ai) LLAMA_LAMBDA_INLINE
+        {
+            forEachLeafCoord<typename DstMapping::RecordDim>([&](auto rc) LLAMA_LAMBDA_INLINE
+                                                             { dstView(ai)(rc) = srcView(ai)(rc); });
+        };
+
+        constexpr auto dims = SrcMapping::ArrayExtents::rank;
+        const auto extents = srcView.extents().toArray();
+        const auto workPerThread = (extents[0] + threadCount - 1) / threadCount;
+        const auto start = threadId * workPerThread;
+        const auto end = std::min((threadId + 1) * workPerThread, static_cast<std::size_t>(extents[0]));
+        for(auto i = start; i < end; i++)
+        {
+            using SrcSizeType = typename SrcMapping::ArrayExtents::value_type;
+            if constexpr(dims > 1)
+                forEachArrayIndex(extents, copyOne, static_cast<SrcSizeType>(i));
+            else
+                copyOne(ArrayIndex<SrcSizeType, dims>{static_cast<std::size_t>(i)});
+        }
+    }
+
+    namespace internal
+    {
+        template<typename Mapping>
+        inline constexpr std::size_t aosoaLanes = 0;
+
+        template<
+            typename ArrayExtents,
+            typename RecordDim,
+            mapping::Blobs Blobs,
+            mapping::SubArrayAlignment SubArrayAlignment,
+            typename LinearizeArrayIndexFunctor>
+        inline constexpr std::size_t
+            aosoaLanes<mapping::SoA<ArrayExtents, RecordDim, Blobs, SubArrayAlignment, LinearizeArrayIndexFunctor>>
+            = std::numeric_limits<std::size_t>::max();
+
+        template<typename ArrayExtents, typename RecordDim, std::size_t Lanes, typename LinearizeArrayIndexFunctor>
+        inline constexpr std::size_t
+            aosoaLanes<mapping::AoSoA<ArrayExtents, RecordDim, Lanes, LinearizeArrayIndexFunctor>>
+            = Lanes;
+    } // namespace internal
+
+    /// AoSoA copy strategy which transfers data in common blocks. SoA mappings are also allowed for at most 1
+    /// argument.
+    /// @param threadId Optional. Zero-based id of calling thread for multi-threaded invocations.
+    /// @param threadCount Optional. Thread count in case of multi-threaded invocation.
+    LLAMA_EXPORT
+    template<typename SrcMapping, typename SrcBlob, typename DstMapping, typename DstBlob>
+    void aosoaCommonBlockCopy(
+        const View<SrcMapping, SrcBlob>& srcView,
+        View<DstMapping, DstBlob>& dstView,
+        bool readOpt,
+        std::size_t threadId = 0,
+        std::size_t threadCount = 1)
+    {
+        // TODO(bgruber): think if we can remove this restriction
+        static_assert(
+            std::is_same_v<typename SrcMapping::RecordDim, typename DstMapping::RecordDim>,
+            "The source and destination record dimensions must be the same");
+        static_assert(
+            std::is_same_v<
+                typename SrcMapping::LinearizeArrayIndexFunctor,
+                typename DstMapping::LinearizeArrayIndexFunctor>,
+            "Source and destination mapping need to use the same array dimensions linearizer");
+        using RecordDim = typename SrcMapping::RecordDim;
+        internal::assertTrivialCopyable<RecordDim>();
+
+        [[maybe_unused]] static constexpr bool isSrcMB = SrcMapping::blobCount > 1;
+        [[maybe_unused]] static constexpr bool isDstMB = DstMapping::blobCount > 1;
+        static constexpr auto lanesSrc = internal::aosoaLanes<SrcMapping>;
+        static constexpr auto lanesDst = internal::aosoaLanes<DstMapping>;
+
+        if(srcView.extents() != dstView.extents())
+            throw std::runtime_error{"Array dimensions sizes are different"};
+
+        static constexpr auto srcIsAoSoA = lanesSrc != std::numeric_limits<std::size_t>::max();
+        static constexpr auto dstIsAoSoA = lanesDst != std::numeric_limits<std::size_t>::max();
+
+        static_assert(srcIsAoSoA || dstIsAoSoA, "At least one of the mappings must be an AoSoA mapping");
+        static_assert(!srcIsAoSoA || SrcMapping::blobCount == 1, "Implementation assumes AoSoA with single blob");
+        static_assert(!dstIsAoSoA || DstMapping::blobCount == 1, "Implementation assumes AoSoA with single blob");
+
+        const auto flatSize = product(dstView.extents());
+
+        // TODO(bgruber): implement the following by adding additional copy loops for the remaining elements
+        if(!srcIsAoSoA && flatSize % lanesDst != 0)
+            throw std::runtime_error{"Source SoA mapping's total array elements must be evenly divisible by the "
+                                     "destination AoSoA Lane count."};
+        if(!dstIsAoSoA && flatSize % lanesSrc != 0)
+            throw std::runtime_error{"Destination SoA mapping's total array elements must be evenly divisible by the "
+                                     "source AoSoA Lane count."};
+
+        // the same as AoSoA::blobNrAndOffset but takes a flat array index
+        auto mapAoSoA = [](std::size_t flatArrayIndex, auto rc, std::size_t Lanes) LLAMA_LAMBDA_INLINE
+        {
+            const auto blockIndex = flatArrayIndex / Lanes;
+            const auto laneIndex = flatArrayIndex % Lanes;
+            const auto offset = (sizeOf<RecordDim> * Lanes) * blockIndex + offsetOf<RecordDim, decltype(rc)> * Lanes
+                + sizeof(GetType<RecordDim, decltype(rc)>) * laneIndex;
+            return offset;
+        };
+        // the same as SoA::blobNrAndOffset but takes a flat array index
+        auto mapSoA = [&](std::size_t flatArrayIndex, auto rc, bool mb) LLAMA_LAMBDA_INLINE
+        {
+            const auto blob = mb * flatRecordCoord<RecordDim, decltype(rc)>;
+            const auto offset = !mb * offsetOf<RecordDim, decltype(rc)> * flatSize
+                + sizeof(GetType<RecordDim, decltype(rc)>) * flatArrayIndex;
+            return NrAndOffset{blob, offset};
+        };
+
+        auto mapSrc = [&](std::size_t flatArrayIndex, auto rc) LLAMA_LAMBDA_INLINE
+        {
+            if constexpr(srcIsAoSoA)
+                return &srcView.blobs()[0][0] + mapAoSoA(flatArrayIndex, rc, lanesSrc);
+            else
+            {
+                const auto [blob, off] = mapSoA(flatArrayIndex, rc, isSrcMB);
+                return &srcView.blobs()[blob][off];
+            }
+        };
+        auto mapDst = [&](std::size_t flatArrayIndex, auto rc) LLAMA_LAMBDA_INLINE
+        {
+            if constexpr(dstIsAoSoA)
+                return &dstView.blobs()[0][0] + mapAoSoA(flatArrayIndex, rc, lanesDst);
+            else
+            {
+                const auto [blob, off] = mapSoA(flatArrayIndex, rc, isDstMB);
+                return &dstView.blobs()[blob][off];
+            }
+        };
+
+        static constexpr auto l = []
+        {
+            if constexpr(srcIsAoSoA && dstIsAoSoA)
+                return std::gcd(lanesSrc, lanesDst);
+            return std::min(lanesSrc, lanesDst);
+        }();
+        if(readOpt)
+        {
+            // optimized for linear reading
+            constexpr auto srcL = srcIsAoSoA ? lanesSrc : l;
+            const auto elementsPerThread = flatSize / srcL / threadCount * srcL;
+            {
+                const auto start = threadId * elementsPerThread;
+                const auto stop = threadId == threadCount - 1 ? flatSize : (threadId + 1) * elementsPerThread;
+
+                auto copyLBlock = [&](const std::byte*& threadSrc, std::size_t dstIndex, auto rc) LLAMA_LAMBDA_INLINE
+                {
+                    constexpr auto bytes = l * sizeof(GetType<RecordDim, decltype(rc)>);
+                    std::memcpy(mapDst(dstIndex, rc), threadSrc, bytes);
+                    threadSrc += bytes;
+                };
+                if constexpr(srcIsAoSoA)
+                {
+                    auto* threadSrc = mapSrc(start, RecordCoord<>{});
+                    for(std::size_t i = start; i < stop; i += lanesSrc)
+                        forEachLeafCoord<RecordDim>(
+                            [&](auto rc) LLAMA_LAMBDA_INLINE
+                            {
+                                for(std::size_t j = 0; j < lanesSrc; j += l)
+                                    copyLBlock(threadSrc, i + j, rc);
+                            });
+                }
+                else
+                {
+                    forEachLeafCoord<RecordDim>(
+                        [&](auto rc) LLAMA_LAMBDA_INLINE
+                        {
+                            auto* threadSrc = mapSrc(start, rc);
+                            for(std::size_t i = start; i < stop; i += l)
+                                copyLBlock(threadSrc, i, rc);
+                        });
+                }
+            }
+        }
+        else
+        {
+            // optimized for linear writing
+            constexpr auto dstL = dstIsAoSoA ? lanesDst : l;
+            const auto elementsPerThread = flatSize / dstL / threadCount * dstL;
+            {
+                const auto start = threadId * elementsPerThread;
+                const auto stop = threadId == threadCount - 1 ? flatSize : (threadId + 1) * elementsPerThread;
+
+                auto copyLBlock = [&](std::byte*& threadDst, std::size_t srcIndex, auto rc) LLAMA_LAMBDA_INLINE
+                {
+                    constexpr auto bytes = l * sizeof(GetType<RecordDim, decltype(rc)>);
+                    std::memcpy(threadDst, mapSrc(srcIndex, rc), bytes);
+                    threadDst += bytes;
+                };
+                if constexpr(dstIsAoSoA)
+                {
+                    auto* threadDst = mapDst(start, RecordCoord<>{});
+                    for(std::size_t i = start; i < stop; i += lanesDst)
+                        forEachLeafCoord<RecordDim>(
+                            [&](auto rc) LLAMA_LAMBDA_INLINE
+                            {
+                                for(std::size_t j = 0; j < lanesDst; j += l)
+                                    copyLBlock(threadDst, i + j, rc);
+                            });
+                }
+                else
+                {
+                    forEachLeafCoord<RecordDim>(
+                        [&](auto rc) LLAMA_LAMBDA_INLINE
+                        {
+                            auto* threadDst = mapDst(start, rc);
+                            for(std::size_t i = start; i < stop; i += l)
+                                copyLBlock(threadDst, i, rc);
+                        });
+                }
+            }
+        }
+    }
+
+    /// @brief Generic implementation of \ref copy defaulting to \ref fieldWiseCopy. LLAMA provides several
+    /// specializations of this construct for specific mappings. Users are encouraged to also specialize this template
+    /// with better copy algorithms for further combinations of mappings, if they can and want to provide a better
+    /// implementation.
+    LLAMA_EXPORT
+    template<typename SrcMapping, typename DstMapping, typename SFINAE = void>
+    struct Copy
+    {
+        template<typename SrcView, typename DstView>
+        void operator()(const SrcView& srcView, DstView& dstView, std::size_t threadId, std::size_t threadCount) const
+        {
+            fieldWiseCopy(srcView, dstView, threadId, threadCount);
+        }
+    };
+
+    LLAMA_EXPORT
+    template<typename Mapping>
+    struct Copy<Mapping, Mapping>
+    {
+        template<typename SrcView, typename DstView>
+        void operator()(const SrcView& srcView, DstView& dstView, std::size_t threadId, std::size_t threadCount) const
+        {
+            blobMemcpy(srcView, dstView, threadId, threadCount);
+        }
+    };
+
+    LLAMA_EXPORT
+    template<
+        typename ArrayExtents,
+        typename RecordDim,
+        typename LinearizeArrayIndex,
+        std::size_t LanesSrc,
+        std::size_t LanesDst>
+    struct Copy<
+        mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex>,
+        mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex>,
+        std::enable_if_t<LanesSrc != LanesDst>>
+    {
+        template<typename SrcBlob, typename DstBlob>
+        void operator()(
+            const View<mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex>, SrcBlob>& srcView,
+            View<mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex>, DstBlob>& dstView,
+            std::size_t threadId,
+            std::size_t threadCount)
+        {
+            constexpr auto readOpt = true; // TODO(bgruber): how to choose?
+            aosoaCommonBlockCopy(srcView, dstView, readOpt, threadId, threadCount);
+        }
+    };
+
+    LLAMA_EXPORT
+    template<
+        typename ArrayExtents,
+        typename RecordDim,
+        typename LinearizeArrayIndex,
+        std::size_t LanesSrc,
+        mapping::Blobs DstBlobs,
+        mapping::SubArrayAlignment DstSubArrayAlignment>
+    struct Copy<
+        mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex>,
+        mapping::SoA<ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex>>
+    {
+        template<typename SrcBlob, typename DstBlob>
+        void operator()(
+            const View<mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex>, SrcBlob>& srcView,
+            View<mapping::SoA<ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex>, DstBlob>&
+                dstView,
+            std::size_t threadId,
+            std::size_t threadCount)
+        {
+            constexpr auto readOpt = true; // TODO(bgruber): how to choose?
+            aosoaCommonBlockCopy(srcView, dstView, readOpt, threadId, threadCount);
+        }
+    };
+
+    LLAMA_EXPORT
+    template<
+        typename ArrayExtents,
+        typename RecordDim,
+        typename LinearizeArrayIndex,
+        std::size_t LanesDst,
+        mapping::Blobs SrcBlobs,
+        mapping::SubArrayAlignment SrcSubArrayAlignment>
+    struct Copy<
+        mapping::SoA<ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex>,
+        mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex>>
+    {
+        template<typename SrcBlob, typename DstBlob>
+        void operator()(
+            const View<
+                mapping::SoA<ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex>,
+                SrcBlob>& srcView,
+            View<mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex>, DstBlob>& dstView,
+            std::size_t threadId,
+            std::size_t threadCount)
+        {
+            constexpr auto readOpt = true; // TODO(bgruber): how to choose?
+            aosoaCommonBlockCopy(srcView, dstView, readOpt, threadId, threadCount);
+        }
+    };
+
+    /// Copy data from source view to destination view. Both views need to have the same array and record
+    /// dimensions. Delegates to \ref Copy to choose an implementation.
+    /// @param threadId Optional. Zero-based id of calling thread for multi-threaded invocations.
+    /// @param threadCount Optional. Thread count in case of multi-threaded invocation.
+    LLAMA_EXPORT
+    template<typename SrcMapping, typename SrcBlob, typename DstMapping, typename DstBlob>
+    void copy(
+        const View<SrcMapping, SrcBlob>& srcView,
+        View<DstMapping, DstBlob>& dstView,
+        std::size_t threadId = 0,
+        std::size_t threadCount = 1)
+    {
+        Copy<SrcMapping, DstMapping>{}(srcView, dstView, threadId, threadCount);
+    }
+} // namespace llama
+// ==
+// == ./include/llama/Copy.hpp ==
+// ============================================================================
+
+// ============================================================================
+// == ./include/llama/llama.hpp ==
+// ==
+// Copyright 2018 Alexander Matthes, Bernhard Manfred Gruber
+// SPDX-License-Identifier: LGPL-3.0-or-later
+
+// #pragma once
+/// \mainpage LLAMA API documentation
+///
+/// LLAMA is a C++17 template header-only library for the abstraction of memory access patterns. It distinguishes
+/// between the view of the algorithm on the memory and the real layout in the background. This enables performance
+/// portability for multicore, manycore and gpu applications with the very same code.
+///
+/// In contrast to many other solutions LLAMA can define nested data structures of arbitrary depths and is not limited
+/// only to struct of array and array of struct data layouts. It is also capable to explicitly define padding,
+/// blocking, striding and any other run time or compile time access pattern simultaneously.
+///
+/// To archieve this goal LLAMA is split into mostly independent, orthogonal parts completely written in modern C++17
+/// to run on as many architectures and with as many compilers as possible while still supporting extensions needed
+/// e.g. to run on GPU or other many core hardware.
+///
+/// This page documents the API of LLAMA. The user documentation and an overview about the concepts and ideas can be
+/// found here: https://llama-doc.rtfd.io
+///
+/// LLAMA is licensed under the LGPL3+.
+
+// NOLINTNEXTLINE(modernize-macro-to-enum)
+#define LLAMA_VERSION_MAJOR 0
+// NOLINTNEXTLINE(modernize-macro-to-enum)
+#define LLAMA_VERSION_MINOR 5
+// NOLINTNEXTLINE(modernize-macro-to-enum)
+#define LLAMA_VERSION_PATCH 0
+
+// suppress warnings on missing return statements. we get a lot of these because nvcc/nvc++ have some troubles with if
+// constexpr.
+#ifdef __NVCC__
+#    ifdef __NVCC_DIAG_PRAGMA_SUPPORT__
+#        pragma nv_diag_suppress 940
+#    else
+#        pragma diag_suppress 940
+#    endif
+#endif
+#ifdef __NVCOMPILER
+#    pragma push
+#    pragma diag_suppress 941
+#endif
+
+// #include "ArrayExtents.hpp"    // amalgamate: file already inlined
+// #include "ArrayIndexRange.hpp"    // amalgamate: file already inlined
+// #include "BlobAllocators.hpp"    // amalgamate: file already inlined
+// #include "Copy.hpp"    // amalgamate: file already inlined
+// #include "Core.hpp"    // amalgamate: file already inlined
+	// ============================================================================
+	// == ./include/llama/DumpMapping.hpp ==
+	// ==
+	// Copyright 2022 Bernhard Manfred Gruber
+	// SPDX-License-Identifier: LGPL-3.0-or-later
+
+	// #pragma once
+	#if __has_include(<fmt/format.h>)
+	// #    include "ArrayIndexRange.hpp"    // amalgamate: file already inlined
+	// #    include "Core.hpp"    // amalgamate: file already inlined
 		// ============================================================================
 		// == ./include/llama/StructName.hpp ==
 		// ==
@@ -3235,1667 +5597,505 @@ namespace llama
 		// == ./include/llama/StructName.hpp ==
 		// ============================================================================
 
-		// ============================================================================
-		// == ./include/llama/View.hpp ==
-		// ==
-		// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
-		// SPDX-License-Identifier: LGPL-3.0-or-later
-
-		// #pragma once
-			// ============================================================================
-			// == ./include/llama/Accessors.hpp ==
-			// ==
-			// Copyright 2023 Bernhard Manfred Gruber
-			// SPDX-License-Identifier: LGPL-3.0-or-later
-
-			// #pragma once
-			// #include "Concepts.hpp"    // amalgamate: file already inlined
-			// #include "ProxyRefOpMixin.hpp"    // amalgamate: file already inlined
-			// #include "macros.hpp"    // amalgamate: file already inlined
-
-			#include <atomic>
-			#include <memory>
-			#include <mutex>
-
-			namespace llama::accessor
-			{
-			    /// Default accessor. Passes through the given reference.
-			    LLAMA_EXPORT
-			    struct Default
-			    {
-			        template<typename Reference>
-			        LLAMA_FN_HOST_ACC_INLINE auto operator()(Reference&& r) const -> Reference
-			        {
-			            return std::forward<Reference>(r);
-			        }
-			    };
-
-			    /// Allows only read access and returns values instead of references to memory.
-			    LLAMA_EXPORT
-			    struct ByValue
-			    {
-			        template<typename Reference>
-			        LLAMA_FN_HOST_ACC_INLINE auto operator()(Reference&& r) const
-			        {
-			            using ValueType = std::decay_t<Reference>;
-			            if constexpr(isProxyReference<ValueType>)
-			                return static_cast<typename ValueType::value_type>(r);
-			            else
-			                return ValueType{r};
-			        }
-			    };
-
-			    /// Allows only read access by qualifying the references to memory with const.
-			    LLAMA_EXPORT
-			    struct Const
-			    {
-			        // for l-value references
-			        template<typename T>
-			        LLAMA_FN_HOST_ACC_INLINE auto operator()(T& r) const -> const T&
-			        {
-			            return r;
-			        }
-
-			        template<typename Ref>
-			        // NOLINTNEXTLINE(cppcoreguidelines-special-member-functions,hicpp-special-member-functions)
-			        struct Reference : ProxyRefOpMixin<Reference<Ref>, typename Ref::value_type>
-			        {
-			        private:
-			            Ref ref;
-
-			        public:
-			            using value_type = typename Ref::value_type;
-
-			            LLAMA_FN_HOST_ACC_INLINE constexpr explicit Reference(Ref ref) : ref{ref}
-			            {
-			            }
-
-			            Reference(const Reference&) = default;
-
-			            // NOLINTNEXTLINE(bugprone-unhandled-self-assignment,cert-oop54-cpp)
-			            LLAMA_FN_HOST_ACC_INLINE constexpr auto operator=(const Reference& other) -> Reference&
-			            {
-			                *this = static_cast<value_type>(other);
-			                return *this;
-			            }
-
-			            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
-			            LLAMA_FN_HOST_ACC_INLINE operator value_type() const
-			            {
-			                return static_cast<value_type>(ref);
-			            }
-
-			            template<typename T>
-			            LLAMA_FN_HOST_ACC_INLINE auto operator=(T) -> Reference&
-			            {
-			                static_assert(sizeof(T) == 0, "You cannot write through a Const accessor");
-			                return *this;
-			            }
-			        };
-
-			        // for proxy references
-			        template<typename ProxyReference, std::enable_if_t<llama::isProxyReference<ProxyReference>, int> = 0>
-			        LLAMA_FN_HOST_ACC_INLINE auto operator()(ProxyReference r) const
-			        {
-			            return Reference<ProxyReference>{std::move(r)};
-			        }
-			    };
-
-			    /// Qualifies references to memory with __restrict. Only works on l-value references.
-			    LLAMA_EXPORT
-			    struct Restrict
-			    {
-			        template<typename T>
-			        LLAMA_FN_HOST_ACC_INLINE auto operator()(T& r) const -> T& __restrict
-			        {
-			            return r;
-			        }
-			    };
-
-			#ifdef __cpp_lib_atomic_ref
-			    /// Accessor wrapping a reference into a std::atomic_ref. Can only wrap l-value references.
-			    LLAMA_EXPORT
-			    struct Atomic
-			    {
-			        template<typename T>
-			        LLAMA_FORCE_INLINE auto operator()(T& r) const -> std::atomic_ref<T>
-			        {
-			            return std::atomic_ref<T>{r};
-			        }
-			    };
-			#endif
-
-			    /// Locks a mutex during each access to the data structure.
-			    LLAMA_EXPORT
-			    template<typename Mutex = std::mutex>
-			    struct Locked
-			    {
-			        // mutexes are usually not movable, so we put them on the heap, so the accessor is movable
-			        std::unique_ptr<Mutex> m = std::make_unique<Mutex>();
-
-			        template<typename Ref, typename Value>
-			        // NOLINTNEXTLINE(cppcoreguidelines-special-member-functions,hicpp-special-member-functions)
-			        struct Reference : ProxyRefOpMixin<Reference<Ref, Value>, Value>
-			        {
-			            Ref ref;
-			            Mutex& m;
-
-			            using value_type = Value;
-
-			            // NOLINTNEXTLINE(bugprone-unhandled-self-assignment,cert-oop54-cpp)
-			            LLAMA_FORCE_INLINE constexpr auto operator=(const Reference& other) -> Reference&
-			            {
-			                const std::lock_guard<Mutex> lock(m);
-			                *this = static_cast<value_type>(other);
-			                return *this;
-			            }
-
-			            // NOLINTNEXTLINE(google-explicit-constructor,hicpp-explicit-conversions)
-			            LLAMA_FORCE_INLINE operator value_type() const
-			            {
-			                const std::lock_guard<Mutex> lock(m);
-			                return static_cast<value_type>(ref);
-			            }
-
-			            template<typename T>
-			            LLAMA_FORCE_INLINE auto operator=(T t) -> Reference&
-			            {
-			                const std::lock_guard<Mutex> lock(m);
-			                ref = t;
-			                return *this;
-			            }
-			        };
-
-			        template<typename PR>
-			        LLAMA_FORCE_INLINE auto operator()(PR r) const -> Reference<PR, typename PR::value_type>
-			        {
-			            return {{}, r, *m};
-			        }
-
-			        template<typename T>
-			        LLAMA_FORCE_INLINE auto operator()(T& r) const -> Reference<T&, std::remove_cv_t<T>>
-			        {
-			            return {{}, r, *m};
-			        }
-			    };
-
-			    namespace internal
-			    {
-			        template<std::size_t I, typename Accessor>
-			        struct StackedLeave : Accessor
-			        {
-			        };
-			    } // namespace internal
-
-			    /// Accessor combining multiple other accessors. The contained accessors are applied in left to right order to the
-			    /// memory location when forming the reference returned from a view.
-			    LLAMA_EXPORT
-			    template<typename... Accessors>
-			    struct Stacked : internal::StackedLeave<0, Default>
-			    {
-			    };
-
-			    LLAMA_EXPORT
-			    template<typename FirstAccessor, typename... MoreAccessors>
-			    struct Stacked<FirstAccessor, MoreAccessors...>
-			        : internal::StackedLeave<1 + sizeof...(MoreAccessors), FirstAccessor>
-			        , Stacked<MoreAccessors...>
-			    {
-			        using First = internal::StackedLeave<1 + sizeof...(MoreAccessors), FirstAccessor>;
-			        using Rest = Stacked<MoreAccessors...>;
-
-			        LLAMA_FN_HOST_ACC_INLINE Stacked() = default;
-
-			        LLAMA_FN_HOST_ACC_INLINE explicit Stacked(FirstAccessor first, MoreAccessors... rest)
-			            : First{std::move(first)}
-			            , Rest{std::move(rest)...}
-			        {
-			        }
-
-			        template<typename Reference>
-			        LLAMA_FN_HOST_ACC_INLINE auto operator()(Reference&& r) const -> decltype(auto)
-			        {
-			            return static_cast<const Rest&>(*this)(static_cast<const First&>(*this)(std::forward<Reference>(r)));
-			        }
-			    };
-			} // namespace llama::accessor
-			// ==
-			// == ./include/llama/Accessors.hpp ==
-			// ============================================================================
-
-		// #include "Array.hpp"    // amalgamate: file already inlined
-		// #include "ArrayIndexRange.hpp"    // amalgamate: file already inlined
-			// ============================================================================
-			// == ./include/llama/BlobAllocators.hpp ==
-			// ==
-			// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
-			// SPDX-License-Identifier: LGPL-3.0-or-later
-
-			// #pragma once
-			// #include "Array.hpp"    // amalgamate: file already inlined
-			// #include "Concepts.hpp"    // amalgamate: file already inlined
-			// #include "macros.hpp"    // amalgamate: file already inlined
-
-			#include <cstddef>
-			// #include <memory>    // amalgamate: file already included
-			#include <vector>
-			#if __has_include(<cuda_runtime.h>)
-			#    include <cuda_runtime.h>
-			#endif
-			#if __has_include(<alpaka/alpaka.hpp>)
-			#    include <alpaka/alpaka.hpp>
-			#endif
-
-			namespace llama::bloballoc
-			{
-			    /// Allocates statically sized memory for a \ref View, which is copied each time a \ref View is copied.
-			    /// \tparam BytesToReserve the amount of memory to reserve.
-			    LLAMA_EXPORT
-			    template<std::size_t BytesToReserve>
-			    struct Array
-			    {
-			        template<std::size_t Alignment>
-			        struct alignas(Alignment) AlignedArray : llama::Array<std::byte, BytesToReserve>
-			        {
-			        };
-
-			        template<std::size_t Alignment>
-			        LLAMA_FN_HOST_ACC_INLINE auto operator()(
-			            std::integral_constant<std::size_t, Alignment>,
-			            [[maybe_unused]] std::size_t count) const -> AlignedArray<Alignment>
-			        {
-			            assert(count == BytesToReserve);
-			            return {};
-			        }
-			    };
-			#ifdef __cpp_lib_concepts
-			    static_assert(BlobAllocator<Array<64>>);
-			#endif
-
-			    /// Allocates heap memory managed by a `std::unique_ptr` for a \ref View. This memory can only be uniquely owned by
-			    /// a single \ref View.
-			    LLAMA_EXPORT
-			    struct UniquePtr
-			    {
-			        template<std::size_t Alignment>
-			        auto operator()(std::integral_constant<std::size_t, Alignment>, std::size_t count) const
-			        {
-			            auto* ptr
-			                = static_cast<std::byte*>(::operator new[](count * sizeof(std::byte), std::align_val_t{Alignment}));
-			            auto deleter = [](std::byte* ptr) { ::operator delete[](ptr, std::align_val_t{Alignment}); };
-			            return std::unique_ptr<std::byte[], decltype(deleter)>{ptr, deleter};
-			        }
-			    };
-			#ifdef __cpp_lib_concepts
-			    static_assert(BlobAllocator<UniquePtr>);
-			#endif
-
-			    /// Allocates heap memory managed by a `std::shared_ptr` for a \ref View. This memory is shared between all copies
-			    /// of a \ref View.
-			    LLAMA_EXPORT
-			    struct SharedPtr
-			    {
-			        template<std::size_t Alignment>
-			        auto operator()(std::integral_constant<std::size_t, Alignment>, std::size_t count) const
-			            -> std::shared_ptr<std::byte[]>
-			        {
-			            auto* ptr
-			                = static_cast<std::byte*>(::operator new[](count * sizeof(std::byte), std::align_val_t{Alignment}));
-			            auto deleter = [](std::byte* ptr) { ::operator delete[](ptr, std::align_val_t{Alignment}); };
-			            return {ptr, deleter};
-			        }
-			    };
-			#ifdef __cpp_lib_concepts
-			    static_assert(BlobAllocator<SharedPtr>);
-			#endif
-
-			    /// An STL compatible allocator allowing to specify alignment.
-			    LLAMA_EXPORT
-			    template<typename T, std::size_t Alignment>
-			    struct AlignedAllocator
-			    {
-			        using value_type = T;
-
-			        inline AlignedAllocator() noexcept = default;
-
-			        template<typename T2>
-			        inline explicit AlignedAllocator(const AlignedAllocator<T2, Alignment>&) noexcept
-			        {
-			        }
-
-			        inline auto allocate(std::size_t n) -> T*
-			        {
-			            return static_cast<T*>(::operator new[](n * sizeof(T), std::align_val_t{Alignment}));
-			        }
-
-			        inline void deallocate(T* p, std::size_t)
-			        {
-			            ::operator delete[](p, std::align_val_t{Alignment});
-			        }
-
-			        template<typename T2>
-			        struct rebind // NOLINT(readability-identifier-naming)
-			        {
-			            using other = AlignedAllocator<T2, Alignment>;
-			        };
-
-			        auto operator!=(const AlignedAllocator<T, Alignment>& other) const -> bool
-			        {
-			            return !(*this == other);
-			        }
-
-			        auto operator==(const AlignedAllocator<T, Alignment>&) const -> bool
-			        {
-			            return true;
-			        }
-			    };
-
-			    /// Allocates heap memory managed by a `std::vector` for a \ref View, which is copied each time a \ref View is
-			    /// copied.
-			    LLAMA_EXPORT
-			    struct Vector
-			    {
-			        template<std::size_t Alignment>
-			        inline auto operator()(std::integral_constant<std::size_t, Alignment>, std::size_t count) const
-			        {
-			            return std::vector<std::byte, AlignedAllocator<std::byte, Alignment>>(count);
-			        }
-			    };
-			#ifdef __cpp_lib_concepts
-			    static_assert(BlobAllocator<Vector>);
-			#endif
-
-			#if __has_include(<cuda_runtime.h>)
-			    /// Allocates GPU device memory using cudaMalloc. The memory is managed by a std::unique_ptr with a deleter that
-			    /// calles cudaFree. If you want to use a view created with this allocator in a CUDA kernel, call \ref shallowCopy
-			    /// on the view before passing it to the kernel.
-			    LLAMA_EXPORT
-			    struct CudaMalloc
-			    {
-			        inline static const auto deleter = [](void* p)
-			        {
-			            if(const auto code = cudaFree(p); code != cudaSuccess)
-			                throw std::runtime_error(std::string{"cudaFree failed with code "} + cudaGetErrorString(code));
-			        };
-
-			        template<std::size_t FieldAlignment>
-			        inline auto operator()(std::integral_constant<std::size_t, FieldAlignment>, std::size_t count) const
-			        {
-			            std::byte* p = nullptr;
-			            if(const auto code = cudaMalloc(&p, count); code != cudaSuccess)
-			                throw std::runtime_error(std::string{"cudaMalloc failed with code "} + cudaGetErrorString(code));
-			            if(reinterpret_cast<std::uintptr_t>(p) & (FieldAlignment - 1 != 0u))
-			                throw std::runtime_error{"cudaMalloc does not align sufficiently"};
-			            return std::unique_ptr<std::byte[], decltype(deleter)>(p, deleter);
-			        }
-			    };
-			#endif
-
-			#if __has_include(<alpaka/alpaka.hpp>)
-			    LLAMA_EXPORT
-			    template<typename Size, typename Dev>
-			    struct AlpakaBuf
-			    {
-			        Dev& dev;
-
-			        template<std::size_t Alignment>
-			        inline auto operator()(std::integral_constant<std::size_t, Alignment>, std::size_t count) const
-			        {
-			            return alpaka::allocBuf<std::byte, Size>(dev, static_cast<Size>(count));
-			        }
-			    };
-			#endif
-			} // namespace llama::bloballoc
-			// ==
-			// == ./include/llama/BlobAllocators.hpp ==
-			// ============================================================================
-
-		// #include "Concepts.hpp"    // amalgamate: file already inlined
-		// #include "Core.hpp"    // amalgamate: file already inlined
-		// #include "macros.hpp"    // amalgamate: file already inlined
-			// ============================================================================
-			// == ./include/llama/mapping/One.hpp ==
-			// ==
-			// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
-			// SPDX-License-Identifier: LGPL-3.0-or-later
-
-			// #pragma once
-			// #include "../Core.hpp"    // amalgamate: file already inlined
-				// ============================================================================
-				// == ./include/llama/mapping/Common.hpp ==
-				// ==
-				// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
-				// SPDX-License-Identifier: LGPL-3.0-or-later
-
-				// #pragma once
-				// #include "../Core.hpp"    // amalgamate: file already inlined
-
-				// #include <atomic>    // amalgamate: file already included
-				#include <climits>
-				#ifndef __cpp_lib_atomic_ref
-				#    include <boost/atomic/atomic_ref.hpp>
-				#endif
-
-				namespace llama::mapping
-				{
-				    LLAMA_EXPORT
-				    template<typename TArrayExtents, typename TRecordDim>
-				    struct MappingBase : protected TArrayExtents
-				    {
-				        using ArrayExtents = TArrayExtents;
-				        using RecordDim = TRecordDim;
-
-				    protected:
-				        using ArrayIndex = typename ArrayExtents::Index;
-				        using size_type = typename ArrayExtents::value_type;
-
-				    public:
-				        constexpr MappingBase() = default;
-
-				        LLAMA_FN_HOST_ACC_INLINE
-				        constexpr explicit MappingBase(ArrayExtents extents, RecordDim = {}) : ArrayExtents(extents)
-				        {
-				        }
-
-				        LLAMA_FN_HOST_ACC_INLINE constexpr auto extents() const -> ArrayExtents
-				        {
-				            return static_cast<const ArrayExtents&>(*this);
-				        }
-				    };
-
-				    /// Functor that maps an \ref ArrayIndex into linear numbers, where the fast moving index should be the rightmost
-				    /// one, which models how C++ arrays work and is analogous to mdspan's layout_right. E.g. ArrayIndex<3> a; stores 3
-				    /// indices where a[2] should be incremented in the innermost loop.
-				    LLAMA_EXPORT
-				    struct LinearizeArrayIndexRight
-				    {
-				        template<typename ArrayExtents>
-				        LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const ArrayExtents& extents) -> typename ArrayExtents::value_type
-				        {
-				            return product(extents);
-				        }
-
-				        /// \param ai Index in the array dimensions.
-				        /// \param extents Total size of the array dimensions.
-				        /// \return Linearized index.
-				        template<typename ArrayExtents>
-				        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator()(
-				            const typename ArrayExtents::Index& ai,
-				            const ArrayExtents& extents) const -> typename ArrayExtents::value_type
-				        {
-				            if constexpr(ArrayExtents::rank == 0)
-				                return 0;
-				            else
-				            {
-				                auto address = ai[0];
-				                for(int i = 1; i < static_cast<int>(ArrayExtents::rank); i++)
-				                {
-				                    address *= extents[i];
-				                    address += ai[i];
-				                }
-				                return address;
-				            }
-				        }
-				    };
-
-				    LLAMA_EXPORT
-				    using LinearizeArrayIndexCpp = LinearizeArrayIndexRight;
-
-				    /// Functor that maps a \ref ArrayIndex into linear numbers the way Fortran arrays work. The fast moving index of
-				    /// the ArrayIndex object should be the last one. E.g. ArrayIndex<3> a; stores 3 indices where a[0] should be
-				    /// incremented in the innermost loop.
-				    LLAMA_EXPORT
-				    struct LinearizeArrayIndexLeft
-				    {
-				        template<typename ArrayExtents>
-				        LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const ArrayExtents& extents) -> typename ArrayExtents::value_type
-				        {
-				            return product(extents);
-				        }
-
-				        /// \param ai Index in the array dimensions.
-				        /// \param extents Total size of the array dimensions.
-				        /// \return Linearized index.
-				        template<typename ArrayExtents>
-				        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator()(
-				            const typename ArrayExtents::Index& ai,
-				            const ArrayExtents& extents) const -> typename ArrayExtents::value_type
-				        {
-				            if constexpr(ArrayExtents::rank == 0)
-				                return 0;
-				            else
-				            {
-				                auto address = ai[ArrayExtents::rank - 1];
-				                for(int i = static_cast<int>(ArrayExtents::rank) - 2; i >= 0; i--)
-				                {
-				                    address *= extents[i];
-				                    address += ai[i];
-				                }
-				                return address;
-				            }
-				        }
-				    };
-
-				    LLAMA_EXPORT
-				    using LinearizeArrayIndexFortran = LinearizeArrayIndexLeft;
-
-				    /// Functor that maps an \ref ArrayIndex into linear numbers using the Z-order space filling curve (Morton codes).
-				    LLAMA_EXPORT
-				    struct LinearizeArrayIndexMorton
-				    {
-				        template<typename ArrayExtents>
-				        LLAMA_FN_HOST_ACC_INLINE constexpr auto size(const ArrayExtents& extents) const ->
-				            typename ArrayExtents::value_type
-				        {
-				            if constexpr(ArrayExtents::rank == 0)
-				                return 0;
-				            else
-				            {
-				                auto longest = extents[0];
-				                for(int i = 1; i < static_cast<int>(ArrayExtents::rank); i++)
-				                    longest = std::max(longest, extents[i]);
-				                const auto longestPO2 = bitCeil(longest);
-				                return intPow(longestPO2, static_cast<typename ArrayExtents::value_type>(ArrayExtents::rank));
-				            }
-				        }
-
-				        /// \param ai Coordinate in the array dimensions.
-				        /// \param extents Total size of the array dimensions.
-				        /// \return Linearized index.
-				        template<typename ArrayExtents>
-				        LLAMA_FN_HOST_ACC_INLINE constexpr auto operator()(
-				            const typename ArrayExtents::Index& ai,
-				            [[maybe_unused]] const ArrayExtents& extents) const -> typename ArrayExtents::value_type
-				        {
-				            using size_type = typename ArrayExtents::value_type;
-				            constexpr auto rank = static_cast<size_type>(ArrayExtents::rank);
-				            size_type r = 0;
-				            for(size_type bit = 0; bit < (static_cast<size_type>(sizeof(size_type)) * CHAR_BIT) / rank; bit++)
-				                for(size_type i = 0; i < rank; i++)
-				                    r |= (ai[i] & (size_type{1} << bit)) << ((bit + 1) * (rank - 1) - i);
-				            return r;
-				        }
-
-				    private:
-				        template<typename T>
-				        LLAMA_FN_HOST_ACC_INLINE static constexpr auto bitCeil(T n) -> T
-				        {
-				            T r = 1u;
-				            while(r < n)
-				                r <<= 1u;
-				            return r;
-				        }
-
-				        template<typename T>
-				        LLAMA_FN_HOST_ACC_INLINE static constexpr auto intPow(T b, T e) -> T
-				        {
-				            e--;
-				            auto r = b;
-				            while(e != 0u)
-				            {
-				                r *= b;
-				                e--;
-				            }
-				            return r;
-				        }
-				    };
-
-				    /// Retains the order of the record dimension's fields.
-				    LLAMA_EXPORT
-				    template<typename TFlatRecordDim>
-				    struct PermuteFieldsInOrder
-				    {
-				        using FlatRecordDim = TFlatRecordDim;
-
-				        template<std::size_t FlatRecordCoord>
-				        static constexpr std::size_t permute = FlatRecordCoord;
-				    };
-
-				    /// Sorts the record dimension's the fields according to a given predicate on the field types.
-				    /// @tparam Less A binary predicate accepting two field types, which exposes a member value. Value must be true if
-				    /// the first field type is less than the second one, otherwise false.
-				    LLAMA_EXPORT
-				    template<typename FlatOrigRecordDim, template<typename, typename> typename Less>
-				    struct PermuteFieldsSorted
-				    {
-				    private:
-				        using FlatSortedRecordDim = mp_sort<FlatOrigRecordDim, Less>;
-
-				        template<typename A, typename B>
-				        using LessWithIndices = Less<mp_at<FlatOrigRecordDim, A>, mp_at<FlatOrigRecordDim, B>>;
-
-				        // A permutation from new FlatSortedRecordDim index to old FlatOrigRecordDim index
-				        using PermutedIndices = mp_sort<mp_iota<mp_size<FlatOrigRecordDim>>, LessWithIndices>;
-
-				        template<typename A, typename B>
-				        using LessInvertPermutation
-				            = std::bool_constant<(mp_at<PermutedIndices, A>::value < mp_at<PermutedIndices, B>::value)>;
-
-				        // A permutation from old FlatOrigRecordDim index to new FlatSortedRecordDim index
-				        using InversePermutedIndices = mp_sort<mp_iota<mp_size<FlatOrigRecordDim>>, LessInvertPermutation>;
-
-				    public:
-				        using FlatRecordDim = FlatSortedRecordDim;
-
-				        template<std::size_t FlatRecordCoord>
-				        static constexpr std::size_t permute = mp_at_c<InversePermutedIndices, FlatRecordCoord>::value;
-				    };
-
-				    namespace internal
-				    {
-				        template<typename A, typename B>
-				        using LessAlignment = std::bool_constant<alignof(A) < alignof(B)>;
-
-				        template<typename A, typename B>
-				        using MoreAlignment = std::bool_constant<(alignof(A) > alignof(B))>;
-				    } // namespace internal
-
-				    /// Sorts the record dimension fields by increasing alignment of its fields.
-				    LLAMA_EXPORT
-				    template<typename FlatRecordDim>
-				    using PermuteFieldsIncreasingAlignment = PermuteFieldsSorted<FlatRecordDim, internal::LessAlignment>;
-
-				    /// Sorts the record dimension fields by decreasing alignment of its fields.
-				    LLAMA_EXPORT
-				    template<typename FlatRecordDim>
-				    using PermuteFieldsDecreasingAlignment = PermuteFieldsSorted<FlatRecordDim, internal::MoreAlignment>;
-
-				    /// Sorts the record dimension fields by the alignment of its fields to minimize padding.
-				    LLAMA_EXPORT
-				    template<typename FlatRecordDim>
-				    using PermuteFieldsMinimizePadding = PermuteFieldsIncreasingAlignment<FlatRecordDim>;
-
-				    namespace internal
-				    {
-				        template<auto I>
-				        struct S;
-
-				        template<typename CountType>
-				        LLAMA_FN_HOST_ACC_INLINE void atomicInc(CountType& i)
-				        {
-				#ifdef __CUDA_ARCH__
-				            // if you get an error here that there is no overload of atomicAdd, your CMAKE_CUDA_ARCHITECTURE might be
-				            // too low or you need to use a smaller CountType for the FieldAccessCount or Heatmap mapping.
-				            if constexpr(mp_contains<mp_list<int, unsigned int, unsigned long long int>, CountType>::value)
-				                atomicAdd(&i, CountType{1});
-				            else if constexpr(sizeof(CountType) == sizeof(unsigned int))
-				                atomicAdd(reinterpret_cast<unsigned int*>(&i), 1u);
-				            else if constexpr(sizeof(CountType) == sizeof(unsigned long long int))
-				                atomicAdd(reinterpret_cast<unsigned long long int*>(&i), 1ull);
-				            else
-				                static_assert(sizeof(CountType) == 0, "There is no CUDA atomicAdd for your CountType");
-				#elif defined(__cpp_lib_atomic_ref)
-				            ++std::atomic_ref<CountType>{i};
-				#else
-				            ++boost::atomic_ref<CountType>{i};
-				#endif
-				        }
-				    } // namespace internal
-
-				    LLAMA_EXPORT
-				    enum class FieldAlignment
-				    {
-				        Pack,
-				        Align
-				    };
-				} // namespace llama::mapping
-				// ==
-				// == ./include/llama/mapping/Common.hpp ==
-				// ============================================================================
-
-
-			namespace llama::mapping
-			{
-			    /// Maps all array dimension indices to the same location and layouts struct members consecutively. This mapping is
-			    /// used for temporary, single element views.
-			    /// \tparam TFieldAlignment If Align, padding bytes are inserted to guarantee that struct members are properly
-			    /// aligned. If false, struct members are tightly packed.
-			    /// \tparam PermuteFields Defines how the record dimension's fields should be permuted. See \ref
-			    /// PermuteFieldsInOrder, \ref PermuteFieldsIncreasingAlignment, \ref PermuteFieldsDecreasingAlignment and
-			    /// \ref PermuteFieldsMinimizePadding.
-			    LLAMA_EXPORT
-			    template<
-			        typename TArrayExtents,
-			        typename TRecordDim,
-			        FieldAlignment TFieldAlignment = FieldAlignment::Align,
-			        template<typename> typename PermuteFields = PermuteFieldsMinimizePadding>
-			    struct One : MappingBase<TArrayExtents, TRecordDim>
-			    {
-			    private:
-			        using Base = MappingBase<TArrayExtents, TRecordDim>;
-			        using size_type = typename Base::size_type;
-
-			    public:
-			        inline static constexpr FieldAlignment fieldAlignment = TFieldAlignment;
-			        using Permuter = PermuteFields<FlatRecordDim<TRecordDim>>;
-			        static constexpr std::size_t blobCount = 1;
-
-			#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ >= 12
-			        using Base::Base;
-			#else
-			        constexpr One() = default;
-
-			        LLAMA_FN_HOST_ACC_INLINE constexpr explicit One(TArrayExtents extents, TRecordDim = {}) : Base(extents)
-			        {
-			        }
-			#endif
-
-			        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(size_type) const -> size_type
-			        {
-			            return flatSizeOf<
-			                typename Permuter::FlatRecordDim,
-			                fieldAlignment == FieldAlignment::Align,
-			                false>; // no tail padding
-			        }
-
-			        template<std::size_t... RecordCoords>
-			        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
-			            typename Base::ArrayIndex,
-			            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset<size_type>
-			        {
-			            constexpr std::size_t flatFieldIndex =
-			#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ <= 6
-			                *& // mess with nvcc compiler state to workaround bug
-			#endif
-			                 Permuter::template permute<flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>>;
-			            constexpr auto offset = static_cast<size_type>(flatOffsetOf<
-			                                                           typename Permuter::FlatRecordDim,
-			                                                           flatFieldIndex,
-			                                                           fieldAlignment == FieldAlignment::Align>);
-			            return {size_type{0}, offset};
-			        }
-			    };
-
-			    /// One mapping preserving the alignment of the field types by inserting padding.
-			    /// \see One
-			    LLAMA_EXPORT
-			    template<typename ArrayExtents, typename RecordDim>
-			    using AlignedOne = One<ArrayExtents, RecordDim, FieldAlignment::Align, PermuteFieldsInOrder>;
-
-			    /// One mapping preserving the alignment of the field types by inserting padding and permuting the field order to
-			    /// minimize this padding.
-			    /// \see One
-			    LLAMA_EXPORT
-			    template<typename ArrayExtents, typename RecordDim>
-			    using MinAlignedOne = One<ArrayExtents, RecordDim, FieldAlignment::Align, PermuteFieldsMinimizePadding>;
-
-			    /// One mapping packing the field types tightly, violating the types' alignment requirements.
-			    /// \see One
-			    LLAMA_EXPORT
-			    template<typename ArrayExtents, typename RecordDim>
-			    using PackedOne = One<ArrayExtents, RecordDim, FieldAlignment::Pack, PermuteFieldsInOrder>;
-
-			    /// Binds parameters to a \ref One mapping except for array and record dimension, producing a quoted
-			    /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
-			    LLAMA_EXPORT
-			    template<
-			        FieldAlignment FieldAlignment = FieldAlignment::Align,
-			        template<typename> typename PermuteFields = PermuteFieldsMinimizePadding>
-			    struct BindOne
-			    {
-			        template<typename ArrayExtents, typename RecordDim>
-			        using fn = One<ArrayExtents, RecordDim, FieldAlignment, PermuteFields>;
-			    };
-
-			    LLAMA_EXPORT
-			    template<typename Mapping>
-			    inline constexpr bool isOne = false;
-
-			    LLAMA_EXPORT
-			    template<
-			        typename ArrayExtents,
-			        typename RecordDim,
-			        FieldAlignment FieldAlignment,
-			        template<typename>
-			        typename PermuteFields>
-			    inline constexpr bool isOne<One<ArrayExtents, RecordDim, FieldAlignment, PermuteFields>> = true;
-			} // namespace llama::mapping
-			// ==
-			// == ./include/llama/mapping/One.hpp ==
-			// ============================================================================
-
-
-		// #include <type_traits>    // amalgamate: file already included
-
-		namespace llama
-		{
-		    LLAMA_EXPORT
-		#ifdef __cpp_lib_concepts
-		    template<typename TMapping, Blob BlobType, typename TAccessor>
-		#else
-		    template<typename TMapping, typename BlobType, typename TAccessor>
-		#endif
-		    struct View;
-
-		    namespace internal
-		    {
-		        template<typename Allocator, typename RecordDim>
-		        using AllocatorBlobType
-		            = decltype(std::declval<Allocator>()(std::integral_constant<std::size_t, alignOf<RecordDim>>{}, 0));
-
-		        template<typename Allocator, typename Mapping, std::size_t... Is>
-		        LLAMA_FN_HOST_ACC_INLINE auto makeBlobArray(
-		            const Allocator& alloc,
-		            const Mapping& mapping,
-		            std::integer_sequence<std::size_t, Is...>)
-		            -> Array<AllocatorBlobType<Allocator, typename Mapping::RecordDim>, Mapping::blobCount>
-		        {
-		            [[maybe_unused]] constexpr auto alignment
-		                = alignOf<typename Mapping::RecordDim>; // g++-12 warns that alignment is unused
-		            LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-		            return {alloc(std::integral_constant<std::size_t, alignment>{}, mapping.blobSize(Is))...};
-		            LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
-		        } // NOLINT(clang-analyzer-cplusplus.NewDeleteLeaks)
-		    } // namespace internal
-
-		    /// Same as \ref allocView but does not run field constructors.
-		    LLAMA_EXPORT
-		#ifdef __cpp_lib_concepts
-		    template<typename Mapping, BlobAllocator Allocator = bloballoc::Vector, typename Accessor = accessor::Default>
-		#else
-		    template<typename Mapping, typename Allocator = bloballoc::Vector, typename Accessor = accessor::Default>
-		#endif
-		    LLAMA_FN_HOST_ACC_INLINE auto allocViewUninitialized(
-		        Mapping mapping = {},
-		        const Allocator& alloc = {},
-		        Accessor accessor = {})
-		    {
-		        auto blobs = internal::makeBlobArray(alloc, mapping, std::make_index_sequence<Mapping::blobCount>{});
-		        return View<Mapping, internal::AllocatorBlobType<Allocator, typename Mapping::RecordDim>, Accessor>{
-		            std::move(mapping),
-		            std::move(blobs),
-		            std::move(accessor)};
-		    }
-
-		    namespace internal
-		    {
-		        template<typename Mapping, typename RecordCoord, typename = void>
-		        struct IsComputed : std::false_type
-		        {
-		        };
-
-		        template<typename Mapping, typename RecordCoord>
-		        struct IsComputed<Mapping, RecordCoord, std::void_t<decltype(Mapping::isComputed(RecordCoord{}))>>
-		            : std::bool_constant<Mapping::isComputed(RecordCoord{})>
-		        {
-		        };
-		    } // namespace internal
-
-		    /// Returns true if the field accessed via the given mapping and record coordinate is a computed value.
-		    LLAMA_EXPORT
-		    template<typename Mapping, typename RecordCoord>
-		    inline constexpr bool isComputed = internal::IsComputed<Mapping, RecordCoord>::value;
-
-		    /// Returns true if any field accessed via the given mapping is a computed value.
-		    // TODO(bgruber): harmonize this with LLAMA's concepts from Concepts.hpp
-		    LLAMA_EXPORT
-		    template<typename Mapping>
-		    inline constexpr bool hasAnyComputedField = mp_any_of<
-		        LeafRecordCoords<typename Mapping::RecordDim>,
-		        mp_bind_front<internal::IsComputed, Mapping>::template fn>::value;
-
-		    LLAMA_EXPORT
-		    template<typename Mapping, typename BlobType, typename Accessor, std::size_t... RCs>
-		    LLAMA_FN_HOST_ACC_INLINE void constructField(
-		        View<Mapping, BlobType, Accessor>& view,
-		        typename Mapping::ArrayExtents::Index ai,
-		        RecordCoord<RCs...> rc)
-		    {
-		        using FieldType = GetType<typename Mapping::RecordDim, decltype(rc)>;
-
-		        // this handles physical and computed mappings
-		        if constexpr(sizeof...(RCs) == 0)
-		        {
-		            using RefType = decltype(view(ai));
-		            if constexpr(isProxyReference<RefType>)
-		            {
-		                view(ai) = FieldType{};
-		            }
-		            else if constexpr(
-		                std::is_lvalue_reference_v<RefType> && !std::is_const_v<std::remove_reference_t<RefType>>)
-		            {
-		                new(&view(ai)) FieldType{};
-		            }
-		        }
-		        else
-		        {
-		            using RefType = decltype(view(ai)(rc));
-		            if constexpr(isProxyReference<RefType>)
-		            {
-		                view(ai)(rc) = FieldType{};
-		            }
-		            else if constexpr(
-		                std::is_lvalue_reference_v<RefType> && !std::is_const_v<std::remove_reference_t<RefType>>)
-		            {
-		                new(&view(ai)(rc)) FieldType{};
-		            }
-		        }
-		    }
-
-		    /// Value-initializes all fields reachable through the given view. That is, constructors are run and fundamental
-		    /// types are zero-initialized. Computed fields are constructed if they return l-value references and assigned a
-		    /// default constructed value if they return a proxy reference.
-		    LLAMA_EXPORT
-		    template<typename Mapping, typename BlobType, typename Accessor>
-		    LLAMA_FN_HOST_ACC_INLINE void constructFields(View<Mapping, BlobType, Accessor>& view)
-		    {
-		        using View = View<Mapping, BlobType, Accessor>;
-		        using RecordDim = typename View::RecordDim;
-		        forEachArrayIndex(
-		            view.extents(),
-		            [&](typename View::ArrayIndex ai) LLAMA_LAMBDA_INLINE
-		            { forEachLeafCoord<RecordDim>([&](auto rc) LLAMA_LAMBDA_INLINE { constructField(view, ai, rc); }); });
-		    }
-
-		    /// Creates a view based on the given mapping, e.g. \ref AoS or \ref :SoA. For allocating the view's underlying
-		    /// memory, the specified allocator callable is used (or the default one, which is \ref bloballoc::Vector). The
-		    /// allocator callable is called with the alignment and size of bytes to allocate for each blob of the mapping.
-		    /// Value-initialization is performed for all fields by calling \ref constructFields. This function is the
-		    /// preferred way to create a \ref View. See also \ref allocViewUninitialized.
-		    LLAMA_EXPORT
-		#ifdef __cpp_lib_concepts
-		    template<typename Mapping, BlobAllocator Allocator = bloballoc::Vector, typename Accessor = accessor::Default>
-		#else
-		    template<typename Mapping, typename Allocator = bloballoc::Vector, typename Accessor = accessor::Default>
-		#endif
-		    LLAMA_FN_HOST_ACC_INLINE auto allocView(Mapping mapping = {}, const Allocator& alloc = {}, Accessor accessor = {})
-		        -> View<Mapping, internal::AllocatorBlobType<Allocator, typename Mapping::RecordDim>, Accessor>
-		    {
-		        auto view = allocViewUninitialized(std::move(mapping), alloc, std::move(accessor));
-		        constructFields(view);
-		        return view;
-		    }
-
-		    /// Same as \ref allocViewStack but does not run field constructors.
-		    LLAMA_EXPORT
-		    template<std::size_t Dim, typename RecordDim>
-		    LLAMA_FN_HOST_ACC_INLINE auto allocViewStackUninitialized() -> decltype(auto)
-		    {
-		        constexpr auto mapping = mapping::MinAlignedOne<ArrayExtentsNCube<int, Dim, 1>, RecordDim>{};
-		        return allocViewUninitialized(mapping, bloballoc::Array<mapping.blobSize(0)>{});
-		    }
-
-		    /// Allocates a \ref View holding a single record backed by stack memory (\ref bloballoc::Array).
-		    /// \tparam Dim Dimension of the \ref ArrayExtents of the \ref View.
-		    LLAMA_EXPORT
-		    template<std::size_t Dim, typename RecordDim>
-		    LLAMA_FN_HOST_ACC_INLINE auto allocViewStack() -> decltype(auto)
-		    {
-		        auto view = allocViewStackUninitialized<Dim, RecordDim>();
-		        constructFields(view);
-		        return view;
-		    }
-
-		    LLAMA_EXPORT
-		    template<typename View, typename BoundRecordCoord = RecordCoord<>, bool OwnView = false>
-		    struct RecordRef;
-
-		    /// A \ref RecordRef that owns and holds a single value.
-		    LLAMA_EXPORT
-		    template<typename RecordDim>
-		    using One = RecordRef<decltype(allocViewStack<0, RecordDim>()), RecordCoord<>, true>;
-
-		    /// Is true, if T is an instance of \ref One.
-		    LLAMA_EXPORT
-		    template<typename T>
-		    inline constexpr bool isOne = false;
-
-		    LLAMA_EXPORT
-		    template<typename View, typename BoundRecordCoord>
-		    inline constexpr bool isOne<RecordRef<View, BoundRecordCoord, true>> = true;
-
-		    // TODO(bgruber): Higher dimensional iterators might not have good codegen. Multiple nested loops seem to be
-		    // superior to a single iterator over multiple dimensions. At least compilers are able to produce better code.
-		    // std::mdspan also discovered similar difficulties and there was a discussion in WG21 in Oulu 2016 to
-		    // remove/postpone iterators from the design. In std::mdspan's design, the iterator iterated over the co-domain.
-		    LLAMA_EXPORT
-		    template<typename View>
-		    struct Iterator
-		    {
-		        using ArrayIndexIterator = llama::ArrayIndexIterator<typename View::ArrayExtents>;
-
-		        using iterator_category = std::random_access_iterator_tag;
-		        using value_type = One<typename View::RecordDim>;
-		        using difference_type = typename ArrayIndexIterator::difference_type;
-		        using pointer = internal::IndirectValue<RecordRef<View>>;
-		        using reference = RecordRef<View>;
-
-		        constexpr Iterator() = default;
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr Iterator(ArrayIndexIterator arrayIndex, View* view)
-		            : arrayIndex(arrayIndex)
-		            , view(view)
-		        {
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE
-		        constexpr auto operator++() -> Iterator&
-		        {
-		            ++arrayIndex;
-		            return *this;
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE
-		        constexpr auto operator++(int) -> Iterator
-		        {
-		            auto tmp = *this;
-		            ++*this;
-		            return tmp;
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE
-		        constexpr auto operator--() -> Iterator&
-		        {
-		            --arrayIndex;
-		            return *this;
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE
-		        constexpr auto operator--(int) -> Iterator
-		        {
-		            auto tmp{*this};
-		            --*this;
-		            return tmp;
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE
-		        constexpr auto operator*() const -> reference
-		        {
-		            return (*view)(*arrayIndex);
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE
-		        constexpr auto operator->() const -> pointer
-		        {
-		            return {**this};
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE
-		        constexpr auto operator[](difference_type i) const -> reference
-		        {
-		            return *(*this + i);
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE
-		        constexpr auto operator+=(difference_type n) -> Iterator&
-		        {
-		            arrayIndex += n;
-		            return *this;
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE
-		        friend constexpr auto operator+(Iterator it, difference_type n) -> Iterator
-		        {
-		            it += n;
-		            return it;
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE
-		        friend constexpr auto operator+(difference_type n, Iterator it) -> Iterator
-		        {
-		            return it + n;
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE
-		        constexpr auto operator-=(difference_type n) -> Iterator&
-		        {
-		            arrayIndex -= n;
-		            return *this;
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE
-		        friend constexpr auto operator-(Iterator it, difference_type n) -> Iterator
-		        {
-		            it -= n;
-		            return it;
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE
-		        friend constexpr auto operator-(const Iterator& a, const Iterator& b) -> difference_type
-		        {
-		            assert(a.view == b.view);
-		            return static_cast<std::ptrdiff_t>(a.arrayIndex - b.arrayIndex);
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE
-		        friend constexpr auto operator==(const Iterator& a, const Iterator& b) -> bool
-		        {
-		            assert(a.view == b.view);
-		            return a.arrayIndex == b.arrayIndex;
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE
-		        friend constexpr auto operator!=(const Iterator& a, const Iterator& b) -> bool
-		        {
-		            return !(a == b);
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE
-		        friend constexpr auto operator<(const Iterator& a, const Iterator& b) -> bool
-		        {
-		            assert(a.view == b.view);
-		            return a.arrayIndex < b.arrayIndex;
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE
-		        friend constexpr auto operator>(const Iterator& a, const Iterator& b) -> bool
-		        {
-		            return b < a;
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE
-		        friend constexpr auto operator<=(const Iterator& a, const Iterator& b) -> bool
-		        {
-		            return !(a > b);
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE
-		        friend constexpr auto operator>=(const Iterator& a, const Iterator& b) -> bool
-		        {
-		            return !(a < b);
-		        }
-
-		        ArrayIndexIterator arrayIndex;
-		        View* view;
-		    };
-
-		    /// Using a mapping, maps the given array index and record coordinate to a memory reference onto the given blobs.
-		    /// \return Either an l-value reference if the record coord maps to a physical field or a proxy reference if mapped
-		    /// to a computed field.
-		    LLAMA_EXPORT
-		    template<typename Mapping, typename RecordCoord, typename Blobs>
-		    LLAMA_FN_HOST_ACC_INLINE auto mapToMemory(
-		        Mapping& mapping,
-		        typename Mapping::ArrayExtents::Index ai,
-		        RecordCoord rc,
-		        Blobs& blobs) -> decltype(auto)
-		    {
-		        if constexpr(llama::isComputed<Mapping, RecordCoord>)
-		            return mapping.compute(ai, rc, blobs);
-		        else
-		        {
-		            const auto [nr, offset] = mapping.blobNrAndOffset(ai, rc);
-		            using Type = GetType<typename Mapping::RecordDim, RecordCoord>;
-		            LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-		            return reinterpret_cast<CopyConst<std::remove_reference_t<decltype(blobs[nr][offset])>, Type>&>(
-		                blobs[nr][offset]);
-		            LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
-		        }
-		    }
-
-		    /// Central LLAMA class holding memory for storage and giving access to values stored there defined by a
-		    /// mapping. A view should be created using \ref allocView. \tparam TMapping The mapping used by the view to
-		    /// map accesses into memory. \tparam TBlobType The storage type used by the view holding memory. \tparam
-		    /// TAccessor The accessor to use when an access is made through this view.
-		    LLAMA_EXPORT
-		#ifdef __cpp_lib_concepts
-		    template<typename TMapping, Blob TBlobType, typename TAccessor = accessor::Default>
-		#else
-		    template<typename TMapping, typename TBlobType, typename TAccessor = accessor::Default>
-		#endif
-		    struct LLAMA_DECLSPEC_EMPTY_BASES View
-		        : private TMapping
-		        , private TAccessor
-		#if CAN_USE_RANGES
-		        , std::ranges::view_base
-		#endif
-		    {
-		        static_assert(!std::is_const_v<TMapping>);
-		        using Mapping = TMapping;
-		        using BlobType = TBlobType;
-		        using ArrayExtents = typename Mapping::ArrayExtents;
-		        using ArrayIndex = typename ArrayExtents::Index;
-		        using RecordDim = typename Mapping::RecordDim;
-		        using Accessor = TAccessor;
-		        using iterator = Iterator<View>;
-		        using const_iterator = Iterator<const View>;
-
-		    private:
-		        using size_type = typename ArrayExtents::value_type;
-
-		    public:
-		        static_assert(
-		            std::is_same_v<Mapping, std::decay_t<Mapping>>,
-		            "Mapping must not be const qualified or a reference. Are you using decltype(...) as View template "
-		            "argument?");
-		        static_assert(
-		            std::is_same_v<ArrayExtents, std::decay_t<ArrayExtents>>,
-		            "Mapping::ArrayExtents must not be const qualified or a reference. Are you using decltype(...) as "
-		            "mapping "
-		            "template argument?");
-
-		        /// Performs default initialization of the blob array.
-		        // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init,hicpp-member-init)
-		        View() = default;
-
-		        /// Creates a LLAMA View manually. Prefer the allocations functions \ref allocView and \ref
-		        /// allocViewUninitialized if possible.
-		        /// \param mapping The mapping used by the view to map accesses into memory.
-		        /// \param blobs An array of blobs providing storage space for the mapped data.
-		        /// \param accessor The accessor to use when an access is made through this view.
-		        LLAMA_FN_HOST_ACC_INLINE
-		        explicit View(Mapping mapping, Array<BlobType, Mapping::blobCount> blobs = {}, Accessor accessor = {})
-		            : Mapping(std::move(mapping))
-		            , Accessor(std::move(accessor))
-		            , m_blobs(std::move(blobs))
-		        {
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE auto mapping() -> Mapping&
-		        {
-		            return static_cast<Mapping&>(*this);
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE auto mapping() const -> const Mapping&
-		        {
-		            return static_cast<const Mapping&>(*this);
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE auto accessor() -> Accessor&
-		        {
-		            return static_cast<Accessor&>(*this);
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE auto accessor() const -> const Accessor&
-		        {
-		            return static_cast<const Accessor&>(*this);
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE auto extents() const -> ArrayExtents
-		        {
-		            return mapping().extents();
-		        }
-
-		#if !(defined(_MSC_VER) && defined(__NVCC__))
-		        template<typename V>
-		        auto operator()(llama::ArrayIndex<V, ArrayIndex::rank>) const
-		        {
-		            static_assert(!sizeof(V), "Passed ArrayIndex with SizeType different than Mapping::ArrayExtent");
-		        }
-		#endif
-
-		        /// Retrieves the \ref RecordRef at the given \ref ArrayIndex index.
-		        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayIndex ai) const -> decltype(auto)
-		        {
-		            if constexpr(isRecordDim<RecordDim>)
-		                return RecordRef<const View>{ai, *this};
-		            else
-		                return access(ai, RecordCoord<>{});
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayIndex ai) -> decltype(auto)
-		        {
-		            if constexpr(isRecordDim<RecordDim>)
-		                return RecordRef<View>{ai, *this};
-		            else
-		                return access(ai, RecordCoord<>{});
-		        }
-
-		        /// Retrieves the \ref RecordRef at the \ref ArrayIndex index constructed from the passed component
-		        /// indices.
-		        template<
-		            typename... Indices,
-		            std::enable_if_t<std::conjunction_v<std::is_convertible<Indices, size_type>...>, int> = 0>
-		        LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) const -> decltype(auto)
-		        {
-		            static_assert(
-		                sizeof...(Indices) == ArrayIndex::rank,
-		                "Please specify as many indices as you have array dimensions");
-		            return (*this)(ArrayIndex{static_cast<typename ArrayIndex::value_type>(indices)...});
-		        }
-
-		        template<
-		            typename... Indices,
-		            std::enable_if_t<std::conjunction_v<std::is_convertible<Indices, size_type>...>, int> = 0>
-		        LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) -> decltype(auto)
-		        {
-		            static_assert(
-		                sizeof...(Indices) == ArrayIndex::rank,
-		                "Please specify as many indices as you have array dimensions");
-		            return (*this)(ArrayIndex{static_cast<typename ArrayIndex::value_type>(indices)...});
-		        }
-
-		        /// Retrieves the \ref RecordRef at the \ref ArrayIndex index constructed from the passed component
-		        /// indices.
-		        LLAMA_FN_HOST_ACC_INLINE auto operator[](ArrayIndex ai) const -> decltype(auto)
-		        {
-		            return (*this)(ai);
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE auto operator[](ArrayIndex ai) -> decltype(auto)
-		        {
-		            return (*this)(ai);
-		        }
-
-		#if !(defined(_MSC_VER) && defined(__NVCC__))
-		        template<typename V>
-		        auto operator[](llama::ArrayIndex<V, ArrayIndex::rank>) const
-		        {
-		            static_assert(!sizeof(V), "Passed ArrayIndex with SizeType different than Mapping::ArrayExtent");
-		        }
-		#endif
-
-		        /// Retrieves the \ref RecordRef at the 1D \ref ArrayIndex index constructed from the passed index.
-		        LLAMA_FN_HOST_ACC_INLINE auto operator[](size_type index) const -> decltype(auto)
-		        {
-		            return (*this)(index);
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE auto operator[](size_type index) -> decltype(auto)
-		        {
-		            return (*this)(index);
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE
-		        auto begin() -> iterator
-		        {
-		            return {ArrayIndexRange<ArrayExtents>{extents()}.begin(), this};
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE
-		        auto begin() const -> const_iterator
-		        {
-		            return {ArrayIndexRange<ArrayExtents>{extents()}.begin(), this};
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE
-		        auto end() -> iterator
-		        {
-		            return {ArrayIndexRange<ArrayExtents>{extents()}.end(), this};
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE
-		        auto end() const -> const_iterator
-		        {
-		            return {ArrayIndexRange<ArrayExtents>{extents()}.end(), this};
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE auto blobs() -> Array<BlobType, Mapping::blobCount>&
-		        {
-		            return m_blobs;
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE auto blobs() const -> const Array<BlobType, Mapping::blobCount>&
-		        {
-		            return m_blobs;
-		        }
-
-		    private:
-		        template<typename TView, typename TBoundRecordCoord, bool OwnView>
-		        friend struct RecordRef;
-
-		        template<std::size_t... Coords>
-		        LLAMA_FN_HOST_ACC_INLINE auto access(ArrayIndex ai, RecordCoord<Coords...> rc = {}) const -> decltype(auto)
-		        {
-		            return accessor()(mapToMemory(mapping(), ai, rc, m_blobs));
-		        }
-
-		        template<std::size_t... Coords>
-		        LLAMA_FN_HOST_ACC_INLINE auto access(ArrayIndex ai, RecordCoord<Coords...> rc = {}) -> decltype(auto)
-		        {
-		            return accessor()(mapToMemory(mapping(), ai, rc, m_blobs));
-		        }
-
-		        Array<BlobType, Mapping::blobCount> m_blobs;
-		    };
-
-		    LLAMA_EXPORT
-		#ifdef __cpp_lib_concepts
-		    template<typename View>
-		    inline constexpr auto isView = AnyView<View>;
-		#else
-		    template<typename View>
-		    inline constexpr auto isView = false;
-
-		    // this definition does neither capture SubView nor user defined view's, but the issue resolves itself with a C++20
-		    // upgrade.
-		    template<typename Mapping, typename BlobType, typename Accessor>
-		    inline constexpr auto isView<View<Mapping, BlobType, Accessor>> = true;
-		#endif
-
-		    namespace internal
-		    {
-		        // remove in C++23, from: https://en.cppreference.com/w/cpp/utility/forward_like
-		        // NOLINTBEGIN
-		        template<class T, class U>
-		        [[nodiscard]] LLAMA_FN_HOST_ACC_INLINE constexpr auto&& forward_like(U&& x) noexcept
-		        {
-		            constexpr bool is_adding_const = std::is_const_v<std::remove_reference_t<T>>;
-		            if constexpr(std::is_lvalue_reference_v<T&&>)
-		            {
-		                if constexpr(is_adding_const)
-		                    return std::as_const(x);
-		                else
-		                    return static_cast<U&>(x);
-		            }
-		            else
-		            {
-		                if constexpr(is_adding_const)
-		                    return std::move(std::as_const(x));
-		                else
-		                    return std::move(x);
-		            }
-		        }
-		        // NOLINTEND
-
-		        template<typename Blobs, typename TransformBlobFunc, std::size_t... Is>
-		        LLAMA_FN_HOST_ACC_INLINE auto makeTransformedBlobArray(
-		            Blobs&& blobs,
-		            const TransformBlobFunc& transformBlob,
-		            std::integer_sequence<std::size_t, Is...>)
-		        {
-		            return llama::Array{transformBlob(forward_like<Blobs>(blobs[Is]))...};
-		        }
-		    } // namespace internal
-
-		    /// Applies the given transformation to the blobs of a view and creates a new view with the transformed blobs
-		    /// and the same mapping and accessor as the old view.
-		    LLAMA_EXPORT
-		    template<typename ViewFwd, typename TransformBlobFunc, typename = std::enable_if_t<isView<std::decay_t<ViewFwd>>>>
-		    LLAMA_FN_HOST_ACC_INLINE auto transformBlobs(ViewFwd&& view, const TransformBlobFunc& transformBlob)
-		    {
-		        using View = std::decay_t<ViewFwd>;
-		        constexpr auto blobCount = View::Mapping::blobCount;
-
-		        auto blobs = internal::makeTransformedBlobArray(
-		            internal::forward_like<ViewFwd>(view.blobs()),
-		            transformBlob,
-		            std::make_index_sequence<blobCount>{});
-		        return llama::View<typename View::Mapping, typename decltype(blobs)::value_type, typename View::Accessor>{
-		            view.mapping(),
-		            std::move(blobs),
-		            view.accessor()};
-		    }
-
-		    /// Creates a shallow copy of a view. This copy must not outlive the view, since it references its blob array.
-		    /// \tparam NewBlobType The blob type of the shallow copy. Must be a non owning pointer like type.
-		    /// \return A new view with the same mapping as view, where each blob refers to the blob in view.
-		    LLAMA_EXPORT
-		    template<
-		        typename View,
-		        typename NewBlobType = CopyConst<std::remove_reference_t<View>, std::byte>*,
-		        typename = std::enable_if_t<isView<std::decay_t<View>>>>
-		    LLAMA_FN_HOST_ACC_INLINE auto shallowCopy(View&& view)
-		    {
-		        if constexpr(std::is_same_v<typename std::decay_t<View>::BlobType, NewBlobType>)
-		            return view;
-		        else
-		            return transformBlobs(
-		                std::forward<View>(view),
-		                [](auto& blob)
-		                {
-		                    LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-		                    return static_cast<NewBlobType>(&blob[0]);
-		                    LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
-		                });
-		    }
-
-		    // Creates a new view from an existing view with the given accessor.
-		    // \param view A view which's mapping and blobs are forwarded into a new view with the different accessor.
-		    LLAMA_EXPORT
-		    template<typename NewAccessor, typename ViewFwd, typename = std::enable_if_t<isView<std::decay_t<ViewFwd>>>>
-		    LLAMA_FN_HOST_ACC_INLINE auto withAccessor(ViewFwd&& view, NewAccessor newAccessor = {})
-		    {
-		        using OldView = std::decay_t<ViewFwd>;
-		        return View<typename OldView::Mapping, typename OldView::BlobType, NewAccessor>{
-		            internal::forward_like<ViewFwd>(view.mapping()),
-		            internal::forward_like<ViewFwd>(view.blobs()),
-		            std::move(newAccessor)};
-		    }
-
-		    // Creates a new view from an existing view with the given mapping.
-		    // \param view A view which's accessor and blobs are forwarded into a new view with the different mapping.
-		    LLAMA_EXPORT
-		    template<typename NewMapping, typename ViewFwd, typename = std::enable_if_t<isView<std::decay_t<ViewFwd>>>>
-		    LLAMA_FN_HOST_ACC_INLINE auto withMapping(ViewFwd&& view, NewMapping newMapping = {})
-		    {
-		        using OldView = std::decay_t<ViewFwd>;
-		        static_assert(OldView::Mapping::blobCount == NewMapping::blobCount);
-		        for(std::size_t i = 0; i < NewMapping::blobCount; i++)
-		        {
-		            assert(view.mapping().blobSize(i) == newMapping.blobSize(i));
-		        }
-
-		        return View<NewMapping, typename OldView::BlobType, typename OldView::Accessor>{
-		            std::move(newMapping),
-		            internal::forward_like<ViewFwd>(view.blobs()),
-		            internal::forward_like<ViewFwd>(view.accessor())};
-		    }
-
-		    /// Like a \ref View, but array indices are shifted.
-		    /// @tparam TStoredParentView Type of the underlying view. May be cv qualified and/or a reference type.
-		    LLAMA_EXPORT
-		    template<typename TStoredParentView>
-		    struct SubView
-		    {
-		        using StoredParentView = TStoredParentView;
-		        using ParentView = std::remove_const_t<std::remove_reference_t<StoredParentView>>; ///< type of the parent view
-
-		        using Mapping = typename ParentView::Mapping;
-		        using ArrayExtents = typename ParentView::ArrayExtents;
-		        using ArrayIndex = typename ParentView::ArrayIndex;
-		        using BlobType = typename ParentView::BlobType;
-		        using RecordDim = typename ParentView::RecordDim;
-		        using Accessor = typename ParentView::Accessor;
-		        using iterator = typename ParentView::iterator;
-		        using const_iterator = typename ParentView::const_iterator;
-
-		    private:
-		        using size_type = typename ArrayExtents::value_type;
-
-		    public:
-		        /// Creates a SubView given a parent \ref View and offset.
-		        template<typename StoredParentViewFwd>
-		        LLAMA_FN_HOST_ACC_INLINE SubView(StoredParentViewFwd&& parentView, ArrayIndex offset)
-		            : parentView(std::forward<StoredParentViewFwd>(parentView))
-		            , offset(offset)
-		        {
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE auto mapping() -> Mapping&
-		        {
-		            return parentView.mapping();
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE auto mapping() const -> const Mapping&
-		        {
-		            return parentView.mapping();
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE auto accessor() -> Accessor&
-		        {
-		            return parentView.accessor();
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE auto accessor() const -> const Accessor&
-		        {
-		            return parentView.accessor();
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE auto extents() const -> ArrayExtents
-		        {
-		            return parentView.extents();
-		        }
-
-		        /// Same as \ref View::operator()(ArrayIndex), but shifted by the offset of this \ref SubView.
-		        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayIndex ai) const -> decltype(auto)
-		        {
-		            return parentView(ArrayIndex{ai + offset});
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE auto operator()(ArrayIndex ai) -> decltype(auto)
-		        {
-		            return parentView(ArrayIndex{ai + offset});
-		        }
-
-		        /// Same as corresponding operator in \ref View, but shifted by the offset of this \ref SubView.
-		        template<typename... Indices>
-		        LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) const -> decltype(auto)
-		        {
-		            static_assert(
-		                sizeof...(Indices) == ArrayIndex::rank,
-		                "Please specify as many indices as you have array dimensions");
-		            static_assert(
-		                std::conjunction_v<std::is_convertible<Indices, size_type>...>,
-		                "Indices must be convertible to ArrayExtents::size_type");
-		            return parentView(
-		                ArrayIndex{ArrayIndex{static_cast<typename ArrayIndex::value_type>(indices)...} + offset});
-		        }
-
-		        template<typename... Indices>
-		        LLAMA_FN_HOST_ACC_INLINE auto operator()(Indices... indices) -> decltype(auto)
-		        {
-		            static_assert(
-		                sizeof...(Indices) == ArrayIndex::rank,
-		                "Please specify as many indices as you have array dimensions");
-		            static_assert(
-		                std::conjunction_v<std::is_convertible<Indices, size_type>...>,
-		                "Indices must be convertible to ArrayExtents::size_type");
-		            return parentView(
-		                ArrayIndex{ArrayIndex{static_cast<typename ArrayIndex::value_type>(indices)...} + offset});
-		        }
-
-		        template<std::size_t... Coords>
-		        LLAMA_FN_HOST_ACC_INLINE auto operator()(RecordCoord<Coords...> rc = {}) const -> decltype(auto)
-		        {
-		            return parentView(ArrayIndex{} + offset, rc);
-		        }
-
-		        template<std::size_t... Coords>
-		        LLAMA_FN_HOST_ACC_INLINE auto operator()(RecordCoord<Coords...> rc = {}) -> decltype(auto)
-		        {
-		            return parentView(ArrayIndex{} + offset, rc);
-		        }
-
-		        // TODO(bgruber): implement iterators. Those would be transform iterators on top of the parent view's
-		        // iterators, applying the offset on access.
-
-		        LLAMA_FN_HOST_ACC_INLINE auto blobs() -> Array<BlobType, Mapping::blobCount>&
-		        {
-		            return parentView.blobs();
-		        }
-
-		        LLAMA_FN_HOST_ACC_INLINE auto blobs() const -> const Array<BlobType, Mapping::blobCount>&
-		        {
-		            return parentView.blobs();
-		        }
-
-		        StoredParentView parentView;
-		        const ArrayIndex offset; ///< offset by which this view's \ref ArrayIndex indices are shifted when passed
-		                                 ///< to the parent view.
-		    };
-
-		    /// SubView vview(view); will store a reference to view.
-		    /// SubView vview(std::move(view)); will store the view.
-		    LLAMA_EXPORT
-		    template<typename TStoredParentView>
-		    SubView(TStoredParentView&&, typename std::remove_reference_t<TStoredParentView>::Mapping::ArrayExtents::Index)
-		        -> SubView<TStoredParentView>;
-		} // namespace llama
-		// ==
-		// == ./include/llama/View.hpp ==
-		// ============================================================================
-
+	// #    include "View.hpp"    // amalgamate: file already inlined
+
+	#    include <fmt/format.h>
+	#    include <functional>
+	#    include <optional>
+	// #    include <string>    // amalgamate: file already included
+	// #    include <vector>    // amalgamate: file already included
+
+	namespace llama
+	{
+	    namespace internal
+	    {
+	        inline auto color(std::string_view recordCoordTags) -> std::size_t
+	        {
+	            auto c = std::hash<std::string_view>{}(recordCoordTags) &std::size_t{0xFFFFFF};
+	            c |= std::size_t{0x404040}; // ensure color per channel is at least 0x40.
+	            return c;
+	        }
+
+	        // from: https://stackoverflow.com/questions/5665231/most-efficient-way-to-escape-xml-html-in-c-string
+	        inline auto xmlEscape(const std::string& str) -> std::string
+	        {
+	            std::string result;
+	            result.reserve(str.size());
+	            for(const char c : str)
+	            {
+	                switch(c)
+	                {
+	                case '&':
+	                    result.append("&amp;");
+	                    break;
+	                case '\"':
+	                    result.append("&quot;");
+	                    break;
+	                case '\'':
+	                    result.append("&apos;");
+	                    break;
+	                case '<':
+	                    result.append("&lt;");
+	                    break;
+	                case '>':
+	                    result.append("&gt;");
+	                    break;
+	                default:
+	                    result += c;
+	                    break;
+	                }
+	            }
+	            return result;
+	        }
+
+	        template<typename T, std::size_t Dim>
+	        auto formatArrayIndex(const ArrayIndex<T, Dim>& ai)
+	        {
+	            if constexpr(Dim == 1)
+	                return std::to_string(ai[0]);
+	            else
+	            {
+	                std::string s = "{";
+	                for(auto v : ai)
+	                {
+	                    if(s.size() >= 2)
+	                        s += ",";
+	                    s += std::to_string(v);
+	                }
+	                s += "}";
+	                return s;
+	            }
+	        }
+
+	        template<typename ArrayIndex>
+	        // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init,hicpp-member-init)
+	        struct FieldBox
+	        {
+	            ArrayIndex arrayIndex;
+	            std::string_view recordCoordTags;
+	            NrAndOffset<std::size_t> nrAndOffset;
+	            std::size_t size;
+	        };
+
+	        template<typename View>
+	        void fillBlobsWithPattern(View& view, uint8_t pattern)
+	        {
+	            const auto& mapping = view.mapping();
+	            for(std::size_t i = 0; i < View::Mapping::blobCount; i++)
+	                std::memset(&view.blobs()[i][0], pattern, mapping.blobSize(i));
+	        }
+
+	        template<typename View, typename RecordCoord>
+	        void boxesFromComputedField(
+	            View& view,
+	            typename View::Mapping::ArrayExtents::Index ai,
+	            RecordCoord rc,
+	            std::vector<FieldBox<typename View::Mapping::ArrayExtents::Index>>& infos)
+	        {
+	            using Mapping = typename View::Mapping;
+	            using RecordDim = typename Mapping::RecordDim;
+
+	            auto emitInfo = [&](auto nrAndOffset, std::size_t size) {
+	                infos.push_back({ai, prettyRecordCoord<RecordDim>(rc), nrAndOffset, size});
+	            };
+
+	            using Type = GetType<RecordDim, decltype(rc)>;
+	            // computed values can come from anywhere, so we can only apply heuristics
+	            auto& blobs = view.blobs();
+	            auto&& ref = view.mapping().compute(ai, rc, blobs);
+
+	            // if we get a reference, try to find the mapped address in one of the blobs
+	            if constexpr(std::is_lvalue_reference_v<decltype(ref)>)
+	            {
+	                auto address = reinterpret_cast<std::intptr_t>(&ref);
+	                for(std::size_t i = 0; i < blobs.size(); i++)
+	                {
+	                    // TODO(bgruber): this is UB, because we are comparing pointers from unrelated
+	                    // allocations
+	                    const auto front = reinterpret_cast<std::intptr_t>(&blobs[i][0]);
+	                    const auto back = reinterpret_cast<std::intptr_t>(&blobs[i][view.mapping().blobSize(i) - 1]);
+	                    if(front <= address && address <= back)
+	                    {
+	                        emitInfo(NrAndOffset{i, static_cast<std::size_t>(address - front)}, sizeof(Type));
+	                        return; // a mapping can only map to one location in the blobs
+	                    }
+	                }
+	            }
+
+	            if constexpr(std::is_default_constructible_v<Type>)
+	            {
+	                const auto infosBefore = infos.size();
+
+	                // try to observe written bytes
+	                const auto pattern = std::uint8_t{0xFF};
+	                fillBlobsWithPattern(view, pattern);
+	                ref = Type{}; // a broad range of types is default constructible and should write
+	                              // something zero-ish
+	                auto wasTouched = [&](auto b) { return static_cast<std::uint8_t>(b) != pattern; };
+	                for(std::size_t i = 0; i < Mapping::blobCount; i++)
+	                {
+	                    const auto blobSize = view.mapping().blobSize(i);
+	                    const auto* begin = &blobs[i][0];
+	                    const auto* end = begin + blobSize;
+
+	                    auto* searchBegin = begin;
+	                    while(true)
+	                    {
+	                        const auto* touchedBegin = std::find_if(searchBegin, end, wasTouched);
+	                        if(touchedBegin == end)
+	                            break;
+	                        const auto& touchedEnd = std::find_if_not(touchedBegin + 1, end, wasTouched);
+	                        emitInfo(
+	                            NrAndOffset{i, static_cast<std::size_t>(touchedBegin - begin)},
+	                            touchedEnd - touchedBegin);
+	                        if(touchedEnd == end)
+	                            break;
+	                        searchBegin = touchedEnd + 1;
+	                    }
+	                }
+
+	                if(infosBefore != infos.size())
+	                    return;
+	            }
+
+	            // if we come here, we could not find out where the value is coming from
+	            emitInfo(NrAndOffset{Mapping::blobCount, std::size_t{0}}, sizeof(Type));
+	        }
+
+	        template<typename Mapping>
+	        auto boxesFromMapping(const Mapping& mapping) -> std::vector<FieldBox<typename Mapping::ArrayExtents::Index>>
+	        {
+	            std::vector<FieldBox<typename Mapping::ArrayExtents::Index>> infos;
+
+	            std::optional<decltype(allocView(mapping))> view;
+	            if constexpr(hasAnyComputedField<Mapping>)
+	                view = allocView(mapping);
+
+	            using RecordDim = typename Mapping::RecordDim;
+	            for(auto ai : ArrayIndexRange{mapping.extents()})
+	                forEachLeafCoord<RecordDim>(
+	                    [&](auto rc)
+	                    {
+	                        using Type = GetType<RecordDim, decltype(rc)>;
+	                        if constexpr(llama::isComputed<Mapping, decltype(rc)>)
+	                            boxesFromComputedField(view.value(), ai, rc, infos);
+	                        else
+	                        {
+	                            const auto [nr, off] = mapping.blobNrAndOffset(ai, rc);
+	                            infos.push_back(
+	                                {ai,
+	                                 prettyRecordCoord<RecordDim>(rc),
+	                                 {static_cast<std::size_t>(nr), static_cast<std::size_t>(off)},
+	                                 sizeof(Type)});
+	                        }
+	                    });
+
+	            return infos;
+	        }
+
+	        template<typename ArrayIndex>
+	        auto breakBoxes(std::vector<FieldBox<ArrayIndex>> boxes, std::size_t wrapByteCount)
+	            -> std::vector<FieldBox<ArrayIndex>>
+	        {
+	            for(std::size_t i = 0; i < boxes.size(); i++)
+	            {
+	                auto& fb = boxes[i];
+	                if(fb.nrAndOffset.offset / wrapByteCount != (fb.nrAndOffset.offset + fb.size - 1) / wrapByteCount)
+	                {
+	                    const auto remainingSpace = wrapByteCount - fb.nrAndOffset.offset % wrapByteCount;
+	                    auto newFb = fb;
+	                    newFb.nrAndOffset.offset = fb.nrAndOffset.offset + remainingSpace;
+	                    newFb.size = fb.size - remainingSpace;
+	                    fb.size = remainingSpace;
+	                    boxes.push_back(newFb);
+	                }
+	            }
+	            return boxes;
+	        }
+
+	        inline auto cssClass(std::string tags)
+	        {
+	            std::replace(begin(tags), end(tags), '.', '_');
+	            std::replace(begin(tags), end(tags), '<', '_');
+	            std::replace(begin(tags), end(tags), '>', '_');
+	            return tags;
+	        };
+	    } // namespace internal
+
+	    /// Returns an SVG image visualizing the memory layout created by the given mapping. The created memory blocks are
+	    /// wrapped after wrapByteCount bytes.
+	    LLAMA_EXPORT
+	    template<typename Mapping>
+	    auto toSvg(const Mapping& mapping, std::size_t wrapByteCount = 64, bool breakBoxes = true) -> std::string
+	    {
+	        constexpr auto byteSizeInPixel = 30;
+	        constexpr auto blobBlockWidth = 60;
+
+	        auto infos = internal::boxesFromMapping(mapping);
+	        if(breakBoxes)
+	            infos = internal::breakBoxes(std::move(infos), wrapByteCount);
+	        std::stable_sort(
+	            begin(infos),
+	            end(infos),
+	            [](const auto& a, const auto& b) {
+	                return std::tie(a.nrAndOffset.nr, a.nrAndOffset.offset)
+	                    < std::tie(b.nrAndOffset.nr, b.nrAndOffset.offset);
+	            });
+
+	        std::string svg;
+
+	        std::array<int, Mapping::blobCount + hasAnyComputedField<Mapping> + 1> blobYOffset{};
+	        auto writeBlobHeader = [&](std::size_t i, std::size_t size, std::string_view name)
+	        {
+	            const auto blobRows = (size + wrapByteCount - 1) / wrapByteCount;
+	            blobYOffset[i + 1] = blobYOffset[i] + (blobRows + 1) * byteSizeInPixel; // one row gap between blobs
+	            const auto height = blobRows * byteSizeInPixel;
+	            svg += fmt::format(
+	                R"a(<rect x="0" y="{}" width="{}" height="{}" fill="#AAA" stroke="#000"/>
+	<text x="{}" y="{}" fill="#000" text-anchor="middle">{}</text>
+	)a",
+	                blobYOffset[i],
+	                blobBlockWidth,
+	                height,
+	                blobBlockWidth / 2,
+	                blobYOffset[i] + height / 2,
+	                name);
+	        };
+	        for(std::size_t i = 0; i < Mapping::blobCount; i++)
+	            writeBlobHeader(i, mapping.blobSize(i), "Blob: " + std::to_string(i));
+
+	        svg = fmt::format(
+	                  R"(<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+	<svg width="{}" height="{}" xmlns="http://www.w3.org/2000/svg">
+	    <style>
+	        .label {{ font: {}px sans-serif; }}
+	    </style>
+	)",
+	                  blobBlockWidth + wrapByteCount * byteSizeInPixel,
+	                  blobYOffset.back() == 0 ? 987654321 : blobYOffset.back() - byteSizeInPixel,
+	                  byteSizeInPixel / 2)
+	            + svg;
+
+	        std::size_t computedSizeSoFar = 0;
+	        std::size_t lastBlobNr = std::numeric_limits<std::size_t>::max();
+	        std::size_t usedBytesInBlobSoFar = 0;
+	        for(const auto& info : infos)
+	        {
+	            if(lastBlobNr != info.nrAndOffset.nr)
+	            {
+	                usedBytesInBlobSoFar = 0;
+	                lastBlobNr = info.nrAndOffset.nr;
+	            }
+
+	            const auto blobY = blobYOffset[info.nrAndOffset.nr];
+	            const auto offset = [&]
+	            {
+	                if(info.nrAndOffset.nr < Mapping::blobCount)
+	                    return info.nrAndOffset.offset;
+
+	                const auto offset = computedSizeSoFar;
+	                computedSizeSoFar += info.size;
+	                return offset;
+	            }();
+	            auto x = (offset % wrapByteCount) * byteSizeInPixel + blobBlockWidth;
+	            auto y = (offset / wrapByteCount) * byteSizeInPixel + blobY;
+	            const auto fill = internal::color(info.recordCoordTags);
+	            const auto width = byteSizeInPixel * info.size;
+
+	            const auto nextOffset = [&]
+	            {
+	                if(&info == &infos.back())
+	                    return std::numeric_limits<std::size_t>::max();
+	                const auto& nextInfo = (&info)[1];
+	                if(info.nrAndOffset.nr < Mapping::blobCount && info.nrAndOffset.nr == nextInfo.nrAndOffset.nr)
+	                    return nextInfo.nrAndOffset.offset;
+
+	                return std::numeric_limits<std::size_t>::max();
+	            }();
+	            const auto isOverlapped = offset < usedBytesInBlobSoFar || nextOffset < offset + info.size;
+	            usedBytesInBlobSoFar = offset + info.size;
+
+	            constexpr auto cropBoxes = true;
+	            if(cropBoxes)
+	            {
+	                svg += fmt::format(
+	                    R"(<svg x="{}" y="{}" width="{}" height="{}">
+	)",
+	                    x,
+	                    y,
+	                    width,
+	                    byteSizeInPixel);
+	                x = 0;
+	                y = 0;
+	            }
+	            svg += fmt::format(
+	                R"(<rect x="{}" y="{}" width="{}" height="{}" fill="#{:X}" stroke="#000" fill-opacity="{}"/>
+	)",
+	                x,
+	                y,
+	                width,
+	                byteSizeInPixel,
+	                fill,
+	                isOverlapped ? 0.3 : 1.0);
+	            for(std::size_t i = 1; i < info.size; i++)
+	            {
+	                svg += fmt::format(
+	                    R"(<line x1="{}" y1="{}" x2="{}" y2="{}" stroke="#777"/>
+	)",
+	                    x + i * byteSizeInPixel,
+	                    y + byteSizeInPixel * 2 / 3,
+	                    x + i * byteSizeInPixel,
+	                    y + byteSizeInPixel);
+	            }
+	            svg += fmt::format(
+	                R"(<text x="{}" y="{}" fill="#000" text-anchor="middle" class="label">{} {}</text>
+	)",
+	                x + width / 2,
+	                y + byteSizeInPixel * 3 / 4,
+	                internal::formatArrayIndex(info.arrayIndex),
+	                internal::xmlEscape(std::string{info.recordCoordTags}));
+	            if(cropBoxes)
+	                svg += R"(</svg>
+	)";
+	        }
+
+	        if(hasAnyComputedField<Mapping>)
+	        {
+	            writeBlobHeader(Mapping::blobCount, computedSizeSoFar, "Comp.");
+
+	            // fix total SVG size
+	            const auto i = svg.find("987654321");
+	            assert(i != std::string::npos);
+	            svg.replace(i, 9, std::to_string(blobYOffset.back() - byteSizeInPixel));
+	        }
+
+	        svg += "</svg>";
+	        return svg;
+	    }
+
+	    /// Returns an HTML document visualizing the memory layout created by the given mapping. The visualization is
+	    /// resizeable.
+	    LLAMA_EXPORT
+	    template<typename Mapping>
+	    auto toHtml(const Mapping& mapping) -> std::string
+	    {
+	        constexpr auto byteSizeInPixel = 30;
+	        constexpr auto rulerLengthInBytes = 512;
+	        constexpr auto rulerByteInterval = 8;
+
+	        auto infos = internal::boxesFromMapping(mapping);
+	        std::stable_sort(
+	            begin(infos),
+	            end(infos),
+	            [](const auto& a, const auto& b) {
+	                return std::tie(a.nrAndOffset.nr, a.nrAndOffset.offset)
+	                    < std::tie(b.nrAndOffset.nr, b.nrAndOffset.offset);
+	            });
+	        infos.erase(
+	            std::unique(
+	                begin(infos),
+	                end(infos),
+	                [](const auto& a, const auto& b) { return a.nrAndOffset == b.nrAndOffset; }),
+	            end(infos));
+
+	        std::string html;
+	        html += fmt::format(
+	            R"(<!DOCTYPE html>
+	<html>
+	<head>
+	<style>
+	.box {{
+	    outline: 1px solid;
+	    display: inline-block;
+	    white-space: nowrap;
+	    height: {}px;
+	    background: repeating-linear-gradient(90deg, #0000, #0000 29px, #777 29px, #777 30px);
+	    text-align: center;
+	    overflow: hidden;
+	    vertical-align: middle;
+	}}
+	#ruler {{
+	    background: repeating-linear-gradient(90deg, #0000, #0000 29px, #000 29px, #000 30px);
+	    border-bottom: 1px solid;
+	    height: 20px;
+	    margin-bottom: 20px;
+	}}
+	#ruler div {{
+	    position: absolute;
+	    display: inline-block;
+	}}
+	)",
+	            byteSizeInPixel);
+	        using RecordDim = typename Mapping::RecordDim;
+	        forEachLeafCoord<RecordDim>(
+	            [&](auto rc)
+	            {
+	                constexpr int size = sizeof(GetType<RecordDim, decltype(rc)>);
+
+	                html += fmt::format(
+	                    R"(.{} {{
+	    width: {}px;
+	    background-color: #{:X};
+	}}
+	)",
+	                    internal::cssClass(std::string{prettyRecordCoord<RecordDim>(rc)}),
+	                    byteSizeInPixel * size,
+	                    internal::color(prettyRecordCoord<RecordDim>(rc)));
+	            });
+
+	        html += fmt::format(R"(</style>
+	</head>
+	<body>
+	    <header id="ruler">
+	)");
+	        for(auto i = 0; i < rulerLengthInBytes; i += rulerByteInterval)
+	            html += fmt::format(
+	                R"(</style>
+	        <div style="margin-left: {}px;">{}</div>)",
+	                i * byteSizeInPixel,
+	                i);
+	        html += fmt::format(R"(
+	    </header>
+	)");
+
+	        auto currentBlobNr = std::numeric_limits<std::size_t>::max();
+	        for(const auto& info : infos)
+	        {
+	            if(currentBlobNr != info.nrAndOffset.nr)
+	            {
+	                currentBlobNr = info.nrAndOffset.nr;
+	                html += fmt::format("<h1>Blob: {}</h1>", currentBlobNr);
+	            }
+	            html += fmt::format(
+	                R"(<div class="box {0}" title="{1} {2}">{1} {2}</div>)",
+	                internal::cssClass(std::string{info.recordCoordTags}),
+	                internal::formatArrayIndex(info.arrayIndex),
+	                internal::xmlEscape(std::string{info.recordCoordTags}));
+	        }
+	        html += R"(</body>
+	</html>)";
+	        return html;
+	    }
+	} // namespace llama
+
+	#endif
+	// ==
+	// == ./include/llama/DumpMapping.hpp ==
+	// ============================================================================
+
+// #include "Meta.hpp"    // amalgamate: file already inlined
+// #include "ProxyRefOpMixin.hpp"    // amalgamate: file already inlined
+	// ============================================================================
+	// == ./include/llama/RecordRef.hpp ==
+	// ==
+	// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
+	// SPDX-License-Identifier: LGPL-3.0-or-later
+
+	// #pragma once
+	// #include "Concepts.hpp"    // amalgamate: file already inlined
+	// #include "ProxyRefOpMixin.hpp"    // amalgamate: file already inlined
+	// #include "StructName.hpp"    // amalgamate: file already inlined
+	// #include "View.hpp"    // amalgamate: file already inlined
 	// #include "macros.hpp"    // amalgamate: file already inlined
 
 	#include <boost/functional/hash.hpp>
@@ -5959,1840 +7159,516 @@ namespace llama
 	// == ./include/llama/RecordRef.hpp ==
 	// ============================================================================
 
-// #include "macros.hpp"    // amalgamate: file already inlined
 	// ============================================================================
-	// == ./include/llama/mapping/AoS.hpp ==
-	// ==
-	// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
-	// SPDX-License-Identifier: LGPL-3.0-or-later
-
-	// #pragma once
-	// #include "Common.hpp"    // amalgamate: file already inlined
-
-	namespace llama::mapping
-	{
-	    /// Array of struct mapping. Used to create a \ref View via \ref allocView.
-	    /// \tparam Alignment If Align, padding bytes are inserted to guarantee that struct members are properly aligned.
-	    /// If Pack, struct members are tightly packed.
-	    /// \tparam TLinearizeArrayIndexFunctor Defines how the array dimensions should be mapped into linear numbers and
-	    /// how big the linear domain gets.
-	    /// \tparam PermuteFields Defines how the record dimension's fields should be permuted. See \ref
-	    /// PermuteFieldsInOrder, \ref PermuteFieldsIncreasingAlignment, \ref PermuteFieldsDecreasingAlignment and
-	    /// \ref PermuteFieldsMinimizePadding.
-	    LLAMA_EXPORT
-	    template<
-	        typename TArrayExtents,
-	        typename TRecordDim,
-	        FieldAlignment TFieldAlignment = FieldAlignment::Align,
-	        typename TLinearizeArrayIndexFunctor = LinearizeArrayIndexRight,
-	        template<typename> typename PermuteFields = PermuteFieldsInOrder>
-	    struct AoS : MappingBase<TArrayExtents, TRecordDim>
-	    {
-	    private:
-	        using Base = MappingBase<TArrayExtents, TRecordDim>;
-	        using size_type = typename Base::size_type;
-
-	    public:
-	        inline static constexpr FieldAlignment fieldAlignment = TFieldAlignment;
-	        using LinearizeArrayIndexFunctor = TLinearizeArrayIndexFunctor;
-	        using Permuter = PermuteFields<FlatRecordDim<TRecordDim>>;
-	        inline static constexpr std::size_t blobCount = 1;
-
-	        using Base::Base;
-
-	        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(size_type) const -> size_type
-	        {
-	            return LinearizeArrayIndexFunctor{}.size(Base::extents())
-	                * flatSizeOf<typename Permuter::FlatRecordDim, fieldAlignment == FieldAlignment::Align>;
-	        }
-
-	        template<std::size_t... RecordCoords>
-	        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
-	            typename Base::ArrayIndex ai,
-	            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset<size_type>
-	        {
-	            constexpr std::size_t flatFieldIndex =
-	#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ <= 6
-	                *& // mess with nvcc compiler state to workaround bug
-	#endif
-	                 Permuter::template permute<flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>>;
-	            const auto offset
-	                = LinearizeArrayIndexFunctor{}(ai, Base::extents())
-	                    * static_cast<size_type>(
-	                        flatSizeOf<typename Permuter::FlatRecordDim, fieldAlignment == FieldAlignment::Align>)
-	                + static_cast<size_type>(flatOffsetOf<
-	                                         typename Permuter::FlatRecordDim,
-	                                         flatFieldIndex,
-	                                         fieldAlignment == FieldAlignment::Align>);
-	            return {size_type{0}, offset};
-	        }
-	    };
-
-	    // we can drop this when inherited ctors also inherit deduction guides
-	    LLAMA_EXPORT
-	    template<typename TArrayExtents, typename TRecordDim>
-	    AoS(TArrayExtents, TRecordDim) -> AoS<TArrayExtents, TRecordDim>;
-
-	    /// Array of struct mapping preserving the alignment of the field types by inserting padding.
-	    /// \see AoS
-	    LLAMA_EXPORT
-	    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
-	    using AlignedAoS = AoS<ArrayExtents, RecordDim, FieldAlignment::Align, LinearizeArrayIndexFunctor>;
-
-	    /// Array of struct mapping preserving the alignment of the field types by inserting padding and permuting the
-	    /// field order to minimize this padding. \see AoS
-	    LLAMA_EXPORT
-	    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
-	    using MinAlignedAoS = AoS<
-	        ArrayExtents,
-	        RecordDim,
-	        FieldAlignment::Align,
-	        LinearizeArrayIndexFunctor,
-	        PermuteFieldsMinimizePadding>;
-
-	    /// Array of struct mapping packing the field types tightly, violating the type's alignment requirements.
-	    /// \see AoS
-	    LLAMA_EXPORT
-	    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
-	    using PackedAoS = AoS<ArrayExtents, RecordDim, FieldAlignment::Pack, LinearizeArrayIndexFunctor>;
-
-	    /// Binds parameters to an \ref AoS mapping except for array and record dimension, producing a quoted meta
-	    /// function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
-	    LLAMA_EXPORT
-	    template<
-	        FieldAlignment Alignment = FieldAlignment::Align,
-	        typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
-	    struct BindAoS
-	    {
-	        template<typename ArrayExtents, typename RecordDim>
-	        using fn = AoS<ArrayExtents, RecordDim, Alignment, LinearizeArrayIndexFunctor>;
-	    };
-
-	    LLAMA_EXPORT
-	    template<typename Mapping>
-	    inline constexpr bool isAoS = false;
-
-	    LLAMA_EXPORT
-	    template<
-	        typename ArrayExtents,
-	        typename RecordDim,
-	        FieldAlignment FieldAlignment,
-	        typename LinearizeArrayIndexFunctor,
-	        template<typename>
-	        typename PermuteFields>
-	    inline constexpr bool
-	        isAoS<AoS<ArrayExtents, RecordDim, FieldAlignment, LinearizeArrayIndexFunctor, PermuteFields>>
-	        = true;
-	} // namespace llama::mapping
-	// ==
-	// == ./include/llama/mapping/AoS.hpp ==
-	// ============================================================================
-
-	// ============================================================================
-	// == ./include/llama/mapping/SoA.hpp ==
-	// ==
-	// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
-	// SPDX-License-Identifier: LGPL-3.0-or-later
-
-	// #pragma once
-	// #include "Common.hpp"    // amalgamate: file already inlined
-
-	// #include <limits>    // amalgamate: file already included
-
-	namespace llama::mapping
-	{
-	    LLAMA_EXPORT
-	    enum class Blobs
-	    {
-	        Single,
-	        OnePerField
-	    };
-
-	    LLAMA_EXPORT
-	    enum class SubArrayAlignment
-	    {
-	        Pack,
-	        Align
-	    };
-
-	    /// Struct of array mapping. Used to create a \ref View via \ref allocView. We recommend to use multiple blobs when
-	    /// the array extents are dynamic and an aligned single blob version when they are static.
-	    /// \tparam TBlobs If OnePerField, every element of the record dimension is mapped to its own blob.
-	    /// \tparam TSubArrayAlignment Only relevant when TBlobs == Single, ignored otherwise. If Align, aligns the sub
-	    /// arrays created within the single blob by inserting padding. If the array extents are dynamic, this may add some
-	    /// overhead to the mapping logic.
-	    /// \tparam TLinearizeArrayIndexFunctor Defines how the array dimensions should be mapped into linear numbers and
-	    /// how big the linear domain gets.
-	    /// \tparam PermuteFieldsSingleBlob Defines how the record dimension's fields should be permuted if Blobs is
-	    /// Single. See \ref PermuteFieldsInOrder, \ref PermuteFieldsIncreasingAlignment, \ref
-	    /// PermuteFieldsDecreasingAlignment and \ref PermuteFieldsMinimizePadding.
-	    LLAMA_EXPORT
-	    template<
-	        typename TArrayExtents,
-	        typename TRecordDim,
-	        Blobs TBlobs = Blobs::OnePerField,
-	        SubArrayAlignment TSubArrayAlignment
-	        = TBlobs == Blobs::Single ? SubArrayAlignment::Align : SubArrayAlignment::Pack,
-	        typename TLinearizeArrayIndexFunctor = LinearizeArrayIndexRight,
-	        template<typename> typename PermuteFieldsSingleBlob = PermuteFieldsInOrder>
-	    struct SoA : MappingBase<TArrayExtents, TRecordDim>
-	    {
-	    private:
-	        using Base = MappingBase<TArrayExtents, TRecordDim>;
-	        using size_type = typename TArrayExtents::value_type;
-
-	    public:
-	        inline static constexpr Blobs blobs = TBlobs;
-	        inline static constexpr SubArrayAlignment subArrayAlignment = TSubArrayAlignment;
-	        using LinearizeArrayIndexFunctor = TLinearizeArrayIndexFunctor;
-	        using Permuter = PermuteFieldsSingleBlob<FlatRecordDim<TRecordDim>>;
-	        inline static constexpr std::size_t blobCount
-	            = blobs == Blobs::OnePerField ? mp_size<FlatRecordDim<TRecordDim>>::value : 1;
-
-	#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ >= 12
-	        using Base::Base;
-	#else
-	        constexpr SoA() = default;
-
-	        LLAMA_FN_HOST_ACC_INLINE constexpr explicit SoA(TArrayExtents extents, TRecordDim = {}) : Base(extents)
-	        {
-	        }
-	#endif
-
-	        LLAMA_FN_HOST_ACC_INLINE
-	        constexpr auto blobSize([[maybe_unused]] size_type blobIndex) const -> size_type
-	        {
-	            const auto flatSize = LinearizeArrayIndexFunctor{}.size(Base::extents());
-	            if constexpr(blobs == Blobs::OnePerField)
-	            {
-	                constexpr auto typeSizes = []() constexpr
-	                {
-	                    Array<size_type, blobCount> r{};
-	                    forEachLeafCoord<TRecordDim>([&r, i = 0](auto rc) mutable constexpr
-	                                                 { r[i++] = sizeof(GetType<TRecordDim, decltype(rc)>); });
-	                    return r;
-	                }();
-	                return flatSize * typeSizes[blobIndex];
-	            }
-	            else if constexpr(subArrayAlignment == SubArrayAlignment::Align)
-	            {
-	                size_type size = 0;
-	                using FRD = typename Permuter::FlatRecordDim;
-	                mp_for_each<mp_transform<mp_identity, FRD>>(
-	                    [&](auto ti) LLAMA_LAMBDA_INLINE
-	                    {
-	                        using FieldType = typename decltype(ti)::type;
-	                        size = roundUpToMultiple(size, static_cast<size_type>(alignof(FieldType)));
-	                        size += static_cast<size_type>(sizeof(FieldType)) * flatSize;
-	                    });
-	                return size;
-	            }
-	            else
-	            {
-	                return flatSize * static_cast<size_type>(sizeOf<TRecordDim>);
-	            }
-	        }
-
-	    private:
-	        static LLAMA_CONSTEVAL auto computeSubArrayOffsets()
-	        {
-	            using FRD = typename Permuter::FlatRecordDim;
-	            constexpr auto staticFlatSize = LinearizeArrayIndexFunctor{}.size(TArrayExtents{});
-	            constexpr auto subArrays = mp_size<FRD>::value;
-	            Array<size_type, subArrays> r{};
-	            // r[0] == 0, only compute the following offsets
-	            mp_for_each<mp_iota_c<subArrays - 1>>(
-	                [&](auto ic)
-	                {
-	                    constexpr auto i = decltype(ic)::value;
-	                    r[i + 1] = r[i];
-	                    using ThisFieldType = mp_at_c<FRD, i>;
-	                    r[i + 1] += static_cast<size_type>(sizeof(ThisFieldType)) * staticFlatSize;
-	                    using NextFieldType = mp_at_c<FRD, i + 1>;
-	                    r[i + 1] = roundUpToMultiple(r[i + 1], static_cast<size_type>(alignof(NextFieldType)));
-	                });
-	            return r;
-	        }
-
-	    public:
-	        template<std::size_t... RecordCoords>
-	        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
-	            typename Base::ArrayIndex ai,
-	            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset<size_type>
-	        {
-	            const size_type elementOffset = LinearizeArrayIndexFunctor{}(ai, Base::extents())
-	                * static_cast<size_type>(sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>));
-	            if constexpr(blobs == Blobs::OnePerField)
-	            {
-	                constexpr auto blob = flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>;
-	                return {blob, elementOffset};
-	            }
-	            else
-	            {
-	                constexpr std::size_t flatFieldIndex =
-	#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ <= 6
-	                    *& // mess with nvcc compiler state to workaround bug
-	#endif
-	                     Permuter::template permute<flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>>;
-	                const size_type flatSize = LinearizeArrayIndexFunctor{}.size(Base::extents());
-	                using FRD = typename Permuter::FlatRecordDim;
-	                if constexpr(subArrayAlignment == SubArrayAlignment::Align)
-	                {
-	                    if constexpr(TArrayExtents::rankStatic == TArrayExtents::rank)
-	                    {
-	                        // full array extents are known statically, we can precompute the sub array offsets
-	                        constexpr auto subArrayOffsets = computeSubArrayOffsets();
-	                        return {0, subArrayOffsets[flatFieldIndex] + elementOffset};
-	                    }
-	                    else
-	                    {
-	                        // TODO(bgruber): we can take a shortcut here if we know that flatSize is a multiple of all
-	                        // type's alignment. We can also precompute a table of sub array starts (and maybe store it),
-	                        // or rely on the compiler it out of loops.
-	                        size_type offset = 0;
-	                        mp_for_each<mp_iota_c<flatFieldIndex>>(
-	                            [&](auto ic) LLAMA_LAMBDA_INLINE
-	                            {
-	                                constexpr auto i = decltype(ic)::value;
-	                                using ThisFieldType = mp_at_c<FRD, i>;
-	                                offset += static_cast<size_type>(sizeof(ThisFieldType)) * flatSize;
-	                                using NextFieldType = mp_at_c<FRD, i + 1>;
-	                                offset = roundUpToMultiple(offset, static_cast<size_type>(alignof(NextFieldType)));
-	                            });
-	                        offset += elementOffset;
-	                        return {0, offset};
-	                    }
-	                }
-	                else
-	                {
-	                    const auto offset
-	                        = elementOffset + static_cast<size_type>(flatOffsetOf<FRD, flatFieldIndex, false>) * flatSize;
-	                    return {0, offset};
-	                }
-	            }
-	        }
-	    };
-
-	    // we can drop this when inherited ctors also inherit deduction guides
-	    LLAMA_EXPORT
-	    template<typename TArrayExtents, typename TRecordDim>
-	    SoA(TArrayExtents, TRecordDim) -> SoA<TArrayExtents, TRecordDim>;
-
-	    /// Struct of array mapping storing the entire layout in a single blob. The starts of the sub arrays are aligned by
-	    /// inserting padding. \see SoA
-	    LLAMA_EXPORT
-	    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
-	    using AlignedSingleBlobSoA
-	        = SoA<ArrayExtents, RecordDim, Blobs::Single, SubArrayAlignment::Align, LinearizeArrayIndexFunctor>;
-
-	    /// Struct of array mapping storing the entire layout in a single blob. The sub arrays are tightly packed,
-	    /// violating the type's alignment requirements. \see SoA
-	    LLAMA_EXPORT
-	    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
-	    using PackedSingleBlobSoA
-	        = SoA<ArrayExtents, RecordDim, Blobs::Single, SubArrayAlignment::Pack, LinearizeArrayIndexFunctor>;
-
-	    /// Struct of array mapping storing each attribute of the record dimension in a separate blob.
-	    /// \see SoA
-	    LLAMA_EXPORT
-	    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
-	    using MultiBlobSoA
-	        = SoA<ArrayExtents, RecordDim, Blobs::OnePerField, SubArrayAlignment::Pack, LinearizeArrayIndexFunctor>;
-
-	    /// Binds parameters to an \ref SoA mapping except for array and record dimension, producing a quoted
-	    /// meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
-	    LLAMA_EXPORT
-	    template<
-	        Blobs Blobs = Blobs::OnePerField,
-	        SubArrayAlignment SubArrayAlignment = SubArrayAlignment::Pack,
-	        typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
-	    struct BindSoA
-	    {
-	        template<typename ArrayExtents, typename RecordDim>
-	        using fn = SoA<ArrayExtents, RecordDim, Blobs, SubArrayAlignment, LinearizeArrayIndexFunctor>;
-	    };
-
-	    LLAMA_EXPORT
-	    template<typename Mapping>
-	    inline constexpr bool isSoA = false;
-
-	    LLAMA_EXPORT
-	    template<
-	        typename ArrayExtents,
-	        typename RecordDim,
-	        Blobs Blobs,
-	        SubArrayAlignment SubArrayAlignment,
-	        typename LinearizeArrayIndexFunctor>
-	    inline constexpr bool isSoA<SoA<ArrayExtents, RecordDim, Blobs, SubArrayAlignment, LinearizeArrayIndexFunctor>>
-	        = true;
-	} // namespace llama::mapping
-	// ==
-	// == ./include/llama/mapping/SoA.hpp ==
-	// ============================================================================
-
-
-// #include <type_traits>    // amalgamate: file already included
-
-namespace llama
-{
-    /// Traits of a specific Simd implementation. Please specialize this template for the SIMD types you are going to
-    /// use in your program.
-    /// Each specialization SimdTraits<Simd> must provide:
-    /// * an alias `value_type` to indicate the element type of the Simd.
-    /// * a `static constexpr size_t lanes` variable holding the number of SIMD lanes of the Simd.
-    /// * a `static auto loadUnalinged(const value_type* mem) -> Simd` function, loading a Simd from the given memory
-    /// address.
-    /// * a `static void storeUnaligned(Simd simd, value_type* mem)` function, storing the given Simd to a given
-    /// memory address.
-    LLAMA_EXPORT
-    template<typename Simd, typename SFINAE = void>
-    struct SimdTraits
-    {
-        static_assert(sizeof(Simd) == 0, "Please specialize SimdTraits for the type Simd");
-    };
-
-    LLAMA_EXPORT
-    template<typename T>
-    struct SimdTraits<T, std::enable_if_t<std::is_arithmetic_v<T>>>
-    {
-        using value_type = T;
-
-        inline static constexpr std::size_t lanes = 1;
-
-        static LLAMA_FN_HOST_ACC_INLINE auto loadUnaligned(const T* mem) -> T
-        {
-            return *mem;
-        }
-
-        static LLAMA_FN_HOST_ACC_INLINE void storeUnaligned(T t, T* mem)
-        {
-            *mem = t;
-        }
-    };
-
-    /// The number of SIMD simdLanes the given SIMD vector or \ref Simd<T> has. If Simd is not a structural \ref Simd
-    /// or \ref SimdN, this is a shortcut for SimdTraits<Simd>::lanes.
-    LLAMA_EXPORT
-    template<typename Simd, typename SFINAE = void>
-    inline constexpr auto simdLanes = SimdTraits<Simd>::lanes;
-
-    /// Chooses the number of SIMD lanes for the given record dimension by mapping each field type to a SIMD type and
-    /// then reducing their sizes.
-    /// @tparam MakeSimd Type function creating a SIMD type given a field type from the record dimension.
-    /// @param reduce Binary reduction function to reduce the SIMD lanes.
-    LLAMA_EXPORT
-    template<typename RecordDim, template<typename> typename MakeSimd, typename BinaryReductionFunction>
-    LLAMA_CONSTEVAL auto chooseSimdLanes(BinaryReductionFunction reduce) -> std::size_t
-    {
-        using FRD = FlatRecordDim<RecordDim>;
-        std::size_t lanes = simdLanes<MakeSimd<mp_first<FRD>>>;
-        mp_for_each<mp_transform<std::add_pointer_t, mp_drop_c<FRD, 1>>>(
-            [&](auto* t)
-            {
-                using T = std::remove_reference_t<decltype(*t)>;
-                lanes = reduce(lanes, simdLanes<MakeSimd<T>>);
-            });
-        assert(lanes > 0);
-        return lanes;
-    }
-
-    /// Determines the number of simd lanes suitable to process all types occurring in the given record dimension. The
-    /// algorithm ensures that even SIMD vectors for the smallest field type are filled completely and may thus require
-    /// multiple SIMD vectors for some field types.
-    /// @tparam RecordDim The record dimension to simdize
-    /// @tparam MakeSimd Type function creating a SIMD type given a field type from the record dimension.
-    LLAMA_EXPORT
-    template<typename RecordDim, template<typename> typename MakeSimd>
-    inline constexpr std::size_t simdLanesWithFullVectorsFor
-        = chooseSimdLanes<RecordDim, MakeSimd>([](auto a, auto b) { return std::max(a, b); });
-
-    /// Determines the number of simd lanes suitable to process all types occurring in the given record dimension. The
-    /// algorithm ensures that the smallest number of SIMD registers is needed and may thus only partially fill
-    /// registers for some data types.
-    /// @tparam RecordDim The record dimension to simdize
-    /// @tparam MakeSimd Type function creating a SIMD type given a field type from the record dimension.
-    LLAMA_EXPORT
-    template<typename RecordDim, template<typename> typename MakeSimd>
-    inline constexpr std::size_t simdLanesWithLeastRegistersFor
-        = chooseSimdLanes<RecordDim, MakeSimd>([](auto a, auto b) { return std::min(a, b); });
-
-    namespace internal
-    {
-        template<std::size_t N, template<typename, /* std::integral */ auto> typename MakeSizedSimd>
-        struct BindMakeSizedSimd
-        {
-            template<typename U>
-            using fn = MakeSizedSimd<U, N>;
-        };
-
-        template<
-            typename RecordDim,
-            std::size_t N,
-            template<typename, /* std::integral */ auto>
-            typename MakeSizedSimd>
-        struct SimdizeNImpl
-        {
-            using type = TransformLeaves<RecordDim, internal::BindMakeSizedSimd<N, MakeSizedSimd>::template fn>;
-        };
-
-        template<typename RecordDim, template<typename, /* std::integral */ auto> typename MakeSizedSimd>
-        struct SimdizeNImpl<RecordDim, 1, MakeSizedSimd>
-        {
-            using type = RecordDim;
-        };
-    } // namespace internal
-
-    /// Transforms the given record dimension into a SIMD version of it. Each leaf field type will be replaced by a
-    /// sized SIMD vector with length N, as determined by MakeSizedSimd. If N is 1, SimdizeN<T, 1, ...> is an alias for
-    /// T.
-    LLAMA_EXPORT
-    template<typename RecordDim, std::size_t N, template<typename, /* std::integral */ auto> typename MakeSizedSimd>
-    using SimdizeN = typename internal::SimdizeNImpl<RecordDim, N, MakeSizedSimd>::type;
-
-    /// Transforms the given record dimension into a SIMD version of it. Each leaf field type will be replaced by a
-    /// SIMD vector, as determined by MakeSimd.
-    LLAMA_EXPORT
-    template<typename RecordDim, template<typename> typename MakeSimd>
-    using Simdize = TransformLeaves<RecordDim, MakeSimd>;
-
-    /// Creates a SIMD version of the given type. Of T is a record dimension, creates a \ref One where each field is a
-    /// SIMD type of the original field type. The SIMD vectors have length N. If N is 1, an ordinary \ref One of the
-    /// record dimension T is created. If T is not a record dimension, a SIMD vector with value T and length N is
-    /// created. If N is 1 (and T is not a record dimension), then T is produced.
-    LLAMA_EXPORT
-    template<typename T, std::size_t N, template<typename, /* std::integral */ auto> typename MakeSizedSimd>
-    using SimdN = typename std::conditional_t<
-        isRecordDim<T>,
-        std::conditional_t<N == 1, mp_identity<One<T>>, mp_identity<One<SimdizeN<T, N, MakeSizedSimd>>>>,
-        std::conditional_t<N == 1, mp_identity<T>, mp_identity<SimdizeN<T, N, MakeSizedSimd>>>>::type;
-
-    /// Creates a SIMD version of the given type. Of T is a record dimension, creates a \ref One where each field is a
-    /// SIMD type of the original field type.
-    LLAMA_EXPORT
-    template<typename T, template<typename> typename MakeSimd>
-    using Simd = typename std::
-        conditional_t<isRecordDim<T>, mp_identity<One<Simdize<T, MakeSimd>>>, mp_identity<Simdize<T, MakeSimd>>>::type;
-
-    namespace internal
-    {
-        template<std::size_t S>
-        struct SizeEqualTo
-        {
-            template<typename Simd>
-            using fn = std::bool_constant<simdLanes<Simd> == S>;
-        };
-    } // namespace internal
-
-    /// Specialization for Simd<RecordDim>. Only works if all SIMD types in the fields of the record dimension have the
-    /// same size.
-    LLAMA_EXPORT
-    template<typename Simd>
-    inline constexpr std::size_t simdLanes<Simd, std::enable_if_t<isRecordRef<Simd>>> = []
-    {
-        using FRD = FlatRecordDim<typename Simd::AccessibleRecordDim>;
-        using FirstFieldType = mp_first<FRD>;
-        static_assert(mp_all_of_q<FRD, internal::SizeEqualTo<simdLanes<FirstFieldType>>>::value);
-        return simdLanes<FirstFieldType>;
-    }();
-
-    namespace internal
-    {
-        template<typename T, typename Simd, typename RecordCoord>
-        LLAMA_FN_HOST_ACC_INLINE void loadSimdRecord(const T& srcRef, Simd& dstSimd, RecordCoord rc)
-        {
-            using RecordDim = typename T::AccessibleRecordDim;
-            using FieldType = GetType<RecordDim, decltype(rc)>;
-            using ElementSimd = std::decay_t<decltype(dstSimd(rc))>;
-            using Traits = SimdTraits<ElementSimd>;
-
-            // TODO(bgruber): can we generalize the logic whether we can load a dstSimd from that mapping?
-            using Mapping = typename T::View::Mapping;
-            if constexpr(mapping::isSoA<Mapping>)
-            {
-                LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-                dstSimd(rc) = Traits::loadUnaligned(&srcRef(rc)); // SIMD load
-                LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
-            }
-            // else if constexpr(mapping::isAoSoA<typename T::View::Mapping>)
-            //{
-            //    // it turns out we do not need the specialization, because clang already fuses the scalar
-            //    loads
-            //    // into a vector load :D
-            //    assert(srcRef.arrayDimsCoord()[0] % SIMD_WIDTH == 0);
-            //    // if(srcRef.arrayDimsCoord()[0] % SIMD_WIDTH != 0)
-            //    //    __builtin_unreachable(); // this also helps nothing
-            //    //__builtin_assume(srcRef.arrayDimsCoord()[0] % SIMD_WIDTH == 0);  // this also helps nothing
-            //    dstSimd(rc) = Traits::load_from(&srcRef(rc)); // SIMD load
-            //}
-            else if constexpr(mapping::isAoS<Mapping>)
-            {
-                static_assert(mapping::isAoS<Mapping>);
-                static constexpr auto srcStride = flatSizeOf<
-                    typename Mapping::Permuter::FlatRecordDim,
-                    Mapping::fieldAlignment == llama::mapping::FieldAlignment::Align>;
-                const auto* srcBaseAddr = reinterpret_cast<const std::byte*>(&srcRef(rc));
-                ElementSimd elemSimd; // g++-12 really needs the intermediate elemSimd and memcpy
-                for(auto i = 0; i < Traits::lanes; i++)
-                    reinterpret_cast<FieldType*>(&elemSimd)[i]
-                        = *reinterpret_cast<const FieldType*>(srcBaseAddr + i * srcStride);
-                std::memcpy(&dstSimd(rc), &elemSimd, sizeof(elemSimd));
-            }
-            else
-            {
-                auto b = ArrayIndexIterator{srcRef.view.extents(), srcRef.arrayIndex()};
-                ElementSimd elemSimd; // g++-12 really needs the intermediate elemSimd and memcpy
-                for(auto i = 0; i < Traits::lanes; i++)
-                    reinterpret_cast<FieldType*>(&elemSimd)[i]
-                        = srcRef.view(*b++)(cat(typename T::BoundRecordCoord{}, rc)); // scalar loads
-                std::memcpy(&dstSimd(rc), &elemSimd, sizeof(elemSimd));
-            }
-        }
-
-        template<typename Simd, typename TFwd, typename RecordCoord>
-        LLAMA_FN_HOST_ACC_INLINE void storeSimdRecord(const Simd& srcSimd, TFwd&& dstRef, RecordCoord rc)
-        {
-            using T = std::remove_reference_t<TFwd>;
-            using RecordDim = typename T::AccessibleRecordDim;
-            using FieldType = GetType<RecordDim, decltype(rc)>;
-            using ElementSimd = std::decay_t<decltype(srcSimd(rc))>;
-            using Traits = SimdTraits<ElementSimd>;
-
-            // TODO(bgruber): can we generalize the logic whether we can store a srcSimd to that mapping?
-            using Mapping = typename std::remove_reference_t<T>::View::Mapping;
-            if constexpr(mapping::isSoA<Mapping>)
-            {
-                LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-                Traits::storeUnaligned(srcSimd(rc), &dstRef(rc)); // SIMD store
-                LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
-            }
-            else if constexpr(mapping::isAoS<Mapping>)
-            {
-                static constexpr auto stride = flatSizeOf<
-                    typename Mapping::Permuter::FlatRecordDim,
-                    Mapping::fieldAlignment == llama::mapping::FieldAlignment::Align>;
-                auto* dstBaseAddr = reinterpret_cast<std::byte*>(&dstRef(rc));
-                const ElementSimd elemSimd = srcSimd(rc);
-                for(auto i = 0; i < Traits::lanes; i++)
-                    *reinterpret_cast<FieldType*>(dstBaseAddr + i * stride)
-                        = reinterpret_cast<const FieldType*>(&elemSimd)[i];
-            }
-            else
-            {
-                // TODO(bgruber): how does this generalize conceptually to 2D and higher dimensions? in which
-                // direction should we collect SIMD values?
-                const ElementSimd elemSimd = srcSimd(rc);
-                auto b = ArrayIndexIterator{dstRef.view.extents(), dstRef.arrayIndex()};
-                for(auto i = 0; i < Traits::lanes; i++)
-                    dstRef.view (*b++)(cat(typename T::BoundRecordCoord{}, rc))
-                        = reinterpret_cast<const FieldType*>(&elemSimd)[i]; // scalar store
-            }
-        }
-    } // namespace internal
-
-    /// Loads SIMD vectors of data starting from the given record reference to dstSimd. Only field tags occurring in
-    /// RecordRef are loaded. If Simd contains multiple fields of SIMD types, a SIMD vector will be fetched for each of
-    /// the fields. The number of elements fetched per SIMD vector depends on the SIMD width of the vector. Simd is
-    /// allowed to have different vector lengths per element.
-    LLAMA_EXPORT
-    template<typename T, typename Simd>
-    LLAMA_FN_HOST_ACC_INLINE void loadSimd(const T& srcRef, Simd& dstSimd)
-    {
-        // structured dstSimd type and record reference
-        if constexpr(isRecordRef<Simd> && isRecordRef<T>)
-        {
-            forEachLeafCoord<typename T::AccessibleRecordDim>([&](auto rc) LLAMA_LAMBDA_INLINE
-                                                              { internal::loadSimdRecord(srcRef, dstSimd, rc); });
-        }
-        // unstructured dstSimd and reference type
-        else if constexpr(!isRecordRef<Simd> && !isRecordRef<T>)
-        {
-            LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-            dstSimd = SimdTraits<Simd>::loadUnaligned(&srcRef);
-            LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
-        }
-        else
-        {
-            // TODO(bgruber): when could we get here? Is this always an error?
-            static_assert(sizeof(Simd) == 0, "Invalid combination of Simd type and reference type");
-        }
-    }
-
-    /// Stores SIMD vectors of element data from the given srcSimd into memory starting at the provided record
-    /// reference. Only field tags occurring in RecordRef are stored. If Simd contains multiple fields of SIMD types, a
-    /// SIMD vector will be stored for each of the fields. The number of elements stored per SIMD vector depends on the
-    /// SIMD width of the vector. Simd is allowed to have different vector lengths per element.
-    LLAMA_EXPORT
-    template<typename Simd, typename T>
-    LLAMA_FN_HOST_ACC_INLINE void storeSimd(const Simd& srcSimd, T&& dstRef)
-    {
-        // structured Simd type and record reference
-        if constexpr(isRecordRef<Simd> && isRecordRef<T>)
-        {
-            forEachLeafCoord<typename T::AccessibleRecordDim>([&](auto rc) LLAMA_LAMBDA_INLINE
-                                                              { internal::storeSimdRecord(srcSimd, dstRef, rc); });
-        }
-        // unstructured srcSimd and reference type
-        else if constexpr(!isRecordRef<Simd> && !isRecordRef<T>)
-        {
-            LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-            SimdTraits<Simd>::storeUnaligned(srcSimd, &dstRef);
-            LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
-        }
-        else
-        {
-            // TODO(bgruber): when could we get here? Is this always an error?
-            static_assert(sizeof(Simd) == 0, "Invalid combination of Simd type and reference type");
-        }
-    }
-
-    LLAMA_EXPORT
-    template<
-        std::size_t N,
-        template<typename, /* std::integral */ auto>
-        typename MakeSizedSimd,
-        typename View,
-        typename UnarySimdFunction>
-    void simdForEachN(View& view, UnarySimdFunction f)
-    {
-        using IndexType = typename View::Mapping::ArrayExtents::value_type;
-        const auto total = product(view.mapping().extents());
-        auto it = view.begin();
-        IndexType i = 0;
-        // simd loop
-        while(i + IndexType{N} <= total)
-        {
-            SimdN<typename View::RecordDim, N, MakeSizedSimd> simd;
-            loadSimd(*it, simd);
-            if constexpr(std::is_void_v<decltype(f(simd))>)
-                f(simd);
-            else
-                storeSimd(f(simd), *it);
-            i += IndexType{N};
-            it += IndexType{N};
-        }
-        // tail
-        while(i < total)
-        {
-            auto scalar = One<typename View::RecordDim>{*it};
-            if constexpr(std::is_void_v<decltype(f(scalar))>)
-                f(scalar);
-            else
-                *it = f(scalar);
-            ++i;
-            ++it;
-        }
-    }
-
-    LLAMA_EXPORT
-    template<
-        template<typename>
-        typename MakeSimd,
-        template<typename, /* std::integral */ auto>
-        typename MakeSizedSimd,
-        typename View,
-        typename UnarySimdFunction>
-    void simdForEach(View& view, UnarySimdFunction f)
-    {
-        constexpr auto n = llama::simdLanesWithFullVectorsFor<typename View::RecordDim, MakeSimd>;
-        simdForEachN<n, MakeSizedSimd>(view, f);
-    }
-} // namespace llama
-// ==
-// == ./include/llama/Simd.hpp ==
-// ============================================================================
-
-// ============================================================================
-// == ./include/llama/Copy.hpp ==
-// ==
-// Copyright 2021 Bernhard Manfred Gruber
-// SPDX-License-Identifier: LGPL-3.0-or-later
-
-// #pragma once
-// #include "View.hpp"    // amalgamate: file already inlined
-	// ============================================================================
-	// == ./include/llama/mapping/AoSoA.hpp ==
+	// == ./include/llama/Simd.hpp ==
 	// ==
 	// Copyright 2022 Bernhard Manfred Gruber
 	// SPDX-License-Identifier: LGPL-3.0-or-later
 
 	// #pragma once
-	// #include "Common.hpp"    // amalgamate: file already inlined
+	// #include "Core.hpp"    // amalgamate: file already inlined
+	// #include "RecordRef.hpp"    // amalgamate: file already inlined
+	// #include "macros.hpp"    // amalgamate: file already inlined
+		// ============================================================================
+		// == ./include/llama/mapping/AoS.hpp ==
+		// ==
+		// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
+		// SPDX-License-Identifier: LGPL-3.0-or-later
 
-	// #include <limits>    // amalgamate: file already included
+		// #pragma once
+		// #include "Common.hpp"    // amalgamate: file already inlined
 
-	namespace llama::mapping
-	{
-	    /// The maximum number of vector lanes that can be used to fetch each leaf type in the record dimension into a
-	    /// vector register of the given size in bits.
-	    LLAMA_EXPORT
-	    template<typename RecordDim, std::size_t VectorRegisterBits>
-	    inline constexpr std::size_t maxLanes = []() constexpr
-	    {
-	        auto max = std::numeric_limits<std::size_t>::max();
-	        forEachLeafCoord<RecordDim>(
-	            [&](auto rc)
-	            {
-	                using AttributeType = GetType<RecordDim, decltype(rc)>;
-	                max = std::min(max, VectorRegisterBits / (sizeof(AttributeType) * CHAR_BIT));
-	            });
-	        return max;
-	    }();
+		namespace llama::mapping
+		{
+		    /// Array of struct mapping. Used to create a \ref View via \ref allocView.
+		    /// \tparam Alignment If Align, padding bytes are inserted to guarantee that struct members are properly aligned.
+		    /// If Pack, struct members are tightly packed.
+		    /// \tparam TLinearizeArrayIndexFunctor Defines how the array dimensions should be mapped into linear numbers and
+		    /// how big the linear domain gets.
+		    /// \tparam PermuteFields Defines how the record dimension's fields should be permuted. See \ref
+		    /// PermuteFieldsInOrder, \ref PermuteFieldsIncreasingAlignment, \ref PermuteFieldsDecreasingAlignment and
+		    /// \ref PermuteFieldsMinimizePadding.
+		    LLAMA_EXPORT
+		    template<
+		        typename TArrayExtents,
+		        typename TRecordDim,
+		        FieldAlignment TFieldAlignment = FieldAlignment::Align,
+		        typename TLinearizeArrayIndexFunctor = LinearizeArrayIndexRight,
+		        template<typename> typename PermuteFields = PermuteFieldsInOrder>
+		    struct AoS : MappingBase<TArrayExtents, TRecordDim>
+		    {
+		    private:
+		        using Base = MappingBase<TArrayExtents, TRecordDim>;
+		        using size_type = typename Base::size_type;
 
-	    /// Array of struct of arrays mapping. Used to create a \ref View via \ref allocView.
-	    /// \tparam Lanes The size of the inner arrays of this array of struct of arrays.
-	    /// \tparam PermuteFields Defines how the record dimension's fields should be permuted. See \ref
-	    /// PermuteFieldsInOrder, \ref PermuteFieldsIncreasingAlignment, \ref PermuteFieldsDecreasingAlignment and
-	    /// \ref PermuteFieldsMinimizePadding.
-	    LLAMA_EXPORT
-	    template<
-	        typename TArrayExtents,
-	        typename TRecordDim,
-	        typename TArrayExtents::value_type Lanes,
-	        typename TLinearizeArrayIndexFunctor = LinearizeArrayIndexRight,
-	        template<typename> typename PermuteFields = PermuteFieldsInOrder>
-	    struct AoSoA : MappingBase<TArrayExtents, TRecordDim>
-	    {
-	    private:
-	        using Base = MappingBase<TArrayExtents, TRecordDim>;
-	        using size_type = typename Base::size_type;
+		    public:
+		        inline static constexpr FieldAlignment fieldAlignment = TFieldAlignment;
+		        using LinearizeArrayIndexFunctor = TLinearizeArrayIndexFunctor;
+		        using Permuter = PermuteFields<FlatRecordDim<TRecordDim>>;
+		        inline static constexpr std::size_t blobCount = 1;
 
-	    public:
-	        inline static constexpr typename TArrayExtents::value_type lanes = Lanes;
-	        using LinearizeArrayIndexFunctor = TLinearizeArrayIndexFunctor;
-	        using Permuter = PermuteFields<FlatRecordDim<TRecordDim>>;
-	        inline static constexpr std::size_t blobCount = 1;
+		        using Base::Base;
 
-	#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ >= 12
-	        using Base::Base;
-	#else
-	        constexpr AoSoA() = default;
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(size_type) const -> size_type
+		        {
+		            return LinearizeArrayIndexFunctor{}.size(Base::extents())
+		                * flatSizeOf<typename Permuter::FlatRecordDim, fieldAlignment == FieldAlignment::Align>;
+		        }
 
-	        LLAMA_FN_HOST_ACC_INLINE constexpr explicit AoSoA(TArrayExtents extents, TRecordDim = {}) : Base(extents)
-	        {
-	        }
-	#endif
+		        template<std::size_t... RecordCoords>
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
+		            typename Base::ArrayIndex ai,
+		            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset<size_type>
+		        {
+		            constexpr std::size_t flatFieldIndex =
+		#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ <= 6
+		                *& // mess with nvcc compiler state to workaround bug
+		#endif
+		                 Permuter::template permute<flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>>;
+		            const auto offset
+		                = LinearizeArrayIndexFunctor{}(ai, Base::extents())
+		                    * static_cast<size_type>(
+		                        flatSizeOf<typename Permuter::FlatRecordDim, fieldAlignment == FieldAlignment::Align>)
+		                + static_cast<size_type>(flatOffsetOf<
+		                                         typename Permuter::FlatRecordDim,
+		                                         flatFieldIndex,
+		                                         fieldAlignment == FieldAlignment::Align>);
+		            return {size_type{0}, offset};
+		        }
+		    };
 
-	        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(size_type) const -> size_type
-	        {
-	            const auto rs = static_cast<size_type>(sizeOf<TRecordDim>);
-	            return roundUpToMultiple(LinearizeArrayIndexFunctor{}.size(Base::extents()) * rs, Lanes * rs);
-	        }
+		    // we can drop this when inherited ctors also inherit deduction guides
+		    LLAMA_EXPORT
+		    template<typename TArrayExtents, typename TRecordDim>
+		    AoS(TArrayExtents, TRecordDim) -> AoS<TArrayExtents, TRecordDim>;
 
-	        template<std::size_t... RecordCoords>
-	        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
-	            typename Base::ArrayIndex ai,
-	            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset<size_type>
-	        {
-	            constexpr std::size_t flatFieldIndex =
-	#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ <= 6
-	                *& // mess with nvcc compiler state to workaround bug
-	#endif
-	                 Permuter::template permute<flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>>;
-	            const auto flatArrayIndex = LinearizeArrayIndexFunctor{}(ai, Base::extents());
-	            const auto blockIndex = flatArrayIndex / Lanes;
-	            const auto laneIndex = flatArrayIndex % Lanes;
-	            const auto offset = static_cast<size_type>(sizeOf<TRecordDim> * Lanes) * blockIndex
-	                + static_cast<size_type>(flatOffsetOf<typename Permuter::FlatRecordDim, flatFieldIndex, false>) * Lanes
-	                + static_cast<size_type>(sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>)) * laneIndex;
-	            return {0, offset};
-	        }
-	    };
+		    /// Array of struct mapping preserving the alignment of the field types by inserting padding.
+		    /// \see AoS
+		    LLAMA_EXPORT
+		    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
+		    using AlignedAoS = AoS<ArrayExtents, RecordDim, FieldAlignment::Align, LinearizeArrayIndexFunctor>;
 
-	    /// Binds parameters to an \ref AoSoA mapping except for array and record dimension, producing a quoted meta
-	    /// function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
-	    LLAMA_EXPORT
-	    template<std::size_t Lanes, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
-	    struct BindAoSoA
-	    {
-	        template<typename ArrayExtents, typename RecordDim>
-	        using fn = AoSoA<ArrayExtents, RecordDim, Lanes, LinearizeArrayIndexFunctor>;
-	    };
+		    /// Array of struct mapping preserving the alignment of the field types by inserting padding and permuting the
+		    /// field order to minimize this padding. \see AoS
+		    LLAMA_EXPORT
+		    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
+		    using MinAlignedAoS = AoS<
+		        ArrayExtents,
+		        RecordDim,
+		        FieldAlignment::Align,
+		        LinearizeArrayIndexFunctor,
+		        PermuteFieldsMinimizePadding>;
 
-	    LLAMA_EXPORT
-	    template<typename Mapping>
-	    inline constexpr bool isAoSoA = false;
+		    /// Array of struct mapping packing the field types tightly, violating the type's alignment requirements.
+		    /// \see AoS
+		    LLAMA_EXPORT
+		    template<typename ArrayExtents, typename RecordDim, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
+		    using PackedAoS = AoS<ArrayExtents, RecordDim, FieldAlignment::Pack, LinearizeArrayIndexFunctor>;
 
-	    LLAMA_EXPORT
-	    template<typename AD, typename RD, typename AD::value_type L>
-	    inline constexpr bool isAoSoA<AoSoA<AD, RD, L>> = true;
-	} // namespace llama::mapping
-	// ==
-	// == ./include/llama/mapping/AoSoA.hpp ==
-	// ============================================================================
+		    /// Binds parameters to an \ref AoS mapping except for array and record dimension, producing a quoted meta
+		    /// function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
+		    LLAMA_EXPORT
+		    template<
+		        FieldAlignment Alignment = FieldAlignment::Align,
+		        typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
+		    struct BindAoS
+		    {
+		        template<typename ArrayExtents, typename RecordDim>
+		        using fn = AoS<ArrayExtents, RecordDim, Alignment, LinearizeArrayIndexFunctor>;
+		    };
 
-// #include "mapping/SoA.hpp"    // amalgamate: file already inlined
+		    LLAMA_EXPORT
+		    template<typename Mapping>
+		    inline constexpr bool isAoS = false;
 
-#include <cstring>
-#include <numeric>
+		    LLAMA_EXPORT
+		    template<
+		        typename ArrayExtents,
+		        typename RecordDim,
+		        FieldAlignment FieldAlignment,
+		        typename LinearizeArrayIndexFunctor,
+		        template<typename>
+		        typename PermuteFields>
+		    inline constexpr bool
+		        isAoS<AoS<ArrayExtents, RecordDim, FieldAlignment, LinearizeArrayIndexFunctor, PermuteFields>>
+		        = true;
+		} // namespace llama::mapping
+		// ==
+		// == ./include/llama/mapping/AoS.hpp ==
+		// ============================================================================
 
-namespace llama
-{
-    namespace internal
-    {
-        template<typename RecordDim>
-        void assertTrivialCopyable()
-        {
-            forEachLeafCoord<RecordDim>(
-                [](auto rc)
-                {
-                    static_assert(
-                        std::is_trivially_copyable_v<GetType<RecordDim, decltype(rc)>>,
-                        "All types in the record dimension must be trivially copyable");
-                });
-        }
+	// #include "mapping/SoA.hpp"    // amalgamate: file already inlined
 
-        using memcopyFunc = void* (*) (void*, const void*, std::size_t);
-
-        inline void parallelMemcpy(
-            std::byte* dst,
-            const std::byte* src,
-            std::size_t size,
-            std::size_t threadId = 0,
-            std::size_t threadCount = 1,
-            memcopyFunc singleThreadMemcpy = std::memcpy)
-        {
-            const auto sizePerThread = size / threadCount;
-            const auto sizeLastThread = sizePerThread + size % threadCount;
-            const auto sizeThisThread = threadId == threadCount - 1 ? sizeLastThread : sizePerThread;
-            singleThreadMemcpy(dst + threadId * sizePerThread, src + threadId * sizePerThread, sizeThisThread);
-        }
-    } // namespace internal
-
-    /// Direct memcpy from source view blobs to destination view blobs. Both views need to have the same mappings with
-    /// the same array dimensions.
-    /// @param threadId Optional. Zero-based id of calling thread for multi-threaded invocations.
-    /// @param threadCount Optional. Thread count in case of multi-threaded invocation.
-    LLAMA_EXPORT
-    template<typename Mapping, typename SrcBlob, typename DstBlob>
-    void blobMemcpy(
-        const View<Mapping, SrcBlob>& srcView,
-        View<Mapping, DstBlob>& dstView,
-        std::size_t threadId = 0,
-        std::size_t threadCount = 1)
-    {
-        internal::assertTrivialCopyable<typename Mapping::RecordDim>();
-
-        // TODO(bgruber): we do not verify if the mappings have other runtime state than the array dimensions
-        if(srcView.extents() != dstView.extents())
-            throw std::runtime_error{"Array dimensions sizes are different"};
-
-        // TODO(bgruber): this is maybe not the best parallel copying strategy
-        for(std::size_t i = 0; i < Mapping::blobCount; i++)
-            internal::parallelMemcpy(
-                &dstView.blobs()[i][0],
-                &srcView.blobs()[i][0],
-                dstView.mapping().blobSize(i),
-                threadId,
-                threadCount);
-    }
-
-    /// Field-wise copy from source to destination view. Both views need to have the same array and record dimensions.
-    /// @param threadId Optional. Thread id in case of multi-threaded copy.
-    /// @param threadCount Optional. Thread count in case of multi-threaded copy.
-    LLAMA_EXPORT
-    template<typename SrcMapping, typename SrcBlob, typename DstMapping, typename DstBlob>
-    void fieldWiseCopy(
-        const View<SrcMapping, SrcBlob>& srcView,
-        View<DstMapping, DstBlob>& dstView,
-        std::size_t threadId = 0,
-        std::size_t threadCount = 1)
-    {
-        // TODO(bgruber): think if we can remove this restriction
-        static_assert(
-            std::is_same_v<typename SrcMapping::RecordDim, typename DstMapping::RecordDim>,
-            "The source and destination record dimensions must be the same");
-
-        if(srcView.extents() != dstView.extents())
-            throw std::runtime_error{"Array dimensions sizes are different"};
-
-        auto copyOne = [&](auto ai) LLAMA_LAMBDA_INLINE
-        {
-            forEachLeafCoord<typename DstMapping::RecordDim>([&](auto rc) LLAMA_LAMBDA_INLINE
-                                                             { dstView(ai)(rc) = srcView(ai)(rc); });
-        };
-
-        constexpr auto dims = SrcMapping::ArrayExtents::rank;
-        const auto extents = srcView.extents().toArray();
-        const auto workPerThread = (extents[0] + threadCount - 1) / threadCount;
-        const auto start = threadId * workPerThread;
-        const auto end = std::min((threadId + 1) * workPerThread, static_cast<std::size_t>(extents[0]));
-        for(auto i = start; i < end; i++)
-        {
-            using SrcSizeType = typename SrcMapping::ArrayExtents::value_type;
-            if constexpr(dims > 1)
-                forEachArrayIndex(extents, copyOne, static_cast<SrcSizeType>(i));
-            else
-                copyOne(ArrayIndex<SrcSizeType, dims>{static_cast<std::size_t>(i)});
-        }
-    }
-
-    namespace internal
-    {
-        template<typename Mapping>
-        inline constexpr std::size_t aosoaLanes = 0;
-
-        template<
-            typename ArrayExtents,
-            typename RecordDim,
-            mapping::Blobs Blobs,
-            mapping::SubArrayAlignment SubArrayAlignment,
-            typename LinearizeArrayIndexFunctor>
-        inline constexpr std::size_t
-            aosoaLanes<mapping::SoA<ArrayExtents, RecordDim, Blobs, SubArrayAlignment, LinearizeArrayIndexFunctor>>
-            = std::numeric_limits<std::size_t>::max();
-
-        template<typename ArrayExtents, typename RecordDim, std::size_t Lanes, typename LinearizeArrayIndexFunctor>
-        inline constexpr std::size_t
-            aosoaLanes<mapping::AoSoA<ArrayExtents, RecordDim, Lanes, LinearizeArrayIndexFunctor>>
-            = Lanes;
-    } // namespace internal
-
-    /// AoSoA copy strategy which transfers data in common blocks. SoA mappings are also allowed for at most 1
-    /// argument.
-    /// @param threadId Optional. Zero-based id of calling thread for multi-threaded invocations.
-    /// @param threadCount Optional. Thread count in case of multi-threaded invocation.
-    LLAMA_EXPORT
-    template<typename SrcMapping, typename SrcBlob, typename DstMapping, typename DstBlob>
-    void aosoaCommonBlockCopy(
-        const View<SrcMapping, SrcBlob>& srcView,
-        View<DstMapping, DstBlob>& dstView,
-        bool readOpt,
-        std::size_t threadId = 0,
-        std::size_t threadCount = 1)
-    {
-        // TODO(bgruber): think if we can remove this restriction
-        static_assert(
-            std::is_same_v<typename SrcMapping::RecordDim, typename DstMapping::RecordDim>,
-            "The source and destination record dimensions must be the same");
-        static_assert(
-            std::is_same_v<
-                typename SrcMapping::LinearizeArrayIndexFunctor,
-                typename DstMapping::LinearizeArrayIndexFunctor>,
-            "Source and destination mapping need to use the same array dimensions linearizer");
-        using RecordDim = typename SrcMapping::RecordDim;
-        internal::assertTrivialCopyable<RecordDim>();
-
-        [[maybe_unused]] static constexpr bool isSrcMB = SrcMapping::blobCount > 1;
-        [[maybe_unused]] static constexpr bool isDstMB = DstMapping::blobCount > 1;
-        static constexpr auto lanesSrc = internal::aosoaLanes<SrcMapping>;
-        static constexpr auto lanesDst = internal::aosoaLanes<DstMapping>;
-
-        if(srcView.extents() != dstView.extents())
-            throw std::runtime_error{"Array dimensions sizes are different"};
-
-        static constexpr auto srcIsAoSoA = lanesSrc != std::numeric_limits<std::size_t>::max();
-        static constexpr auto dstIsAoSoA = lanesDst != std::numeric_limits<std::size_t>::max();
-
-        static_assert(srcIsAoSoA || dstIsAoSoA, "At least one of the mappings must be an AoSoA mapping");
-        static_assert(!srcIsAoSoA || SrcMapping::blobCount == 1, "Implementation assumes AoSoA with single blob");
-        static_assert(!dstIsAoSoA || DstMapping::blobCount == 1, "Implementation assumes AoSoA with single blob");
-
-        const auto flatSize = product(dstView.extents());
-
-        // TODO(bgruber): implement the following by adding additional copy loops for the remaining elements
-        if(!srcIsAoSoA && flatSize % lanesDst != 0)
-            throw std::runtime_error{"Source SoA mapping's total array elements must be evenly divisible by the "
-                                     "destination AoSoA Lane count."};
-        if(!dstIsAoSoA && flatSize % lanesSrc != 0)
-            throw std::runtime_error{"Destination SoA mapping's total array elements must be evenly divisible by the "
-                                     "source AoSoA Lane count."};
-
-        // the same as AoSoA::blobNrAndOffset but takes a flat array index
-        auto mapAoSoA = [](std::size_t flatArrayIndex, auto rc, std::size_t Lanes) LLAMA_LAMBDA_INLINE
-        {
-            const auto blockIndex = flatArrayIndex / Lanes;
-            const auto laneIndex = flatArrayIndex % Lanes;
-            const auto offset = (sizeOf<RecordDim> * Lanes) * blockIndex + offsetOf<RecordDim, decltype(rc)> * Lanes
-                + sizeof(GetType<RecordDim, decltype(rc)>) * laneIndex;
-            return offset;
-        };
-        // the same as SoA::blobNrAndOffset but takes a flat array index
-        auto mapSoA = [&](std::size_t flatArrayIndex, auto rc, bool mb) LLAMA_LAMBDA_INLINE
-        {
-            const auto blob = mb * flatRecordCoord<RecordDim, decltype(rc)>;
-            const auto offset = !mb * offsetOf<RecordDim, decltype(rc)> * flatSize
-                + sizeof(GetType<RecordDim, decltype(rc)>) * flatArrayIndex;
-            return NrAndOffset{blob, offset};
-        };
-
-        auto mapSrc = [&](std::size_t flatArrayIndex, auto rc) LLAMA_LAMBDA_INLINE
-        {
-            if constexpr(srcIsAoSoA)
-                return &srcView.blobs()[0][0] + mapAoSoA(flatArrayIndex, rc, lanesSrc);
-            else
-            {
-                const auto [blob, off] = mapSoA(flatArrayIndex, rc, isSrcMB);
-                return &srcView.blobs()[blob][off];
-            }
-        };
-        auto mapDst = [&](std::size_t flatArrayIndex, auto rc) LLAMA_LAMBDA_INLINE
-        {
-            if constexpr(dstIsAoSoA)
-                return &dstView.blobs()[0][0] + mapAoSoA(flatArrayIndex, rc, lanesDst);
-            else
-            {
-                const auto [blob, off] = mapSoA(flatArrayIndex, rc, isDstMB);
-                return &dstView.blobs()[blob][off];
-            }
-        };
-
-        static constexpr auto l = []
-        {
-            if constexpr(srcIsAoSoA && dstIsAoSoA)
-                return std::gcd(lanesSrc, lanesDst);
-            return std::min(lanesSrc, lanesDst);
-        }();
-        if(readOpt)
-        {
-            // optimized for linear reading
-            constexpr auto srcL = srcIsAoSoA ? lanesSrc : l;
-            const auto elementsPerThread = flatSize / srcL / threadCount * srcL;
-            {
-                const auto start = threadId * elementsPerThread;
-                const auto stop = threadId == threadCount - 1 ? flatSize : (threadId + 1) * elementsPerThread;
-
-                auto copyLBlock = [&](const std::byte*& threadSrc, std::size_t dstIndex, auto rc) LLAMA_LAMBDA_INLINE
-                {
-                    constexpr auto bytes = l * sizeof(GetType<RecordDim, decltype(rc)>);
-                    std::memcpy(mapDst(dstIndex, rc), threadSrc, bytes);
-                    threadSrc += bytes;
-                };
-                if constexpr(srcIsAoSoA)
-                {
-                    auto* threadSrc = mapSrc(start, RecordCoord<>{});
-                    for(std::size_t i = start; i < stop; i += lanesSrc)
-                        forEachLeafCoord<RecordDim>(
-                            [&](auto rc) LLAMA_LAMBDA_INLINE
-                            {
-                                for(std::size_t j = 0; j < lanesSrc; j += l)
-                                    copyLBlock(threadSrc, i + j, rc);
-                            });
-                }
-                else
-                {
-                    forEachLeafCoord<RecordDim>(
-                        [&](auto rc) LLAMA_LAMBDA_INLINE
-                        {
-                            auto* threadSrc = mapSrc(start, rc);
-                            for(std::size_t i = start; i < stop; i += l)
-                                copyLBlock(threadSrc, i, rc);
-                        });
-                }
-            }
-        }
-        else
-        {
-            // optimized for linear writing
-            constexpr auto dstL = dstIsAoSoA ? lanesDst : l;
-            const auto elementsPerThread = flatSize / dstL / threadCount * dstL;
-            {
-                const auto start = threadId * elementsPerThread;
-                const auto stop = threadId == threadCount - 1 ? flatSize : (threadId + 1) * elementsPerThread;
-
-                auto copyLBlock = [&](std::byte*& threadDst, std::size_t srcIndex, auto rc) LLAMA_LAMBDA_INLINE
-                {
-                    constexpr auto bytes = l * sizeof(GetType<RecordDim, decltype(rc)>);
-                    std::memcpy(threadDst, mapSrc(srcIndex, rc), bytes);
-                    threadDst += bytes;
-                };
-                if constexpr(dstIsAoSoA)
-                {
-                    auto* threadDst = mapDst(start, RecordCoord<>{});
-                    for(std::size_t i = start; i < stop; i += lanesDst)
-                        forEachLeafCoord<RecordDim>(
-                            [&](auto rc) LLAMA_LAMBDA_INLINE
-                            {
-                                for(std::size_t j = 0; j < lanesDst; j += l)
-                                    copyLBlock(threadDst, i + j, rc);
-                            });
-                }
-                else
-                {
-                    forEachLeafCoord<RecordDim>(
-                        [&](auto rc) LLAMA_LAMBDA_INLINE
-                        {
-                            auto* threadDst = mapDst(start, rc);
-                            for(std::size_t i = start; i < stop; i += l)
-                                copyLBlock(threadDst, i, rc);
-                        });
-                }
-            }
-        }
-    }
-
-    /// @brief Generic implementation of \ref copy defaulting to \ref fieldWiseCopy. LLAMA provides several
-    /// specializations of this construct for specific mappings. Users are encouraged to also specialize this template
-    /// with better copy algorithms for further combinations of mappings, if they can and want to provide a better
-    /// implementation.
-    LLAMA_EXPORT
-    template<typename SrcMapping, typename DstMapping, typename SFINAE = void>
-    struct Copy
-    {
-        template<typename SrcView, typename DstView>
-        void operator()(const SrcView& srcView, DstView& dstView, std::size_t threadId, std::size_t threadCount) const
-        {
-            fieldWiseCopy(srcView, dstView, threadId, threadCount);
-        }
-    };
-
-    LLAMA_EXPORT
-    template<typename Mapping>
-    struct Copy<Mapping, Mapping>
-    {
-        template<typename SrcView, typename DstView>
-        void operator()(const SrcView& srcView, DstView& dstView, std::size_t threadId, std::size_t threadCount) const
-        {
-            blobMemcpy(srcView, dstView, threadId, threadCount);
-        }
-    };
-
-    LLAMA_EXPORT
-    template<
-        typename ArrayExtents,
-        typename RecordDim,
-        typename LinearizeArrayIndex,
-        std::size_t LanesSrc,
-        std::size_t LanesDst>
-    struct Copy<
-        mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex>,
-        mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex>,
-        std::enable_if_t<LanesSrc != LanesDst>>
-    {
-        template<typename SrcBlob, typename DstBlob>
-        void operator()(
-            const View<mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex>, SrcBlob>& srcView,
-            View<mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex>, DstBlob>& dstView,
-            std::size_t threadId,
-            std::size_t threadCount)
-        {
-            constexpr auto readOpt = true; // TODO(bgruber): how to choose?
-            aosoaCommonBlockCopy(srcView, dstView, readOpt, threadId, threadCount);
-        }
-    };
-
-    LLAMA_EXPORT
-    template<
-        typename ArrayExtents,
-        typename RecordDim,
-        typename LinearizeArrayIndex,
-        std::size_t LanesSrc,
-        mapping::Blobs DstBlobs,
-        mapping::SubArrayAlignment DstSubArrayAlignment>
-    struct Copy<
-        mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex>,
-        mapping::SoA<ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex>>
-    {
-        template<typename SrcBlob, typename DstBlob>
-        void operator()(
-            const View<mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex>, SrcBlob>& srcView,
-            View<mapping::SoA<ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex>, DstBlob>&
-                dstView,
-            std::size_t threadId,
-            std::size_t threadCount)
-        {
-            constexpr auto readOpt = true; // TODO(bgruber): how to choose?
-            aosoaCommonBlockCopy(srcView, dstView, readOpt, threadId, threadCount);
-        }
-    };
-
-    LLAMA_EXPORT
-    template<
-        typename ArrayExtents,
-        typename RecordDim,
-        typename LinearizeArrayIndex,
-        std::size_t LanesDst,
-        mapping::Blobs SrcBlobs,
-        mapping::SubArrayAlignment SrcSubArrayAlignment>
-    struct Copy<
-        mapping::SoA<ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex>,
-        mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex>>
-    {
-        template<typename SrcBlob, typename DstBlob>
-        void operator()(
-            const View<
-                mapping::SoA<ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex>,
-                SrcBlob>& srcView,
-            View<mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex>, DstBlob>& dstView,
-            std::size_t threadId,
-            std::size_t threadCount)
-        {
-            constexpr auto readOpt = true; // TODO(bgruber): how to choose?
-            aosoaCommonBlockCopy(srcView, dstView, readOpt, threadId, threadCount);
-        }
-    };
-
-    /// Copy data from source view to destination view. Both views need to have the same array and record
-    /// dimensions. Delegates to \ref Copy to choose an implementation.
-    /// @param threadId Optional. Zero-based id of calling thread for multi-threaded invocations.
-    /// @param threadCount Optional. Thread count in case of multi-threaded invocation.
-    LLAMA_EXPORT
-    template<typename SrcMapping, typename SrcBlob, typename DstMapping, typename DstBlob>
-    void copy(
-        const View<SrcMapping, SrcBlob>& srcView,
-        View<DstMapping, DstBlob>& dstView,
-        std::size_t threadId = 0,
-        std::size_t threadCount = 1)
-    {
-        Copy<SrcMapping, DstMapping>{}(srcView, dstView, threadId, threadCount);
-    }
-} // namespace llama
-// ==
-// == ./include/llama/Copy.hpp ==
-// ============================================================================
-
-// ============================================================================
-// == ./include/llama/llama.hpp ==
-// ==
-// Copyright 2018 Alexander Matthes, Bernhard Manfred Gruber
-// SPDX-License-Identifier: LGPL-3.0-or-later
-
-// #pragma once
-/// \mainpage LLAMA API documentation
-///
-/// LLAMA is a C++17 template header-only library for the abstraction of memory access patterns. It distinguishes
-/// between the view of the algorithm on the memory and the real layout in the background. This enables performance
-/// portability for multicore, manycore and gpu applications with the very same code.
-///
-/// In contrast to many other solutions LLAMA can define nested data structures of arbitrary depths and is not limited
-/// only to struct of array and array of struct data layouts. It is also capable to explicitly define padding,
-/// blocking, striding and any other run time or compile time access pattern simultaneously.
-///
-/// To archieve this goal LLAMA is split into mostly independent, orthogonal parts completely written in modern C++17
-/// to run on as many architectures and with as many compilers as possible while still supporting extensions needed
-/// e.g. to run on GPU or other many core hardware.
-///
-/// This page documents the API of LLAMA. The user documentation and an overview about the concepts and ideas can be
-/// found here: https://llama-doc.rtfd.io
-///
-/// LLAMA is licensed under the LGPL3+.
-
-// NOLINTNEXTLINE(modernize-macro-to-enum)
-#define LLAMA_VERSION_MAJOR 0
-// NOLINTNEXTLINE(modernize-macro-to-enum)
-#define LLAMA_VERSION_MINOR 5
-// NOLINTNEXTLINE(modernize-macro-to-enum)
-#define LLAMA_VERSION_PATCH 0
-
-// suppress warnings on missing return statements. we get a lot of these because nvcc/nvc++ have some troubles with if
-// constexpr.
-#ifdef __NVCC__
-#    ifdef __NVCC_DIAG_PRAGMA_SUPPORT__
-#        pragma nv_diag_suppress 940
-#    else
-#        pragma diag_suppress 940
-#    endif
-#endif
-#ifdef __NVCOMPILER
-#    pragma push
-#    pragma diag_suppress 941
-#endif
-
-// #include "ArrayExtents.hpp"    // amalgamate: file already inlined
-// #include "ArrayIndexRange.hpp"    // amalgamate: file already inlined
-// #include "BlobAllocators.hpp"    // amalgamate: file already inlined
-// #include "Copy.hpp"    // amalgamate: file already inlined
-// #include "Core.hpp"    // amalgamate: file already inlined
-	// ============================================================================
-	// == ./include/llama/DumpMapping.hpp ==
-	// ==
-	// Copyright 2022 Bernhard Manfred Gruber
-	// SPDX-License-Identifier: LGPL-3.0-or-later
-
-	// #pragma once
-	#if __has_include(<fmt/format.h>)
-	// #    include "ArrayIndexRange.hpp"    // amalgamate: file already inlined
-	// #    include "Core.hpp"    // amalgamate: file already inlined
-	// #    include "StructName.hpp"    // amalgamate: file already inlined
-	// #    include "View.hpp"    // amalgamate: file already inlined
-
-	#    include <fmt/format.h>
-	#    include <functional>
-	#    include <optional>
-	// #    include <string>    // amalgamate: file already included
-	// #    include <vector>    // amalgamate: file already included
+	// #include <type_traits>    // amalgamate: file already included
 
 	namespace llama
 	{
+	    /// Traits of a specific Simd implementation. Please specialize this template for the SIMD types you are going to
+	    /// use in your program.
+	    /// Each specialization SimdTraits<Simd> must provide:
+	    /// * an alias `value_type` to indicate the element type of the Simd.
+	    /// * a `static constexpr size_t lanes` variable holding the number of SIMD lanes of the Simd.
+	    /// * a `static auto loadUnalinged(const value_type* mem) -> Simd` function, loading a Simd from the given memory
+	    /// address.
+	    /// * a `static void storeUnaligned(Simd simd, value_type* mem)` function, storing the given Simd to a given
+	    /// memory address.
+	    LLAMA_EXPORT
+	    template<typename Simd, typename SFINAE = void>
+	    struct SimdTraits
+	    {
+	        static_assert(sizeof(Simd) == 0, "Please specialize SimdTraits for the type Simd");
+	    };
+
+	    LLAMA_EXPORT
+	    template<typename T>
+	    struct SimdTraits<T, std::enable_if_t<std::is_arithmetic_v<T>>>
+	    {
+	        using value_type = T;
+
+	        inline static constexpr std::size_t lanes = 1;
+
+	        static LLAMA_FN_HOST_ACC_INLINE auto loadUnaligned(const T* mem) -> T
+	        {
+	            return *mem;
+	        }
+
+	        static LLAMA_FN_HOST_ACC_INLINE void storeUnaligned(T t, T* mem)
+	        {
+	            *mem = t;
+	        }
+	    };
+
+	    /// The number of SIMD simdLanes the given SIMD vector or \ref Simd<T> has. If Simd is not a structural \ref Simd
+	    /// or \ref SimdN, this is a shortcut for SimdTraits<Simd>::lanes.
+	    LLAMA_EXPORT
+	    template<typename Simd, typename SFINAE = void>
+	    inline constexpr auto simdLanes = SimdTraits<Simd>::lanes;
+
+	    /// Chooses the number of SIMD lanes for the given record dimension by mapping each field type to a SIMD type and
+	    /// then reducing their sizes.
+	    /// @tparam MakeSimd Type function creating a SIMD type given a field type from the record dimension.
+	    /// @param reduce Binary reduction function to reduce the SIMD lanes.
+	    LLAMA_EXPORT
+	    template<typename RecordDim, template<typename> typename MakeSimd, typename BinaryReductionFunction>
+	    LLAMA_CONSTEVAL auto chooseSimdLanes(BinaryReductionFunction reduce) -> std::size_t
+	    {
+	        using FRD = FlatRecordDim<RecordDim>;
+	        std::size_t lanes = simdLanes<MakeSimd<mp_first<FRD>>>;
+	        mp_for_each<mp_transform<std::add_pointer_t, mp_drop_c<FRD, 1>>>(
+	            [&](auto* t)
+	            {
+	                using T = std::remove_reference_t<decltype(*t)>;
+	                lanes = reduce(lanes, simdLanes<MakeSimd<T>>);
+	            });
+	        assert(lanes > 0);
+	        return lanes;
+	    }
+
+	    /// Determines the number of simd lanes suitable to process all types occurring in the given record dimension. The
+	    /// algorithm ensures that even SIMD vectors for the smallest field type are filled completely and may thus require
+	    /// multiple SIMD vectors for some field types.
+	    /// @tparam RecordDim The record dimension to simdize
+	    /// @tparam MakeSimd Type function creating a SIMD type given a field type from the record dimension.
+	    LLAMA_EXPORT
+	    template<typename RecordDim, template<typename> typename MakeSimd>
+	    inline constexpr std::size_t simdLanesWithFullVectorsFor
+	        = chooseSimdLanes<RecordDim, MakeSimd>([](auto a, auto b) { return std::max(a, b); });
+
+	    /// Determines the number of simd lanes suitable to process all types occurring in the given record dimension. The
+	    /// algorithm ensures that the smallest number of SIMD registers is needed and may thus only partially fill
+	    /// registers for some data types.
+	    /// @tparam RecordDim The record dimension to simdize
+	    /// @tparam MakeSimd Type function creating a SIMD type given a field type from the record dimension.
+	    LLAMA_EXPORT
+	    template<typename RecordDim, template<typename> typename MakeSimd>
+	    inline constexpr std::size_t simdLanesWithLeastRegistersFor
+	        = chooseSimdLanes<RecordDim, MakeSimd>([](auto a, auto b) { return std::min(a, b); });
+
 	    namespace internal
 	    {
-	        inline auto color(std::string_view recordCoordTags) -> std::size_t
+	        template<std::size_t N, template<typename, /* std::integral */ auto> typename MakeSizedSimd>
+	        struct BindMakeSizedSimd
 	        {
-	            auto c = std::hash<std::string_view>{}(recordCoordTags) &std::size_t{0xFFFFFF};
-	            c |= std::size_t{0x404040}; // ensure color per channel is at least 0x40.
-	            return c;
-	        }
-
-	        // from: https://stackoverflow.com/questions/5665231/most-efficient-way-to-escape-xml-html-in-c-string
-	        inline auto xmlEscape(const std::string& str) -> std::string
-	        {
-	            std::string result;
-	            result.reserve(str.size());
-	            for(const char c : str)
-	            {
-	                switch(c)
-	                {
-	                case '&':
-	                    result.append("&amp;");
-	                    break;
-	                case '\"':
-	                    result.append("&quot;");
-	                    break;
-	                case '\'':
-	                    result.append("&apos;");
-	                    break;
-	                case '<':
-	                    result.append("&lt;");
-	                    break;
-	                case '>':
-	                    result.append("&gt;");
-	                    break;
-	                default:
-	                    result += c;
-	                    break;
-	                }
-	            }
-	            return result;
-	        }
-
-	        template<typename T, std::size_t Dim>
-	        auto formatArrayIndex(const ArrayIndex<T, Dim>& ai)
-	        {
-	            if constexpr(Dim == 1)
-	                return std::to_string(ai[0]);
-	            else
-	            {
-	                std::string s = "{";
-	                for(auto v : ai)
-	                {
-	                    if(s.size() >= 2)
-	                        s += ",";
-	                    s += std::to_string(v);
-	                }
-	                s += "}";
-	                return s;
-	            }
-	        }
-
-	        template<typename ArrayIndex>
-	        // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init,hicpp-member-init)
-	        struct FieldBox
-	        {
-	            ArrayIndex arrayIndex;
-	            std::string_view recordCoordTags;
-	            NrAndOffset<std::size_t> nrAndOffset;
-	            std::size_t size;
+	            template<typename U>
+	            using fn = MakeSizedSimd<U, N>;
 	        };
 
-	        template<typename View>
-	        void fillBlobsWithPattern(View& view, uint8_t pattern)
+	        template<
+	            typename RecordDim,
+	            std::size_t N,
+	            template<typename, /* std::integral */ auto>
+	            typename MakeSizedSimd>
+	        struct SimdizeNImpl
 	        {
-	            const auto& mapping = view.mapping();
-	            for(std::size_t i = 0; i < View::Mapping::blobCount; i++)
-	                std::memset(&view.blobs()[i][0], pattern, mapping.blobSize(i));
-	        }
+	            using type = TransformLeaves<RecordDim, internal::BindMakeSizedSimd<N, MakeSizedSimd>::template fn>;
+	        };
 
-	        template<typename View, typename RecordCoord>
-	        void boxesFromComputedField(
-	            View& view,
-	            typename View::Mapping::ArrayExtents::Index ai,
-	            RecordCoord rc,
-	            std::vector<FieldBox<typename View::Mapping::ArrayExtents::Index>>& infos)
+	        template<typename RecordDim, template<typename, /* std::integral */ auto> typename MakeSizedSimd>
+	        struct SimdizeNImpl<RecordDim, 1, MakeSizedSimd>
 	        {
-	            using Mapping = typename View::Mapping;
-	            using RecordDim = typename Mapping::RecordDim;
-
-	            auto emitInfo = [&](auto nrAndOffset, std::size_t size) {
-	                infos.push_back({ai, prettyRecordCoord<RecordDim>(rc), nrAndOffset, size});
-	            };
-
-	            using Type = GetType<RecordDim, decltype(rc)>;
-	            // computed values can come from anywhere, so we can only apply heuristics
-	            auto& blobs = view.blobs();
-	            auto&& ref = view.mapping().compute(ai, rc, blobs);
-
-	            // if we get a reference, try to find the mapped address in one of the blobs
-	            if constexpr(std::is_lvalue_reference_v<decltype(ref)>)
-	            {
-	                auto address = reinterpret_cast<std::intptr_t>(&ref);
-	                for(std::size_t i = 0; i < blobs.size(); i++)
-	                {
-	                    // TODO(bgruber): this is UB, because we are comparing pointers from unrelated
-	                    // allocations
-	                    const auto front = reinterpret_cast<std::intptr_t>(&blobs[i][0]);
-	                    const auto back = reinterpret_cast<std::intptr_t>(&blobs[i][view.mapping().blobSize(i) - 1]);
-	                    if(front <= address && address <= back)
-	                    {
-	                        emitInfo(NrAndOffset{i, static_cast<std::size_t>(address - front)}, sizeof(Type));
-	                        return; // a mapping can only map to one location in the blobs
-	                    }
-	                }
-	            }
-
-	            if constexpr(std::is_default_constructible_v<Type>)
-	            {
-	                const auto infosBefore = infos.size();
-
-	                // try to observe written bytes
-	                const auto pattern = std::uint8_t{0xFF};
-	                fillBlobsWithPattern(view, pattern);
-	                ref = Type{}; // a broad range of types is default constructible and should write
-	                              // something zero-ish
-	                auto wasTouched = [&](auto b) { return static_cast<std::uint8_t>(b) != pattern; };
-	                for(std::size_t i = 0; i < Mapping::blobCount; i++)
-	                {
-	                    const auto blobSize = view.mapping().blobSize(i);
-	                    const auto* begin = &blobs[i][0];
-	                    const auto* end = begin + blobSize;
-
-	                    auto* searchBegin = begin;
-	                    while(true)
-	                    {
-	                        const auto* touchedBegin = std::find_if(searchBegin, end, wasTouched);
-	                        if(touchedBegin == end)
-	                            break;
-	                        const auto& touchedEnd = std::find_if_not(touchedBegin + 1, end, wasTouched);
-	                        emitInfo(
-	                            NrAndOffset{i, static_cast<std::size_t>(touchedBegin - begin)},
-	                            touchedEnd - touchedBegin);
-	                        if(touchedEnd == end)
-	                            break;
-	                        searchBegin = touchedEnd + 1;
-	                    }
-	                }
-
-	                if(infosBefore != infos.size())
-	                    return;
-	            }
-
-	            // if we come here, we could not find out where the value is coming from
-	            emitInfo(NrAndOffset{Mapping::blobCount, std::size_t{0}}, sizeof(Type));
-	        }
-
-	        template<typename Mapping>
-	        auto boxesFromMapping(const Mapping& mapping) -> std::vector<FieldBox<typename Mapping::ArrayExtents::Index>>
-	        {
-	            std::vector<FieldBox<typename Mapping::ArrayExtents::Index>> infos;
-
-	            std::optional<decltype(allocView(mapping))> view;
-	            if constexpr(hasAnyComputedField<Mapping>)
-	                view = allocView(mapping);
-
-	            using RecordDim = typename Mapping::RecordDim;
-	            for(auto ai : ArrayIndexRange{mapping.extents()})
-	                forEachLeafCoord<RecordDim>(
-	                    [&](auto rc)
-	                    {
-	                        using Type = GetType<RecordDim, decltype(rc)>;
-	                        if constexpr(llama::isComputed<Mapping, decltype(rc)>)
-	                            boxesFromComputedField(view.value(), ai, rc, infos);
-	                        else
-	                        {
-	                            const auto [nr, off] = mapping.blobNrAndOffset(ai, rc);
-	                            infos.push_back(
-	                                {ai,
-	                                 prettyRecordCoord<RecordDim>(rc),
-	                                 {static_cast<std::size_t>(nr), static_cast<std::size_t>(off)},
-	                                 sizeof(Type)});
-	                        }
-	                    });
-
-	            return infos;
-	        }
-
-	        template<typename ArrayIndex>
-	        auto breakBoxes(std::vector<FieldBox<ArrayIndex>> boxes, std::size_t wrapByteCount)
-	            -> std::vector<FieldBox<ArrayIndex>>
-	        {
-	            for(std::size_t i = 0; i < boxes.size(); i++)
-	            {
-	                auto& fb = boxes[i];
-	                if(fb.nrAndOffset.offset / wrapByteCount != (fb.nrAndOffset.offset + fb.size - 1) / wrapByteCount)
-	                {
-	                    const auto remainingSpace = wrapByteCount - fb.nrAndOffset.offset % wrapByteCount;
-	                    auto newFb = fb;
-	                    newFb.nrAndOffset.offset = fb.nrAndOffset.offset + remainingSpace;
-	                    newFb.size = fb.size - remainingSpace;
-	                    fb.size = remainingSpace;
-	                    boxes.push_back(newFb);
-	                }
-	            }
-	            return boxes;
-	        }
-
-	        inline auto cssClass(std::string tags)
-	        {
-	            std::replace(begin(tags), end(tags), '.', '_');
-	            std::replace(begin(tags), end(tags), '<', '_');
-	            std::replace(begin(tags), end(tags), '>', '_');
-	            return tags;
+	            using type = RecordDim;
 	        };
 	    } // namespace internal
 
-	    /// Returns an SVG image visualizing the memory layout created by the given mapping. The created memory blocks are
-	    /// wrapped after wrapByteCount bytes.
+	    /// Transforms the given record dimension into a SIMD version of it. Each leaf field type will be replaced by a
+	    /// sized SIMD vector with length N, as determined by MakeSizedSimd. If N is 1, SimdizeN<T, 1, ...> is an alias for
+	    /// T.
 	    LLAMA_EXPORT
-	    template<typename Mapping>
-	    auto toSvg(const Mapping& mapping, std::size_t wrapByteCount = 64, bool breakBoxes = true) -> std::string
+	    template<typename RecordDim, std::size_t N, template<typename, /* std::integral */ auto> typename MakeSizedSimd>
+	    using SimdizeN = typename internal::SimdizeNImpl<RecordDim, N, MakeSizedSimd>::type;
+
+	    /// Transforms the given record dimension into a SIMD version of it. Each leaf field type will be replaced by a
+	    /// SIMD vector, as determined by MakeSimd.
+	    LLAMA_EXPORT
+	    template<typename RecordDim, template<typename> typename MakeSimd>
+	    using Simdize = TransformLeaves<RecordDim, MakeSimd>;
+
+	    /// Creates a SIMD version of the given type. Of T is a record dimension, creates a \ref One where each field is a
+	    /// SIMD type of the original field type. The SIMD vectors have length N. If N is 1, an ordinary \ref One of the
+	    /// record dimension T is created. If T is not a record dimension, a SIMD vector with value T and length N is
+	    /// created. If N is 1 (and T is not a record dimension), then T is produced.
+	    LLAMA_EXPORT
+	    template<typename T, std::size_t N, template<typename, /* std::integral */ auto> typename MakeSizedSimd>
+	    using SimdN = typename std::conditional_t<
+	        isRecordDim<T>,
+	        std::conditional_t<N == 1, mp_identity<One<T>>, mp_identity<One<SimdizeN<T, N, MakeSizedSimd>>>>,
+	        std::conditional_t<N == 1, mp_identity<T>, mp_identity<SimdizeN<T, N, MakeSizedSimd>>>>::type;
+
+	    /// Creates a SIMD version of the given type. Of T is a record dimension, creates a \ref One where each field is a
+	    /// SIMD type of the original field type.
+	    LLAMA_EXPORT
+	    template<typename T, template<typename> typename MakeSimd>
+	    using Simd = typename std::
+	        conditional_t<isRecordDim<T>, mp_identity<One<Simdize<T, MakeSimd>>>, mp_identity<Simdize<T, MakeSimd>>>::type;
+
+	    namespace internal
 	    {
-	        constexpr auto byteSizeInPixel = 30;
-	        constexpr auto blobBlockWidth = 60;
-
-	        auto infos = internal::boxesFromMapping(mapping);
-	        if(breakBoxes)
-	            infos = internal::breakBoxes(std::move(infos), wrapByteCount);
-	        std::stable_sort(
-	            begin(infos),
-	            end(infos),
-	            [](const auto& a, const auto& b) {
-	                return std::tie(a.nrAndOffset.nr, a.nrAndOffset.offset)
-	                    < std::tie(b.nrAndOffset.nr, b.nrAndOffset.offset);
-	            });
-
-	        std::string svg;
-
-	        std::array<int, Mapping::blobCount + hasAnyComputedField<Mapping> + 1> blobYOffset{};
-	        auto writeBlobHeader = [&](std::size_t i, std::size_t size, std::string_view name)
+	        template<std::size_t S>
+	        struct SizeEqualTo
 	        {
-	            const auto blobRows = (size + wrapByteCount - 1) / wrapByteCount;
-	            blobYOffset[i + 1] = blobYOffset[i] + (blobRows + 1) * byteSizeInPixel; // one row gap between blobs
-	            const auto height = blobRows * byteSizeInPixel;
-	            svg += fmt::format(
-	                R"a(<rect x="0" y="{}" width="{}" height="{}" fill="#AAA" stroke="#000"/>
-	<text x="{}" y="{}" fill="#000" text-anchor="middle">{}</text>
-	)a",
-	                blobYOffset[i],
-	                blobBlockWidth,
-	                height,
-	                blobBlockWidth / 2,
-	                blobYOffset[i] + height / 2,
-	                name);
+	            template<typename Simd>
+	            using fn = std::bool_constant<simdLanes<Simd> == S>;
 	        };
-	        for(std::size_t i = 0; i < Mapping::blobCount; i++)
-	            writeBlobHeader(i, mapping.blobSize(i), "Blob: " + std::to_string(i));
+	    } // namespace internal
 
-	        svg = fmt::format(
-	                  R"(<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-	<svg width="{}" height="{}" xmlns="http://www.w3.org/2000/svg">
-	    <style>
-	        .label {{ font: {}px sans-serif; }}
-	    </style>
-	)",
-	                  blobBlockWidth + wrapByteCount * byteSizeInPixel,
-	                  blobYOffset.back() == 0 ? 987654321 : blobYOffset.back() - byteSizeInPixel,
-	                  byteSizeInPixel / 2)
-	            + svg;
+	    /// Specialization for Simd<RecordDim>. Only works if all SIMD types in the fields of the record dimension have the
+	    /// same size.
+	    LLAMA_EXPORT
+	    template<typename Simd>
+	    inline constexpr std::size_t simdLanes<Simd, std::enable_if_t<isRecordRef<Simd>>> = []
+	    {
+	        using FRD = FlatRecordDim<typename Simd::AccessibleRecordDim>;
+	        using FirstFieldType = mp_first<FRD>;
+	        static_assert(mp_all_of_q<FRD, internal::SizeEqualTo<simdLanes<FirstFieldType>>>::value);
+	        return simdLanes<FirstFieldType>;
+	    }();
 
-	        std::size_t computedSizeSoFar = 0;
-	        std::size_t lastBlobNr = std::numeric_limits<std::size_t>::max();
-	        std::size_t usedBytesInBlobSoFar = 0;
-	        for(const auto& info : infos)
+	    namespace internal
+	    {
+	        template<typename T, typename Simd, typename RecordCoord>
+	        LLAMA_FN_HOST_ACC_INLINE void loadSimdRecord(const T& srcRef, Simd& dstSimd, RecordCoord rc)
 	        {
-	            if(lastBlobNr != info.nrAndOffset.nr)
+	            using RecordDim = typename T::AccessibleRecordDim;
+	            using FieldType = GetType<RecordDim, decltype(rc)>;
+	            using ElementSimd = std::decay_t<decltype(dstSimd(rc))>;
+	            using Traits = SimdTraits<ElementSimd>;
+
+	            // TODO(bgruber): can we generalize the logic whether we can load a dstSimd from that mapping?
+	            using Mapping = typename T::View::Mapping;
+	            if constexpr(mapping::isSoA<Mapping>)
 	            {
-	                usedBytesInBlobSoFar = 0;
-	                lastBlobNr = info.nrAndOffset.nr;
+	                LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
+	                dstSimd(rc) = Traits::loadUnaligned(&srcRef(rc)); // SIMD load
+	                LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
 	            }
-
-	            const auto blobY = blobYOffset[info.nrAndOffset.nr];
-	            const auto offset = [&]
+	            // else if constexpr(mapping::isAoSoA<typename T::View::Mapping>)
+	            //{
+	            //    // it turns out we do not need the specialization, because clang already fuses the scalar
+	            //    loads
+	            //    // into a vector load :D
+	            //    assert(srcRef.arrayDimsCoord()[0] % SIMD_WIDTH == 0);
+	            //    // if(srcRef.arrayDimsCoord()[0] % SIMD_WIDTH != 0)
+	            //    //    __builtin_unreachable(); // this also helps nothing
+	            //    //__builtin_assume(srcRef.arrayDimsCoord()[0] % SIMD_WIDTH == 0);  // this also helps nothing
+	            //    dstSimd(rc) = Traits::load_from(&srcRef(rc)); // SIMD load
+	            //}
+	            else if constexpr(mapping::isAoS<Mapping>)
 	            {
-	                if(info.nrAndOffset.nr < Mapping::blobCount)
-	                    return info.nrAndOffset.offset;
-
-	                const auto offset = computedSizeSoFar;
-	                computedSizeSoFar += info.size;
-	                return offset;
-	            }();
-	            auto x = (offset % wrapByteCount) * byteSizeInPixel + blobBlockWidth;
-	            auto y = (offset / wrapByteCount) * byteSizeInPixel + blobY;
-	            const auto fill = internal::color(info.recordCoordTags);
-	            const auto width = byteSizeInPixel * info.size;
-
-	            const auto nextOffset = [&]
-	            {
-	                if(&info == &infos.back())
-	                    return std::numeric_limits<std::size_t>::max();
-	                const auto& nextInfo = (&info)[1];
-	                if(info.nrAndOffset.nr < Mapping::blobCount && info.nrAndOffset.nr == nextInfo.nrAndOffset.nr)
-	                    return nextInfo.nrAndOffset.offset;
-
-	                return std::numeric_limits<std::size_t>::max();
-	            }();
-	            const auto isOverlapped = offset < usedBytesInBlobSoFar || nextOffset < offset + info.size;
-	            usedBytesInBlobSoFar = offset + info.size;
-
-	            constexpr auto cropBoxes = true;
-	            if(cropBoxes)
-	            {
-	                svg += fmt::format(
-	                    R"(<svg x="{}" y="{}" width="{}" height="{}">
-	)",
-	                    x,
-	                    y,
-	                    width,
-	                    byteSizeInPixel);
-	                x = 0;
-	                y = 0;
+	                static_assert(mapping::isAoS<Mapping>);
+	                static constexpr auto srcStride = flatSizeOf<
+	                    typename Mapping::Permuter::FlatRecordDim,
+	                    Mapping::fieldAlignment == llama::mapping::FieldAlignment::Align>;
+	                const auto* srcBaseAddr = reinterpret_cast<const std::byte*>(&srcRef(rc));
+	                ElementSimd elemSimd; // g++-12 really needs the intermediate elemSimd and memcpy
+	                for(auto i = 0; i < Traits::lanes; i++)
+	                    reinterpret_cast<FieldType*>(&elemSimd)[i]
+	                        = *reinterpret_cast<const FieldType*>(srcBaseAddr + i * srcStride);
+	                std::memcpy(&dstSimd(rc), &elemSimd, sizeof(elemSimd));
 	            }
-	            svg += fmt::format(
-	                R"(<rect x="{}" y="{}" width="{}" height="{}" fill="#{:X}" stroke="#000" fill-opacity="{}"/>
-	)",
-	                x,
-	                y,
-	                width,
-	                byteSizeInPixel,
-	                fill,
-	                isOverlapped ? 0.3 : 1.0);
-	            for(std::size_t i = 1; i < info.size; i++)
+	            else
 	            {
-	                svg += fmt::format(
-	                    R"(<line x1="{}" y1="{}" x2="{}" y2="{}" stroke="#777"/>
-	)",
-	                    x + i * byteSizeInPixel,
-	                    y + byteSizeInPixel * 2 / 3,
-	                    x + i * byteSizeInPixel,
-	                    y + byteSizeInPixel);
+	                auto b = ArrayIndexIterator{srcRef.view.extents(), srcRef.arrayIndex()};
+	                ElementSimd elemSimd; // g++-12 really needs the intermediate elemSimd and memcpy
+	                for(auto i = 0; i < Traits::lanes; i++)
+	                    reinterpret_cast<FieldType*>(&elemSimd)[i]
+	                        = srcRef.view(*b++)(cat(typename T::BoundRecordCoord{}, rc)); // scalar loads
+	                std::memcpy(&dstSimd(rc), &elemSimd, sizeof(elemSimd));
 	            }
-	            svg += fmt::format(
-	                R"(<text x="{}" y="{}" fill="#000" text-anchor="middle" class="label">{} {}</text>
-	)",
-	                x + width / 2,
-	                y + byteSizeInPixel * 3 / 4,
-	                internal::formatArrayIndex(info.arrayIndex),
-	                internal::xmlEscape(std::string{info.recordCoordTags}));
-	            if(cropBoxes)
-	                svg += R"(</svg>
-	)";
 	        }
 
-	        if(hasAnyComputedField<Mapping>)
+	        template<typename Simd, typename TFwd, typename RecordCoord>
+	        LLAMA_FN_HOST_ACC_INLINE void storeSimdRecord(const Simd& srcSimd, TFwd&& dstRef, RecordCoord rc)
 	        {
-	            writeBlobHeader(Mapping::blobCount, computedSizeSoFar, "Comp.");
+	            using T = std::remove_reference_t<TFwd>;
+	            using RecordDim = typename T::AccessibleRecordDim;
+	            using FieldType = GetType<RecordDim, decltype(rc)>;
+	            using ElementSimd = std::decay_t<decltype(srcSimd(rc))>;
+	            using Traits = SimdTraits<ElementSimd>;
 
-	            // fix total SVG size
-	            const auto i = svg.find("987654321");
-	            assert(i != std::string::npos);
-	            svg.replace(i, 9, std::to_string(blobYOffset.back() - byteSizeInPixel));
+	            // TODO(bgruber): can we generalize the logic whether we can store a srcSimd to that mapping?
+	            using Mapping = typename std::remove_reference_t<T>::View::Mapping;
+	            if constexpr(mapping::isSoA<Mapping>)
+	            {
+	                LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
+	                Traits::storeUnaligned(srcSimd(rc), &dstRef(rc)); // SIMD store
+	                LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
+	            }
+	            else if constexpr(mapping::isAoS<Mapping>)
+	            {
+	                static constexpr auto stride = flatSizeOf<
+	                    typename Mapping::Permuter::FlatRecordDim,
+	                    Mapping::fieldAlignment == llama::mapping::FieldAlignment::Align>;
+	                auto* dstBaseAddr = reinterpret_cast<std::byte*>(&dstRef(rc));
+	                const ElementSimd elemSimd = srcSimd(rc);
+	                for(auto i = 0; i < Traits::lanes; i++)
+	                    *reinterpret_cast<FieldType*>(dstBaseAddr + i * stride)
+	                        = reinterpret_cast<const FieldType*>(&elemSimd)[i];
+	            }
+	            else
+	            {
+	                // TODO(bgruber): how does this generalize conceptually to 2D and higher dimensions? in which
+	                // direction should we collect SIMD values?
+	                const ElementSimd elemSimd = srcSimd(rc);
+	                auto b = ArrayIndexIterator{dstRef.view.extents(), dstRef.arrayIndex()};
+	                for(auto i = 0; i < Traits::lanes; i++)
+	                    dstRef.view (*b++)(cat(typename T::BoundRecordCoord{}, rc))
+	                        = reinterpret_cast<const FieldType*>(&elemSimd)[i]; // scalar store
+	            }
 	        }
+	    } // namespace internal
 
-	        svg += "</svg>";
-	        return svg;
+	    /// Loads SIMD vectors of data starting from the given record reference to dstSimd. Only field tags occurring in
+	    /// RecordRef are loaded. If Simd contains multiple fields of SIMD types, a SIMD vector will be fetched for each of
+	    /// the fields. The number of elements fetched per SIMD vector depends on the SIMD width of the vector. Simd is
+	    /// allowed to have different vector lengths per element.
+	    LLAMA_EXPORT
+	    template<typename T, typename Simd>
+	    LLAMA_FN_HOST_ACC_INLINE void loadSimd(const T& srcRef, Simd& dstSimd)
+	    {
+	        // structured dstSimd type and record reference
+	        if constexpr(isRecordRef<Simd> && isRecordRef<T>)
+	        {
+	            forEachLeafCoord<typename Simd::AccessibleRecordDim>([&](auto rc) LLAMA_LAMBDA_INLINE
+	                                                                 { internal::loadSimdRecord(srcRef, dstSimd, rc); });
+	        }
+	        // unstructured dstSimd and reference type
+	        else if constexpr(!isRecordRef<Simd> && !isRecordRef<T>)
+	        {
+	            LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
+	            dstSimd = SimdTraits<Simd>::loadUnaligned(&srcRef);
+	            LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
+	        }
+	        else
+	        {
+	            // TODO(bgruber): when could we get here? Is this always an error?
+	            static_assert(sizeof(Simd) == 0, "Invalid combination of Simd type and reference type");
+	        }
 	    }
 
-	    /// Returns an HTML document visualizing the memory layout created by the given mapping. The visualization is
-	    /// resizeable.
+	    /// Stores SIMD vectors of element data from the given srcSimd into memory starting at the provided record
+	    /// reference. Only field tags occurring in RecordRef are stored. If Simd contains multiple fields of SIMD types, a
+	    /// SIMD vector will be stored for each of the fields. The number of elements stored per SIMD vector depends on the
+	    /// SIMD width of the vector. Simd is allowed to have different vector lengths per element.
 	    LLAMA_EXPORT
-	    template<typename Mapping>
-	    auto toHtml(const Mapping& mapping) -> std::string
+	    template<typename Simd, typename T>
+	    LLAMA_FN_HOST_ACC_INLINE void storeSimd(const Simd& srcSimd, T&& dstRef)
 	    {
-	        constexpr auto byteSizeInPixel = 30;
-	        constexpr auto rulerLengthInBytes = 512;
-	        constexpr auto rulerByteInterval = 8;
-
-	        auto infos = internal::boxesFromMapping(mapping);
-	        std::stable_sort(
-	            begin(infos),
-	            end(infos),
-	            [](const auto& a, const auto& b) {
-	                return std::tie(a.nrAndOffset.nr, a.nrAndOffset.offset)
-	                    < std::tie(b.nrAndOffset.nr, b.nrAndOffset.offset);
-	            });
-	        infos.erase(
-	            std::unique(
-	                begin(infos),
-	                end(infos),
-	                [](const auto& a, const auto& b) { return a.nrAndOffset == b.nrAndOffset; }),
-	            end(infos));
-
-	        std::string html;
-	        html += fmt::format(
-	            R"(<!DOCTYPE html>
-	<html>
-	<head>
-	<style>
-	.box {{
-	    outline: 1px solid;
-	    display: inline-block;
-	    white-space: nowrap;
-	    height: {}px;
-	    background: repeating-linear-gradient(90deg, #0000, #0000 29px, #777 29px, #777 30px);
-	    text-align: center;
-	    overflow: hidden;
-	    vertical-align: middle;
-	}}
-	#ruler {{
-	    background: repeating-linear-gradient(90deg, #0000, #0000 29px, #000 29px, #000 30px);
-	    border-bottom: 1px solid;
-	    height: 20px;
-	    margin-bottom: 20px;
-	}}
-	#ruler div {{
-	    position: absolute;
-	    display: inline-block;
-	}}
-	)",
-	            byteSizeInPixel);
-	        using RecordDim = typename Mapping::RecordDim;
-	        forEachLeafCoord<RecordDim>(
-	            [&](auto rc)
-	            {
-	                constexpr int size = sizeof(GetType<RecordDim, decltype(rc)>);
-
-	                html += fmt::format(
-	                    R"(.{} {{
-	    width: {}px;
-	    background-color: #{:X};
-	}}
-	)",
-	                    internal::cssClass(std::string{prettyRecordCoord<RecordDim>(rc)}),
-	                    byteSizeInPixel * size,
-	                    internal::color(prettyRecordCoord<RecordDim>(rc)));
-	            });
-
-	        html += fmt::format(R"(</style>
-	</head>
-	<body>
-	    <header id="ruler">
-	)");
-	        for(auto i = 0; i < rulerLengthInBytes; i += rulerByteInterval)
-	            html += fmt::format(
-	                R"(</style>
-	        <div style="margin-left: {}px;">{}</div>)",
-	                i * byteSizeInPixel,
-	                i);
-	        html += fmt::format(R"(
-	    </header>
-	)");
-
-	        auto currentBlobNr = std::numeric_limits<std::size_t>::max();
-	        for(const auto& info : infos)
+	        // structured Simd type and record reference
+	        if constexpr(isRecordRef<Simd> && isRecordRef<T>)
 	        {
-	            if(currentBlobNr != info.nrAndOffset.nr)
-	            {
-	                currentBlobNr = info.nrAndOffset.nr;
-	                html += fmt::format("<h1>Blob: {}</h1>", currentBlobNr);
-	            }
-	            html += fmt::format(
-	                R"(<div class="box {0}" title="{1} {2}">{1} {2}</div>)",
-	                internal::cssClass(std::string{info.recordCoordTags}),
-	                internal::formatArrayIndex(info.arrayIndex),
-	                internal::xmlEscape(std::string{info.recordCoordTags}));
+	            forEachLeafCoord<typename T::AccessibleRecordDim>([&](auto rc) LLAMA_LAMBDA_INLINE
+	                                                              { internal::storeSimdRecord(srcSimd, dstRef, rc); });
 	        }
-	        html += R"(</body>
-	</html>)";
-	        return html;
+	        // unstructured srcSimd and reference type
+	        else if constexpr(!isRecordRef<Simd> && !isRecordRef<T>)
+	        {
+	            LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
+	            SimdTraits<Simd>::storeUnaligned(srcSimd, &dstRef);
+	            LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
+	        }
+	        else
+	        {
+	            // TODO(bgruber): when could we get here? Is this always an error?
+	            static_assert(sizeof(Simd) == 0, "Invalid combination of Simd type and reference type");
+	        }
+	    }
+
+	    LLAMA_EXPORT
+	    template<
+	        std::size_t N,
+	        template<typename, /* std::integral */ auto>
+	        typename MakeSizedSimd,
+	        typename View,
+	        typename UnarySimdFunction>
+	    void simdForEachN(View& view, UnarySimdFunction f)
+	    {
+	        using IndexType = typename View::Mapping::ArrayExtents::value_type;
+	        const auto total = product(view.mapping().extents());
+	        auto it = view.begin();
+	        IndexType i = 0;
+	        // simd loop
+	        while(i + IndexType{N} <= total)
+	        {
+	            SimdN<typename View::RecordDim, N, MakeSizedSimd> simd;
+	            loadSimd(*it, simd);
+	            if constexpr(std::is_void_v<decltype(f(simd))>)
+	                f(simd);
+	            else
+	                storeSimd(f(simd), *it);
+	            i += IndexType{N};
+	            it += IndexType{N};
+	        }
+	        // tail
+	        while(i < total)
+	        {
+	            auto scalar = One<typename View::RecordDim>{*it};
+	            if constexpr(std::is_void_v<decltype(f(scalar))>)
+	                f(scalar);
+	            else
+	                *it = f(scalar);
+	            ++i;
+	            ++it;
+	        }
+	    }
+
+	    LLAMA_EXPORT
+	    template<
+	        template<typename>
+	        typename MakeSimd,
+	        template<typename, /* std::integral */ auto>
+	        typename MakeSizedSimd,
+	        typename View,
+	        typename UnarySimdFunction>
+	    void simdForEach(View& view, UnarySimdFunction f)
+	    {
+	        constexpr auto n = llama::simdLanesWithFullVectorsFor<typename View::RecordDim, MakeSimd>;
+	        simdForEachN<n, MakeSizedSimd>(view, f);
 	    }
 	} // namespace llama
-
-	#endif
 	// ==
-	// == ./include/llama/DumpMapping.hpp ==
+	// == ./include/llama/Simd.hpp ==
 	// ============================================================================
 
-// #include "Meta.hpp"    // amalgamate: file already inlined
-// #include "ProxyRefOpMixin.hpp"    // amalgamate: file already inlined
-// #include "RecordRef.hpp"    // amalgamate: file already inlined
-// #include "Simd.hpp"    // amalgamate: file already inlined
 // #include "StructName.hpp"    // amalgamate: file already inlined
 	// ============================================================================
 	// == ./include/llama/Tuple.hpp ==
@@ -11799,5 +11675,129 @@ namespace llama
 #endif
 // ==
 // == ./include/llama/llama.hpp ==
+// ============================================================================
+
+// ============================================================================
+// == ./include/llama/Proofs.hpp ==
+// ==
+// Copyright 2022 Bernhard Manfred Gruber
+// SPDX-License-Identifier: LGPL-3.0-or-later
+
+// #pragma once
+// #include "ArrayIndexRange.hpp"    // amalgamate: file already inlined
+// #include "Core.hpp"    // amalgamate: file already inlined
+
+namespace llama
+{
+// FIXME(bgruber): this test is actually not correct, because __cpp_constexpr_dynamic_alloc only guarantees constexpr
+// std::allocator
+#ifdef __cpp_constexpr_dynamic_alloc
+    namespace internal
+    {
+        template<typename T>
+        struct DynArray
+        {
+            constexpr DynArray() = default;
+
+            constexpr explicit DynArray(std::size_t n) : data(new T[n]{})
+            {
+            }
+
+            DynArray(const DynArray&) = delete;
+            DynArray(DynArray&&) = delete;
+            auto operator=(const DynArray&) -> DynArray& = delete;
+            auto operator=(DynArray&&) -> DynArray& = delete;
+
+            constexpr ~DynArray()
+            {
+                delete[] data;
+            }
+
+            constexpr void resize(std::size_t n)
+            {
+                delete[] data;
+                data = new T[n]{};
+            }
+
+            T* data = nullptr; // TODO(bgruber): replace by std::unique_ptr in C++23
+        };
+    } // namespace internal
+
+    /// Proofs by exhaustion of the array and record dimensions, that all values mapped to memory do not overlap.
+    // Unfortunately, this only works for smallish array dimensions, because of compiler limits on constexpr evaluation
+    // depth.
+    LLAMA_EXPORT
+    template<typename Mapping>
+    constexpr auto mapsNonOverlappingly(const Mapping& m) -> bool
+    {
+        internal::DynArray<internal::DynArray<std::uint64_t>> blobByteMapped(m.blobCount);
+        for(std::size_t i = 0; i < m.blobCount; i++)
+            blobByteMapped.data[i].resize(divCeil(m.blobSize(i), std::size_t{64}));
+
+        auto testAndSet = [&](auto blob, auto offset) constexpr
+        {
+            const auto bit = std::uint64_t{1} << (offset % 64);
+            if(blobByteMapped.data[blob].data[offset / 64] & bit)
+                return true;
+            blobByteMapped.data[blob].data[offset / 64] |= bit;
+            return false;
+        };
+
+        bool collision = false;
+        forEachLeafCoord<typename Mapping::RecordDim>(
+            [&](auto rc) constexpr
+            {
+                if(collision)
+                    return;
+                for(auto ai : ArrayIndexRange{m.extents()})
+                {
+                    using Type = GetType<typename Mapping::RecordDim, decltype(rc)>;
+                    const auto [blob, offset] = m.blobNrAndOffset(ai, rc);
+                    for(std::size_t b = 0; b < sizeof(Type); b++)
+                        if(testAndSet(blob, offset + b))
+                        {
+                            collision = true;
+                            break;
+                        }
+                }
+            });
+        return !collision;
+    }
+#endif
+
+    /// Proofs by exhaustion of the array and record dimensions, that at least PieceLength elements are always stored
+    /// contiguously.
+    // Unfortunately, this only works for smallish array dimensions, because of compiler limits on constexpr evaluation
+    // depth.
+    LLAMA_EXPORT
+    template<std::size_t PieceLength, typename Mapping>
+    constexpr auto mapsPiecewiseContiguous(const Mapping& m) -> bool
+    {
+        bool collision = false;
+        forEachLeafCoord<typename Mapping::RecordDim>(
+            [&](auto rc) constexpr
+            {
+                std::size_t flatIndex = 0;
+                std::size_t lastBlob = std::numeric_limits<std::size_t>::max();
+                std::size_t lastOffset = std::numeric_limits<std::size_t>::max();
+                for(auto ai : ArrayIndexRange{m.extents()})
+                {
+                    using Type = GetType<typename Mapping::RecordDim, decltype(rc)>;
+                    const auto [blob, offset] = m.blobNrAndOffset(ai, rc);
+                    if(flatIndex % PieceLength != 0 && (lastBlob != blob || lastOffset + sizeof(Type) != offset))
+                    {
+                        collision = true;
+                        break;
+                    }
+                    lastBlob = blob;
+                    lastOffset = offset;
+                    flatIndex++;
+                }
+            });
+        return !collision;
+    }
+} // namespace llama
+// ==
+// == ./include/llama/Proofs.hpp ==
 // ============================================================================
 
