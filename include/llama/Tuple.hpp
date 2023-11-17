@@ -248,9 +248,7 @@ namespace llama
             const Tuple<Elements...>& tuple,
             const Functor& functor)
         {
-            // FIXME(bgruber): nvcc fails to compile
-            // Tuple{functor(get<Is>(tuple))...}
-            return Tuple<decltype(functor(std::declval<Elements>()))...>{functor(get<Is>(tuple))...};
+            return Tuple{functor(get<Is>(tuple))...};
         }
     } // namespace internal
 

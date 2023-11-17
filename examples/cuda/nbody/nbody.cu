@@ -90,7 +90,6 @@ __device__ void pPInteraction(ParticleRefI& pi, ParticleRefJ pj)
 template<int MappingSM, typename View>
 __global__ void updateSM(View particles)
 {
-    // FIXME: removing this lambda makes nvcc 11 segfault
     auto sharedView = []
     {
         constexpr auto sharedMapping = []
