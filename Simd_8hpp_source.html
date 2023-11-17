@@ -324,8 +324,8 @@ $(document).ready(function(){initNavTree('Simd_8hpp_source.html',''); initResiza
 <div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;        <span class="comment">// structured dstSimd type and record reference</span></div>
 <div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;        <span class="keywordflow">if</span> constexpr(isRecordRef&lt;Simd&gt; &amp;&amp; isRecordRef&lt;T&gt;)</div>
 <div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;        {</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;            forEachLeafCoord&lt;typename T::AccessibleRecordDim&gt;([&amp;](<span class="keyword">auto</span> rc) <a class="code" href="macros_8hpp.html#a5a40ca12db507af3cf9cbff655513aca">LLAMA_LAMBDA_INLINE</a></div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;                                                              { <a class="code" href="namespacellama_1_1internal.html#a6cc3ab81fd3ee9d9fa0579a062e14dcb">internal::loadSimdRecord</a>(srcRef, dstSimd, rc); });</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;            forEachLeafCoord&lt;typename Simd::AccessibleRecordDim&gt;([&amp;](<span class="keyword">auto</span> rc) <a class="code" href="macros_8hpp.html#a5a40ca12db507af3cf9cbff655513aca">LLAMA_LAMBDA_INLINE</a></div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;                                                                 { <a class="code" href="namespacellama_1_1internal.html#a6cc3ab81fd3ee9d9fa0579a062e14dcb">internal::loadSimdRecord</a>(srcRef, dstSimd, rc); });</div>
 <div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;        }</div>
 <div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;        <span class="comment">// unstructured dstSimd and reference type</span></div>
 <div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> constexpr(!isRecordRef&lt;Simd&gt; &amp;&amp; !isRecordRef&lt;T&gt;)</div>
@@ -473,7 +473,7 @@ $(document).ready(function(){initNavTree('Simd_8hpp_source.html',''); initResiza
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="Simd_8hpp.html">Simd.hpp</a></li>
-    <li class="footer">Generated on Fri Nov 17 2023 15:48:37 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Fri Nov 17 2023 17:12:29 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
