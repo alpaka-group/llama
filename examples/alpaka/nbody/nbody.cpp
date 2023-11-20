@@ -28,14 +28,14 @@ constexpr auto allowRsqrt = true; // rsqrt can be way faster, but less accurate
 constexpr auto runUpate = true; // run update step. Useful to disable for benchmarking the move step.
 
 #if defined(ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED) || defined(ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED)
-#    if defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
+#    if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) || defined(ALPAKA_ACC_GPU_HIP_ENABLED)
 #        error Cannot enable CUDA together with other backends
 #    endif
 constexpr auto elementsPerThread = xsimd::batch<float>::size;
 constexpr auto threadsPerBlock = 1;
 constexpr auto sharedElementsPerBlock = 1;
 constexpr auto aosoaLanes = xsimd::batch<float>::size; // vectors
-#elif defined(ALPAKA_ACC_GPU_CUDA_ENABLED)
+#elif defined(ALPAKA_ACC_GPU_CUDA_ENABLED) || defined(ALPAKA_ACC_GPU_HIP_ENABLED)
 constexpr auto threadsPerBlock = 256;
 constexpr auto sharedElementsPerBlock = 512;
 constexpr auto elementsPerThread = 1;
