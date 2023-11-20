@@ -351,6 +351,9 @@ try
               << " kiB) in shared memory\n"
               << "Reducing on " << elementsPerThread << " particles per thread\n"
               << "Using " << threadsPerBlock << " threads per block\n";
+    const auto dev = alpaka::getDevByIdx(alpaka::Platform<Acc>{}, 0);
+    const auto props = alpaka::getAccDevProps<Acc>(dev);
+    std::cout << "Running on " << alpaka::getName(dev) << ", " << props.m_sharedMemSizeBytes / 1024 << "kiB SM\n";
     std::cout << std::fixed;
 
     std::ofstream plotFile{"nbody_alpaka.sh"};
