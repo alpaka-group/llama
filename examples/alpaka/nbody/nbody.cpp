@@ -214,12 +214,14 @@ struct MoveKernel
     }
 };
 
-template<template<typename, typename> typename AccTemplate, Mapping MappingGM, Mapping MappingSM>
+template<typename Acc>
+constexpr auto hasSharedMem = alpaka::accMatchesTags<Acc, alpaka::TagGpuCudaRt, alpaka::TagGpuHipRt>;
+
+template<typename Acc, Mapping MappingGM, Mapping MappingSM>
 void run(std::ostream& plotFile)
 {
-    using Dim = alpaka::DimInt<1>;
-    using Size = int;
-    using Acc = AccTemplate<Dim, Size>;
+    using Dim = alpaka::Dim<Acc>;
+    using Size = alpaka::Idx<Acc>;
 
     auto mappingName = [](int m) -> std::string
     {
@@ -235,7 +237,7 @@ void run(std::ostream& plotFile)
             return "SplitGpuGems";
         std::abort();
     };
-    const auto title = "GM " + mappingName(MappingGM) + " SM " + mappingName(MappingSM);
+    const auto title = "GM " + mappingName(MappingGM) + (hasSharedMem<Acc> ? " SM " + mappingName(MappingSM) : "");
     std::cout << '\n' << title << '\n';
 
     const auto platformAcc = alpaka::Platform<Acc>{};
@@ -342,6 +344,10 @@ void run(std::ostream& plotFile)
 auto main() -> int
 try
 {
+    using Dim = alpaka::DimInt<1>;
+    using Size = int;
+    using Acc = alpaka::ExampleDefaultAcc<Dim, Size>;
+
     std::cout << problemSize / 1000 << "k particles (" << problemSize * llama::sizeOf<Particle> / 1024 << "kiB)\n"
               << "Caching " << threadsPerBlock << " particles (" << threadsPerBlock * llama::sizeOf<Particle> / 1024
               << " kiB) in shared memory\n"
@@ -366,20 +372,26 @@ set y2tics auto
 $data << EOD
 )",
         problemSize / 1024,
-        alpaka::getAccName<alpaka::ExampleDefaultAcc<alpaka::DimInt<1>, int>>(),
+        alpaka::getAccName<Acc>(),
         common::hostname());
     plotFile << "\"\"\t\"update\"\t\"move\"\n";
 
-    run<alpaka::ExampleDefaultAcc, AoS, AoS>(plotFile);
-    run<alpaka::ExampleDefaultAcc, AoS, SoA_SB>(plotFile);
-    run<alpaka::ExampleDefaultAcc, AoS, AoSoA>(plotFile);
-    run<alpaka::ExampleDefaultAcc, SoA_SB, AoS>(plotFile);
-    run<alpaka::ExampleDefaultAcc, SoA_SB, SoA_SB>(plotFile);
-    run<alpaka::ExampleDefaultAcc, SoA_SB, AoSoA>(plotFile);
-    run<alpaka::ExampleDefaultAcc, AoSoA, AoS>(plotFile);
-    run<alpaka::ExampleDefaultAcc, AoSoA, SoA_SB>(plotFile);
-    run<alpaka::ExampleDefaultAcc, AoSoA, AoSoA>(plotFile);
-    run<alpaka::ExampleDefaultAcc, SplitGpuGems, AoS>(plotFile);
+    run<Acc, AoS, AoS>(plotFile);
+    if constexpr(hasSharedMem<Acc>)
+        run<Acc, AoS, SoA_SB>(plotFile);
+    if constexpr(hasSharedMem<Acc>)
+        run<Acc, AoS, AoSoA>(plotFile);
+    run<Acc, SoA_SB, AoS>(plotFile);
+    if constexpr(hasSharedMem<Acc>)
+        run<Acc, SoA_SB, SoA_SB>(plotFile);
+    if constexpr(hasSharedMem<Acc>)
+        run<Acc, SoA_SB, AoSoA>(plotFile);
+    run<Acc, AoSoA, AoS>(plotFile);
+    if constexpr(hasSharedMem<Acc>)
+        run<Acc, AoSoA, SoA_SB>(plotFile);
+    if constexpr(hasSharedMem<Acc>)
+        run<Acc, AoSoA, AoSoA>(plotFile);
+    run<Acc, SplitGpuGems, AoS>(plotFile);
 
     plotFile << R"(EOD
 plot $data using 2:xtic(1) ti col axis x1y1, "" using 3 ti col axis x1y2
