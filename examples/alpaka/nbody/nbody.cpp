@@ -185,11 +185,9 @@ struct UpdateKernel
 
         for(int blockOffset = 0; blockOffset < problemSize; blockOffset += sharedElementsPerBlock)
         {
-            ALPAKA_UNROLL()
             for(int j = 0; j < sharedElementsPerBlock; j += threadsPerBlock)
                 sharedView(j) = particles(blockOffset + tbi + j);
             alpaka::syncBlockThreads(acc);
-
             for(int j = 0; j < sharedElementsPerBlock; ++j)
                 pPInteraction(acc, pis, sharedView(j));
             alpaka::syncBlockThreads(acc);
