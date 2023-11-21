@@ -189,9 +189,6 @@ jobs:
             add_toolchain_repo: true
             asan: ON
             install_extra: g++-13
-          - name: build-ubuntu-clang11
-            cxx: clang++-11
-            install_extra: clang-11 libomp-11-dev
           - name: build-ubuntu-clang12
             cxx: clang++-12
             install_extra: clang-12 libomp-12-dev
