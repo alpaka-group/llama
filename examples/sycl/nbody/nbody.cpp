@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "../../common/Stopwatch.hpp"
-#include "../../common/hostname.hpp"
+#include "../../common/env.hpp"
 
 #include <chrono>
 #include <iostream>

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "../common/Stopwatch.hpp"
-#include "../common/hostname.hpp"
+#include "../common/env.hpp"
 #include "../common/ttjet_13tev_june2019.hpp"
 
 #include <boost/functional/hash.hpp>
@@ -127,25 +127,16 @@ auto prepareViewAndHash(Mapping mapping)
 auto main() -> int
 try
 {
+    const auto env = common::captureEnv();
     const auto dataSize = llama::product(extents) * llama::sizeOf<RecordDim>;
-    const auto numThreads = static_cast<std::size_t>(omp_get_max_threads());
-    const char* affinity = std::getenv("GOMP_CPU_AFFINITY"); // NOLINT(concurrency-mt-unsafe)
-    affinity = affinity == nullptr ? "NONE - PLEASE PIN YOUR THREADS!" : affinity;
-    fmt::print(
-        R"(Data size: {}MiB
-Threads: {}
-Affinity: {}
-)",
-        dataSize / 1024 / 1024,
-        numThreads,
-        affinity);
+    fmt::print("Data size: {}MiB\n{}\n", dataSize / 1024 / 1024, env);
 
     std::ofstream plotFile{"viewcopy.sh"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
     plotFile << fmt::format(
         R"(#!/usr/bin/gnuplot -p
-# threads: {} affinity: {}
-set title "viewcopy CPU {}MiB particles on {}"
+# {}
+set title "viewcopy CPU {}MiB particles"
 set style data histograms
 set style fill solid
 set xtics rotate by 45 right
@@ -153,10 +144,8 @@ set key out top center maxrows 4
 set ylabel "throughput [GiB/s]"
 $data << EOD
 )",
-        numThreads,
-        affinity,
-        dataSize / 1024 / 1024,
-        common::hostname());
+        env,
+        dataSize / 1024 / 1024);
 
     plotFile << "\"\"\t\"memcpy\"\t\"memcpy\\\\\\_avx2\"\t\"memcpy(p)\"\t\"memcpy\\\\\\_avx2(p)\"\t\"naive "
                 "copy\"\t\"std::copy\"\t\"aosoa copy(r)\"\t\"aosoa copy(w)\"\t\"naive copy(p)\"\t\"aosoa "

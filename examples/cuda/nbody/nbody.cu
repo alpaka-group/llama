@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "../../common/Stopwatch.hpp"
-#include "../../common/hostname.hpp"
+#include "../../common/env.hpp"
 
 #include <cuda_runtime.h>
 #include <fmt/format.h>
@@ -523,25 +523,24 @@ namespace gpugems
 auto main() -> int
 try
 {
+    const auto env = common::captureEnv();
     std::cout << problemSize / 1024 << "ki particles (" << problemSize * llama::sizeOf<Particle> / 1024 << "kiB)\n"
               << "Caching " << sharedElementsPerBlock << " particles ("
               << sharedElementsPerBlock * llama::sizeOf<SharedMemoryParticle> / 1024 << " kiB) in shared memory\n"
-              << "Using " << threadsPerBlock << " threads per block\n";
+              << "Using " << threadsPerBlock << " threads per block\n"
+              << env << '\n';
+    std::cout << std::fixed;
+
     int device = 0;
     cudaGetDevice(&device);
     cudaDeviceProp prop{};
     cudaGetDeviceProperties(&prop, device);
-    fmt::print(
-        "Running on {}, {}MiB GM, {}kiB SM\n",
-        prop.name,
-        prop.totalGlobalMem / 1024 / 1024,
-        prop.sharedMemPerBlock / 1024);
-    std::cout << std::fixed;
 
     std::ofstream plotFile{"nbody_cuda.sh"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
     plotFile << fmt::format(
         R"(#!/usr/bin/gnuplot -p
+# {}
 set title "nbody CUDA {}ki particles on {}"
 set style data histograms
 set style fill solid
@@ -554,8 +553,9 @@ set y2label "move runtime [s]"
 set y2tics auto
 $data << EOD
 )",
+        env,
         problemSize / 1024,
-        common::hostname());
+        prop.name);
     plotFile << "\"\"\t\"update\"\t\"move\"\n";
 
     using namespace boost::mp11;

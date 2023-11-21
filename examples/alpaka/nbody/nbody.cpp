@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "../../common/Stopwatch.hpp"
-#include "../../common/hostname.hpp"
+#include "../../common/env.hpp"
 
 #include <alpaka/alpaka.hpp>
 #include <alpaka/example/ExampleDefaultAcc.hpp>
@@ -356,21 +356,21 @@ try
     using Size = int;
     using Acc = alpaka::ExampleDefaultAcc<Dim, Size>;
 
+    const auto env = common::captureEnv<Acc>();
     std::cout << problemSize / 1000 << "k particles (" << problemSize * llama::sizeOf<Particle> / 1024 << "kiB)\n"
               << "Caching " << threadsPerBlock << " particles (" << threadsPerBlock * llama::sizeOf<Particle> / 1024
               << " kiB) in shared memory\n"
               << "Reducing on " << elementsPerThread << " particles per thread\n"
-              << "Using " << threadsPerBlock << " threads per block\n";
-    const auto dev = alpaka::getDevByIdx(alpaka::Platform<Acc>{}, 0);
-    const auto props = alpaka::getAccDevProps<Acc>(dev);
-    std::cout << "Running on " << alpaka::getName(dev) << ", " << props.m_sharedMemSizeBytes / 1024 << "kiB SM\n";
+              << "Using " << threadsPerBlock << " threads per block\n"
+              << env << '\n';
     std::cout << std::fixed;
 
     std::ofstream plotFile{"nbody_alpaka.sh"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
     plotFile << fmt::format(
         R"(#!/usr/bin/gnuplot -p
-set title "nbody alpaka {}ki particles on {} on {}"
+# {}
+set title "nbody alpaka {}ki particles on {}"
 set style data histograms
 set style fill solid
 set xtics rotate by 45 right
@@ -382,9 +382,9 @@ set y2label "move runtime [s]"
 set y2tics auto
 $data << EOD
 )",
+        env,
         problemSize / 1024,
-        alpaka::getAccName<Acc>(),
-        common::hostname());
+        alpaka::getAccName<Acc>());
     plotFile << "\"\"\t\"update\"\t\"move\"\n";
 
     run<Acc, AoS, AoS>(plotFile);

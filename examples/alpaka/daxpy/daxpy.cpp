@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "../../common/Stopwatch.hpp"
-#include "../../common/hostname.hpp"
+#include "../../common/env.hpp"
 
 #include <alpaka/alpaka.hpp>
 #include <alpaka/example/ExampleDefaultAcc.hpp>
@@ -156,26 +156,20 @@ void daxpyAlpakaLlama(std::string mappingName, std::ofstream& plotFile, Mapping 
 auto main() -> int
 try
 {
-    const auto numThreads = static_cast<std::size_t>(omp_get_max_threads());
-    const char* affinity = std::getenv("GOMP_CPU_AFFINITY"); // NOLINT(concurrency-mt-unsafe)
-    affinity = affinity == nullptr ? "NONE - PLEASE PIN YOUR THREADS!" : affinity;
+    const auto env = common::captureEnv();
 
     fmt::print(
-        R"({}Mi doubles ({}MiB data)
-Threads: {}
-Affinity: {}
-)",
+        "{}Mi doubles ({}MiB data)\n{}\n",
         problemSize / 1024 / 1024,
         problemSize * sizeof(double) / 1024 / 1024,
-        numThreads,
-        affinity);
+        env);
 
     std::ofstream plotFile{"daxpy.sh"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
     plotFile << fmt::format(
         R"(#!/usr/bin/gnuplot -p
-# threads: {} affinity: {}
-set title "daxpy CPU {}Mi doubles on {}"
+# {}
+set title "daxpy CPU {}Mi doubles"
 set style data histograms
 set style fill solid
 set xtics rotate by 45 right
@@ -184,10 +178,8 @@ set yrange [0:*]
 set ylabel "runtime [s]"
 $data << EOD
 )",
-        numThreads,
-        affinity,
-        problemSize / 1024 / 1024,
-        common::hostname());
+        env,
+        problemSize / 1024 / 1024);
 
     daxpy(plotFile);
 

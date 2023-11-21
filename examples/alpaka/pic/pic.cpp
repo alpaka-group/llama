@@ -5,7 +5,7 @@
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) && !defined(ALPAKA_ACC_GPU_CUDA_ONLY_MODE)
 #    define ALPAKA_ACC_GPU_CUDA_ONLY_MODE
 #endif
-#include "../../common/hostname.hpp"
+#include "../../common/env.hpp"
 
 #include <alpaka/alpaka.hpp>
 #include <alpaka/example/ExampleDefaultAcc.hpp>
@@ -877,29 +877,18 @@ void run(std::ostream& plotFile)
 auto main() -> int
 try
 {
-    const auto numThreads = static_cast<std::size_t>(omp_get_max_threads());
-    const char* affinity = std::getenv("GOMP_CPU_AFFINITY"); // NOLINT(concurrency-mt-unsafe)
-    affinity = affinity == nullptr ? "NONE - PLEASE PIN YOUR THREADS!" : affinity;
-
     using Acc = alpaka::ExampleDefaultAcc<Dim, Size>;
-    auto accName = alpaka::getName(alpaka::getDevByIdx(alpaka::Platform<Acc>{}, 0u));
-    while(static_cast<bool>(std::isspace(accName.back())))
-        accName.pop_back();
-    fmt::print(
-        "Running {} steps with grid {}x{} and {}k particles on {}\n",
-        nsteps,
-        gridX,
-        gridY,
-        numpart / 1000,
-        accName);
+    const auto env = common::captureEnv<Acc>();
+    const auto accName = common::trim(alpaka::getName(alpaka::getDevByIdx(alpaka::Platform<Acc>{}, 0u)));
+    fmt::print("Running {} steps with grid {}x{} and {}k particles\n{}\n", nsteps, gridX, gridY, numpart / 1000, env);
 
     std::ofstream plotFile{"pic.sh"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
     fmt::print(
         plotFile,
         R"aa(#!/usr/bin/gnuplot -p
-# threads: {} affinity: {}
-set title "PIC grid {}x{} {}k particles on {} ({})"
+# {}
+set title "PIC grid {}x{} {}k particles on {}"
 set style data histograms
 set style fill solid
 set xtics rotate by 45 right
@@ -909,14 +898,11 @@ set ylabel "runtime [s]"
 $data << EOD
 ""	"clr J"	"integr"	" dep J"	" bnd J"	"adv B1"	"bnd B1"	" adv E"	" bnd E"	"adv B2"	"bnd B2"	"total"
 )aa",
-        numThreads,
-        affinity,
+        env,
         gridX,
         gridY,
         numpart / 1000,
-        accName,
-        common::hostname());
-
+        accName);
 
     // FieldMapping: AoS RM, AoS CM, AoS Mo,
     //               SoA RM, SoA CM, SoA Mo,
