@@ -217,7 +217,7 @@
 			#    define LLAMA_EXPORT
 			#endif
 
-			// TODO(bgruber): clang 10-15 (libstdc++ from gcc 11.2 or gcc 12.1) fail to compile this currently with the issue
+			// TODO(bgruber): clang 12-15 (libstdc++ from gcc 11.2 or gcc 12.1) fail to compile this currently with the issue
 			// described here:
 			// https://stackoverflow.com/questions/64300832/why-does-clang-think-gccs-subrange-does-not-satisfy-gccs-ranges-begin-functi
 			// Intel LLVM compiler is also using the clang frontend
