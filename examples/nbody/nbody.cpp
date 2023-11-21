@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "../common/Stopwatch.hpp"
-#include "../common/hostname.hpp"
+#include "../common/env.hpp"
 
 #include <fmt/format.h>
 #include <fstream>
@@ -1549,36 +1549,15 @@ auto arePositionsClose(const std::vector<Vec3>& finalPositions) -> bool
 auto main() -> int
 try
 {
-#ifdef HAVE_XSIMD
-    using Simd = xsimd::batch<FP>;
-    // using Simd = xsimd::make_sized_batch_t<FP, 16>;
-    constexpr auto simdLanes = Simd::size;
-#else
-    constexpr auto simdLanes = 1;
-#endif
-
-    const auto numThreads = static_cast<std::size_t>(omp_get_max_threads());
-    const char* affinity = std::getenv("GOMP_CPU_AFFINITY"); // NOLINT(concurrency-mt-unsafe)
-    affinity = affinity == nullptr ? "NONE - PLEASE PIN YOUR THREADS!" : affinity;
-
-    fmt::print(
-        R"({}ki particles ({}kiB)
-Threads: {}
-Affinity: {}
-SIMD lanes: {}
-)",
-        problemSize / 1024,
-        problemSize * sizeof(FP) * 7 / 1024,
-        numThreads,
-        affinity,
-        simdLanes);
+    const auto env = common::captureEnv();
+    fmt::print("{}ki particles ({}kiB)\n{}\n", problemSize / 1024, problemSize * sizeof(FP) * 7 / 1024, env);
 
     std::ofstream plotFile{"nbody.sh"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
     plotFile << fmt::format(
         R"(#!/usr/bin/gnuplot -p
-# threads: {} affinity: {} SIMD lanes: {}
-set title "nbody CPU {}ki particles on {}"
+# {}
+set title "nbody CPU {}ki particles"
 set style data histograms
 set style fill solid
 set xtics rotate by 45 right
@@ -1590,11 +1569,8 @@ set y2label "move runtime [s]"
 set y2tics auto
 $data << EOD
 )",
-        numThreads,
-        affinity,
-        simdLanes,
-        problemSize / 1024,
-        common::hostname());
+        env,
+        problemSize / 1024);
     plotFile << "\"\"\t\"update\"\t\"move\"\n";
 
     // Note:
@@ -1635,6 +1611,7 @@ $data << EOD
     finalPositions.push_back(manualAoSoAManualAVX::main(plotFile, false));
 #endif
 #ifdef HAVE_XSIMD
+    using Simd = xsimd::batch<FP>;
     const auto maxThreads = std::thread::hardware_concurrency();
     for(int threads = 1; threads <= std::thread::hardware_concurrency(); threads *= 2)
     {

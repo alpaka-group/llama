@@ -9,7 +9,7 @@ if (NOT TARGET llama::llama)
 	find_package(llama REQUIRED)
 endif()
 find_package(alpaka 1.0 REQUIRED)
-alpaka_add_executable(${PROJECT_NAME} daxpy.cpp ../../common/Stopwatch.hpp ../../common/hostname.hpp)
+alpaka_add_executable(${PROJECT_NAME} daxpy.cpp ../../common/Stopwatch.hpp ../../common/env.hpp)
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 target_link_libraries(${PROJECT_NAME} PRIVATE llama::llama OpenMP::OpenMP_CXX alpaka::alpaka)
 

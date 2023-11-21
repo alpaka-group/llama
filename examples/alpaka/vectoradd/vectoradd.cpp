@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: CC0-1.0
 
 #include "../../common/Stopwatch.hpp"
-#include "../../common/hostname.hpp"
+#include "../../common/env.hpp"
 
 #include <alpaka/alpaka.hpp>
 #include <alpaka/example/ExampleDefaultAcc.hpp>
@@ -189,14 +189,18 @@ catch(const std::exception& e)
 
 auto main() -> int
 {
+    using Acc = alpaka::ExampleDefaultAcc<alpaka::DimInt<1>, Size>;
+    const auto env = common::captureEnv<Acc>();
     std::cout << problemSize / 1000 / 1000 << "M values "
-              << "(" << problemSize * sizeof(float) / 1024 << "kiB)\n";
+              << "(" << problemSize * sizeof(float) / 1024 << "kiB)\n"
+              << env << '\n';
 
     std::ofstream plotFile{"vectoradd_alpaka.sh"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
     plotFile << fmt::format(
         R"(#!/usr/bin/gnuplot -p
-set title "vectoradd alpaka {}Mi elements on {} on {}"
+# {}
+set title "vectoradd alpaka {}Mi elements on {}"
 set style data histograms
 set style fill solid
 set xtics rotate by 45 right
@@ -204,9 +208,9 @@ set yrange [0:*]
 set ylabel "runtime [s]"
 $data << EOD
 )",
+        env,
         problemSize / 1024 / 1024,
-        alpaka::getAccName<alpaka::ExampleDefaultAcc<alpaka::DimInt<1>, Size>>(),
-        common::hostname());
+        alpaka::getAccName<Acc>());
 
     boost::mp11::mp_for_each<boost::mp11::mp_iota_c<6>>([&](auto ic) { run<decltype(ic)::value>(plotFile); });
 

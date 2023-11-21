@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "../common/Stopwatch.hpp"
-#include "../common/hostname.hpp"
+#include "../common/env.hpp"
 
 #include <fmt/format.h>
 #include <fstream>
@@ -315,14 +315,17 @@ namespace manualAoSoA
 auto main() -> int
 try
 {
+    const auto env = common::captureEnv();
     std::cout << problemSize / 1000 / 1000 << "M values "
-              << "(" << problemSize * sizeof(float) / 1024 << "kiB)\n";
+              << "(" << problemSize * sizeof(float) / 1024 << "kiB)\n"
+              << env << '\n';
 
     std::ofstream plotFile{"vectoradd.sh"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
     plotFile << fmt::format(
         R"(#!/usr/bin/gnuplot -p
-set title "vectoradd CPU {}Mi elements on {}"
+# {}
+set title "vectoradd CPU {}Mi elements"
 set style data histograms
 set style fill solid
 set xtics rotate by 45 right
@@ -330,8 +333,8 @@ set yrange [0:*]
 set ylabel "runtime [s]"
 $data << EOD
 )",
-        problemSize / 1024 / 1024,
-        common::hostname());
+        env,
+        problemSize / 1024 / 1024);
 
     int r = 0;
     boost::mp11::mp_for_each<boost::mp11::mp_iota_c<6>>([&](auto ic)
