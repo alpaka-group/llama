@@ -162,16 +162,16 @@ namespace llama
                     return e - nameArray.begin();
                 };
 
-                auto size1 = removeAllOccurences(nameArray, nameArray.size(), std::string_view{"struct "});
-                auto size2 = removeAllOccurences(nameArray, size1, std::string_view{"class "});
+                auto size = removeAllOccurences(nameArray, nameArray.size(), std::string_view{"struct "});
+                size = removeAllOccurences(nameArray, size, std::string_view{"class "});
 #else
-                auto size2 = nameArray.size();
+                auto size = nameArray.size();
 #endif
 
-                auto size3Func = [&](auto& nameArray) constexpr
+                if(size > 3)
                 {
                     // remove spaces between closing template angle brackets and after commas
-                    auto e = nameArray.begin() + size2;
+                    auto e = nameArray.begin() + size;
                     for(auto b = nameArray.begin(); b < e - 2; b++)
                     {
                         if((b[0] == '>' && b[1] == ' ' && b[2] == '>') || (b[0] == ',' && b[1] == ' '))
@@ -180,11 +180,10 @@ namespace llama
                             e--;
                         }
                     }
-                    return e - nameArray.begin();
-                };
-                auto size3 = size3Func(nameArray);
+                    size = e - nameArray.begin();
+                }
 
-                return std::pair{nameArray, size3};
+                return std::pair{nameArray, size};
             }();
 
             return resizeArray<arrAndSize.second>(arrAndSize.first);
