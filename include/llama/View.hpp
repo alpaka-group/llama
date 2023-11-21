@@ -741,6 +741,11 @@ namespace llama
         using size_type = typename ArrayExtents::value_type;
 
     public:
+        /// Creates a SubView given an offset. The parent view is default constructed.
+        LLAMA_FN_HOST_ACC_INLINE explicit SubView(ArrayIndex offset) : offset(offset)
+        {
+        }
+
         /// Creates a SubView given a parent \ref View and offset.
         template<typename StoredParentViewFwd>
         LLAMA_FN_HOST_ACC_INLINE SubView(StoredParentViewFwd&& parentView, ArrayIndex offset)
