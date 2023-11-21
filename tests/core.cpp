@@ -458,9 +458,14 @@ namespace
     } // namespace ns
 } // namespace
 
+struct A
+{
+};
+
 TEST_CASE("qualifiedTypeName")
 {
     CHECK(llama::qualifiedTypeName<int> == "int");
+    CHECK(llama::qualifiedTypeName<A> == "A");
     CHECK(llama::qualifiedTypeName<tag::A> == "tag::A");
     CHECK(llama::qualifiedTypeName<tag::Normal> == "tag::Normal");
     CHECK(llama::qualifiedTypeName<unsigned int> == "unsigned int");
@@ -504,6 +509,7 @@ TEST_CASE("qualifiedTypeName")
 TEST_CASE("structName")
 {
     CHECK(llama::structName<int>() == "int");
+    CHECK(llama::structName<A>() == "A");
     CHECK(llama::structName(int{}) == "int");
     CHECK(llama::structName<tag::A>() == "A");
     CHECK(llama::structName(tag::A{}) == "A");
