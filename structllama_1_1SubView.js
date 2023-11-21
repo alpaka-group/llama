@@ -10,6 +10,7 @@ var structllama_1_1SubView =
     [ "ParentView", "structllama_1_1SubView.html#a68b627423bc53908fd8a08ca8602148d", null ],
     [ "RecordDim", "structllama_1_1SubView.html#a51e9369860cf67eecc4438caf0be05d2", null ],
     [ "StoredParentView", "structllama_1_1SubView.html#ae8ec3d55c74216060bf28e3e7e92993f", null ],
+    [ "SubView", "structllama_1_1SubView.html#aac077f7ba19fc7fddfa3d99bb0cba502", null ],
     [ "SubView", "structllama_1_1SubView.html#adbb2ed9591e50121c2b732e3c1cc570b", null ],
     [ "accessor", "structllama_1_1SubView.html#a8aef2c5a7e128bbc93ec199cb9e2b8d1", null ],
     [ "accessor", "structllama_1_1SubView.html#a11f00deb7131b1d544d7ac1b7ccc008b", null ],

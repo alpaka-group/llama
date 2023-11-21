@@ -120,6 +120,9 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:aac077f7ba19fc7fddfa3d99bb0cba502"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1SubView.html#aac077f7ba19fc7fddfa3d99bb0cba502">SubView</a> (<a class="el" href="structllama_1_1SubView.html#a38e517de91412330d6bc3c28a217bf0a">ArrayIndex</a> <a class="el" href="structllama_1_1SubView.html#a247053b7eff2707c3551da7c6756a9c3">offset</a>)</td></tr>
+<tr class="memdesc:aac077f7ba19fc7fddfa3d99bb0cba502"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <a class="el" href="structllama_1_1SubView.html">SubView</a> given an offset. The parent view is default constructed.  <a href="structllama_1_1SubView.html#aac077f7ba19fc7fddfa3d99bb0cba502">More...</a><br /></td></tr>
+<tr class="separator:aac077f7ba19fc7fddfa3d99bb0cba502"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adbb2ed9591e50121c2b732e3c1cc570b"><td class="memTemplParams" colspan="2">template&lt;typename StoredParentViewFwd &gt; </td></tr>
 <tr class="memitem:adbb2ed9591e50121c2b732e3c1cc570b"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1SubView.html#adbb2ed9591e50121c2b732e3c1cc570b">SubView</a> (StoredParentViewFwd &amp;&amp;<a class="el" href="structllama_1_1SubView.html#a0e0c37b5281cf4f86f69377790f79f42">parentView</a>, <a class="el" href="structllama_1_1SubView.html#a38e517de91412330d6bc3c28a217bf0a">ArrayIndex</a> <a class="el" href="structllama_1_1SubView.html#a247053b7eff2707c3551da7c6756a9c3">offset</a>)</td></tr>
 <tr class="memdesc:adbb2ed9591e50121c2b732e3c1cc570b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <a class="el" href="structllama_1_1SubView.html">SubView</a> given a parent <a class="el" href="structllama_1_1View.html">View</a> and offset.  <a href="structllama_1_1SubView.html#adbb2ed9591e50121c2b732e3c1cc570b">More...</a><br /></td></tr>
@@ -360,8 +363,40 @@ template&lt;typename TStoredParentView &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="aac077f7ba19fc7fddfa3d99bb0cba502"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac077f7ba19fc7fddfa3d99bb0cba502">&#9670;&nbsp;</a></span>SubView() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename TStoredParentView &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structllama_1_1SubView.html">llama::SubView</a>&lt; TStoredParentView &gt;::<a class="el" href="structllama_1_1SubView.html">SubView</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structllama_1_1SubView.html#a38e517de91412330d6bc3c28a217bf0a">ArrayIndex</a>&#160;</td>
+          <td class="paramname"><em>offset</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Creates a <a class="el" href="structllama_1_1SubView.html">SubView</a> given an offset. The parent view is default constructed. </p>
+
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00745">745</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+
+</div>
+</div>
 <a id="adbb2ed9591e50121c2b732e3c1cc570b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adbb2ed9591e50121c2b732e3c1cc570b">&#9670;&nbsp;</a></span>SubView()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#adbb2ed9591e50121c2b732e3c1cc570b">&#9670;&nbsp;</a></span>SubView() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -400,7 +435,7 @@ template&lt;typename StoredParentViewFwd &gt; </div>
 
 <p>Creates a <a class="el" href="structllama_1_1SubView.html">SubView</a> given a parent <a class="el" href="structllama_1_1View.html">View</a> and offset. </p>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00746">746</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00751">751</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -431,7 +466,7 @@ template&lt;typename TStoredParentView &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00762">762</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00767">767</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -461,7 +496,7 @@ template&lt;typename TStoredParentView &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00767">767</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00772">772</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -491,7 +526,7 @@ template&lt;typename TStoredParentView &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00830">830</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00835">835</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -521,7 +556,7 @@ template&lt;typename TStoredParentView &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00835">835</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00840">840</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -551,7 +586,7 @@ template&lt;typename TStoredParentView &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00772">772</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00777">777</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -581,7 +616,7 @@ template&lt;typename TStoredParentView &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00752">752</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00757">757</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -611,7 +646,7 @@ template&lt;typename TStoredParentView &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00757">757</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00762">762</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -642,7 +677,7 @@ template&lt;typename TStoredParentView &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00783">783</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00788">788</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -675,7 +710,7 @@ template&lt;typename TStoredParentView &gt; </div>
 
 <p>Same as <a class="el" href="structllama_1_1View.html#a821703da22b47469141cd8b65f96a1ec">View::operator()(ArrayIndex)</a>, but shifted by the offset of this <a class="el" href="structllama_1_1SubView.html">SubView</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00778">778</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00783">783</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -708,7 +743,7 @@ template&lt;typename... Indices&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00803">803</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00808">808</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -743,7 +778,7 @@ template&lt;typename... Indices&gt; </div>
 
 <p>Same as corresponding operator in <a class="el" href="structllama_1_1View.html">View</a>, but shifted by the offset of this <a class="el" href="structllama_1_1SubView.html">SubView</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00790">790</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00795">795</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -776,7 +811,7 @@ template&lt;std::size_t... Coords&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00822">822</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00827">827</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -809,7 +844,7 @@ template&lt;std::size_t... Coords&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00816">816</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00821">821</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -829,7 +864,7 @@ template&lt;typename TStoredParentView &gt; </div>
 </div><div class="memdoc">
 <p>offset by which this view's <a class="el" href="structllama_1_1ArrayIndex.html">ArrayIndex</a> indices are shifted when passed to the parent view. </p>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00841">841</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00846">846</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -847,7 +882,7 @@ template&lt;typename TStoredParentView &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00840">840</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00845">845</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -860,7 +895,7 @@ template&lt;typename TStoredParentView &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="structllama_1_1SubView.html">SubView</a></li>
-    <li class="footer">Generated on Tue Nov 21 2023 09:51:34 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Nov 21 2023 13:57:32 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
