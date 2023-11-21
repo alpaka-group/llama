@@ -2961,6 +2961,9 @@ namespace llama
 		#if __has_include(<alpaka/alpaka.hpp>)
 		#    include <alpaka/alpaka.hpp>
 		#endif
+		#if __has_include(<sycl/sycl.hpp>)
+		#    include <sycl/sycl.hpp>
+		#endif
 
 		namespace llama::bloballoc
 		{
@@ -3108,6 +3111,7 @@ namespace llama
 		#endif
 
 		#if __has_include(<alpaka/alpaka.hpp>)
+		    /// Allocates alpaka buffers as blobs.
 		    LLAMA_EXPORT
 		    template<typename Size, typename Dev>
 		    struct AlpakaBuf
@@ -3118,6 +3122,32 @@ namespace llama
 		        inline auto operator()(std::integral_constant<std::size_t, Alignment>, std::size_t count) const
 		        {
 		            return alpaka::allocBuf<std::byte, Size>(dev, static_cast<Size>(count));
+		        }
+		    };
+		#endif
+
+		#if __has_include(<sycl/sycl.hpp>)
+		    /// Allocates shared USM memory using sycl::aligned_alloc_shared. The memory is managed by a std::unique_ptr with a
+		    /// deleter that calles sycl::free. If you want to use a view created with this allocator in a kernel, call \ref
+		    /// shallowCopy on the view before passing it to the kernel.
+		    LLAMA_EXPORT
+		    struct SyclMallocShared
+		    {
+		        sycl::queue queue;
+
+		        static auto makeDeleter(sycl::queue q)
+		        {
+		            // create lambda in function independent of FieldAlignment template paramter to avoid different blob types
+		            return [q](void* p) { sycl::free(p, q); };
+		        }
+
+		        template<std::size_t FieldAlignment>
+		        inline auto operator()(std::integral_constant<std::size_t, FieldAlignment>, std::size_t count) const
+		        {
+		            std::byte* p = sycl::aligned_alloc_shared<std::byte>(FieldAlignment, count, queue);
+		            if(reinterpret_cast<std::uintptr_t>(p) & (FieldAlignment - 1 != 0u))
+		                throw std::runtime_error{"sycl::malloc_shared does not align sufficiently"};
+		            return std::unique_ptr<std::byte[], decltype(makeDeleter(queue))>(p, makeDeleter(queue));
 		        }
 		    };
 		#endif
