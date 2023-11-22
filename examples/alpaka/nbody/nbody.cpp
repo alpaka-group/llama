@@ -45,7 +45,7 @@ constexpr auto runUpate = true; // run update step. Useful to disable for benchm
 constexpr auto elementsPerThread = xsimd::batch<float>::size;
 constexpr auto threadsPerBlock = 1;
 constexpr auto sharedElementsPerBlock = 1;
-constexpr auto aosoaLanes = xsimd::batch<float>::size; // vectors
+constexpr auto aosoaLanes = elementsPerThread;
 #elif ANY_GPU_ENABLED
 constexpr auto threadsPerBlock = 256;
 constexpr auto sharedElementsPerBlock = 512;
@@ -144,7 +144,7 @@ LLAMA_FN_HOST_ACC_INLINE void pPInteraction(const Acc& acc, ParticleRefI& pis, P
     const auto distSqr = +eps2 + dist(tag::X{}) + dist(tag::Y{}) + dist(tag::Z{});
     const auto distSixth = distSqr * distSqr * distSqr;
     const auto invDistCube
-        = allowRsqrt ? alpaka::math::rsqrt(acc, distSixth) : (1.0f / alpaka::math::sqrt(acc, distSixth));
+        = allowRsqrt ? alpaka::math::rsqrt(acc, distSixth) : (FP{1} / alpaka::math::sqrt(acc, distSixth));
     const auto sts = (pj(tag::Mass{}) * timestep) * invDistCube;
     pis(tag::Vel{}) += dist * sts;
 }
