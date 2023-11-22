@@ -20,6 +20,14 @@ struct Stopwatch
         return seconds;
     }
 
+    auto getAndReset() -> double
+    {
+        const auto end = clock::now();
+        const auto seconds = std::chrono::duration<double>{end - last}.count();
+        last = clock::now();
+        return seconds;
+    }
+
 private:
     clock::time_point last = clock::now();
 };

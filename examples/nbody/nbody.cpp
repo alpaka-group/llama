@@ -1,6 +1,7 @@
 // Copyright 2022 Bernhard Manfred Gruber
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
+#include "../common/Stats.hpp"
 #include "../common/Stopwatch.hpp"
 #include "../common/env.hpp"
 
@@ -28,7 +29,7 @@
 using FP = float;
 
 constexpr auto problemSize = 16 * 1024;
-constexpr auto steps = 5;
+constexpr auto steps = 20; ///< number of steps to calculate, excluding 1 warmup run
 constexpr auto countFieldAccesses = false;
 constexpr auto heatmap = false;
 constexpr auto dumpMapping = false;
@@ -363,9 +364,9 @@ namespace usellama
             particles.mapping().fieldHits(particles.blobs()) = {};
         watch.printAndReset("init");
 
-        double sumUpdate = 0;
-        double sumMove = 0;
-        for(std::size_t s = 0; s < steps; ++s)
+        common::Stats statsUpdate;
+        common::Stats statsMove;
+        for(std::size_t s = 0; s < steps + 1; ++s)
         {
 #ifdef HAVE_XSIMD
             constexpr auto width = llama::simdLanesWithFullVectorsFor<Particle, MakeBatch>;
@@ -378,7 +379,7 @@ namespace usellama
                 else
 #endif
                     update(particles);
-                sumUpdate += watch.printAndReset("update", '\t');
+                statsUpdate(watch.printAndReset("update", '\t'));
             }
 #ifdef HAVE_XSIMD
             if constexpr(UseSimd)
@@ -386,9 +387,10 @@ namespace usellama
             else
 #endif
                 move(particles);
-            sumMove += watch.printAndReset("move");
+            statsMove(watch.printAndReset("move"));
         }
-        plotFile << std::quoted(title) << "\t" << sumUpdate / steps << '\t' << sumMove / steps << '\n';
+        plotFile << std::quoted(title) << "\t" << statsUpdate.mean() << "\t" << statsUpdate.sem() << '\t'
+                 << statsMove.mean() << "\t" << statsMove.sem() << std::endl;
 
         if constexpr(heatmap)
             std::ofstream("nbody_heatmap_" + mappingName(Mapping) + ".sh") << particles.mapping().toGnuplotScript();
@@ -465,19 +467,20 @@ namespace manualAoS
         }
         watch.printAndReset("init");
 
-        double sumUpdate = 0;
-        double sumMove = 0;
-        for(std::size_t s = 0; s < steps; ++s)
+        common::Stats statsUpdate;
+        common::Stats statsMove;
+        for(std::size_t s = 0; s < steps + 1; ++s)
         {
             if constexpr(runUpate)
             {
                 update(particles.data());
-                sumUpdate += watch.printAndReset("update", '\t');
+                statsUpdate(watch.printAndReset("update", '\t'));
             }
             move(particles.data());
-            sumMove += watch.printAndReset("move");
+            statsMove(watch.printAndReset("move"));
         }
-        plotFile << std::quoted(title) << "\t" << sumUpdate / steps << '\t' << sumMove / steps << '\n';
+        plotFile << std::quoted(title) << "\t" << statsUpdate.mean() << "\t" << statsUpdate.sem() << '\t'
+                 << statsMove.mean() << "\t" << statsMove.sem() << std::endl;
 
         return printReferenceParticle(particles[referenceParticleIndex].pos);
     }
@@ -572,19 +575,20 @@ namespace manualSoA
         }
         watch.printAndReset("init");
 
-        double sumUpdate = 0;
-        double sumMove = 0;
-        for(std::size_t s = 0; s < steps; ++s)
+        common::Stats statsUpdate;
+        common::Stats statsMove;
+        for(std::size_t s = 0; s < steps + 1; ++s)
         {
             if constexpr(runUpate)
             {
                 update(posx.data(), posy.data(), posz.data(), velx.data(), vely.data(), velz.data(), mass.data());
-                sumUpdate += watch.printAndReset("update", '\t');
+                statsUpdate(watch.printAndReset("update", '\t'));
             }
             move(posx.data(), posy.data(), posz.data(), velx.data(), vely.data(), velz.data());
-            sumMove += watch.printAndReset("move");
+            statsMove(watch.printAndReset("move"));
         }
-        plotFile << std::quoted(title) << "\t" << sumUpdate / steps << '\t' << sumMove / steps << '\n';
+        plotFile << std::quoted(title) << "\t" << statsUpdate.mean() << "\t" << statsUpdate.sem() << '\t'
+                 << statsMove.mean() << "\t" << statsMove.sem() << std::endl;
 
         return printReferenceParticle(
             {posx[referenceParticleIndex], posy[referenceParticleIndex], posz[referenceParticleIndex]});
@@ -754,9 +758,9 @@ namespace manualAoSoA
         }
         watch.printAndReset("init");
 
-        double sumUpdate = 0;
-        double sumMove = 0;
-        for(std::size_t s = 0; s < steps; ++s)
+        common::Stats statsUpdate;
+        common::Stats statsMove;
+        for(std::size_t s = 0; s < steps + 1; ++s)
         {
             if constexpr(runUpate)
             {
@@ -764,12 +768,13 @@ namespace manualAoSoA
                     updateTiled(particles.data());
                 else
                     update(particles.data());
-                sumUpdate += watch.printAndReset("update", '\t');
+                statsUpdate(watch.printAndReset("update", '\t'));
             }
             move(particles.data());
-            sumMove += watch.printAndReset("move");
+            statsMove(watch.printAndReset("move"));
         }
-        plotFile << std::quoted(title) << "\t" << sumUpdate / steps << '\t' << sumMove / steps << '\n';
+        plotFile << std::quoted(title) << "\t" << statsUpdate.mean() << "\t" << statsUpdate.sem() << '\t'
+                 << statsMove.mean() << "\t" << statsMove.sem() << std::endl;
 
         const auto& refBlock = particles[referenceParticleIndex / Lanes];
         const auto refLane = referenceParticleIndex % Lanes;
@@ -971,9 +976,9 @@ namespace manualAoSoAManualAVX
         }
         watch.printAndReset("init");
 
-        double sumUpdate = 0;
-        double sumMove = 0;
-        for(std::size_t s = 0; s < steps; ++s)
+        common::Stats statsUpdate;
+        common::Stats statsMove;
+        for(std::size_t s = 0; s < steps + 1; ++s)
         {
             if constexpr(runUpate)
             {
@@ -981,12 +986,13 @@ namespace manualAoSoAManualAVX
                     update1(particles.data());
                 else
                     update8(particles.data());
-                sumUpdate += watch.printAndReset("update", '\t');
+                statsUpdate(watch.printAndReset("update", '\t'));
             }
             move(particles.data());
-            sumMove += watch.printAndReset("move");
+            statsMove(watch.printAndReset("move"));
         }
-        plotFile << std::quoted(title) << "\t" << sumUpdate / steps << '\t' << sumMove / steps << '\n';
+        plotFile << std::quoted(title) << "\t" << statsUpdate.mean() << "\t" << statsUpdate.sem() << '\t'
+                 << statsMove.mean() << "\t" << statsMove.sem() << std::endl;
 
         const auto& refBlock = particles[referenceParticleIndex / lanes];
         const auto refLane = referenceParticleIndex % lanes;
@@ -1253,9 +1259,9 @@ namespace manualAoSoASIMD
         }
         watch.printAndReset("init");
 
-        double sumUpdate = 0;
-        double sumMove = 0;
-        for(std::size_t s = 0; s < steps; ++s)
+        common::Stats statsUpdate;
+        common::Stats statsMove;
+        for(std::size_t s = 0; s < steps + 1; ++s)
         {
             if constexpr(runUpate)
             {
@@ -1268,12 +1274,13 @@ namespace manualAoSoASIMD
                     else
                         update8(particles.data(), threads);
                 }
-                sumUpdate += watch.printAndReset("update", '\t');
+                statsUpdate(watch.printAndReset("update", '\t'));
             }
             move(particles.data(), threads);
-            sumMove += watch.printAndReset("move");
+            statsMove(watch.printAndReset("move"));
         }
-        plotFile << std::quoted(title) << "\t" << sumUpdate / steps << '\t' << sumMove / steps << '\n';
+        plotFile << std::quoted(title) << "\t" << statsUpdate.mean() << "\t" << statsUpdate.sem() << '\t'
+                 << statsMove.mean() << "\t" << statsMove.sem() << std::endl;
 
 
         const auto& refBlock = particles[referenceParticleIndex / Simd::size];
@@ -1390,19 +1397,20 @@ namespace manualAoSSIMD
         }
         watch.printAndReset("init");
 
-        double sumUpdate = 0;
-        double sumMove = 0;
-        for(std::size_t s = 0; s < steps; ++s)
+        common::Stats statsUpdate;
+        common::Stats statsMove;
+        for(std::size_t s = 0; s < steps + 1; ++s)
         {
             if constexpr(runUpate)
             {
                 update<Simd>(particles.data(), threads);
-                sumUpdate += watch.printAndReset("update", '\t');
+                statsUpdate(watch.printAndReset("update", '\t'));
             }
             move<Simd>(particles.data(), threads);
-            sumMove += watch.printAndReset("move");
+            statsMove(watch.printAndReset("move"));
         }
-        plotFile << std::quoted(title) << "\t" << sumUpdate / steps << '\t' << sumMove / steps << '\n';
+        plotFile << std::quoted(title) << "\t" << statsUpdate.mean() << "\t" << statsUpdate.sem() << '\t'
+                 << statsMove.mean() << "\t" << statsMove.sem() << std::endl;
 
         return printReferenceParticle(particles[referenceParticleIndex].pos);
     }
@@ -1495,9 +1503,9 @@ namespace manualSoASIMD
         }
         watch.printAndReset("init");
 
-        double sumUpdate = 0;
-        double sumMove = 0;
-        for(std::size_t s = 0; s < steps; ++s)
+        common::Stats statsUpdate;
+        common::Stats statsMove;
+        for(std::size_t s = 0; s < steps + 1; ++s)
         {
             if constexpr(runUpate)
             {
@@ -1510,12 +1518,13 @@ namespace manualSoASIMD
                     velz.data(),
                     mass.data(),
                     threads);
-                sumUpdate += watch.printAndReset("update", '\t');
+                statsUpdate(watch.printAndReset("update", '\t'));
             }
             move<Simd>(posx.data(), posy.data(), posz.data(), velx.data(), vely.data(), velz.data(), threads);
-            sumMove += watch.printAndReset("move");
+            statsMove(watch.printAndReset("move"));
         }
-        plotFile << std::quoted(title) << "\t" << sumUpdate / steps << '\t' << sumMove / steps << '\n';
+        plotFile << std::quoted(title) << "\t" << statsUpdate.mean() << "\t" << statsUpdate.sem() << '\t'
+                 << statsMove.mean() << "\t" << statsMove.sem() << std::endl;
 
         return printReferenceParticle(
             {posx[referenceParticleIndex], posy[referenceParticleIndex], posz[referenceParticleIndex]});
@@ -1559,8 +1568,9 @@ try
 # {}
 set title "nbody CPU {}ki particles"
 set style data histograms
-set style fill solid
-set xtics rotate by 45 right
+set style histogram errorbars
+set style fill solid border -1
+set xtics rotate by 45 right nomirror
 set key out top center maxrows 3
 set yrange [0:*]
 set y2range [0:*]
@@ -1568,10 +1578,10 @@ set ylabel "update runtime [s]"
 set y2label "move runtime [s]"
 set y2tics auto
 $data << EOD
+""	"update"	"update_sem"	"move"	"move_sem"
 )",
         env,
         problemSize / 1024);
-    plotFile << "\"\"\t\"update\"\t\"move\"\n";
 
     // Note:
     // Tiled versions did not give any performance benefit, so they are disabled by default.
@@ -1642,7 +1652,7 @@ $data << EOD
     const auto ok = arePositionsClose(finalPositions);
 
     plotFile << R"(EOD
-plot $data using 2:xtic(1) ti col axis x1y1, "" using 3 ti col axis x1y2
+plot $data using 2:3:xtic(1) ti col axis x1y1, "" using 4:5 ti col axis x1y2
 )";
     std::cout << "Plot with: ./nbody.sh\n";
 

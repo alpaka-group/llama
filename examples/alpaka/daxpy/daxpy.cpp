@@ -1,6 +1,7 @@
 // Copyright 2022 Bernhard Manfred Gruber
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
+#include "../../common/Stats.hpp"
 #include "../../common/Stopwatch.hpp"
 #include "../../common/env.hpp"
 
@@ -15,8 +16,7 @@
 
 constexpr auto problemSize = std::size_t{1024} * 1024 * 128;
 constexpr auto gpuBlockSize = std::size_t{256};
-constexpr auto warmupSteps = 1;
-constexpr auto steps = 5;
+constexpr auto steps = 20; // number of steps to calculate, excluding 1 warmup run
 constexpr auto alpha = 3.14;
 
 static_assert(problemSize % gpuBlockSize == 0);
@@ -40,18 +40,15 @@ void daxpy(std::ofstream& plotFile)
     }
     watch.printAndReset("init");
 
-    double sum = 0;
-    for(std::size_t s = 0; s < warmupSteps + steps; ++s)
+    common::Stats stats;
+    for(std::size_t s = 0; s < steps + 1; ++s)
     {
 #pragma omp parallel for
         for(std::ptrdiff_t i = 0; i < problemSize; i++)
             z[i] = alpha * x[i] + y[i];
-        if(s < warmupSteps)
-            watch.printAndReset("daxpy (warmup)");
-        else
-            sum += watch.printAndReset("daxpy");
+        stats(watch.printAndReset("daxpy"));
     }
-    plotFile << std::quoted(title) << "\t" << sum / steps << '\n';
+    plotFile << std::quoted(title) << "\t" << stats.mean() << "\t" << stats.sem() << '\n';
 }
 
 template<typename Acc>
@@ -116,8 +113,8 @@ void daxpyAlpakaLlama(std::string mappingName, std::ofstream& plotFile, Mapping 
         alpaka::Vec<Dim, Size>{Size{1}});
     watch = {};
 
-    double sum = 0;
-    for(std::size_t s = 0; s < warmupSteps + steps; ++s)
+    common::Stats stats;
+    for(std::size_t s = 0; s < steps + 1; ++s)
     {
         auto kernel = [] ALPAKA_FN_ACC(
                           const Acc& acc,
@@ -137,10 +134,7 @@ void daxpyAlpakaLlama(std::string mappingName, std::ofstream& plotFile, Mapping 
             llama::shallowCopy(viewY),
             alpha,
             llama::shallowCopy(viewZ));
-        if(s < warmupSteps)
-            watch.printAndReset("daxpy (warmup)");
-        else
-            sum += watch.printAndReset("daxpy");
+        stats(watch.printAndReset("daxpy"));
     }
 
     for(std::size_t i = 0; i < Mapping::blobCount; i++)
@@ -150,7 +144,7 @@ void daxpyAlpakaLlama(std::string mappingName, std::ofstream& plotFile, Mapping 
     }
     watch.printAndReset("copy D->H");
 
-    plotFile << std::quoted(title) << "\t" << sum / steps << '\n';
+    plotFile << std::quoted(title) << "\t" << stats.mean() << "\t" << stats.sem() << '\n';
 }
 
 auto main() -> int
@@ -164,19 +158,21 @@ try
         problemSize * sizeof(double) / 1024 / 1024,
         env);
 
-    std::ofstream plotFile{"daxpy.sh"};
+    std::ofstream plotFile{"daxpy_alpaka.sh"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
     plotFile << fmt::format(
         R"(#!/usr/bin/gnuplot -p
 # {}
 set title "daxpy CPU {}Mi doubles"
 set style data histograms
-set style fill solid
-set xtics rotate by 45 right
+set style histogram errorbars
+set style fill solid border -1
+set xtics rotate by 45 right nomirror
 set key off
 set yrange [0:*]
 set ylabel "runtime [s]"
 $data << EOD
+""	"runtime"	"runtime_sem"
 )",
         env,
         problemSize / 1024 / 1024);
@@ -261,9 +257,9 @@ $data << EOD
             llama::Constant<10>>{extents});
 
     plotFile << R"(EOD
-plot $data using 2:xtic(1)
+plot $data using 2:3:xtic(1) ti col
 )";
-    std::cout << "Plot with: ./daxpy.sh\n";
+    std::cout << "Plot with: ./daxpy_alpaka.sh\n";
 
     return 0;
 }

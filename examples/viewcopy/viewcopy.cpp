@@ -1,6 +1,7 @@
 // Copyright 2020 Bernhard Manfred Gruber
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
+#include "../common/Stats.hpp"
 #include "../common/Stopwatch.hpp"
 #include "../common/env.hpp"
 #include "../common/ttjet_13tev_june2019.hpp"
@@ -15,7 +16,7 @@
 #include <omp.h>
 #include <string_view>
 
-constexpr auto repetitions = 5;
+constexpr auto repetitions = 20; // excluding 1 warmup run
 constexpr auto extents = llama::ArrayExtents{512, 512, 16};
 
 // clang-format off
@@ -134,22 +135,20 @@ try
     std::ofstream plotFile{"viewcopy.sh"};
     plotFile.exceptions(std::ios::badbit | std::ios::failbit);
     plotFile << fmt::format(
-        R"(#!/usr/bin/gnuplot -p
+        R"plot(#!/usr/bin/gnuplot -p
 # {}
 set title "viewcopy CPU {}MiB particles"
 set style data histograms
-set style fill solid
-set xtics rotate by 45 right
+set style histogram errorbars
+set style fill solid border -1
+set xtics rotate by 45 right nomirror
 set key out top center maxrows 4
-set ylabel "throughput [GiB/s]"
+set ylabel "Throughput [GiB/s]"
 $data << EOD
-)",
+""	"memcpy"	"memcpy_sem"	"memcpy\\_avx2"	"memcpy\\_avx2_sem"	"memcpy(p)"	"memcpy(p)_sem"	"memcpy\\_avx2(p)"	"memcpy\\_avx2(p)_sem"	"naive copy"	"naive copy_sem"	"std::copy"	"std::copy_sem"	"aosoa copy(r)"	"aosoa copy(r)_sem"	"aosoa copy(w)"	"aosoa copy(w)_sem"	"naive copy(p)"	"naive copy(p)_sem"	"aosoa copy(r,p)"	"aosoa copy(r,p)_sem"	"aosoa copy(w,p)"	"aosoa copy(w,p)_sem"
+)plot",
         env,
         dataSize / 1024 / 1024);
-
-    plotFile << "\"\"\t\"memcpy\"\t\"memcpy\\\\\\_avx2\"\t\"memcpy(p)\"\t\"memcpy\\\\\\_avx2(p)\"\t\"naive "
-                "copy\"\t\"std::copy\"\t\"aosoa copy(r)\"\t\"aosoa copy(w)\"\t\"naive copy(p)\"\t\"aosoa "
-                "copy(r,p)\"\t\"aosoa copy(w,p)\"\n";
 
     std::vector<std::byte, llama::bloballoc::AlignedAllocator<std::byte, 64>> src(dataSize);
 
@@ -157,12 +156,16 @@ $data << EOD
     {
         std::vector<std::byte, llama::bloballoc::AlignedAllocator<std::byte, 64>> dst(dataSize);
         Stopwatch watch;
-        for(auto i = 0; i < repetitions; i++)
+        common::Stats stats;
+        for(auto i = 0; i < repetitions + 1; i++)
+        {
             memcpy(dst.data(), src.data(), dataSize);
-        const auto seconds = watch.printAndReset(name, '\t') / repetitions;
-        const auto gbs = (dataSize / seconds) / (1024.0 * 1024.0 * 1024.0);
-        std::cout << gbs << "GiB/s\t\n";
-        plotFile << gbs << "\t";
+            const auto seconds = watch.getAndReset();
+            const auto gbs = dataSize / (seconds * 1024.0 * 1024.0 * 1024.0);
+            stats(gbs);
+        }
+        std::cout << name << " " << stats.mean() << "GiB/s\t\n";
+        plotFile << stats.mean() << "\t" << stats.sem() << '\t';
     };
 
     std::cout << "byte[] -> byte[]\n";
@@ -191,13 +194,8 @@ $data << EOD
 #else
     plotFile << "0\t";
 #endif
-    plotFile << "0\t";
-    plotFile << "0\t";
-    plotFile << "0\t";
-    plotFile << "0\t";
-    plotFile << "0\t";
-    plotFile << "0\t";
-    plotFile << "0\t";
+    for(int i = 0; i < 7 * 2; i++)
+        plotFile << "0\t";
     plotFile << "\n";
 
     auto benchmarkAllCopies = [&](std::string_view srcName, std::string_view dstName, auto srcMapping, auto dstMapping)
@@ -211,19 +209,21 @@ $data << EOD
         {
             auto dstView = llama::allocViewUninitialized(dstMapping);
             Stopwatch watch;
-            for(auto i = 0; i < repetitions; i++)
+            common::Stats stats;
+            for(auto i = 0; i < repetitions + 1; i++)
+            {
                 copy(srcView, dstView);
-            const auto seconds = watch.printAndReset(name, '\t') / repetitions;
-            const auto gbs = (dataSize / seconds) / (1024.0 * 1024.0 * 1024.0);
+                const auto seconds = watch.getAndReset();
+                const auto gbs = (dataSize / seconds) / (1024.0 * 1024.0 * 1024.0);
+                stats(gbs);
+            }
             const auto dstHash = hash(dstView);
-            std::cout << gbs << "GiB/s\t" << (srcHash == dstHash ? "" : "\thash BAD ") << "\n";
-            plotFile << gbs << "\t";
+            std::cout << name << " " << stats.mean() << "GiB/s\t" << (srcHash == dstHash ? "" : "\thash BAD ") << "\n";
+            plotFile << stats.mean() << "\t" << stats.sem() << '\t';
         };
 
-        plotFile << "0\t";
-        plotFile << "0\t";
-        plotFile << "0\t";
-        plotFile << "0\t";
+        for(int i = 0; i < 4 * 2; i++)
+            plotFile << "0\t";
         benchmarkCopy(
             "naive copy",
             [](const auto& srcView, auto& dstView) { llama::fieldWiseCopy(srcView, dstView); });
@@ -241,8 +241,8 @@ $data << EOD
         }
         else
         {
-            plotFile << "0\t";
-            plotFile << "0\t";
+            for(int i = 0; i < 2 * 2; i++)
+                plotFile << "0\t";
         }
         benchmarkCopy(
             "naive copy(p)",
@@ -273,8 +273,8 @@ $data << EOD
         }
         else
         {
-            plotFile << "0\t";
-            plotFile << "0\t";
+            for(int i = 0; i < 2 * 2; i++)
+                plotFile << "0\t";
         }
         plotFile << "\n";
     };
@@ -303,7 +303,17 @@ $data << EOD
     benchmarkAllCopies("AoSoA64", "AoSoA8", aosoa64Mapping, aosoa8Mapping);
 
     plotFile << R"(EOD
-plot $data using 2:xtic(1) ti col, "" using 3 ti col, "" using 4 ti col, "" using 5 ti col, "" using 6 ti col, "" using 7 ti col, "" using 8 ti col, "" using 9 ti col, "" using 10 ti col, "" using 11 ti col, "" using 12 ti col
+plot $data using   2:3:xtic(1) ti col, \
+        "" using   4:5         ti col, \
+        "" using   6:7         ti col, \
+        "" using   8:9         ti col, \
+        "" using 10:11         ti col, \
+        "" using 12:13         ti col, \
+        "" using 14:15         ti col, \
+        "" using 16:17         ti col, \
+        "" using 18:19         ti col, \
+        "" using 20:21         ti col, \
+        "" using 22:23         ti col
 )";
     std::cout << "Plot with: ./viewcopy.sh\n";
 }
