@@ -5,7 +5,6 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 
 #include "../../common/Stopwatch.hpp"
-#include "../../common/alpakaHelpers.hpp"
 
 #include <alpaka/alpaka.hpp>
 #include <alpaka/example/ExampleDefaultAcc.hpp>
