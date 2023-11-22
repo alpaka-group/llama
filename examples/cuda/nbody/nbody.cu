@@ -84,7 +84,7 @@ __device__ void pPInteraction(ParticleRefI& pi, ParticleRefJ pj)
     dist *= dist;
     const FP distSqr = eps2 + dist(tag::X{}) + dist(tag::Y{}) + dist(tag::Z{});
     const FP distSixth = distSqr * distSqr * distSqr;
-    const FP invDistCube = allowRsqrt ? rsqrt(distSixth) : (1.0f / sqrt(distSixth));
+    const FP invDistCube = allowRsqrt ? rsqrt(distSixth) : (FP{1} / sqrt(distSixth));
     const FP sts = pj(tag::Mass{}) * invDistCube * +timestep;
     pi(tag::Vel{}) += dist * sts;
 }
