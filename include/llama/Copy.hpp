@@ -121,14 +121,23 @@ namespace llama
             typename RecordDim,
             mapping::Blobs Blobs,
             mapping::SubArrayAlignment SubArrayAlignment,
-            typename LinearizeArrayIndexFunctor>
-        inline constexpr std::size_t
-            aosoaLanes<mapping::SoA<ArrayExtents, RecordDim, Blobs, SubArrayAlignment, LinearizeArrayIndexFunctor>>
+            typename LinearizeArrayIndexFunctor,
+            template<typename>
+            typename PermuteSBFields>
+        inline constexpr std::size_t aosoaLanes<
+            mapping::
+                SoA<ArrayExtents, RecordDim, Blobs, SubArrayAlignment, LinearizeArrayIndexFunctor, PermuteSBFields>>
             = std::numeric_limits<std::size_t>::max();
 
-        template<typename ArrayExtents, typename RecordDim, std::size_t Lanes, typename LinearizeArrayIndexFunctor>
+        template<
+            typename ArrayExtents,
+            typename RecordDim,
+            typename ArrayExtents::value_type Lanes,
+            typename LinearizeArrayIndexFunctor,
+            template<typename>
+            typename PermuteFields>
         inline constexpr std::size_t
-            aosoaLanes<mapping::AoSoA<ArrayExtents, RecordDim, Lanes, LinearizeArrayIndexFunctor>>
+            aosoaLanes<mapping::AoSoA<ArrayExtents, RecordDim, Lanes, LinearizeArrayIndexFunctor, PermuteFields>>
             = Lanes;
     } // namespace internal
 
