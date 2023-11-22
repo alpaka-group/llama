@@ -1,6 +1,7 @@
 // Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
 // SPDX-License-Identifier: CC0-1.0
 
+#include "../../common/Stats.hpp"
 #include "../../common/Stopwatch.hpp"
 #include "../../common/env.hpp"
 
@@ -15,7 +16,7 @@
 using Size = std::size_t;
 
 constexpr auto problemSize = Size{64 * 1024 * 1024 + 3}; ///< problem size
-constexpr auto steps = 10;
+constexpr auto steps = 20; // excluding 1 warmup run
 constexpr auto aosoaLanes = 32;
 constexpr auto elements = Size{32};
 
@@ -47,7 +48,7 @@ inline constexpr bool isGpu<alpaka::AccGpuCudaRt<Dim, Size>> = true;
 #endif
 
 template<std::size_t Elems>
-struct ComputeKernel
+struct Kernel
 {
     template<typename Acc, typename View>
     LLAMA_FN_HOST_ACC_INLINE void operator()(const Acc& acc, View a, View b) const
@@ -162,18 +163,13 @@ try
     const auto workdiv = alpaka::getValidWorkDiv<Acc>(devAcc, problemSize, elements, false);
     std::cout << "Workdiv: " << workdiv << "\n";
 
-    double acc = 0;
-    for(std::size_t s = 0; s < steps; ++s)
+    common::Stats stats;
+    for(std::size_t s = 0; s < steps + 1; ++s)
     {
-        alpaka::exec<Acc>(
-            queue,
-            workdiv,
-            ComputeKernel<elements>{},
-            llama::shallowCopy(devA),
-            llama::shallowCopy(devB));
-        acc += chrono.printAndReset("Compute kernel");
+        alpaka::exec<Acc>(queue, workdiv, Kernel<elements>{}, llama::shallowCopy(devA), llama::shallowCopy(devB));
+        stats(chrono.printAndReset("vectoradd"));
     }
-    plotFile << "\"" << mappingname << "\"\t" << acc / steps << '\n';
+    plotFile << "\"LLAMA " << mappingname << "\"\t" << stats.mean() << "\t" << stats.sem() << '\n';
 
     for(std::size_t i = 0; i < blobCount; i++)
     {
@@ -202,11 +198,14 @@ auto main() -> int
 # {}
 set title "vectoradd alpaka {}Mi elements on {}"
 set style data histograms
-set style fill solid
-set xtics rotate by 45 right
+set style histogram errorbars
+set style fill solid border -1
+set xtics rotate by 45 right nomirror
+set key off
 set yrange [0:*]
 set ylabel "runtime [s]"
 $data << EOD
+""	"runtime"	"runtime_sem"
 )",
         env,
         problemSize / 1024 / 1024,
@@ -215,7 +214,7 @@ $data << EOD
     boost::mp11::mp_for_each<boost::mp11::mp_iota_c<6>>([&](auto ic) { run<decltype(ic)::value>(plotFile); });
 
     plotFile << R"(EOD
-plot $data using 2:xtic(1) ti "compute kernel"
+plot $data using 2:3:xtic(1) ti col
 )";
     std::cout << "Plot with: ./vectoradd_alpaka.sh\n";
     return 0;

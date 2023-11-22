@@ -1,6 +1,7 @@
 // Copyright 2022 Bernhard Manfred Gruber
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
+#include "../../common/Stats.hpp"
 #include "../../common/Stopwatch.hpp"
 #include "../../common/env.hpp"
 
@@ -16,7 +17,7 @@
 using FP = float;
 
 constexpr auto problemSize = 64 * 1024; ///< total number of particles
-constexpr auto steps = 5; ///< number of steps to calculate
+constexpr auto steps = 20; ///< number of steps to calculate, excluding 1 warmup run
 constexpr auto allowRsqrt = true; // rsqrt can be way faster, but less accurate
 constexpr auto runUpate = true; // run update step. Useful to disable for benchmarking the move step.
 constexpr auto countFieldAccesses = false;
@@ -309,9 +310,9 @@ try
 
     const auto blocks = problemSize / threadsPerBlock;
 
-    double sumUpdate = 0;
-    double sumMove = 0;
-    for(int s = 0; s < steps; ++s)
+    common::Stats statsUpdate;
+    common::Stats statsMove;
+    for(int s = 0; s < steps + 1; ++s)
     {
         if constexpr(runUpate)
         {
@@ -322,16 +323,17 @@ try
                 update<<<blocks, threadsPerBlock>>>(llama::shallowCopy(accView));
             const auto secondsUpdate = stop();
             std::cout << "update " << secondsUpdate << " s\t";
-            sumUpdate += secondsUpdate;
+            statsUpdate(secondsUpdate);
         }
 
         start();
         ::move<<<blocks, threadsPerBlock>>>(llama::shallowCopy(accView));
         const auto secondsMove = stop();
         std::cout << "move " << secondsMove << " s\n";
-        sumMove += secondsMove;
+        statsMove(secondsMove);
     }
-    plotFile << std::quoted(title) << "\t" << sumUpdate / steps << '\t' << sumMove / steps << '\n';
+    plotFile << std::quoted(title) << "\t" << statsUpdate.mean() << "\t" << statsUpdate.sem() << '\t'
+             << statsMove.mean() << "\t" << statsMove.sem() << '\n';
 
     start();
     for(std::size_t i = 0; i < hostView.blobs().size(); i++)
@@ -482,8 +484,8 @@ namespace gpugems
 
         const auto blocks = problemSize / threadsPerBlock;
 
-        double sumUpdate = 0;
-        double sumMove = 0;
+        common::Stats statsUpdate;
+        common::Stats statsMove;
         for(int s = 0; s < steps; ++s)
         {
             if constexpr(runUpate)
@@ -492,16 +494,17 @@ namespace gpugems
                 calculateForces<<<blocks, threadsPerBlock>>>(accPositions, accVelocities);
                 const auto secondsUpdate = stop();
                 std::cout << "update " << secondsUpdate << " s\t";
-                sumUpdate += secondsUpdate;
+                statsUpdate(secondsUpdate);
             }
 
             start();
             move<<<blocks, threadsPerBlock>>>(accPositions, accVelocities);
             const auto secondsMove = stop();
             std::cout << "move " << secondsMove << " s\n";
-            sumMove += secondsMove;
+            statsMove(secondsMove);
         }
-        plotFile << std::quoted(title) << "\t" << sumUpdate / steps << '\t' << sumMove / steps << '\n';
+        plotFile << std::quoted(title) << "\t" << statsUpdate.mean() << "\t" << statsUpdate.sem() << '\t'
+                 << statsMove.mean() << "\t" << statsMove.sem() << '\n';
 
         start();
         checkError(cudaMemcpy(hostPositions.data(), accPositions, problemSize * sizeof(FP4), cudaMemcpyDeviceToHost));
@@ -543,8 +546,9 @@ try
 # {}
 set title "nbody CUDA {}ki particles on {}"
 set style data histograms
-set style fill solid
-set xtics rotate by 45 right
+set style histogram errorbars
+set style fill solid border -1
+set xtics rotate by 45 right nomirror
 set key out top center maxrows 3
 set yrange [0:*]
 set y2range [0:*]
@@ -552,11 +556,11 @@ set ylabel "update runtime [s]"
 set y2label "move runtime [s]"
 set y2tics auto
 $data << EOD
+""	"update"	"update_sem"	"move"	"move_sem"
 )",
         env,
         problemSize / 1024,
         prop.name);
-    plotFile << "\"\"\t\"update\"\t\"move\"\n";
 
     using namespace boost::mp11;
     mp_for_each<mp_iota_c<6>>([&](auto i) { run<decltype(i)::value, 0>(plotFile, false); });
@@ -567,7 +571,7 @@ $data << EOD
 
     plotFile <<
         R"(EOD
-plot $data using 2:xtic(1) ti col axis x1y1, "" using 3 ti col axis x1y2
+plot $data using 2:3:xtic(1) ti col axis x1y1, "" using 4:5 ti col axis x1y2
 )";
     std::cout << "Plot with: ./nbody_cuda.sh\n";
 

@@ -1,6 +1,7 @@
 // Copyright 2021 Bernhard Manfred Gruber
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
+#include "../common/Stats.hpp"
 #include "../common/Stopwatch.hpp"
 #include "../common/env.hpp"
 
@@ -10,7 +11,7 @@
 #include <llama/llama.hpp>
 
 constexpr auto problemSize = 64 * 1024 * 1024 + 3; ///< problem size
-constexpr auto steps = 10; ///< number of vector adds to perform
+constexpr auto steps = 20; ///< number of vector adds to perform, excluding 1 warmup run
 constexpr auto aosoaLanes = 16;
 
 // use different types for various struct members to alignment/padding plays a role
@@ -111,13 +112,13 @@ namespace usellama
         }
         watch.printAndReset("init");
 
-        double acc = 0;
-        for(std::size_t s = 0; s < steps; ++s)
+        common::Stats stats;
+        for(std::size_t s = 0; s < steps + 1; ++s)
         {
             compute(a, b, c);
-            acc += watch.printAndReset("compute");
+            stats(watch.printAndReset("vectoradd"));
         }
-        plotFile << "\"" << mappingname << "\"\t" << acc / steps << '\n';
+        plotFile << "\"LLAMA " << mappingname << "\"\t" << stats.mean() << '\t' << stats.sem() << '\n';
 
         return static_cast<int>(c.blobs()[0][0]);
     }
@@ -162,13 +163,13 @@ namespace manualAoS
         }
         watch.printAndReset("init");
 
-        double acc = 0;
-        for(std::size_t s = 0; s < steps; ++s)
+        common::Stats stats;
+        for(std::size_t s = 0; s < steps + 1; ++s)
         {
             compute(a.data(), b.data(), c.data(), problemSize);
-            acc += watch.printAndReset("compute");
+            stats(watch.printAndReset("vectoradd"));
         }
-        plotFile << "AoS\t" << acc / steps << '\n';
+        plotFile << "AoS\t" << stats.mean() << '\t' << stats.sem() << '\n';
 
         return static_cast<int>(c[0].x);
     }
@@ -225,8 +226,8 @@ namespace manualSoA
         }
         watch.printAndReset("init");
 
-        double acc = 0;
-        for(std::size_t s = 0; s < steps; ++s)
+        common::Stats stats;
+        for(std::size_t s = 0; s < steps + 1; ++s)
         {
             compute(
                 ax.data(),
@@ -239,9 +240,9 @@ namespace manualSoA
                 cy.data(),
                 cz.data(),
                 problemSize);
-            acc += watch.printAndReset("compute");
+            stats(watch.printAndReset("vectoradd"));
         }
-        plotFile << "SoA\t" << acc / steps << '\n';
+        plotFile << "SoA\t" << stats.mean() << '\t' << stats.sem() << '\n';
 
         return static_cast<int>(cx[0]);
     }
@@ -299,13 +300,13 @@ namespace manualAoSoA
         }
         watch.printAndReset("init");
 
-        double acc = 0;
-        for(std::size_t s = 0; s < steps; ++s)
+        common::Stats stats;
+        for(std::size_t s = 0; s < steps + 1; ++s)
         {
             compute(a.data(), b.data(), c.data(), problemSize);
-            acc += watch.printAndReset("compute");
+            stats(watch.printAndReset("vectoradd"));
         }
-        plotFile << "AoSoA" << aosoaLanes << "\t" << acc / steps << '\n';
+        plotFile << "AoSoA\t" << stats.mean() << '\t' << stats.sem() << '\n';
 
         return static_cast<int>(c[0].x[0]);
     }
@@ -327,11 +328,14 @@ try
 # {}
 set title "vectoradd CPU {}Mi elements"
 set style data histograms
-set style fill solid
-set xtics rotate by 45 right
+set style histogram errorbars
+set style fill solid border -1
+set xtics rotate by 45 right nomirror
+set key off
 set yrange [0:*]
 set ylabel "runtime [s]"
 $data << EOD
+""	"runtime"	"runtime_sem"
 )",
         env,
         problemSize / 1024 / 1024);
@@ -344,7 +348,7 @@ $data << EOD
     r += manualAoSoA::main(plotFile);
 
     plotFile << R"(EOD
-plot $data using 2:xtic(1) ti "compute kernel"
+plot $data using 2:3:xtic(1) ti col
 )";
     std::cout << "Plot with: ./vectoradd.sh\n";
 

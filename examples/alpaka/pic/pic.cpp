@@ -890,8 +890,8 @@ try
 # {}
 set title "PIC grid {}x{} {}k particles on {}"
 set style data histograms
-set style fill solid
-set xtics rotate by 45 right
+set style fill solid border -1
+set xtics rotate by 45 right nomirror
 set key out top center maxrows 3
 set yrange [0:*]
 set ylabel "runtime [s]"
