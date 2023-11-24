@@ -38,63 +38,38 @@ namespace
     // struct BFlightDistance{};
     // struct BVertexChi2{};
 
-    // struct H1Charge{};
-    // struct H1IpChi2{};
-    struct H1PX{};
-    struct H1PY{};
-    struct H1PZ{};
-    struct H1ProbK{};
-    struct H1ProbPi{};
-    struct H1isMuon{};
+    struct H1{} h1;
+    struct H2{} h2;
+    struct H3{} h3;
 
-    // struct H2Charge{};
-    // struct H2IpChi2{};
-    struct H2PX{};
-    struct H2PY{};
-    struct H2PZ{};
-    struct H2ProbK{};
-    struct H2ProbPi{};
-    struct H2isMuon{};
-
-    // struct H3Charge{};
-    // struct H3IpChi2{};
-    struct H3PX{};
-    struct H3PY{};
-    struct H3PZ{};
-    struct H3ProbK{};
-    struct H3ProbPi{};
-    struct H3isMuon{};
+    // struct Charge{} charge;
+    // struct IpChi2{} ipChi2;
+    struct PX{} px;
+    struct PY{} py;
+    struct PZ{} pz;
+    struct ProbK{} probK;
+    struct ProbPi{} probPi;
+    struct IsMuon{} isMuon;
     // clang-format on
 
     // Only needed data is loaded and represented in the LLAMA view. This is also the default behavior of ROOT's
     // RDataFrame and handwritten analyses. Only used columns are loaded.
-    using RecordDim = llama::Record<
+    using H = llama::Record<
+        // llama::Field<Charge, int>,
+        // llama::Field<IpChi2, double>,
+        llama::Field<PX, double>,
+        llama::Field<PY, double>,
+        llama::Field<PZ, double>,
+        llama::Field<ProbK, double>,
+        llama::Field<ProbPi, double>,
+        llama::Field<IsMuon, int>>;
+
+    using Event = llama::Record<
         // llama::Field<BFlightDistance, double>,
         // llama::Field<BVertexChi2, double>,
-        // llama::Field<H1Charge, int>,
-        // llama::Field<H1IpChi2, double>,
-        llama::Field<H1PX, double>,
-        llama::Field<H1PY, double>,
-        llama::Field<H1PZ, double>,
-        llama::Field<H1ProbK, double>,
-        llama::Field<H1ProbPi, double>,
-        llama::Field<H1isMuon, int>,
-        // llama::Field<H2Charge, int>,
-        // llama::Field<H2IpChi2, double>,
-        llama::Field<H2PX, double>,
-        llama::Field<H2PY, double>,
-        llama::Field<H2PZ, double>,
-        llama::Field<H2ProbK, double>,
-        llama::Field<H2ProbPi, double>,
-        llama::Field<H2isMuon, int>,
-        // llama::Field<H3Charge, int>,
-        // llama::Field<H3IpChi2, double>,
-        llama::Field<H3PX, double>,
-        llama::Field<H3PY, double>,
-        llama::Field<H3PZ, double>,
-        llama::Field<H3ProbK, double>,
-        llama::Field<H3ProbPi, double>,
-        llama::Field<H3isMuon, int>>;
+        llama::Field<H1, H>,
+        llama::Field<H2, H>,
+        llama::Field<H3, H>>;
 
     namespace RE = ROOT::Experimental;
 
@@ -115,16 +90,19 @@ namespace
 
         auto view = llama::allocViewUninitialized(Mapping{typename Mapping::ArrayExtents{ntuple->GetNEntries()}});
 
-        llama::forEachLeafCoord<RecordDim>(
-            [&]<typename RecordCoord>(RecordCoord)
+        llama::forEachLeafCoord<Event>(
+            [&]<typename RecordCoord>(RecordCoord rc)
             {
-                using Type = llama::GetType<RecordDim, RecordCoord>;
-                using Tag = llama::GetTag<RecordDim, RecordCoord>;
-                auto columnName = std::string(llama::structName<Tag>());
-                columnName.insert(columnName.begin() + 1 + (columnName[0] == 'H'), '_');
+                using Type = llama::GetType<Event, RecordCoord>;
+                auto columnName = std::string(llama::prettyRecordCoord<Event>(rc));
+                for(char& c : columnName)
+                    if(c == '.')
+                        c = '_';
+                if(columnName[3] == 'I')
+                    columnName[3] = 'i';
                 auto columnView = ntuple->GetView<Type>(columnName);
                 for(auto i : ntuple->GetEntryRange())
-                    view(i)(Tag{}) = columnView(i);
+                    view(i)(rc) = columnView(i);
             });
         const auto duration
             = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - begin).count();
@@ -159,36 +137,36 @@ namespace
         for(RE::NTupleSize_t i = 0; i < n; i++)
         {
             auto&& event = view[i];
-            if(event(H1isMuon{}))
+            if(event(h1)(isMuon))
                 continue;
-            if(event(H2isMuon{}))
+            if(event(h2)(isMuon))
                 continue;
-            if(event(H3isMuon{}))
-                continue;
-
-            if(event(H1ProbK{}) < probKCut)
-                continue;
-            if(event(H2ProbK{}) < probKCut)
-                continue;
-            if(event(H3ProbK{}) < probKCut)
+            if(event(h3)(isMuon))
                 continue;
 
-            if(event(H1ProbPi{}) > probPiCut)
+            if(event(h1)(probK) < probKCut)
                 continue;
-            if(event(H2ProbPi{}) > probPiCut)
+            if(event(h2)(probK) < probKCut)
                 continue;
-            if(event(H3ProbPi{}) > probPiCut)
+            if(event(h3)(probK) < probKCut)
                 continue;
 
-            const double h1px = event(H1PX{});
-            const double h1py = event(H1PY{});
-            const double h1pz = event(H1PZ{});
-            const double h2px = event(H2PX{});
-            const double h2py = event(H2PY{});
-            const double h2pz = event(H2PZ{});
-            const double h3px = event(H3PX{});
-            const double h3py = event(H3PY{});
-            const double h3pz = event(H3PZ{});
+            if(event(h1)(probPi) > probPiCut)
+                continue;
+            if(event(h2)(probPi) > probPiCut)
+                continue;
+            if(event(h3)(probPi) > probPiCut)
+                continue;
+
+            const double h1px = event(h1)(px);
+            const double h1py = event(h1)(py);
+            const double h1pz = event(h1)(pz);
+            const double h2px = event(h2)(px);
+            const double h2py = event(h2)(py);
+            const double h2pz = event(h2)(pz);
+            const double h3px = event(h3)(px);
+            const double h3py = event(h3)(py);
+            const double h3pz = event(h3)(pz);
 
             const double bpx = h1px + h2px + h3px;
             const double bpy = h1py + h2py + h3py;
@@ -236,11 +214,11 @@ namespace
     constexpr auto expectedMean = 5262.231219944131;
     constexpr auto expectedStdDev = 75.02283561602752;
 
-    using AoS = llama::mapping::AoS<llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>, RecordDim>;
-    using AoSoA8 = llama::mapping::AoSoA<llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>, RecordDim, 8>;
-    using AoSoA16 = llama::mapping::AoSoA<llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>, RecordDim, 16>;
-    using SoAASB = llama::mapping::AlignedSingleBlobSoA<llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>, RecordDim>;
-    using SoAMB = llama::mapping::MultiBlobSoA<llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>, RecordDim>;
+    using AoS = llama::mapping::AoS<llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>, Event>;
+    using AoSoA8 = llama::mapping::AoSoA<llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>, Event, 8>;
+    using AoSoA16 = llama::mapping::AoSoA<llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>, Event, 16>;
+    using SoAASB = llama::mapping::AlignedSingleBlobSoA<llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>, Event>;
+    using SoAMB = llama::mapping::MultiBlobSoA<llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>, Event>;
 
     using AoSHeatmap = llama::mapping::Heatmap<AoS>;
     using AoSFieldAccessCount = llama::mapping::FieldAccessCount<AoS>;
@@ -249,13 +227,13 @@ namespace
 
     using AoS_Floats = llama::mapping::ChangeType<
         llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>,
-        RecordDim,
+        Event,
         llama::mapping::BindAoS<>::fn,
         mp_list<mp_list<double, float>>>;
 
     using SoAMB_Floats = llama::mapping::ChangeType<
         llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>,
-        RecordDim,
+        Event,
         llama::mapping::BindSoA<llama::mapping::Blobs::OnePerField>::fn,
         mp_list<mp_list<double, float>>>;
 
@@ -265,41 +243,42 @@ namespace
 
     using Custom1 = llama::mapping::Split<
         llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>,
-        RecordDim,
-        mp_list<mp_list<H1isMuon>, mp_list<H2isMuon>, mp_list<H3isMuon>, mp_list<H1ProbK>>,
+        Event,
+        mp_list<mp_list<H1, IsMuon>, mp_list<H2, IsMuon>, mp_list<H3, IsMuon>, mp_list<H1, ProbK>>,
         llama::mapping::AlignedAoS,
         llama::mapping::AlignedAoS,
         true>;
 
     using Custom2 = llama::mapping::Split<
         llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>,
-        RecordDim,
-        mp_list<mp_list<H1isMuon>, mp_list<H2isMuon>, mp_list<H3isMuon>>,
+        Event,
+        mp_list<mp_list<H1, IsMuon>, mp_list<H2, IsMuon>, mp_list<H3, IsMuon>>,
         llama::mapping::AlignedAoS,
         llama::mapping::
-            BindSplit<mp_list<mp_list<H1ProbK>>, llama::mapping::AlignedAoS, llama::mapping::AlignedAoS, true>::fn,
+            BindSplit<mp_list<mp_list<H1, ProbK>>, llama::mapping::AlignedAoS, llama::mapping::AlignedAoS, true>::fn,
         true>;
 
     using Custom3 = llama::mapping::Split<
         llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>,
-        RecordDim,
-        mp_list<mp_list<H1isMuon>, mp_list<H2isMuon>, mp_list<H3isMuon>>,
+        Event,
+        mp_list<mp_list<H1, IsMuon>, mp_list<H2, IsMuon>, mp_list<H3, IsMuon>>,
         llama::mapping::AlignedAoS,
         llama::mapping::BindSplit<
-            mp_list<mp_list<H1ProbK>>,
+            mp_list<mp_list<H1, ProbK>>,
             llama::mapping::AlignedAoS,
             llama::mapping::
-                BindSplit<mp_list<mp_list<H2ProbK>>, llama::mapping::AlignedAoS, llama::mapping::AlignedAoS, true>::fn,
+                BindSplit<mp_list<mp_list<H2, ProbK>>, llama::mapping::AlignedAoS, llama::mapping::AlignedAoS, true>::
+                    fn,
             true>::fn,
         true>;
 
     using Custom4 = llama::mapping::Split<
         llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>,
-        RecordDim,
-        mp_list<mp_list<H1isMuon>, mp_list<H2isMuon>, mp_list<H3isMuon>>,
+        Event,
+        mp_list<mp_list<H1, IsMuon>, mp_list<H2, IsMuon>, mp_list<H3, IsMuon>>,
         llama::mapping::AlignedAoS,
         llama::mapping::BindSplit<
-            mp_list<mp_list<H1ProbK>, mp_list<H2ProbK>>,
+            mp_list<mp_list<H1, ProbK>, mp_list<H2, ProbK>>,
             llama::mapping::AlignedAoS,
             llama::mapping::AlignedAoS,
             true>::fn,
@@ -307,22 +286,22 @@ namespace
 
     using Custom1_3_H1ProbK_float = llama::mapping::Split<
         llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>,
-        RecordDim,
-        mp_list<mp_list<H1isMuon>, mp_list<H2isMuon>, mp_list<H3isMuon>, mp_list<H1ProbK>>,
+        Event,
+        mp_list<mp_list<H1, IsMuon>, mp_list<H2, IsMuon>, mp_list<H3, IsMuon>, mp_list<H1, ProbK>>,
         llama::mapping::BindChangeType<llama::mapping::BindAoS<>::fn, mp_list<mp_list<double, float>>>::fn,
         llama::mapping::
-            BindSplit<mp_list<mp_list<H2ProbK>>, llama::mapping::AlignedAoS, llama::mapping::AlignedAoS, true>::fn,
+            BindSplit<mp_list<mp_list<H2, ProbK>>, llama::mapping::AlignedAoS, llama::mapping::AlignedAoS, true>::fn,
         true>;
 
     using Custom4Heatmap = llama::mapping::Heatmap<Custom4>;
 
     using Custom5 = llama::mapping::Split<
         llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>,
-        RecordDim,
-        mp_list<mp_list<H1isMuon>, mp_list<H2isMuon>, mp_list<H3isMuon>>,
+        Event,
+        mp_list<mp_list<H1, IsMuon>, mp_list<H2, IsMuon>, mp_list<H3, IsMuon>>,
         llama::mapping::BindBitPackedIntAoS<llama::Constant<1>, llama::mapping::SignBit::Discard>::fn,
         llama::mapping::BindSplit<
-            mp_list<mp_list<H1ProbK>, mp_list<H2ProbK>>,
+            mp_list<mp_list<H1, ProbK>, mp_list<H2, ProbK>>,
             llama::mapping::AlignedAoS,
             llama::mapping::AlignedAoS,
             true>::fn,
@@ -331,11 +310,11 @@ namespace
     template<std::size_t ManBits = 16>
     using Custom6 = llama::mapping::Split<
         llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>,
-        RecordDim,
-        mp_list<mp_list<H1isMuon>, mp_list<H2isMuon>, mp_list<H3isMuon>>,
+        Event,
+        mp_list<mp_list<H1, IsMuon>, mp_list<H2, IsMuon>, mp_list<H3, IsMuon>>,
         llama::mapping::BindBitPackedIntAoS<llama::Constant<1>, llama::mapping::SignBit::Discard>::fn,
         llama::mapping::BindSplit<
-            mp_list<mp_list<H1ProbK>, mp_list<H2ProbK>>,
+            mp_list<mp_list<H1, ProbK>, mp_list<H2, ProbK>>,
             llama::mapping::BindBitPackedFloatAoS<llama::Constant<6>, llama::Constant<ManBits>>::template fn,
             llama::mapping::BindBitPackedFloatAoS<llama::Constant<6>, llama::Constant<ManBits>>::template fn,
             true>::template fn,
@@ -343,11 +322,11 @@ namespace
 
     using Custom7 = llama::mapping::Split<
         llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>,
-        RecordDim,
-        mp_list<mp_list<H1isMuon>, mp_list<H2isMuon>, mp_list<H3isMuon>>,
+        Event,
+        mp_list<mp_list<H1, IsMuon>, mp_list<H2, IsMuon>, mp_list<H3, IsMuon>>,
         llama::mapping::BindBitPackedIntAoS<llama::Constant<1>, llama::mapping::SignBit::Discard>::fn,
         llama::mapping::BindSplit<
-            mp_list<mp_list<H1ProbK>, mp_list<H2ProbK>>,
+            mp_list<mp_list<H1, ProbK>, mp_list<H2, ProbK>>,
             llama::mapping::AlignedAoS,
             llama::mapping::BindBitPackedFloatAoS<llama::Constant<6>, llama::Constant<16>>::template fn,
             true>::fn,
@@ -356,11 +335,11 @@ namespace
     template<std::size_t ManBits = 16>
     using Custom8 = llama::mapping::Split<
         llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>,
-        RecordDim,
-        mp_list<mp_list<H1isMuon>, mp_list<H2isMuon>, mp_list<H3isMuon>>,
+        Event,
+        mp_list<mp_list<H1, IsMuon>, mp_list<H2, IsMuon>, mp_list<H3, IsMuon>>,
         llama::mapping::BindBitPackedIntAoS<llama::Constant<1>, llama::mapping::SignBit::Discard>::fn,
         llama::mapping::BindSplit<
-            mp_list<mp_list<H1ProbK>, mp_list<H2ProbK>>,
+            mp_list<mp_list<H1, ProbK>, mp_list<H2, ProbK>>,
             llama::mapping::BindChangeType<llama::mapping::BindAoS<>::fn, mp_list<mp_list<double, float>>>::fn,
             llama::mapping::BindBitPackedFloatAoS<llama::Constant<6>, llama::Constant<ManBits>>::template fn,
             true>::template fn,
@@ -368,11 +347,11 @@ namespace
 
     using Custom9 = llama::mapping::Split<
         llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>,
-        RecordDim,
-        mp_list<mp_list<H1isMuon>, mp_list<H2isMuon>, mp_list<H3isMuon>>,
+        Event,
+        mp_list<mp_list<H1, IsMuon>, mp_list<H2, IsMuon>, mp_list<H3, IsMuon>>,
         llama::mapping::BindBitPackedIntAoS<llama::Constant<1>, llama::mapping::SignBit::Discard>::fn,
         llama::mapping::BindSplit<
-            mp_list<mp_list<H1ProbK>, mp_list<H2ProbK>>,
+            mp_list<mp_list<H1, ProbK>, mp_list<H2, ProbK>>,
             llama::mapping::BindChangeType<llama::mapping::BindAoS<>::fn, mp_list<mp_list<double, float>>>::fn,
             llama::mapping::BindChangeType<llama::mapping::BindAoS<>::fn, mp_list<mp_list<double, float>>>::fn,
             true>::fn,
@@ -381,8 +360,8 @@ namespace
     template<int Exp, int Man>
     using MakeBitpacked = llama::mapping::Split<
         llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>,
-        RecordDim,
-        mp_list<mp_list<H1isMuon>, mp_list<H2isMuon>, mp_list<H3isMuon>>,
+        Event,
+        mp_list<mp_list<H1, IsMuon>, mp_list<H2, IsMuon>, mp_list<H3, IsMuon>>,
         llama::mapping::BindBitPackedIntSoA<llama::Constant<1>, llama::mapping::SignBit::Discard>::fn,
         llama::mapping::BindBitPackedFloatSoA<llama::Constant<Exp>, llama::Constant<Man>>::template fn,
         true>;
@@ -433,15 +412,15 @@ namespace
         auto filterResults = [](const auto& e)
         {
             return std::tuple{
-                e(H1isMuon{}),
-                e(H2isMuon{}),
-                e(H3isMuon{}),
-                e(H1ProbK{}) < probKCut,
-                e(H2ProbK{}) < probKCut,
-                e(H3ProbK{}) < probKCut,
-                e(H1ProbPi{}) > probPiCut,
-                e(H2ProbPi{}) > probPiCut,
-                e(H3ProbPi{}) > probPiCut};
+                e(h1)(isMuon),
+                e(h2)(isMuon),
+                e(h3)(isMuon),
+                e(h1)(probK) < probKCut,
+                e(h2)(probK) < probKCut,
+                e(h3)(probK) < probKCut,
+                e(h1)(probPi) > probPiCut,
+                e(h2)(probPi) > probPiCut,
+                e(h3)(probPi) > probPiCut};
         };
         std::sort(
             v.begin(),
