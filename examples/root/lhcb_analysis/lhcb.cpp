@@ -9,6 +9,8 @@
 // A walkthrough of the concrete analysis is here:
 // https://github.com/lhcb/opendata-project/blob/master/LHCb_Open_Data_Project.ipynb
 
+#include "../../common/Stats.hpp"
+
 #include <ROOT/RNTuple.hxx>
 #include <TApplication.h>
 #include <TCanvas.h>
@@ -29,7 +31,7 @@
 
 namespace
 {
-    constexpr auto analysisRepetitions = 100;
+    constexpr auto analysisRepetitions = 100; // excluding 1 warmup run
     constexpr auto analysisRepetitionsInstrumentation
         = 0; // costly, so turned off by default, use 1 for FieldAccessCounts and Heatmap
     constexpr auto estimateLoadedCachelines = false;
@@ -104,10 +106,9 @@ namespace
                 for(auto i : ntuple->GetEntryRange())
                     view(i)(rc) = columnView(i);
             });
-        const auto duration
-            = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - begin).count();
+        const auto seconds = std::chrono::duration<double>(std::chrono::steady_clock::now() - begin).count();
 
-        return std::tuple{view, duration};
+        return std::tuple{view, seconds};
     }
 
     auto getP2(double px, double py, double pz) -> double
@@ -180,13 +181,12 @@ namespace
 
             hists[omp_get_thread_num()].Fill(bmass);
         }
-        const auto duration
-            = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - begin);
+        const auto seconds = std::chrono::duration<double>(std::chrono::steady_clock::now() - begin).count();
 
         for(std::size_t i = 1; i < hists.size(); i++)
             hists[0].Add(&hists[i]);
 
-        return std::tuple{hists[0], duration};
+        return std::tuple{hists[0], seconds};
     }
 
     const auto histogramFolder = std::filesystem::path("lhcb/histograms");
@@ -426,9 +426,8 @@ namespace
             v.begin(),
             v.end(),
             [&](const auto& a, const auto& b) { return filterResults(a) < filterResults(b); });
-        const auto duration
-            = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - begin);
-        return duration;
+        const auto seconds = std::chrono::duration<double>(std::chrono::steady_clock::now() - begin).count();
+        return seconds;
     }
 
     template<typename View>
@@ -455,7 +454,7 @@ namespace
             return;
         saveLayout<Mapping>(mappingName + ".svg");
 
-        auto [view, conversionTime] = convertRNTupleToLLAMA<Mapping>(inputFile, treeName);
+        auto [view, conversionSeconds] = convertRNTupleToLLAMA<Mapping>(inputFile, treeName);
         if constexpr(llama::mapping::isFieldAccessCount<Mapping>)
         {
             view.mapping().printFieldHits(view.blobs());
@@ -467,18 +466,18 @@ namespace
             clearHeatmap(view);
         }
 
-        std::chrono::microseconds sortTime{}; // NOLINT(misc-const-correctness)
+        double sortSeconds = 0; // NOLINT(misc-const-correctness)
         if constexpr(Sort)
-            sortTime = sortView(view);
+            sortSeconds = sortView(view);
 
         TH1D hist{};
-        std::chrono::microseconds totalAnalysisTime{};
-        for(int i = 0; i < repetitions; i++)
+        common::Stats analysisStats;
+        for(int i = 0; i < repetitions + 1; i++)
         {
             auto [h, analysisTime] = analysis(view, mappingName);
             if(i == 0)
                 hist = h;
-            totalAnalysisTime += analysisTime;
+            analysisStats(analysisTime);
         }
         if constexpr(llama::mapping::isFieldAccessCount<Mapping>)
             view.mapping().printFieldHits(view.blobs());
@@ -501,11 +500,13 @@ namespace
         const auto mean = hist.GetMean();
         const auto absError = std::abs(mean - expectedMean);
         fmt::print(
-            "{:13} {:>9.3f} {:>9.3f} {:>9.3f} {:>4} {:>10.1f} {:>7} {:>6.1f} {:>6.1f} {:>6.1f} {:>6.3f} {:>8}\n",
+            "{:13} {:>9.3f} {:>9.3f} {:>9.3f} {:>9.6f} {:>4} {:>10.1f} {:>7} {:>6.1f} {:>6.1f} {:>6.1f} {:>6.3f} "
+            "{:>8}\n",
             mappingName,
-            conversionTime / 1000.0,
-            static_cast<double>(sortTime.count()) / 1000.0,
-            static_cast<double>(totalAnalysisTime.count()) / repetitions / 1000.0,
+            conversionSeconds / 1000.0,
+            sortSeconds / 1000.0,
+            analysisStats.mean() * 1000.0,
+            analysisStats.sem() * 1000.0,
             repetitions,
             totalBlobSizes(view.mapping()) / 1024.0 / 1024.0,
             hist.GetEntries(),
@@ -535,11 +536,12 @@ auto main(int argc, const char* argv[]) -> int
                                       // format. Remove this once RNTuple hits production.
 
     fmt::print(
-        "{:13} {:>9} {:>9} {:>9} {:>4} {:>10} {:>7} {:>6} {:>6} {:>6} {:>6} {:>8}\n",
+        "{:13} {:>9} {:>9} {:>9} {:>9} {:>4} {:>10} {:>7} {:>6} {:>6} {:>6} {:>6} {:>8}\n",
         "Mapping",
         "Read(ms)",
         "Sort(ms)",
         "Anly(ms)",
+        "SEM(ms)",
         "Rep",
         "Size(MiB)",
         "Entries",
