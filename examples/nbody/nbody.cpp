@@ -10,7 +10,6 @@
 #include <iomanip>
 #include <iostream>
 #include <llama/llama.hpp>
-#include <omp.h>
 #include <random>
 #include <thread>
 #include <utility>
@@ -22,9 +21,8 @@
 #endif
 
 // needs -fno-math-errno, so std::sqrt() can be vectorized
-// for multithreading, specify thread affinity (GNU OpenMP):
-// e.g. for a 32 core CPU with SMT/hyperthreading: GOMP_CPU_AFFINITY='0-30:2,1-31:2' llama-nbody
-// e.g. for a 16 core CPU without SMT/hyperthreading: GOMP_CPU_AFFINITY='0-15' llama-nbody
+// for multithreading, specify OpenMP thread affinity:
+// OMP_NUM_THREADS=x OMP_PROC_BIND=true OMP_PLACES=cores llama-nbody, where x is the number of cores on your system
 
 using FP = float;
 
@@ -219,6 +217,7 @@ namespace usellama
     template<int Width, typename View>
     void updateSimd(View& particles)
     {
+#    pragma omp parallel for
         for(std::size_t i = 0; i < problemSize; i += Width)
         {
             using RecordDim = typename View::RecordDim;
@@ -233,8 +232,8 @@ namespace usellama
     template<int Width, typename View>
     void moveSimd(View& particles)
     {
-        LLAMA_INDEPENDENT_DATA // TODO(bgruber): why is this needed
-            for(std::size_t i = 0; i < problemSize; i += Width)
+#    pragma omp parallel for
+        for(std::size_t i = 0; i < problemSize; i += Width)
         {
             using RecordDim = typename View::RecordDim;
             llama::SimdN<llama::GetType<RecordDim, tag::Pos>, Width, xsimd::make_sized_batch_t> pos;
@@ -249,7 +248,7 @@ namespace usellama
     template<typename View>
     void update(View& particles)
     {
-        LLAMA_INDEPENDENT_DATA
+#pragma omp parallel for
         for(std::size_t i = 0; i < problemSize; i++)
         {
             llama::One<Particle> pi = particles(i);
@@ -262,7 +261,7 @@ namespace usellama
     template<typename View>
     void move(View& particles)
     {
-        LLAMA_INDEPENDENT_DATA
+#pragma omp parallel for
         for(std::size_t i = 0; i < problemSize; i++)
             particles(i)(tag::Pos{}) += particles(i)(tag::Vel{}) * timestep;
     }
@@ -426,11 +425,10 @@ namespace manualAoS
 
     void update(Particle* particles)
     {
-        LLAMA_INDEPENDENT_DATA
+#pragma omp parallel for
         for(std::size_t i = 0; i < problemSize; i++)
         {
             Particle pi = particles[i];
-            LLAMA_INDEPENDENT_DATA
             for(std::size_t j = 0; j < problemSize; ++j)
                 pPInteraction(pi, particles[j]);
             particles[i].vel = pi.vel;
@@ -439,7 +437,7 @@ namespace manualAoS
 
     void move(Particle* particles)
     {
-        LLAMA_INDEPENDENT_DATA
+#pragma omp parallel for
         for(std::size_t i = 0; i < problemSize; i++)
             particles[i].pos += particles[i].vel * timestep;
     }
@@ -517,7 +515,7 @@ namespace manualSoA
 
     void update(FP* posx, FP* posy, FP* posz, FP* velx, FP* vely, FP* velz, FP* mass)
     {
-        LLAMA_INDEPENDENT_DATA
+#pragma omp parallel for
         for(std::size_t i = 0; i < problemSize; i++)
         {
             const FP piposx = posx[i];
@@ -536,7 +534,7 @@ namespace manualSoA
 
     void move(FP* posx, FP* posy, FP* posz, const FP* velx, const FP* vely, const FP* velz)
     {
-        LLAMA_INDEPENDENT_DATA
+#pragma omp parallel for
         for(std::size_t i = 0; i < problemSize; i++)
         {
             posx[i] += velx[i] * timestep;
@@ -646,6 +644,7 @@ namespace manualAoSoA
     void update(ParticleBlock<Lanes>* particles)
     {
         constexpr auto blocks = problemSize / Lanes;
+#pragma omp parallel for
         for(std::size_t bi = 0; bi < blocks; bi++)
         {
             auto blockI = particles[bi];
@@ -680,6 +679,7 @@ namespace manualAoSoA
         constexpr auto blocks = problemSize / Lanes;
         constexpr auto blocksPerTile = 128; // L1D_SIZE / sizeof(ParticleBlock<Lanes>);
         static_assert(blocks % blocksPerTile == 0);
+#pragma omp parallel for
         for(std::size_t ti = 0; ti < blocks / blocksPerTile; ti++)
             for(std::size_t tj = 0; tj < blocks / blocksPerTile; tj++)
                 for(std::size_t bi = 0; bi < blocksPerTile; bi++)
@@ -713,6 +713,7 @@ namespace manualAoSoA
     void move(ParticleBlock<Lanes>* particles)
     {
         constexpr auto blocks = problemSize / Lanes;
+#pragma omp parallel for
         for(std::size_t bi = 0; bi < blocks; bi++)
         {
             LLAMA_INDEPENDENT_DATA
@@ -860,6 +861,7 @@ namespace manualAoSoAManualAVX
     // update (read/write) 8 particles I based on the influence of 1 particle J
     void update8(ParticleBlock* particles)
     {
+#    pragma omp parallel for
         for(std::size_t bi = 0; bi < blocks; bi++)
         {
             auto& blockI = particles[bi];
@@ -905,6 +907,7 @@ namespace manualAoSoAManualAVX
     // update (read/write) 1 particles I based on the influence of 8 particles J with accumulator
     void update1(ParticleBlock* particles)
     {
+#    pragma omp parallel for
         for(std::size_t bi = 0; bi < blocks; bi++)
             for(std::size_t i = 0; i < lanes; i++)
             {
@@ -934,6 +937,7 @@ namespace manualAoSoAManualAVX
 
     void move(ParticleBlock* particles)
     {
+#    pragma omp parallel for
         for(std::size_t bi = 0; bi < blocks; bi++)
         {
             auto& block = particles[bi];
@@ -1066,12 +1070,12 @@ namespace manualAoSoASIMD
     }
 
     template<typename Simd>
-    void update8(ParticleBlock<Simd>* particles, int threads)
+    void update8(ParticleBlock<Simd>* particles)
     {
         constexpr auto lanes = Simd::size;
         constexpr auto blocks = problemSize / lanes;
 
-#    pragma omp parallel for schedule(static) num_threads(threads)
+#    pragma omp parallel for
         for(std::ptrdiff_t bi = 0; bi < blocks; bi++)
         {
             auto& blockI = particles[bi];
@@ -1103,14 +1107,14 @@ namespace manualAoSoASIMD
     }
 
     template<typename Simd>
-    void update8Tiled(ParticleBlock<Simd>* particles, int threads)
+    void update8Tiled(ParticleBlock<Simd>* particles)
     {
         constexpr auto lanes = Simd::size;
         constexpr auto blocks = problemSize / lanes;
 
         constexpr auto blocksPerTile = 128; // L1D_SIZE / sizeof(ParticleBlock);
         static_assert(blocks % blocksPerTile == 0);
-#    pragma omp parallel for schedule(static) num_threads(threads)
+#    pragma omp parallel for
         for(std::ptrdiff_t ti = 0; ti < blocks / blocksPerTile; ti++)
             for(std::size_t bi = 0; bi < blocksPerTile; bi++)
             {
@@ -1164,12 +1168,12 @@ namespace manualAoSoASIMD
     }
 
     template<typename Simd>
-    void update1(ParticleBlock<Simd>* particles, int threads)
+    void update1(ParticleBlock<Simd>* particles)
     {
         constexpr auto lanes = Simd::size;
         constexpr auto blocks = problemSize / lanes;
 
-#    pragma omp parallel for schedule(static) num_threads(threads)
+#    pragma omp parallel for
         for(std::ptrdiff_t bi = 0; bi < blocks; bi++)
         {
             auto& blockI = particles[bi];
@@ -1208,11 +1212,11 @@ namespace manualAoSoASIMD
     }
 
     template<typename Simd>
-    void move(ParticleBlock<Simd>* particles, int threads)
+    void move(ParticleBlock<Simd>* particles)
     {
         constexpr auto blocks = problemSize / Simd::size;
 
-#    pragma omp parallel for schedule(static) num_threads(threads)
+#    pragma omp parallel for
         for(std::ptrdiff_t bi = 0; bi < blocks; bi++)
         {
             // std::for_each(ex, particles, particles + BLOCKS, [&](ParticleBlock& block) {
@@ -1225,13 +1229,11 @@ namespace manualAoSoASIMD
     }
 
     template<typename Simd>
-    auto main(std::ostream& plotFile, int threads, bool useUpdate1, bool tiled = false) -> Vec3
+    auto main(std::ostream& plotFile, bool useUpdate1, bool tiled = false) -> Vec3
     {
         auto title = "AoSoA" + std::to_string(Simd::size) + " SIMD" + (useUpdate1 ? " w1r8" : " w8r1"); // NOLINT
         if(tiled)
             title += " tiled";
-        if(threads > 1)
-            title += " " + std::to_string(threads) + "Thrds";
 
         std::cout << title << '\n';
         Stopwatch watch;
@@ -1266,17 +1268,17 @@ namespace manualAoSoASIMD
             if constexpr(runUpate)
             {
                 if(useUpdate1)
-                    update1(particles.data(), threads);
+                    update1(particles.data());
                 else
                 {
                     if(tiled)
-                        update8Tiled(particles.data(), threads);
+                        update8Tiled(particles.data());
                     else
-                        update8(particles.data(), threads);
+                        update8(particles.data());
                 }
                 statsUpdate(watch.printAndReset("update", '\t'));
             }
-            move(particles.data(), threads);
+            move(particles.data());
             statsMove(watch.printAndReset("move"));
         }
         plotFile << std::quoted(title) << "\t" << statsUpdate.mean() << "\t" << statsUpdate.sem() << '\t'
@@ -1328,9 +1330,9 @@ namespace manualAoSSIMD
     }
 
     template<typename Simd>
-    void update(Particle* particles, int threads)
+    void update(Particle* particles)
     {
-#    pragma omp parallel for schedule(static) num_threads(threads)
+#    pragma omp parallel for
         for(std::ptrdiff_t i = 0; i < problemSize; i += Simd::size)
         {
             auto& pi = particles[i];
@@ -1359,9 +1361,9 @@ namespace manualAoSSIMD
     }
 
     template<typename Simd>
-    void move(Particle* particles, int threads)
+    void move(Particle* particles)
     {
-#    pragma omp parallel for schedule(static) num_threads(threads)
+#    pragma omp parallel for
         for(std::ptrdiff_t i = 0; i < problemSize; i += Simd::size)
         {
             auto& pi = particles[i];
@@ -1372,11 +1374,9 @@ namespace manualAoSSIMD
     }
 
     template<typename Simd>
-    auto main(std::ostream& plotFile, int threads) -> Vec3
+    auto main(std::ostream& plotFile) -> Vec3
     {
-        auto title = "AoS SIMD"s;
-        if(threads > 1)
-            title += " " + std::to_string(threads) + "Thrds";
+        const auto title = "AoS SIMD"s;
         std::cout << title << '\n';
         Stopwatch watch;
 
@@ -1403,10 +1403,10 @@ namespace manualAoSSIMD
         {
             if constexpr(runUpate)
             {
-                update<Simd>(particles.data(), threads);
+                update<Simd>(particles.data());
                 statsUpdate(watch.printAndReset("update", '\t'));
             }
-            move<Simd>(particles.data(), threads);
+            move<Simd>(particles.data());
             statsMove(watch.printAndReset("move"));
         }
         plotFile << std::quoted(title) << "\t" << statsUpdate.mean() << "\t" << statsUpdate.sem() << '\t'
@@ -1421,17 +1421,9 @@ namespace manualSoASIMD
     using manualAoSoASIMD::pPInteraction;
 
     template<typename Simd>
-    void update(
-        const FP* posx,
-        const FP* posy,
-        const FP* posz,
-        FP* velx,
-        FP* vely,
-        FP* velz,
-        const FP* mass,
-        int threads)
+    void update(const FP* posx, const FP* posy, const FP* posz, FP* velx, FP* vely, FP* velz, const FP* mass)
     {
-#    pragma omp parallel for schedule(static) num_threads(threads)
+#    pragma omp parallel for
         for(std::ptrdiff_t i = 0; i < problemSize; i += Simd::size)
         {
             const Simd piposx = Simd::load_aligned(posx + i);
@@ -1459,9 +1451,9 @@ namespace manualSoASIMD
     }
 
     template<typename Simd>
-    void move(FP* posx, FP* posy, FP* posz, const FP* velx, const FP* vely, const FP* velz, int threads)
+    void move(FP* posx, FP* posy, FP* posz, const FP* velx, const FP* vely, const FP* velz)
     {
-#    pragma omp parallel for schedule(static) num_threads(threads)
+#    pragma omp parallel for
         for(std::ptrdiff_t i = 0; i < problemSize; i += Simd::size)
         {
             (Simd::load_aligned(posx + i) + Simd::load_aligned(velx + i) * timestep).store_aligned(posx + i);
@@ -1471,11 +1463,9 @@ namespace manualSoASIMD
     }
 
     template<typename Simd>
-    auto main(std::ostream& plotFile, int threads) -> Vec3
+    auto main(std::ostream& plotFile) -> Vec3
     {
-        auto title = "SoA MB SIMD"s;
-        if(threads > 1)
-            title += " " + std::to_string(threads) + "Thrds";
+        const auto title = "SoA MB SIMD";
         std::cout << title << '\n';
         Stopwatch watch;
 
@@ -1516,11 +1506,10 @@ namespace manualSoASIMD
                     velx.data(),
                     vely.data(),
                     velz.data(),
-                    mass.data(),
-                    threads);
+                    mass.data());
                 statsUpdate(watch.printAndReset("update", '\t'));
             }
-            move<Simd>(posx.data(), posy.data(), posz.data(), velx.data(), vely.data(), velz.data(), threads);
+            move<Simd>(posx.data(), posy.data(), posz.data(), velx.data(), vely.data(), velz.data());
             statsMove(watch.printAndReset("move"));
         }
         plotFile << std::quoted(title) << "\t" << statsUpdate.mean() << "\t" << statsUpdate.sem() << '\t'
@@ -1622,31 +1611,23 @@ $data << EOD
 #endif
 #ifdef HAVE_XSIMD
     using Simd = xsimd::batch<FP>;
-    const auto maxThreads = std::thread::hardware_concurrency();
-    for(int threads = 1; threads <= std::thread::hardware_concurrency(); threads *= 2)
-    {
-        // for (auto useUpdate1 : {false, true})
-        //    for (auto tiled : {false, true})
-        //    {
-        //        if (useUpdate1 && tiled)
-        //            continue;
-        //        r += manualAoSoA_SIMD::main<Simd>(plotFile, threads, useUpdate1, tiled);
-        //    }
-        finalPositions.push_back(manualAoSoASIMD::main<Simd>(plotFile, threads, false, false));
-    }
-    for(int threads = 1; threads <= maxThreads; threads *= 2)
-    {
-        //        mp_for_each<mp_list_c<std::size_t, 1, 2, 4, 8, 16>>(
-        //            [&](auto lanes)
-        //            {
-        //                using Simd = xsimd::make_sized_batch_t<FP, decltype(lanes)::value>;
-        //                if constexpr(!std::is_void_v<Simd>)
-        //                    r += manualAoS_SIMD::main<Simd>(plotFile, threads);
-        //            });
-        finalPositions.push_back(manualAoSSIMD::main<Simd>(plotFile, threads));
-    }
-    for(int threads = 1; threads <= maxThreads; threads *= 2)
-        finalPositions.push_back(manualSoASIMD::main<Simd>(plotFile, threads));
+    // for (auto useUpdate1 : {false, true})
+    //    for (auto tiled : {false, true})
+    //    {
+    //        if (useUpdate1 && tiled)
+    //            continue;
+    //        r += manualAoSoA_SIMD::main<Simd>(plotFile, useUpdate1, tiled);
+    //    }
+    finalPositions.push_back(manualAoSoASIMD::main<Simd>(plotFile, false, false));
+    //        mp_for_each<mp_list_c<std::size_t, 1, 2, 4, 8, 16>>(
+    //            [&](auto lanes)
+    //            {
+    //                using Simd = xsimd::make_sized_batch_t<FP, decltype(lanes)::value>;
+    //                if constexpr(!std::is_void_v<Simd>)
+    //                    r += manualAoS_SIMD::main<Simd>(plotFile);
+    //            });
+    finalPositions.push_back(manualAoSSIMD::main<Simd>(plotFile));
+    finalPositions.push_back(manualSoASIMD::main<Simd>(plotFile));
 #endif
 
     const auto ok = arePositionsClose(finalPositions);
