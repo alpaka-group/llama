@@ -287,8 +287,6 @@ namespace usellama
                 return "ByteSplit SoA MB";
             if(m == 7)
                 return "BitPack SoA 11e4";
-            if(m == 8)
-                return "BitPack SoA 11e4 CT";
             std::abort();
         };
         auto title = "LLAMA " + mappingName(Mapping) + (UseSimd ? " SIMD" : "");
@@ -319,8 +317,6 @@ namespace usellama
             if constexpr(Mapping == 6)
                 return llama::mapping::Bytesplit<ArrayExtents, Particle, llama::mapping::BindSoA<>::fn>{extents};
             if constexpr(Mapping == 7)
-                return llama::mapping::BitPackedFloatSoA<ArrayExtents, Particle>{extents, 4, 11};
-            if constexpr(Mapping == 8)
                 return llama::mapping::
                     BitPackedFloatSoA<ArrayExtents, Particle, llama::Constant<4>, llama::Constant<11>>{extents};
         }();
