@@ -1,5 +1,8 @@
 var namespaces_dup =
 [
+    [ "alpaka", "namespacealpaka.html", [
+      [ "allocBuf", "namespacealpaka.html#a3ba7b08c7ab05f64c5b1e89f74d9c816", null ]
+    ] ],
     [ "llama", "namespacellama.html", "namespacellama" ],
     [ "std", null, [
       [ "tuple_size< llama::Array< T, N > >", "structstd_1_1tuple__size_3_01llama_1_1Array_3_01T_00_01N_01_4_01_4.html", null ],

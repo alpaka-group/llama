@@ -1,5 +1,7 @@
 var NAVTREEINDEX5 =
 {
+"structllama_1_1accessor_1_1Default.html#a6bf43e681fa33310219aa1389743e6bc":[2,0,0,0,1,0],
+"structllama_1_1accessor_1_1Locked.html":[2,0,0,0,5],
 "structllama_1_1accessor_1_1Locked.html#ab0471036fb296a91ba9bbd6911deb4f7":[2,0,0,0,5,3],
 "structllama_1_1accessor_1_1Locked.html#ab8f42cfaab9ba2478575e14fba16bb7a":[2,0,0,0,5,1],
 "structllama_1_1accessor_1_1Locked.html#aeee88009c22da968858523bfe8316558":[2,0,0,0,5,2],
@@ -30,6 +32,9 @@ var NAVTREEINDEX5 =
 "structllama_1_1bloballoc_1_1AlignedAllocator.html#afc1b74be5b9bec25c966fe343f0aa235":[2,0,0,1,3,2],
 "structllama_1_1bloballoc_1_1AlignedAllocator_1_1rebind.html":[2,0,0,1,3,0],
 "structllama_1_1bloballoc_1_1AlignedAllocator_1_1rebind.html#a21f94f8b3f97ad48279888f0d6a6cc2e":[2,0,0,1,3,0,0],
+"structllama_1_1bloballoc_1_1AlpakaBuf.html":[2,0,0,1,5],
+"structllama_1_1bloballoc_1_1AlpakaBuf.html#a3735e7625813dad6e0d3ee033e12bcce":[2,0,0,1,5,0],
+"structllama_1_1bloballoc_1_1AlpakaBuf.html#ad1930b33613ebfb61309aa1b5f05552e":[2,0,0,1,5,1],
 "structllama_1_1bloballoc_1_1Array.html":[2,0,0,1,0],
 "structllama_1_1bloballoc_1_1Array.html#a3c282745bc38c9554406545e7d108520":[2,0,0,1,0,1],
 "structllama_1_1bloballoc_1_1Array_1_1AlignedArray.html":[2,0,0,1,0,0],
@@ -244,10 +249,5 @@ var NAVTREEINDEX5 =
 "structllama_1_1mapping_1_1BitPackedFloatAoS.html#af8cd2d5bc9e963379d1870db32e6467c":[2,0,0,3,8,4],
 "structllama_1_1mapping_1_1BitPackedFloatSoA.html":[2,0,0,3,6],
 "structllama_1_1mapping_1_1BitPackedFloatSoA.html#a1a168506193631b987170a3899038b8e":[2,0,0,3,6,6],
-"structllama_1_1mapping_1_1BitPackedFloatSoA.html#a3dd863836a9d91b243b1f67a420e7dda":[2,0,0,3,6,1],
-"structllama_1_1mapping_1_1BitPackedFloatSoA.html#a3e970429c672e5d0c87fadf4ad045aae":[2,0,0,3,6,4],
-"structllama_1_1mapping_1_1BitPackedFloatSoA.html#a6f6fd42927080307413510517f4b0f4a":[2,0,0,3,6,5],
-"structllama_1_1mapping_1_1BitPackedFloatSoA.html#a724cba1aca943a525b6c5ebdea19053c":[2,0,0,3,6,8],
-"structllama_1_1mapping_1_1BitPackedFloatSoA.html#aa2e1181f91f2906b1dd40a1b14c011ff":[2,0,0,3,6,0],
-"structllama_1_1mapping_1_1BitPackedFloatSoA.html#aa9b583a88eeadd76ccdc90c0b839c97d":[2,0,0,3,6,2]
+"structllama_1_1mapping_1_1BitPackedFloatSoA.html#a3dd863836a9d91b243b1f67a420e7dda":[2,0,0,3,6,1]
 };

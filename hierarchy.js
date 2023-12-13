@@ -6,6 +6,7 @@ var hierarchy =
       [ "llama::accessor::internal::StackedLeave< I, Accessor >", "structllama_1_1accessor_1_1internal_1_1StackedLeave.html", null ]
     ] ],
     [ "llama::bloballoc::AlignedAllocator< T, Alignment >", "structllama_1_1bloballoc_1_1AlignedAllocator.html", null ],
+    [ "llama::bloballoc::AlpakaBuf< Size, Dev >", "structllama_1_1bloballoc_1_1AlpakaBuf.html", null ],
     [ "llama::Array< T, N >", "structllama_1_1Array.html", null ],
     [ "llama::bloballoc::Array< BytesToReserve >", "structllama_1_1bloballoc_1_1Array.html", null ],
     [ "llama::Array< AccessCounts< CountType >, flatFieldCount< RecordDim > >", "structllama_1_1Array.html", [
