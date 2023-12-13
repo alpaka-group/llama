@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: LGPL-3.0-or-later
 
 cmake_minimum_required (VERSION 3.18.3)
-project(llama-alpaka-pic)
+project(llama-alpaka-pic CXX)
 
 if (MSVC AND MSVC_VERSION VERSION_GREATER_EQUAL 19.37)
 	# a failing MSVC version is 19.37.32825.0. A working version was 19.35.32217.1.
