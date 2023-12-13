@@ -13,12 +13,15 @@
 #if __has_include(<cuda_runtime.h>)
 #    include <cuda_runtime.h>
 #endif
-#if __has_include(<alpaka/alpaka.hpp>)
-#    include <alpaka/alpaka.hpp>
-#endif
 #if __has_include(<sycl/sycl.hpp>)
 #    include <sycl/sycl.hpp>
 #endif
+
+namespace alpaka
+{
+    template<typename TElem, typename TIdx, typename TExtent, typename TDev>
+    auto allocBuf(const TDev& dev, const TExtent& extent); // NOLINT(readability-redundant-declaration)
+} // namespace alpaka
 
 namespace llama::bloballoc
 {
@@ -165,7 +168,6 @@ namespace llama::bloballoc
     };
 #endif
 
-#if __has_include(<alpaka/alpaka.hpp>)
     /// Allocates alpaka buffers as blobs.
     LLAMA_EXPORT
     template<typename Size, typename Dev>
@@ -179,7 +181,6 @@ namespace llama::bloballoc
             return alpaka::allocBuf<std::byte, Size>(dev, static_cast<Size>(count));
         }
     };
-#endif
 
 #if __has_include(<sycl/sycl.hpp>)
     /// Allocates shared USM memory using sycl::aligned_alloc_shared. The memory is managed by a std::unique_ptr with a

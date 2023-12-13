@@ -6,6 +6,7 @@
 #include "macros.hpp"
 
 #include <ostream>
+#include <stdexcept>
 #include <tuple>
 
 namespace llama
