@@ -14,16 +14,15 @@ using RecordDim = boost::mp11::mp_take_c<Event, LLAMA_COMPTIME_RECORD_DIM_SIZE>;
 auto main() -> int
 try
 {
-    constexpr auto extents = llama::ArrayExtents{1024 * 1024};
-    using ArrayExtents = std::remove_const_t<decltype(extents)>;
-    //    const auto packedAoSMapping = llama::mapping::PackedAoS<ArrayExtents, RecordDim>{extents};
-    const auto alignedAoSMapping = llama::mapping::AlignedAoS<ArrayExtents, RecordDim>{extents};
-    //    const auto multiBlobSoAMapping = llama::mapping::MultiBlobSoA<ArrayExtents, RecordDim>{extents};
-    //    const auto aosoa8Mapping = llama::mapping::AoSoA<ArrayExtents, RecordDim, 8>{extents};
-    //    const auto aosoa32Mapping = llama::mapping::AoSoA<ArrayExtents, RecordDim, 32>{extents};
-    //    const auto aosoa64Mapping = llama::mapping::AoSoA<ArrayExtents, RecordDim, 64>{extents};
+    auto extents = llama::ArrayExtents{1024 * 1024};
+    //    const auto mapping = llama::mapping::PackedAoS<decltype(extents), RecordDim>{extents};
+    const auto mapping = llama::mapping::AlignedAoS<decltype(extents), RecordDim>{extents};
+    //    const auto mapping = llama::mapping::MultiBlobSoA<decltype(extents), RecordDim>{extents};
+    //    const auto mapping = llama::mapping::AoSoA<decltype(extents), RecordDim, 8>{extents};
+    //    const auto mapping = llama::mapping::AoSoA<decltype(extents), RecordDim, 32>{extents};
+    //    const auto mapping = llama::mapping::AoSoA<decltype(extents), RecordDim, 64>{extents};
 
-    auto view = llama::allocViewUninitialized(alignedAoSMapping);
+    auto view = llama::allocViewUninitialized(mapping);
     llama::forEachLeafCoord<RecordDim>(
         [&](auto coord)
         {
