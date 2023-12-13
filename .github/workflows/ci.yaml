@@ -178,12 +178,12 @@ jobs:
           - name: build-ubuntu-gcc12-nvcc12.2-asan
             cxx: g++-12
             install_extra: g++-12
-            cuda_url: https://developer.download.nvidia.com/compute/cuda/12.2.1/local_installers/cuda_12.2.1_535.86.10_linux.run
+            cuda_url: https://developer.download.nvidia.com/compute/cuda/12.2.2/local_installers/cuda_12.2.2_535.104.05_linux.run
             asan: ON
           - name: build-ubuntu-gcc12-nvcc12.3
             cxx: g++-12
             install_extra: g++-12
-            cuda_url: https://developer.download.nvidia.com/compute/cuda/12.3.0/local_installers/cuda_12.3.0_545.23.06_linux.run
+            cuda_url: https://developer.download.nvidia.com/compute/cuda/12.3.1/local_installers/cuda_12.3.1_545.23.08_linux.run
           - name: build-ubuntu-gcc13-asan
             cxx: g++-13
             add_toolchain_repo: true
