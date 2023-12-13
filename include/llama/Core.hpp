@@ -7,7 +7,6 @@
 #include "Meta.hpp"
 #include "RecordCoord.hpp"
 
-#include <iostream>
 #include <string>
 #include <type_traits>
 #if __has_include(<boost/describe/members.hpp>)
