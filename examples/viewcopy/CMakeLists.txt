@@ -10,11 +10,12 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "NVHPC")
 endif()
 
 find_package(OpenMP REQUIRED)
+find_package(fmt REQUIRED)
 if (NOT TARGET llama::llama)
 	find_package(llama REQUIRED)
 endif()
 add_executable(${PROJECT_NAME} viewcopy.cpp ../common/Stopwatch.hpp)
-target_link_libraries(${PROJECT_NAME} PRIVATE llama::llama OpenMP::OpenMP_CXX)
+target_link_libraries(${PROJECT_NAME} PRIVATE llama::llama OpenMP::OpenMP_CXX fmt::fmt)
 
 if (MSVC)
 	target_compile_options(${PROJECT_NAME} PRIVATE /arch:AVX2)

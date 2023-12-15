@@ -153,7 +153,7 @@ namespace llama
     namespace internal
     {
         template<typename Mapping>
-        inline constexpr std::size_t aosoaLanes = 0;
+        inline constexpr std::size_t aosoaLanes = 1;
 
         template<
             typename ArrayExtents,
@@ -193,6 +193,13 @@ namespace llama
         std::size_t threadId = 0,
         std::size_t threadCount = 1)
     {
+        static_assert(
+            mapping::isAoSoA<SrcMapping> || mapping::isSoA<SrcMapping>,
+            "Only AoSoA and SoA mappings allowed as source");
+        static_assert(
+            mapping::isAoSoA<DstMapping> || mapping::isSoA<DstMapping>,
+            "Only AoSoA and SoA mappings allowed as destination");
+
         // TODO(bgruber): think if we can remove this restriction
         static_assert(
             std::is_same_v<typename SrcMapping::RecordDim, typename DstMapping::RecordDim>,
