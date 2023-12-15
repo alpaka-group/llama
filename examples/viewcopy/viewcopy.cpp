@@ -7,10 +7,9 @@
 #include "../common/ttjet_13tev_june2019.hpp"
 
 #include <boost/functional/hash.hpp>
-#include <fmt/format.h>
+#include <fmt/core.h>
 #include <fstream>
 #include <immintrin.h>
-#include <iomanip>
 #include <llama/llama.hpp>
 #include <numeric>
 #include <omp.h>
@@ -18,6 +17,7 @@
 
 constexpr auto repetitions = 20; // excluding 1 warmup run
 constexpr auto extents = llama::ArrayExtents{512, 512, 16};
+constexpr auto measureMemcpy = false;
 
 // clang-format off
 namespace tag
@@ -125,6 +125,46 @@ auto prepareViewAndHash(Mapping mapping)
     return std::tuple{view, checkSum};
 }
 
+void benchmarkMemcopy(std::size_t dataSize, std::ostream& plotFile)
+{
+    std::vector<std::byte, llama::bloballoc::AlignedAllocator<std::byte, 64>> src(dataSize);
+
+    auto run = [&](std::string_view name, auto memcpy)
+    {
+        std::vector<std::byte, llama::bloballoc::AlignedAllocator<std::byte, 64>> dst(dataSize);
+        Stopwatch watch;
+        common::Stats stats;
+        for(auto i = 0; i < repetitions + 1; i++)
+        {
+            memcpy(dst.data(), src.data(), dataSize);
+            const auto seconds = watch.getAndReset();
+            const auto gbs = dataSize / (seconds * 1024.0 * 1024.0 * 1024.0);
+            stats(gbs);
+        }
+        std::cout << name << " " << stats.mean() << "GiB/s\n";
+        plotFile << "# " << name << ' ' << stats.mean() << "\t" << stats.sem() << '\n' << std::flush;
+    };
+
+    run("memcpy", std::memcpy);
+#ifdef __AVX2__
+    run("memcpy_avx2", memcpyAVX2);
+#endif
+    run("memcpy(p)",
+        [&](auto* dst, auto* src, auto size)
+        {
+#pragma omp parallel
+            llama::internal::parallelMemcpy(dst, src, size, omp_get_thread_num(), omp_get_num_threads(), std::memcpy);
+        });
+#ifdef __AVX2__
+    run("memcpy_avx2(p)",
+        [&](auto* dst, auto* src, auto size)
+        {
+#    pragma omp parallel
+            llama::internal::parallelMemcpy(dst, src, size, omp_get_thread_num(), omp_get_num_threads(), memcpyAVX2);
+        });
+#endif
+}
+
 auto main() -> int
 try
 {
@@ -144,64 +184,29 @@ set style fill solid border -1
 set xtics rotate by 45 right nomirror
 set key out top center maxrows 4
 set ylabel "Throughput [GiB/s]"
-$data << EOD
-""	"memcpy"	"memcpy_sem"	"memcpy\\_avx2"	"memcpy\\_avx2_sem"	"memcpy(p)"	"memcpy(p)_sem"	"memcpy\\_avx2(p)"	"memcpy\\_avx2(p)_sem"	"naive copy"	"naive copy_sem"	"std::copy"	"std::copy_sem"	"aosoa copy(r)"	"aosoa copy(r)_sem"	"aosoa copy(w)"	"aosoa copy(w)_sem"	"naive copy(p)"	"naive copy(p)_sem"	"aosoa copy(r,p)"	"aosoa copy(r,p)_sem"	"aosoa copy(w,p)"	"aosoa copy(w,p)_sem"
+
 )plot",
         env,
         dataSize / 1024 / 1024);
 
-    std::vector<std::byte, llama::bloballoc::AlignedAllocator<std::byte, 64>> src(dataSize);
-
-    auto benchmarkMemcpy = [&](std::string_view name, auto memcpy)
+    // measure memcpy to have a baseline for comparison
+    if constexpr(measureMemcpy)
     {
-        std::vector<std::byte, llama::bloballoc::AlignedAllocator<std::byte, 64>> dst(dataSize);
-        Stopwatch watch;
-        common::Stats stats;
-        for(auto i = 0; i < repetitions + 1; i++)
-        {
-            memcpy(dst.data(), src.data(), dataSize);
-            const auto seconds = watch.getAndReset();
-            const auto gbs = dataSize / (seconds * 1024.0 * 1024.0 * 1024.0);
-            stats(gbs);
-        }
-        std::cout << name << " " << stats.mean() << "GiB/s\t\n";
-        plotFile << stats.mean() << "\t" << stats.sem() << '\t';
-    };
+        fmt::print("byte[] -> byte[]\n");
+        benchmarkMemcopy(dataSize, plotFile);
+    }
 
-    std::cout << "byte[] -> byte[]\n";
-    plotFile << "\"byte[] -> byte[]\"\t";
-    benchmarkMemcpy("memcpy", std::memcpy);
-#ifdef __AVX2__
-    benchmarkMemcpy("memcpy_avx2", memcpyAVX2);
-#else
-    plotFile << "0\t";
-#endif
-    benchmarkMemcpy(
-        "memcpy(p)",
-        [&](auto* dst, auto* src, auto size)
-        {
-#pragma omp parallel
-            llama::internal::parallelMemcpy(dst, src, size, omp_get_thread_num(), omp_get_num_threads(), std::memcpy);
-        });
-#ifdef __AVX2__
-    benchmarkMemcpy(
-        "memcpy_avx2(p)",
-        [&](auto* dst, auto* src, auto size)
-        {
-#    pragma omp parallel
-            llama::internal::parallelMemcpy(dst, src, size, omp_get_thread_num(), omp_get_num_threads(), memcpyAVX2);
-        });
-#else
-    plotFile << "0\t";
-#endif
-    for(int i = 0; i < 7 * 2; i++)
-        plotFile << "0\t";
-    plotFile << "\n";
+    // benchmark structural copies
+
+    plotFile << R"plot(
+$data << EOD
+"src layout"	"dst layout"	"naive copy"	"naive copy_sem"	"std::copy"	"std::copy_sem"	"aosoa copy(r)"	"aosoa copy(r)_sem"	"aosoa copy(w)"	"aosoa copy(w)_sem"	"LLAMA copy"	"LLAMA copy_sem"	"naive copy(p)"	"naive copy(p)_sem"	"aosoa copy(r,p)"	"aosoa copy(r,p)_sem"	"aosoa copy(w,p)"	"aosoa copy(w,p)_sem"	"LLAMA copy(p)"	"LLAMA copy_sem(p)"
+)plot";
 
     auto benchmarkAllCopies = [&](std::string_view srcName, std::string_view dstName, auto srcMapping, auto dstMapping)
     {
-        std::cout << srcName << " -> " << dstName << "\n";
-        plotFile << "\"" << srcName << " -> " << dstName << "\"\t";
+        fmt::print("{} -> {}\n", srcName, dstName);
+        plotFile << "\"" << srcName << "\" \"" << dstName << "\"\t";
 
         auto [srcView, srcHash] = prepareViewAndHash(srcMapping);
 
@@ -218,19 +223,19 @@ $data << EOD
                 stats(gbs);
             }
             const auto dstHash = hash(dstView);
-            std::cout << name << " " << stats.mean() << "GiB/s\t" << (srcHash == dstHash ? "" : "\thash BAD ") << "\n";
+            fmt::print("{} {}GiB/s\t{}\n", name, stats.mean(), srcHash == dstHash ? "" : "\thash BAD ");
             plotFile << stats.mean() << "\t" << stats.sem() << '\t';
         };
 
-        for(int i = 0; i < 4 * 2; i++)
-            plotFile << "0\t";
         benchmarkCopy(
             "naive copy",
             [](const auto& srcView, auto& dstView) { llama::fieldWiseCopy(srcView, dstView); });
         benchmarkCopy("std::copy", [](const auto& srcView, auto& dstView) { stdCopy(srcView, dstView); });
-        constexpr auto oneIsAoSoA
-            = llama::mapping::isAoSoA<decltype(srcMapping)> || llama::mapping::isAoSoA<decltype(dstMapping)>;
-        if constexpr(oneIsAoSoA)
+        using namespace llama::mapping;
+        constexpr auto hasCommonBlockCopy = (isAoSoA<decltype(srcMapping)> && isAoSoA<decltype(dstMapping)>)
+            || (isAoSoA<decltype(srcMapping)> && isSoA<decltype(dstMapping)>)
+            || (isSoA<decltype(srcMapping)> && isAoSoA<decltype(dstMapping)>);
+        if constexpr(hasCommonBlockCopy)
         {
             benchmarkCopy(
                 "aosoa copy(r)",
@@ -244,6 +249,7 @@ $data << EOD
             for(int i = 0; i < 2 * 2; i++)
                 plotFile << "0\t";
         }
+        benchmarkCopy("llama", [&](const auto& srcView, auto& dstView) { llama::copy(srcView, dstView); });
         benchmarkCopy(
             "naive copy(p)",
             [&](const auto& srcView, auto& dstView)
@@ -252,7 +258,7 @@ $data << EOD
                 // NOLINTNEXTLINE(openmp-exception-escape)
                 llama::fieldWiseCopy(srcView, dstView, omp_get_thread_num(), omp_get_num_threads());
             });
-        if constexpr(oneIsAoSoA)
+        if constexpr(hasCommonBlockCopy)
         {
             benchmarkCopy(
                 "aosoa_copy(r,p)",
@@ -276,46 +282,53 @@ $data << EOD
             for(int i = 0; i < 2 * 2; i++)
                 plotFile << "0\t";
         }
+        benchmarkCopy(
+            "llama(p)",
+            [&](const auto& srcView, auto& dstView)
+            {
+#pragma omp parallel
+                // NOLINTNEXTLINE(openmp-exception-escape)
+                llama::copy(srcView, dstView, omp_get_thread_num(), omp_get_num_threads());
+            });
         plotFile << "\n";
     };
 
+    using namespace boost::mp11;
     using ArrayExtents = std::remove_const_t<decltype(extents)>;
-    const auto packedAoSMapping = llama::mapping::PackedAoS<ArrayExtents, RecordDim>{extents};
-    const auto alignedAoSMapping = llama::mapping::AlignedAoS<ArrayExtents, RecordDim>{extents};
-    const auto multiBlobSoAMapping = llama::mapping::MultiBlobSoA<ArrayExtents, RecordDim>{extents};
-    const auto aosoa8Mapping = llama::mapping::AoSoA<ArrayExtents, RecordDim, 8>{extents};
-    const auto aosoa32Mapping = llama::mapping::AoSoA<ArrayExtents, RecordDim, 32>{extents};
-    const auto aosoa64Mapping = llama::mapping::AoSoA<ArrayExtents, RecordDim, 64>{extents};
-
-    benchmarkAllCopies("P AoS", "A AoS", packedAoSMapping, alignedAoSMapping);
-    benchmarkAllCopies("A AoS", "P AoS", alignedAoSMapping, packedAoSMapping);
-
-    benchmarkAllCopies("A AoS", "SoA MB", alignedAoSMapping, multiBlobSoAMapping);
-    benchmarkAllCopies("SoA MB", "A AoS", multiBlobSoAMapping, alignedAoSMapping);
-
-    benchmarkAllCopies("SoA MB", "AoSoA32", multiBlobSoAMapping, aosoa32Mapping);
-    benchmarkAllCopies("AoSoA32", "SoA MB", aosoa32Mapping, multiBlobSoAMapping);
-
-    benchmarkAllCopies("AoSoA8", "AoSoA32", aosoa8Mapping, aosoa32Mapping);
-    benchmarkAllCopies("AoSoA32", "AoSoA8", aosoa32Mapping, aosoa8Mapping);
-
-    benchmarkAllCopies("AoSoA8", "AoSoA64", aosoa8Mapping, aosoa64Mapping);
-    benchmarkAllCopies("AoSoA64", "AoSoA8", aosoa64Mapping, aosoa8Mapping);
+    using Mappings = mp_list<
+        // llama::mapping::PackedAoS<ArrayExtents, RecordDim>,
+        llama::mapping::AlignedAoS<ArrayExtents, RecordDim>,
+        llama::mapping::AlignedSingleBlobSoA<ArrayExtents, RecordDim>,
+        llama::mapping::MultiBlobSoA<ArrayExtents, RecordDim>,
+        llama::mapping::AoSoA<ArrayExtents, RecordDim, 8>,
+        llama::mapping::AoSoA<ArrayExtents, RecordDim, 32>>;
+    std::string_view mappingNames[] = {/*"AoS P",*/ "AoS A", "SoA SB", "SoA MB", "AoSoA8", "AoSoA32"};
+    mp_for_each<mp_iota<mp_size<Mappings>>>(
+        [&]<typename I>(I)
+        {
+            mp_for_each<mp_iota<mp_size<Mappings>>>(
+                [&]<typename J>(J)
+                {
+                    benchmarkAllCopies(
+                        mappingNames[I::value],
+                        mappingNames[J::value],
+                        mp_at<Mappings, I>{extents},
+                        mp_at<Mappings, J>{extents});
+                });
+        });
 
     plotFile << R"(EOD
-plot $data using   2:3:xtic(1) ti col, \
-        "" using   4:5         ti col, \
-        "" using   6:7         ti col, \
-        "" using   8:9         ti col, \
-        "" using 10:11         ti col, \
-        "" using 12:13         ti col, \
-        "" using 14:15         ti col, \
-        "" using 16:17         ti col, \
-        "" using 18:19         ti col, \
-        "" using 20:21         ti col, \
-        "" using 22:23         ti col
+plot $data using  3: 4:xtic(sprintf("%s -> %s", stringcolumn(1), stringcolumn(2))) ti col, \
+        "" using  5: 6         ti col, \
+        "" using  7: 8         ti col, \
+        "" using  9:10         ti col, \
+        "" using 11:12         ti col, \
+        "" using 13:14         ti col, \
+        "" using 15:16         ti col, \
+        "" using 17:18         ti col, \
+        "" using 19:20         ti col
 )";
-    std::cout << "Plot with: ./viewcopy.sh\n";
+    fmt::print("Plot with: ./viewcopy.sh\n");
 }
 catch(const std::exception& e)
 {
