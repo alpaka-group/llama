@@ -364,8 +364,8 @@ namespace llama
         typename ArrayExtents,
         typename RecordDim,
         typename LinearizeArrayIndex,
-        std::size_t LanesSrc,
-        std::size_t LanesDst,
+        typename ArrayExtents::value_type LanesSrc,
+        typename ArrayExtents::value_type LanesDst,
         template<typename>
         typename PermuteFields>
     struct Copy<
@@ -394,7 +394,7 @@ namespace llama
         typename LinearizeArrayIndex,
         template<typename>
         typename PermuteFields,
-        std::size_t LanesSrc,
+        typename ArrayExtents::value_type LanesSrc,
         mapping::Blobs DstBlobs,
         mapping::SubArrayAlignment DstSubArrayAlignment>
     struct Copy<
@@ -424,7 +424,7 @@ namespace llama
         typename LinearizeArrayIndex,
         template<typename>
         typename PermuteFields,
-        std::size_t LanesDst,
+        typename ArrayExtents::value_type LanesDst,
         mapping::Blobs SrcBlobs,
         mapping::SubArrayAlignment SrcSubArrayAlignment>
     struct Copy<
