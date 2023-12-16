@@ -231,8 +231,6 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:a359ae38d758d2af3b2e5610fcc32c110"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a359ae38d758d2af3b2e5610fcc32c110">memcopyFunc</a> = void *(*)(void *, const void *, std::size_t)</td></tr>
-<tr class="separator:a359ae38d758d2af3b2e5610fcc32c110"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a81e3783dd94e3a1b003f955aaacf49d6"><td class="memTemplParams" colspan="2">template&lt;typename FromList , template&lt; auto... &gt; class ToList&gt; </td></tr>
 <tr class="memitem:a81e3783dd94e3a1b003f955aaacf49d6"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a81e3783dd94e3a1b003f955aaacf49d6">mp_unwrap_values_into</a> = typename <a class="el" href="structllama_1_1internal_1_1mp__unwrap__values__into__impl.html">mp_unwrap_values_into_impl</a>&lt; FromList, ToList &gt;::type</td></tr>
 <tr class="separator:a81e3783dd94e3a1b003f955aaacf49d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -248,8 +246,9 @@ Functions</h2></td></tr>
 <tr class="memitem:aafa8c3b0fd47fb8140b6b9aec0b61cb0"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim &gt; </td></tr>
 <tr class="memitem:aafa8c3b0fd47fb8140b6b9aec0b61cb0"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#aafa8c3b0fd47fb8140b6b9aec0b61cb0">assertTrivialCopyable</a> ()</td></tr>
 <tr class="separator:aafa8c3b0fd47fb8140b6b9aec0b61cb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a81e9975bf6750cae8fa41b8b94f58c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a0a81e9975bf6750cae8fa41b8b94f58c">parallelMemcpy</a> (std::byte *dst, const std::byte *src, std::size_t size, std::size_t threadId=0, std::size_t threadCount=1, <a class="el" href="namespacellama_1_1internal.html#a359ae38d758d2af3b2e5610fcc32c110">memcopyFunc</a> singleThreadMemcpy=std::memcpy)</td></tr>
-<tr class="separator:a0a81e9975bf6750cae8fa41b8b94f58c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab68b2a5fff076187bccb1aaa5e51f4e8"><td class="memTemplParams" colspan="2">template&lt;typename MemcpyFunc  = decltype(memcpy)&gt; </td></tr>
+<tr class="memitem:ab68b2a5fff076187bccb1aaa5e51f4e8"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#ab68b2a5fff076187bccb1aaa5e51f4e8">parallelMemcpy</a> (std::byte *dst, const std::byte *src, std::size_t size, std::size_t threadId=0, std::size_t threadCount=1, MemcpyFunc singleThreadMemcpy=&amp;<a class="el" href="namespacellama_1_1internal.html#ae7d043343c1a60a7ceb75ba7c06e4c18">memcpy</a>)</td></tr>
+<tr class="separator:ab68b2a5fff076187bccb1aaa5e51f4e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2413ee7f2d6487f7e306148cf2b46ac4"><td class="memTemplParams" colspan="2">template&lt;typename TypeList &gt; </td></tr>
 <tr class="memitem:a2413ee7f2d6487f7e306148cf2b46ac4"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a2413ee7f2d6487f7e306148cf2b46ac4">flatAlignOfImpl</a> ()</td></tr>
 <tr class="separator:a2413ee7f2d6487f7e306148cf2b46ac4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -386,6 +385,10 @@ Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
+<tr class="memitem:ae7d043343c1a60a7ceb75ba7c06e4c18"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#ae7d043343c1a60a7ceb75ba7c06e4c18">memcpy</a> = [](void* dst, const void* src, std::size_t size) { std::memcpy(dst, src, size); }</td></tr>
+<tr class="separator:ae7d043343c1a60a7ceb75ba7c06e4c18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c6df394c66fe2b06db0c0ad6a5e7b12"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a1c6df394c66fe2b06db0c0ad6a5e7b12">copyBlobWithMemcpy</a></td></tr>
+<tr class="separator:a1c6df394c66fe2b06db0c0ad6a5e7b12"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6be5f6ab0482c0b8d8276f41c70667c2"><td class="memTemplParams" colspan="2">template&lt;typename Mapping &gt; </td></tr>
 <tr class="memitem:a6be5f6ab0482c0b8d8276f41c70667c2"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a6be5f6ab0482c0b8d8276f41c70667c2">aosoaLanes</a> = 0</td></tr>
 <tr class="separator:a6be5f6ab0482c0b8d8276f41c70667c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -442,22 +445,6 @@ template&lt;typename Allocator , typename RecordDim &gt; </div>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00030">30</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a359ae38d758d2af3b2e5610fcc32c110"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a359ae38d758d2af3b2e5610fcc32c110">&#9670;&nbsp;</a></span>memcopyFunc</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="namespacellama_1_1internal.html#a359ae38d758d2af3b2e5610fcc32c110">llama::internal::memcopyFunc</a> = typedef void* (*) (void*, const void*, std::size_t)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="Copy_8hpp_source.html#l00029">29</a> of file <a class="el" href="Copy_8hpp_source.html">Copy.hpp</a>.</p>
 
 </div>
 </div>
@@ -1764,14 +1751,13 @@ template&lt;typename TypeList , std::size_t I, bool Align&gt; </div>
 
 </div>
 </div>
-<a id="a0a81e9975bf6750cae8fa41b8b94f58c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0a81e9975bf6750cae8fa41b8b94f58c">&#9670;&nbsp;</a></span>parallelMemcpy()</h2>
+<a id="ab68b2a5fff076187bccb1aaa5e51f4e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab68b2a5fff076187bccb1aaa5e51f4e8">&#9670;&nbsp;</a></span>parallelMemcpy()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
+<div class="memtemplate">
+template&lt;typename MemcpyFunc  = decltype(memcpy)&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void llama::internal::parallelMemcpy </td>
@@ -1806,8 +1792,8 @@ template&lt;typename TypeList , std::size_t I, bool Align&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespacellama_1_1internal.html#a359ae38d758d2af3b2e5610fcc32c110">memcopyFunc</a>&#160;</td>
-          <td class="paramname"><em>singleThreadMemcpy</em> = <code>std::memcpy</code>&#160;</td>
+          <td class="paramtype">MemcpyFunc&#160;</td>
+          <td class="paramname"><em>singleThreadMemcpy</em> = <code>&amp;<a class="el" href="namespacellama_1_1internal.html#ae7d043343c1a60a7ceb75ba7c06e4c18">memcpy</a></code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1815,14 +1801,9 @@ template&lt;typename TypeList , std::size_t I, bool Align&gt; </div>
           <td></td><td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Copy_8hpp_source.html#l00031">31</a> of file <a class="el" href="Copy_8hpp_source.html">Copy.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Copy_8hpp_source.html#l00035">35</a> of file <a class="el" href="Copy_8hpp_source.html">Copy.hpp</a>.</p>
 
 </div>
 </div>
@@ -2424,7 +2405,38 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Copy_8hpp_source.html#l00117">117</a> of file <a class="el" href="Copy_8hpp_source.html">Copy.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Copy_8hpp_source.html#l00156">156</a> of file <a class="el" href="Copy_8hpp_source.html">Copy.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a1c6df394c66fe2b06db0c0ad6a5e7b12"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c6df394c66fe2b06db0c0ad6a5e7b12">&#9670;&nbsp;</a></span>copyBlobWithMemcpy</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto llama::internal::copyBlobWithMemcpy</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">= [](<span class="keyword">const</span> <span class="keyword">auto</span>&amp; src, <span class="keyword">auto</span>&amp; dst, std::size_t size)</div>
+<div class="line">        {</div>
+<div class="line">            static_assert(std::is_trivially_copyable_v&lt;std::remove_reference_t&lt;decltype(*&amp;src[0])&gt;&gt;);</div>
+<div class="line">            static_assert(std::is_trivially_copyable_v&lt;std::remove_reference_t&lt;decltype(*&amp;dst[0])&gt;&gt;);</div>
+<div class="line">            <a class="code" href="namespacellama_1_1internal.html#ae7d043343c1a60a7ceb75ba7c06e4c18">std::memcpy</a>(&amp;dst[0], &amp;src[0], size);</div>
+<div class="line">        }</div>
+<div class="ttc" id="anamespacellama_1_1internal_html_ae7d043343c1a60a7ceb75ba7c06e4c18"><div class="ttname"><a href="namespacellama_1_1internal.html#ae7d043343c1a60a7ceb75ba7c06e4c18">llama::internal::memcpy</a></div><div class="ttdeci">constexpr auto memcpy</div><div class="ttdef"><b>Definition:</b> <a href="Copy_8hpp_source.html#l00031">Copy.hpp:32</a></div></div>
+</div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="Copy_8hpp_source.html#l00083">83</a> of file <a class="el" href="Copy_8hpp_source.html">Copy.hpp</a>.</p>
 
 </div>
 </div>
@@ -2667,6 +2679,30 @@ template&lt;typename T , typename  = void&gt; </div>
 
 </div>
 </div>
+<a id="ae7d043343c1a60a7ceb75ba7c06e4c18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae7d043343c1a60a7ceb75ba7c06e4c18">&#9670;&nbsp;</a></span>memcpy</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto llama::internal::memcpy = [](void* dst, const void* src, std::size_t size) { std::memcpy(dst, src, size); }</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="Copy_8hpp_source.html#l00031">31</a> of file <a class="el" href="Copy_8hpp_source.html">Copy.hpp</a>.</p>
+
+</div>
+</div>
 <a id="aadb89628e7b37c78df955928a1934c00"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aadb89628e7b37c78df955928a1934c00">&#9670;&nbsp;</a></span>recordCoordTagsStorage</h2>
 
@@ -2751,7 +2787,7 @@ template&lt;typename T &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1internal.html">internal</a></li>
-    <li class="footer">Generated on Sat Dec 16 2023 19:59:28 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Sat Dec 16 2023 23:11:15 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

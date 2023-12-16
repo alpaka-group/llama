@@ -1,5 +1,10 @@
 var NAVTREEINDEX6 =
 {
+"structllama_1_1mapping_1_1BitPackedFloatAoS.html#a98bf6eccea8e898be9e6459910113a13":[2,0,0,3,8,5],
+"structllama_1_1mapping_1_1BitPackedFloatAoS.html#ac070950434a6bc2db0cf14ff52d61e06":[2,0,0,3,8,6],
+"structllama_1_1mapping_1_1BitPackedFloatAoS.html#af8cd2d5bc9e963379d1870db32e6467c":[2,0,0,3,8,4],
+"structllama_1_1mapping_1_1BitPackedFloatSoA.html":[2,0,0,3,6],
+"structllama_1_1mapping_1_1BitPackedFloatSoA.html#a1a168506193631b987170a3899038b8e":[2,0,0,3,6,6],
 "structllama_1_1mapping_1_1BitPackedFloatSoA.html#a3dd863836a9d91b243b1f67a420e7dda":[2,0,0,3,6,1],
 "structllama_1_1mapping_1_1BitPackedFloatSoA.html#a3e970429c672e5d0c87fadf4ad045aae":[2,0,0,3,6,4],
 "structllama_1_1mapping_1_1BitPackedFloatSoA.html#a6f6fd42927080307413510517f4b0f4a":[2,0,0,3,6,5],
@@ -244,10 +249,5 @@ var NAVTREEINDEX6 =
 "structllama_1_1mapping_1_1internal_1_1ReplaceTagListsByCoords_3_01RecordDim_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html#a2c814eb0b34b2bb8eb0af9687279b611":[2,0,0,3,0,18,0],
 "structllama_1_1mapping_1_1internal_1_1ReplaceTagListsByCoords_3_01RecordDim_00_01mp__list_3_01Args_8_8_8_01_4_01_4.html":[2,0,0,3,0,19],
 "structllama_1_1mapping_1_1internal_1_1ReplaceTagListsByCoords_3_01RecordDim_00_01mp__list_3_01Args_8_8_8_01_4_01_4.html#a6ae0875971c97bfa21cfba027b8e4347":[2,0,0,3,0,19,0],
-"structllama_1_1mapping_1_1internal_1_1ReplaceTagListsByCoords_3_01RecordDim_00_01mp__list_3_01Args_8_8_8_01_4_01_4.html#ad81d397d27ee18beac31b6c7a0eb95dc":[2,0,0,3,0,19,1],
-"structllama_1_1mapping_1_1internal_1_1S.html":[2,0,0,3,0,9],
-"structllama_1_1mapping_1_1internal_1_1UnaryFunctionTraits.html":[2,0,0,3,0,12],
-"structllama_1_1mapping_1_1internal_1_1UnaryFunctionTraits_3_01Ret_07_5_08_07Arg_08_4.html":[2,0,0,3,0,13],
-"structllama_1_1mapping_1_1internal_1_1UnaryFunctionTraits_3_01Ret_07_5_08_07Arg_08_4.html#a0e5619a039ea44abe3dbb99a56492812":[2,0,0,3,0,13,0],
-"structllama_1_1mapping_1_1internal_1_1UnaryFunctionTraits_3_01Ret_07_5_08_07Arg_08_4.html#ad24fb11cf0ac668f70e35bfbd1272f34":[2,0,0,3,0,13,1]
+"structllama_1_1mapping_1_1internal_1_1ReplaceTagListsByCoords_3_01RecordDim_00_01mp__list_3_01Args_8_8_8_01_4_01_4.html#ad81d397d27ee18beac31b6c7a0eb95dc":[2,0,0,3,0,19,1]
 };
