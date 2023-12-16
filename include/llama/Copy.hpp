@@ -38,7 +38,7 @@ namespace llama
             std::size_t size,
             std::size_t threadId = 0,
             std::size_t threadCount = 1,
-            MemcpyFunc singleThreadMemcpy = &memcpy)
+            MemcpyFunc singleThreadMemcpy = memcpy)
         {
             const auto sizePerThread = size / threadCount;
             const auto sizeLastThread = sizePerThread + size % threadCount;
