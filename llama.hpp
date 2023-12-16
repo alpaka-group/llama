@@ -6163,8 +6163,8 @@ struct std::
 	namespace llama::mapping
 	{
 	    /// Array of struct mapping. Used to create a \ref View via \ref allocView.
-	    /// \tparam Alignment If Align, padding bytes are inserted to guarantee that struct members are properly aligned.
-	    /// If Pack, struct members are tightly packed.
+	    /// \tparam TFieldAlignment If Align, padding bytes are inserted to guarantee that struct members are properly
+	    /// aligned. If Pack, struct members are tightly packed.
 	    /// \tparam TLinearizeArrayIndexFunctor Defines how the array dimensions should be mapped into linear numbers and
 	    /// how big the linear domain gets.
 	    /// \tparam PermuteFields Defines how the record dimension's fields should be permuted. See \ref
@@ -6409,10 +6409,19 @@ struct std::
 	        template<std::size_t... RecordCoords>
 	        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
 	            typename Base::ArrayIndex ai,
+	            RecordCoord<RecordCoords...> rc = {}) const -> NrAndOffset<size_type>
+	        {
+	            return blobNrAndOffset(LinearizeArrayIndexFunctor{}(ai, Base::extents()), rc);
+	        }
+
+	        // Exposed for aosoaCommonBlockCopy. Should be private ...
+	        template<std::size_t... RecordCoords>
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
+	            size_type flatArrayIndex,
 	            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset<size_type>
 	        {
-	            const size_type elementOffset = LinearizeArrayIndexFunctor{}(ai, Base::extents())
-	                * static_cast<size_type>(sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>));
+	            const size_type elementOffset
+	                = flatArrayIndex * static_cast<size_type>(sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>));
 	            if constexpr(blobs == Blobs::OnePerField)
 	            {
 	                constexpr auto blob = flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>;
@@ -7022,6 +7031,15 @@ namespace llama
 		        template<std::size_t... RecordCoords>
 		        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
 		            typename Base::ArrayIndex ai,
+		            RecordCoord<RecordCoords...> rc = {}) const -> NrAndOffset<size_type>
+		        {
+		            return blobNrAndOffset(LinearizeArrayIndexFunctor{}(ai, Base::extents()), rc);
+		        }
+
+		        // Exposed for aosoaCommonBlockCopy. Should be private ...
+		        template<std::size_t... RecordCoords>
+		        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
+		            size_type flatArrayIndex,
 		            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset<size_type>
 		        {
 		            constexpr std::size_t flatFieldIndex =
@@ -7029,7 +7047,6 @@ namespace llama
 		                *& // mess with nvcc compiler state to workaround bug
 		#endif
 		                 Permuter::template permute<flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>>;
-		            const auto flatArrayIndex = LinearizeArrayIndexFunctor{}(ai, Base::extents());
 		            const auto blockIndex = flatArrayIndex / Lanes;
 		            const auto laneIndex = flatArrayIndex % Lanes;
 		            const auto offset = static_cast<size_type>(sizeOf<TRecordDim> * Lanes) * blockIndex
@@ -7042,11 +7059,14 @@ namespace llama
 		    /// Binds parameters to an \ref AoSoA mapping except for array and record dimension, producing a quoted meta
 		    /// function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
 		    LLAMA_EXPORT
-		    template<std::size_t Lanes, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
+		    template<
+		        std::size_t Lanes,
+		        typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight,
+		        template<typename> typename PermuteFields = PermuteFieldsInOrder>
 		    struct BindAoSoA
 		    {
 		        template<typename ArrayExtents, typename RecordDim>
-		        using fn = AoSoA<ArrayExtents, RecordDim, Lanes, LinearizeArrayIndexFunctor>;
+		        using fn = AoSoA<ArrayExtents, RecordDim, Lanes, LinearizeArrayIndexFunctor, PermuteFields>;
 		    };
 
 		    LLAMA_EXPORT
@@ -7054,8 +7074,8 @@ namespace llama
 		    inline constexpr bool isAoSoA = false;
 
 		    LLAMA_EXPORT
-		    template<typename AD, typename RD, typename AD::value_type L>
-		    inline constexpr bool isAoSoA<AoSoA<AD, RD, L>> = true;
+		    template<typename AD, typename RD, typename AD::value_type L, typename Lin, template<typename> typename Perm>
+		    inline constexpr bool isAoSoA<AoSoA<AD, RD, L, Lin, Perm>> = true;
 		} // namespace llama::mapping
 		// ==
 		// == ./include/llama/mapping/AoSoA.hpp ==
@@ -7247,43 +7267,15 @@ namespace llama
 	            throw std::runtime_error{"Destination SoA mapping's total array elements must be evenly divisible by the "
 	                                     "source AoSoA Lane count."};
 
-	        // the same as AoSoA::blobNrAndOffset but takes a flat array index
-	        auto mapAoSoA = [](std::size_t flatArrayIndex, auto rc, std::size_t Lanes) LLAMA_LAMBDA_INLINE
-	        {
-	            const auto blockIndex = flatArrayIndex / Lanes;
-	            const auto laneIndex = flatArrayIndex % Lanes;
-	            const auto offset = (sizeOf<RecordDim> * Lanes) * blockIndex + offsetOf<RecordDim, decltype(rc)> * Lanes
-	                + sizeof(GetType<RecordDim, decltype(rc)>) * laneIndex;
-	            return offset;
-	        };
-	        // the same as SoA::blobNrAndOffset but takes a flat array index
-	        auto mapSoA = [&](std::size_t flatArrayIndex, auto rc, bool mb) LLAMA_LAMBDA_INLINE
-	        {
-	            const auto blob = mb * flatRecordCoord<RecordDim, decltype(rc)>;
-	            const auto offset = !mb * offsetOf<RecordDim, decltype(rc)> * flatSize
-	                + sizeof(GetType<RecordDim, decltype(rc)>) * flatArrayIndex;
-	            return NrAndOffset{blob, offset};
-	        };
-
 	        auto mapSrc = [&](std::size_t flatArrayIndex, auto rc) LLAMA_LAMBDA_INLINE
 	        {
-	            if constexpr(srcIsAoSoA)
-	                return &srcView.blobs()[0][0] + mapAoSoA(flatArrayIndex, rc, lanesSrc);
-	            else
-	            {
-	                const auto [blob, off] = mapSoA(flatArrayIndex, rc, isSrcMB);
-	                return &srcView.blobs()[blob][off];
-	            }
+	            const auto [blob, off] = srcView.mapping().blobNrAndOffset(flatArrayIndex, rc);
+	            return &srcView.blobs()[blob][off];
 	        };
 	        auto mapDst = [&](std::size_t flatArrayIndex, auto rc) LLAMA_LAMBDA_INLINE
 	        {
-	            if constexpr(dstIsAoSoA)
-	                return &dstView.blobs()[0][0] + mapAoSoA(flatArrayIndex, rc, lanesDst);
-	            else
-	            {
-	                const auto [blob, off] = mapSoA(flatArrayIndex, rc, isDstMB);
-	                return &dstView.blobs()[blob][off];
-	            }
+	            const auto [blob, off] = dstView.mapping().blobNrAndOffset(flatArrayIndex, rc);
+	            return &dstView.blobs()[blob][off];
 	        };
 
 	        static constexpr auto l = []
@@ -7402,40 +7394,19 @@ namespace llama
 	        typename RecordDim,
 	        typename LinearizeArrayIndex,
 	        std::size_t LanesSrc,
-	        std::size_t LanesDst>
+	        std::size_t LanesDst,
+	        template<typename>
+	        typename PermuteFields>
 	    struct Copy<
-	        mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex>,
-	        mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex>,
+	        mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex, PermuteFields>,
+	        mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex, PermuteFields>,
 	        std::enable_if_t<LanesSrc != LanesDst>>
 	    {
 	        template<typename SrcBlob, typename DstBlob>
 	        void operator()(
-	            const View<mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex>, SrcBlob>& srcView,
-	            View<mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex>, DstBlob>& dstView,
-	            std::size_t threadId,
-	            std::size_t threadCount)
-	        {
-	            constexpr auto readOpt = true; // TODO(bgruber): how to choose?
-	            aosoaCommonBlockCopy(srcView, dstView, readOpt, threadId, threadCount);
-	        }
-	    };
-
-	    LLAMA_EXPORT
-	    template<
-	        typename ArrayExtents,
-	        typename RecordDim,
-	        typename LinearizeArrayIndex,
-	        std::size_t LanesSrc,
-	        mapping::Blobs DstBlobs,
-	        mapping::SubArrayAlignment DstSubArrayAlignment>
-	    struct Copy<
-	        mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex>,
-	        mapping::SoA<ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex>>
-	    {
-	        template<typename SrcBlob, typename DstBlob>
-	        void operator()(
-	            const View<mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex>, SrcBlob>& srcView,
-	            View<mapping::SoA<ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex>, DstBlob>&
+	            const View<mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex, PermuteFields>, SrcBlob>&
+	                srcView,
+	            View<mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex, PermuteFields>, DstBlob>&
 	                dstView,
 	            std::size_t threadId,
 	            std::size_t threadCount)
@@ -7450,19 +7421,53 @@ namespace llama
 	        typename ArrayExtents,
 	        typename RecordDim,
 	        typename LinearizeArrayIndex,
+	        template<typename>
+	        typename PermuteFields,
+	        std::size_t LanesSrc,
+	        mapping::Blobs DstBlobs,
+	        mapping::SubArrayAlignment DstSubArrayAlignment>
+	    struct Copy<
+	        mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex, PermuteFields>,
+	        mapping::SoA<ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex, PermuteFields>>
+	    {
+	        template<typename SrcBlob, typename DstBlob>
+	        void operator()(
+	            const View<mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex, PermuteFields>, SrcBlob>&
+	                srcView,
+	            View<
+	                mapping::
+	                    SoA<ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex, PermuteFields>,
+	                DstBlob>& dstView,
+	            std::size_t threadId,
+	            std::size_t threadCount)
+	        {
+	            constexpr auto readOpt = true; // TODO(bgruber): how to choose?
+	            aosoaCommonBlockCopy(srcView, dstView, readOpt, threadId, threadCount);
+	        }
+	    };
+
+	    LLAMA_EXPORT
+	    template<
+	        typename ArrayExtents,
+	        typename RecordDim,
+	        typename LinearizeArrayIndex,
+	        template<typename>
+	        typename PermuteFields,
 	        std::size_t LanesDst,
 	        mapping::Blobs SrcBlobs,
 	        mapping::SubArrayAlignment SrcSubArrayAlignment>
 	    struct Copy<
-	        mapping::SoA<ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex>,
-	        mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex>>
+	        mapping::SoA<ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex, PermuteFields>,
+	        mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex, PermuteFields>>
 	    {
 	        template<typename SrcBlob, typename DstBlob>
 	        void operator()(
 	            const View<
-	                mapping::SoA<ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex>,
+	                mapping::
+	                    SoA<ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex, PermuteFields>,
 	                SrcBlob>& srcView,
-	            View<mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex>, DstBlob>& dstView,
+	            View<mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex, PermuteFields>, DstBlob>&
+	                dstView,
 	            std::size_t threadId,
 	            std::size_t threadCount)
 	        {
