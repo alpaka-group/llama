@@ -265,7 +265,7 @@ jobs:
         run: |
           sudo apt install ${{ matrix.install_extra }}
       - name: remove g++-13 to fix old clang builds
-        if: ${{ matrix.cxx == 'clang++-11' || matrix.cxx == 'clang++-12' || matrix.cxx == 'clang++-13' || matrix.cxx == 'clang++-14' || matrix.cxx == 'clang++-15' }}
+        if: ${{ matrix.cxx == 'clang++-11' || matrix.cxx == 'clang++-12' || matrix.cxx == 'clang++-13' || matrix.cxx == 'clang++-14' || matrix.cxx == 'clang++-15' || matrix.cudacxx == 'clang++-16' }}
         run: |
           sudo apt remove gcc-13 g++-13 libstdc++-13-dev gcc g++ libstdc++-dev
           sudo apt autoremove
