@@ -1,6 +1,5 @@
 var NAVTREEINDEX1 =
 {
-"RecordCoord_8hpp_source.html":[3,0,0,0,15],
 "RecordRef_8hpp.html":[3,0,0,0,16],
 "RecordRef_8hpp.html#a066dd05be57445a48d062423d35f13d5":[3,0,0,0,16,32],
 "RecordRef_8hpp.html#a0f1653ed919838d951dd7753b22cac7e":[3,0,0,0,16,38],
@@ -154,8 +153,8 @@ var NAVTREEINDEX1 =
 "dir_cc3d900ac5e5cf76cfc53f8f96d0c8dc.html":[3,0,0,0,0],
 "dir_d44c64559bbebec7f509842c48db8b23.html":[3,0,0],
 "files.html":[3,0],
-"functions.html":[2,3,0],
 "functions.html":[2,3,0,0],
+"functions.html":[2,3,0],
 "functions_b.html":[2,3,0,1],
 "functions_c.html":[2,3,0,2],
 "functions_d.html":[2,3,0,3],
@@ -249,5 +248,6 @@ var NAVTREEINDEX1 =
 "namespacealpaka.html":[1,0,0],
 "namespacealpaka.html#a3ba7b08c7ab05f64c5b1e89f74d9c816":[1,0,0,0],
 "namespacellama.html":[1,0,1],
-"namespacellama.html#a0289e8c7f0657f29a2b02a1d37452493":[1,0,1,70]
+"namespacellama.html#a0289e8c7f0657f29a2b02a1d37452493":[1,0,1,70],
+"namespacellama.html#a03ce8695c9b67882c44356056ad3156d":[1,0,1,143]
 };
