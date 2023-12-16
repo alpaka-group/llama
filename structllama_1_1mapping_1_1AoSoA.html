@@ -138,9 +138,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a97a59d566716720cf304f52c7cfcd0fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a68998fecc259af70ca1daf6bcde1e098"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1AoSoA.html#a68998fecc259af70ca1daf6bcde1e098">blobSize</a> (size_type) const -&gt; size_type</td></tr>
 <tr class="separator:a68998fecc259af70ca1daf6bcde1e098"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab6c7173b3931df99b3c59e34f7dccaab"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RecordCoords&gt; </td></tr>
-<tr class="memitem:ab6c7173b3931df99b3c59e34f7dccaab"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1AoSoA.html#ab6c7173b3931df99b3c59e34f7dccaab">blobNrAndOffset</a> (typename <a class="el" href="structllama_1_1mapping_1_1MappingBase.html#a9e8dbadc1023c973d1d8a10a773e4786">Base::ArrayIndex</a> ai, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt;={}) const -&gt; <a class="el" href="structllama_1_1NrAndOffset.html">NrAndOffset</a>&lt; size_type &gt;</td></tr>
-<tr class="separator:ab6c7173b3931df99b3c59e34f7dccaab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42ef06d2f600c9043f68c10e59977103"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RecordCoords&gt; </td></tr>
+<tr class="memitem:a42ef06d2f600c9043f68c10e59977103"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1AoSoA.html#a42ef06d2f600c9043f68c10e59977103">blobNrAndOffset</a> (typename <a class="el" href="structllama_1_1mapping_1_1MappingBase.html#a9e8dbadc1023c973d1d8a10a773e4786">Base::ArrayIndex</a> ai, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt; rc={}) const -&gt; <a class="el" href="structllama_1_1NrAndOffset.html">NrAndOffset</a>&lt; size_type &gt;</td></tr>
+<tr class="separator:a42ef06d2f600c9043f68c10e59977103"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49b4588d5f80c14b557b6021ec6deb77"><td class="memTemplParams" colspan="2">template&lt;std::size_t... RecordCoords&gt; </td></tr>
+<tr class="memitem:a49b4588d5f80c14b557b6021ec6deb77"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1AoSoA.html#a49b4588d5f80c14b557b6021ec6deb77">blobNrAndOffset</a> (size_type flatArrayIndex, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt;={}) const -&gt; <a class="el" href="structllama_1_1NrAndOffset.html">NrAndOffset</a>&lt; size_type &gt;</td></tr>
+<tr class="separator:a49b4588d5f80c14b557b6021ec6deb77"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_structllama_1_1mapping_1_1MappingBase"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_structllama_1_1mapping_1_1MappingBase')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="structllama_1_1mapping_1_1MappingBase.html">llama::mapping::MappingBase&lt; TArrayExtents, TRecordDim &gt;</a></td></tr>
 <tr class="memitem:a3ca09f04e20b05688fa3ca89c5224fde inherit pub_methods_structllama_1_1mapping_1_1MappingBase"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1MappingBase.html#a3ca09f04e20b05688fa3ca89c5224fde">MappingBase</a> ()=default</td></tr>
 <tr class="separator:a3ca09f04e20b05688fa3ca89c5224fde inherit pub_methods_structllama_1_1mapping_1_1MappingBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -283,8 +286,51 @@ template&lt;typename TArrayExtents , typename TRecordDim , typename TArrayExtent
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ab6c7173b3931df99b3c59e34f7dccaab"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab6c7173b3931df99b3c59e34f7dccaab">&#9670;&nbsp;</a></span>blobNrAndOffset()</h2>
+<a id="a49b4588d5f80c14b557b6021ec6deb77"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49b4588d5f80c14b557b6021ec6deb77">&#9670;&nbsp;</a></span>blobNrAndOffset() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename TArrayExtents , typename TRecordDim , typename TArrayExtents::value_type Lanes, typename TLinearizeArrayIndexFunctor  = LinearizeArrayIndexRight, template&lt; typename &gt; typename PermuteFields = PermuteFieldsInOrder&gt; </div>
+<div class="memtemplate">
+template&lt;std::size_t... RecordCoords&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto <a class="el" href="structllama_1_1mapping_1_1AoSoA.html">llama::mapping::AoSoA</a>&lt; TArrayExtents, TRecordDim, Lanes, TLinearizeArrayIndexFunctor, PermuteFields &gt;::blobNrAndOffset </td>
+          <td>(</td>
+          <td class="paramtype">size_type&#160;</td>
+          <td class="paramname"><em>flatArrayIndex</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt;&#160;</td>
+          <td class="paramname"> = <code>{}</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const -&gt; <a class="el" href="structllama_1_1NrAndOffset.html">NrAndOffset</a>&lt;size_type&gt;
+        </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="AoSoA_8hpp_source.html#l00078">78</a> of file <a class="el" href="AoSoA_8hpp_source.html">AoSoA.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a42ef06d2f600c9043f68c10e59977103"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a42ef06d2f600c9043f68c10e59977103">&#9670;&nbsp;</a></span>blobNrAndOffset() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -306,7 +352,7 @@ template&lt;std::size_t... RecordCoords&gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; RecordCoords... &gt;&#160;</td>
-          <td class="paramname"> = <code>{}</code>&#160;</td>
+          <td class="paramname"><em>rc</em> = <code>{}</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -419,7 +465,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , typename TArrayExtent
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1AoSoA.html">AoSoA</a></li>
-    <li class="footer">Generated on Sat Dec 16 2023 17:03:00 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Sat Dec 16 2023 19:59:28 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

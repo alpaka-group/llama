@@ -166,7 +166,7 @@ struct llama::mapping::AoS&lt; TArrayExtents, TRecordDim, TFieldAlignment, TLine
 
 <p><a class="el" href="structllama_1_1Array.html">Array</a> of struct mapping. Used to create a <a class="el" href="structllama_1_1View.html">View</a> via <a class="el" href="namespacellama.html#a8e5d70e7cec0c305424ed3890c4cedc6">allocView</a>. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">Alignment</td><td>If Align, padding bytes are inserted to guarantee that struct members are properly aligned. If Pack, struct members are tightly packed. </td></tr>
+    <tr><td class="paramname">TFieldAlignment</td><td>If Align, padding bytes are inserted to guarantee that struct members are properly aligned. If Pack, struct members are tightly packed. </td></tr>
     <tr><td class="paramname">TLinearizeArrayIndexFunctor</td><td>Defines how the array dimensions should be mapped into linear numbers and how big the linear domain gets. </td></tr>
     <tr><td class="paramname">PermuteFields</td><td>Defines how the record dimension's fields should be permuted. See <a class="el" href="structllama_1_1mapping_1_1PermuteFieldsInOrder.html">PermuteFieldsInOrder</a>, <a class="el" href="namespacellama_1_1mapping.html#a85115db479ff4a7394fae89c70ff4305">PermuteFieldsIncreasingAlignment</a>, <a class="el" href="namespacellama_1_1mapping.html#a2e0ea39ca46af98002f4fefa52cc6ba8">PermuteFieldsDecreasingAlignment</a> and <a class="el" href="namespacellama_1_1mapping.html#a27d3128c60274c2018beeb76e99d6aff">PermuteFieldsMinimizePadding</a>. </td></tr>
   </table>
@@ -348,7 +348,7 @@ template&lt;typename TArrayExtents , typename TRecordDim , FieldAlignment TField
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1AoS.html">AoS</a></li>
-    <li class="footer">Generated on Sat Dec 16 2023 17:03:00 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Sat Dec 16 2023 19:59:28 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
