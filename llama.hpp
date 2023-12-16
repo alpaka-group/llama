@@ -7102,15 +7102,19 @@ namespace llama
 	                });
 	        }
 
-	        using memcopyFunc = void* (*) (void*, const void*, std::size_t);
+	        // need a custom memcpy symbol in LLAMA, because with clang+CUDA, there are multiple std::memcpy symbols, so
+	        // the address is ambiguous.
+	        inline constexpr auto memcpy
+	            = [](void* dst, const void* src, std::size_t size) { std::memcpy(dst, src, size); };
 
-	        inline void parallelMemcpy(
+	        template<typename MemcpyFunc = decltype(memcpy)>
+	        void parallelMemcpy(
 	            std::byte* dst,
 	            const std::byte* src,
 	            std::size_t size,
 	            std::size_t threadId = 0,
 	            std::size_t threadCount = 1,
-	            memcopyFunc singleThreadMemcpy = std::memcpy)
+	            MemcpyFunc singleThreadMemcpy = &memcpy)
 	        {
 	            const auto sizePerThread = size / threadCount;
 	            const auto sizeLastThread = sizePerThread + size % threadCount;
@@ -7119,17 +7123,19 @@ namespace llama
 	        }
 	    } // namespace internal
 
-	    /// Direct memcpy from source view blobs to destination view blobs. Both views need to have the same mappings with
-	    /// the same array dimensions.
-	    /// @param threadId Optional. Zero-based id of calling thread for multi-threaded invocations.
-	    /// @param threadCount Optional. Thread count in case of multi-threaded invocation.
+	    /// Copy the blobs' content from the source view to the destination view in parallel with the given thread
+	    /// configuration.  Both views need to have the same mappings with the same array extents.
+	    /// @param threadId Zero-based id of calling thread for multi-threaded invocations.
+	    /// @param threadCount Thread count in case of multi-threaded invocation.
+	    /// \param singleThreadMemcpy The implementation of memcpy. By default: std::memcpy.
 	    LLAMA_EXPORT
-	    template<typename Mapping, typename SrcBlob, typename DstBlob>
-	    void blobMemcpy(
+	    template<typename Mapping, typename SrcBlob, typename DstBlob, typename MemcpyFunc = decltype(internal::memcpy)>
+	    void memcpyBlobs(
 	        const View<Mapping, SrcBlob>& srcView,
 	        View<Mapping, DstBlob>& dstView,
 	        std::size_t threadId = 0,
-	        std::size_t threadCount = 1)
+	        std::size_t threadCount = 1,
+	        MemcpyFunc singleThreadMemcpy = internal::memcpy)
 	    {
 	        internal::assertTrivialCopyable<typename Mapping::RecordDim>();
 
@@ -7144,7 +7150,40 @@ namespace llama
 	                &srcView.blobs()[i][0],
 	                dstView.mapping().blobSize(i),
 	                threadId,
-	                threadCount);
+	                threadCount,
+	                singleThreadMemcpy);
+	    }
+
+	    namespace internal
+	    {
+	        inline constexpr auto copyBlobWithMemcpy = [](const auto& src, auto& dst, std::size_t size)
+	        {
+	            static_assert(std::is_trivially_copyable_v<std::remove_reference_t<decltype(*&src[0])>>);
+	            static_assert(std::is_trivially_copyable_v<std::remove_reference_t<decltype(*&dst[0])>>);
+	            std::memcpy(&dst[0], &src[0], size);
+	        };
+	    } // namespace internal
+
+	    /// Copy the blobs' content from the source view to the destination view. Both views need to have the same mapping,
+	    /// and thus the same blob count and blob sizes. The copy is performed blob by blob.
+	    /// \param copyBlob The function to use for copying blobs. Default is \ref internal::copyBlobWithMemcpy, which uses
+	    /// std::memcpy.
+	    LLAMA_EXPORT
+	    template<
+	        typename Mapping,
+	        typename SrcBlob,
+	        typename DstBlob,
+	        typename BlobCopyFunc = decltype(internal::copyBlobWithMemcpy)>
+	    void copyBlobs(
+	        const View<Mapping, SrcBlob>& srcView,
+	        View<Mapping, DstBlob>& dstView,
+	        BlobCopyFunc copyBlob = internal::copyBlobWithMemcpy)
+	    {
+	        // TODO(bgruber): we do not verify if the mappings have other runtime state than the array dimensions
+	        if(srcView.extents() != dstView.extents())
+	            throw std::runtime_error{"Array dimensions sizes are different"};
+	        for(std::size_t i = 0; i < Mapping::blobCount; i++)
+	            copyBlob(srcView.blobs()[i], dstView.blobs()[i], dstView.mapping().blobSize(i));
 	    }
 
 	    /// Field-wise copy from source to destination view. Both views need to have the same array and record dimensions.
@@ -7384,7 +7423,8 @@ namespace llama
 	        template<typename SrcView, typename DstView>
 	        void operator()(const SrcView& srcView, DstView& dstView, std::size_t threadId, std::size_t threadCount) const
 	        {
-	            blobMemcpy(srcView, dstView, threadId, threadCount);
+	            // FIXME(bgruber): need to fallback to fieldWiseCopy when elements are not trivially copyable
+	            memcpyBlobs(srcView, dstView, threadId, threadCount);
 	        }
 	    };
 
@@ -7476,8 +7516,9 @@ namespace llama
 	        }
 	    };
 
-	    /// Copy data from source view to destination view. Both views need to have the same array and record
-	    /// dimensions. Delegates to \ref Copy to choose an implementation.
+	    /// Copy data from source to destination view. Both views need to have the same array and record
+	    /// dimensions, but may have different mappings. The blobs need to be read- and writeable. Delegates to \ref Copy
+	    /// to choose an implementation.
 	    /// @param threadId Optional. Zero-based id of calling thread for multi-threaded invocations.
 	    /// @param threadCount Optional. Thread count in case of multi-threaded invocation.
 	    LLAMA_EXPORT
