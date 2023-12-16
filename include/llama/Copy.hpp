@@ -382,7 +382,7 @@ namespace llama
             std::size_t threadId,
             std::size_t threadCount)
         {
-            constexpr auto readOpt = true; // TODO(bgruber): how to choose?
+            constexpr auto readOpt = LanesSrc < LanesDst; // read contiguously on the AoSoA with the smaller lane count
             aosoaCommonBlockCopy(srcView, dstView, readOpt, threadId, threadCount);
         }
     };
@@ -412,7 +412,7 @@ namespace llama
             std::size_t threadId,
             std::size_t threadCount)
         {
-            constexpr auto readOpt = true; // TODO(bgruber): how to choose?
+            constexpr auto readOpt = true; // read contiguously on the AoSoA
             aosoaCommonBlockCopy(srcView, dstView, readOpt, threadId, threadCount);
         }
     };
@@ -442,7 +442,7 @@ namespace llama
             std::size_t threadId,
             std::size_t threadCount)
         {
-            constexpr auto readOpt = true; // TODO(bgruber): how to choose?
+            constexpr auto readOpt = false; // read contiguously on the AoSoA
             aosoaCommonBlockCopy(srcView, dstView, readOpt, threadId, threadCount);
         }
     };
