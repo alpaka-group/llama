@@ -30,7 +30,7 @@ abstract: >-
   memory and the real data layout in the background. This
   allows for performance portability in applications running
   on heterogeneous hardware with the very same code.
-license: LGPL-3.0+
+license: MPL-2.0
 keywords:
   - HPC
   - C++

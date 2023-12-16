@@ -1,5 +1,5 @@
 // Copyright 2023 Bernhard Manfred Gruber
-// SPDX-License-Identifier: LGPL-3.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 
 #ifndef LLAMA_COMPTIME_RECORD_DIM_SIZE
 #    define LLAMA_COMPTIME_RECORD_DIM_SIZE 20

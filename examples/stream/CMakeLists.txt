@@ -1,5 +1,5 @@
 # Copyright 2022 Bernhard Manfred Gruber
-# SPDX-License-Identifier: LGPL-3.0-or-later
+# SPDX-License-Identifier: MPL-2.0
 
 cmake_minimum_required (VERSION 3.18.3)
 

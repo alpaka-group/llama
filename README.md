@@ -83,4 +83,4 @@ Additionally, consider citing the [LLAMA paper](https://doi.org/10.1002/spe.3077
 License
 -------
 
-LLAMA is licensed under the [LGPL3+](LICENSE).
+LLAMA is licensed under the [MPL-2.0](LICENSE).
