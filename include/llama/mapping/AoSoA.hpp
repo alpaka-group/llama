@@ -88,11 +88,14 @@ namespace llama::mapping
     /// Binds parameters to an \ref AoSoA mapping except for array and record dimension, producing a quoted meta
     /// function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
     LLAMA_EXPORT
-    template<std::size_t Lanes, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight>
+    template<
+        std::size_t Lanes,
+        typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight,
+        template<typename> typename PermuteFields = PermuteFieldsInOrder>
     struct BindAoSoA
     {
         template<typename ArrayExtents, typename RecordDim>
-        using fn = AoSoA<ArrayExtents, RecordDim, Lanes, LinearizeArrayIndexFunctor>;
+        using fn = AoSoA<ArrayExtents, RecordDim, Lanes, LinearizeArrayIndexFunctor, PermuteFields>;
     };
 
     LLAMA_EXPORT
@@ -100,6 +103,6 @@ namespace llama::mapping
     inline constexpr bool isAoSoA = false;
 
     LLAMA_EXPORT
-    template<typename AD, typename RD, typename AD::value_type L>
-    inline constexpr bool isAoSoA<AoSoA<AD, RD, L>> = true;
+    template<typename AD, typename RD, typename AD::value_type L, typename Lin, template<typename> typename Perm>
+    inline constexpr bool isAoSoA<AoSoA<AD, RD, L, Lin, Perm>> = true;
 } // namespace llama::mapping

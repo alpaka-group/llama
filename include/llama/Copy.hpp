@@ -346,40 +346,19 @@ namespace llama
         typename RecordDim,
         typename LinearizeArrayIndex,
         std::size_t LanesSrc,
-        std::size_t LanesDst>
+        std::size_t LanesDst,
+        template<typename>
+        typename PermuteFields>
     struct Copy<
-        mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex>,
-        mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex>,
+        mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex, PermuteFields>,
+        mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex, PermuteFields>,
         std::enable_if_t<LanesSrc != LanesDst>>
     {
         template<typename SrcBlob, typename DstBlob>
         void operator()(
-            const View<mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex>, SrcBlob>& srcView,
-            View<mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex>, DstBlob>& dstView,
-            std::size_t threadId,
-            std::size_t threadCount)
-        {
-            constexpr auto readOpt = true; // TODO(bgruber): how to choose?
-            aosoaCommonBlockCopy(srcView, dstView, readOpt, threadId, threadCount);
-        }
-    };
-
-    LLAMA_EXPORT
-    template<
-        typename ArrayExtents,
-        typename RecordDim,
-        typename LinearizeArrayIndex,
-        std::size_t LanesSrc,
-        mapping::Blobs DstBlobs,
-        mapping::SubArrayAlignment DstSubArrayAlignment>
-    struct Copy<
-        mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex>,
-        mapping::SoA<ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex>>
-    {
-        template<typename SrcBlob, typename DstBlob>
-        void operator()(
-            const View<mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex>, SrcBlob>& srcView,
-            View<mapping::SoA<ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex>, DstBlob>&
+            const View<mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex, PermuteFields>, SrcBlob>&
+                srcView,
+            View<mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex, PermuteFields>, DstBlob>&
                 dstView,
             std::size_t threadId,
             std::size_t threadCount)
@@ -394,19 +373,53 @@ namespace llama
         typename ArrayExtents,
         typename RecordDim,
         typename LinearizeArrayIndex,
+        template<typename>
+        typename PermuteFields,
+        std::size_t LanesSrc,
+        mapping::Blobs DstBlobs,
+        mapping::SubArrayAlignment DstSubArrayAlignment>
+    struct Copy<
+        mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex, PermuteFields>,
+        mapping::SoA<ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex, PermuteFields>>
+    {
+        template<typename SrcBlob, typename DstBlob>
+        void operator()(
+            const View<mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex, PermuteFields>, SrcBlob>&
+                srcView,
+            View<
+                mapping::
+                    SoA<ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex, PermuteFields>,
+                DstBlob>& dstView,
+            std::size_t threadId,
+            std::size_t threadCount)
+        {
+            constexpr auto readOpt = true; // TODO(bgruber): how to choose?
+            aosoaCommonBlockCopy(srcView, dstView, readOpt, threadId, threadCount);
+        }
+    };
+
+    LLAMA_EXPORT
+    template<
+        typename ArrayExtents,
+        typename RecordDim,
+        typename LinearizeArrayIndex,
+        template<typename>
+        typename PermuteFields,
         std::size_t LanesDst,
         mapping::Blobs SrcBlobs,
         mapping::SubArrayAlignment SrcSubArrayAlignment>
     struct Copy<
-        mapping::SoA<ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex>,
-        mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex>>
+        mapping::SoA<ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex, PermuteFields>,
+        mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex, PermuteFields>>
     {
         template<typename SrcBlob, typename DstBlob>
         void operator()(
             const View<
-                mapping::SoA<ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex>,
+                mapping::
+                    SoA<ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex, PermuteFields>,
                 SrcBlob>& srcView,
-            View<mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex>, DstBlob>& dstView,
+            View<mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex, PermuteFields>, DstBlob>&
+                dstView,
             std::size_t threadId,
             std::size_t threadCount)
         {
