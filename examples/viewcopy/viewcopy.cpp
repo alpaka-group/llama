@@ -18,6 +18,7 @@
 constexpr auto repetitions = 20; // excluding 1 warmup run
 constexpr auto extents = llama::ArrayExtents{512, 512, 16};
 constexpr auto measureMemcpy = false;
+constexpr auto runParallelVersions = true;
 
 // clang-format off
 namespace tag
@@ -200,8 +201,11 @@ set ylabel "Throughput [GiB/s]"
 
     plotFile << R"plot(
 $data << EOD
-"src layout"	"dst layout"	"naive copy"	"naive copy_sem"	"std::copy"	"std::copy_sem"	"aosoa copy(r)"	"aosoa copy(r)_sem"	"aosoa copy(w)"	"aosoa copy(w)_sem"	"LLAMA copy"	"LLAMA copy_sem"	"naive copy(p)"	"naive copy(p)_sem"	"aosoa copy(r,p)"	"aosoa copy(r,p)_sem"	"aosoa copy(w,p)"	"aosoa copy(w,p)_sem"	"LLAMA copy(p)"	"LLAMA copy_sem(p)"
-)plot";
+"src layout"	"dst layout"	"naive copy"	"naive copy_sem"	"std::copy"	"std::copy_sem"	"aosoa copy(r)"	"aosoa copy(r)_sem"	"aosoa copy(w)"	"aosoa copy(w)_sem"	"LLAMA copy"	"LLAMA copy_sem")plot";
+    if constexpr(runParallelVersions)
+        plotFile
+            << R"plot(	"naive copy(p)"	"naive copy(p)_sem"	"aosoa copy(r,p)"	"aosoa copy(r,p)_sem"	"aosoa copy(w,p)"	"aosoa copy(w,p)_sem"	"LLAMA copy(p)"	"LLAMA copy_sem(p)")plot";
+    plotFile << '\n';
 
     auto benchmarkAllCopies = [&](std::string_view srcName, std::string_view dstName, auto srcMapping, auto dstMapping)
     {
@@ -250,46 +254,60 @@ $data << EOD
                 plotFile << "0\t";
         }
         benchmarkCopy("llama", [&](const auto& srcView, auto& dstView) { llama::copy(srcView, dstView); });
-        benchmarkCopy(
-            "naive copy(p)",
-            [&](const auto& srcView, auto& dstView)
-            {
-#pragma omp parallel
-                // NOLINTNEXTLINE(openmp-exception-escape)
-                llama::fieldWiseCopy(srcView, dstView, omp_get_thread_num(), omp_get_num_threads());
-            });
-        if constexpr(hasCommonBlockCopy)
+
+        if constexpr(runParallelVersions)
         {
             benchmarkCopy(
-                "aosoa_copy(r,p)",
+                "naive copy(p)",
                 [&](const auto& srcView, auto& dstView)
                 {
 #pragma omp parallel
                     // NOLINTNEXTLINE(openmp-exception-escape)
-                    llama::aosoaCommonBlockCopy(srcView, dstView, true, omp_get_thread_num(), omp_get_num_threads());
+                    llama::fieldWiseCopy(srcView, dstView, omp_get_thread_num(), omp_get_num_threads());
                 });
+            if constexpr(hasCommonBlockCopy)
+            {
+                benchmarkCopy(
+                    "aosoa_copy(r,p)",
+                    [&](const auto& srcView, auto& dstView)
+                    {
+#pragma omp parallel
+                        // NOLINTNEXTLINE(openmp-exception-escape)
+                        llama::aosoaCommonBlockCopy(
+                            srcView,
+                            dstView,
+                            true,
+                            omp_get_thread_num(),
+                            omp_get_num_threads());
+                    });
+                benchmarkCopy(
+                    "aosoa_copy(w,p)",
+                    [&](const auto& srcView, auto& dstView)
+                    {
+#pragma omp parallel
+                        // NOLINTNEXTLINE(openmp-exception-escape)
+                        llama::aosoaCommonBlockCopy(
+                            srcView,
+                            dstView,
+                            false,
+                            omp_get_thread_num(),
+                            omp_get_num_threads());
+                    });
+            }
+            else
+            {
+                for(int i = 0; i < 2 * 2; i++)
+                    plotFile << "0\t";
+            }
             benchmarkCopy(
-                "aosoa_copy(w,p)",
+                "llama(p)",
                 [&](const auto& srcView, auto& dstView)
                 {
 #pragma omp parallel
                     // NOLINTNEXTLINE(openmp-exception-escape)
-                    llama::aosoaCommonBlockCopy(srcView, dstView, false, omp_get_thread_num(), omp_get_num_threads());
+                    llama::copy(srcView, dstView, omp_get_thread_num(), omp_get_num_threads());
                 });
         }
-        else
-        {
-            for(int i = 0; i < 2 * 2; i++)
-                plotFile << "0\t";
-        }
-        benchmarkCopy(
-            "llama(p)",
-            [&](const auto& srcView, auto& dstView)
-            {
-#pragma omp parallel
-                // NOLINTNEXTLINE(openmp-exception-escape)
-                llama::copy(srcView, dstView, omp_get_thread_num(), omp_get_num_threads());
-            });
         plotFile << "\n";
     };
 
@@ -322,12 +340,14 @@ plot $data using  3: 4:xtic(sprintf("%s -> %s", stringcolumn(1), stringcolumn(2)
         "" using  5: 6         ti col, \
         "" using  7: 8         ti col, \
         "" using  9:10         ti col, \
-        "" using 11:12         ti col, \
+        "" using 11:12         ti col)";
+    if constexpr(runParallelVersions)
+        plotFile << R"(, \
         "" using 13:14         ti col, \
         "" using 15:16         ti col, \
         "" using 17:18         ti col, \
-        "" using 19:20         ti col
-)";
+        "" using 19:20         ti col)";
+    plotFile << '\n';
     fmt::print("Plot with: ./viewcopy.sh\n");
 }
 catch(const std::exception& e)
