@@ -212,8 +212,6 @@ namespace llama
         using RecordDim = typename SrcMapping::RecordDim;
         internal::assertTrivialCopyable<RecordDim>();
 
-        [[maybe_unused]] static constexpr bool isSrcMB = SrcMapping::blobCount > 1;
-        [[maybe_unused]] static constexpr bool isDstMB = DstMapping::blobCount > 1;
         static constexpr auto lanesSrc = internal::aosoaLanes<SrcMapping>;
         static constexpr auto lanesDst = internal::aosoaLanes<DstMapping>;
 
@@ -444,6 +442,57 @@ namespace llama
         {
             constexpr auto readOpt = false; // read contiguously on the AoSoA
             aosoaCommonBlockCopy(srcView, dstView, readOpt, threadId, threadCount);
+        }
+    };
+
+    LLAMA_EXPORT
+    template<
+        typename ArrayExtents,
+        typename RecordDim,
+        mapping::Blobs SrcBlobs,
+        mapping::Blobs DstBlobs,
+        mapping::SubArrayAlignment SrcSubArrayAlignment,
+        mapping::SubArrayAlignment DstSubArrayAlignment,
+        typename LinearizeArrayIndex,
+        template<typename>
+        typename PermuteFields>
+    struct Copy<
+        mapping::SoA<ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex, PermuteFields>,
+        mapping::SoA<ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex, PermuteFields>,
+        std::enable_if_t<SrcBlobs != DstBlobs || SrcSubArrayAlignment != DstSubArrayAlignment>>
+    {
+        template<typename SrcBlob, typename DstBlob>
+        void operator()(
+            const View<
+                mapping::
+                    SoA<ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex, PermuteFields>,
+                SrcBlob>& srcView,
+            View<
+                mapping::
+                    SoA<ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex, PermuteFields>,
+                DstBlob>& dstView,
+            std::size_t threadId,
+            std::size_t threadCount)
+        {
+            if(srcView.extents() != dstView.extents())
+                throw std::runtime_error{"Array dimensions sizes are different"};
+
+            const auto subArrayLength = product(srcView.extents());
+            forEachLeafCoord<RecordDim>(
+                [&](auto rc) LLAMA_LAMBDA_INLINE
+                {
+                    auto subArrayStart = [&](auto& view, auto rc) LLAMA_LAMBDA_INLINE
+                    {
+                        const auto [blob, off] = view.mapping().blobNrAndOffset(0, rc);
+                        return &view.blobs()[blob][off];
+                    };
+                    internal::parallelMemcpy(
+                        subArrayStart(dstView, rc),
+                        subArrayStart(srcView, rc),
+                        subArrayLength * sizeof(GetType<RecordDim, decltype(rc)>),
+                        threadId,
+                        threadCount);
+                });
         }
     };
 
