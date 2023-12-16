@@ -1,5 +1,5 @@
 // Copyright 2023 Bernhard Manfred Gruber
-// SPDX-License-Identifier: LGPL-3.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 
 // This example shows how a LLAMA mapping can be used to detect false sharing. The initial idea came from discussion
 // with Andreas Knüpfer after a presentation of LLAMA at the ZIH PhD student retreat.

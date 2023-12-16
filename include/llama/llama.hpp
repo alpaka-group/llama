@@ -1,5 +1,5 @@
 // Copyright 2018 Alexander Matthes, Bernhard Manfred Gruber
-// SPDX-License-Identifier: LGPL-3.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 
 #pragma once
 
@@ -20,7 +20,7 @@
 /// This page documents the API of LLAMA. The user documentation and an overview about the concepts and ideas can be
 /// found here: https://llama-doc.rtfd.io
 ///
-/// LLAMA is licensed under the LGPL3+.
+/// LLAMA is licensed under the MPL-2.0.
 
 // NOLINTNEXTLINE(modernize-macro-to-enum)
 #define LLAMA_VERSION_MAJOR 0

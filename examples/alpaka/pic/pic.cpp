@@ -1,5 +1,5 @@
 // Copyright 2020 Jiri Vyskocil, Bernhard Manfred Gruber
-// SPDX-License-Identifier: LGPL-3.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 
 #define _USE_MATH_DEFINES // NOLINT
 #if defined(ALPAKA_ACC_GPU_CUDA_ENABLED) && !defined(ALPAKA_ACC_GPU_CUDA_ONLY_MODE)
