@@ -7114,7 +7114,7 @@ namespace llama
 	            std::size_t size,
 	            std::size_t threadId = 0,
 	            std::size_t threadCount = 1,
-	            MemcpyFunc singleThreadMemcpy = &memcpy)
+	            MemcpyFunc singleThreadMemcpy = memcpy)
 	        {
 	            const auto sizePerThread = size / threadCount;
 	            const auto sizeLastThread = sizePerThread + size % threadCount;
@@ -7229,7 +7229,7 @@ namespace llama
 	    namespace internal
 	    {
 	        template<typename Mapping>
-	        inline constexpr std::size_t aosoaLanes = 0;
+	        inline constexpr std::size_t aosoaLanes = 1;
 
 	        template<
 	            typename ArrayExtents,
@@ -7269,6 +7269,13 @@ namespace llama
 	        std::size_t threadId = 0,
 	        std::size_t threadCount = 1)
 	    {
+	        static_assert(
+	            mapping::isAoSoA<SrcMapping> || mapping::isSoA<SrcMapping>,
+	            "Only AoSoA and SoA mappings allowed as source");
+	        static_assert(
+	            mapping::isAoSoA<DstMapping> || mapping::isSoA<DstMapping>,
+	            "Only AoSoA and SoA mappings allowed as destination");
+
 	        // TODO(bgruber): think if we can remove this restriction
 	        static_assert(
 	            std::is_same_v<typename SrcMapping::RecordDim, typename DstMapping::RecordDim>,
@@ -7281,8 +7288,6 @@ namespace llama
 	        using RecordDim = typename SrcMapping::RecordDim;
 	        internal::assertTrivialCopyable<RecordDim>();
 
-	        [[maybe_unused]] static constexpr bool isSrcMB = SrcMapping::blobCount > 1;
-	        [[maybe_unused]] static constexpr bool isDstMB = DstMapping::blobCount > 1;
 	        static constexpr auto lanesSrc = internal::aosoaLanes<SrcMapping>;
 	        static constexpr auto lanesDst = internal::aosoaLanes<DstMapping>;
 
@@ -7433,8 +7438,8 @@ namespace llama
 	        typename ArrayExtents,
 	        typename RecordDim,
 	        typename LinearizeArrayIndex,
-	        std::size_t LanesSrc,
-	        std::size_t LanesDst,
+	        typename ArrayExtents::value_type LanesSrc,
+	        typename ArrayExtents::value_type LanesDst,
 	        template<typename>
 	        typename PermuteFields>
 	    struct Copy<
@@ -7451,7 +7456,7 @@ namespace llama
 	            std::size_t threadId,
 	            std::size_t threadCount)
 	        {
-	            constexpr auto readOpt = true; // TODO(bgruber): how to choose?
+	            constexpr auto readOpt = LanesSrc < LanesDst; // read contiguously on the AoSoA with the smaller lane count
 	            aosoaCommonBlockCopy(srcView, dstView, readOpt, threadId, threadCount);
 	        }
 	    };
@@ -7463,7 +7468,7 @@ namespace llama
 	        typename LinearizeArrayIndex,
 	        template<typename>
 	        typename PermuteFields,
-	        std::size_t LanesSrc,
+	        typename ArrayExtents::value_type LanesSrc,
 	        mapping::Blobs DstBlobs,
 	        mapping::SubArrayAlignment DstSubArrayAlignment>
 	    struct Copy<
@@ -7481,7 +7486,7 @@ namespace llama
 	            std::size_t threadId,
 	            std::size_t threadCount)
 	        {
-	            constexpr auto readOpt = true; // TODO(bgruber): how to choose?
+	            constexpr auto readOpt = true; // read contiguously on the AoSoA
 	            aosoaCommonBlockCopy(srcView, dstView, readOpt, threadId, threadCount);
 	        }
 	    };
@@ -7493,7 +7498,7 @@ namespace llama
 	        typename LinearizeArrayIndex,
 	        template<typename>
 	        typename PermuteFields,
-	        std::size_t LanesDst,
+	        typename ArrayExtents::value_type LanesDst,
 	        mapping::Blobs SrcBlobs,
 	        mapping::SubArrayAlignment SrcSubArrayAlignment>
 	    struct Copy<
@@ -7511,8 +7516,59 @@ namespace llama
 	            std::size_t threadId,
 	            std::size_t threadCount)
 	        {
-	            constexpr auto readOpt = true; // TODO(bgruber): how to choose?
+	            constexpr auto readOpt = false; // read contiguously on the AoSoA
 	            aosoaCommonBlockCopy(srcView, dstView, readOpt, threadId, threadCount);
+	        }
+	    };
+
+	    LLAMA_EXPORT
+	    template<
+	        typename ArrayExtents,
+	        typename RecordDim,
+	        mapping::Blobs SrcBlobs,
+	        mapping::Blobs DstBlobs,
+	        mapping::SubArrayAlignment SrcSubArrayAlignment,
+	        mapping::SubArrayAlignment DstSubArrayAlignment,
+	        typename LinearizeArrayIndex,
+	        template<typename>
+	        typename PermuteFields>
+	    struct Copy<
+	        mapping::SoA<ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex, PermuteFields>,
+	        mapping::SoA<ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex, PermuteFields>,
+	        std::enable_if_t<SrcBlobs != DstBlobs || SrcSubArrayAlignment != DstSubArrayAlignment>>
+	    {
+	        template<typename SrcBlob, typename DstBlob>
+	        void operator()(
+	            const View<
+	                mapping::
+	                    SoA<ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex, PermuteFields>,
+	                SrcBlob>& srcView,
+	            View<
+	                mapping::
+	                    SoA<ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex, PermuteFields>,
+	                DstBlob>& dstView,
+	            std::size_t threadId,
+	            std::size_t threadCount)
+	        {
+	            if(srcView.extents() != dstView.extents())
+	                throw std::runtime_error{"Array dimensions sizes are different"};
+
+	            const auto subArrayLength = product(srcView.extents());
+	            forEachLeafCoord<RecordDim>(
+	                [&](auto rc) LLAMA_LAMBDA_INLINE
+	                {
+	                    auto subArrayStart = [&](auto& view, auto rc) LLAMA_LAMBDA_INLINE
+	                    {
+	                        const auto [blob, off] = view.mapping().blobNrAndOffset(0, rc);
+	                        return &view.blobs()[blob][off];
+	                    };
+	                    internal::parallelMemcpy(
+	                        subArrayStart(dstView, rc),
+	                        subArrayStart(srcView, rc),
+	                        subArrayLength * sizeof(GetType<RecordDim, decltype(rc)>),
+	                        threadId,
+	                        threadCount);
+	                });
 	        }
 	    };
 
