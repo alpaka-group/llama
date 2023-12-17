@@ -139,7 +139,7 @@ void benchmarkMemcopy(std::size_t dataSize, std::ostream& plotFile)
         {
             memcpy(dst.data(), src.data(), dataSize);
             const auto seconds = watch.getAndReset();
-            const auto gbs = dataSize / (seconds * 1024.0 * 1024.0 * 1024.0);
+            const auto gbs = static_cast<double>(dataSize) / (seconds * 1024.0 * 1024.0 * 1024.0);
             stats(gbs);
         }
         std::cout << name << " " << stats.mean() << "GiB/s\n";
