@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['hash_3c_20llama_3a_3arecordref_3c_20view_2c_20boundrecordcoord_2c_20ownview_20_3e_20_3e_880',['hash&lt; llama::RecordRef&lt; View, BoundRecordCoord, OwnView &gt; &gt;',['../structstd_1_1hash_3_01llama_1_1RecordRef_3_01View_00_01BoundRecordCoord_00_01OwnView_01_4_01_4.html',1,'std']]],
-  ['heatmap_881',['Heatmap',['../structllama_1_1mapping_1_1Heatmap.html',1,'llama::mapping']]]
+  ['hash_3c_20llama_3a_3arecordref_3c_20view_2c_20boundrecordcoord_2c_20ownview_20_3e_20_3e_882',['hash&lt; llama::RecordRef&lt; View, BoundRecordCoord, OwnView &gt; &gt;',['../structstd_1_1hash_3_01llama_1_1RecordRef_3_01View_00_01BoundRecordCoord_00_01OwnView_01_4_01_4.html',1,'std']]],
+  ['heatmap_883',['Heatmap',['../structllama_1_1mapping_1_1Heatmap.html',1,'llama::mapping']]]
 ];

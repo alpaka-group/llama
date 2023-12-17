@@ -246,9 +246,9 @@ Functions</h2></td></tr>
 <tr class="memitem:aafa8c3b0fd47fb8140b6b9aec0b61cb0"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim &gt; </td></tr>
 <tr class="memitem:aafa8c3b0fd47fb8140b6b9aec0b61cb0"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#aafa8c3b0fd47fb8140b6b9aec0b61cb0">assertTrivialCopyable</a> ()</td></tr>
 <tr class="separator:aafa8c3b0fd47fb8140b6b9aec0b61cb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab68b2a5fff076187bccb1aaa5e51f4e8"><td class="memTemplParams" colspan="2">template&lt;typename MemcpyFunc  = decltype(memcpy)&gt; </td></tr>
-<tr class="memitem:ab68b2a5fff076187bccb1aaa5e51f4e8"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#ab68b2a5fff076187bccb1aaa5e51f4e8">parallelMemcpy</a> (std::byte *dst, const std::byte *src, std::size_t size, std::size_t threadId=0, std::size_t threadCount=1, MemcpyFunc singleThreadMemcpy=&amp;<a class="el" href="namespacellama_1_1internal.html#ae7d043343c1a60a7ceb75ba7c06e4c18">memcpy</a>)</td></tr>
-<tr class="separator:ab68b2a5fff076187bccb1aaa5e51f4e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40d6481f77184bd16b5efc5d4e927d00"><td class="memTemplParams" colspan="2">template&lt;typename MemcpyFunc  = decltype(memcpy)&gt; </td></tr>
+<tr class="memitem:a40d6481f77184bd16b5efc5d4e927d00"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a40d6481f77184bd16b5efc5d4e927d00">parallelMemcpy</a> (std::byte *dst, const std::byte *src, std::size_t size, std::size_t threadId=0, std::size_t threadCount=1, MemcpyFunc singleThreadMemcpy=<a class="el" href="namespacellama_1_1internal.html#ae7d043343c1a60a7ceb75ba7c06e4c18">memcpy</a>)</td></tr>
+<tr class="separator:a40d6481f77184bd16b5efc5d4e927d00"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2413ee7f2d6487f7e306148cf2b46ac4"><td class="memTemplParams" colspan="2">template&lt;typename TypeList &gt; </td></tr>
 <tr class="memitem:a2413ee7f2d6487f7e306148cf2b46ac4"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a2413ee7f2d6487f7e306148cf2b46ac4">flatAlignOfImpl</a> ()</td></tr>
 <tr class="separator:a2413ee7f2d6487f7e306148cf2b46ac4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -390,7 +390,7 @@ Variables</h2></td></tr>
 <tr class="memitem:a1c6df394c66fe2b06db0c0ad6a5e7b12"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a1c6df394c66fe2b06db0c0ad6a5e7b12">copyBlobWithMemcpy</a></td></tr>
 <tr class="separator:a1c6df394c66fe2b06db0c0ad6a5e7b12"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6be5f6ab0482c0b8d8276f41c70667c2"><td class="memTemplParams" colspan="2">template&lt;typename Mapping &gt; </td></tr>
-<tr class="memitem:a6be5f6ab0482c0b8d8276f41c70667c2"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a6be5f6ab0482c0b8d8276f41c70667c2">aosoaLanes</a> = 0</td></tr>
+<tr class="memitem:a6be5f6ab0482c0b8d8276f41c70667c2"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a6be5f6ab0482c0b8d8276f41c70667c2">aosoaLanes</a> = 1</td></tr>
 <tr class="separator:a6be5f6ab0482c0b8d8276f41c70667c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1dc0436b8f0598e4fe3e707051be5b5f"><td class="memTemplParams" colspan="2">template&lt;std::size_t I, typename RecordDim &gt; </td></tr>
 <tr class="memitem:a1dc0436b8f0598e4fe3e707051be5b5f"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a1dc0436b8f0598e4fe3e707051be5b5f">flatFieldCountBefore</a> = 0</td></tr>
@@ -1751,8 +1751,8 @@ template&lt;typename TypeList , std::size_t I, bool Align&gt; </div>
 
 </div>
 </div>
-<a id="ab68b2a5fff076187bccb1aaa5e51f4e8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab68b2a5fff076187bccb1aaa5e51f4e8">&#9670;&nbsp;</a></span>parallelMemcpy()</h2>
+<a id="a40d6481f77184bd16b5efc5d4e927d00"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40d6481f77184bd16b5efc5d4e927d00">&#9670;&nbsp;</a></span>parallelMemcpy()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1793,7 +1793,7 @@ template&lt;typename MemcpyFunc  = decltype(memcpy)&gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">MemcpyFunc&#160;</td>
-          <td class="paramname"><em>singleThreadMemcpy</em> = <code>&amp;<a class="el" href="namespacellama_1_1internal.html#ae7d043343c1a60a7ceb75ba7c06e4c18">memcpy</a></code>&#160;</td>
+          <td class="paramname"><em>singleThreadMemcpy</em> = <code><a class="el" href="namespacellama_1_1internal.html#ae7d043343c1a60a7ceb75ba7c06e4c18">memcpy</a></code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -2395,7 +2395,7 @@ template&lt;typename Mapping &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr std::size_t llama::internal::aosoaLanes = 0</td>
+          <td class="memname">constexpr std::size_t llama::internal::aosoaLanes = 1</td>
         </tr>
       </table>
   </td>
@@ -2787,7 +2787,7 @@ template&lt;typename T &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1internal.html">internal</a></li>
-    <li class="footer">Generated on Sat Dec 16 2023 23:12:20 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Sun Dec 17 2023 02:38:00 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

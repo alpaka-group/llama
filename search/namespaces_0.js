@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['alpaka_1017',['alpaka',['../namespacealpaka.html',1,'']]]
+  ['alpaka_1019',['alpaka',['../namespacealpaka.html',1,'']]]
 ];
