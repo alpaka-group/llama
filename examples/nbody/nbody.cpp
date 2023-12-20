@@ -20,9 +20,10 @@
 #    define HAVE_XSIMD
 #endif
 
-// needs -fno-math-errno, so std::sqrt() can be vectorized
 // for multithreading, specify OpenMP thread affinity:
 // OMP_NUM_THREADS=x OMP_PROC_BIND=true OMP_PLACES=cores llama-nbody, where x is the number of cores on your system
+// for comparable benchmarks, disable rsqrt and replace -ffast-math by -fno-math-errno (so std::sqrt() can be
+// vectorized), so all versions use sqrt and divison
 
 using FP = float;
 
@@ -31,8 +32,7 @@ constexpr auto steps = 20; ///< number of steps to calculate, excluding 1 warmup
 constexpr auto countFieldAccesses = false;
 constexpr auto heatmap = false;
 constexpr auto dumpMapping = false;
-constexpr auto allowRsqrt
-    = true; // rsqrt can be way faster, but less accurate (use false for benchmarks and rely on -ffast-math)
+constexpr auto allowRsqrt = true; // rsqrt can be way faster, but less accurate
 constexpr auto newtonRaphsonAfterRsqrt = true; // generate a newton raphson refinement after explicit calls to rsqrt()
 constexpr auto runUpdate = true; // run update step. Useful to disable for benchmarking the move step.
 
