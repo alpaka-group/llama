@@ -34,7 +34,7 @@ constexpr auto dumpMapping = false;
 constexpr auto allowRsqrt
     = true; // rsqrt can be way faster, but less accurate (use false for benchmarks and rely on -ffast-math)
 constexpr auto newtonRaphsonAfterRsqrt = true; // generate a newton raphson refinement after explicit calls to rsqrt()
-constexpr auto runUpate = true; // run update step. Useful to disable for benchmarking the move step.
+constexpr auto runUpdate = true; // run update step. Useful to disable for benchmarking the move step.
 
 constexpr auto timestep = FP{0.0001};
 constexpr auto eps2 = FP{0.01};
@@ -366,7 +366,7 @@ namespace usellama
 #ifdef HAVE_XSIMD
             constexpr auto width = llama::simdLanesWithFullVectorsFor<Particle, MakeBatch>;
 #endif
-            if constexpr(runUpate)
+            if constexpr(runUpdate)
             {
 #ifdef HAVE_XSIMD
                 if constexpr(UseSimd)
@@ -465,7 +465,7 @@ namespace manualAoS
         common::Stats statsMove;
         for(std::size_t s = 0; s < steps + 1; ++s)
         {
-            if constexpr(runUpate)
+            if constexpr(runUpdate)
             {
                 update(particles.data());
                 statsUpdate(watch.printAndReset("update", '\t'));
@@ -573,7 +573,7 @@ namespace manualSoA
         common::Stats statsMove;
         for(std::size_t s = 0; s < steps + 1; ++s)
         {
-            if constexpr(runUpate)
+            if constexpr(runUpdate)
             {
                 update(posx.data(), posy.data(), posz.data(), velx.data(), vely.data(), velz.data(), mass.data());
                 statsUpdate(watch.printAndReset("update", '\t'));
@@ -759,7 +759,7 @@ namespace manualAoSoA
         common::Stats statsMove;
         for(std::size_t s = 0; s < steps + 1; ++s)
         {
-            if constexpr(runUpate)
+            if constexpr(runUpdate)
             {
                 if(tiled)
                     updateTiled(particles.data());
@@ -980,7 +980,7 @@ namespace manualAoSoAManualAVX
         common::Stats statsMove;
         for(std::size_t s = 0; s < steps + 1; ++s)
         {
-            if constexpr(runUpate)
+            if constexpr(runUpdate)
             {
                 if(useUpdate1)
                     update1(particles.data());
@@ -1261,7 +1261,7 @@ namespace manualAoSoASIMD
         common::Stats statsMove;
         for(std::size_t s = 0; s < steps + 1; ++s)
         {
-            if constexpr(runUpate)
+            if constexpr(runUpdate)
             {
                 if(useUpdate1)
                     update1(particles.data());
@@ -1397,7 +1397,7 @@ namespace manualAoSSIMD
         common::Stats statsMove;
         for(std::size_t s = 0; s < steps + 1; ++s)
         {
-            if constexpr(runUpate)
+            if constexpr(runUpdate)
             {
                 update<Simd>(particles.data());
                 statsUpdate(watch.printAndReset("update", '\t'));
@@ -1493,7 +1493,7 @@ namespace manualSoASIMD
         common::Stats statsMove;
         for(std::size_t s = 0; s < steps + 1; ++s)
         {
-            if constexpr(runUpate)
+            if constexpr(runUpdate)
             {
                 update<Simd>(
                     posx.data(),
