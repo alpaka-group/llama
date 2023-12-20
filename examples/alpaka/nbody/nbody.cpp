@@ -149,7 +149,7 @@ LLAMA_FN_HOST_ACC_INLINE void pPInteraction(const Acc& acc, ParticleRefI& pis, P
     pis(tag::Vel{}) += dist * sts;
 }
 
-template<int Elems, Mapping MappingSM>
+template<int Elems, typename QuotedSMMapping>
 struct UpdateKernel
 {
     template<typename Acc, typename View>
@@ -159,26 +159,19 @@ struct UpdateKernel
         {
             // if there is only 1 shared element per block, use just a variable (in registers) instead of shared memory
             if constexpr(sharedElementsPerBlock == 1)
-                return llama::allocViewStackUninitialized<View::ArrayExtents::rank, typename View::RecordDim>();
+            {
+                constexpr auto mapping
+                    = llama::mapping::MinAlignedOne<llama::ArrayExtents<int, 1>, SharedMemoryParticle>{};
+                return allocViewUninitialized(mapping, llama::bloballoc::Array<mapping.blobSize(0)>{});
+            }
             else
             {
-                constexpr auto sharedMapping = []
-                {
-                    using ArrayExtents = llama::ArrayExtents<int, sharedElementsPerBlock>;
-                    if constexpr(MappingSM == AoS)
-                        return llama::mapping::AoS<ArrayExtents, SharedMemoryParticle>{};
-                    if constexpr(MappingSM == SoA_SB)
-                        return llama::mapping::
-                            SoA<ArrayExtents, SharedMemoryParticle, llama::mapping::Blobs::Single>{};
-                    if constexpr(MappingSM == SoA_MB)
-                        return llama::mapping::
-                            SoA<ArrayExtents, SharedMemoryParticle, llama::mapping::Blobs::OnePerField>{};
-                    if constexpr(MappingSM == AoSoA)
-                        return llama::mapping::AoSoA<ArrayExtents, SharedMemoryParticle, aosoaLanes>{};
-                }();
+                using ArrayExtents = llama::ArrayExtents<int, sharedElementsPerBlock>;
+                using Mapping = typename QuotedSMMapping::template fn<ArrayExtents, SharedMemoryParticle>;
+                constexpr auto sharedMapping = Mapping{};
 
-                llama::Array<std::byte*, decltype(sharedMapping)::blobCount> sharedMems{};
-                boost::mp11::mp_for_each<boost::mp11::mp_iota_c<decltype(sharedMapping)::blobCount>>(
+                llama::Array<std::byte*, Mapping::blobCount> sharedMems{};
+                boost::mp11::mp_for_each<boost::mp11::mp_iota_c<Mapping::blobCount>>(
                     [&](auto i)
                     {
                         auto& sharedMem = alpaka::declareSharedVar<std::byte[sharedMapping.blobSize(i)], i>(acc);
@@ -290,6 +283,20 @@ void run(std::ostream& plotFile)
                 true>{extents};
         }
     }();
+
+    [[maybe_unused]] auto selectedSMMapping = []
+    {
+        if constexpr(MappingSM == AoS)
+            return llama::mapping::BindAoS{};
+        if constexpr(MappingSM == SoA_SB)
+            return llama::mapping::BindSoA<llama::mapping::Blobs::Single>{};
+        if constexpr(MappingSM == SoA_MB)
+            return llama::mapping::BindSoA<llama::mapping::Blobs::OnePerField>{};
+        if constexpr(MappingSM == AoSoA)
+            return llama::mapping::BindAoSoA<aosoaLanes>{};
+    }();
+    using QuotedMappingSM = decltype(selectedSMMapping);
+
     std::ofstream{"nbody_alpaka_mapping_" + mappingName(MappingGM) + ".svg"}
         << llama::toSvg(decltype(mapping){llama::ArrayExtentsDynamic<int, 1>{32}});
 
@@ -331,7 +338,7 @@ void run(std::ostream& plotFile)
     {
         if constexpr(runUpdate)
         {
-            auto updateKernel = UpdateKernel<elementsPerThread, MappingSM>{};
+            auto updateKernel = UpdateKernel<elementsPerThread, QuotedMappingSM>{};
             alpaka::exec<Acc>(queue, workdiv, updateKernel, llama::shallowCopy(accView));
             statsUpdate(watch.printAndReset("update", '\t'));
         }
