@@ -1075,7 +1075,7 @@ TEST_CASE("RecordRef.One.size")
     STATIC_REQUIRE(Mapping{}.blobSize(0) == 56);
     STATIC_REQUIRE(std::is_empty_v<Mapping::ArrayExtents::Index>);
 
-    [[maybe_unused]] const auto v = llama::allocViewStack<0, Particle>();
+    [[maybe_unused]] const auto v = llama::allocScalarView<0, Particle>();
     STATIC_REQUIRE(std::is_same_v<typename decltype(v)::Mapping, Mapping>);
     STATIC_REQUIRE(sizeof(v) == 56);
 

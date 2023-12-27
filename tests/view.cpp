@@ -406,14 +406,14 @@ TEMPLATE_TEST_CASE(
     checkCopy(constCopyOfConstCopy);
 }
 
-TEST_CASE("view.allocViewStack")
+TEST_CASE("view.allocScalarView")
 {
-    auto v0 = llama::allocViewStack<0, Vec3I>();
+    auto v0 = llama::allocScalarView<0, Vec3I>();
     v0(llama::ArrayIndex<int, 0>{})(tag::X{}) = 42;
 
-    auto v1 = llama::allocViewStack<1, Vec3I>();
+    auto v1 = llama::allocScalarView<1, Vec3I>();
     v1(llama::ArrayIndex{0})(tag::X{}) = 42;
 
-    auto v4 = llama::allocViewStack<4, Vec3I>();
+    auto v4 = llama::allocScalarView<4, Vec3I>();
     v4(llama::ArrayIndex{0, 0, 0, 0})(tag::X{}) = 42;
 }

@@ -163,22 +163,22 @@ namespace llama
         return view;
     }
 
-    /// Same as \ref allocViewStack but does not run field constructors.
+    /// Same as \ref allocScalarView but does not run field constructors.
     LLAMA_EXPORT
     template<std::size_t Dim, typename RecordDim>
-    LLAMA_FN_HOST_ACC_INLINE auto allocViewStackUninitialized() -> decltype(auto)
+    LLAMA_FN_HOST_ACC_INLINE auto allocScalarViewUninitialized() -> decltype(auto)
     {
         constexpr auto mapping = mapping::MinAlignedOne<ArrayExtentsNCube<int, Dim, 1>, RecordDim>{};
         return allocViewUninitialized(mapping, bloballoc::Array<mapping.blobSize(0)>{});
     }
 
-    /// Allocates a \ref View holding a single record backed by stack memory (\ref bloballoc::Array).
+    /// Allocates a \ref View holding a single record backed by a byte array (\ref bloballoc::Array).
     /// \tparam Dim Dimension of the \ref ArrayExtents of the \ref View.
     LLAMA_EXPORT
     template<std::size_t Dim, typename RecordDim>
-    LLAMA_FN_HOST_ACC_INLINE auto allocViewStack() -> decltype(auto)
+    LLAMA_FN_HOST_ACC_INLINE auto allocScalarView() -> decltype(auto)
     {
-        auto view = allocViewStackUninitialized<Dim, RecordDim>();
+        auto view = allocScalarViewUninitialized<Dim, RecordDim>();
         constructFields(view);
         return view;
     }
@@ -190,7 +190,7 @@ namespace llama
     /// A \ref RecordRef that owns and holds a single value.
     LLAMA_EXPORT
     template<typename RecordDim>
-    using One = RecordRef<decltype(allocViewStack<0, RecordDim>()), RecordCoord<>, true>;
+    using One = RecordRef<decltype(allocScalarView<0, RecordDim>()), RecordCoord<>, true>;
 
     /// Is true, if T is an instance of \ref One.
     LLAMA_EXPORT

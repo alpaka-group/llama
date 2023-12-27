@@ -363,7 +363,7 @@ namespace llama
         LLAMA_FN_HOST_ACC_INLINE RecordRef()
             /* requires(OwnView) */
             : ArrayIndex{}
-            , view{allocViewStack<0, RecordDim>()}
+            , view{allocScalarView<0, RecordDim>()}
         {
             static_assert(OwnView, "The default constructor of RecordRef is only available if it owns the view.");
         }

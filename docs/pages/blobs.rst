@@ -90,7 +90,7 @@ For :math:`N`-dimensional one-record views a shortcut exists, returning a view w
 
 .. code-block:: C++
 
-    auto tempView = llama::allocViewStack<N, RecordDim>();
+    auto tempView = llama::allocScalarView<N, RecordDim>();
 
 CudaMalloc
 ^^^^^^^^^^
