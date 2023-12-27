@@ -103,7 +103,7 @@ Views
 .. doxygenfunction:: llama::allocView
 .. doxygenfunction:: llama::constructFields
 .. doxygenfunction:: llama::allocViewUninitialized
-.. doxygenfunction:: llama::allocViewStack
+.. doxygenfunction:: llama::allocScalarView
 .. doxygentypedef:: llama::One
 .. doxygenfunction:: llama::copyRecord
 
