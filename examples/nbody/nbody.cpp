@@ -32,7 +32,7 @@ constexpr auto steps = 20; ///< number of steps to calculate, excluding 1 warmup
 constexpr auto countFieldAccesses = false;
 constexpr auto heatmap = false;
 constexpr auto dumpMapping = false;
-constexpr auto allowRsqrt = true; // rsqrt can be way faster, but less accurate
+constexpr auto allowRsqrt = false; // rsqrt can be way faster, but less accurate
 constexpr auto newtonRaphsonAfterRsqrt = true; // generate a newton raphson refinement after explicit calls to rsqrt()
 constexpr auto runUpdate = true; // run update step. Useful to disable for benchmarking the move step.
 
