@@ -1575,7 +1575,7 @@ $data << EOD
 
     std::vector<Vec3> finalPositions;
     using namespace boost::mp11;
-    mp_for_each<mp_iota_c<8>>(
+    mp_for_each<mp_iota_c<5>>(
         [&](auto ic)
         {
             static constexpr auto i = decltype(ic)::value;
