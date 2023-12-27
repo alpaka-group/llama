@@ -25,8 +25,8 @@ using FP = float;
 
 constexpr auto problemSize = 64 * 1024; ///< total number of particles
 constexpr auto steps = 20; ///< number of steps to calculate, excluding 1 warmup run
-constexpr auto allowRsqrt = true; // rsqrt can be way faster, but less accurate (some compilers may insert an
-                                  // additional newton raphson refinement)
+constexpr auto allowRsqrt = false; // rsqrt can be way faster, but less accurate (some compilers may insert an
+                                   // additional newton raphson refinement)
 constexpr auto runUpdate = true; // run update step. Useful to disable for benchmarking the move step.
 
 #if defined(ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED) || defined(ALPAKA_ACC_CPU_B_OMP2_T_SEQ_ENABLED)                       \

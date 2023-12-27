@@ -19,7 +19,7 @@ target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 target_link_libraries(${PROJECT_NAME} PRIVATE llama::llama fmt::fmt alpaka::alpaka xsimd)
 
 if (MSVC)
-	target_compile_options(${PROJECT_NAME} PRIVATE $<$<COMPILE_LANGUAGE:CXX>:/arch:AVX2 /fp:fast>)
+	target_compile_options(${PROJECT_NAME} PRIVATE /arch:AVX2) # /fp:fast
 else()
-	target_compile_options(${PROJECT_NAME} PRIVATE -march=native $<IF:$<CXX_COMPILER_ID:NVHPC>,-fast,-ffast-math>)
+	target_compile_options(${PROJECT_NAME} PRIVATE -march=native -fno-math-errno) # -ffast-math
 endif()
