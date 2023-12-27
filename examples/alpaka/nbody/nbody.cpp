@@ -161,9 +161,8 @@ struct UpdateKernel
             // if there is only 1 shared element per block, use just a variable (in registers) instead of shared memory
             if constexpr(sharedElementsPerBlock == 1)
             {
-                constexpr auto mapping
-                    = llama::mapping::MinAlignedOne<llama::ArrayExtents<int, 1>, SharedMemoryParticle>{};
-                return allocViewUninitialized(mapping, llama::bloballoc::Array<mapping.blobSize(0)>{});
+                using Mapping = llama::mapping::MinAlignedOne<llama::ArrayExtents<int, 1>, SharedMemoryParticle>;
+                return allocViewUninitialized(Mapping{}, llama::bloballoc::Array<Mapping{}.blobSize(0)>{});
             }
             else
             {
