@@ -3,7 +3,7 @@
 # run this on the generated n-body executable to see where rsqrt is generated
 objdump -SC $1 | awk '
 /^000.+/ {
-  if ($0 ~ /update/) {
+  if ($0 ~ /[Uu]pdate/) {
     f = $0;
   } else {
     f = ""
