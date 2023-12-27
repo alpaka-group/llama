@@ -20,10 +20,11 @@
 #    define HAVE_XSIMD
 #endif
 
-// for multithreading, specify OpenMP thread affinity:
-// OMP_NUM_THREADS=x OMP_PROC_BIND=true OMP_PLACES=cores llama-nbody, where x is the number of cores on your system
-// for comparable benchmarks, disable rsqrt and replace -ffast-math by -fno-math-errno (so std::sqrt() can be
-// vectorized), so all versions use sqrt and divison
+#ifdef _OPENMP
+#    define PARALLEL_FOR _Pragma("omp parallel for simd")
+#else
+#    define PARALLEL_FOR LLAMA_INDEPENDENT_DATA
+#endif
 
 using FP = float;
 
@@ -217,7 +218,7 @@ namespace usellama
     template<int Width, typename View>
     void updateSimd(View& particles)
     {
-#    pragma omp parallel for
+        PARALLEL_FOR
         for(std::size_t i = 0; i < problemSize; i += Width)
         {
             using RecordDim = typename View::RecordDim;
@@ -232,7 +233,7 @@ namespace usellama
     template<int Width, typename View>
     void moveSimd(View& particles)
     {
-#    pragma omp parallel for
+        PARALLEL_FOR
         for(std::size_t i = 0; i < problemSize; i += Width)
         {
             using RecordDim = typename View::RecordDim;
@@ -248,7 +249,7 @@ namespace usellama
     template<typename View>
     void update(View& particles)
     {
-#pragma omp parallel for
+        PARALLEL_FOR
         for(std::size_t i = 0; i < problemSize; i++)
         {
             llama::One<Particle> pi = particles(i);
@@ -261,7 +262,7 @@ namespace usellama
     template<typename View>
     void move(View& particles)
     {
-#pragma omp parallel for
+        PARALLEL_FOR
         for(std::size_t i = 0; i < problemSize; i++)
             particles(i)(tag::Pos{}) += particles(i)(tag::Vel{}) * timestep;
     }
@@ -421,7 +422,7 @@ namespace manualAoS
 
     void update(Particle* particles)
     {
-#pragma omp parallel for
+        PARALLEL_FOR
         for(std::size_t i = 0; i < problemSize; i++)
         {
             Particle pi = particles[i];
@@ -433,7 +434,7 @@ namespace manualAoS
 
     void move(Particle* particles)
     {
-#pragma omp parallel for
+        PARALLEL_FOR
         for(std::size_t i = 0; i < problemSize; i++)
             particles[i].pos += particles[i].vel * timestep;
     }
@@ -511,7 +512,7 @@ namespace manualSoA
 
     void update(FP* posx, FP* posy, FP* posz, FP* velx, FP* vely, FP* velz, FP* mass)
     {
-#pragma omp parallel for
+        PARALLEL_FOR
         for(std::size_t i = 0; i < problemSize; i++)
         {
             const FP piposx = posx[i];
@@ -530,7 +531,7 @@ namespace manualSoA
 
     void move(FP* posx, FP* posy, FP* posz, const FP* velx, const FP* vely, const FP* velz)
     {
-#pragma omp parallel for
+        PARALLEL_FOR
         for(std::size_t i = 0; i < problemSize; i++)
         {
             posx[i] += velx[i] * timestep;
@@ -640,7 +641,7 @@ namespace manualAoSoA
     void update(ParticleBlock<Lanes>* particles)
     {
         constexpr auto blocks = problemSize / Lanes;
-#pragma omp parallel for
+        PARALLEL_FOR
         for(std::size_t bi = 0; bi < blocks; bi++)
         {
             auto blockI = particles[bi];
@@ -675,7 +676,7 @@ namespace manualAoSoA
         constexpr auto blocks = problemSize / Lanes;
         constexpr auto blocksPerTile = 128; // L1D_SIZE / sizeof(ParticleBlock<Lanes>);
         static_assert(blocks % blocksPerTile == 0);
-#pragma omp parallel for
+        PARALLEL_FOR
         for(std::size_t ti = 0; ti < blocks / blocksPerTile; ti++)
             for(std::size_t tj = 0; tj < blocks / blocksPerTile; tj++)
                 for(std::size_t bi = 0; bi < blocksPerTile; bi++)
@@ -709,7 +710,7 @@ namespace manualAoSoA
     void move(ParticleBlock<Lanes>* particles)
     {
         constexpr auto blocks = problemSize / Lanes;
-#pragma omp parallel for
+        PARALLEL_FOR
         for(std::size_t bi = 0; bi < blocks; bi++)
         {
             LLAMA_INDEPENDENT_DATA
@@ -857,7 +858,7 @@ namespace manualAoSoAManualAVX
     // update (read/write) 8 particles I based on the influence of 1 particle J
     void update8(ParticleBlock* particles)
     {
-#    pragma omp parallel for
+        PARALLEL_FOR
         for(std::size_t bi = 0; bi < blocks; bi++)
         {
             auto& blockI = particles[bi];
@@ -903,7 +904,7 @@ namespace manualAoSoAManualAVX
     // update (read/write) 1 particles I based on the influence of 8 particles J with accumulator
     void update1(ParticleBlock* particles)
     {
-#    pragma omp parallel for
+        PARALLEL_FOR
         for(std::size_t bi = 0; bi < blocks; bi++)
             for(std::size_t i = 0; i < lanes; i++)
             {
@@ -933,7 +934,7 @@ namespace manualAoSoAManualAVX
 
     void move(ParticleBlock* particles)
     {
-#    pragma omp parallel for
+        PARALLEL_FOR
         for(std::size_t bi = 0; bi < blocks; bi++)
         {
             auto& block = particles[bi];
@@ -1071,7 +1072,7 @@ namespace manualAoSoASIMD
         constexpr auto lanes = Simd::size;
         constexpr auto blocks = problemSize / lanes;
 
-#    pragma omp parallel for
+        PARALLEL_FOR
         for(std::ptrdiff_t bi = 0; bi < blocks; bi++)
         {
             auto& blockI = particles[bi];
@@ -1110,7 +1111,7 @@ namespace manualAoSoASIMD
 
         constexpr auto blocksPerTile = 128; // L1D_SIZE / sizeof(ParticleBlock);
         static_assert(blocks % blocksPerTile == 0);
-#    pragma omp parallel for
+        PARALLEL_FOR
         for(std::ptrdiff_t ti = 0; ti < blocks / blocksPerTile; ti++)
             for(std::size_t bi = 0; bi < blocksPerTile; bi++)
             {
@@ -1169,7 +1170,7 @@ namespace manualAoSoASIMD
         constexpr auto lanes = Simd::size;
         constexpr auto blocks = problemSize / lanes;
 
-#    pragma omp parallel for
+        PARALLEL_FOR
         for(std::ptrdiff_t bi = 0; bi < blocks; bi++)
         {
             auto& blockI = particles[bi];
@@ -1212,7 +1213,7 @@ namespace manualAoSoASIMD
     {
         constexpr auto blocks = problemSize / Simd::size;
 
-#    pragma omp parallel for
+        PARALLEL_FOR
         for(std::ptrdiff_t bi = 0; bi < blocks; bi++)
         {
             // std::for_each(ex, particles, particles + BLOCKS, [&](ParticleBlock& block) {
@@ -1328,7 +1329,7 @@ namespace manualAoSSIMD
     template<typename Simd>
     void update(Particle* particles)
     {
-#    pragma omp parallel for
+        PARALLEL_FOR
         for(std::ptrdiff_t i = 0; i < problemSize; i += Simd::size)
         {
             auto& pi = particles[i];
@@ -1359,7 +1360,7 @@ namespace manualAoSSIMD
     template<typename Simd>
     void move(Particle* particles)
     {
-#    pragma omp parallel for
+        PARALLEL_FOR
         for(std::ptrdiff_t i = 0; i < problemSize; i += Simd::size)
         {
             auto& pi = particles[i];
@@ -1419,7 +1420,7 @@ namespace manualSoASIMD
     template<typename Simd>
     void update(const FP* posx, const FP* posy, const FP* posz, FP* velx, FP* vely, FP* velz, const FP* mass)
     {
-#    pragma omp parallel for
+        PARALLEL_FOR
         for(std::ptrdiff_t i = 0; i < problemSize; i += Simd::size)
         {
             const Simd piposx = Simd::load_aligned(posx + i);
@@ -1449,7 +1450,7 @@ namespace manualSoASIMD
     template<typename Simd>
     void move(FP* posx, FP* posy, FP* posz, const FP* velx, const FP* vely, const FP* velz)
     {
-#    pragma omp parallel for
+        PARALLEL_FOR
         for(std::ptrdiff_t i = 0; i < problemSize; i += Simd::size)
         {
             (Simd::load_aligned(posx + i) + Simd::load_aligned(velx + i) * timestep).store_aligned(posx + i);
