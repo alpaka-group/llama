@@ -259,15 +259,15 @@ Typedefs</h2></td></tr>
 <tr class="memitem:adf54146d2fef06baf9d512e22793f41a"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#adf54146d2fef06baf9d512e22793f41a">Simdize</a> = <a class="el" href="namespacellama.html#a825425dc4761ab3b27c3ec6d42876f32">TransformLeaves</a>&lt; RecordDim, MakeSimd &gt;</td></tr>
 <tr class="separator:adf54146d2fef06baf9d512e22793f41a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f1e01829ca6b6d3a50720fdbcc99adf"><td class="memTemplParams" colspan="2">template&lt;typename T , std::size_t N, template&lt; typename, auto &gt; typename MakeSizedSimd&gt; </td></tr>
-<tr class="memitem:a2f1e01829ca6b6d3a50720fdbcc99adf"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a2f1e01829ca6b6d3a50720fdbcc99adf">SimdN</a> = typename std::conditional_t&lt; <a class="el" href="namespacellama.html#ab8f37f9e6c5055a9fa84709a6c5e5304">isRecordDim</a>&lt; T &gt;, std::conditional_t&lt; N==1, mp_identity&lt; <a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a>&lt; T &gt; &gt;, mp_identity&lt; <a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a>&lt; <a class="el" href="namespacellama.html#ab5050ae091b407bcd3adabb734f2aba0">SimdizeN</a>&lt; T, N, MakeSizedSimd &gt; &gt;&gt; &gt;, std::conditional_t&lt; N==1, mp_identity&lt; T &gt;, mp_identity&lt; <a class="el" href="namespacellama.html#ab5050ae091b407bcd3adabb734f2aba0">SimdizeN</a>&lt; T, N, MakeSizedSimd &gt; &gt;&gt; &gt;::type</td></tr>
+<tr class="memitem:a2f1e01829ca6b6d3a50720fdbcc99adf"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a2f1e01829ca6b6d3a50720fdbcc99adf">SimdN</a> = typename std::conditional_t&lt; <a class="el" href="namespacellama.html#ab8f37f9e6c5055a9fa84709a6c5e5304">isRecordDim</a>&lt; T &gt;, std::conditional_t&lt; N==1, mp_identity&lt; <a class="el" href="namespacellama.html#a7b33b2c30fa081e8352cf12c7b98b0eb">One</a>&lt; T &gt; &gt;, mp_identity&lt; <a class="el" href="namespacellama.html#a7b33b2c30fa081e8352cf12c7b98b0eb">One</a>&lt; <a class="el" href="namespacellama.html#ab5050ae091b407bcd3adabb734f2aba0">SimdizeN</a>&lt; T, N, MakeSizedSimd &gt; &gt;&gt; &gt;, std::conditional_t&lt; N==1, mp_identity&lt; T &gt;, mp_identity&lt; <a class="el" href="namespacellama.html#ab5050ae091b407bcd3adabb734f2aba0">SimdizeN</a>&lt; T, N, MakeSizedSimd &gt; &gt;&gt; &gt;::type</td></tr>
 <tr class="separator:a2f1e01829ca6b6d3a50720fdbcc99adf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf42387a56b588d4a261b9ab869e33ee"><td class="memTemplParams" colspan="2">template&lt;typename T , template&lt; typename &gt; typename MakeSimd&gt; </td></tr>
-<tr class="memitem:adf42387a56b588d4a261b9ab869e33ee"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#adf42387a56b588d4a261b9ab869e33ee">Simd</a> = typename std::conditional_t&lt; <a class="el" href="namespacellama.html#ab8f37f9e6c5055a9fa84709a6c5e5304">isRecordDim</a>&lt; T &gt;, mp_identity&lt; <a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a>&lt; <a class="el" href="namespacellama.html#adf54146d2fef06baf9d512e22793f41a">Simdize</a>&lt; T, MakeSimd &gt; &gt;&gt;, mp_identity&lt; <a class="el" href="namespacellama.html#adf54146d2fef06baf9d512e22793f41a">Simdize</a>&lt; T, MakeSimd &gt; &gt;&gt;::type</td></tr>
+<tr class="memitem:adf42387a56b588d4a261b9ab869e33ee"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#adf42387a56b588d4a261b9ab869e33ee">Simd</a> = typename std::conditional_t&lt; <a class="el" href="namespacellama.html#ab8f37f9e6c5055a9fa84709a6c5e5304">isRecordDim</a>&lt; T &gt;, mp_identity&lt; <a class="el" href="namespacellama.html#a7b33b2c30fa081e8352cf12c7b98b0eb">One</a>&lt; <a class="el" href="namespacellama.html#adf54146d2fef06baf9d512e22793f41a">Simdize</a>&lt; T, MakeSimd &gt; &gt;&gt;, mp_identity&lt; <a class="el" href="namespacellama.html#adf54146d2fef06baf9d512e22793f41a">Simdize</a>&lt; T, MakeSimd &gt; &gt;&gt;::type</td></tr>
 <tr class="separator:adf42387a56b588d4a261b9ab869e33ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ace059168abe83f42c9493ad853abb746"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim &gt; </td></tr>
-<tr class="memitem:ace059168abe83f42c9493ad853abb746"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a> = <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a>&lt; decltype(<a class="el" href="namespacellama.html#a3750d27a7f8dd111fbe32dc769b44120">allocViewStack</a>&lt; 0, RecordDim &gt;()), <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt;&gt;, true &gt;</td></tr>
-<tr class="memdesc:ace059168abe83f42c9493ad853abb746"><td class="mdescLeft">&#160;</td><td class="mdescRight">A <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> that owns and holds a single value.  <a href="namespacellama.html#ace059168abe83f42c9493ad853abb746">More...</a><br /></td></tr>
-<tr class="separator:ace059168abe83f42c9493ad853abb746"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b33b2c30fa081e8352cf12c7b98b0eb"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim &gt; </td></tr>
+<tr class="memitem:a7b33b2c30fa081e8352cf12c7b98b0eb"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a7b33b2c30fa081e8352cf12c7b98b0eb">One</a> = <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a>&lt; decltype(<a class="el" href="namespacellama.html#a3e6032b02494ed6d889e8612fa5006dd">allocScalarView</a>&lt; 0, RecordDim &gt;()), <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt;&gt;, true &gt;</td></tr>
+<tr class="memdesc:a7b33b2c30fa081e8352cf12c7b98b0eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">A <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> that owns and holds a single value.  <a href="namespacellama.html#a7b33b2c30fa081e8352cf12c7b98b0eb">More...</a><br /></td></tr>
+<tr class="separator:a7b33b2c30fa081e8352cf12c7b98b0eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -387,7 +387,7 @@ Functions</h2></td></tr>
 <tr class="separator:a42cdd926d98388052f028ab19c94b649"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4fca680f97ca52a42cd74519e6347395"><td class="memTemplParams" colspan="2">template&lt;typename View , typename BoundRecordCoord , bool OwnView&gt; </td></tr>
 <tr class="memitem:a4fca680f97ca52a42cd74519e6347395"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a4fca680f97ca52a42cd74519e6347395">copyRecord</a> (const <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a>&lt; <a class="el" href="structllama_1_1View.html">View</a>, BoundRecordCoord, OwnView &gt; &amp;rr)</td></tr>
-<tr class="memdesc:a4fca680f97ca52a42cd74519e6347395"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a <a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a> with the same record dimension as the given record ref, with values copyied from rr.  <a href="namespacellama.html#a4fca680f97ca52a42cd74519e6347395">More...</a><br /></td></tr>
+<tr class="memdesc:a4fca680f97ca52a42cd74519e6347395"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a <a class="el" href="namespacellama.html#a7b33b2c30fa081e8352cf12c7b98b0eb">One</a> with the same record dimension as the given record ref, with values copyied from rr.  <a href="namespacellama.html#a4fca680f97ca52a42cd74519e6347395">More...</a><br /></td></tr>
 <tr class="separator:a4fca680f97ca52a42cd74519e6347395"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aebf7c7c54c4190a57a2cc1ad5c280453"><td class="memTemplParams" colspan="2">template&lt;typename ViewA , typename BoundRecordDimA , bool OwnViewA, typename ViewB , typename BoundRecordDimB , bool OwnViewB&gt; </td></tr>
 <tr class="memitem:aebf7c7c54c4190a57a2cc1ad5c280453"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#aebf7c7c54c4190a57a2cc1ad5c280453">swap</a> (<a class="el" href="structllama_1_1RecordRef.html">RecordRef</a>&lt; ViewA, BoundRecordDimA, OwnViewA &gt; &amp;a, <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a>&lt; ViewB, BoundRecordDimB, OwnViewB &gt; &amp;b) noexcept -&gt; std::enable_if_t&lt; std::is_same_v&lt; typename <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a>&lt; ViewA, BoundRecordDimA, OwnViewA &gt;::AccessibleRecordDim, typename <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a>&lt; ViewB, BoundRecordDimB, OwnViewB &gt;::AccessibleRecordDim &gt;&gt;</td></tr>
@@ -471,13 +471,13 @@ Functions</h2></td></tr>
 <tr class="memitem:a8e5d70e7cec0c305424ed3890c4cedc6"><td class="memTemplParams" colspan="2">template&lt;typename Mapping , typename Allocator  = bloballoc::Vector, typename Accessor  = accessor::Default&gt; </td></tr>
 <tr class="memitem:a8e5d70e7cec0c305424ed3890c4cedc6"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a8e5d70e7cec0c305424ed3890c4cedc6">allocView</a> (Mapping mapping={}, const Allocator &amp;alloc={}, Accessor accessor={}) -&gt; <a class="el" href="structllama_1_1View.html">View</a>&lt; Mapping, <a class="el" href="namespacellama_1_1internal.html#a6b703634fd8ad7364cf42588add461bc">internal::AllocatorBlobType</a>&lt; Allocator, typename Mapping::RecordDim &gt;, Accessor &gt;</td></tr>
 <tr class="separator:a8e5d70e7cec0c305424ed3890c4cedc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6b8a4632ab312dc849343500487296ab"><td class="memTemplParams" colspan="2">template&lt;std::size_t Dim, typename RecordDim &gt; </td></tr>
-<tr class="memitem:a6b8a4632ab312dc849343500487296ab"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a6b8a4632ab312dc849343500487296ab">allocViewStackUninitialized</a> () -&gt; decltype(auto)</td></tr>
-<tr class="memdesc:a6b8a4632ab312dc849343500487296ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as <a class="el" href="namespacellama.html#a3750d27a7f8dd111fbe32dc769b44120">allocViewStack</a> but does not run field constructors.  <a href="namespacellama.html#a6b8a4632ab312dc849343500487296ab">More...</a><br /></td></tr>
-<tr class="separator:a6b8a4632ab312dc849343500487296ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3750d27a7f8dd111fbe32dc769b44120"><td class="memTemplParams" colspan="2">template&lt;std::size_t Dim, typename RecordDim &gt; </td></tr>
-<tr class="memitem:a3750d27a7f8dd111fbe32dc769b44120"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a3750d27a7f8dd111fbe32dc769b44120">allocViewStack</a> () -&gt; decltype(auto)</td></tr>
-<tr class="separator:a3750d27a7f8dd111fbe32dc769b44120"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2433706eff02aa64f1354cae4d44f14"><td class="memTemplParams" colspan="2">template&lt;std::size_t Dim, typename RecordDim &gt; </td></tr>
+<tr class="memitem:ac2433706eff02aa64f1354cae4d44f14"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ac2433706eff02aa64f1354cae4d44f14">allocScalarViewUninitialized</a> () -&gt; decltype(auto)</td></tr>
+<tr class="memdesc:ac2433706eff02aa64f1354cae4d44f14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as <a class="el" href="namespacellama.html#a3e6032b02494ed6d889e8612fa5006dd">allocScalarView</a> but does not run field constructors.  <a href="namespacellama.html#ac2433706eff02aa64f1354cae4d44f14">More...</a><br /></td></tr>
+<tr class="separator:ac2433706eff02aa64f1354cae4d44f14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e6032b02494ed6d889e8612fa5006dd"><td class="memTemplParams" colspan="2">template&lt;std::size_t Dim, typename RecordDim &gt; </td></tr>
+<tr class="memitem:a3e6032b02494ed6d889e8612fa5006dd"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a3e6032b02494ed6d889e8612fa5006dd">allocScalarView</a> () -&gt; decltype(auto)</td></tr>
+<tr class="separator:a3e6032b02494ed6d889e8612fa5006dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae38fc0d77ddcdd41b2f2522f4c5bd24e"><td class="memTemplParams" colspan="2">template&lt;typename Mapping , typename RecordCoord , typename Blobs &gt; </td></tr>
 <tr class="memitem:ae38fc0d77ddcdd41b2f2522f4c5bd24e"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ae38fc0d77ddcdd41b2f2522f4c5bd24e">mapToMemory</a> (Mapping &amp;mapping, typename Mapping::ArrayExtents::Index ai, <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a> rc, Blobs &amp;blobs) -&gt; decltype(auto)</td></tr>
 <tr class="separator:ae38fc0d77ddcdd41b2f2522f4c5bd24e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -624,7 +624,7 @@ Variables</h2></td></tr>
 <tr class="separator:a156385d5598b772070206225a5093266"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aecf6a2d8f8fd3cde95667fbf433e42d1"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:aecf6a2d8f8fd3cde95667fbf433e42d1"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#aecf6a2d8f8fd3cde95667fbf433e42d1">isOne</a> = false</td></tr>
-<tr class="memdesc:aecf6a2d8f8fd3cde95667fbf433e42d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is true, if T is an instance of <a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a>.  <a href="namespacellama.html#aecf6a2d8f8fd3cde95667fbf433e42d1">More...</a><br /></td></tr>
+<tr class="memdesc:aecf6a2d8f8fd3cde95667fbf433e42d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is true, if T is an instance of <a class="el" href="namespacellama.html#a7b33b2c30fa081e8352cf12c7b98b0eb">One</a>.  <a href="namespacellama.html#aecf6a2d8f8fd3cde95667fbf433e42d1">More...</a><br /></td></tr>
 <tr class="separator:aecf6a2d8f8fd3cde95667fbf433e42d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a44aec444f97e67c053400d58fae4126b"><td class="memTemplParams" colspan="2">template&lt;typename View , typename BoundRecordCoord &gt; </td></tr>
 <tr class="memitem:a44aec444f97e67c053400d58fae4126b"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a44aec444f97e67c053400d58fae4126b">isOne&lt; RecordRef&lt; View, BoundRecordCoord, true &gt; &gt;</a> = true</td></tr>
@@ -914,8 +914,8 @@ template&lt;typename RecordDimA , typename RecordDimB &gt; </div>
 
 </div>
 </div>
-<a id="ace059168abe83f42c9493ad853abb746"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ace059168abe83f42c9493ad853abb746">&#9670;&nbsp;</a></span>One</h2>
+<a id="a7b33b2c30fa081e8352cf12c7b98b0eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b33b2c30fa081e8352cf12c7b98b0eb">&#9670;&nbsp;</a></span>One</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -923,7 +923,7 @@ template&lt;typename RecordDimA , typename RecordDimB &gt; </div>
 template&lt;typename RecordDim &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">llama::One</a> = typedef <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a>&lt;decltype(<a class="el" href="namespacellama.html#a3750d27a7f8dd111fbe32dc769b44120">allocViewStack</a>&lt;0, RecordDim&gt;()), <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt;&gt;, true&gt;</td>
+          <td class="memname">using <a class="el" href="namespacellama.html#a7b33b2c30fa081e8352cf12c7b98b0eb">llama::One</a> = typedef <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a>&lt;decltype(<a class="el" href="namespacellama.html#a3e6032b02494ed6d889e8612fa5006dd">allocScalarView</a>&lt;0, RecordDim&gt;()), <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt;&gt;, true&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1001,11 +1001,11 @@ template&lt;typename Expression , typename... Args&gt; </div>
 template&lt;typename T , template&lt; typename &gt; typename MakeSimd&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="namespacellama.html#adf42387a56b588d4a261b9ab869e33ee">llama::Simd</a> = typedef typename std:: conditional_t&lt;<a class="el" href="namespacellama.html#ab8f37f9e6c5055a9fa84709a6c5e5304">isRecordDim</a>&lt;T&gt;, mp_identity&lt;<a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a>&lt;<a class="el" href="namespacellama.html#adf54146d2fef06baf9d512e22793f41a">Simdize</a>&lt;T, MakeSimd&gt; &gt;&gt;, mp_identity&lt;<a class="el" href="namespacellama.html#adf54146d2fef06baf9d512e22793f41a">Simdize</a>&lt;T, MakeSimd&gt; &gt;&gt;::type</td>
+          <td class="memname">using <a class="el" href="namespacellama.html#adf42387a56b588d4a261b9ab869e33ee">llama::Simd</a> = typedef typename std:: conditional_t&lt;<a class="el" href="namespacellama.html#ab8f37f9e6c5055a9fa84709a6c5e5304">isRecordDim</a>&lt;T&gt;, mp_identity&lt;<a class="el" href="namespacellama.html#a7b33b2c30fa081e8352cf12c7b98b0eb">One</a>&lt;<a class="el" href="namespacellama.html#adf54146d2fef06baf9d512e22793f41a">Simdize</a>&lt;T, MakeSimd&gt; &gt;&gt;, mp_identity&lt;<a class="el" href="namespacellama.html#adf54146d2fef06baf9d512e22793f41a">Simdize</a>&lt;T, MakeSimd&gt; &gt;&gt;::type</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Creates a SIMD version of the given type. Of T is a record dimension, creates a <a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a> where each field is a SIMD type of the original field type. </p>
+<p>Creates a SIMD version of the given type. Of T is a record dimension, creates a <a class="el" href="namespacellama.html#a7b33b2c30fa081e8352cf12c7b98b0eb">One</a> where each field is a SIMD type of the original field type. </p>
 
 <p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00151">151</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
 
@@ -1058,11 +1058,11 @@ template&lt;typename RecordDim , std::size_t N, template&lt; typename, auto &gt;
 template&lt;typename T , std::size_t N, template&lt; typename, auto &gt; typename MakeSizedSimd&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="namespacellama.html#a2f1e01829ca6b6d3a50720fdbcc99adf">llama::SimdN</a> = typedef typename std::conditional_t&lt; <a class="el" href="namespacellama.html#ab8f37f9e6c5055a9fa84709a6c5e5304">isRecordDim</a>&lt;T&gt;, std::conditional_t&lt;N == 1, mp_identity&lt;<a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a>&lt;T&gt; &gt;, mp_identity&lt;<a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a>&lt;<a class="el" href="namespacellama.html#ab5050ae091b407bcd3adabb734f2aba0">SimdizeN</a>&lt;T, N, MakeSizedSimd&gt; &gt;&gt; &gt;, std::conditional_t&lt;N == 1, mp_identity&lt;T&gt;, mp_identity&lt;<a class="el" href="namespacellama.html#ab5050ae091b407bcd3adabb734f2aba0">SimdizeN</a>&lt;T, N, MakeSizedSimd&gt; &gt;&gt; &gt;::type</td>
+          <td class="memname">using <a class="el" href="namespacellama.html#a2f1e01829ca6b6d3a50720fdbcc99adf">llama::SimdN</a> = typedef typename std::conditional_t&lt; <a class="el" href="namespacellama.html#ab8f37f9e6c5055a9fa84709a6c5e5304">isRecordDim</a>&lt;T&gt;, std::conditional_t&lt;N == 1, mp_identity&lt;<a class="el" href="namespacellama.html#a7b33b2c30fa081e8352cf12c7b98b0eb">One</a>&lt;T&gt; &gt;, mp_identity&lt;<a class="el" href="namespacellama.html#a7b33b2c30fa081e8352cf12c7b98b0eb">One</a>&lt;<a class="el" href="namespacellama.html#ab5050ae091b407bcd3adabb734f2aba0">SimdizeN</a>&lt;T, N, MakeSizedSimd&gt; &gt;&gt; &gt;, std::conditional_t&lt;N == 1, mp_identity&lt;T&gt;, mp_identity&lt;<a class="el" href="namespacellama.html#ab5050ae091b407bcd3adabb734f2aba0">SimdizeN</a>&lt;T, N, MakeSizedSimd&gt; &gt;&gt; &gt;::type</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Creates a SIMD version of the given type. Of T is a record dimension, creates a <a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a> where each field is a SIMD type of the original field type. The SIMD vectors have length N. If N is 1, an ordinary <a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a> of the record dimension T is created. If T is not a record dimension, a SIMD vector with value T and length N is created. If N is 1 (and T is not a record dimension), then T is produced. </p>
+<p>Creates a SIMD version of the given type. Of T is a record dimension, creates a <a class="el" href="namespacellama.html#a7b33b2c30fa081e8352cf12c7b98b0eb">One</a> where each field is a SIMD type of the original field type. The SIMD vectors have length N. If N is 1, an ordinary <a class="el" href="namespacellama.html#a7b33b2c30fa081e8352cf12c7b98b0eb">One</a> of the record dimension T is created. If T is not a record dimension, a SIMD vector with value T and length N is created. If N is 1 (and T is not a record dimension), then T is produced. </p>
 
 <p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00142">142</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
 
@@ -1107,6 +1107,74 @@ template&lt;typename RecordDim , template&lt; typename, typename &gt; typename F
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="a3e6032b02494ed6d889e8612fa5006dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e6032b02494ed6d889e8612fa5006dd">&#9670;&nbsp;</a></span>allocScalarView()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;std::size_t Dim, typename RecordDim &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto llama::allocScalarView </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> -&gt; decltype(auto)
+    </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Allocates a <a class="el" href="structllama_1_1View.html">View</a> holding a single record backed by a byte array (<a class="el" href="structllama_1_1bloballoc_1_1Array.html">bloballoc::Array</a>). </p><dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Dim</td><td>Dimension of the <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a> of the <a class="el" href="structllama_1_1View.html">View</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00179">179</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ac2433706eff02aa64f1354cae4d44f14"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac2433706eff02aa64f1354cae4d44f14">&#9670;&nbsp;</a></span>allocScalarViewUninitialized()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;std::size_t Dim, typename RecordDim &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto llama::allocScalarViewUninitialized </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> -&gt; decltype(auto)
+    </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Same as <a class="el" href="namespacellama.html#a3e6032b02494ed6d889e8612fa5006dd">allocScalarView</a> but does not run field constructors. </p>
+
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00169">169</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a8e5d70e7cec0c305424ed3890c4cedc6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8e5d70e7cec0c305424ed3890c4cedc6">&#9670;&nbsp;</a></span>allocView()</h2>
 
@@ -1152,74 +1220,6 @@ template&lt;typename Mapping , typename Allocator  = bloballoc::Vector, typename
 <p>Creates a view based on the given mapping, e.g. AoS or :SoA. For allocating the view's underlying memory, the specified allocator callable is used (or the default one, which is <a class="el" href="structllama_1_1bloballoc_1_1Vector.html">bloballoc::Vector</a>). The allocator callable is called with the alignment and size of bytes to allocate for each blob of the mapping. Value-initialization is performed for all fields by calling <a class="el" href="namespacellama.html#af4c8d962f80ddc030f99b08479ecb083">constructFields</a>. This function is the preferred way to create a <a class="el" href="structllama_1_1View.html">View</a>. See also <a class="el" href="namespacellama.html#a1a76478259d35873449cc44e27dd5abc">allocViewUninitialized</a>. </p>
 
 <p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00158">158</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a3750d27a7f8dd111fbe32dc769b44120"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3750d27a7f8dd111fbe32dc769b44120">&#9670;&nbsp;</a></span>allocViewStack()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;std::size_t Dim, typename RecordDim &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">auto llama::allocViewStack </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> -&gt; decltype(auto)
-    </td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Allocates a <a class="el" href="structllama_1_1View.html">View</a> holding a single record backed by stack memory (<a class="el" href="structllama_1_1bloballoc_1_1Array.html">bloballoc::Array</a>). </p><dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">Dim</td><td>Dimension of the <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a> of the <a class="el" href="structllama_1_1View.html">View</a>. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00179">179</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a6b8a4632ab312dc849343500487296ab"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6b8a4632ab312dc849343500487296ab">&#9670;&nbsp;</a></span>allocViewStackUninitialized()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;std::size_t Dim, typename RecordDim &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">auto llama::allocViewStackUninitialized </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> -&gt; decltype(auto)
-    </td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Same as <a class="el" href="namespacellama.html#a3750d27a7f8dd111fbe32dc769b44120">allocViewStack</a> but does not run field constructors. </p>
-
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00169">169</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -1671,7 +1671,7 @@ template&lt;typename View , typename BoundRecordCoord , bool OwnView&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Returns a <a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a> with the same record dimension as the given record ref, with values copyied from rr. </p>
+<p>Returns a <a class="el" href="namespacellama.html#a7b33b2c30fa081e8352cf12c7b98b0eb">One</a> with the same record dimension as the given record ref, with values copyied from rr. </p>
 
 <p class="definition">Definition at line <a class="el" href="RecordRef_8hpp_source.html#l00033">33</a> of file <a class="el" href="RecordRef_8hpp_source.html">RecordRef.hpp</a>.</p>
 
@@ -4355,7 +4355,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Is true, if T is an instance of <a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a>. </p>
+<p>Is true, if T is an instance of <a class="el" href="namespacellama.html#a7b33b2c30fa081e8352cf12c7b98b0eb">One</a>. </p>
 
 <p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00198">198</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
@@ -4924,7 +4924,7 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Sun Dec 17 2023 02:38:00 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Wed Dec 27 2023 09:50:03 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

@@ -138,7 +138,7 @@ Public Types</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:afe269579eb27f8f363fc1364a8361a5b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1RecordRef.html#afe269579eb27f8f363fc1364a8361a5b">RecordRef</a> ()</td></tr>
-<tr class="memdesc:afe269579eb27f8f363fc1364a8361a5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates an empty <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a>. Only available for if the view is owned. Used by <a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746" title="A RecordRef that owns and holds a single value.">llama::One</a>.  <a href="structllama_1_1RecordRef.html#afe269579eb27f8f363fc1364a8361a5b">More...</a><br /></td></tr>
+<tr class="memdesc:afe269579eb27f8f363fc1364a8361a5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates an empty <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a>. Only available for if the view is owned. Used by <a class="el" href="namespacellama.html#a7b33b2c30fa081e8352cf12c7b98b0eb" title="A RecordRef that owns and holds a single value.">llama::One</a>.  <a href="structllama_1_1RecordRef.html#afe269579eb27f8f363fc1364a8361a5b">More...</a><br /></td></tr>
 <tr class="separator:afe269579eb27f8f363fc1364a8361a5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ae7838c73c7b3ecef0926ac33126584"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1RecordRef.html#a6ae7838c73c7b3ecef0926ac33126584">RecordRef</a> (ArrayIndex ai, std::conditional_t&lt; OwnView, <a class="el" href="structllama_1_1RecordRef.html#ac9965a14a4632a3ac4d2ea35e722dca9">View</a> &amp;&amp;, <a class="el" href="structllama_1_1RecordRef.html#ac9965a14a4632a3ac4d2ea35e722dca9">View</a> &amp; &gt; view)</td></tr>
 <tr class="separator:a6ae7838c73c7b3ecef0926ac33126584"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -159,7 +159,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:afe216e0488a15e06e895b276fecec4d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aea6fff77548d86c90d3b2815ef72f6c5"><td class="memTemplParams" colspan="2">template&lt;typename T , typename  = std::enable_if_t&lt;!isRecordRef&lt;T&gt;&gt;&gt; </td></tr>
 <tr class="memitem:aea6fff77548d86c90d3b2815ef72f6c5"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1RecordRef.html#aea6fff77548d86c90d3b2815ef72f6c5">RecordRef</a> (const T &amp;scalar)</td></tr>
-<tr class="memdesc:aea6fff77548d86c90d3b2815ef72f6c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> from a scalar. Only available for if the view is owned. Used by <a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746" title="A RecordRef that owns and holds a single value.">llama::One</a>.  <a href="structllama_1_1RecordRef.html#aea6fff77548d86c90d3b2815ef72f6c5">More...</a><br /></td></tr>
+<tr class="memdesc:aea6fff77548d86c90d3b2815ef72f6c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> from a scalar. Only available for if the view is owned. Used by <a class="el" href="namespacellama.html#a7b33b2c30fa081e8352cf12c7b98b0eb" title="A RecordRef that owns and holds a single value.">llama::One</a>.  <a href="structllama_1_1RecordRef.html#aea6fff77548d86c90d3b2815ef72f6c5">More...</a><br /></td></tr>
 <tr class="separator:aea6fff77548d86c90d3b2815ef72f6c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e3f77a18819a49ab694345faffab318"><td class="memTemplParams" colspan="2">template&lt;std::size_t... Coord&gt; </td></tr>
 <tr class="memitem:a6e3f77a18819a49ab694345faffab318"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1RecordRef.html#a6e3f77a18819a49ab694345faffab318">operator()</a> (<a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a>&lt; Coord... &gt;) const -&gt; decltype(auto)</td></tr>
@@ -380,7 +380,7 @@ template&lt;typename TView , typename TBoundRecordCoord , bool OwnView&gt; </div
 </table>
 </div><div class="memdoc">
 
-<p>Creates an empty <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a>. Only available for if the view is owned. Used by <a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746" title="A RecordRef that owns and holds a single value.">llama::One</a>. </p>
+<p>Creates an empty <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a>. Only available for if the view is owned. Used by <a class="el" href="namespacellama.html#a7b33b2c30fa081e8352cf12c7b98b0eb" title="A RecordRef that owns and holds a single value.">llama::One</a>. </p>
 
 <p class="definition">Definition at line <a class="el" href="RecordRef_8hpp_source.html#l00363">363</a> of file <a class="el" href="RecordRef_8hpp_source.html">RecordRef.hpp</a>.</p>
 
@@ -536,7 +536,7 @@ template&lt;typename OtherView , typename OtherBoundRecordCoord , bool OtherOwnV
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Create a <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> from a different <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a>. Only available for if the view is owned. Used by <a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746" title="A RecordRef that owns and holds a single value.">llama::One</a>. </p>
+<p>Create a <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> from a different <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a>. Only available for if the view is owned. Used by <a class="el" href="namespacellama.html#a7b33b2c30fa081e8352cf12c7b98b0eb" title="A RecordRef that owns and holds a single value.">llama::One</a>. </p>
 
 <p class="definition">Definition at line <a class="el" href="RecordRef_8hpp_source.html#l00401">401</a> of file <a class="el" href="RecordRef_8hpp_source.html">RecordRef.hpp</a>.</p>
 
@@ -570,7 +570,7 @@ template&lt;typename T , typename  = std::enable_if_t&lt;!isRecordRef&lt;T&gt;&g
 </table>
 </div><div class="memdoc">
 
-<p>Create a <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> from a scalar. Only available for if the view is owned. Used by <a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746" title="A RecordRef that owns and holds a single value.">llama::One</a>. </p>
+<p>Create a <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> from a scalar. Only available for if the view is owned. Used by <a class="el" href="namespacellama.html#a7b33b2c30fa081e8352cf12c7b98b0eb" title="A RecordRef that owns and holds a single value.">llama::One</a>. </p>
 
 <p class="definition">Definition at line <a class="el" href="RecordRef_8hpp_source.html#l00416">416</a> of file <a class="el" href="RecordRef_8hpp_source.html">RecordRef.hpp</a>.</p>
 
@@ -2286,7 +2286,7 @@ template&lt;typename TView , typename TBoundRecordCoord , bool OwnView&gt; </div
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="structllama_1_1RecordRef.html">RecordRef</a></li>
-    <li class="footer">Generated on Sun Dec 17 2023 02:38:00 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Wed Dec 27 2023 09:50:03 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

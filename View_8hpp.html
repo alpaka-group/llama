@@ -189,10 +189,10 @@ Typedefs</h2></td></tr>
 <tr class="memitem:a6b703634fd8ad7364cf42588add461bc"><td class="memTemplParams" colspan="2">template&lt;typename Allocator , typename RecordDim &gt; </td></tr>
 <tr class="memitem:a6b703634fd8ad7364cf42588add461bc"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a6b703634fd8ad7364cf42588add461bc">llama::internal::AllocatorBlobType</a> = decltype(std::declval&lt; Allocator &gt;()(std::integral_constant&lt; std::size_t, alignOf&lt; RecordDim &gt; &gt;{}, 0))</td></tr>
 <tr class="separator:a6b703634fd8ad7364cf42588add461bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ace059168abe83f42c9493ad853abb746"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim &gt; </td></tr>
-<tr class="memitem:ace059168abe83f42c9493ad853abb746"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">llama::One</a> = RecordRef&lt; decltype(allocViewStack&lt; 0, RecordDim &gt;()), RecordCoord&lt;&gt;, true &gt;</td></tr>
-<tr class="memdesc:ace059168abe83f42c9493ad853abb746"><td class="mdescLeft">&#160;</td><td class="mdescRight">A <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> that owns and holds a single value.  <a href="namespacellama.html#ace059168abe83f42c9493ad853abb746">More...</a><br /></td></tr>
-<tr class="separator:ace059168abe83f42c9493ad853abb746"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b33b2c30fa081e8352cf12c7b98b0eb"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim &gt; </td></tr>
+<tr class="memitem:a7b33b2c30fa081e8352cf12c7b98b0eb"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a7b33b2c30fa081e8352cf12c7b98b0eb">llama::One</a> = RecordRef&lt; decltype(allocScalarView&lt; 0, RecordDim &gt;()), RecordCoord&lt;&gt;, true &gt;</td></tr>
+<tr class="memdesc:a7b33b2c30fa081e8352cf12c7b98b0eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">A <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> that owns and holds a single value.  <a href="namespacellama.html#a7b33b2c30fa081e8352cf12c7b98b0eb">More...</a><br /></td></tr>
+<tr class="separator:a7b33b2c30fa081e8352cf12c7b98b0eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -212,13 +212,13 @@ Functions</h2></td></tr>
 <tr class="memitem:a8e5d70e7cec0c305424ed3890c4cedc6"><td class="memTemplParams" colspan="2">template&lt;typename Mapping , typename Allocator  = bloballoc::Vector, typename Accessor  = accessor::Default&gt; </td></tr>
 <tr class="memitem:a8e5d70e7cec0c305424ed3890c4cedc6"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a8e5d70e7cec0c305424ed3890c4cedc6">llama::allocView</a> (Mapping mapping={}, const Allocator &amp;alloc={}, Accessor accessor={}) -&gt; View&lt; Mapping, internal::AllocatorBlobType&lt; Allocator, typename Mapping::RecordDim &gt;, Accessor &gt;</td></tr>
 <tr class="separator:a8e5d70e7cec0c305424ed3890c4cedc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6b8a4632ab312dc849343500487296ab"><td class="memTemplParams" colspan="2">template&lt;std::size_t Dim, typename RecordDim &gt; </td></tr>
-<tr class="memitem:a6b8a4632ab312dc849343500487296ab"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a6b8a4632ab312dc849343500487296ab">llama::allocViewStackUninitialized</a> () -&gt; decltype(auto)</td></tr>
-<tr class="memdesc:a6b8a4632ab312dc849343500487296ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as <a class="el" href="namespacellama.html#a3750d27a7f8dd111fbe32dc769b44120">allocViewStack</a> but does not run field constructors.  <a href="namespacellama.html#a6b8a4632ab312dc849343500487296ab">More...</a><br /></td></tr>
-<tr class="separator:a6b8a4632ab312dc849343500487296ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3750d27a7f8dd111fbe32dc769b44120"><td class="memTemplParams" colspan="2">template&lt;std::size_t Dim, typename RecordDim &gt; </td></tr>
-<tr class="memitem:a3750d27a7f8dd111fbe32dc769b44120"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a3750d27a7f8dd111fbe32dc769b44120">llama::allocViewStack</a> () -&gt; decltype(auto)</td></tr>
-<tr class="separator:a3750d27a7f8dd111fbe32dc769b44120"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2433706eff02aa64f1354cae4d44f14"><td class="memTemplParams" colspan="2">template&lt;std::size_t Dim, typename RecordDim &gt; </td></tr>
+<tr class="memitem:ac2433706eff02aa64f1354cae4d44f14"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ac2433706eff02aa64f1354cae4d44f14">llama::allocScalarViewUninitialized</a> () -&gt; decltype(auto)</td></tr>
+<tr class="memdesc:ac2433706eff02aa64f1354cae4d44f14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as <a class="el" href="namespacellama.html#a3e6032b02494ed6d889e8612fa5006dd">allocScalarView</a> but does not run field constructors.  <a href="namespacellama.html#ac2433706eff02aa64f1354cae4d44f14">More...</a><br /></td></tr>
+<tr class="separator:ac2433706eff02aa64f1354cae4d44f14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e6032b02494ed6d889e8612fa5006dd"><td class="memTemplParams" colspan="2">template&lt;std::size_t Dim, typename RecordDim &gt; </td></tr>
+<tr class="memitem:a3e6032b02494ed6d889e8612fa5006dd"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a3e6032b02494ed6d889e8612fa5006dd">llama::allocScalarView</a> () -&gt; decltype(auto)</td></tr>
+<tr class="separator:a3e6032b02494ed6d889e8612fa5006dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae38fc0d77ddcdd41b2f2522f4c5bd24e"><td class="memTemplParams" colspan="2">template&lt;typename Mapping , typename RecordCoord , typename Blobs &gt; </td></tr>
 <tr class="memitem:ae38fc0d77ddcdd41b2f2522f4c5bd24e"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ae38fc0d77ddcdd41b2f2522f4c5bd24e">llama::mapToMemory</a> (Mapping &amp;mapping, typename Mapping::ArrayExtents::Index ai, RecordCoord rc, Blobs &amp;blobs) -&gt; decltype(auto)</td></tr>
 <tr class="separator:ae38fc0d77ddcdd41b2f2522f4c5bd24e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -256,7 +256,7 @@ Variables</h2></td></tr>
 <tr class="separator:a156385d5598b772070206225a5093266"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aecf6a2d8f8fd3cde95667fbf433e42d1"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:aecf6a2d8f8fd3cde95667fbf433e42d1"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#aecf6a2d8f8fd3cde95667fbf433e42d1">llama::isOne</a> = false</td></tr>
-<tr class="memdesc:aecf6a2d8f8fd3cde95667fbf433e42d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is true, if T is an instance of <a class="el" href="namespacellama.html#ace059168abe83f42c9493ad853abb746">One</a>.  <a href="namespacellama.html#aecf6a2d8f8fd3cde95667fbf433e42d1">More...</a><br /></td></tr>
+<tr class="memdesc:aecf6a2d8f8fd3cde95667fbf433e42d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is true, if T is an instance of <a class="el" href="namespacellama.html#a7b33b2c30fa081e8352cf12c7b98b0eb">One</a>.  <a href="namespacellama.html#aecf6a2d8f8fd3cde95667fbf433e42d1">More...</a><br /></td></tr>
 <tr class="separator:aecf6a2d8f8fd3cde95667fbf433e42d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a44aec444f97e67c053400d58fae4126b"><td class="memTemplParams" colspan="2">template&lt;typename View , typename BoundRecordCoord &gt; </td></tr>
 <tr class="memitem:a44aec444f97e67c053400d58fae4126b"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a44aec444f97e67c053400d58fae4126b">llama::isOne&lt; RecordRef&lt; View, BoundRecordCoord, true &gt; &gt;</a> = true</td></tr>
@@ -274,7 +274,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="View_8hpp.html">View.hpp</a></li>
-    <li class="footer">Generated on Sun Dec 17 2023 02:38:00 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Wed Dec 27 2023 09:50:03 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
