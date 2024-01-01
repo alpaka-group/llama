@@ -857,7 +857,7 @@ namespace manualAoSoAManualAVX
     }
 
     // update (read/write) 8 particles I based on the influence of 1 particle J
-    void update8(ParticleBlock* particles)
+    void updateOuterLoopSimd(ParticleBlock* particles)
     {
         PARALLEL_FOR
         for(std::size_t bi = 0; bi < blocks; bi++)
@@ -902,8 +902,8 @@ namespace manualAoSoAManualAVX
         // return a[0] + a[1] + a[2] + a[3] + a[4] + a[5] + a[6] + a[7];
     }
 
-    // update (read/write) 1 particles I based on the influence of 8 particles J with accumulator
-    void update1(ParticleBlock* particles)
+    // update (read/write) 1 particles I based on the influence of 8 particles J
+    void updateInnerLoopSimd(ParticleBlock* particles)
     {
         PARALLEL_FOR
         for(std::size_t bi = 0; bi < blocks; bi++)
@@ -951,9 +951,9 @@ namespace manualAoSoAManualAVX
         }
     }
 
-    auto main(std::ostream& plotFile, bool useUpdate1) -> Vec3
+    auto main(std::ostream& plotFile, bool innerLoopSimd) -> Vec3
     {
-        auto title = "AoSoA" + std::to_string(lanes) + " AVX2 " + (useUpdate1 ? "w1r8" : "w8r1"); // NOLINT
+        auto title = "AoSoA" + std::to_string(lanes) + " AVX2 " + (innerLoopSimd ? "inner" : "outer"); // NOLINT
         std::cout << title << '\n';
         Stopwatch watch;
 
@@ -984,10 +984,10 @@ namespace manualAoSoAManualAVX
         {
             if constexpr(runUpdate)
             {
-                if(useUpdate1)
-                    update1(particles.data());
+                if(innerLoopSimd)
+                    updateInnerLoopSimd(particles.data());
                 else
-                    update8(particles.data());
+                    updateOuterLoopSimd(particles.data());
                 statsUpdate(watch.printAndReset("update", '\t'));
             }
             move(particles.data());
@@ -1068,7 +1068,7 @@ namespace manualAoSoASIMD
     }
 
     template<typename Simd>
-    void update8(ParticleBlock<Simd>* particles)
+    void updateOuterLoopSimd(ParticleBlock<Simd>* particles)
     {
         constexpr auto lanes = Simd::size;
         constexpr auto blocks = problemSize / lanes;
@@ -1105,7 +1105,7 @@ namespace manualAoSoASIMD
     }
 
     template<typename Simd>
-    void update8Tiled(ParticleBlock<Simd>* particles)
+    void updateOuterLoopSimdTiled(ParticleBlock<Simd>* particles)
     {
         constexpr auto lanes = Simd::size;
         constexpr auto blocks = problemSize / lanes;
@@ -1166,7 +1166,7 @@ namespace manualAoSoASIMD
     }
 
     template<typename Simd>
-    void update1(ParticleBlock<Simd>* particles)
+    void updateInnerLoopSimd(ParticleBlock<Simd>* particles)
     {
         constexpr auto lanes = Simd::size;
         constexpr auto blocks = problemSize / lanes;
@@ -1227,9 +1227,10 @@ namespace manualAoSoASIMD
     }
 
     template<typename Simd>
-    auto main(std::ostream& plotFile, bool useUpdate1, bool tiled = false) -> Vec3
+    auto main(std::ostream& plotFile, bool vectorizeInnerLoop, bool tiled = false) -> Vec3
     {
-        auto title = "AoSoA" + std::to_string(Simd::size) + " SIMD" + (useUpdate1 ? " w1r8" : " w8r1"); // NOLINT
+        auto title
+            = "AoSoA" + std::to_string(Simd::size) + " SIMD" + (vectorizeInnerLoop ? " inner" : " outer"); // NOLINT
         if(tiled)
             title += " tiled";
 
@@ -1265,14 +1266,14 @@ namespace manualAoSoASIMD
         {
             if constexpr(runUpdate)
             {
-                if(useUpdate1)
-                    update1(particles.data());
+                if(vectorizeInnerLoop)
+                    updateInnerLoopSimd(particles.data());
                 else
                 {
                     if(tiled)
-                        update8Tiled(particles.data());
+                        updateOuterLoopSimdTiled(particles.data());
                     else
-                        update8(particles.data());
+                        updateOuterLoopSimd(particles.data());
                 }
                 statsUpdate(watch.printAndReset("update", '\t'));
             }
@@ -1603,18 +1604,18 @@ $data << EOD
             finalPositions.push_back(manualAoSoA::main<decltype(lanes)::value>(plotFile, false));
         });
 #if defined(__AVX2__) && defined(__FMA__)
-    // for (auto useUpdate1 : {false, true})
-    //    r += manualAoSoA_manualAVX::main(plotFile, useUpdate1);
+    // for (auto innerLoopSimd : {false, true})
+    //    r += manualAoSoA_manualAVX::main(plotFile, innerLoopSimd);
     finalPositions.push_back(manualAoSoAManualAVX::main(plotFile, false));
 #endif
 #ifdef HAVE_XSIMD
     using Simd = xsimd::batch<FP>;
-    // for (auto useUpdate1 : {false, true})
+    // for (auto innerLoopSimd : {false, true})
     //    for (auto tiled : {false, true})
     //    {
-    //        if (useUpdate1 && tiled)
+    //        if (innerLoopSimd && tiled)
     //            continue;
-    //        r += manualAoSoA_SIMD::main<Simd>(plotFile, useUpdate1, tiled);
+    //        r += manualAoSoA_SIMD::main<Simd>(plotFile, innerLoopSimd, tiled);
     //    }
     finalPositions.push_back(manualAoSoASIMD::main<Simd>(plotFile, false, false));
     //        mp_for_each<mp_list_c<std::size_t, 1, 2, 4, 8, 16>>(
