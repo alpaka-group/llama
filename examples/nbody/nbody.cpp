@@ -36,7 +36,6 @@ constexpr auto dumpMapping = false;
 constexpr auto allowRsqrt = false; // rsqrt can be way faster, but less accurate
 constexpr auto newtonRaphsonAfterRsqrt = true; // generate a newton raphson refinement after explicit calls to rsqrt()
 constexpr auto runUpdate = true; // run update step. Useful to disable for benchmarking the move step.
-constexpr auto llamaSimdLanes = -1; // SIMD lanes to use for LLAMA, -1 lets LLAMA choose
 
 constexpr auto timestep = FP{0.0001};
 constexpr auto eps2 = FP{0.01};
@@ -281,7 +280,8 @@ namespace usellama
             particles(i)(tag::Pos{}) += particles(i)(tag::Vel{}) * timestep;
     }
 
-    template<bool UseSimd, int Mapping, std::size_t AoSoALanes = 8 /*AVX2*/>
+    /// @tparam SIMDLanes 0: no SIMD, otherwise use the value as SIMD width
+    template<int Mapping, std::size_t SIMDLanes, std::size_t AoSoALanes = 8 /*AVX2*/>
     auto main(std::ostream& plotFile) -> Vec3
     {
         auto mappingName = [](int m) -> std::string
@@ -304,7 +304,7 @@ namespace usellama
                 return "BitPack SoA 11e4";
             std::abort();
         };
-        auto title = "LLAMA " + mappingName(Mapping) + (UseSimd ? " SIMD" : "");
+        auto title = "LLAMA " + mappingName(Mapping) + (SIMDLanes == 0 ? "" : " SIMD W=" + std::to_string(SIMDLanes));
         std::cout << title << "\n";
         Stopwatch watch;
         auto mapping = [&]
@@ -378,23 +378,19 @@ namespace usellama
         common::Stats statsMove;
         for(std::size_t s = 0; s < steps + 1; ++s)
         {
-#ifdef HAVE_XSIMD
-            constexpr auto width
-                = llamaSimdLanes == -1 ? llama::simdLanesWithFullVectorsFor<Particle, MakeBatch> : llamaSimdLanes;
-#endif
             if constexpr(runUpdate)
             {
 #ifdef HAVE_XSIMD
-                if constexpr(UseSimd)
-                    updateSimd<width>(particles);
+                if constexpr(SIMDLanes != 0)
+                    updateSimd<SIMDLanes>(particles);
                 else
 #endif
                     update(particles);
                 statsUpdate(watch.printAndReset("update", '\t'));
             }
 #ifdef HAVE_XSIMD
-            if constexpr(UseSimd)
-                moveSimd<width>(particles);
+            if constexpr(SIMDLanes != 0)
+                moveSimd<SIMDLanes>(particles);
             else
 #endif
                 move(particles);
@@ -1591,6 +1587,10 @@ $data << EOD
     // SIMD versions updating 8 particles by 1 are also a bit faster than updating 1 particle by 8, so the latter are
     // also disabled.
 
+#ifdef HAVE_XSIMD
+    static constexpr auto nativeSimdWidth = llama::simdLanesWithFullVectorsFor<usellama::Particle, MakeBatch>;
+#endif
+
     std::vector<Vec3> finalPositions;
     using namespace boost::mp11;
     mp_for_each<mp_iota_c<5>>(
@@ -1600,12 +1600,17 @@ $data << EOD
             // only AoSoA (3) needs lanes
             using Lanes = std::conditional_t<i == 3, mp_list_c<std::size_t, 8, 16>, mp_list_c<std::size_t, 0>>;
             mp_for_each<Lanes>(
-                [&](auto lanes)
+                [&](auto aosoaLanesIc)
                 {
-                    finalPositions.push_back(usellama::main<false, i, decltype(lanes)::value>(plotFile));
+                    static constexpr int aosoaLanes = decltype(aosoaLanesIc)::value;
+                    finalPositions.push_back(usellama::main<i, 0, aosoaLanes>(plotFile));
 #ifdef HAVE_XSIMD
-                    if constexpr(i < 5) // TODO(bgruber): simd does not work with proxy references yet
-                        finalPositions.push_back(usellama::main<true, i, decltype(lanes)::value>(plotFile));
+                    // TODO(bgruber): simd does not work with proxy references yet
+                    if constexpr(i < 5)
+                    {
+                        finalPositions.push_back(usellama::main<i, 1, aosoaLanes>(plotFile));
+                        finalPositions.push_back(usellama::main<i, nativeSimdWidth, aosoaLanes>(plotFile));
+                    }
 #endif
                 });
         });
