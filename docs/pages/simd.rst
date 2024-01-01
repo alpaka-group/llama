@@ -48,36 +48,19 @@ SIMD library integration with LLAMA
 
 In order for LLAMA to make use of a third-party SIMD library,
 the class template :cpp:`llama::SimdTraits` has to be specialized for the SIMD types of the SIMD library.
-
-Here is an exemplary integration of `std::experimental::simd<T, Abi>` with LLAMA:
-
-.. code-block:: C++
-
-    #include <llama/llama.hpp>
-    #include <experimental/simd>
-
-    namespace stdx = std::experimental;
-    template<typename T, typename Abi>
-    struct llama::SimdTraits<stdx::simd<T, Abi>> {
-        using value_type = T;
-
-        inline static constexpr std::size_t lanes = stdx::simd<T, Abi>::size();
-
-        static auto loadUnaligned(const value_type* mem) -> stdx::simd<T, Abi> {
-            return {mem, stdx::element_aligned};
-        }
-
-        static void storeUnaligned(stdx::simd<T, Abi> simd, value_type* mem) {
-            simd.copy_to(mem, stdx::element_aligned);
-        }
-    };
-
 Each specialization :cpp:`llama::SimdTraits<Simd>` must provide:
 
 * an alias :cpp:`value_type` to indicate the element type of the Simd.
 * a :cpp:`static constexpr size_t lanes` variable holding the number of SIMD lanes of the Simd.
 * a :cpp:`static auto loadUnaligned(const value_type* mem) -> Simd` function, loading a Simd from the given memory address.
 * a :cpp:`static void storeUnaligned(Simd simd, value_type* mem)` function, storing the given Simd to a given memory address.
+* a :cpp:`static auto gather(const value_type* mem, std::array<int, lanes> indices) -> Simd` function,
+  gathering values into a Simd from the memory addresses identified by :cpp:`mem + indices * sizeof(value_type)`.
+* a :cpp:`static void scatter(Simd simd, value_type* mem, std::array<int, lanes> indices)` function,
+  scattering the values from a Simd to the memory addresses identified by :cpp:`mem + indices * sizeof(value_type)`.
+
+For an example integration of `xsimd::batch<T, A>` with LLAMA, see the nbody example.
+For an example integration of `std::experimental::simd<T, Abi>` with LLAMA, see the `simd.cpp` unit tests.
 
 LLAMA already provides a specialization of :cpp:`llama::SimdTraits` for the built-in scalar `arithmetic types <https://en.cppreference.com/w/c/language/arithmetic_types>`_.
 In that sense, these types are SIMD types from LLAMA's perspective and can be used with the SIMD API in LLAMA.
