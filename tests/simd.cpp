@@ -39,6 +39,19 @@ struct llama::SimdTraits<stdx::simd<T, Abi>>
     {
         simd.copy_to(mem, stdx::element_aligned);
     }
+
+    static LLAMA_FORCE_INLINE auto gather(const value_type* mem, std::array<int, lanes> indices) -> stdx::simd<T, Abi>
+    {
+        // no native support for gather yet
+        return stdx::simd<T, Abi>{[&](auto ic) { return mem[indices[ic]]; }};
+    }
+
+    static LLAMA_FORCE_INLINE void scatter(stdx::simd<T, Abi> simd, value_type* mem, std::array<int, lanes> indices)
+    {
+        // no native support for scatter yet
+        for(std::size_t i = 0; i < lanes; i++)
+            mem[indices[i]] = simd[i];
+    }
 };
 
 namespace
@@ -199,10 +212,10 @@ TEST_CASE("simd.loadSimd.simd.stdsimd")
     CHECK(s[3] == 4.0f);
 }
 
-TEST_CASE("simd.loadSimd.record.scalar")
+TEMPLATE_TEST_CASE("simd.loadSimd.record.scalar", "", llama::mapping::BindAoS<>, llama::mapping::BindSoA<>)
 {
     using ArrayExtents = llama::ArrayExtentsDynamic<int, 1>;
-    const auto mapping = llama::mapping::SoA<ArrayExtents, ParticleSimd>(ArrayExtents{1});
+    const auto mapping = typename TestType::template fn<ArrayExtents, ParticleSimd>(ArrayExtents{1});
     auto view = llama::allocViewUninitialized(mapping);
     iotaFillView(view);
 
@@ -222,10 +235,10 @@ TEST_CASE("simd.loadSimd.record.scalar")
     CHECK(p(tag::Flags{}, llama::RecordCoord<3>{}) == 10);
 }
 
-TEST_CASE("simd.loadSimd.record.stdsimd")
+TEMPLATE_TEST_CASE("simd.loadSimd.record.stdsimd", "", llama::mapping::BindAoS<>, llama::mapping::BindSoA<>)
 {
     using ArrayExtents = llama::ArrayExtentsDynamic<int, 1>;
-    const auto mapping = llama::mapping::SoA<ArrayExtents, ParticleSimd>(ArrayExtents{16});
+    const auto mapping = typename TestType::template fn<ArrayExtents, ParticleSimd>(ArrayExtents{16});
     auto view = llama::allocViewUninitialized(mapping);
     iotaFillView(view);
 
@@ -290,10 +303,10 @@ TEST_CASE("simd.storeSimd.simd.stdsimd")
     CHECK(a[3] == 4.0f);
 }
 
-TEST_CASE("simd.storeSimd.record.scalar")
+TEMPLATE_TEST_CASE("simd.storeSimd.record.scalar", "", llama::mapping::BindAoS<>, llama::mapping::BindSoA<>)
 {
     using ArrayExtents = llama::ArrayExtentsDynamic<int, 1>;
-    const auto mapping = llama::mapping::SoA<ArrayExtents, ParticleSimd>(ArrayExtents{1});
+    const auto mapping = typename TestType::template fn<ArrayExtents, ParticleSimd>(ArrayExtents{1});
     auto view = llama::allocViewUninitialized(mapping);
 
     llama::SimdN<ParticleSimd, 1, stdx::fixed_size_simd> p;
@@ -323,11 +336,11 @@ TEST_CASE("simd.storeSimd.record.scalar")
     CHECK(view(0)(tag::Flags{}, llama::RecordCoord<3>{}) == 10);
 }
 
-TEST_CASE("simd.storeSimd.record.stdsimd")
+TEMPLATE_TEST_CASE("simd.storeSimd.record.stdsimd", "", llama::mapping::BindAoS<>, llama::mapping::BindSoA<>)
 {
     using ArrayExtents = llama::ArrayExtentsDynamic<int, 1>;
-    const auto mapping = llama::mapping::SoA<ArrayExtents, ParticleSimd>(ArrayExtents{16});
-    auto view = llama::allocView(mapping);
+    const auto mapping = typename TestType::template fn<ArrayExtents, ParticleSimd>(ArrayExtents{16});
+    auto view = llama::allocViewUninitialized(mapping);
 
     llama::SimdN<ParticleSimd, 3, stdx::fixed_size_simd> p;
     auto& x = p(tag::Pos{}, tag::X{});
@@ -358,13 +371,13 @@ TEST_CASE("simd.storeSimd.record.stdsimd")
     CHECK(view(3)(tag::Mass{}) == 0);
 }
 
-TEST_CASE("simd.simdForEachN.stdsimd")
+TEMPLATE_TEST_CASE("simd.simdForEachN.stdsimd", "", llama::mapping::BindAoS<>, llama::mapping::BindSoA<>)
 {
     using ArrayExtents = llama::ArrayExtentsDynamic<int, 2>;
     for(auto extents : {ArrayExtents{16, 32}, ArrayExtents{11, 7}})
     {
         CAPTURE(extents);
-        const auto mapping = llama::mapping::SoA<ArrayExtents, Vec2F>(extents);
+        const auto mapping = typename TestType::template fn<ArrayExtents, Vec2F>(extents);
         auto view = llama::allocViewUninitialized(mapping);
         for(int i = 0; i < extents[0]; i++)
             for(int j = 0; j < extents[1]; j++)
@@ -388,13 +401,13 @@ TEST_CASE("simd.simdForEachN.stdsimd")
     }
 }
 
-TEST_CASE("simd.simdForEach.stdsimd")
+TEMPLATE_TEST_CASE("simd.simdForEach.stdsimd", "", llama::mapping::BindAoS<>, llama::mapping::BindSoA<>)
 {
     using ArrayExtents = llama::ArrayExtentsDynamic<int, 2>;
     for(auto extents : {ArrayExtents{16, 32}, ArrayExtents{11, 7}})
     {
         CAPTURE(extents);
-        const auto mapping = llama::mapping::SoA<ArrayExtents, Vec2F>(extents);
+        const auto mapping = typename TestType::template fn<ArrayExtents, Vec2F>(extents);
         auto view = llama::allocViewUninitialized(mapping);
         for(int i = 0; i < extents[0]; i++)
             for(int j = 0; j < extents[1]; j++)
