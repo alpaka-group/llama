@@ -36,6 +36,7 @@ constexpr auto dumpMapping = false;
 constexpr auto allowRsqrt = false; // rsqrt can be way faster, but less accurate
 constexpr auto newtonRaphsonAfterRsqrt = true; // generate a newton raphson refinement after explicit calls to rsqrt()
 constexpr auto runUpdate = true; // run update step. Useful to disable for benchmarking the move step.
+constexpr auto llamaSimdLanes = -1; // SIMD lanes to use for LLAMA, -1 lets LLAMA choose
 
 constexpr auto timestep = FP{0.0001};
 constexpr auto eps2 = FP{0.01};
@@ -378,7 +379,8 @@ namespace usellama
         for(std::size_t s = 0; s < steps + 1; ++s)
         {
 #ifdef HAVE_XSIMD
-            constexpr auto width = llama::simdLanesWithFullVectorsFor<Particle, MakeBatch>;
+            constexpr auto width
+                = llamaSimdLanes == -1 ? llama::simdLanesWithFullVectorsFor<Particle, MakeBatch> : llamaSimdLanes;
 #endif
             if constexpr(runUpdate)
             {
