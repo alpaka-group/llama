@@ -44,9 +44,6 @@ constexpr auto rngSeed = 42;
 constexpr auto referenceParticleIndex = 1338;
 constexpr auto maxPosDiff = FP{0.001};
 
-constexpr auto l1CacheSize = 32 * 1024;
-constexpr auto l2CacheSize = 512 * 1024;
-
 using namespace std::string_literals;
 
 #ifdef HAVE_XSIMD
