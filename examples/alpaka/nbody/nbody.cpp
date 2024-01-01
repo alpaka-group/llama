@@ -83,6 +83,22 @@ struct llama::SimdTraits<Batch, std::enable_if_t<xsimd::is_batch<Batch>::value>>
     {
         batch.store_unaligned(mem);
     }
+
+    template<std::size_t... Is>
+    static LLAMA_FORCE_INLINE auto indicesToReg(std::array<int, lanes> indices, std::index_sequence<Is...>)
+    {
+        return xsimd::batch<int, typename Batch::arch_type>(indices[Is]...);
+    }
+
+    static LLAMA_FORCE_INLINE auto gather(const value_type* mem, std::array<int, lanes> indices) -> Batch
+    {
+        return Batch::gather(mem, indicesToReg(indices, std::make_index_sequence<lanes>{}));
+    }
+
+    static LLAMA_FORCE_INLINE void scatter(Batch batch, value_type* mem, std::array<int, lanes> indices)
+    {
+        batch.scatter(mem, indicesToReg(indices, std::make_index_sequence<lanes>{}));
+    }
 };
 
 template<typename T>
