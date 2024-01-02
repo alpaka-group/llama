@@ -1018,7 +1018,7 @@ namespace manualAoSoAManualAVX
 namespace manualAoSoASIMD
 {
     template<typename Simd>
-    struct alignas(64) ParticleBlock
+    struct alignas(sizeof(Simd)) ParticleBlock
     {
         struct
         {
@@ -1028,7 +1028,6 @@ namespace manualAoSoASIMD
         } pos, vel;
         Simd mass;
     };
-
 
     template<typename Simd, typename SimdOrScalar>
     inline void pPInteraction(
