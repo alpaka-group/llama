@@ -312,8 +312,11 @@ namespace llama
         // structured dstSimd type and record reference
         if constexpr(isRecordRef<Simd> && isRecordRef<T>)
         {
-            forEachLeafCoord<typename Simd::AccessibleRecordDim>([&](auto rc) LLAMA_LAMBDA_INLINE
-                                                                 { internal::loadSimdFromField(srcRef, dstSimd, rc); });
+            if constexpr(simdLanes<Simd> == simdLanes<T>) // fast path mainly for scalar SimdN<T, 1, ...>
+                dstSimd = srcRef;
+            else
+                forEachLeafCoord<typename Simd::AccessibleRecordDim>(
+                    [&](auto rc) LLAMA_LAMBDA_INLINE { internal::loadSimdFromField(srcRef, dstSimd, rc); });
         }
         // unstructured dstSimd and reference type
         else if constexpr(!isRecordRef<Simd> && !isRecordRef<T>)
@@ -340,8 +343,11 @@ namespace llama
         // structured Simd type and record reference
         if constexpr(isRecordRef<Simd> && isRecordRef<T>)
         {
-            forEachLeafCoord<typename T::AccessibleRecordDim>([&](auto rc) LLAMA_LAMBDA_INLINE
-                                                              { internal::storeSimdToField(srcSimd, dstRef, rc); });
+            if constexpr(simdLanes<Simd> == simdLanes<T>) // fast path mainly for scalar SimdN<T, 1, ...>
+                dstRef = srcSimd;
+            else
+                forEachLeafCoord<typename T::AccessibleRecordDim>(
+                    [&](auto rc) LLAMA_LAMBDA_INLINE { internal::storeSimdToField(srcSimd, dstRef, rc); });
         }
         // unstructured srcSimd and reference type
         else if constexpr(!isRecordRef<Simd> && !isRecordRef<T>)
