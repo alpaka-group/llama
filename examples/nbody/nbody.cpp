@@ -1630,6 +1630,8 @@ $data << EOD
 #endif
 #ifdef HAVE_XSIMD
     using Simd = xsimd::batch<FP>;
+    using Simd8 = xsimd::make_sized_batch_t<FP, 8>;
+    using Simd16 = xsimd::make_sized_batch_t<FP, 16>;
     // for (auto innerLoopSimd : {false, true})
     //    for (auto tiled : {false, true})
     //    {
@@ -1637,7 +1639,12 @@ $data << EOD
     //            continue;
     //        r += manualAoSoA_SIMD::main<Simd>(plotFile, innerLoopSimd, tiled);
     //    }
-    finalPositions.push_back(manualAoSoASIMD::main<Simd>(plotFile, false, false));
+    if constexpr(Simd::size != 8 && Simd::size != 16)
+        finalPositions.push_back(manualAoSoASIMD::main<Simd>(plotFile, false, false));
+    if constexpr(!std::is_void_v<Simd8>)
+        finalPositions.push_back(manualAoSoASIMD::main<Simd8>(plotFile, false, false));
+    if constexpr(!std::is_void_v<Simd16>)
+        finalPositions.push_back(manualAoSoASIMD::main<Simd16>(plotFile, false, false));
     //        mp_for_each<mp_list_c<std::size_t, 1, 2, 4, 8, 16>>(
     //            [&](auto lanes)
     //            {
