@@ -47,7 +47,7 @@ var searchData=
   ['storedparentview_690',['StoredParentView',['../structllama_1_1SubView.html#ae8ec3d55c74216060bf28e3e7e92993f',1,'llama::SubView']]],
   ['storedunsignedfor_691',['StoredUnsignedFor',['../namespacellama_1_1mapping_1_1internal.html#a9c9a33a5cf5e402d9887b0071b30ede0',1,'llama::mapping::internal']]],
   ['storesimd_692',['storeSimd',['../namespacellama.html#a85e63e02c425ced774c87dfc1e3dda3d',1,'llama']]],
-  ['storesimdrecord_693',['storeSimdRecord',['../namespacellama_1_1internal.html#a383757e5ef0435ab24cc8570e355912f',1,'llama::internal::storeSimdRecord(const Simd &amp;srcSimd, TFwd &amp;&amp;dstRef, RecordCoord rc)'],['../namespacellama_1_1internal.html#a39d130ecf8dc32be0c10f142df6a0d42',1,'llama::internal::storeSimdRecord(const Simd &amp;srcSimd, T &amp;&amp;dstRef, RecordCoord rc)']]],
+  ['storesimdtofield_693',['storeSimdToField',['../namespacellama_1_1internal.html#af99d8c66e0c278c1ab1b7d513ea6d2cc',1,'llama::internal::storeSimdToField(const Simd &amp;srcSimd, TFwd &amp;&amp;dstRef, RecordCoord rc)'],['../namespacellama_1_1internal.html#a1a97bc24f4d0862ed1d36d509a6150e7',1,'llama::internal::storeSimdToField(const Simd &amp;srcSimd, T &amp;&amp;dstRef, RecordCoord rc)']]],
   ['storeunaligned_694',['storeUnaligned',['../structllama_1_1SimdTraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__arithmetic__v_3_01T_01_4_01_4_01_4.html#a67e2693738b7a12f3e262c534578afbe',1,'llama::SimdTraits&lt; T, std::enable_if_t&lt; std::is_arithmetic_v&lt; T &gt; &gt; &gt;']]],
   ['structname_695',['structName',['../namespacellama.html#a8def4cdbf850f818833a38d67e6ebf34',1,'llama']]],
   ['structname_2ehpp_696',['StructName.hpp',['../StructName_8hpp.html',1,'']]],

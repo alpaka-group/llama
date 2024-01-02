@@ -96,6 +96,7 @@ $(document).ready(function(){initNavTree('Simd_8hpp.html',''); initResizable(); 
 <code>#include &quot;<a class="el" href="RecordRef_8hpp_source.html">RecordRef.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="macros_8hpp_source.html">macros.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="AoS_8hpp_source.html">mapping/AoS.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="AoSoA_8hpp_source.html">mapping/AoSoA.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="SoA_8hpp_source.html">mapping/SoA.hpp</a>&quot;</code><br />
 <code>#include &lt;type_traits&gt;</code><br />
 </div><div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
@@ -105,45 +106,46 @@ $(document).ready(function(){initNavTree('Simd_8hpp.html',''); initResizable(); 
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="Simd_8hpp__incl.png" border="0" usemap="#a_2home_2runner_2work_2llama_2llama_2include_2llama_2Simd_8hpp" alt=""/></div>
 <map name="a_2home_2runner_2work_2llama_2llama_2include_2llama_2Simd_8hpp" id="a_2home_2runner_2work_2llama_2llama_2include_2llama_2Simd_8hpp">
-<area shape="rect" title=" " alt="" coords="1545,5,1765,47"/>
-<area shape="rect" href="Core_8hpp.html" title=" " alt="" coords="1293,401,1373,427"/>
-<area shape="rect" href="macros_8hpp.html" title=" " alt="" coords="471,632,569,659"/>
-<area shape="rect" title=" " alt="" coords="1365,557,1457,584"/>
-<area shape="rect" href="RecordRef_8hpp.html" title=" " alt="" coords="1121,95,1237,121"/>
-<area shape="rect" href="AoS_8hpp.html" title=" " alt="" coords="1628,95,1764,121"/>
-<area shape="rect" href="SoA_8hpp.html" title=" " alt="" coords="1499,244,1635,271"/>
-<area shape="rect" href="ArrayExtents_8hpp.html" title=" " alt="" coords="897,483,1031,509"/>
-<area shape="rect" href="Meta_8hpp.html" title=" " alt="" coords="956,557,1039,584"/>
-<area shape="rect" href="RecordCoord_8hpp.html" title=" " alt="" coords="1107,483,1240,509"/>
-<area shape="rect" title=" " alt="" coords="1264,483,1323,509"/>
-<area shape="rect" href="Array_8hpp.html" title=" " alt="" coords="805,557,888,584"/>
-<area shape="rect" title=" " alt="" coords="365,557,424,584"/>
-<area shape="rect" title=" " alt="" coords="853,632,929,659"/>
-<area shape="rect" title=" " alt="" coords="953,632,1039,659"/>
-<area shape="rect" title=" " alt="" coords="774,632,829,659"/>
-<area shape="rect" title=" " alt="" coords="1063,632,1190,659"/>
-<area shape="rect" title=" " alt="" coords="1113,557,1169,584"/>
-<area shape="rect" href="Concepts_8hpp.html" title=" " alt="" coords="1193,319,1303,345"/>
-<area shape="rect" href="ProxyRefOpMixin_8hpp.html" title=" " alt="" coords="93,319,256,345"/>
-<area shape="rect" href="StructName_8hpp.html" title=" " alt="" coords="1793,319,1919,345"/>
-<area shape="rect" href="View_8hpp.html" title=" " alt="" coords="826,169,907,196"/>
-<area shape="rect" title=" " alt="" coords="931,169,1122,196"/>
-<area shape="rect" title=" " alt="" coords="1147,169,1211,196"/>
-<area shape="rect" title=" " alt="" coords="1822,401,1919,427"/>
-<area shape="rect" href="Accessors_8hpp.html" title=" " alt="" coords="713,244,828,271"/>
-<area shape="rect" href="ArrayIndexRange_8hpp.html" title=" " alt="" coords="381,319,544,345"/>
-<area shape="rect" href="BlobAllocators_8hpp.html" title=" " alt="" coords="901,244,1045,271"/>
-<area shape="rect" href="One_8hpp.html" title=" " alt="" coords="1286,244,1423,271"/>
-<area shape="rect" title=" " alt="" coords="1203,401,1269,427"/>
-<area shape="rect" title=" " alt="" coords="808,319,885,345"/>
-<area shape="rect" title=" " alt="" coords="669,319,733,345"/>
-<area shape="rect" title=" " alt="" coords="432,401,517,427"/>
-<area shape="rect" title=" " alt="" coords="542,401,613,427"/>
-<area shape="rect" title=" " alt="" coords="1098,319,1169,345"/>
-<area shape="rect" title=" " alt="" coords="1011,319,1074,345"/>
-<area shape="rect" href="Common_8hpp.html" title=" " alt="" coords="1499,319,1608,345"/>
-<area shape="rect" title=" " alt="" coords="1499,401,1565,427"/>
-<area shape="rect" title=" " alt="" coords="1590,393,1746,435"/>
+<area shape="rect" title=" " alt="" coords="508,5,728,47"/>
+<area shape="rect" href="Core_8hpp.html" title=" " alt="" coords="685,401,765,427"/>
+<area shape="rect" href="macros_8hpp.html" title=" " alt="" coords="1686,632,1785,659"/>
+<area shape="rect" title=" " alt="" coords="1350,557,1442,584"/>
+<area shape="rect" href="RecordRef_8hpp.html" title=" " alt="" coords="1059,95,1175,121"/>
+<area shape="rect" href="AoS_8hpp.html" title=" " alt="" coords="436,95,572,121"/>
+<area shape="rect" href="AoSoA_8hpp.html" title=" " alt="" coords="296,244,450,271"/>
+<area shape="rect" href="SoA_8hpp.html" title=" " alt="" coords="136,244,272,271"/>
+<area shape="rect" href="ArrayExtents_8hpp.html" title=" " alt="" coords="779,483,914,509"/>
+<area shape="rect" href="Meta_8hpp.html" title=" " alt="" coords="805,557,888,584"/>
+<area shape="rect" href="RecordCoord_8hpp.html" title=" " alt="" coords="1090,483,1224,509"/>
+<area shape="rect" title=" " alt="" coords="696,483,754,509"/>
+<area shape="rect" href="Array_8hpp.html" title=" " alt="" coords="961,557,1044,584"/>
+<area shape="rect" title=" " alt="" coords="205,557,264,584"/>
+<area shape="rect" title=" " alt="" coords="1054,632,1130,659"/>
+<area shape="rect" title=" " alt="" coords="864,632,951,659"/>
+<area shape="rect" title=" " alt="" coords="975,632,1030,659"/>
+<area shape="rect" title=" " alt="" coords="714,632,840,659"/>
+<area shape="rect" title=" " alt="" coords="1129,557,1185,584"/>
+<area shape="rect" href="Concepts_8hpp.html" title=" " alt="" coords="1094,319,1204,345"/>
+<area shape="rect" href="ProxyRefOpMixin_8hpp.html" title=" " alt="" coords="1854,319,2017,345"/>
+<area shape="rect" href="StructName_8hpp.html" title=" " alt="" coords="498,319,624,345"/>
+<area shape="rect" href="View_8hpp.html" title=" " alt="" coords="1174,169,1255,196"/>
+<area shape="rect" title=" " alt="" coords="870,169,1060,196"/>
+<area shape="rect" title=" " alt="" coords="1085,169,1149,196"/>
+<area shape="rect" title=" " alt="" coords="512,401,610,427"/>
+<area shape="rect" href="Accessors_8hpp.html" title=" " alt="" coords="1330,244,1445,271"/>
+<area shape="rect" href="ArrayIndexRange_8hpp.html" title=" " alt="" coords="856,319,1018,345"/>
+<area shape="rect" href="BlobAllocators_8hpp.html" title=" " alt="" coords="1512,244,1656,271"/>
+<area shape="rect" href="One_8hpp.html" title=" " alt="" coords="656,244,794,271"/>
+<area shape="rect" title=" " alt="" coords="370,401,437,427"/>
+<area shape="rect" title=" " alt="" coords="1469,319,1546,345"/>
+<area shape="rect" title=" " alt="" coords="1330,319,1394,345"/>
+<area shape="rect" title=" " alt="" coords="840,401,925,427"/>
+<area shape="rect" title=" " alt="" coords="950,401,1020,427"/>
+<area shape="rect" title=" " alt="" coords="1622,319,1692,345"/>
+<area shape="rect" title=" " alt="" coords="1716,319,1779,345"/>
+<area shape="rect" href="Common_8hpp.html" title=" " alt="" coords="313,319,422,345"/>
+<area shape="rect" title=" " alt="" coords="98,401,165,427"/>
+<area shape="rect" title=" " alt="" coords="190,393,346,435"/>
 </map>
 </div>
 </div>
@@ -191,12 +193,12 @@ Functions</h2></td></tr>
 <tr class="memitem:abb21e8bcb7c41613b7183a1beef1f600"><td class="memTemplParams" colspan="2">template&lt;typename RecordDim , template&lt; typename &gt; typename MakeSimd, typename BinaryReductionFunction &gt; </td></tr>
 <tr class="memitem:abb21e8bcb7c41613b7183a1beef1f600"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#abb21e8bcb7c41613b7183a1beef1f600">llama::chooseSimdLanes</a> (BinaryReductionFunction reduce) -&gt; std::size_t</td></tr>
 <tr class="separator:abb21e8bcb7c41613b7183a1beef1f600"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6cc3ab81fd3ee9d9fa0579a062e14dcb"><td class="memTemplParams" colspan="2">template&lt;typename T , typename Simd , typename RecordCoord &gt; </td></tr>
-<tr class="memitem:a6cc3ab81fd3ee9d9fa0579a062e14dcb"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a6cc3ab81fd3ee9d9fa0579a062e14dcb">llama::internal::loadSimdRecord</a> (const T &amp;srcRef, Simd &amp;dstSimd, RecordCoord rc)</td></tr>
-<tr class="separator:a6cc3ab81fd3ee9d9fa0579a062e14dcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a383757e5ef0435ab24cc8570e355912f"><td class="memTemplParams" colspan="2">template&lt;typename Simd , typename TFwd , typename RecordCoord &gt; </td></tr>
-<tr class="memitem:a383757e5ef0435ab24cc8570e355912f"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a383757e5ef0435ab24cc8570e355912f">llama::internal::storeSimdRecord</a> (const Simd &amp;srcSimd, TFwd &amp;&amp;dstRef, RecordCoord rc)</td></tr>
-<tr class="separator:a383757e5ef0435ab24cc8570e355912f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad402d19308ef3a656c9902f39990fc1e"><td class="memTemplParams" colspan="2">template&lt;typename T , typename Simd , typename RecordCoord &gt; </td></tr>
+<tr class="memitem:ad402d19308ef3a656c9902f39990fc1e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#ad402d19308ef3a656c9902f39990fc1e">llama::internal::loadSimdFromField</a> (const T &amp;srcRef, Simd &amp;dstSimd, RecordCoord rc)</td></tr>
+<tr class="separator:ad402d19308ef3a656c9902f39990fc1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af99d8c66e0c278c1ab1b7d513ea6d2cc"><td class="memTemplParams" colspan="2">template&lt;typename Simd , typename TFwd , typename RecordCoord &gt; </td></tr>
+<tr class="memitem:af99d8c66e0c278c1ab1b7d513ea6d2cc"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#af99d8c66e0c278c1ab1b7d513ea6d2cc">llama::internal::storeSimdToField</a> (const Simd &amp;srcSimd, TFwd &amp;&amp;dstRef, RecordCoord rc)</td></tr>
+<tr class="separator:af99d8c66e0c278c1ab1b7d513ea6d2cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6060f4836e56bda4689232f0d22fecf8"><td class="memTemplParams" colspan="2">template&lt;typename T , typename Simd &gt; </td></tr>
 <tr class="memitem:a6060f4836e56bda4689232f0d22fecf8"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a6060f4836e56bda4689232f0d22fecf8">llama::loadSimd</a> (const T &amp;srcRef, Simd &amp;dstSimd)</td></tr>
 <tr class="separator:a6060f4836e56bda4689232f0d22fecf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -231,7 +233,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="Simd_8hpp.html">Simd.hpp</a></li>
-    <li class="footer">Generated on Tue Jan 2 2024 17:30:04 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Jan 2 2024 20:33:13 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

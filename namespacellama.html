@@ -1007,7 +1007,7 @@ template&lt;typename T , template&lt; typename &gt; typename MakeSimd&gt; </div>
 </div><div class="memdoc">
 <p>Creates a SIMD version of the given type. Of T is a record dimension, creates a <a class="el" href="namespacellama.html#a7b33b2c30fa081e8352cf12c7b98b0eb">One</a> where each field is a SIMD type of the original field type. </p>
 
-<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00165">165</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00166">166</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
 
 </div>
 </div>
@@ -1026,7 +1026,7 @@ template&lt;typename RecordDim , template&lt; typename &gt; typename MakeSimd&gt
 </div><div class="memdoc">
 <p>Transforms the given record dimension into a SIMD version of it. Each leaf field type will be replaced by a SIMD vector, as determined by MakeSimd. </p>
 
-<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00148">148</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00149">149</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
 
 </div>
 </div>
@@ -1045,7 +1045,7 @@ template&lt;typename RecordDim , std::size_t N, template&lt; typename, auto &gt;
 </div><div class="memdoc">
 <p>Transforms the given record dimension into a SIMD version of it. Each leaf field type will be replaced by a sized SIMD vector with length N, as determined by MakeSizedSimd. If N is 1, SimdizeN&lt;T, 1, ...&gt; is an alias for T. </p>
 
-<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00142">142</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00143">143</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
 
 </div>
 </div>
@@ -1064,7 +1064,7 @@ template&lt;typename T , std::size_t N, template&lt; typename, auto &gt; typenam
 </div><div class="memdoc">
 <p>Creates a SIMD version of the given type. Of T is a record dimension, creates a <a class="el" href="namespacellama.html#a7b33b2c30fa081e8352cf12c7b98b0eb">One</a> where each field is a SIMD type of the original field type. The SIMD vectors have length N. If N is 1, an ordinary <a class="el" href="namespacellama.html#a7b33b2c30fa081e8352cf12c7b98b0eb">One</a> of the record dimension T is created. If T is not a record dimension, a SIMD vector with value T and length N is created. If N is 1 (and T is not a record dimension), then T is produced. </p>
 
-<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00156">156</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00157">157</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
 
 </div>
 </div>
@@ -1469,7 +1469,7 @@ template&lt;typename RecordDim , template&lt; typename &gt; typename MakeSimd, t
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00077">77</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00078">78</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
 
 </div>
 </div>
@@ -1698,7 +1698,7 @@ template&lt;typename T &gt; </div>
 
 <p>Pulls a copy of the given value or reference. Proxy references are resolved to their value types. </p>
 
-<p class="definition">Definition at line <a class="el" href="RecordRef_8hpp_source.html#l00872">872</a> of file <a class="el" href="RecordRef_8hpp_source.html">RecordRef.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RecordRef_8hpp_source.html#l00875">875</a> of file <a class="el" href="RecordRef_8hpp_source.html">RecordRef.hpp</a>.</p>
 
 </div>
 </div>
@@ -1959,7 +1959,7 @@ template&lt;typename RecordRefFwd , typename Functor &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="RecordRef_8hpp_source.html#l00828">828</a> of file <a class="el" href="RecordRef_8hpp_source.html">RecordRef.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RecordRef_8hpp_source.html#l00831">831</a> of file <a class="el" href="RecordRef_8hpp_source.html">RecordRef.hpp</a>.</p>
 
 </div>
 </div>
@@ -2156,7 +2156,7 @@ template&lt;typename T , typename Simd &gt; </div>
 </div><div class="memdoc">
 <p>Loads SIMD vectors of data starting from the given record reference to dstSimd. Only field tags occurring in <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> are loaded. If Simd contains multiple fields of SIMD types, a SIMD vector will be fetched for each of the fields. The number of elements fetched per SIMD vector depends on the SIMD width of the vector. Simd is allowed to have different vector lengths per element. </p>
 
-<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00292">292</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00310">310</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
 
 </div>
 </div>
@@ -2592,7 +2592,7 @@ template&lt;typename View , typename BoundRecordCoord , bool OwnView&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="RecordRef_8hpp_source.html#l00795">795</a> of file <a class="el" href="RecordRef_8hpp_source.html">RecordRef.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RecordRef_8hpp_source.html#l00798">798</a> of file <a class="el" href="RecordRef_8hpp_source.html">RecordRef.hpp</a>.</p>
 
 </div>
 </div>
@@ -3322,7 +3322,7 @@ template&lt;template&lt; typename &gt; typename MakeSimd, template&lt; typename,
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00388">388</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00412">412</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
 
 </div>
 </div>
@@ -3354,7 +3354,7 @@ template&lt;std::size_t N, template&lt; typename, auto &gt; typename MakeSizedSi
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00349">349</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00373">373</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
 
 </div>
 </div>
@@ -3395,7 +3395,7 @@ template&lt;typename Simd , typename T &gt; </div>
 </div><div class="memdoc">
 <p>Stores SIMD vectors of element data from the given srcSimd into memory starting at the provided record reference. Only field tags occurring in <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> are stored. If Simd contains multiple fields of SIMD types, a SIMD vector will be stored for each of the fields. The number of elements stored per SIMD vector depends on the SIMD width of the vector. Simd is allowed to have different vector lengths per element. </p>
 
-<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00320">320</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00341">341</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
 
 </div>
 </div>
@@ -3500,7 +3500,7 @@ template&lt;typename ViewA , typename BoundRecordDimA , bool OwnViewA, typename 
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="RecordRef_8hpp_source.html#l00777">777</a> of file <a class="el" href="RecordRef_8hpp_source.html">RecordRef.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RecordRef_8hpp_source.html#l00780">780</a> of file <a class="el" href="RecordRef_8hpp_source.html">RecordRef.hpp</a>.</p>
 
 </div>
 </div>
@@ -4792,7 +4792,7 @@ template&lt;typename Simd , typename SFINAE  = void&gt; </div>
 </div><div class="memdoc">
 <p>The number of SIMD simdLanes the given SIMD vector or <a class="el" href="namespacellama.html#adf42387a56b588d4a261b9ab869e33ee">Simd&lt;T&gt;</a> has. If Simd is not a structural <a class="el" href="namespacellama.html#adf42387a56b588d4a261b9ab869e33ee">Simd</a> or <a class="el" href="namespacellama.html#a2f1e01829ca6b6d3a50720fdbcc99adf">SimdN</a>, this is a shortcut for SimdTraits&lt;Simd&gt;::lanes. </p>
 
-<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00069">69</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00070">70</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
 
 </div>
 </div>
@@ -4825,7 +4825,7 @@ template&lt;typename RecordDim , template&lt; typename &gt; typename MakeSimd&gt
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00098">98</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00099">99</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
 
 </div>
 </div>
@@ -4858,7 +4858,7 @@ template&lt;typename RecordDim , template&lt; typename &gt; typename MakeSimd&gt
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00108">108</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00109">109</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
 
 </div>
 </div>
@@ -4924,7 +4924,7 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Tue Jan 2 2024 17:30:04 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Jan 2 2024 20:33:13 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

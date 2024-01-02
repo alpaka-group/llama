@@ -51,7 +51,7 @@ var searchData=
   ['loader_414',['Loader',['../structllama_1_1RecordRef_1_1Loader.html',1,'llama::RecordRef']]],
   ['loaderconst_415',['LoaderConst',['../structllama_1_1RecordRef_1_1LoaderConst.html',1,'llama::RecordRef']]],
   ['loadsimd_416',['loadSimd',['../namespacellama.html#a6060f4836e56bda4689232f0d22fecf8',1,'llama']]],
-  ['loadsimdrecord_417',['loadSimdRecord',['../namespacellama_1_1internal.html#a6cc3ab81fd3ee9d9fa0579a062e14dcb',1,'llama::internal']]],
+  ['loadsimdfromfield_417',['loadSimdFromField',['../namespacellama_1_1internal.html#ad402d19308ef3a656c9902f39990fc1e',1,'llama::internal']]],
   ['loadunaligned_418',['loadUnaligned',['../structllama_1_1SimdTraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__arithmetic__v_3_01T_01_4_01_4_01_4.html#ab5a7f0f2dd7e52aa220aad5256a477c6',1,'llama::SimdTraits&lt; T, std::enable_if_t&lt; std::is_arithmetic_v&lt; T &gt; &gt; &gt;']]],
   ['locked_419',['Locked',['../structllama_1_1accessor_1_1Locked.html',1,'llama::accessor']]],
   ['mapping_420',['mapping',['../namespacellama_1_1mapping.html',1,'llama']]],
