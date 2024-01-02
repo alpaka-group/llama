@@ -419,6 +419,9 @@ Variables</h2></td></tr>
 <tr class="memitem:a4522640644ac2790e930a57ea0ec85c9"><td class="memTemplParams" colspan="2">template&lt;typename T , template&lt; typename... &gt; typename Tuple, typename... Args&gt; </td></tr>
 <tr class="memitem:a4522640644ac2790e930a57ea0ec85c9"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a4522640644ac2790e930a57ea0ec85c9">isDirectListInitializableFromTuple&lt; T, Tuple&lt; Args... &gt; &gt;</a> = <a class="el" href="namespacellama_1_1internal.html#ab894af475936b236e92c32b9ddde4003">isDirectListInitializable</a>&lt;T, Args...&gt;</td></tr>
 <tr class="separator:a4522640644ac2790e930a57ea0ec85c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab915382f731a636c0b92fa24124aee7c"><td class="memTemplParams" colspan="2">template&lt;typename AoSMapping , typename ElementType , std::size_t Lanes&gt; </td></tr>
+<tr class="memitem:ab915382f731a636c0b92fa24124aee7c"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#ab915382f731a636c0b92fa24124aee7c">aosStridedIndices</a></td></tr>
+<tr class="separator:ab915382f731a636c0b92fa24124aee7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a52be59da116649206cd1d61b613ee680"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a52be59da116649206cd1d61b613ee680"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a52be59da116649206cd1d61b613ee680">typeNameStorage</a> = <a class="el" href="namespacellama_1_1internal.html#a64b252f2299cce03f8814269a0c25ca2">typeNameAsArray</a>&lt;T&gt;()</td></tr>
 <tr class="separator:a52be59da116649206cd1d61b613ee680"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1387,7 +1390,7 @@ template&lt;typename T , typename Simd , typename RecordCoord &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00179">179</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00206">206</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
 
 </div>
 </div>
@@ -2199,7 +2202,7 @@ template&lt;typename Simd , typename TFwd , typename RecordCoord &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00230">230</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00251">251</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
 
 </div>
 </div>
@@ -2406,6 +2409,46 @@ template&lt;typename Mapping &gt; </div>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="Copy_8hpp_source.html#l00156">156</a> of file <a class="el" href="Copy_8hpp_source.html">Copy.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ab915382f731a636c0b92fa24124aee7c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab915382f731a636c0b92fa24124aee7c">&#9670;&nbsp;</a></span>aosStridedIndices</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename AoSMapping , typename ElementType , std::size_t Lanes&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto llama::internal::aosStridedIndices</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">= []()</div>
+<div class="line">        {</div>
+<div class="line">            <span class="keyword">auto</span> stride = <a class="code" href="namespacellama.html#ac8f48517b46c35c1a511273f08d2abb3">flatSizeOf</a>&lt;</div>
+<div class="line">                              <span class="keyword">typename</span> <a class="code" href="namespacellama.html#a1fddf1f638927edfb8da8e3c78da4e1c">AoSMapping::Permuter::FlatRecordDim</a>,</div>
+<div class="line">                              AoSMapping::fieldAlignment == <a class="code" href="namespacellama_1_1mapping.html#aeead2d9c8929b8c0aff18aad054a0710ad12fbc9a2ba3b0b91a4190959b4c966b">llama::mapping::FieldAlignment::Align</a>&gt;</div>
+<div class="line">                / <span class="keyword">sizeof</span>(ElementType);</div>
+<div class="line">            std::array&lt;int, Lanes&gt; indices{};</div>
+<div class="line">            <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0; i &lt; static_cast&lt;int&gt;(Lanes); i++)</div>
+<div class="line">                indices[i] = i * stride;</div>
+<div class="line">            <span class="keywordflow">return</span> indices;</div>
+<div class="line">        }()</div>
+<div class="ttc" id="anamespacellama_1_1mapping_html_aeead2d9c8929b8c0aff18aad054a0710ad12fbc9a2ba3b0b91a4190959b4c966b"><div class="ttname"><a href="namespacellama_1_1mapping.html#aeead2d9c8929b8c0aff18aad054a0710ad12fbc9a2ba3b0b91a4190959b4c966b">llama::mapping::FieldAlignment::Align</a></div><div class="ttdeci">@ Align</div></div>
+<div class="ttc" id="anamespacellama_html_a1fddf1f638927edfb8da8e3c78da4e1c"><div class="ttname"><a href="namespacellama.html#a1fddf1f638927edfb8da8e3c78da4e1c">llama::FlatRecordDim</a></div><div class="ttdeci">typename internal::FlattenRecordDimImpl&lt; RecordDim &gt;::type FlatRecordDim</div><div class="ttdoc">Returns a flat type list containing all leaf field types of the given record dimension.</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00481">Core.hpp:481</a></div></div>
+<div class="ttc" id="anamespacellama_html_ac8f48517b46c35c1a511273f08d2abb3"><div class="ttname"><a href="namespacellama.html#ac8f48517b46c35c1a511273f08d2abb3">llama::flatSizeOf</a></div><div class="ttdeci">constexpr std::size_t flatSizeOf</div><div class="ttdoc">The size of a type list if its elements would be in a normal struct.</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00618">Core.hpp:618</a></div></div>
+</div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00193">193</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
 
 </div>
 </div>
@@ -2787,7 +2830,7 @@ template&lt;typename T &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1internal.html">internal</a></li>
-    <li class="footer">Generated on Tue Jan 2 2024 00:41:11 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Tue Jan 2 2024 17:30:05 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

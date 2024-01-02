@@ -17,6 +17,7 @@ var Simd_8hpp =
     [ "simdForEachN", "Simd_8hpp.html#a4451ec281eb037ebac7c08772ce0670f", null ],
     [ "storeSimd", "Simd_8hpp.html#a85e63e02c425ced774c87dfc1e3dda3d", null ],
     [ "storeSimdRecord", "Simd_8hpp.html#a383757e5ef0435ab24cc8570e355912f", null ],
+    [ "aosStridedIndices", "Simd_8hpp.html#ab915382f731a636c0b92fa24124aee7c", null ],
     [ "simdLanes", "Simd_8hpp.html#a85e41b88e239189c88b2d895bfc2691e", null ],
     [ "simdLanesWithFullVectorsFor", "Simd_8hpp.html#a34f90853e28950fdd34ecf9696ae1f63", null ],
     [ "simdLanesWithLeastRegistersFor", "Simd_8hpp.html#ac902aa26f43ee2c8cceeb580a1df0c50", null ]

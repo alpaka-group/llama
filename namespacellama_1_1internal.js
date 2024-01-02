@@ -118,6 +118,7 @@ var namespacellama_1_1internal =
     [ "tupleTransformHelper", "namespacellama_1_1internal.html#a76aaf566f3c6233df18940831d184aa9", null ],
     [ "typeNameAsArray", "namespacellama_1_1internal.html#a64b252f2299cce03f8814269a0c25ca2", null ],
     [ "aosoaLanes", "namespacellama_1_1internal.html#a6be5f6ab0482c0b8d8276f41c70667c2", null ],
+    [ "aosStridedIndices", "namespacellama_1_1internal.html#ab915382f731a636c0b92fa24124aee7c", null ],
     [ "copyBlobWithMemcpy", "namespacellama_1_1internal.html#a1c6df394c66fe2b06db0c0ad6a5e7b12", null ],
     [ "dependentFalse", "namespacellama_1_1internal.html#a99f936c1db4c84570feff6ea76a4934a", null ],
     [ "flatFieldCountBefore", "namespacellama_1_1internal.html#a1dc0436b8f0598e4fe3e707051be5b5f", null ],
