@@ -204,7 +204,7 @@ namespace llama
         }();
 
         template<typename T, typename Simd, typename RecordCoord>
-        LLAMA_FN_HOST_ACC_INLINE void loadSimdRecord(const T& srcRef, Simd& dstSimd, RecordCoord rc)
+        LLAMA_FN_HOST_ACC_INLINE void loadSimdFromField(const T& srcRef, Simd& dstSimd, RecordCoord rc)
         {
             using RecordDim = typename T::AccessibleRecordDim;
             using FieldType = GetType<RecordDim, decltype(rc)>;
@@ -251,7 +251,7 @@ namespace llama
         }
 
         template<typename Simd, typename TFwd, typename RecordCoord>
-        LLAMA_FN_HOST_ACC_INLINE void storeSimdRecord(const Simd& srcSimd, TFwd&& dstRef, RecordCoord rc)
+        LLAMA_FN_HOST_ACC_INLINE void storeSimdToField(const Simd& srcSimd, TFwd&& dstRef, RecordCoord rc)
         {
             using T = std::remove_reference_t<TFwd>;
             using RecordDim = typename T::AccessibleRecordDim;
@@ -313,7 +313,7 @@ namespace llama
         if constexpr(isRecordRef<Simd> && isRecordRef<T>)
         {
             forEachLeafCoord<typename Simd::AccessibleRecordDim>([&](auto rc) LLAMA_LAMBDA_INLINE
-                                                                 { internal::loadSimdRecord(srcRef, dstSimd, rc); });
+                                                                 { internal::loadSimdFromField(srcRef, dstSimd, rc); });
         }
         // unstructured dstSimd and reference type
         else if constexpr(!isRecordRef<Simd> && !isRecordRef<T>)
@@ -341,7 +341,7 @@ namespace llama
         if constexpr(isRecordRef<Simd> && isRecordRef<T>)
         {
             forEachLeafCoord<typename T::AccessibleRecordDim>([&](auto rc) LLAMA_LAMBDA_INLINE
-                                                              { internal::storeSimdRecord(srcSimd, dstRef, rc); });
+                                                              { internal::storeSimdToField(srcSimd, dstRef, rc); });
         }
         // unstructured srcSimd and reference type
         else if constexpr(!isRecordRef<Simd> && !isRecordRef<T>)

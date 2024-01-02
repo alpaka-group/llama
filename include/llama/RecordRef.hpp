@@ -329,10 +329,10 @@ namespace llama
             = isDirectListInitializable<T, Args...>;
 
         template<typename T, typename Simd, typename RecordCoord>
-        LLAMA_FN_HOST_ACC_INLINE void loadSimdRecord(const T& srcRef, Simd& dstSimd, RecordCoord rc);
+        LLAMA_FN_HOST_ACC_INLINE void loadSimdFromField(const T& srcRef, Simd& dstSimd, RecordCoord rc);
 
         template<typename Simd, typename T, typename RecordCoord>
-        LLAMA_FN_HOST_ACC_INLINE void storeSimdRecord(const Simd& srcSimd, T&& dstRef, RecordCoord rc);
+        LLAMA_FN_HOST_ACC_INLINE void storeSimdToField(const Simd& srcSimd, T&& dstRef, RecordCoord rc);
     } // namespace internal
 
     /// Record reference type returned by \ref View after resolving an array dimensions coordinate or partially
@@ -757,9 +757,12 @@ namespace llama
         // to find subsequent elements. This is not a great design for now and the SIMD load/store functions should
         // probably take iterators to records.
         template<typename T, typename Simd, typename RecordCoord>
-        friend LLAMA_FN_HOST_ACC_INLINE void internal::loadSimdRecord(const T& srcRef, Simd& dstSimd, RecordCoord rc);
+        friend LLAMA_FN_HOST_ACC_INLINE void internal::loadSimdFromField(
+            const T& srcRef,
+            Simd& dstSimd,
+            RecordCoord rc);
         template<typename Simd, typename T, typename RecordCoord>
-        friend LLAMA_FN_HOST_ACC_INLINE void internal::storeSimdRecord(
+        friend LLAMA_FN_HOST_ACC_INLINE void internal::storeSimdToField(
             const Simd& srcSimd,
             T&& dstRef,
             RecordCoord rc);
