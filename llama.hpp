@@ -5400,10 +5400,10 @@ namespace llama
             = isDirectListInitializable<T, Args...>;
 
         template<typename T, typename Simd, typename RecordCoord>
-        LLAMA_FN_HOST_ACC_INLINE void loadSimdRecord(const T& srcRef, Simd& dstSimd, RecordCoord rc);
+        LLAMA_FN_HOST_ACC_INLINE void loadSimdFromField(const T& srcRef, Simd& dstSimd, RecordCoord rc);
 
         template<typename Simd, typename T, typename RecordCoord>
-        LLAMA_FN_HOST_ACC_INLINE void storeSimdRecord(const Simd& srcSimd, T&& dstRef, RecordCoord rc);
+        LLAMA_FN_HOST_ACC_INLINE void storeSimdToField(const Simd& srcSimd, T&& dstRef, RecordCoord rc);
     } // namespace internal
 
     /// Record reference type returned by \ref View after resolving an array dimensions coordinate or partially
@@ -5828,9 +5828,12 @@ namespace llama
         // to find subsequent elements. This is not a great design for now and the SIMD load/store functions should
         // probably take iterators to records.
         template<typename T, typename Simd, typename RecordCoord>
-        friend LLAMA_FN_HOST_ACC_INLINE void internal::loadSimdRecord(const T& srcRef, Simd& dstSimd, RecordCoord rc);
+        friend LLAMA_FN_HOST_ACC_INLINE void internal::loadSimdFromField(
+            const T& srcRef,
+            Simd& dstSimd,
+            RecordCoord rc);
         template<typename Simd, typename T, typename RecordCoord>
-        friend LLAMA_FN_HOST_ACC_INLINE void internal::storeSimdRecord(
+        friend LLAMA_FN_HOST_ACC_INLINE void internal::storeSimdToField(
             const Simd& srcSimd,
             T&& dstRef,
             RecordCoord rc);
@@ -6280,6 +6283,128 @@ struct std::
 	// ============================================================================
 
 	// ============================================================================
+	// == ./include/llama/mapping/AoSoA.hpp ==
+	// ==
+	// Copyright 2022 Bernhard Manfred Gruber
+	// SPDX-License-Identifier: MPL-2.0
+
+	// #pragma once
+	// #include "Common.hpp"    // amalgamate: file already inlined
+
+	// #include <limits>    // amalgamate: file already included
+
+	namespace llama::mapping
+	{
+	    /// The maximum number of vector lanes that can be used to fetch each leaf type in the record dimension into a
+	    /// vector register of the given size in bits.
+	    LLAMA_EXPORT
+	    template<typename RecordDim, std::size_t VectorRegisterBits>
+	    inline constexpr std::size_t maxLanes = []() constexpr
+	    {
+	        auto max = std::numeric_limits<std::size_t>::max();
+	        forEachLeafCoord<RecordDim>(
+	            [&](auto rc)
+	            {
+	                using AttributeType = GetType<RecordDim, decltype(rc)>;
+	                max = std::min(max, VectorRegisterBits / (sizeof(AttributeType) * CHAR_BIT));
+	            });
+	        return max;
+	    }();
+
+	    /// Array of struct of arrays mapping. Used to create a \ref View via \ref allocView.
+	    /// \tparam Lanes The size of the inner arrays of this array of struct of arrays.
+	    /// \tparam PermuteFields Defines how the record dimension's fields should be permuted. See \ref
+	    /// PermuteFieldsInOrder, \ref PermuteFieldsIncreasingAlignment, \ref PermuteFieldsDecreasingAlignment and
+	    /// \ref PermuteFieldsMinimizePadding.
+	    LLAMA_EXPORT
+	    template<
+	        typename TArrayExtents,
+	        typename TRecordDim,
+	        typename TArrayExtents::value_type Lanes,
+	        typename TLinearizeArrayIndexFunctor = LinearizeArrayIndexRight,
+	        template<typename> typename PermuteFields = PermuteFieldsInOrder>
+	    struct AoSoA : MappingBase<TArrayExtents, TRecordDim>
+	    {
+	    private:
+	        using Base = MappingBase<TArrayExtents, TRecordDim>;
+	        using size_type = typename Base::size_type;
+
+	    public:
+	        inline static constexpr typename TArrayExtents::value_type lanes = Lanes;
+	        using LinearizeArrayIndexFunctor = TLinearizeArrayIndexFunctor;
+	        using Permuter = PermuteFields<FlatRecordDim<TRecordDim>>;
+	        inline static constexpr std::size_t blobCount = 1;
+
+	#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ >= 12
+	        using Base::Base;
+	#else
+	        constexpr AoSoA() = default;
+
+	        LLAMA_FN_HOST_ACC_INLINE constexpr explicit AoSoA(TArrayExtents extents, TRecordDim = {}) : Base(extents)
+	        {
+	        }
+	#endif
+
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(size_type) const -> size_type
+	        {
+	            const auto rs = static_cast<size_type>(sizeOf<TRecordDim>);
+	            return roundUpToMultiple(LinearizeArrayIndexFunctor{}.size(Base::extents()) * rs, Lanes * rs);
+	        }
+
+	        template<std::size_t... RecordCoords>
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
+	            typename Base::ArrayIndex ai,
+	            RecordCoord<RecordCoords...> rc = {}) const -> NrAndOffset<size_type>
+	        {
+	            return blobNrAndOffset(LinearizeArrayIndexFunctor{}(ai, Base::extents()), rc);
+	        }
+
+	        // Exposed for aosoaCommonBlockCopy. Should be private ...
+	        template<std::size_t... RecordCoords>
+	        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
+	            size_type flatArrayIndex,
+	            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset<size_type>
+	        {
+	            constexpr std::size_t flatFieldIndex =
+	#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ <= 6
+	                *& // mess with nvcc compiler state to workaround bug
+	#endif
+	                 Permuter::template permute<flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>>;
+	            const auto blockIndex = flatArrayIndex / Lanes;
+	            const auto laneIndex = flatArrayIndex % Lanes;
+	            const auto offset = static_cast<size_type>(sizeOf<TRecordDim> * Lanes) * blockIndex
+	                + static_cast<size_type>(flatOffsetOf<typename Permuter::FlatRecordDim, flatFieldIndex, false>) * Lanes
+	                + static_cast<size_type>(sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>)) * laneIndex;
+	            return {0, offset};
+	        }
+	    };
+
+	    /// Binds parameters to an \ref AoSoA mapping except for array and record dimension, producing a quoted meta
+	    /// function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
+	    LLAMA_EXPORT
+	    template<
+	        std::size_t Lanes,
+	        typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight,
+	        template<typename> typename PermuteFields = PermuteFieldsInOrder>
+	    struct BindAoSoA
+	    {
+	        template<typename ArrayExtents, typename RecordDim>
+	        using fn = AoSoA<ArrayExtents, RecordDim, Lanes, LinearizeArrayIndexFunctor, PermuteFields>;
+	    };
+
+	    LLAMA_EXPORT
+	    template<typename Mapping>
+	    inline constexpr bool isAoSoA = false;
+
+	    LLAMA_EXPORT
+	    template<typename AD, typename RD, typename AD::value_type L, typename Lin, template<typename> typename Perm>
+	    inline constexpr bool isAoSoA<AoSoA<AD, RD, L, Lin, Perm>> = true;
+	} // namespace llama::mapping
+	// ==
+	// == ./include/llama/mapping/AoSoA.hpp ==
+	// ============================================================================
+
+	// ============================================================================
 	// == ./include/llama/mapping/SoA.hpp ==
 	// ==
 	// Copyright 2022 Alexander Matthes, Bernhard Manfred Gruber
@@ -6725,52 +6850,54 @@ namespace llama
         }();
 
         template<typename T, typename Simd, typename RecordCoord>
-        LLAMA_FN_HOST_ACC_INLINE void loadSimdRecord(const T& srcRef, Simd& dstSimd, RecordCoord rc)
+        LLAMA_FN_HOST_ACC_INLINE void loadSimdFromField(const T& srcRef, Simd& dstSimd, RecordCoord rc)
         {
             using RecordDim = typename T::AccessibleRecordDim;
             using FieldType = GetType<RecordDim, decltype(rc)>;
             using ElementSimd = std::decay_t<decltype(dstSimd(rc))>;
             using Traits = SimdTraits<ElementSimd>;
 
+            auto loadElementWise = [&]
+            {
+                auto b = ArrayIndexIterator{srcRef.view.extents(), srcRef.arrayIndex()};
+                for(std::size_t i = 0; i < Traits::lanes; i++)
+                    reinterpret_cast<FieldType*>(&dstSimd(rc))[i]
+                        = srcRef.view(*b++)(cat(typename T::BoundRecordCoord{}, rc));
+            };
+
             // TODO(bgruber): can we generalize the logic whether we can load a dstSimd from that mapping?
             using Mapping = typename T::View::Mapping;
             if constexpr(mapping::isSoA<Mapping>)
             {
                 LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-                dstSimd(rc) = Traits::loadUnaligned(&srcRef(rc)); // SIMD load
+                dstSimd(rc) = Traits::loadUnaligned(&srcRef(rc));
                 LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
             }
-            // else if constexpr(mapping::isAoSoA<typename T::View::Mapping>)
-            //{
-            //    // it turns out we do not need the specialization, because clang already fuses the scalar
-            //    loads
-            //    // into a vector load :D
-            //    assert(srcRef.arrayDimsCoord()[0] % SIMD_WIDTH == 0);
-            //    // if(srcRef.arrayDimsCoord()[0] % SIMD_WIDTH != 0)
-            //    //    __builtin_unreachable(); // this also helps nothing
-            //    //__builtin_assume(srcRef.arrayDimsCoord()[0] % SIMD_WIDTH == 0);  // this also helps nothing
-            //    dstSimd(rc) = Traits::load_from(&srcRef(rc)); // SIMD load
-            //}
+            else if constexpr(mapping::isAoSoA<typename T::View::Mapping>)
+            {
+                // TODO(bgruber): this check is too strict
+                if(T::View::Mapping::ArrayExtents::rank == 1 && srcRef.arrayIndex()[0] % Traits::lanes == 0
+                   && T::View::Mapping::lanes >= Traits::lanes)
+                {
+                    LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
+                    dstSimd(rc) = Traits::loadUnaligned(&srcRef(rc));
+                    LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
+                }
+                else
+                    loadElementWise();
+            }
             else if constexpr(mapping::isAoS<Mapping>)
             {
-                static_assert(mapping::isAoS<Mapping>);
                 LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
                 dstSimd(rc) = Traits::gather(&srcRef(rc), aosStridedIndices<Mapping, FieldType, Traits::lanes>);
                 LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
             }
             else
-            {
-                auto b = ArrayIndexIterator{srcRef.view.extents(), srcRef.arrayIndex()};
-                ElementSimd elemSimd; // g++-12 really needs the intermediate elemSimd and memcpy
-                for(auto i = 0; i < Traits::lanes; i++)
-                    reinterpret_cast<FieldType*>(&elemSimd)[i]
-                        = srcRef.view(*b++)(cat(typename T::BoundRecordCoord{}, rc)); // scalar loads
-                std::memcpy(&dstSimd(rc), &elemSimd, sizeof(elemSimd));
-            }
+                loadElementWise();
         }
 
         template<typename Simd, typename TFwd, typename RecordCoord>
-        LLAMA_FN_HOST_ACC_INLINE void storeSimdRecord(const Simd& srcSimd, TFwd&& dstRef, RecordCoord rc)
+        LLAMA_FN_HOST_ACC_INLINE void storeSimdToField(const Simd& srcSimd, TFwd&& dstRef, RecordCoord rc)
         {
             using T = std::remove_reference_t<TFwd>;
             using RecordDim = typename T::AccessibleRecordDim;
@@ -6778,13 +6905,36 @@ namespace llama
             using ElementSimd = std::decay_t<decltype(srcSimd(rc))>;
             using Traits = SimdTraits<ElementSimd>;
 
+            auto storeElementWise = [&]
+            {
+                // TODO(bgruber): how does this generalize conceptually to 2D and higher dimensions? in which
+                // direction should we collect SIMD values?
+                auto b = ArrayIndexIterator{dstRef.view.extents(), dstRef.arrayIndex()};
+                for(std::size_t i = 0; i < Traits::lanes; i++)
+                    dstRef.view (*b++)(cat(typename T::BoundRecordCoord{}, rc))
+                        = reinterpret_cast<const FieldType*>(&srcSimd(rc))[i];
+            };
+
             // TODO(bgruber): can we generalize the logic whether we can store a srcSimd to that mapping?
             using Mapping = typename std::remove_reference_t<T>::View::Mapping;
             if constexpr(mapping::isSoA<Mapping>)
             {
                 LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-                Traits::storeUnaligned(srcSimd(rc), &dstRef(rc)); // SIMD store
+                Traits::storeUnaligned(srcSimd(rc), &dstRef(rc));
                 LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
+            }
+            else if constexpr(mapping::isAoSoA<typename T::View::Mapping>)
+            {
+                // TODO(bgruber): this check is too strict
+                if(T::View::Mapping::ArrayExtents::rank == 1 && dstRef.arrayIndex()[0] % Traits::lanes == 0
+                   && T::View::Mapping::lanes >= Traits::lanes)
+                {
+                    LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
+                    Traits::storeUnaligned(srcSimd(rc), &dstRef(rc));
+                    LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
+                }
+                else
+                    storeElementWise();
             }
             else if constexpr(mapping::isAoS<Mapping>)
             {
@@ -6793,15 +6943,7 @@ namespace llama
                 LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
             }
             else
-            {
-                // TODO(bgruber): how does this generalize conceptually to 2D and higher dimensions? in which
-                // direction should we collect SIMD values?
-                const ElementSimd elemSimd = srcSimd(rc);
-                auto b = ArrayIndexIterator{dstRef.view.extents(), dstRef.arrayIndex()};
-                for(auto i = 0; i < Traits::lanes; i++)
-                    dstRef.view (*b++)(cat(typename T::BoundRecordCoord{}, rc))
-                        = reinterpret_cast<const FieldType*>(&elemSimd)[i]; // scalar store
-            }
+                storeElementWise();
         }
     } // namespace internal
 
@@ -6816,8 +6958,11 @@ namespace llama
         // structured dstSimd type and record reference
         if constexpr(isRecordRef<Simd> && isRecordRef<T>)
         {
-            forEachLeafCoord<typename Simd::AccessibleRecordDim>([&](auto rc) LLAMA_LAMBDA_INLINE
-                                                                 { internal::loadSimdRecord(srcRef, dstSimd, rc); });
+            if constexpr(simdLanes<Simd> == simdLanes<T>) // fast path mainly for scalar SimdN<T, 1, ...>
+                dstSimd = srcRef;
+            else
+                forEachLeafCoord<typename Simd::AccessibleRecordDim>(
+                    [&](auto rc) LLAMA_LAMBDA_INLINE { internal::loadSimdFromField(srcRef, dstSimd, rc); });
         }
         // unstructured dstSimd and reference type
         else if constexpr(!isRecordRef<Simd> && !isRecordRef<T>)
@@ -6844,8 +6989,11 @@ namespace llama
         // structured Simd type and record reference
         if constexpr(isRecordRef<Simd> && isRecordRef<T>)
         {
-            forEachLeafCoord<typename T::AccessibleRecordDim>([&](auto rc) LLAMA_LAMBDA_INLINE
-                                                              { internal::storeSimdRecord(srcSimd, dstRef, rc); });
+            if constexpr(simdLanes<Simd> == simdLanes<T>) // fast path mainly for scalar SimdN<T, 1, ...>
+                dstRef = srcSimd;
+            else
+                forEachLeafCoord<typename T::AccessibleRecordDim>(
+                    [&](auto rc) LLAMA_LAMBDA_INLINE { internal::storeSimdToField(srcSimd, dstRef, rc); });
         }
         // unstructured srcSimd and reference type
         else if constexpr(!isRecordRef<Simd> && !isRecordRef<T>)
@@ -6975,128 +7123,7 @@ namespace llama
 
 	// #pragma once
 	// #include "View.hpp"    // amalgamate: file already inlined
-		// ============================================================================
-		// == ./include/llama/mapping/AoSoA.hpp ==
-		// ==
-		// Copyright 2022 Bernhard Manfred Gruber
-		// SPDX-License-Identifier: MPL-2.0
-
-		// #pragma once
-		// #include "Common.hpp"    // amalgamate: file already inlined
-
-		// #include <limits>    // amalgamate: file already included
-
-		namespace llama::mapping
-		{
-		    /// The maximum number of vector lanes that can be used to fetch each leaf type in the record dimension into a
-		    /// vector register of the given size in bits.
-		    LLAMA_EXPORT
-		    template<typename RecordDim, std::size_t VectorRegisterBits>
-		    inline constexpr std::size_t maxLanes = []() constexpr
-		    {
-		        auto max = std::numeric_limits<std::size_t>::max();
-		        forEachLeafCoord<RecordDim>(
-		            [&](auto rc)
-		            {
-		                using AttributeType = GetType<RecordDim, decltype(rc)>;
-		                max = std::min(max, VectorRegisterBits / (sizeof(AttributeType) * CHAR_BIT));
-		            });
-		        return max;
-		    }();
-
-		    /// Array of struct of arrays mapping. Used to create a \ref View via \ref allocView.
-		    /// \tparam Lanes The size of the inner arrays of this array of struct of arrays.
-		    /// \tparam PermuteFields Defines how the record dimension's fields should be permuted. See \ref
-		    /// PermuteFieldsInOrder, \ref PermuteFieldsIncreasingAlignment, \ref PermuteFieldsDecreasingAlignment and
-		    /// \ref PermuteFieldsMinimizePadding.
-		    LLAMA_EXPORT
-		    template<
-		        typename TArrayExtents,
-		        typename TRecordDim,
-		        typename TArrayExtents::value_type Lanes,
-		        typename TLinearizeArrayIndexFunctor = LinearizeArrayIndexRight,
-		        template<typename> typename PermuteFields = PermuteFieldsInOrder>
-		    struct AoSoA : MappingBase<TArrayExtents, TRecordDim>
-		    {
-		    private:
-		        using Base = MappingBase<TArrayExtents, TRecordDim>;
-		        using size_type = typename Base::size_type;
-
-		    public:
-		        inline static constexpr typename TArrayExtents::value_type lanes = Lanes;
-		        using LinearizeArrayIndexFunctor = TLinearizeArrayIndexFunctor;
-		        using Permuter = PermuteFields<FlatRecordDim<TRecordDim>>;
-		        inline static constexpr std::size_t blobCount = 1;
-
-		#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ >= 12
-		        using Base::Base;
-		#else
-		        constexpr AoSoA() = default;
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr explicit AoSoA(TArrayExtents extents, TRecordDim = {}) : Base(extents)
-		        {
-		        }
-		#endif
-
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(size_type) const -> size_type
-		        {
-		            const auto rs = static_cast<size_type>(sizeOf<TRecordDim>);
-		            return roundUpToMultiple(LinearizeArrayIndexFunctor{}.size(Base::extents()) * rs, Lanes * rs);
-		        }
-
-		        template<std::size_t... RecordCoords>
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
-		            typename Base::ArrayIndex ai,
-		            RecordCoord<RecordCoords...> rc = {}) const -> NrAndOffset<size_type>
-		        {
-		            return blobNrAndOffset(LinearizeArrayIndexFunctor{}(ai, Base::extents()), rc);
-		        }
-
-		        // Exposed for aosoaCommonBlockCopy. Should be private ...
-		        template<std::size_t... RecordCoords>
-		        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobNrAndOffset(
-		            size_type flatArrayIndex,
-		            RecordCoord<RecordCoords...> = {}) const -> NrAndOffset<size_type>
-		        {
-		            constexpr std::size_t flatFieldIndex =
-		#if defined(__NVCC__) && __CUDACC_VER_MAJOR__ == 11 && __CUDACC_VER_MINOR__ <= 6
-		                *& // mess with nvcc compiler state to workaround bug
-		#endif
-		                 Permuter::template permute<flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>>;
-		            const auto blockIndex = flatArrayIndex / Lanes;
-		            const auto laneIndex = flatArrayIndex % Lanes;
-		            const auto offset = static_cast<size_type>(sizeOf<TRecordDim> * Lanes) * blockIndex
-		                + static_cast<size_type>(flatOffsetOf<typename Permuter::FlatRecordDim, flatFieldIndex, false>) * Lanes
-		                + static_cast<size_type>(sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>)) * laneIndex;
-		            return {0, offset};
-		        }
-		    };
-
-		    /// Binds parameters to an \ref AoSoA mapping except for array and record dimension, producing a quoted meta
-		    /// function accepting the latter two. Useful to to prepare this mapping for a meta mapping.
-		    LLAMA_EXPORT
-		    template<
-		        std::size_t Lanes,
-		        typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight,
-		        template<typename> typename PermuteFields = PermuteFieldsInOrder>
-		    struct BindAoSoA
-		    {
-		        template<typename ArrayExtents, typename RecordDim>
-		        using fn = AoSoA<ArrayExtents, RecordDim, Lanes, LinearizeArrayIndexFunctor, PermuteFields>;
-		    };
-
-		    LLAMA_EXPORT
-		    template<typename Mapping>
-		    inline constexpr bool isAoSoA = false;
-
-		    LLAMA_EXPORT
-		    template<typename AD, typename RD, typename AD::value_type L, typename Lin, template<typename> typename Perm>
-		    inline constexpr bool isAoSoA<AoSoA<AD, RD, L, Lin, Perm>> = true;
-		} // namespace llama::mapping
-		// ==
-		// == ./include/llama/mapping/AoSoA.hpp ==
-		// ============================================================================
-
+	// #include "mapping/AoSoA.hpp"    // amalgamate: file already inlined
 	// #include "mapping/SoA.hpp"    // amalgamate: file already inlined
 
 	#include <cstring>
