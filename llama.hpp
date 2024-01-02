@@ -6544,6 +6544,10 @@ namespace llama
     /// address.
     /// * a `static void storeUnaligned(Simd simd, value_type* mem)` function, storing the given Simd to a given
     /// memory address.
+    /// * a `static auto gather(const value_type* mem, std::array<int, lanes> indices) -> Simd` function, gathering
+    ///  values into a Simd from the memory addresses identified by mem + indices * sizeof(value_type).
+    /// * a `static void scatter(Simd simd, value_type* mem, std::array<int, lanes> indices)` function, scattering the
+    /// values from a Simd to the memory addresses identified by mem + indices * sizeof(value_type).
     LLAMA_EXPORT
     template<typename Simd, typename SFINAE = void>
     struct SimdTraits
@@ -6567,6 +6571,16 @@ namespace llama
         static LLAMA_FN_HOST_ACC_INLINE void storeUnaligned(T t, T* mem)
         {
             *mem = t;
+        }
+
+        static LLAMA_FN_HOST_ACC_INLINE auto gather(const value_type* mem, std::array<int, lanes> indices) -> T
+        {
+            return mem[indices[0]];
+        }
+
+        static LLAMA_FN_HOST_ACC_INLINE void scatter(T t, value_type* mem, std::array<int, lanes> indices)
+        {
+            mem[indices[0]] = t;
         }
     };
 
@@ -6697,6 +6711,19 @@ namespace llama
 
     namespace internal
     {
+        template<typename AoSMapping, typename ElementType, std::size_t Lanes>
+        inline constexpr auto aosStridedIndices = []()
+        {
+            auto stride = flatSizeOf<
+                              typename AoSMapping::Permuter::FlatRecordDim,
+                              AoSMapping::fieldAlignment == llama::mapping::FieldAlignment::Align>
+                / sizeof(ElementType);
+            std::array<int, Lanes> indices{};
+            for(int i = 0; i < static_cast<int>(Lanes); i++)
+                indices[i] = i * stride;
+            return indices;
+        }();
+
         template<typename T, typename Simd, typename RecordCoord>
         LLAMA_FN_HOST_ACC_INLINE void loadSimdRecord(const T& srcRef, Simd& dstSimd, RecordCoord rc)
         {
@@ -6727,15 +6754,9 @@ namespace llama
             else if constexpr(mapping::isAoS<Mapping>)
             {
                 static_assert(mapping::isAoS<Mapping>);
-                static constexpr auto srcStride = flatSizeOf<
-                    typename Mapping::Permuter::FlatRecordDim,
-                    Mapping::fieldAlignment == llama::mapping::FieldAlignment::Align>;
-                const auto* srcBaseAddr = reinterpret_cast<const std::byte*>(&srcRef(rc));
-                ElementSimd elemSimd; // g++-12 really needs the intermediate elemSimd and memcpy
-                for(auto i = 0; i < Traits::lanes; i++)
-                    reinterpret_cast<FieldType*>(&elemSimd)[i]
-                        = *reinterpret_cast<const FieldType*>(srcBaseAddr + i * srcStride);
-                std::memcpy(&dstSimd(rc), &elemSimd, sizeof(elemSimd));
+                LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
+                dstSimd(rc) = Traits::gather(&srcRef(rc), aosStridedIndices<Mapping, FieldType, Traits::lanes>);
+                LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
             }
             else
             {
@@ -6767,14 +6788,9 @@ namespace llama
             }
             else if constexpr(mapping::isAoS<Mapping>)
             {
-                static constexpr auto stride = flatSizeOf<
-                    typename Mapping::Permuter::FlatRecordDim,
-                    Mapping::fieldAlignment == llama::mapping::FieldAlignment::Align>;
-                auto* dstBaseAddr = reinterpret_cast<std::byte*>(&dstRef(rc));
-                const ElementSimd elemSimd = srcSimd(rc);
-                for(auto i = 0; i < Traits::lanes; i++)
-                    *reinterpret_cast<FieldType*>(dstBaseAddr + i * stride)
-                        = reinterpret_cast<const FieldType*>(&elemSimd)[i];
+                LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
+                Traits::scatter(srcSimd(rc), &dstRef(rc), aosStridedIndices<Mapping, FieldType, Traits::lanes>);
+                LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
             }
             else
             {
