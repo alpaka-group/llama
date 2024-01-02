@@ -7,6 +7,7 @@
 #include "RecordRef.hpp"
 #include "macros.hpp"
 #include "mapping/AoS.hpp"
+#include "mapping/AoSoA.hpp"
 #include "mapping/SoA.hpp"
 
 #include <type_traits>
@@ -210,41 +211,43 @@ namespace llama
             using ElementSimd = std::decay_t<decltype(dstSimd(rc))>;
             using Traits = SimdTraits<ElementSimd>;
 
+            auto loadElementWise = [&]
+            {
+                auto b = ArrayIndexIterator{srcRef.view.extents(), srcRef.arrayIndex()};
+                for(std::size_t i = 0; i < Traits::lanes; i++)
+                    reinterpret_cast<FieldType*>(&dstSimd(rc))[i]
+                        = srcRef.view(*b++)(cat(typename T::BoundRecordCoord{}, rc));
+            };
+
             // TODO(bgruber): can we generalize the logic whether we can load a dstSimd from that mapping?
             using Mapping = typename T::View::Mapping;
             if constexpr(mapping::isSoA<Mapping>)
             {
                 LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-                dstSimd(rc) = Traits::loadUnaligned(&srcRef(rc)); // SIMD load
+                dstSimd(rc) = Traits::loadUnaligned(&srcRef(rc));
                 LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
             }
-            // else if constexpr(mapping::isAoSoA<typename T::View::Mapping>)
-            //{
-            //    // it turns out we do not need the specialization, because clang already fuses the scalar
-            //    loads
-            //    // into a vector load :D
-            //    assert(srcRef.arrayDimsCoord()[0] % SIMD_WIDTH == 0);
-            //    // if(srcRef.arrayDimsCoord()[0] % SIMD_WIDTH != 0)
-            //    //    __builtin_unreachable(); // this also helps nothing
-            //    //__builtin_assume(srcRef.arrayDimsCoord()[0] % SIMD_WIDTH == 0);  // this also helps nothing
-            //    dstSimd(rc) = Traits::load_from(&srcRef(rc)); // SIMD load
-            //}
+            else if constexpr(mapping::isAoSoA<typename T::View::Mapping>)
+            {
+                // TODO(bgruber): this check is too strict
+                if(T::View::Mapping::ArrayExtents::rank == 1 && srcRef.arrayIndex()[0] % Traits::lanes == 0
+                   && T::View::Mapping::lanes >= Traits::lanes)
+                {
+                    LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
+                    dstSimd(rc) = Traits::loadUnaligned(&srcRef(rc));
+                    LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
+                }
+                else
+                    loadElementWise();
+            }
             else if constexpr(mapping::isAoS<Mapping>)
             {
-                static_assert(mapping::isAoS<Mapping>);
                 LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
                 dstSimd(rc) = Traits::gather(&srcRef(rc), aosStridedIndices<Mapping, FieldType, Traits::lanes>);
                 LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
             }
             else
-            {
-                auto b = ArrayIndexIterator{srcRef.view.extents(), srcRef.arrayIndex()};
-                ElementSimd elemSimd; // g++-12 really needs the intermediate elemSimd and memcpy
-                for(auto i = 0; i < Traits::lanes; i++)
-                    reinterpret_cast<FieldType*>(&elemSimd)[i]
-                        = srcRef.view(*b++)(cat(typename T::BoundRecordCoord{}, rc)); // scalar loads
-                std::memcpy(&dstSimd(rc), &elemSimd, sizeof(elemSimd));
-            }
+                loadElementWise();
         }
 
         template<typename Simd, typename TFwd, typename RecordCoord>
@@ -256,13 +259,36 @@ namespace llama
             using ElementSimd = std::decay_t<decltype(srcSimd(rc))>;
             using Traits = SimdTraits<ElementSimd>;
 
+            auto storeElementWise = [&]
+            {
+                // TODO(bgruber): how does this generalize conceptually to 2D and higher dimensions? in which
+                // direction should we collect SIMD values?
+                auto b = ArrayIndexIterator{dstRef.view.extents(), dstRef.arrayIndex()};
+                for(std::size_t i = 0; i < Traits::lanes; i++)
+                    dstRef.view (*b++)(cat(typename T::BoundRecordCoord{}, rc))
+                        = reinterpret_cast<const FieldType*>(&srcSimd(rc))[i];
+            };
+
             // TODO(bgruber): can we generalize the logic whether we can store a srcSimd to that mapping?
             using Mapping = typename std::remove_reference_t<T>::View::Mapping;
             if constexpr(mapping::isSoA<Mapping>)
             {
                 LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-                Traits::storeUnaligned(srcSimd(rc), &dstRef(rc)); // SIMD store
+                Traits::storeUnaligned(srcSimd(rc), &dstRef(rc));
                 LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
+            }
+            else if constexpr(mapping::isAoSoA<typename T::View::Mapping>)
+            {
+                // TODO(bgruber): this check is too strict
+                if(T::View::Mapping::ArrayExtents::rank == 1 && dstRef.arrayIndex()[0] % Traits::lanes == 0
+                   && T::View::Mapping::lanes >= Traits::lanes)
+                {
+                    LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
+                    Traits::storeUnaligned(srcSimd(rc), &dstRef(rc));
+                    LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
+                }
+                else
+                    storeElementWise();
             }
             else if constexpr(mapping::isAoS<Mapping>)
             {
@@ -271,15 +297,7 @@ namespace llama
                 LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
             }
             else
-            {
-                // TODO(bgruber): how does this generalize conceptually to 2D and higher dimensions? in which
-                // direction should we collect SIMD values?
-                const ElementSimd elemSimd = srcSimd(rc);
-                auto b = ArrayIndexIterator{dstRef.view.extents(), dstRef.arrayIndex()};
-                for(auto i = 0; i < Traits::lanes; i++)
-                    dstRef.view (*b++)(cat(typename T::BoundRecordCoord{}, rc))
-                        = reinterpret_cast<const FieldType*>(&elemSimd)[i]; // scalar store
-            }
+                storeElementWise();
         }
     } // namespace internal
 
