@@ -5399,11 +5399,11 @@ namespace llama
         inline constexpr auto isDirectListInitializableFromTuple<T, Tuple<Args...>>
             = isDirectListInitializable<T, Args...>;
 
-        template<typename T, typename Simd, typename RecordCoord>
-        LLAMA_FN_HOST_ACC_INLINE void loadSimdFromField(const T& srcRef, Simd& dstSimd, RecordCoord rc);
+        template<typename T, typename Simd, typename SrcRC, typename DstRC>
+        LLAMA_FN_HOST_ACC_INLINE void loadSimdFromField(const T& srcRef, Simd& dstSimd, SrcRC srcRC, DstRC dstRC);
 
-        template<typename Simd, typename T, typename RecordCoord>
-        LLAMA_FN_HOST_ACC_INLINE void storeSimdToField(const Simd& srcSimd, T&& dstRef, RecordCoord rc);
+        template<typename Simd, typename TFwd, typename SrcRC, typename DstRC>
+        LLAMA_FN_HOST_ACC_INLINE void storeSimdToField(const Simd& srcSimd, TFwd&& dstRef, SrcRC srcRC, DstRC dstRC);
     } // namespace internal
 
     /// Record reference type returned by \ref View after resolving an array dimensions coordinate or partially
@@ -5827,16 +5827,18 @@ namespace llama
         // FIXME(bgruber): the SIMD load/store functions need to navigate back from a record ref to the contained view
         // to find subsequent elements. This is not a great design for now and the SIMD load/store functions should
         // probably take iterators to records.
-        template<typename T, typename Simd, typename RecordCoord>
+        template<typename T, typename Simd, typename SrcRC, typename DstRC>
         friend LLAMA_FN_HOST_ACC_INLINE void internal::loadSimdFromField(
             const T& srcRef,
             Simd& dstSimd,
-            RecordCoord rc);
-        template<typename Simd, typename T, typename RecordCoord>
+            SrcRC srcRC,
+            DstRC dstRC);
+        template<typename Simd, typename TFwd, typename SrcRC, typename DstRC>
         friend LLAMA_FN_HOST_ACC_INLINE void internal::storeSimdToField(
             const Simd& srcSimd,
-            T&& dstRef,
-            RecordCoord rc);
+            TFwd&& dstRef,
+            SrcRC srcRC,
+            DstRC dstRC);
     };
 
     // swap for heterogeneous RecordRef
@@ -6849,20 +6851,19 @@ namespace llama
             return indices;
         }();
 
-        template<typename T, typename Simd, typename RecordCoord>
-        LLAMA_FN_HOST_ACC_INLINE void loadSimdFromField(const T& srcRef, Simd& dstSimd, RecordCoord rc)
+        template<typename T, typename Simd, typename SrcRC, typename DstRC>
+        LLAMA_FN_HOST_ACC_INLINE void loadSimdFromField(const T& srcRef, Simd& dstSimd, SrcRC srcRC, DstRC dstRC)
         {
-            using RecordDim = typename T::AccessibleRecordDim;
-            using FieldType = GetType<RecordDim, decltype(rc)>;
-            using ElementSimd = std::decay_t<decltype(dstSimd(rc))>;
+            using FieldType = GetType<typename T::AccessibleRecordDim, SrcRC>;
+            using ElementSimd = std::decay_t<decltype(dstSimd(dstRC))>;
             using Traits = SimdTraits<ElementSimd>;
 
             auto loadElementWise = [&]
             {
                 auto b = ArrayIndexIterator{srcRef.view.extents(), srcRef.arrayIndex()};
                 for(std::size_t i = 0; i < Traits::lanes; i++)
-                    reinterpret_cast<FieldType*>(&dstSimd(rc))[i]
-                        = srcRef.view(*b++)(cat(typename T::BoundRecordCoord{}, rc));
+                    reinterpret_cast<FieldType*>(&dstSimd(dstRC))[i]
+                        = srcRef.view(*b++)(cat(typename T::BoundRecordCoord{}, srcRC));
             };
 
             // TODO(bgruber): can we generalize the logic whether we can load a dstSimd from that mapping?
@@ -6870,7 +6871,7 @@ namespace llama
             if constexpr(mapping::isSoA<Mapping>)
             {
                 LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-                dstSimd(rc) = Traits::loadUnaligned(&srcRef(rc));
+                dstSimd(dstRC) = Traits::loadUnaligned(&srcRef(srcRC));
                 LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
             }
             else if constexpr(mapping::isAoSoA<typename T::View::Mapping>)
@@ -6880,7 +6881,7 @@ namespace llama
                    && T::View::Mapping::lanes >= Traits::lanes)
                 {
                     LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-                    dstSimd(rc) = Traits::loadUnaligned(&srcRef(rc));
+                    dstSimd(dstRC) = Traits::loadUnaligned(&srcRef(srcRC));
                     LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
                 }
                 else
@@ -6889,20 +6890,19 @@ namespace llama
             else if constexpr(mapping::isAoS<Mapping>)
             {
                 LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-                dstSimd(rc) = Traits::gather(&srcRef(rc), aosStridedIndices<Mapping, FieldType, Traits::lanes>);
+                dstSimd(dstRC) = Traits::gather(&srcRef(srcRC), aosStridedIndices<Mapping, FieldType, Traits::lanes>);
                 LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
             }
             else
                 loadElementWise();
         }
 
-        template<typename Simd, typename TFwd, typename RecordCoord>
-        LLAMA_FN_HOST_ACC_INLINE void storeSimdToField(const Simd& srcSimd, TFwd&& dstRef, RecordCoord rc)
+        template<typename Simd, typename TFwd, typename SrcRC, typename DstRC>
+        LLAMA_FN_HOST_ACC_INLINE void storeSimdToField(const Simd& srcSimd, TFwd&& dstRef, SrcRC srcRC, DstRC dstRC)
         {
             using T = std::remove_reference_t<TFwd>;
-            using RecordDim = typename T::AccessibleRecordDim;
-            using FieldType = GetType<RecordDim, decltype(rc)>;
-            using ElementSimd = std::decay_t<decltype(srcSimd(rc))>;
+            using FieldType = GetType<typename T::AccessibleRecordDim, DstRC>;
+            using ElementSimd = std::decay_t<decltype(srcSimd(srcRC))>;
             using Traits = SimdTraits<ElementSimd>;
 
             auto storeElementWise = [&]
@@ -6911,8 +6911,8 @@ namespace llama
                 // direction should we collect SIMD values?
                 auto b = ArrayIndexIterator{dstRef.view.extents(), dstRef.arrayIndex()};
                 for(std::size_t i = 0; i < Traits::lanes; i++)
-                    dstRef.view (*b++)(cat(typename T::BoundRecordCoord{}, rc))
-                        = reinterpret_cast<const FieldType*>(&srcSimd(rc))[i];
+                    dstRef.view (*b++)(cat(typename T::BoundRecordCoord{}, dstRC))
+                        = reinterpret_cast<const FieldType*>(&srcSimd(srcRC))[i];
             };
 
             // TODO(bgruber): can we generalize the logic whether we can store a srcSimd to that mapping?
@@ -6920,7 +6920,7 @@ namespace llama
             if constexpr(mapping::isSoA<Mapping>)
             {
                 LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-                Traits::storeUnaligned(srcSimd(rc), &dstRef(rc));
+                Traits::storeUnaligned(srcSimd(srcRC), &dstRef(dstRC));
                 LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
             }
             else if constexpr(mapping::isAoSoA<typename T::View::Mapping>)
@@ -6930,7 +6930,7 @@ namespace llama
                    && T::View::Mapping::lanes >= Traits::lanes)
                 {
                     LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-                    Traits::storeUnaligned(srcSimd(rc), &dstRef(rc));
+                    Traits::storeUnaligned(srcSimd(srcRC), &dstRef(dstRC));
                     LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
                 }
                 else
@@ -6939,7 +6939,7 @@ namespace llama
             else if constexpr(mapping::isAoS<Mapping>)
             {
                 LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-                Traits::scatter(srcSimd(rc), &dstRef(rc), aosStridedIndices<Mapping, FieldType, Traits::lanes>);
+                Traits::scatter(srcSimd(srcRC), &dstRef(dstRC), aosStridedIndices<Mapping, FieldType, Traits::lanes>);
                 LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
             }
             else
@@ -6961,8 +6961,32 @@ namespace llama
             if constexpr(simdLanes<Simd> == simdLanes<T>) // fast path mainly for scalar SimdN<T, 1, ...>
                 dstSimd = srcRef;
             else
-                forEachLeafCoord<typename Simd::AccessibleRecordDim>(
-                    [&](auto rc) LLAMA_LAMBDA_INLINE { internal::loadSimdFromField(srcRef, dstSimd, rc); });
+            {
+                using SrcARD = typename T::AccessibleRecordDim;
+                using DstArd = typename Simd::AccessibleRecordDim;
+                if constexpr(std::is_same_v<SrcARD, DstArd>)
+                {
+                    forEachLeafCoord<SrcARD>([&](auto rc) LLAMA_LAMBDA_INLINE
+                                             { internal::loadSimdFromField(srcRef, dstSimd, rc, rc); });
+                }
+                else
+                {
+                    forEachLeafCoord<SrcARD>(
+                        [&](auto srcRC) LLAMA_LAMBDA_INLINE
+                        {
+                            using SrcInnerCoord = decltype(srcRC);
+                            forEachLeafCoord<DstArd>(
+                                [&](auto dstRC) LLAMA_LAMBDA_INLINE
+                                {
+                                    using DstInnerCoord = decltype(dstRC);
+                                    if constexpr(hasSameTags<SrcARD, SrcInnerCoord, DstArd, DstInnerCoord>)
+                                    {
+                                        internal::loadSimdFromField(srcRef, dstSimd, srcRC, dstRC);
+                                    }
+                                });
+                        });
+                }
+            }
         }
         // unstructured dstSimd and reference type
         else if constexpr(!isRecordRef<Simd> && !isRecordRef<T>)
@@ -6983,17 +7007,42 @@ namespace llama
     /// SIMD vector will be stored for each of the fields. The number of elements stored per SIMD vector depends on the
     /// SIMD width of the vector. Simd is allowed to have different vector lengths per element.
     LLAMA_EXPORT
-    template<typename Simd, typename T>
-    LLAMA_FN_HOST_ACC_INLINE void storeSimd(const Simd& srcSimd, T&& dstRef)
+    template<typename Simd, typename TFwd>
+    LLAMA_FN_HOST_ACC_INLINE void storeSimd(const Simd& srcSimd, TFwd&& dstRef)
     {
+        using T = std::decay_t<TFwd>;
         // structured Simd type and record reference
         if constexpr(isRecordRef<Simd> && isRecordRef<T>)
         {
             if constexpr(simdLanes<Simd> == simdLanes<T>) // fast path mainly for scalar SimdN<T, 1, ...>
                 dstRef = srcSimd;
             else
-                forEachLeafCoord<typename T::AccessibleRecordDim>(
-                    [&](auto rc) LLAMA_LAMBDA_INLINE { internal::storeSimdToField(srcSimd, dstRef, rc); });
+            {
+                using SrcARD = typename Simd::AccessibleRecordDim;
+                using DstArd = typename T::AccessibleRecordDim;
+                if constexpr(std::is_same_v<SrcARD, DstArd>)
+                {
+                    forEachLeafCoord<SrcARD>([&](auto rc) LLAMA_LAMBDA_INLINE
+                                             { internal::storeSimdToField(srcSimd, dstRef, rc, rc); });
+                }
+                else
+                {
+                    forEachLeafCoord<SrcARD>(
+                        [&](auto srcRC) LLAMA_LAMBDA_INLINE
+                        {
+                            using SrcInnerCoord = decltype(srcRC);
+                            forEachLeafCoord<DstArd>(
+                                [&](auto dstRC) LLAMA_LAMBDA_INLINE
+                                {
+                                    using DstInnerCoord = decltype(dstRC);
+                                    if constexpr(hasSameTags<SrcARD, SrcInnerCoord, DstArd, DstInnerCoord>)
+                                    {
+                                        internal::storeSimdToField(srcSimd, dstRef, srcRC, dstRC);
+                                    }
+                                });
+                        });
+                }
+            }
         }
         // unstructured srcSimd and reference type
         else if constexpr(!isRecordRef<Simd> && !isRecordRef<T>)
