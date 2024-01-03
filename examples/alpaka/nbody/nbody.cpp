@@ -418,11 +418,11 @@ $data << EOD
         run<Acc, AoS, SoA_SB>(plotFile);
     if constexpr(hasSharedMem<Acc>)
         run<Acc, AoS, AoSoA>(plotFile);
-    run<Acc, SoA_SB, AoS>(plotFile);
+    run<Acc, SoA_MB, AoS>(plotFile);
     if constexpr(hasSharedMem<Acc>)
-        run<Acc, SoA_SB, SoA_SB>(plotFile);
+        run<Acc, SoA_MB, SoA_SB>(plotFile);
     if constexpr(hasSharedMem<Acc>)
-        run<Acc, SoA_SB, AoSoA>(plotFile);
+        run<Acc, SoA_MB, AoSoA>(plotFile);
     run<Acc, AoSoA, AoS>(plotFile);
     if constexpr(hasSharedMem<Acc>)
         run<Acc, AoSoA, SoA_SB>(plotFile);
