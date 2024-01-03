@@ -239,6 +239,13 @@ TEMPLATE_TEST_CASE(
     CHECK(p(tag::Flags{}, llama::RecordCoord<1>{}) == 8);
     CHECK(p(tag::Flags{}, llama::RecordCoord<2>{}) == 9);
     CHECK(p(tag::Flags{}, llama::RecordCoord<3>{}) == 10);
+
+    llama::SimdN<Vec3D, 1, stdx::fixed_size_simd> v;
+    llama::loadSimd(view(0)(tag::Pos{}), v);
+
+    CHECK(v(tag::X{}) == 0);
+    CHECK(v(tag::Y{}) == 1);
+    CHECK(v(tag::Z{}) == 2);
 }
 
 TEMPLATE_TEST_CASE(
@@ -292,6 +299,74 @@ TEMPLATE_TEST_CASE(
     CHECK(
         SimdRange{p(tag::Flags{}, llama::RecordCoord<3>{})}
         == SimdRange{stdx::fixed_size_simd<std::uint8_t, 4>{[](auto ic) -> std::uint8_t { return 10 + ic * 11; }}});
+
+    llama::SimdN<Vec3D, 4, stdx::fixed_size_simd> v;
+    llama::loadSimd(view(0)(tag::Pos{}), v);
+
+    CHECK(SimdRange{v(tag::X{})} == SimdRange{stdx::fixed_size_simd<double, 4>{[](auto ic) {
+              return 0.0 + ic * 11.0;
+          }}});
+    CHECK(SimdRange{v(tag::Y{})} == SimdRange{stdx::fixed_size_simd<double, 4>{[](auto ic) {
+              return 1.0 + ic * 11.0;
+          }}});
+    CHECK(SimdRange{v(tag::Z{})} == SimdRange{stdx::fixed_size_simd<double, 4>{[](auto ic) {
+              return 2.0 + ic * 11.0;
+          }}});
+}
+
+using Vec2I = llama::Record<llama::Field<tag::X, int>, llama::Field<tag::Y, int>>;
+using Vec1I = llama::Record<llama::Field<tag::Y, int>>;
+
+TEMPLATE_TEST_CASE(
+    "simd.heterogeneousLoadStore.stdsimd",
+    "",
+    llama::mapping::BindAoS<>,
+    llama::mapping::BindSoA<>,
+    llama::mapping::BindAoSoA<2>,
+    llama::mapping::BindAoSoA<32>)
+{
+    using ArrayExtents = llama::ArrayExtentsDynamic<int, 1>;
+    const auto mapping = typename TestType::template fn<ArrayExtents, Vec2I>(ArrayExtents{2});
+    auto view = llama::allocViewUninitialized(mapping);
+    iotaFillView(view);
+
+    SECTION("BiggerSimdRecord")
+    {
+        llama::SimdN<Vec3I, 2, stdx::fixed_size_simd> v{};
+        llama::loadSimd(view(0), v);
+        CHECK(SimdRange{v(tag::X{})} == SimdRange{stdx::fixed_size_simd<int, 2>{[](auto ic) {
+                  return 0 + static_cast<int>(ic) * 2;
+              }}});
+        CHECK(SimdRange{v(tag::Y{})} == SimdRange{stdx::fixed_size_simd<int, 2>{[](auto ic) {
+                  return 1 + static_cast<int>(ic) * 2;
+              }}});
+        CHECK(SimdRange{v(tag::Z{})} == SimdRange{stdx::fixed_size_simd<int, 2>{}});
+
+        v(tag::X{}) = stdx::fixed_size_simd<int, 2>{[](auto ic) { return static_cast<int>(ic) + 100; }};
+        v(tag::Y{}) = stdx::fixed_size_simd<int, 2>{[](auto ic) { return static_cast<int>(ic) + 200; }};
+        v(tag::Z{}) = stdx::fixed_size_simd<int, 2>{[](auto ic) { return static_cast<int>(ic) + 300; }};
+        llama::storeSimd(v, view(0));
+        CHECK(view(0)(tag::X{}) == 100);
+        CHECK(view(1)(tag::X{}) == 101);
+        CHECK(view(0)(tag::Y{}) == 200);
+        CHECK(view(1)(tag::Y{}) == 201);
+    }
+
+    SECTION("SmallerSimdRecord")
+    {
+        llama::SimdN<Vec1I, 2, stdx::fixed_size_simd> v{};
+        llama::loadSimd(view(0), v);
+        CHECK(SimdRange{v(tag::Y{})} == SimdRange{stdx::fixed_size_simd<int, 2>{[](auto ic) {
+                  return 1 + static_cast<int>(ic) * 2;
+              }}});
+
+        v(tag::Y{}) = stdx::fixed_size_simd<int, 2>{[](auto ic) { return static_cast<int>(ic) + 1000; }};
+        llama::storeSimd(v, view(0));
+        CHECK(view(0)(tag::X{}) == 0);
+        CHECK(view(1)(tag::X{}) == 2);
+        CHECK(view(0)(tag::Y{}) == 1000);
+        CHECK(view(1)(tag::Y{}) == 1001);
+    }
 }
 
 TEST_CASE("simd.storeSimd.scalar")
@@ -352,6 +427,24 @@ TEMPLATE_TEST_CASE(
     CHECK(view(0)(tag::Flags{}, llama::RecordCoord<1>{}) == 8);
     CHECK(view(0)(tag::Flags{}, llama::RecordCoord<2>{}) == 9);
     CHECK(view(0)(tag::Flags{}, llama::RecordCoord<3>{}) == 10);
+
+    llama::SimdN<Vec3D, 1, stdx::fixed_size_simd> v;
+    v(tag::X{}) = 100;
+    v(tag::Y{}) = 101;
+    v(tag::Z{}) = 102;
+    llama::storeSimd(v, view(0)(tag::Vel{}));
+
+    CHECK(view(0)(tag::Pos{}, tag::X{}) == 0);
+    CHECK(view(0)(tag::Pos{}, tag::Y{}) == 1);
+    CHECK(view(0)(tag::Pos{}, tag::Z{}) == 2);
+    CHECK(view(0)(tag::Mass{}) == 3);
+    CHECK(view(0)(tag::Vel{}, tag::X{}) == 100);
+    CHECK(view(0)(tag::Vel{}, tag::Y{}) == 101);
+    CHECK(view(0)(tag::Vel{}, tag::Z{}) == 102);
+    CHECK(view(0)(tag::Flags{}, llama::RecordCoord<0>{}) == 7);
+    CHECK(view(0)(tag::Flags{}, llama::RecordCoord<1>{}) == 8);
+    CHECK(view(0)(tag::Flags{}, llama::RecordCoord<2>{}) == 9);
+    CHECK(view(0)(tag::Flags{}, llama::RecordCoord<3>{}) == 10);
 }
 
 TEMPLATE_TEST_CASE(
@@ -367,14 +460,16 @@ TEMPLATE_TEST_CASE(
     auto view = llama::allocViewUninitialized(mapping);
 
     llama::SimdN<ParticleSimd, 3, stdx::fixed_size_simd> p;
-    auto& x = p(tag::Pos{}, tag::X{});
-    auto& y = p(tag::Pos{}, tag::Y{});
-    auto& z = p(tag::Pos{}, tag::Z{});
-    auto& m = p(tag::Mass{});
-    x[0] = 1, x[1] = 2, x[2] = 3;
-    y[0] = 4, y[1] = 5, y[2] = 6;
-    z[0] = 7, z[1] = 8, z[2] = 9;
-    m[0] = 80, m[1] = 81, m[2] = 82;
+    {
+        auto& x = p(tag::Pos{}, tag::X{});
+        auto& y = p(tag::Pos{}, tag::Y{});
+        auto& z = p(tag::Pos{}, tag::Z{});
+        auto& m = p(tag::Mass{});
+        x[0] = 1, x[1] = 2, x[2] = 3;
+        y[0] = 4, y[1] = 5, y[2] = 6;
+        z[0] = 7, z[1] = 8, z[2] = 9;
+        m[0] = 80, m[1] = 81, m[2] = 82;
+    }
     llama::storeSimd(p, view(0));
 
     CHECK(view(0)(tag::Pos{}, tag::X{}) == 1);
@@ -393,6 +488,26 @@ TEMPLATE_TEST_CASE(
     CHECK(view(1)(tag::Mass{}) == 81);
     CHECK(view(2)(tag::Mass{}) == 82);
     CHECK(view(3)(tag::Mass{}) == 0);
+
+    llama::SimdN<Vec3D, 3, stdx::fixed_size_simd> v;
+    {
+        auto& x = v(tag::X{});
+        auto& y = v(tag::Y{});
+        auto& z = v(tag::Z{});
+        x[0] = 101, x[1] = 102, x[2] = 103;
+        y[0] = 104, y[1] = 105, y[2] = 106;
+        z[0] = 107, z[1] = 108, z[2] = 109;
+    }
+    llama::storeSimd(v, view(0)(tag::Pos{}));
+    CHECK(view(0)(tag::Pos{}, tag::X{}) == 101);
+    CHECK(view(1)(tag::Pos{}, tag::X{}) == 102);
+    CHECK(view(2)(tag::Pos{}, tag::X{}) == 103);
+    CHECK(view(0)(tag::Pos{}, tag::Y{}) == 104);
+    CHECK(view(1)(tag::Pos{}, tag::Y{}) == 105);
+    CHECK(view(2)(tag::Pos{}, tag::Y{}) == 106);
+    CHECK(view(0)(tag::Pos{}, tag::Z{}) == 107);
+    CHECK(view(1)(tag::Pos{}, tag::Z{}) == 108);
+    CHECK(view(2)(tag::Pos{}, tag::Z{}) == 109);
 }
 
 TEMPLATE_TEST_CASE(
