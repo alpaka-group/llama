@@ -166,18 +166,7 @@ LLAMA_FN_HOST_ACC_INLINE void pPInteraction(const Acc& acc, ParticleRefI& pis, P
 template<int ThreadsPerBlock, int SharedElementsPerBlock, int ElementsPerThread, typename QuotedSMMapping>
 struct UpdateKernel
 {
-    // TODO(bgruber): make this an IILE in C++20
-    template<typename Mapping, typename Acc, std::size_t... Is>
-    ALPAKA_FN_HOST_ACC auto makeSharedViewHelper(const Acc& acc, std::index_sequence<Is...>) const
-    {
-        return llama::View{
-            Mapping{},
-            llama::Array<std::byte*, sizeof...(Is)>{
-                alpaka::declareSharedVar<std::byte[Mapping{}.blobSize(Is)], Is>(acc)...}};
-    }
-
-    template<typename Acc, typename View>
-    ALPAKA_FN_HOST_ACC void operator()(const Acc& acc, View particles) const
+    ALPAKA_FN_HOST_ACC void operator()(const auto& acc, auto particles) const
     {
         auto sharedView = [&]
         {
@@ -191,7 +180,12 @@ struct UpdateKernel
             {
                 using Mapping = typename QuotedSMMapping::
                     template fn<llama::ArrayExtents<int, SharedElementsPerBlock>, SharedMemoryParticle>;
-                return makeSharedViewHelper<Mapping>(acc, std::make_index_sequence<Mapping::blobCount>{});
+                return [&]<std::size_t... Is>(std::index_sequence<Is...>)
+                {
+                    return llama::View{
+                        Mapping{},
+                        llama::Array{alpaka::declareSharedVar<std::byte[Mapping{}.blobSize(Is)], Is>(acc)...}};
+                }(std::make_index_sequence<Mapping::blobCount>{});
             }
         }();
 
@@ -217,8 +211,7 @@ struct UpdateKernel
 template<int ElementsPerThread>
 struct MoveKernel
 {
-    template<typename Acc, typename View>
-    ALPAKA_FN_HOST_ACC void operator()(const Acc& acc, View particles) const
+    ALPAKA_FN_HOST_ACC void operator()(const auto& acc, auto particles) const
     {
         const auto ti = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc)[0];
         const auto i = ti * ElementsPerThread;
