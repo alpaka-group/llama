@@ -328,11 +328,11 @@ namespace llama
         inline constexpr auto isDirectListInitializableFromTuple<T, Tuple<Args...>>
             = isDirectListInitializable<T, Args...>;
 
-        template<typename T, typename Simd, typename RecordCoord>
-        LLAMA_FN_HOST_ACC_INLINE void loadSimdFromField(const T& srcRef, Simd& dstSimd, RecordCoord rc);
+        template<typename T, typename Simd, typename SrcRC, typename DstRC>
+        LLAMA_FN_HOST_ACC_INLINE void loadSimdFromField(const T& srcRef, Simd& dstSimd, SrcRC srcRC, DstRC dstRC);
 
-        template<typename Simd, typename T, typename RecordCoord>
-        LLAMA_FN_HOST_ACC_INLINE void storeSimdToField(const Simd& srcSimd, T&& dstRef, RecordCoord rc);
+        template<typename Simd, typename TFwd, typename SrcRC, typename DstRC>
+        LLAMA_FN_HOST_ACC_INLINE void storeSimdToField(const Simd& srcSimd, TFwd&& dstRef, SrcRC srcRC, DstRC dstRC);
     } // namespace internal
 
     /// Record reference type returned by \ref View after resolving an array dimensions coordinate or partially
@@ -756,16 +756,18 @@ namespace llama
         // FIXME(bgruber): the SIMD load/store functions need to navigate back from a record ref to the contained view
         // to find subsequent elements. This is not a great design for now and the SIMD load/store functions should
         // probably take iterators to records.
-        template<typename T, typename Simd, typename RecordCoord>
+        template<typename T, typename Simd, typename SrcRC, typename DstRC>
         friend LLAMA_FN_HOST_ACC_INLINE void internal::loadSimdFromField(
             const T& srcRef,
             Simd& dstSimd,
-            RecordCoord rc);
-        template<typename Simd, typename T, typename RecordCoord>
+            SrcRC srcRC,
+            DstRC dstRC);
+        template<typename Simd, typename TFwd, typename SrcRC, typename DstRC>
         friend LLAMA_FN_HOST_ACC_INLINE void internal::storeSimdToField(
             const Simd& srcSimd,
-            T&& dstRef,
-            RecordCoord rc);
+            TFwd&& dstRef,
+            SrcRC srcRC,
+            DstRC dstRC);
     };
 
     // swap for heterogeneous RecordRef
