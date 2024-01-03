@@ -270,12 +270,12 @@ Functions</h2></td></tr>
 <tr class="memitem:a0f1653ed919838d951dd7753b22cac7e"><td class="memTemplParams" colspan="2">template&lt;typename T , typename Tuple , std::size_t... Is&gt; </td></tr>
 <tr class="memitem:a0f1653ed919838d951dd7753b22cac7e"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a0f1653ed919838d951dd7753b22cac7e">llama::internal::makeFromTuple</a> (Tuple &amp;&amp;src, std::index_sequence&lt; Is... &gt;)</td></tr>
 <tr class="separator:a0f1653ed919838d951dd7753b22cac7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad402d19308ef3a656c9902f39990fc1e"><td class="memTemplParams" colspan="2">template&lt;typename T , typename Simd , typename RecordCoord &gt; </td></tr>
-<tr class="memitem:ad402d19308ef3a656c9902f39990fc1e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#ad402d19308ef3a656c9902f39990fc1e">llama::internal::loadSimdFromField</a> (const T &amp;srcRef, Simd &amp;dstSimd, RecordCoord rc)</td></tr>
-<tr class="separator:ad402d19308ef3a656c9902f39990fc1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1a97bc24f4d0862ed1d36d509a6150e7"><td class="memTemplParams" colspan="2">template&lt;typename Simd , typename T , typename RecordCoord &gt; </td></tr>
-<tr class="memitem:a1a97bc24f4d0862ed1d36d509a6150e7"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a1a97bc24f4d0862ed1d36d509a6150e7">llama::internal::storeSimdToField</a> (const Simd &amp;srcSimd, T &amp;&amp;dstRef, RecordCoord rc)</td></tr>
-<tr class="separator:a1a97bc24f4d0862ed1d36d509a6150e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a04e27d810e06e8e7f378238ff2981d91"><td class="memTemplParams" colspan="2">template&lt;typename T , typename Simd , typename SrcRC , typename DstRC &gt; </td></tr>
+<tr class="memitem:a04e27d810e06e8e7f378238ff2981d91"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a04e27d810e06e8e7f378238ff2981d91">llama::internal::loadSimdFromField</a> (const T &amp;srcRef, Simd &amp;dstSimd, SrcRC srcRC, DstRC dstRC)</td></tr>
+<tr class="separator:a04e27d810e06e8e7f378238ff2981d91"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a636be5a3f3d91fcd9ce625263f5a8f2e"><td class="memTemplParams" colspan="2">template&lt;typename Simd , typename TFwd , typename SrcRC , typename DstRC &gt; </td></tr>
+<tr class="memitem:a636be5a3f3d91fcd9ce625263f5a8f2e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama_1_1internal.html#a636be5a3f3d91fcd9ce625263f5a8f2e">llama::internal::storeSimdToField</a> (const Simd &amp;srcSimd, TFwd &amp;&amp;dstRef, SrcRC srcRC, DstRC dstRC)</td></tr>
+<tr class="separator:a636be5a3f3d91fcd9ce625263f5a8f2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aebf7c7c54c4190a57a2cc1ad5c280453"><td class="memTemplParams" colspan="2">template&lt;typename ViewA , typename BoundRecordDimA , bool OwnViewA, typename ViewB , typename BoundRecordDimB , bool OwnViewB&gt; </td></tr>
 <tr class="memitem:aebf7c7c54c4190a57a2cc1ad5c280453"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#aebf7c7c54c4190a57a2cc1ad5c280453">llama::swap</a> (RecordRef&lt; ViewA, BoundRecordDimA, OwnViewA &gt; &amp;a, RecordRef&lt; ViewB, BoundRecordDimB, OwnViewB &gt; &amp;b) noexcept -&gt; std::enable_if_t&lt; std::is_same_v&lt; typename RecordRef&lt; ViewA, BoundRecordDimA, OwnViewA &gt;::AccessibleRecordDim, typename RecordRef&lt; ViewB, BoundRecordDimB, OwnViewB &gt;::AccessibleRecordDim &gt;&gt;</td></tr>
 <tr class="separator:aebf7c7c54c4190a57a2cc1ad5c280453"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -326,7 +326,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="RecordRef_8hpp.html">RecordRef.hpp</a></li>
-    <li class="footer">Generated on Wed Jan 3 2024 18:55:49 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Wed Jan 3 2024 19:29:20 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

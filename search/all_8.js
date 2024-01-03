@@ -81,6 +81,6 @@ var searchData=
   ['iterator_360',['iterator',['../structllama_1_1Vector.html#a7cb2da4cdee69566d96d906796ac96ff',1,'llama::Vector::iterator()'],['../structllama_1_1View.html#abe36abe814e4a701c181c5fd06b6b9b0',1,'llama::View::iterator()'],['../structllama_1_1SubView.html#a71c77a388115768cf3f88f4a09732de3',1,'llama::SubView::iterator()']]],
   ['iterator_361',['Iterator',['../structllama_1_1Iterator.html#afa877e06adc28f4c7bb7644b2aa77d67',1,'llama::Iterator::Iterator()=default'],['../structllama_1_1Iterator.html#a87ca77106e3bf02e1ddf3124fd00a5de',1,'llama::Iterator::Iterator(ArrayIndexIterator arrayIndex, View *view)'],['../structllama_1_1Iterator.html',1,'llama::Iterator&lt; View &gt;']]],
   ['iterator_5fcategory_362',['iterator_category',['../structllama_1_1Iterator.html#a9e213325f5a69c320be804d24e0b1ccd',1,'llama::Iterator::iterator_category()'],['../structllama_1_1ArrayIndexIterator.html#ac149b9191555df8d9cd3c8b08b6f22ab',1,'llama::ArrayIndexIterator::iterator_category()']]],
-  ['loadsimdfromfield_363',['loadSimdFromField',['../structllama_1_1RecordRef.html#a3e050b61d9f853c8bde0444a29e4bc6e',1,'llama::RecordRef']]],
-  ['storesimdtofield_364',['storeSimdToField',['../structllama_1_1RecordRef.html#a9aa10e379806667bf8c9c147d1b6c567',1,'llama::RecordRef']]]
+  ['loadsimdfromfield_363',['loadSimdFromField',['../structllama_1_1RecordRef.html#a0e8bde38ca36c8106134cf25642b1d8e',1,'llama::RecordRef']]],
+  ['storesimdtofield_364',['storeSimdToField',['../structllama_1_1RecordRef.html#a80d47be2e885bda85475212cdcf41986',1,'llama::RecordRef']]]
 ];

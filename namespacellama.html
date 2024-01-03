@@ -411,9 +411,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a6060f4836e56bda4689232f0d22fecf8"><td class="memTemplParams" colspan="2">template&lt;typename T , typename Simd &gt; </td></tr>
 <tr class="memitem:a6060f4836e56bda4689232f0d22fecf8"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a6060f4836e56bda4689232f0d22fecf8">loadSimd</a> (const T &amp;srcRef, <a class="el" href="namespacellama.html#adf42387a56b588d4a261b9ab869e33ee">Simd</a> &amp;dstSimd)</td></tr>
 <tr class="separator:a6060f4836e56bda4689232f0d22fecf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a85e63e02c425ced774c87dfc1e3dda3d"><td class="memTemplParams" colspan="2">template&lt;typename Simd , typename T &gt; </td></tr>
-<tr class="memitem:a85e63e02c425ced774c87dfc1e3dda3d"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a85e63e02c425ced774c87dfc1e3dda3d">storeSimd</a> (const <a class="el" href="namespacellama.html#adf42387a56b588d4a261b9ab869e33ee">Simd</a> &amp;srcSimd, T &amp;&amp;dstRef)</td></tr>
-<tr class="separator:a85e63e02c425ced774c87dfc1e3dda3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad85a654e961eeb097cb3b557850e668b"><td class="memTemplParams" colspan="2">template&lt;typename Simd , typename TFwd &gt; </td></tr>
+<tr class="memitem:ad85a654e961eeb097cb3b557850e668b"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ad85a654e961eeb097cb3b557850e668b">storeSimd</a> (const <a class="el" href="namespacellama.html#adf42387a56b588d4a261b9ab869e33ee">Simd</a> &amp;srcSimd, TFwd &amp;&amp;dstRef)</td></tr>
+<tr class="separator:ad85a654e961eeb097cb3b557850e668b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4451ec281eb037ebac7c08772ce0670f"><td class="memTemplParams" colspan="2">template&lt;std::size_t N, template&lt; typename, auto &gt; typename MakeSizedSimd, typename View , typename UnarySimdFunction &gt; </td></tr>
 <tr class="memitem:a4451ec281eb037ebac7c08772ce0670f"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a4451ec281eb037ebac7c08772ce0670f">simdForEachN</a> (<a class="el" href="structllama_1_1View.html">View</a> &amp;view, UnarySimdFunction f)</td></tr>
 <tr class="separator:a4451ec281eb037ebac7c08772ce0670f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1698,7 +1698,7 @@ template&lt;typename T &gt; </div>
 
 <p>Pulls a copy of the given value or reference. Proxy references are resolved to their value types. </p>
 
-<p class="definition">Definition at line <a class="el" href="RecordRef_8hpp_source.html#l00875">875</a> of file <a class="el" href="RecordRef_8hpp_source.html">RecordRef.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RecordRef_8hpp_source.html#l00877">877</a> of file <a class="el" href="RecordRef_8hpp_source.html">RecordRef.hpp</a>.</p>
 
 </div>
 </div>
@@ -1959,7 +1959,7 @@ template&lt;typename RecordRefFwd , typename Functor &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="RecordRef_8hpp_source.html#l00831">831</a> of file <a class="el" href="RecordRef_8hpp_source.html">RecordRef.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RecordRef_8hpp_source.html#l00833">833</a> of file <a class="el" href="RecordRef_8hpp_source.html">RecordRef.hpp</a>.</p>
 
 </div>
 </div>
@@ -2156,7 +2156,7 @@ template&lt;typename T , typename Simd &gt; </div>
 </div><div class="memdoc">
 <p>Loads SIMD vectors of data starting from the given record reference to dstSimd. Only field tags occurring in <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> are loaded. If Simd contains multiple fields of SIMD types, a SIMD vector will be fetched for each of the fields. The number of elements fetched per SIMD vector depends on the SIMD width of the vector. Simd is allowed to have different vector lengths per element. </p>
 
-<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00310">310</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00308">308</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
 
 </div>
 </div>
@@ -2592,7 +2592,7 @@ template&lt;typename View , typename BoundRecordCoord , bool OwnView&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="RecordRef_8hpp_source.html#l00798">798</a> of file <a class="el" href="RecordRef_8hpp_source.html">RecordRef.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RecordRef_8hpp_source.html#l00800">800</a> of file <a class="el" href="RecordRef_8hpp_source.html">RecordRef.hpp</a>.</p>
 
 </div>
 </div>
@@ -3322,7 +3322,7 @@ template&lt;template&lt; typename &gt; typename MakeSimd, template&lt; typename,
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00412">412</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00459">459</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
 
 </div>
 </div>
@@ -3354,17 +3354,17 @@ template&lt;std::size_t N, template&lt; typename, auto &gt; typename MakeSizedSi
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00373">373</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00420">420</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a85e63e02c425ced774c87dfc1e3dda3d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a85e63e02c425ced774c87dfc1e3dda3d">&#9670;&nbsp;</a></span>storeSimd()</h2>
+<a id="ad85a654e961eeb097cb3b557850e668b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad85a654e961eeb097cb3b557850e668b">&#9670;&nbsp;</a></span>storeSimd()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Simd , typename T &gt; </div>
+template&lt;typename Simd , typename TFwd &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -3378,7 +3378,7 @@ template&lt;typename Simd , typename T &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">T &amp;&amp;&#160;</td>
+          <td class="paramtype">TFwd &amp;&amp;&#160;</td>
           <td class="paramname"><em>dstRef</em>&#160;</td>
         </tr>
         <tr>
@@ -3395,7 +3395,7 @@ template&lt;typename Simd , typename T &gt; </div>
 </div><div class="memdoc">
 <p>Stores SIMD vectors of element data from the given srcSimd into memory starting at the provided record reference. Only field tags occurring in <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> are stored. If Simd contains multiple fields of SIMD types, a SIMD vector will be stored for each of the fields. The number of elements stored per SIMD vector depends on the SIMD width of the vector. Simd is allowed to have different vector lengths per element. </p>
 
-<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00341">341</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Simd_8hpp_source.html#l00363">363</a> of file <a class="el" href="Simd_8hpp_source.html">Simd.hpp</a>.</p>
 
 </div>
 </div>
@@ -3500,7 +3500,7 @@ template&lt;typename ViewA , typename BoundRecordDimA , bool OwnViewA, typename 
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="RecordRef_8hpp_source.html#l00780">780</a> of file <a class="el" href="RecordRef_8hpp_source.html">RecordRef.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="RecordRef_8hpp_source.html#l00782">782</a> of file <a class="el" href="RecordRef_8hpp_source.html">RecordRef.hpp</a>.</p>
 
 </div>
 </div>
@@ -4924,7 +4924,7 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Wed Jan 3 2024 18:55:49 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Wed Jan 3 2024 19:29:20 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

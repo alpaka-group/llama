@@ -124,7 +124,7 @@ var namespacellama =
     [ "shallowCopy", "namespacellama.html#a4d2a40734074075e17bccd413a6f1ec1", null ],
     [ "simdForEach", "namespacellama.html#acebdbc18176bbf81e01c2b268665a94c", null ],
     [ "simdForEachN", "namespacellama.html#a4451ec281eb037ebac7c08772ce0670f", null ],
-    [ "storeSimd", "namespacellama.html#a85e63e02c425ced774c87dfc1e3dda3d", null ],
+    [ "storeSimd", "namespacellama.html#ad85a654e961eeb097cb3b557850e668b", null ],
     [ "structName", "namespacellama.html#a8def4cdbf850f818833a38d67e6ebf34", null ],
     [ "SubView", "namespacellama.html#a08522ce66a9c0e6ac1b771e38a81d97e", null ],
     [ "swap", "namespacellama.html#aebf7c7c54c4190a57a2cc1ad5c280453", null ],
