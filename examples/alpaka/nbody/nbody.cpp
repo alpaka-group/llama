@@ -231,7 +231,8 @@ struct MoveKernel
 };
 
 template<typename Acc>
-constexpr auto hasSharedMem = alpaka::accMatchesTags<Acc, alpaka::TagGpuCudaRt, alpaka::TagGpuHipRt>;
+constexpr auto hasSharedMem
+    = alpaka::accMatchesTags<Acc, alpaka::TagGpuCudaRt, alpaka::TagGpuHipRt, alpaka::TagGpuSyclIntel>;
 
 template<typename Acc, Mapping MappingGM, Mapping MappingSM>
 void run(std::ostream& plotFile)
