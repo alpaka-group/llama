@@ -1,5 +1,6 @@
 var NAVTREEINDEX6 =
 {
+"structllama_1_1mapping_1_1BitPackedFloatAoS.html#a3feaf3d1436d3b4f06003f5177f725a6":[2,0,0,3,8,3],
 "structllama_1_1mapping_1_1BitPackedFloatAoS.html#a6ad0ddb793ff96207a435ff67cadc415":[2,0,0,3,8,8],
 "structllama_1_1mapping_1_1BitPackedFloatAoS.html#a75ee95fefffa55a10634b41e8622dea7":[2,0,0,3,8,2],
 "structllama_1_1mapping_1_1BitPackedFloatAoS.html#a84c762119deabae1c988a44538c6e69a":[2,0,0,3,8,7],
@@ -248,6 +249,5 @@ var NAVTREEINDEX6 =
 "structllama_1_1mapping_1_1internal_1_1ProjectionReference.html#a763b0a94596745a761c4e97034a20728":[2,0,0,3,0,15,0],
 "structllama_1_1mapping_1_1internal_1_1ProjectionReference.html#ac3e3bd6d44525142ff704cbc995bad56":[2,0,0,3,0,15,4],
 "structllama_1_1mapping_1_1internal_1_1ProjectionReference.html#ad4cffefe1c8bdf53977b935f58d6430b":[2,0,0,3,0,15,3],
-"structllama_1_1mapping_1_1internal_1_1ReplaceTagListsByCoords.html":[2,0,0,3,0,17],
-"structllama_1_1mapping_1_1internal_1_1ReplaceTagListsByCoords_3_01RecordDim_00_01RecordCoord_3_01RCs_8_8_8_01_4_01_4.html":[2,0,0,3,0,18]
+"structllama_1_1mapping_1_1internal_1_1ReplaceTagListsByCoords.html":[2,0,0,3,0,17]
 };
