@@ -412,20 +412,22 @@ $data << EOD
         problemSize / 1024,
         alpaka::getAccName<Acc>());
 
+    constexpr auto runSMVariations = hasSharedMem<Acc> && runUpdate;
+
     run<Acc, AoS, AoS>(plotFile);
-    if constexpr(hasSharedMem<Acc>)
+    if constexpr(runSMVariations)
         run<Acc, AoS, SoA_SB>(plotFile);
-    if constexpr(hasSharedMem<Acc>)
+    if constexpr(runSMVariations)
         run<Acc, AoS, AoSoA>(plotFile);
     run<Acc, SoA_MB, AoS>(plotFile);
-    if constexpr(hasSharedMem<Acc>)
+    if constexpr(runSMVariations)
         run<Acc, SoA_MB, SoA_SB>(plotFile);
-    if constexpr(hasSharedMem<Acc>)
+    if constexpr(runSMVariations)
         run<Acc, SoA_MB, AoSoA>(plotFile);
     run<Acc, AoSoA, AoS>(plotFile);
-    if constexpr(hasSharedMem<Acc>)
+    if constexpr(runSMVariations)
         run<Acc, AoSoA, SoA_SB>(plotFile);
-    if constexpr(hasSharedMem<Acc>)
+    if constexpr(runSMVariations)
         run<Acc, AoSoA, AoSoA>(plotFile);
     run<Acc, SplitGpuGems, AoS>(plotFile);
 
