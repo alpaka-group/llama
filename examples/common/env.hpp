@@ -98,9 +98,10 @@ namespace common
             const auto devName = trim(getName(dev)); // TODO(bgruber): drop trim after fix lands in alpaka
             const auto devProps = alpaka::getAccDevProps<Acc>(dev);
             env += fmt::format(
-                "; alpaka acc: {}, dev[0]: {}, SMem: {}KiB",
+                "; alpaka acc: {}, dev[0]: {}, {}MiB GM, {}KiB SM",
                 accName,
                 devName,
+                alpaka::getMemBytes(dev) / 1024 / 1024,
                 devProps.m_sharedMemSizeBytes / 1024);
         }
 #endif
