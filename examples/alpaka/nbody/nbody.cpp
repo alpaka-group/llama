@@ -43,9 +43,9 @@ constexpr auto runUpdate = true; // run update step. Useful to disable for bench
 #endif
 
 #if ANY_CPU_ENABLED
-constexpr auto elementsPerThread = xsimd::batch<float>::size;
 constexpr auto threadsPerBlock = 1;
 constexpr auto sharedElementsPerBlock = 1;
+constexpr auto elementsPerThread = xsimd::batch<float>::size;
 constexpr auto aosoaLanes = elementsPerThread;
 #elif ANY_GPU_ENABLED
 constexpr auto threadsPerBlock = 256;
@@ -100,9 +100,6 @@ struct llama::SimdTraits<Batch, std::enable_if_t<xsimd::is_batch<Batch>::value>>
         batch.scatter(mem, indicesToReg(indices, std::make_index_sequence<lanes>{}));
     }
 };
-
-template<typename T>
-using MakeBatch = xsimd::batch<T>;
 
 template<typename T, std::size_t N>
 struct MakeSizedBatchImpl
@@ -166,66 +163,67 @@ LLAMA_FN_HOST_ACC_INLINE void pPInteraction(const Acc& acc, ParticleRefI& pis, P
     pis(tag::Vel{}) += dist * sts;
 }
 
-template<int Elems, typename QuotedSMMapping>
+template<int ThreadsPerBlock, int SharedElementsPerBlock, int ElementsPerThread, typename QuotedSMMapping>
 struct UpdateKernel
 {
+    // TODO(bgruber): make this an IILE in C++20
+    template<typename Mapping, typename Acc, std::size_t... Is>
+    ALPAKA_FN_HOST_ACC auto makeSharedViewHelper(const Acc& acc, std::index_sequence<Is...>) const
+    {
+        return llama::View{
+            Mapping{},
+            llama::Array<std::byte*, sizeof...(Is)>{
+                alpaka::declareSharedVar<std::byte[Mapping{}.blobSize(Is)], Is>(acc)...}};
+    }
+
     template<typename Acc, typename View>
     ALPAKA_FN_HOST_ACC void operator()(const Acc& acc, View particles) const
     {
         auto sharedView = [&]
         {
             // if there is only 1 shared element per block, use just a variable (in registers) instead of shared memory
-            if constexpr(sharedElementsPerBlock == 1)
+            if constexpr(SharedElementsPerBlock == 1)
             {
                 using Mapping = llama::mapping::MinAlignedOne<llama::ArrayExtents<int, 1>, SharedMemoryParticle>;
                 return allocViewUninitialized(Mapping{}, llama::bloballoc::Array<Mapping{}.blobSize(0)>{});
             }
             else
             {
-                using ArrayExtents = llama::ArrayExtents<int, sharedElementsPerBlock>;
-                using Mapping = typename QuotedSMMapping::template fn<ArrayExtents, SharedMemoryParticle>;
-                constexpr auto sharedMapping = Mapping{};
-
-                llama::Array<std::byte*, Mapping::blobCount> sharedMems{};
-                boost::mp11::mp_for_each<boost::mp11::mp_iota_c<Mapping::blobCount>>(
-                    [&](auto i)
-                    {
-                        auto& sharedMem = alpaka::declareSharedVar<std::byte[sharedMapping.blobSize(i)], i>(acc);
-                        sharedMems[i] = &sharedMem[0];
-                    });
-                return llama::View{sharedMapping, sharedMems};
+                using Mapping = typename QuotedSMMapping::
+                    template fn<llama::ArrayExtents<int, SharedElementsPerBlock>, SharedMemoryParticle>;
+                return makeSharedViewHelper<Mapping>(acc, std::make_index_sequence<Mapping::blobCount>{});
             }
         }();
 
         const auto ti = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc)[0];
         const auto tbi = alpaka::getIdx<alpaka::Block, alpaka::Threads>(acc)[0];
 
-        auto pis = llama::SimdN<typename View::RecordDim, Elems, MakeSizedBatch>{};
-        llama::loadSimd(particles(ti * Elems), pis);
+        auto pis = llama::SimdN<Particle, ElementsPerThread, MakeSizedBatch>{};
+        llama::loadSimd(particles(ti * ElementsPerThread), pis);
 
-        for(int blockOffset = 0; blockOffset < problemSize; blockOffset += sharedElementsPerBlock)
+        for(int blockOffset = 0; blockOffset < problemSize; blockOffset += SharedElementsPerBlock)
         {
-            for(int j = 0; j < sharedElementsPerBlock; j += threadsPerBlock)
+            for(int j = 0; j < SharedElementsPerBlock; j += ThreadsPerBlock)
                 sharedView(j) = particles(blockOffset + tbi + j);
             alpaka::syncBlockThreads(acc);
-            for(int j = 0; j < sharedElementsPerBlock; ++j)
+            for(int j = 0; j < SharedElementsPerBlock; ++j)
                 pPInteraction(acc, pis, sharedView(j));
             alpaka::syncBlockThreads(acc);
         }
-        llama::storeSimd(pis(tag::Vel{}), particles(ti * Elems)(tag::Vel{}));
+        llama::storeSimd(pis(tag::Vel{}), particles(ti * ElementsPerThread)(tag::Vel{}));
     }
 };
 
-template<int Elems>
+template<int ElementsPerThread>
 struct MoveKernel
 {
     template<typename Acc, typename View>
     ALPAKA_FN_HOST_ACC void operator()(const Acc& acc, View particles) const
     {
         const auto ti = alpaka::getIdx<alpaka::Grid, alpaka::Threads>(acc)[0];
-        const auto i = ti * Elems;
-        llama::SimdN<Vec3, Elems, MakeSizedBatch> pos;
-        llama::SimdN<Vec3, Elems, MakeSizedBatch> vel;
+        const auto i = ti * ElementsPerThread;
+        llama::SimdN<Vec3, ElementsPerThread, MakeSizedBatch> pos;
+        llama::SimdN<Vec3, ElementsPerThread, MakeSizedBatch> vel;
         llama::loadSimd(particles(i)(tag::Pos{}), pos);
         llama::loadSimd(particles(i)(tag::Vel{}), vel);
         llama::storeSimd(pos + vel * +timestep, particles(i)(tag::Pos{}));
@@ -354,7 +352,8 @@ void run(std::ostream& plotFile)
     {
         if constexpr(runUpdate)
         {
-            auto updateKernel = UpdateKernel<elementsPerThread, QuotedMappingSM>{};
+            auto updateKernel
+                = UpdateKernel<threadsPerBlock, sharedElementsPerBlock, elementsPerThread, QuotedMappingSM>{};
             alpaka::exec<Acc>(queue, workdiv, updateKernel, llama::shallowCopy(accView));
             statsUpdate(watch.printAndReset("update", '\t'));
         }
