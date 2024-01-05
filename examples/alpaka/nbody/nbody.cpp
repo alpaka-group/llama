@@ -204,7 +204,7 @@ struct UpdateKernel
         for(int blockOffset = 0; blockOffset < problemSize; blockOffset += SharedElementsPerBlock)
         {
             for(int j = 0; j < SharedElementsPerBlock; j += ThreadsPerBlock)
-                sharedView(j) = particles(blockOffset + tbi + j);
+                sharedView(tbi + j) = particles(blockOffset + tbi + j);
             alpaka::syncBlockThreads(acc);
             for(int j = 0; j < SharedElementsPerBlock; ++j)
                 pPInteraction(acc, pis, sharedView(j));
