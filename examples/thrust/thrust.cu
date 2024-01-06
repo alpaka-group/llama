@@ -1,4 +1,4 @@
-//#define THRUST_DEBUG_SYNC
+// #define THRUST_DEBUG_SYNC
 #include "../common/Stopwatch.hpp"
 #include "../common/hostname.hpp"
 
@@ -17,11 +17,11 @@
 #include <thrust/device_vector.h>
 #include <thrust/execution_policy.h>
 #include <thrust/iterator/counting_iterator.h>
-//#include <thrust/random.h>
+// #include <thrust/random.h>
 #include <thrust/remove.h>
 #include <thrust/shuffle.h>
 #include <thrust/tabulate.h>
-//#include <thrust/sort.h>
+// #include <thrust/sort.h>
 #include <thrust/transform.h>
 #include <thrust/transform_reduce.h>
 #include <thrust/transform_scan.h>
@@ -408,28 +408,28 @@ void run(std::ostream& plotFile)
     thrust::fill(thrust::device, b, e, 0);
     syncWithCuda();
 
-    //#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
-    // thrust::counting_iterator<std::size_t> ci(0);
-    // thrust::transform(
-    //    thrust::device,
-    //    ci,
-    //    ci + N,
-    //    view.begin(),
-    //    [] LLAMA_FN_HOST_ACC_INLINE(std::size_t i)
-    //    {
-    //        thrust::default_random_engine e;
-    //        e.discard(i);
-    //        thrust::uniform_real_distribution d{-1.0f, 1.0f};
-    //        return d(e);
-    //    });
-    //#else
-    //    {
-    //        std::default_random_engine e;
-    //        std::uniform_real_distribution d{-1.0f, 1.0f};
-    //        for(auto vr : view)
-    //            vr = d(e);
-    //    }
-    //#endif
+    // #if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
+    //  thrust::counting_iterator<std::size_t> ci(0);
+    //  thrust::transform(
+    //     thrust::device,
+    //     ci,
+    //     ci + N,
+    //     view.begin(),
+    //     [] LLAMA_FN_HOST_ACC_INLINE(std::size_t i)
+    //     {
+    //         thrust::default_random_engine e;
+    //         e.discard(i);
+    //         thrust::uniform_real_distribution d{-1.0f, 1.0f};
+    //         return d(e);
+    //     });
+    // #else
+    //     {
+    //         std::default_random_engine e;
+    //         std::uniform_real_distribution d{-1.0f, 1.0f};
+    //         for(auto vr : view)
+    //             vr = d(e);
+    //     }
+    // #endif
 
     double tabulateTotal = 0;
     // double shuffleTotal = 0;
