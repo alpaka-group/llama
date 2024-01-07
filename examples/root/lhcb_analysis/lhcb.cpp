@@ -31,7 +31,7 @@
 
 namespace
 {
-    constexpr auto analysisRepetitions = 100; // excluding 1 warmup run
+    constexpr auto analysisRepetitions = 20; // excluding 1 warmup run
     constexpr auto analysisRepetitionsInstrumentation
         = 0; // costly, so turned off by default, use 1 for FieldAccessCounts and Heatmap
     constexpr auto estimateLoadedCachelines = false;
