@@ -320,6 +320,19 @@ namespace
             true>::template fn,
         true>;
 
+    using Custom6LossLess = llama::mapping::Split<
+        llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>,
+        Event,
+        mp_list<mp_list<H1, IsMuon>, mp_list<H2, IsMuon>, mp_list<H3, IsMuon>>,
+        llama::mapping::BindBitPackedIntAoS<llama::Constant<1>, llama::mapping::SignBit::Discard>::fn,
+        llama::mapping::BindSplit<
+            mp_list<mp_list<H1, ProbK>, mp_list<H2, ProbK>>,
+            llama::mapping::BindBitPackedFloatAoS<llama::Constant<6>, llama::Constant<52>>::template fn,
+            llama::mapping::BindBitPackedFloatAoS<llama::Constant<6>, llama::Constant<52>>::template fn,
+            true>::fn,
+        true>;
+
+
     using Custom7 = llama::mapping::Split<
         llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>,
         Event,
@@ -354,6 +367,23 @@ namespace
             mp_list<mp_list<H1, ProbK>, mp_list<H2, ProbK>>,
             llama::mapping::BindChangeType<llama::mapping::BindAoS<>::fn, mp_list<mp_list<double, float>>>::fn,
             llama::mapping::BindChangeType<llama::mapping::BindAoS<>::fn, mp_list<mp_list<double, float>>>::fn,
+            true>::fn,
+        true>;
+
+    // Like 9, but split H1.ProbK and H2.PropK again
+    using Custom10 = llama::mapping::Split<
+        llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>,
+        Event,
+        mp_list<mp_list<H1, IsMuon>, mp_list<H2, IsMuon>, mp_list<H3, IsMuon>>,
+        llama::mapping::BindBitPackedIntAoS<llama::Constant<1>, llama::mapping::SignBit::Discard>::fn,
+        llama::mapping::BindSplit<
+            mp_list<mp_list<H1, ProbK>>,
+            llama::mapping::BindChangeType<llama::mapping::BindAoS<>::fn, mp_list<mp_list<double, float>>>::fn,
+            llama::mapping::BindSplit<
+                mp_list<mp_list<H2, ProbK>>,
+                llama::mapping::BindChangeType<llama::mapping::BindAoS<>::fn, mp_list<mp_list<double, float>>>::fn,
+                llama::mapping::BindChangeType<llama::mapping::BindAoS<>::fn, mp_list<mp_list<double, float>>>::fn,
+                true>::fn,
             true>::fn,
         true>;
 
@@ -572,20 +602,23 @@ auto main(int argc, const char* argv[]) -> int
     testAnalysis<Custom4>(inputFile, treeName, "Custom4");
     testAnalysis<Custom4Heatmap>(inputFile, treeName, "Custom4_HM");
     testAnalysis<Custom5>(inputFile, treeName, "Custom5");
-    //    testAnalysis<Custom5, true>(inputFile, treeName, "Custom5_S");
+    // testAnalysis<Custom5, true>(inputFile, treeName, "Custom5_S");
     testAnalysis<Custom6<>>(inputFile, treeName, "Custom6");
-    //    testAnalysis<Custom6<>, true>(inputFile, treeName, "Custom6_S");
+    testAnalysis<Custom6LossLess>(inputFile, treeName, "Custom6LL");
+    // testAnalysis<Custom6<>, true>(inputFile, treeName, "Custom6_S");
     testAnalysis<Custom7>(inputFile, treeName, "Custom7");
-    //    testAnalysis<Custom7, true>(inputFile, treeName, "Custom7_S");
+    // testAnalysis<Custom7, true>(inputFile, treeName, "Custom7_S");
     testAnalysis<Custom8<>>(inputFile, treeName, "Custom8");
-    //    testAnalysis<Custom8<>, true>(inputFile, treeName, "Custom8_S");
+    // testAnalysis<Custom8<>, true>(inputFile, treeName, "Custom8_S");
     testAnalysis<Custom9>(inputFile, treeName, "Custom9");
-    //    testAnalysis<Custom9, true>(inputFile, treeName, "Custom9_S");
-    testAnalysis<Custom1_3_H1ProbK_float>(inputFile, treeName, "Custom1_3_F");
+    testAnalysis<Custom10>(inputFile, treeName, "Custom10");
+    // testAnalysis<Custom9, true>(inputFile, treeName, "Custom9_S");
+    // testAnalysis<Custom1_3_H1ProbK_float>(inputFile, treeName, "Custom1_3_F");
 
     constexpr auto fullExp = 11;
     constexpr auto fullMan = 52;
     testAnalysis<MakeBitpacked<fullExp, fullMan>>(inputFile, treeName, fmt::format("BP_SoA_{}e{}", fullMan, fullExp));
+    testAnalysis<MakeBitpacked<6, fullMan>>(inputFile, treeName, fmt::format("BP_SoA_{}e6", fullMan)); // lossless
 
     // using namespace boost::mp11;
     // mp_for_each<mp_reverse<mp_iota_c<fullExp>>>(
