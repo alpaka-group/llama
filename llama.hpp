@@ -8060,7 +8060,14 @@ namespace llama
 
 	        if(hasAnyComputedField<Mapping>)
 	        {
-	            writeBlobHeader(Mapping::blobCount, computedSizeSoFar, "Comp.");
+	            if(computedSizeSoFar > 0)
+	                writeBlobHeader(Mapping::blobCount, computedSizeSoFar, "Comp.");
+	            else
+	            {
+	                const auto blobRows = (wrapByteCount - 1) / wrapByteCount;
+	                blobYOffset[Mapping::blobCount + 1]
+	                    = blobYOffset[Mapping::blobCount] + blobRows * byteSizeInPixel; // fix-up, omit gap
+	            }
 
 	            // fix total SVG size
 	            const auto i = svg.find("987654321");
