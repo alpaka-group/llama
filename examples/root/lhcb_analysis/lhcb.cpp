@@ -358,6 +358,24 @@ namespace
             true>::template fn,
         true>;
 
+    // Like 8, but split H1.ProbK and H2.PropK again
+    template<std::size_t ManBits = 16>
+    using Custom8Sep = llama::mapping::Split<
+        llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>,
+        Event,
+        mp_list<mp_list<H1, IsMuon>, mp_list<H2, IsMuon>, mp_list<H3, IsMuon>>,
+        llama::mapping::BindBitPackedIntAoS<llama::Constant<1>, llama::mapping::SignBit::Discard>::fn,
+        llama::mapping::BindSplit<
+            mp_list<mp_list<H1, ProbK>>,
+            llama::mapping::BindChangeType<llama::mapping::BindAoS<>::fn, mp_list<mp_list<double, float>>>::fn,
+            llama::mapping::BindSplit<
+                mp_list<mp_list<H2, ProbK>>,
+                llama::mapping::BindChangeType<llama::mapping::BindAoS<>::fn, mp_list<mp_list<double, float>>>::fn,
+                llama::mapping::BindBitPackedFloatAoS<llama::Constant<6>, llama::Constant<ManBits>>::template fn,
+                true>::template fn,
+            true>::template fn,
+        true>;
+
     using Custom9 = llama::mapping::Split<
         llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>,
         Event,
@@ -610,6 +628,7 @@ auto main(int argc, const char* argv[]) -> int
     // testAnalysis<Custom7, true>(inputFile, treeName, "Custom7_S");
     testAnalysis<Custom8<>>(inputFile, treeName, "Custom8");
     // testAnalysis<Custom8<>, true>(inputFile, treeName, "Custom8_S");
+    testAnalysis<Custom8Sep<>>(inputFile, treeName, "Custom8Sep");
     testAnalysis<Custom9>(inputFile, treeName, "Custom9");
     testAnalysis<Custom10>(inputFile, treeName, "Custom10");
     // testAnalysis<Custom9, true>(inputFile, treeName, "Custom9_S");
