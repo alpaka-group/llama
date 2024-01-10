@@ -156,6 +156,7 @@ if (LLAMA_BUILD_EXAMPLES)
 	# general examples
 	add_subdirectory("examples/vectoradd")
 	add_subdirectory("examples/nbody")
+	add_subdirectory("examples/nbody_code_comp")
 	add_subdirectory("examples/heatequation")
 	add_subdirectory("examples/viewcopy")
 	add_subdirectory("examples/bufferguard")
