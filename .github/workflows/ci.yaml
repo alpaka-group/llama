@@ -148,8 +148,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: build-ubuntu-gcc9
-            cxx: g++-9
           - name: build-ubuntu-gcc10
             cxx: g++-10
           - name: build-ubuntu-gcc10-nvcc11.6
