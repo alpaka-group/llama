@@ -11,6 +11,7 @@
 #include <iostream>
 #include <llama/llama.hpp>
 #include <random>
+#include <span>
 #include <thread>
 #include <utility>
 #include <vector>
@@ -482,7 +483,7 @@ namespace manualAoS
                 update(particles.data());
                 statsUpdate(watch.printAndReset("update", '\t'));
             }
-            move(particles.data());
+            manualAoS::move(particles.data());
             statsMove(watch.printAndReset("move"));
         }
         plotFile << std::quoted(title) << "\t" << statsUpdate.mean() << "\t" << statsUpdate.sem() << '\t'
@@ -1339,7 +1340,7 @@ namespace manualAoSSIMD
     }
 
     template<typename Simd>
-    void update(Particle* particles)
+    void update(std::span<Particle> particles)
     {
         PARALLEL_FOR
         for(std::ptrdiff_t i = 0; i < problemSize; i += Simd::size)
@@ -1370,7 +1371,7 @@ namespace manualAoSSIMD
     }
 
     template<typename Simd>
-    void move(Particle* particles)
+    void move(std::span<Particle> particles)
     {
         PARALLEL_FOR
         for(std::ptrdiff_t i = 0; i < problemSize; i += Simd::size)
@@ -1412,10 +1413,10 @@ namespace manualAoSSIMD
         {
             if constexpr(runUpdate)
             {
-                update<Simd>(particles.data());
+                update<Simd>(particles);
                 statsUpdate(watch.printAndReset("update", '\t'));
             }
-            move<Simd>(particles.data());
+            manualAoSSIMD::move<Simd>(particles);
             statsMove(watch.printAndReset("move"));
         }
         plotFile << std::quoted(title) << "\t" << statsUpdate.mean() << "\t" << statsUpdate.sem() << '\t'
