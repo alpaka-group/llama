@@ -284,11 +284,14 @@ namespace
             true>::fn,
         true>;
 
+    using ChangeFloatAoS
+        = llama::mapping::BindChangeType<llama::mapping::BindAoS<>::fn, mp_list<mp_list<double, float>>>;
+
     using Custom1_3_H1ProbK_float = llama::mapping::Split<
         llama::ArrayExtentsDynamic<RE::NTupleSize_t, 1>,
         Event,
         mp_list<mp_list<H1, IsMuon>, mp_list<H2, IsMuon>, mp_list<H3, IsMuon>, mp_list<H1, ProbK>>,
-        llama::mapping::BindChangeType<llama::mapping::BindAoS<>::fn, mp_list<mp_list<double, float>>>::fn,
+        ChangeFloatAoS::fn,
         llama::mapping::
             BindSplit<mp_list<mp_list<H2, ProbK>>, llama::mapping::AlignedAoS, llama::mapping::AlignedAoS, true>::fn,
         true>;
@@ -353,7 +356,7 @@ namespace
         llama::mapping::BindBitPackedIntAoS<llama::Constant<1>, llama::mapping::SignBit::Discard>::fn,
         llama::mapping::BindSplit<
             mp_list<mp_list<H1, ProbK>, mp_list<H2, ProbK>>,
-            llama::mapping::BindChangeType<llama::mapping::BindAoS<>::fn, mp_list<mp_list<double, float>>>::fn,
+            ChangeFloatAoS::fn,
             llama::mapping::BindBitPackedFloatAoS<llama::Constant<6>, llama::Constant<ManBits>>::template fn,
             true>::template fn,
         true>;
@@ -367,10 +370,10 @@ namespace
         llama::mapping::BindBitPackedIntAoS<llama::Constant<1>, llama::mapping::SignBit::Discard>::fn,
         llama::mapping::BindSplit<
             mp_list<mp_list<H1, ProbK>>,
-            llama::mapping::BindChangeType<llama::mapping::BindAoS<>::fn, mp_list<mp_list<double, float>>>::fn,
+            ChangeFloatAoS::fn,
             llama::mapping::BindSplit<
                 mp_list<mp_list<H2, ProbK>>,
-                llama::mapping::BindChangeType<llama::mapping::BindAoS<>::fn, mp_list<mp_list<double, float>>>::fn,
+                ChangeFloatAoS::fn,
                 llama::mapping::BindBitPackedFloatAoS<llama::Constant<6>, llama::Constant<ManBits>>::template fn,
                 true>::template fn,
             true>::template fn,
@@ -381,11 +384,9 @@ namespace
         Event,
         mp_list<mp_list<H1, IsMuon>, mp_list<H2, IsMuon>, mp_list<H3, IsMuon>>,
         llama::mapping::BindBitPackedIntAoS<llama::Constant<1>, llama::mapping::SignBit::Discard>::fn,
-        llama::mapping::BindSplit<
-            mp_list<mp_list<H1, ProbK>, mp_list<H2, ProbK>>,
-            llama::mapping::BindChangeType<llama::mapping::BindAoS<>::fn, mp_list<mp_list<double, float>>>::fn,
-            llama::mapping::BindChangeType<llama::mapping::BindAoS<>::fn, mp_list<mp_list<double, float>>>::fn,
-            true>::fn,
+        llama::mapping::
+            BindSplit<mp_list<mp_list<H1, ProbK>, mp_list<H2, ProbK>>, ChangeFloatAoS::fn, ChangeFloatAoS::fn, true>::
+                fn,
         true>;
 
     // Like 9, but split H1.ProbK and H2.PropK again
@@ -396,12 +397,8 @@ namespace
         llama::mapping::BindBitPackedIntAoS<llama::Constant<1>, llama::mapping::SignBit::Discard>::fn,
         llama::mapping::BindSplit<
             mp_list<mp_list<H1, ProbK>>,
-            llama::mapping::BindChangeType<llama::mapping::BindAoS<>::fn, mp_list<mp_list<double, float>>>::fn,
-            llama::mapping::BindSplit<
-                mp_list<mp_list<H2, ProbK>>,
-                llama::mapping::BindChangeType<llama::mapping::BindAoS<>::fn, mp_list<mp_list<double, float>>>::fn,
-                llama::mapping::BindChangeType<llama::mapping::BindAoS<>::fn, mp_list<mp_list<double, float>>>::fn,
-                true>::fn,
+            ChangeFloatAoS::fn,
+            llama::mapping::BindSplit<mp_list<mp_list<H2, ProbK>>, ChangeFloatAoS::fn, ChangeFloatAoS::fn, true>::fn,
             true>::fn,
         true>;
 
