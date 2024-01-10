@@ -40,10 +40,9 @@ public:
     virtual void read_arrays(std::vector<T>& a, std::vector<T>& b, std::vector<T>& c) = 0;
 };
 
-
 // Implementation specific device functions
 void listDevices(void);
-std::string getDeviceName(const int);
-std::string getDeviceDriver(const int);
+std::string getDeviceName(int const);
+std::string getDeviceDriver(int const);
 
 // NOLINTEND
