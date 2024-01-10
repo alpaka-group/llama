@@ -56,7 +56,7 @@
 #endif
 
 // Default size of 2^25
-int ARRAY_SIZE = 33554432;
+int ARRAY_SIZE = 33'554'432;
 unsigned int num_times = 100;
 unsigned int deviceIndex = 0;
 bool use_float = false;
@@ -65,7 +65,7 @@ bool mibibytes = false;
 std::string csv_separator = ",";
 
 template<typename T>
-void check_solution(const unsigned int ntimes, std::vector<T>& a, std::vector<T>& b, std::vector<T>& c, T& sum);
+void check_solution(unsigned int const ntimes, std::vector<T>& a, std::vector<T>& b, std::vector<T>& c, T& sum);
 
 template<typename T>
 void run();
@@ -102,7 +102,6 @@ int main(int argc, char* argv[])
     else
         run<double>();
 }
-
 
 // Run the 5 main kernels
 template<typename T>
@@ -195,7 +194,6 @@ std::vector<std::vector<double>> run_nstream(Stream<T>* stream)
 
     return timings;
 }
-
 
 // Generic run routine
 // Runs the kernel(s) and prints output.
@@ -428,9 +426,8 @@ void run()
     delete stream;
 }
 
-
 template<typename T>
-void check_solution(const unsigned int ntimes, std::vector<T>& a, std::vector<T>& b, std::vector<T>& c, T& sum)
+void check_solution(unsigned int const ntimes, std::vector<T>& a, std::vector<T>& b, std::vector<T>& c, T& sum)
 {
     // Generate correct solution
     T goldA = startA;
@@ -489,14 +486,14 @@ void check_solution(const unsigned int ntimes, std::vector<T>& a, std::vector<T>
                   << std::setprecision(15) << "Sum was " << sum << " but should be " << goldSum << std::endl;
 }
 
-int parseUInt(const char* str, unsigned int* output)
+int parseUInt(char const* str, unsigned int* output)
 {
     char* next;
     *output = strtoul(str, &next, 10);
     return !strlen(next);
 }
 
-int parseInt(const char* str, int* output)
+int parseInt(char const* str, int* output)
 {
     char* next;
     *output = strtol(str, &next, 10);
