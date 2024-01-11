@@ -45,8 +45,8 @@ static_assert(extents.back() % threadsPerBlock == 0);
 >;
 // clang-format on
 
-using RecordDim = Particle;
-// using RecordDim = boost::mp11::mp_take_c<Event, 20>;
+// using RecordDim = Particle;
+using RecordDim = boost::mp11::mp_take_c<Event, 20>;
 // using RecordDim = Event; // WARN: expect long compilation time
 
 static_assert(
