@@ -13,50 +13,31 @@ constexpr int steps = 5, problemSize = 64 * 1024;
 
 struct Vec3 {
     FP x, y, z;
-
-    auto operator*=(Vec3 v) -> Vec3& {
-        x *= v.x;
-        y *= v.y;
-        z *= v.z;
-        return *this;
-    }
-
-    auto operator+=(Vec3 v) -> Vec3& {
-        x += v.x;
-        y += v.y;
-        z += v.z;
-        return *this;
-    }
-
-    friend auto operator-(Vec3 a, Vec3 b) -> Vec3 {
-        return Vec3{a.x - b.x, a.y - b.y, a.z - b.z};
-    }
-
-    friend auto operator*(Vec3 a, FP s) -> Vec3 {
-        return Vec3{a.x * s, a.y * s, a.z * s};
-    }
 };
-
 struct Particle {
     Vec3 pos, vel;
     FP mass;
 };
 
 inline void pPInteraction(Particle& pi, const Particle& pj) {
-    auto dist = pi.pos - pj.pos;
-    dist *= dist;
+    auto dist = Vec3{pi.pos.x - pj.pos.x, pi.pos.y - pj.pos.y, pi.pos.z - pj.pos.z};
+    dist.x *= dist.x;
+    dist.y *= dist.y;
+    dist.z *= dist.z;
     const auto distSqr = eps2 + dist.x + dist.y + dist.z;
     const auto distSixth = distSqr * distSqr * distSqr;
     const auto invDistCube = FP{1} / std::sqrt(distSixth);
     const auto sts = pj.mass * timestep * invDistCube;
-    pi.vel += dist * sts;
+    pi.vel.x += dist.x * sts;
+    pi.vel.y += dist.y * sts;
+    pi.vel.z += dist.z * sts;
 }
 
 void update(std::span<Particle> particles) {
 #pragma GCC ivdep
     for(int i = 0; i < problemSize; i++) {
         Particle pi = particles[i];
-        for(std::size_t j = 0; j < problemSize; ++j)
+        for(int j = 0; j < problemSize; ++j)
             pPInteraction(pi, particles[j]);
         particles[i].vel = pi.vel;
     }
@@ -64,12 +45,16 @@ void update(std::span<Particle> particles) {
 
 void move(std::span<Particle> particles) {
 #pragma GCC ivdep
-    for(int i = 0; i < problemSize; i++)
-        particles[i].pos += particles[i].vel * timestep;
+    for(int i = 0; i < problemSize; i++) {
+        particles[i].pos.x += particles[i].vel.x * timestep;
+        particles[i].pos.y += particles[i].vel.y * timestep;
+        particles[i].pos.z += particles[i].vel.z * timestep;
+    }
 }
 
 auto main() -> int {
     auto particles = std::vector<Particle>(problemSize);
+	
     std::default_random_engine engine;
     std::normal_distribution<FP> dist(FP{0}, FP{1});
     for(auto& p : particles) {
@@ -86,5 +71,6 @@ auto main() -> int {
         update(particles);
         ::move(particles);
     }
+
     return 0;
 }
