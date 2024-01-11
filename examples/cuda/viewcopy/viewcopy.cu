@@ -231,7 +231,7 @@ try
         gibs,
         prop.multiProcessorCount,
         prop.maxThreadsPerMultiProcessor);
-    const Size maxThreads = prop.multiProcessorCount * prop.maxThreadsPerMultiProcessor;
+    // const Size maxThreads = prop.multiProcessorCount * prop.maxThreadsPerMultiProcessor;
 
     fmt::print("{:10} -> {:10} {:11} {:>10} {:>10} {:4}\n", "src", "dst", "alg", "ms", "GiB/s", "hash");
 
@@ -294,13 +294,16 @@ try
         };
 
         benchmarkCopy("naive 1D", [](const auto& srcView, auto& dstView) { ::fieldWiseCopy1D(srcView, dstView); });
-        benchmarkCopy("naive 3D", [](const auto& srcView, auto& dstView) { ::fieldWiseCopy3D(srcView, dstView); });
-        benchmarkCopy(
-            "naive GS 1D",
-            [&](const auto& srcView, auto& dstView) { ::fieldWiseCopyGridStrided1D(srcView, dstView, maxThreads); });
-        benchmarkCopy(
-            "naive GS 3D",
-            [&](const auto& srcView, auto& dstView) { ::fieldWiseCopyGridStrided3D(srcView, dstView, maxThreads); });
+        // These are slower on Nvidia V100 and A100:
+        // benchmarkCopy("naive 3D", [](const auto& srcView, auto& dstView) { ::fieldWiseCopy3D(srcView, dstView); });
+        // benchmarkCopy(
+        //     "naive GS 1D",
+        //     [&](const auto& srcView, auto& dstView) { ::fieldWiseCopyGridStrided1D(srcView, dstView, maxThreads);
+        //     });
+        // benchmarkCopy(
+        //     "naive GS 3D",
+        //     [&](const auto& srcView, auto& dstView) { ::fieldWiseCopyGridStrided3D(srcView, dstView, maxThreads);
+        //     });
     };
 
     using ArrayExtents = std::remove_const_t<decltype(extents)>;
