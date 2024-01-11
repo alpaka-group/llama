@@ -13,7 +13,7 @@
 // No specialized layout aware copy routine is implemented.
 
 using Size = std::size_t;
-constexpr auto repetitions = 5;
+constexpr auto repetitions = 20; // excluding 1 warmup run
 constexpr auto extents = llama::ArrayExtentsDynamic<Size, 3>{200u, 512u, 512u}; // z, y, x
 constexpr auto threadsPerBlock = Size{256};
 
@@ -246,6 +246,7 @@ try
         std::byte* dst = nullptr;
         cudaMalloc(&src, dataSize);
         cudaMalloc(&dst, dataSize);
+        cudaMemcpyAsync(dst, src, dataSize, cudaMemcpyDeviceToDevice); // warmup
         cudaEventRecord(startEvent);
         for(auto i = 0; i < repetitions; i++)
             cudaMemcpyAsync(dst, src, dataSize, cudaMemcpyDeviceToDevice);
@@ -272,6 +273,7 @@ try
         auto benchmarkCopy = [&, srcView = &srcView, srcHash = srcHash](std::string_view algName, auto copy)
         {
             auto dstView = llama::allocViewUninitialized(dstMapping, llama::bloballoc::CudaMalloc{});
+            copy(*srcView, dstView); // warumup
             cudaEventRecord(startEvent);
             for(auto i = 0; i < repetitions; i++)
                 copy(*srcView, dstView);
