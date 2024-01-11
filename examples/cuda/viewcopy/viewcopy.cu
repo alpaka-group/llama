@@ -223,14 +223,15 @@ try
     const auto gibs = 2.0 * prop.memoryClockRate * 1000.0 * (prop.memoryBusWidth / 8) / (1024.0 * 1024.0 * 1024.0);
     fmt::print(
         "Dataset size:  {:5.1f}{} (x2)\nGMemory size:  {:5.1f}{}\nMax bandwidth: {:5.1f}GiB/s\nSMs: {}\nMax threads "
-        "per SM: {}\n",
+        "per SM: {}\nEnv: {}\n",
         dsize,
         dunit,
         gmsize,
         gmunit,
         gibs,
         prop.multiProcessorCount,
-        prop.maxThreadsPerMultiProcessor);
+        prop.maxThreadsPerMultiProcessor,
+        common::captureEnv());
     // const Size maxThreads = prop.multiProcessorCount * prop.maxThreadsPerMultiProcessor;
 
     fmt::print("{:10} -> {:10} {:11} {:>10} {:>10} {:4}\n", "src", "dst", "alg", "ms", "GiB/s", "hash");
