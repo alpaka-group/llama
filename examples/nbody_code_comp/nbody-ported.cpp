@@ -4,7 +4,6 @@
 // clang-format off
 
 #include "llama/llama.hpp"
-
 #include <random>
 #include <vector>
 
@@ -13,8 +12,16 @@ constexpr FP timestep = 0.0001f, eps2 = 0.01f;
 constexpr int steps = 5, problemSize = 64 * 1024;
 
 struct Pos{}; struct Vel{}; struct X{}; struct Y{}; struct Z{}; struct Mass{};
-using V3 = llama::Record<llama::Field<X, FP>, llama::Field<Y, FP>, llama::Field<Z, FP>>;
-using Particle = llama::Record<llama::Field<Pos, V3>, llama::Field<Vel, V3>, llama::Field<Mass, FP>>;
+using Vec3 = llama::Record<
+    llama::Field<X, FP>,
+    llama::Field<Y, FP>,
+    llama::Field<Z, FP>
+>;
+using Particle = llama::Record<
+    llama::Field<Pos, Vec3>,
+    llama::Field<Vel, Vec3>,
+    llama::Field<Mass, FP>
+>;
 
 LLAMA_FN_HOST_ACC_INLINE void pPInteraction(auto&& pi, auto&& pj) {
     auto dist = pi(Pos{}) - pj(Pos{});
@@ -47,6 +54,7 @@ auto main() -> int {
     const auto extents = ArrayExtents{problemSize};
     auto mapping = llama::mapping::AoS<ArrayExtents, Particle>{extents};
     auto particles = llama::allocViewUninitialized(mapping);
+
     std::default_random_engine engine;
     std::normal_distribution<FP> dist(FP{0}, FP{1});
     for(auto&& p : particles) {
@@ -63,5 +71,6 @@ auto main() -> int {
         update(particles);
         ::move(particles);
     }
+
     return 0;
 }
