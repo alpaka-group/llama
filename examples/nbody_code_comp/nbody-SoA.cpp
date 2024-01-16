@@ -58,7 +58,7 @@ struct AlignedAllocator {
     using value_type = T;
 
     auto allocate(std::size_t n) const -> T* {
-        return new(std::align_val_t{64}) T[n];
+        return static_cast<T*>(::operator new[](n * sizeof(T), std::align_val_t{64}));
     }
 
     void deallocate(T* p, std::size_t) const {
