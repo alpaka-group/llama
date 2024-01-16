@@ -20,6 +20,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE llama::llama fmt::fmt alpaka::alpa
 
 if (MSVC)
 	target_compile_options(${PROJECT_NAME} PRIVATE /arch:AVX2) # /fp:fast
+	target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20) # MSVC fails some constexpr evaluation in C++17
 else()
 	target_compile_options(${PROJECT_NAME} PRIVATE -march=native -fno-math-errno) # -ffast-math
 endif()
