@@ -5945,7 +5945,7 @@ namespace llama
     /// Pulls a copy of the given value or reference. Proxy references are resolved to their value types.
     LLAMA_EXPORT
     template<typename T>
-    auto decayCopy(T&& valueOrRef) -> typename internal::ValueOf<T>::type
+    LLAMA_FN_HOST_ACC_INLINE auto decayCopy(T&& valueOrRef) -> typename internal::ValueOf<T>::type
     {
         return std::forward<T>(valueOrRef);
     }
