@@ -241,7 +241,7 @@ try
     auto hostView = llama::allocView(hostMapping, allocBlobHost);
 
     using HostChunkView = decltype(llama::allocView(devMapping, allocBlobHost));
-    using AccChunkView = decltype(llama::allocView(devMapping, allocBlobAcc));
+    using AccChunkView = decltype(llama::allocViewUninitialized(devMapping, allocBlobAcc));
     std::vector<HostChunkView> hostChunkView;
     std::vector<AccChunkView> devOldView;
     std::vector<AccChunkView> devNewView;
@@ -249,8 +249,8 @@ try
     for(std::size_t i = 0; i < chunkCount; ++i)
     {
         hostChunkView.push_back(llama::allocView(devMapping, allocBlobHost));
-        devOldView.push_back(llama::allocView(devMapping, allocBlobAcc));
-        devNewView.push_back(llama::allocView(devMapping, allocBlobAcc));
+        devOldView.push_back(llama::allocViewUninitialized(devMapping, allocBlobAcc));
+        devNewView.push_back(llama::allocViewUninitialized(devMapping, allocBlobAcc));
     }
 
     chrono.printAndReset("Alloc");
