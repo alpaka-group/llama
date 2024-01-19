@@ -71,12 +71,20 @@ using ParticleUnaligned = llama::Record<
 >;
 // clang-format on
 
+inline void replaceAll(std::string& str, const std::string& search, const std::string& replace)
+{
+    std::string::size_type i = 0;
+    while((i = str.find(search, i)) != std::string::npos)
+    {
+        str.replace(i, search.length(), replace);
+        i += replace.length();
+    }
+}
+
 // TODO(bgruber): replace by boost::core::type_name<T>() once released and available
 template<typename T>
 auto prettyPrintType(const T& t = {}) -> std::string
 {
-    using llama::mapping::tree::internal::replaceAll;
-
     auto raw = boost::core::demangle(typeid(t).name());
 #ifdef _MSC_VER
     // remove clutter in MSVC

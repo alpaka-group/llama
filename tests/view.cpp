@@ -39,9 +39,6 @@ TEST_CASE("view.default-ctor")
     [[maybe_unused]] const llama::View<llama::mapping::MultiBlobSoA<ArrayExtents, RecordDimJustInt>, std::byte*>
         view5{};
     [[maybe_unused]] const llama::View<llama::mapping::One<ArrayExtents, RecordDimJustInt>, std::byte*> view6{};
-    [[maybe_unused]] const llama::
-        View<llama::mapping::tree::Mapping<ArrayExtents, RecordDimJustInt, llama::Tuple<>>, std::byte*>
-            view7{};
 }
 
 TEST_CASE("view.observers")

@@ -217,14 +217,9 @@ try
     // LLAMA
     using ArrayIndex = llama::ArrayIndex<int, 2>;
 
-    auto treeOperationList = llama::Tuple{llama::mapping::tree::functor::LeafOnlyRT()};
-    const auto hostMapping = llama::mapping::tree::Mapping{
-        llama::ArrayExtentsDynamic<int, 2>{bufferY, bufferX},
-        treeOperationList,
-        Pixel{}};
-    const auto devMapping = llama::mapping::tree::Mapping{
+    const auto hostMapping = llama::mapping::SoA{llama::ArrayExtentsDynamic<int, 2>{bufferY, bufferX}, Pixel{}};
+    const auto devMapping = llama::mapping::SoA{
         llama::ArrayExtents<int, chunkSize + 2 * kernelSize, chunkSize + 2 * kernelSize>{},
-        treeOperationList,
         PixelOnAcc{}};
     using DevMapping = std::decay_t<decltype(devMapping)>;
 
