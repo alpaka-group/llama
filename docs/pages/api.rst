@@ -178,9 +178,9 @@ Acessors
 .. doxygenstruct:: llama::accessor::Restrict
 .. doxygenstruct:: llama::accessor::Atomic
 .. doxygenstruct:: llama::accessor::Stacked
+
 RecordDim field permuters
 ^^^^^^^^^^^^^^^^^^^^^^^^^
-
 
 .. doxygenstruct:: llama::mapping::PermuteFieldsInOrder
 .. doxygenstruct:: llama::mapping::PermuteFieldsSorted
@@ -197,23 +197,6 @@ Common utilities
    :members:
 .. doxygenstruct:: llama::mapping::LinearizeArrayIndexMorton
    :members:
-
-Tree mapping (deprecated)
-^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. doxygenstruct:: llama::mapping::tree::Mapping
-   :members:
-
-For a detailed description of the tree mapping concept have a look at
-:ref:`LLAMA tree mapping <label-tree-mapping>`
-
-**Tree mapping functors**
-
-.. doxygenstruct:: llama::mapping::tree::functor::Idem
-.. doxygenstruct:: llama::mapping::tree::functor::LeafOnlyRT
-.. doxygenstruct:: llama::mapping::tree::functor::MoveRTDown
-
-.. FIXME: doxygen fails to parse the source code ...
 
 Dumping
 ^^^^^^^

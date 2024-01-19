@@ -73,7 +73,6 @@
 #include "mapping/Projection.hpp"
 #include "mapping/SoA.hpp"
 #include "mapping/Split.hpp"
-#include "mapping/tree/Mapping.hpp"
 
 #if defined(__NVCC__)
 #    ifdef __NVCC_DIAG_PRAGMA_SUPPORT__
