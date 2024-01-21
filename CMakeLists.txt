@@ -35,6 +35,7 @@ endif()
 if (MSVC)
 	# FIXME(bgruber): alpaka uses M_PI, so we need to make it available on MSVC. This may be fixed in alpaka 1.0.0.
 	target_compile_definitions(llama INTERFACE _USE_MATH_DEFINES)
+	target_compile_options(${PROJECT_NAME} INTERFACE /Zc:lambda) # needed in C++17 mode, remove when upgrading to C++20
 endif()
 
 # CUDA
