@@ -6315,6 +6315,8 @@ struct std::
 
 	    /// Array of struct of arrays mapping. Used to create a \ref View via \ref allocView.
 	    /// \tparam Lanes The size of the inner arrays of this array of struct of arrays.
+	    /// \tparam TFieldAlignment If Align, padding bytes are inserted to guarantee that struct members are properly
+	    /// aligned. If Pack, struct members are tightly packed.
 	    /// \tparam PermuteFields Defines how the record dimension's fields should be permuted. See \ref
 	    /// PermuteFieldsInOrder, \ref PermuteFieldsIncreasingAlignment, \ref PermuteFieldsDecreasingAlignment and
 	    /// \ref PermuteFieldsMinimizePadding.
@@ -6323,6 +6325,7 @@ struct std::
 	        typename TArrayExtents,
 	        typename TRecordDim,
 	        typename TArrayExtents::value_type Lanes,
+	        FieldAlignment TFieldAlignment = FieldAlignment::Align,
 	        typename TLinearizeArrayIndexFunctor = LinearizeArrayIndexRight,
 	        template<typename> typename PermuteFields = PermuteFieldsInOrder>
 	    struct AoSoA : MappingBase<TArrayExtents, TRecordDim>
@@ -6333,6 +6336,7 @@ struct std::
 
 	    public:
 	        inline static constexpr typename TArrayExtents::value_type lanes = Lanes;
+	        inline static constexpr FieldAlignment fieldAlignment = TFieldAlignment;
 	        using LinearizeArrayIndexFunctor = TLinearizeArrayIndexFunctor;
 	        using Permuter = PermuteFields<FlatRecordDim<TRecordDim>>;
 	        inline static constexpr std::size_t blobCount = 1;
@@ -6349,7 +6353,8 @@ struct std::
 
 	        LLAMA_FN_HOST_ACC_INLINE constexpr auto blobSize(size_type) const -> size_type
 	        {
-	            const auto rs = static_cast<size_type>(sizeOf<TRecordDim>);
+	            const auto rs = static_cast<size_type>(
+	                flatSizeOf<typename Permuter::FlatRecordDim, fieldAlignment == FieldAlignment::Align>);
 	            return roundUpToMultiple(LinearizeArrayIndexFunctor{}.size(Base::extents()) * rs, Lanes * rs);
 	        }
 
@@ -6374,8 +6379,15 @@ struct std::
 	                 Permuter::template permute<flatRecordCoord<TRecordDim, RecordCoord<RecordCoords...>>>;
 	            const auto blockIndex = flatArrayIndex / Lanes;
 	            const auto laneIndex = flatArrayIndex % Lanes;
-	            const auto offset = static_cast<size_type>(sizeOf<TRecordDim> * Lanes) * blockIndex
-	                + static_cast<size_type>(flatOffsetOf<typename Permuter::FlatRecordDim, flatFieldIndex, false>) * Lanes
+	            const auto offset
+	                = static_cast<size_type>(
+	                      flatSizeOf<typename Permuter::FlatRecordDim, fieldAlignment == FieldAlignment::Align> * Lanes)
+	                    * blockIndex
+	                + static_cast<size_type>(flatOffsetOf<
+	                                         typename Permuter::FlatRecordDim,
+	                                         flatFieldIndex,
+	                                         fieldAlignment == FieldAlignment::Align>)
+	                    * Lanes
 	                + static_cast<size_type>(sizeof(GetType<TRecordDim, RecordCoord<RecordCoords...>>)) * laneIndex;
 	            return {0, offset};
 	        }
@@ -6386,12 +6398,13 @@ struct std::
 	    LLAMA_EXPORT
 	    template<
 	        std::size_t Lanes,
+	        FieldAlignment Alignment = FieldAlignment::Align,
 	        typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight,
 	        template<typename> typename PermuteFields = PermuteFieldsInOrder>
 	    struct BindAoSoA
 	    {
 	        template<typename ArrayExtents, typename RecordDim>
-	        using fn = AoSoA<ArrayExtents, RecordDim, Lanes, LinearizeArrayIndexFunctor, PermuteFields>;
+	        using fn = AoSoA<ArrayExtents, RecordDim, Lanes, Alignment, LinearizeArrayIndexFunctor, PermuteFields>;
 	    };
 
 	    LLAMA_EXPORT
@@ -6399,8 +6412,15 @@ struct std::
 	    inline constexpr bool isAoSoA = false;
 
 	    LLAMA_EXPORT
-	    template<typename AD, typename RD, typename AD::value_type L, typename Lin, template<typename> typename Perm>
-	    inline constexpr bool isAoSoA<AoSoA<AD, RD, L, Lin, Perm>> = true;
+	    template<
+	        typename AD,
+	        typename RD,
+	        typename AD::value_type L,
+	        FieldAlignment A,
+	        typename Lin,
+	        template<typename>
+	        typename Perm>
+	    inline constexpr bool isAoSoA<AoSoA<AD, RD, L, A, Lin, Perm>> = true;
 	} // namespace llama::mapping
 	// ==
 	// == ./include/llama/mapping/AoSoA.hpp ==
@@ -7340,11 +7360,12 @@ namespace llama
 	            typename ArrayExtents,
 	            typename RecordDim,
 	            typename ArrayExtents::value_type Lanes,
+	            mapping::FieldAlignment FA,
 	            typename LinearizeArrayIndexFunctor,
 	            template<typename>
 	            typename PermuteFields>
 	        inline constexpr std::size_t
-	            aosoaLanes<mapping::AoSoA<ArrayExtents, RecordDim, Lanes, LinearizeArrayIndexFunctor, PermuteFields>>
+	            aosoaLanes<mapping::AoSoA<ArrayExtents, RecordDim, Lanes, FA, LinearizeArrayIndexFunctor, PermuteFields>>
 	            = Lanes;
 	    } // namespace internal
 
@@ -7532,19 +7553,23 @@ namespace llama
 	        typename LinearizeArrayIndex,
 	        typename ArrayExtents::value_type LanesSrc,
 	        typename ArrayExtents::value_type LanesDst,
+	        mapping::FieldAlignment AlignSrc,
+	        mapping::FieldAlignment AlignDst,
 	        template<typename>
 	        typename PermuteFields>
 	    struct Copy<
-	        mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex, PermuteFields>,
-	        mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex, PermuteFields>,
+	        mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, AlignSrc, LinearizeArrayIndex, PermuteFields>,
+	        mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, AlignDst, LinearizeArrayIndex, PermuteFields>,
 	        std::enable_if_t<LanesSrc != LanesDst>>
 	    {
 	        template<typename SrcBlob, typename DstBlob>
 	        void operator()(
-	            const View<mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex, PermuteFields>, SrcBlob>&
-	                srcView,
-	            View<mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex, PermuteFields>, DstBlob>&
-	                dstView,
+	            const View<
+	                mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, AlignSrc, LinearizeArrayIndex, PermuteFields>,
+	                SrcBlob>& srcView,
+	            View<
+	                mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, AlignDst, LinearizeArrayIndex, PermuteFields>,
+	                DstBlob>& dstView,
 	            std::size_t threadId,
 	            std::size_t threadCount)
 	        {
@@ -7561,16 +7586,18 @@ namespace llama
 	        template<typename>
 	        typename PermuteFields,
 	        typename ArrayExtents::value_type LanesSrc,
+	        mapping::FieldAlignment AlignSrc,
 	        mapping::Blobs DstBlobs,
 	        mapping::SubArrayAlignment DstSubArrayAlignment>
 	    struct Copy<
-	        mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex, PermuteFields>,
+	        mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, AlignSrc, LinearizeArrayIndex, PermuteFields>,
 	        mapping::SoA<ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex, PermuteFields>>
 	    {
 	        template<typename SrcBlob, typename DstBlob>
 	        void operator()(
-	            const View<mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex, PermuteFields>, SrcBlob>&
-	                srcView,
+	            const View<
+	                mapping::AoSoA<ArrayExtents, RecordDim, LanesSrc, AlignSrc, LinearizeArrayIndex, PermuteFields>,
+	                SrcBlob>& srcView,
 	            View<
 	                mapping::
 	                    SoA<ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex, PermuteFields>,
@@ -7591,11 +7618,12 @@ namespace llama
 	        template<typename>
 	        typename PermuteFields,
 	        typename ArrayExtents::value_type LanesDst,
+	        mapping::FieldAlignment AlignDst,
 	        mapping::Blobs SrcBlobs,
 	        mapping::SubArrayAlignment SrcSubArrayAlignment>
 	    struct Copy<
 	        mapping::SoA<ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex, PermuteFields>,
-	        mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex, PermuteFields>>
+	        mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, AlignDst, LinearizeArrayIndex, PermuteFields>>
 	    {
 	        template<typename SrcBlob, typename DstBlob>
 	        void operator()(
@@ -7603,8 +7631,9 @@ namespace llama
 	                mapping::
 	                    SoA<ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex, PermuteFields>,
 	                SrcBlob>& srcView,
-	            View<mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex, PermuteFields>, DstBlob>&
-	                dstView,
+	            View<
+	                mapping::AoSoA<ArrayExtents, RecordDim, LanesDst, AlignDst, LinearizeArrayIndex, PermuteFields>,
+	                DstBlob>& dstView,
 	            std::size_t threadId,
 	            std::size_t threadCount)
 	        {
