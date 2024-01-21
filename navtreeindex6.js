@@ -1,5 +1,6 @@
 var NAVTREEINDEX6 =
 {
+"structllama_1_1mapping_1_1Heatmap.html#a83e17842d5dc74dcffeccdf1c74d9a56":[2,0,0,3,27,7],
 "structllama_1_1mapping_1_1Heatmap.html#a84b3989ab82a9fd9349090825bdede8a":[2,0,0,3,27,13],
 "structllama_1_1mapping_1_1Heatmap.html#a901d18016a883947241884a733bfdd5a":[2,0,0,3,27,8],
 "structllama_1_1mapping_1_1Heatmap.html#aa37d9b62224479d411cab7dc3a862133":[2,0,0,3,27,14],
@@ -198,6 +199,5 @@ var NAVTREEINDEX6 =
 "structstd_1_1tuple__size_3_01llama_1_1Array_3_01T_00_01N_01_4_01_4.html":[2,0,1,0],
 "structstd_1_1tuple__size_3_01llama_1_1RecordRef_3_01View_00_01BoundRecordCoord_00_01OwnView_01_4_01_4.html":[2,0,1,6],
 "structstd_1_1tuple__size_3_01llama_1_1Tuple_3_01Elements_8_8_8_01_4_01_4.html":[2,0,1,10],
-"structstd_1_1tuple__size_3_01llama_1_1Tuple_3_01Elements_8_8_8_01_4_01_4.html#abfb585e14c073fe0440706749d845b00":[2,0,1,10,0],
-"":[1,0,2]
+"structstd_1_1tuple__size_3_01llama_1_1Tuple_3_01Elements_8_8_8_01_4_01_4.html#abfb585e14c073fe0440706749d845b00":[2,0,1,10,0]
 };

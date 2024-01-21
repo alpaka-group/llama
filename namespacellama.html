@@ -930,7 +930,7 @@ template&lt;typename RecordDim &gt; </div>
 
 <p>A <a class="el" href="structllama_1_1RecordRef.html">RecordRef</a> that owns and holds a single value. </p>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00193">193</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00188">188</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -1139,7 +1139,7 @@ template&lt;std::size_t Dim, typename RecordDim &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00179">179</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00174">174</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -1171,7 +1171,7 @@ template&lt;std::size_t Dim, typename RecordDim &gt; </div>
 
 <p>Same as <a class="el" href="namespacellama.html#a3e6032b02494ed6d889e8612fa5006dd">allocScalarView</a> but does not run field constructors. </p>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00169">169</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00164">164</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -1219,7 +1219,7 @@ template&lt;typename Mapping , typename Allocator  = bloballoc::Vector, typename
 </div><div class="memdoc">
 <p>Creates a view based on the given mapping, e.g. AoS or :SoA. For allocating the view's underlying memory, the specified allocator callable is used (or the default one, which is <a class="el" href="structllama_1_1bloballoc_1_1Vector.html">bloballoc::Vector</a>). The allocator callable is called with the alignment and size of bytes to allocate for each blob of the mapping. Value-initialization is performed for all fields by calling <a class="el" href="namespacellama.html#af4c8d962f80ddc030f99b08479ecb083">constructFields</a>. This function is the preferred way to create a <a class="el" href="structllama_1_1View.html">View</a>. See also <a class="el" href="namespacellama.html#a1a76478259d35873449cc44e27dd5abc">allocViewUninitialized</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00158">158</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00153">153</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -1546,7 +1546,7 @@ template&lt;typename Mapping , typename BlobType , typename Accessor &gt; </div>
 </div><div class="memdoc">
 <p>Value-initializes all fields reachable through the given view. That is, constructors are run and fundamental types are zero-initialized. Computed fields are constructed if they return l-value references and assigned a default constructed value if they return a proxy reference. </p>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00137">137</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00132">132</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -2250,7 +2250,7 @@ template&lt;typename Mapping , typename RecordCoord , typename Blobs &gt; </div>
 </div><div class="memdoc">
 <p>Using a mapping, maps the given array index and record coordinate to a memory reference onto the given blobs. </p><dl class="section return"><dt>Returns</dt><dd>Either an l-value reference if the record coord maps to a physical field or a proxy reference if mapped to a computed field. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00364">364</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00359">359</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -3298,7 +3298,7 @@ template&lt;typename View , typename NewBlobType  = CopyConst&lt;std::remove_ref
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A new view with the same mapping as view, where each blob refers to the blob in view. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00675">675</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00670">670</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -3549,7 +3549,7 @@ template&lt;typename ViewFwd , typename TransformBlobFunc , typename  = std::ena
 </div><div class="memdoc">
 <p>Applies the given transformation to the blobs of a view and creates a new view with the transformed blobs and the same mapping and accessor as the old view. </p>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00652">652</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00647">647</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -3732,7 +3732,7 @@ template&lt;typename NewAccessor , typename ViewFwd , typename  = std::enable_if
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00694">694</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00689">689</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -3772,7 +3772,7 @@ template&lt;typename NewMapping , typename ViewFwd , typename  = std::enable_if_
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00707">707</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00702">702</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -4365,7 +4365,7 @@ template&lt;typename T &gt; </div>
 
 <p>Is true, if T is an instance of <a class="el" href="namespacellama.html#a7b33b2c30fa081e8352cf12c7b98b0eb">One</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00198">198</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00193">193</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -4391,7 +4391,7 @@ template&lt;typename View , typename BoundRecordCoord &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00202">202</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00197">197</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -4627,7 +4627,7 @@ template&lt;typename View &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00605">605</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00600">600</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -4653,7 +4653,7 @@ template&lt;typename Mapping , typename BlobType , typename Accessor &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00610">610</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="View_8hpp_source.html#l00605">605</a> of file <a class="el" href="View_8hpp_source.html">View.hpp</a>.</p>
 
 </div>
 </div>
@@ -4932,7 +4932,7 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Sun Jan 21 2024 00:10:37 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Sun Jan 21 2024 19:19:45 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
