@@ -129,11 +129,11 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Copy_3_01Mapping_00_01Mapping_01_4.html">Copy&lt; Mapping, Mapping &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayExtents_00_01RecordDim_00_01LanesSrc_00_01Linecca40af6cbfeabebd92c0340cc1055ba.html">Copy&lt; mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex, PermuteFields &gt;, mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex, PermuteFields &gt;, std::enable_if_t&lt; LanesSrc !=LanesDst &gt; &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayExtents_00_01RecordDim_00_01LanesSrc_00_01Alig1ead0624d41206bf19b261e50248c1b7.html">Copy&lt; mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesSrc, AlignSrc, LinearizeArrayIndex, PermuteFields &gt;, mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesDst, AlignDst, LinearizeArrayIndex, PermuteFields &gt;, std::enable_if_t&lt; LanesSrc !=LanesDst &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayExtents_00_01RecordDim_00_01LanesSrc_00_01Line859743977e4e49efc57e47040098b4b8.html">Copy&lt; mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex, PermuteFields &gt;, mapping::SoA&lt; ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex, PermuteFields &gt; &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayExtents_00_01RecordDim_00_01LanesSrc_00_01Alig4bb4101c04ed9279847838623873bbbf.html">Copy&lt; mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesSrc, AlignSrc, LinearizeArrayIndex, PermuteFields &gt;, mapping::SoA&lt; ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex, PermuteFields &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Copy_3_01mapping_1_1SoA_3_01ArrayExtents_00_01RecordDim_00_01SrcBlobs_00_01SrcSub712ac8967d7b9cd8f921b93e85e89274.html">Copy&lt; mapping::SoA&lt; ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex, PermuteFields &gt;, mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex, PermuteFields &gt; &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Copy_3_01mapping_1_1SoA_3_01ArrayExtents_00_01RecordDim_00_01SrcBlobs_00_01SrcSub9770d34b14dc1e0da729ea63e513047d.html">Copy&lt; mapping::SoA&lt; ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex, PermuteFields &gt;, mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesDst, AlignDst, LinearizeArrayIndex, PermuteFields &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1Copy_3_01mapping_1_1SoA_3_01ArrayExtents_00_01RecordDim_00_01SrcBlobs_00_01SrcSubb9263f80fc3284e42fedd51b14aadf82.html">Copy&lt; mapping::SoA&lt; ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex, PermuteFields &gt;, mapping::SoA&lt; ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex, PermuteFields &gt;, std::enable_if_t&lt; SrcBlobs !=DstBlobs||SrcSubArrayAlignment !=DstSubArrayAlignment &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1324,7 +1324,7 @@ template&lt;typename SrcMapping , typename SrcBlob , typename DstMapping , typen
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Copy_8hpp_source.html#l00189">189</a> of file <a class="el" href="Copy_8hpp_source.html">Copy.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Copy_8hpp_source.html#l00190">190</a> of file <a class="el" href="Copy_8hpp_source.html">Copy.hpp</a>.</p>
 
 </div>
 </div>
@@ -1597,7 +1597,7 @@ template&lt;typename SrcMapping , typename SrcBlob , typename DstMapping , typen
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Copy_8hpp_source.html#l00506">506</a> of file <a class="el" href="Copy_8hpp_source.html">Copy.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Copy_8hpp_source.html#l00515">515</a> of file <a class="el" href="Copy_8hpp_source.html">Copy.hpp</a>.</p>
 
 </div>
 </div>
@@ -4932,7 +4932,7 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Fri Jan 19 2024 21:25:14 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Sun Jan 21 2024 00:10:37 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

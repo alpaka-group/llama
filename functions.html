@@ -107,11 +107,8 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 <li>allocate()
 : <a class="el" href="structllama_1_1bloballoc_1_1AlignedAllocator.html#a81dc20deb1d961e997070c14951cf2f3">llama::bloballoc::AlignedAllocator&lt; T, Alignment &gt;</a>
 </li>
-<li>amount
-: <a class="el" href="structllama_1_1mapping_1_1tree_1_1functor_1_1MoveRTDown.html#ac116255f840f0cee439b5ce01bd90b34">llama::mapping::tree::functor::MoveRTDown&lt; TreeCoord, Amount &gt;</a>
-</li>
 <li>AoSoA()
-: <a class="el" href="structllama_1_1mapping_1_1AoSoA.html#a212360d96e304d602ea507f9312f33c1">llama::mapping::AoSoA&lt; TArrayExtents, TRecordDim, Lanes, TLinearizeArrayIndexFunctor, PermuteFields &gt;</a>
+: <a class="el" href="structllama_1_1mapping_1_1AoSoA.html#a9930e6bb6922a8862ca257332225ac16">llama::mapping::AoSoA&lt; TArrayExtents, TRecordDim, Lanes, TFieldAlignment, TLinearizeArrayIndexFunctor, PermuteFields &gt;</a>
 </li>
 <li>ArgumentType
 : <a class="el" href="structllama_1_1mapping_1_1internal_1_1UnaryFunctionTraits_3_01Ret_07_5_08_07Arg_08_4.html#a0e5619a039ea44abe3dbb99a56492812">llama::mapping::internal::UnaryFunctionTraits&lt; Ret(*)(Arg)&gt;</a>
@@ -122,7 +119,6 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 , <a class="el" href="structllama_1_1mapping_1_1MappingBase.html#ab0dff4b5449fbc61e63ef6c8ae427c70">llama::mapping::MappingBase&lt; TArrayExtents, TRecordDim &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1Projection.html#a561ee92f75381d34b3ec7a0b8a936538">llama::mapping::Projection&lt; TArrayExtents, TRecordDim, InnerMapping, TProjectionMap &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1Split.html#a05c352cd24e3efacdee67e5668e6fd2a">llama::mapping::Split&lt; TArrayExtents, TRecordDim, TSelectorForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#a18be9f1a4fc4f99d932eca8ba09c406d">llama::mapping::tree::Mapping&lt; TArrayExtents, TRecordDim, TreeOperationList &gt;</a>
 , <a class="el" href="structllama_1_1SubView.html#a427fdaccd5d74c8122a73e09254f6198">llama::SubView&lt; TStoredParentView &gt;</a>
 , <a class="el" href="structllama_1_1View.html#a1fadf5a169e81c3171929c6fd53d2313">llama::View&lt; TMapping, TBlobType, TAccessor &gt;</a>
 </li>
@@ -133,11 +129,9 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 : <a class="el" href="structllama_1_1mapping_1_1MappingBase.html#a9e8dbadc1023c973d1d8a10a773e4786">llama::mapping::MappingBase&lt; TArrayExtents, TRecordDim &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1Projection.html#afcc2884bd643e8f2caa79880b08614a3">llama::mapping::Projection&lt; TArrayExtents, TRecordDim, InnerMapping, TProjectionMap &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1Split.html#a597a062d9e7e38fb5af83182665b457c">llama::mapping::Split&lt; TArrayExtents, TRecordDim, TSelectorForMapping1, MappingTemplate1, MappingTemplate2, SeparateBlobs &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1tree_1_1Mapping.html#aaa2f0af194a2bddb45e11522f11b0221">llama::mapping::tree::Mapping&lt; TArrayExtents, TRecordDim, TreeOperationList &gt;</a>
 </li>
-<li>arrayIndex
-: <a class="el" href="structllama_1_1mapping_1_1tree_1_1TreeCoordElement.html#a916a1c7576b55911097a7d64a9694f46">llama::mapping::tree::TreeCoordElement&lt; ChildIndex, ArrayIndexType &gt;</a>
-, <a class="el" href="structllama_1_1RecordRef.html#ad2b6d1f9c041126b35f97c22ded60326">llama::RecordRef&lt; TView, TBoundRecordCoord, OwnView &gt;</a>
+<li>arrayIndex()
+: <a class="el" href="structllama_1_1RecordRef.html#ad2b6d1f9c041126b35f97c22ded60326">llama::RecordRef&lt; TView, TBoundRecordCoord, OwnView &gt;</a>
 </li>
 <li>ArrayIndex
 : <a class="el" href="structllama_1_1SubView.html#a38e517de91412330d6bc3c28a217bf0a">llama::SubView&lt; TStoredParentView &gt;</a>
@@ -165,7 +159,7 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri Jan 19 2024 21:25:14 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Sun Jan 21 2024 00:10:37 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

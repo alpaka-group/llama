@@ -1,5 +1,0 @@
-var structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeElement_3_01Tag_00_01ChildType_0fCount_0e_00_01CountType_01_4 =
-[
-    [ "type", "structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeElement_3_01Tag_00_01ChildType_0fCount_0e_00_01CountType_01_4.html#aaab9523b8d90c8f9d4a360590939440e", null ],
-    [ "createChildren", "structllama_1_1mapping_1_1tree_1_1internal_1_1CreateTreeElement_3_01Tag_00_01ChildType_0fCount_0e_00_01CountType_01_4.html#ae551ba2c29a3b074c6ec0f646d826350", null ]
-];

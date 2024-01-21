@@ -92,9 +92,6 @@ $(document).ready(function(){initNavTree('functions_o.html',''); initResizable()
 <li>One()
 : <a class="el" href="structllama_1_1mapping_1_1One.html#a6e1341053b9461e3f67815825aa0417a">llama::mapping::One&lt; TArrayExtents, TRecordDim, TFieldAlignment, PermuteFields &gt;</a>
 </li>
-<li>operation
-: <a class="el" href="structllama_1_1mapping_1_1tree_1_1internal_1_1MergeFunctors_3_01Tree_00_01Tuple_3_01Operations_8_8_8_01_4_01_4.html#ab816e628595fe858030104a21297fbc1">llama::mapping::tree::internal::MergeFunctors&lt; Tree, Tuple&lt; Operations... &gt; &gt;</a>
-</li>
 <li>operator const value_type &amp;()
 : <a class="el" href="structllama_1_1ScopedUpdate_3_01Reference_00_01std_1_1enable__if__t_3_01std_1_1is__fundamental__e14f71eb64730a69a1b74dea5c5f8b59.html#a7a7dd8e2515d64235811144996cfa5e1">llama::ScopedUpdate&lt; Reference, std::enable_if_t&lt; std::is_fundamental_v&lt; typename internal::ValueOf&lt; Reference &gt;::type &gt; &gt; &gt;</a>
 </li>
@@ -154,9 +151,9 @@ $(document).ready(function(){initNavTree('functions_o.html',''); initResizable()
 , <a class="el" href="structllama_1_1bloballoc_1_1Vector.html#a460676ac82586d1bef38037a1816464b">llama::bloballoc::Vector</a>
 , <a class="el" href="structllama_1_1Copy.html#a5456c747d230db86a65cb67f67d1aa05">llama::Copy&lt; SrcMapping, DstMapping, SFINAE &gt;</a>
 , <a class="el" href="structllama_1_1Copy_3_01Mapping_00_01Mapping_01_4.html#a07d8bb1043f704c649aba7ec2090b4c0">llama::Copy&lt; Mapping, Mapping &gt;</a>
-, <a class="el" href="structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayExtents_00_01RecordDim_00_01LanesSrc_00_01Linecca40af6cbfeabebd92c0340cc1055ba.html#ae141b585c31bc810d01aeaec10d96e41">llama::Copy&lt; mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex, PermuteFields &gt;, mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex, PermuteFields &gt;, std::enable_if_t&lt; LanesSrc !=LanesDst &gt; &gt;</a>
-, <a class="el" href="structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayExtents_00_01RecordDim_00_01LanesSrc_00_01Line859743977e4e49efc57e47040098b4b8.html#ae38407734a9910b9973081739990d445">llama::Copy&lt; mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesSrc, LinearizeArrayIndex, PermuteFields &gt;, mapping::SoA&lt; ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex, PermuteFields &gt; &gt;</a>
-, <a class="el" href="structllama_1_1Copy_3_01mapping_1_1SoA_3_01ArrayExtents_00_01RecordDim_00_01SrcBlobs_00_01SrcSub712ac8967d7b9cd8f921b93e85e89274.html#a9c7e14912f334590b7420ac2b7d6bb77">llama::Copy&lt; mapping::SoA&lt; ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex, PermuteFields &gt;, mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesDst, LinearizeArrayIndex, PermuteFields &gt; &gt;</a>
+, <a class="el" href="structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayExtents_00_01RecordDim_00_01LanesSrc_00_01Alig1ead0624d41206bf19b261e50248c1b7.html#aca1d6b0804efcbb95548a07e5166cffb">llama::Copy&lt; mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesSrc, AlignSrc, LinearizeArrayIndex, PermuteFields &gt;, mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesDst, AlignDst, LinearizeArrayIndex, PermuteFields &gt;, std::enable_if_t&lt; LanesSrc !=LanesDst &gt; &gt;</a>
+, <a class="el" href="structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayExtents_00_01RecordDim_00_01LanesSrc_00_01Alig4bb4101c04ed9279847838623873bbbf.html#a579b540da80db98cf6e878123ba3711e">llama::Copy&lt; mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesSrc, AlignSrc, LinearizeArrayIndex, PermuteFields &gt;, mapping::SoA&lt; ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex, PermuteFields &gt; &gt;</a>
+, <a class="el" href="structllama_1_1Copy_3_01mapping_1_1SoA_3_01ArrayExtents_00_01RecordDim_00_01SrcBlobs_00_01SrcSub9770d34b14dc1e0da729ea63e513047d.html#ae24fdbc8861445cd29b71b00f3c9ad3d">llama::Copy&lt; mapping::SoA&lt; ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex, PermuteFields &gt;, mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesDst, AlignDst, LinearizeArrayIndex, PermuteFields &gt; &gt;</a>
 , <a class="el" href="structllama_1_1Copy_3_01mapping_1_1SoA_3_01ArrayExtents_00_01RecordDim_00_01SrcBlobs_00_01SrcSubb9263f80fc3284e42fedd51b14aadf82.html#a7414e5fe066dfc3dec47688f1c3a4609">llama::Copy&lt; mapping::SoA&lt; ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex, PermuteFields &gt;, mapping::SoA&lt; ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex, PermuteFields &gt;, std::enable_if_t&lt; SrcBlobs !=DstBlobs||SrcSubArrayAlignment !=DstSubArrayAlignment &gt; &gt;</a>
 , <a class="el" href="structllama_1_1internal_1_1Assign.html#ae8e7737477254928607c54a1dbe94918">llama::internal::Assign</a>
 , <a class="el" href="structllama_1_1internal_1_1DivideAssign.html#a4ef194014d4c19d8bba9c2c3a0b7d9e0">llama::internal::DivideAssign</a>
@@ -167,10 +164,9 @@ $(document).ready(function(){initNavTree('functions_o.html',''); initResizable()
 , <a class="el" href="structllama_1_1mapping_1_1LinearizeArrayIndexLeft.html#a6494312cef4828f0bf1360f585c22843">llama::mapping::LinearizeArrayIndexLeft</a>
 , <a class="el" href="structllama_1_1mapping_1_1LinearizeArrayIndexMorton.html#a17efec391738bcb8395f7592474ad3bf">llama::mapping::LinearizeArrayIndexMorton</a>
 , <a class="el" href="structllama_1_1mapping_1_1LinearizeArrayIndexRight.html#a2e557b74062a4f706f7454bde2e20e9b">llama::mapping::LinearizeArrayIndexRight</a>
-, <a class="el" href="structllama_1_1mapping_1_1tree_1_1functor_1_1internal_1_1ChangeNodeChildsRuntimeFunctor.html#a32b64325b2b8255a3965a073fd4075d0">llama::mapping::tree::functor::internal::ChangeNodeChildsRuntimeFunctor</a>
-, <a class="el" href="structllama_1_1RecordRef.html#a033f16ec277c95ff8a0c5444c6bcb2bc">llama::RecordRef&lt; TView, TBoundRecordCoord, OwnView &gt;</a>
+, <a class="el" href="structllama_1_1RecordRef.html#a6e3f77a18819a49ab694345faffab318">llama::RecordRef&lt; TView, TBoundRecordCoord, OwnView &gt;</a>
 , <a class="el" href="structllama_1_1SubView.html#a50ea3ae3586fb42363a16ed5cf54b864">llama::SubView&lt; TStoredParentView &gt;</a>
-, <a class="el" href="structllama_1_1View.html#a62688dca2ffbedad30e219e2aa7d5400">llama::View&lt; TMapping, TBlobType, TAccessor &gt;</a>
+, <a class="el" href="structllama_1_1View.html#a99b9fd989744030d2b082b830ae4beb4">llama::View&lt; TMapping, TBlobType, TAccessor &gt;</a>
 , <a class="el" href="structstd_1_1hash_3_01llama_1_1RecordRef_3_01View_00_01BoundRecordCoord_00_01OwnView_01_4_01_4.html#ac7feadd8ba99ce12ece0f844da21c099">std::hash&lt; llama::RecordRef&lt; View, BoundRecordCoord, OwnView &gt; &gt;</a>
 </li>
 <li>operator*()
@@ -186,8 +182,8 @@ $(document).ready(function(){initNavTree('functions_o.html',''); initResizable()
 : <a class="el" href="structllama_1_1Array.html#a17babdb41e8863ccd94806c23e501355">llama::Array&lt; T, N &gt;</a>
 , <a class="el" href="structllama_1_1Array_3_01T_00_010_01_4.html#a29729a64f80d4237bc82b3e71f68b39d">llama::Array&lt; T, 0 &gt;</a>
 , <a class="el" href="structllama_1_1ArrayIndexIterator.html#a1b93201049db4583d861203628a2d934">llama::ArrayIndexIterator&lt; ArrayExtents &gt;</a>
-, <a class="el" href="structllama_1_1Iterator.html#a5135551db447539d7b4389aedac11ad3">llama::Iterator&lt; View &gt;</a>
-, <a class="el" href="structllama_1_1RecordRef.html#a67adea4a6bb0440a9c3fe3287f897e95">llama::RecordRef&lt; TView, TBoundRecordCoord, OwnView &gt;</a>
+, <a class="el" href="structllama_1_1Iterator.html#a9fc80ea72157cefe76d1b05979a6c8f7">llama::Iterator&lt; View &gt;</a>
+, <a class="el" href="structllama_1_1RecordRef.html#ad52b41ada501955c1808b973dfc1d153">llama::RecordRef&lt; TView, TBoundRecordCoord, OwnView &gt;</a>
 </li>
 <li>operator++()
 : <a class="el" href="structllama_1_1ArrayIndexIterator.html#aa0690871b4b8f9a59376db29497c1b9a">llama::ArrayIndexIterator&lt; ArrayExtents &gt;</a>
@@ -231,7 +227,7 @@ $(document).ready(function(){initNavTree('functions_o.html',''); initResizable()
 <li>operator&lt;
 : <a class="el" href="structllama_1_1ArrayIndexIterator.html#a32d7c4e8fa736c0fc866b318dbfc528c">llama::ArrayIndexIterator&lt; ArrayExtents &gt;</a>
 , <a class="el" href="structllama_1_1Iterator.html#abff008ef987f7ea29390328c1af8ce72">llama::Iterator&lt; View &gt;</a>
-, <a class="el" href="structllama_1_1RecordRef.html#a517bee54eb43b63ede727940f71cd9ae">llama::RecordRef&lt; TView, TBoundRecordCoord, OwnView &gt;</a>
+, <a class="el" href="structllama_1_1RecordRef.html#a35d17e80a4a27107b754078bf55f7106">llama::RecordRef&lt; TView, TBoundRecordCoord, OwnView &gt;</a>
 , <a class="el" href="structllama_1_1Vector.html#a450e2abfedad4aefbfdb303054a53a20">llama::Vector&lt; Mapping &gt;</a>
 </li>
 <li>operator&lt;&lt;
@@ -248,13 +244,13 @@ $(document).ready(function(){initNavTree('functions_o.html',''); initResizable()
 </li>
 <li>operator=()
 : <a class="el" href="structllama_1_1accessor_1_1Const_1_1Reference.html#ae28d2bac2976d8b8822aa9ec0e983bfa">llama::accessor::Const::Reference&lt; Ref &gt;</a>
-, <a class="el" href="structllama_1_1accessor_1_1Locked_1_1Reference.html#a24373ccaae6c09ab95e9059e8e95f112">llama::accessor::Locked&lt; Mutex &gt;::Reference&lt; Ref, Value &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1Bytesplit_1_1Reference.html#aa90f46d1590b8fcda4935f29493a0289">llama::mapping::Bytesplit&lt; TArrayExtents, TRecordDim, InnerMapping &gt;::Reference&lt; RC, BlobArray &gt;</a>
+, <a class="el" href="structllama_1_1accessor_1_1Locked_1_1Reference.html#a703c4fdc2aa8d678bd707e41b0ce144e">llama::accessor::Locked&lt; Mutex &gt;::Reference&lt; Ref, Value &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1Bytesplit_1_1Reference.html#a576d03612330d02949b5c39eee5feeec">llama::mapping::Bytesplit&lt; TArrayExtents, TRecordDim, InnerMapping &gt;::Reference&lt; RC, BlobArray &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedFloatRef.html#ae3151a3b5f02ee4e3bea589a56c3377c">llama::mapping::internal::BitPackedFloatRef&lt; Float, StoredIntegralCV, VHExp, VHMan, SizeType &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html#a7b0e4335cde52c10ffdee5d1e2c9b025">llama::mapping::internal::BitPackedIntRef&lt; Integral, StoredIntegralCV, VHBits, SizeType, SignBit &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1internal_1_1BitPackedIntRef.html#ac5ca46ded1c950a100e4eb31956d23c7">llama::mapping::internal::BitPackedIntRef&lt; Integral, StoredIntegralCV, VHBits, SizeType, SignBit &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1internal_1_1FieldAccessCountReference.html#a3f62661bce4f0794057c32c51196d38c">llama::mapping::internal::FieldAccessCountReference&lt; Value, Ref, Count &gt;</a>
 , <a class="el" href="structllama_1_1mapping_1_1internal_1_1NullReference.html#aec59109e33b5a655f8a782fea81cde82">llama::mapping::internal::NullReference&lt; T &gt;</a>
-, <a class="el" href="structllama_1_1mapping_1_1internal_1_1ProjectionReference.html#a1f6cd477412a83bb1e02412fee99f51e">llama::mapping::internal::ProjectionReference&lt; Reference, Projection &gt;</a>
+, <a class="el" href="structllama_1_1mapping_1_1internal_1_1ProjectionReference.html#ac3e3bd6d44525142ff704cbc995bad56">llama::mapping::internal::ProjectionReference&lt; Reference, Projection &gt;</a>
 , <a class="el" href="structllama_1_1RecordRef.html#a0550786f236bad995846f06ca51ae789">llama::RecordRef&lt; TView, TBoundRecordCoord, OwnView &gt;</a>
 , <a class="el" href="structllama_1_1ScopedUpdate.html#a3ce7e6001813df201f857f039fda5d63">llama::ScopedUpdate&lt; Reference, typename &gt;</a>
 , <a class="el" href="structllama_1_1ScopedUpdate_3_01Reference_00_01std_1_1enable__if__t_3_01std_1_1is__fundamental__e14f71eb64730a69a1b74dea5c5f8b59.html#a6daaf806e8e2fe26874f7c1b395186d1">llama::ScopedUpdate&lt; Reference, std::enable_if_t&lt; std::is_fundamental_v&lt; typename internal::ValueOf&lt; Reference &gt;::type &gt; &gt; &gt;</a>
@@ -309,7 +305,7 @@ $(document).ready(function(){initNavTree('functions_o.html',''); initResizable()
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri Jan 19 2024 21:25:14 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Sun Jan 21 2024 00:10:37 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

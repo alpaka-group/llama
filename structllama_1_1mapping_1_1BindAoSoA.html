@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Low-Level Abstraction of Memory Access: llama::mapping::BindAoSoA&lt; Lanes, LinearizeArrayIndexFunctor, PermuteFields &gt; Struct Template Reference</title>
+<title>Low-Level Abstraction of Memory Access: llama::mapping::BindAoSoA&lt; Lanes, Alignment, LinearizeArrayIndexFunctor, PermuteFields &gt; Struct Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -86,7 +86,7 @@ $(document).ready(function(){initNavTree('structllama_1_1mapping_1_1BindAoSoA.ht
 <a href="#pub-types">Public Types</a> &#124;
 <a href="structllama_1_1mapping_1_1BindAoSoA-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">llama::mapping::BindAoSoA&lt; Lanes, LinearizeArrayIndexFunctor, PermuteFields &gt; Struct Template Reference</div>  </div>
+<div class="title">llama::mapping::BindAoSoA&lt; Lanes, Alignment, LinearizeArrayIndexFunctor, PermuteFields &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -94,35 +94,35 @@ $(document).ready(function(){initNavTree('structllama_1_1mapping_1_1BindAoSoA.ht
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a96a1f256e450ece838aadda32436227e"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim &gt; </td></tr>
-<tr class="memitem:a96a1f256e450ece838aadda32436227e"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BindAoSoA.html#a96a1f256e450ece838aadda32436227e">fn</a> = <a class="el" href="structllama_1_1mapping_1_1AoSoA.html">AoSoA</a>&lt; <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, Lanes, LinearizeArrayIndexFunctor, PermuteFields &gt;</td></tr>
-<tr class="separator:a96a1f256e450ece838aadda32436227e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59bcda91d9831fadfe5bcfcbccd229b5"><td class="memTemplParams" colspan="2">template&lt;typename ArrayExtents , typename RecordDim &gt; </td></tr>
+<tr class="memitem:a59bcda91d9831fadfe5bcfcbccd229b5"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1BindAoSoA.html#a59bcda91d9831fadfe5bcfcbccd229b5">fn</a> = <a class="el" href="structllama_1_1mapping_1_1AoSoA.html">AoSoA</a>&lt; <a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, Lanes, Alignment, LinearizeArrayIndexFunctor, PermuteFields &gt;</td></tr>
+<tr class="separator:a59bcda91d9831fadfe5bcfcbccd229b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;std::size_t Lanes, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight, template&lt; typename &gt; typename PermuteFields = PermuteFieldsInOrder&gt;<br />
-struct llama::mapping::BindAoSoA&lt; Lanes, LinearizeArrayIndexFunctor, PermuteFields &gt;</h3>
+<div class="textblock"><h3>template&lt;std::size_t Lanes, FieldAlignment Alignment = FieldAlignment::Align, typename LinearizeArrayIndexFunctor = LinearizeArrayIndexRight, template&lt; typename &gt; typename PermuteFields = PermuteFieldsInOrder&gt;<br />
+struct llama::mapping::BindAoSoA&lt; Lanes, Alignment, LinearizeArrayIndexFunctor, PermuteFields &gt;</h3>
 
 <p>Binds parameters to an <a class="el" href="structllama_1_1mapping_1_1AoSoA.html">AoSoA</a> mapping except for array and record dimension, producing a quoted meta function accepting the latter two. Useful to to prepare this mapping for a meta mapping. </p>
 
-<p class="definition">Definition at line <a class="el" href="AoSoA_8hpp_source.html#l00103">103</a> of file <a class="el" href="AoSoA_8hpp_source.html">AoSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AoSoA_8hpp_source.html#l00116">116</a> of file <a class="el" href="AoSoA_8hpp_source.html">AoSoA.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="a96a1f256e450ece838aadda32436227e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a96a1f256e450ece838aadda32436227e">&#9670;&nbsp;</a></span>fn</h2>
+<a id="a59bcda91d9831fadfe5bcfcbccd229b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a59bcda91d9831fadfe5bcfcbccd229b5">&#9670;&nbsp;</a></span>fn</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;std::size_t Lanes, typename LinearizeArrayIndexFunctor  = LinearizeArrayIndexRight, template&lt; typename &gt; typename PermuteFields = PermuteFieldsInOrder&gt; </div>
+template&lt;std::size_t Lanes, FieldAlignment Alignment = FieldAlignment::Align, typename LinearizeArrayIndexFunctor  = LinearizeArrayIndexRight, template&lt; typename &gt; typename PermuteFields = PermuteFieldsInOrder&gt; </div>
 <div class="memtemplate">
 template&lt;typename ArrayExtents , typename RecordDim &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1BindAoSoA.html">llama::mapping::BindAoSoA</a>&lt; Lanes, LinearizeArrayIndexFunctor, PermuteFields &gt;::<a class="el" href="structllama_1_1mapping_1_1BindAoSoA.html#a96a1f256e450ece838aadda32436227e">fn</a> =  <a class="el" href="structllama_1_1mapping_1_1AoSoA.html">AoSoA</a>&lt;<a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, Lanes, LinearizeArrayIndexFunctor, PermuteFields&gt;</td>
+          <td class="memname">using <a class="el" href="structllama_1_1mapping_1_1BindAoSoA.html">llama::mapping::BindAoSoA</a>&lt; Lanes, Alignment, LinearizeArrayIndexFunctor, PermuteFields &gt;::<a class="el" href="structllama_1_1mapping_1_1BindAoSoA.html#a59bcda91d9831fadfe5bcfcbccd229b5">fn</a> =  <a class="el" href="structllama_1_1mapping_1_1AoSoA.html">AoSoA</a>&lt;<a class="el" href="structllama_1_1ArrayExtents.html">ArrayExtents</a>, RecordDim, Lanes, Alignment, LinearizeArrayIndexFunctor, PermuteFields&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="AoSoA_8hpp_source.html#l00106">106</a> of file <a class="el" href="AoSoA_8hpp_source.html">AoSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AoSoA_8hpp_source.html#l00119">119</a> of file <a class="el" href="AoSoA_8hpp_source.html">AoSoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -135,7 +135,7 @@ template&lt;typename ArrayExtents , typename RecordDim &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1BindAoSoA.html">BindAoSoA</a></li>
-    <li class="footer">Generated on Fri Jan 19 2024 21:25:14 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Sun Jan 21 2024 00:10:37 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

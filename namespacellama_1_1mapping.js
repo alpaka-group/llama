@@ -1,7 +1,6 @@
 var namespacellama_1_1mapping =
 [
     [ "internal", "namespacellama_1_1mapping_1_1internal.html", "namespacellama_1_1mapping_1_1internal" ],
-    [ "tree", "namespacellama_1_1mapping_1_1tree.html", "namespacellama_1_1mapping_1_1tree" ],
     [ "AoS", "structllama_1_1mapping_1_1AoS.html", "structllama_1_1mapping_1_1AoS" ],
     [ "BindAoS", "structllama_1_1mapping_1_1BindAoS.html", "structllama_1_1mapping_1_1BindAoS" ],
     [ "AoSoA", "structllama_1_1mapping_1_1AoSoA.html", "structllama_1_1mapping_1_1AoSoA" ],
@@ -75,7 +74,7 @@ var namespacellama_1_1mapping =
     [ "isAoS", "namespacellama_1_1mapping.html#a8ccdc77397e087a2a223e32b544006fa", null ],
     [ "isAoS< AoS< ArrayExtents, RecordDim, FieldAlignment, LinearizeArrayIndexFunctor, PermuteFields > >", "namespacellama_1_1mapping.html#a52d3f2a8cc0eb9d356536d8f57888d22", null ],
     [ "isAoSoA", "namespacellama_1_1mapping.html#a5f9ae52631dd878c1ae2c2e73f353580", null ],
-    [ "isAoSoA< AoSoA< AD, RD, L, Lin, Perm > >", "namespacellama_1_1mapping.html#a121e1d727915a265684db0491a13b644", null ],
+    [ "isAoSoA< AoSoA< AD, RD, L, A, Lin, Perm > >", "namespacellama_1_1mapping.html#ab330c6fb0b99ccce36cb79e6cdfc3958", null ],
     [ "isBitPackedFloatAoS", "namespacellama_1_1mapping.html#a2c8b80aa8bfba10f6b647735746bb61b", null ],
     [ "isBitPackedFloatAoS< BitPackedFloatAoS< ArrayExtents, RecordDim, ExponentBits, MantissaBits, LinearizeArrayIndexFunctor, PermuteFields, StoredIntegral > >", "namespacellama_1_1mapping.html#a26443c5794d6ec9f578f48a634f58c8b", null ],
     [ "isBitPackedFloatSoA", "namespacellama_1_1mapping.html#af9c9d24fc8ce05a939c4bdb3ca8ae133", null ],
