@@ -3640,34 +3640,29 @@ namespace llama
         typename Mapping::ArrayExtents::Index ai,
         RecordCoord<RCs...> rc)
     {
-        using FieldType = GetType<typename Mapping::RecordDim, decltype(rc)>;
+        auto init = [](auto&& ref) LLAMA_LAMBDA_INLINE
+        {
+            using FieldType = GetType<typename Mapping::RecordDim, RecordCoord<RCs...>>;
+            using RefType = decltype(ref);
+            if constexpr(isProxyReference<std::remove_reference_t<RefType>>)
+            {
+                ref = FieldType{};
+            }
+            else if constexpr(
+                std::is_lvalue_reference_v<RefType> && !std::is_const_v<std::remove_reference_t<RefType>>)
+            {
+                new(&ref) FieldType{};
+            }
+        };
 
         // this handles physical and computed mappings
         if constexpr(sizeof...(RCs) == 0)
         {
-            using RefType = decltype(view(ai));
-            if constexpr(isProxyReference<RefType>)
-            {
-                view(ai) = FieldType{};
-            }
-            else if constexpr(
-                std::is_lvalue_reference_v<RefType> && !std::is_const_v<std::remove_reference_t<RefType>>)
-            {
-                new(&view(ai)) FieldType{};
-            }
+            init(view(ai));
         }
         else
         {
-            using RefType = decltype(view(ai)(rc));
-            if constexpr(isProxyReference<RefType>)
-            {
-                view(ai)(rc) = FieldType{};
-            }
-            else if constexpr(
-                std::is_lvalue_reference_v<RefType> && !std::is_const_v<std::remove_reference_t<RefType>>)
-            {
-                new(&view(ai)(rc)) FieldType{};
-            }
+            init(view(ai)(rc));
         }
     }
 
