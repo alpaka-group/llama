@@ -8,7 +8,7 @@
 namespace
 {
     using ArrayExtents = llama::ArrayExtentsDynamic<std::size_t, 2>;
-    using RecordDim = Vec3I;
+    using RecordDim = llama::Record<llama::Field<int, int>, llama::Field<char, char>, llama::Field<double, double>>;
 
     template<typename SrcMapping, typename DstMapping, typename CopyFunc>
     void testCopy(CopyFunc copy)
