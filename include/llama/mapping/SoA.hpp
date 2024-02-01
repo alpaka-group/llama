@@ -86,7 +86,7 @@ namespace llama::mapping
             {
                 size_type size = 0;
                 using FRD = typename Permuter::FlatRecordDim;
-                mp_for_each<mp_transform<mp_identity, FRD>>(
+                mp_for_each_inline<mp_transform<mp_identity, FRD>>(
                     [&](auto ti) LLAMA_LAMBDA_INLINE
                     {
                         using FieldType = typename decltype(ti)::type;
@@ -109,7 +109,7 @@ namespace llama::mapping
             constexpr auto subArrays = mp_size<FRD>::value;
             Array<size_type, subArrays> r{};
             // r[0] == 0, only compute the following offsets
-            mp_for_each<mp_iota_c<subArrays - 1>>(
+            mp_for_each_inline<mp_iota_c<subArrays - 1>>(
                 [&](auto ic)
                 {
                     constexpr auto i = decltype(ic)::value;
@@ -167,7 +167,7 @@ namespace llama::mapping
                         // type's alignment. We can also precompute a table of sub array starts (and maybe store it),
                         // or rely on the compiler it out of loops.
                         size_type offset = 0;
-                        mp_for_each<mp_iota_c<flatFieldIndex>>(
+                        mp_for_each_inline<mp_iota_c<flatFieldIndex>>(
                             [&](auto ic) LLAMA_LAMBDA_INLINE
                             {
                                 constexpr auto i = decltype(ic)::value;

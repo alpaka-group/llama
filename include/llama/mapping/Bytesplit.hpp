@@ -91,7 +91,7 @@ namespace llama::mapping
 
                 value_type v;
                 auto* p = reinterpret_cast<std::byte*>(&v);
-                mp_for_each<mp_iota_c<sizeof(value_type)>>(
+                mp_for_each_inline<mp_iota_c<sizeof(value_type)>>(
                     [&](auto ic) LLAMA_LAMBDA_INLINE
                     {
                         constexpr auto i = decltype(ic)::value;
@@ -110,7 +110,7 @@ namespace llama::mapping
 #endif
 
                 auto* p = reinterpret_cast<std::byte*>(&v);
-                mp_for_each<mp_iota_c<sizeof(value_type)>>(
+                mp_for_each_inline<mp_iota_c<sizeof(value_type)>>(
                     [&](auto ic) LLAMA_LAMBDA_INLINE
                     {
                         constexpr auto i = decltype(ic)::value;

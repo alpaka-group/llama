@@ -288,7 +288,7 @@ namespace llama::mapping
                 , VHBits{bits}
             {
                 static_assert(VHBits::value() > 0);
-                mp_for_each<mp_transform<mp_identity, FlatRecordDim<TRecordDim>>>(
+                mp_for_each_inline<mp_transform<mp_identity, FlatRecordDim<TRecordDim>>>(
                     [&](auto t)
                     {
                         using FieldType = typename decltype(t)::type;
@@ -317,7 +317,7 @@ namespace llama::mapping
                 if(VHBits::value() <= 0)
                     throw std::invalid_argument("BitPackedInt* Bits must not be zero");
 #endif
-                mp_for_each<mp_transform<mp_identity, FlatRecordDim<TRecordDim>>>(
+                mp_for_each_inline<mp_transform<mp_identity, FlatRecordDim<TRecordDim>>>(
                     [&](auto t)
                     {
                         using FieldType [[maybe_unused]] = typename decltype(t)::type;

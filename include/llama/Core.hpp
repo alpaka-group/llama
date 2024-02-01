@@ -536,7 +536,7 @@ namespace llama
         constexpr auto flatAlignOfImpl()
         {
             std::size_t maxAlign = 0;
-            mp_for_each<mp_transform<mp_identity, TypeList>>(
+            mp_for_each_inline<mp_transform<mp_identity, TypeList>>(
                 [&](auto e) constexpr
                 {
                     using T = typename decltype(e)::type;
@@ -586,7 +586,7 @@ namespace llama
         {
             std::size_t size = 0;
             std::size_t maxAlign = 0; // NOLINT(misc-const-correctness)
-            mp_for_each<mp_transform<mp_identity, TypeList>>(
+            mp_for_each_inline<mp_transform<mp_identity, TypeList>>(
                 [&](auto e) constexpr
                 {
                     using T = typename decltype(e)::type;
