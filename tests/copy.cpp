@@ -13,7 +13,7 @@ namespace
     template<typename SrcMapping, typename DstMapping, typename CopyFunc>
     void testCopy(CopyFunc copy)
     {
-        const auto viewExtents = ArrayExtents{4, 8};
+        const auto viewExtents = ArrayExtents{8, 6};
         const auto srcMapping = SrcMapping(viewExtents);
         auto srcView = llama::allocViewUninitialized(srcMapping);
         iotaFillView(srcView);
@@ -68,7 +68,7 @@ namespace
         llama::mapping::AoSoA<
             ArrayExtents,
             RecordDim,
-            4,
+            6,
             llama::mapping::FieldAlignment::Align,
             llama::mapping::LinearizeArrayIndexRight>,
         // llama::mapping::AoSoA<ArrayExtents, RecordDim, 4, llama::mapping::LinearizeArrayIndexLeft>,
