@@ -212,7 +212,8 @@ try
     plotFile << fmt::format(
         R"plot(#!/usr/bin/gnuplot -p
 # {}
-set title "viewcopy CPU {}MiB particles"
+# ArrayExtents: {}
+set title "viewcopy CPU {}Mi {} ({}MiB)"
 set style data histograms
 set style histogram errorbars
 set style fill solid border -1
@@ -222,6 +223,11 @@ set ylabel "Throughput [GiB/s]"
 
 )plot",
         env,
+        fmt::streamed(extents),
+        dataSize / 1024 / 1024,
+        std::is_same_v<RecordDim, Particle>
+            ? "particles"
+            : "events of " + std::to_string(boost::mp11::mp_size<RecordDim>::value) + " fields",
         dataSize / 1024 / 1024);
 
     // measure memcpy to have a baseline for comparison
