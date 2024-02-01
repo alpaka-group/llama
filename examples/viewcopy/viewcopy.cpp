@@ -109,21 +109,58 @@ auto memcpyAVX2(void* dst, const void* src, size_t n) noexcept -> void*
 template<typename Mapping, typename BlobType>
 auto hash(const llama::View<Mapping, BlobType>& view)
 {
-    std::size_t acc = 0;
-    for(auto ad : llama::ArrayIndexRange{view.extents()})
-        llama::forEachLeafCoord<typename Mapping::RecordDim>([&](auto rc) { boost::hash_combine(acc, view(ad)(rc)); });
-    return acc;
+    const auto total = llama::product(extents);
+
+    std::size_t globalAcc = 0;
+#pragma omp parallel reduction(+ : globalAcc)
+    {
+        const auto threadCount = omp_get_num_threads();
+        const auto perThread = total / threadCount;
+        const auto perLastThread = total - (threadCount - 1) * perThread;
+        const auto thid = omp_get_thread_num();
+        const auto start = perThread * thid;
+        const auto count = (thid == threadCount - 1) ? perLastThread : perThread;
+        auto it = llama::ArrayIndexIterator{extents, {}} + static_cast<std::ptrdiff_t>(start);
+        std::size_t acc = 0;
+        for(int i = 0; i < count; i++)
+        {
+            llama::forEachLeafCoord<typename Mapping::RecordDim>([&](auto rc)
+                                                                 { boost::hash_combine(acc, view(*it)(rc)); });
+            ++it;
+        }
+        globalAcc += acc; // requires commutative and associative reduction, so use plain addition
+    }
+    return globalAcc;
+}
+
+template<typename Mapping, typename BlobType>
+void init(llama::View<Mapping, BlobType>& view)
+{
+    const auto total = llama::product(extents);
+#pragma omp parallel
+    {
+        const auto threadCount = omp_get_num_threads();
+        const auto perThread = total / threadCount;
+        const auto perLastThread = total - (threadCount - 1) * perThread;
+        const auto thid = omp_get_thread_num();
+        const auto start = perThread * thid;
+        const auto count = (thid == threadCount - 1) ? perLastThread : perThread;
+        auto it = llama::ArrayIndexIterator{extents, {}} + static_cast<std::ptrdiff_t>(start);
+
+        auto value = std::size_t{start} * llama::flatFieldCount<RecordDim>;
+        for(int i = 0; i < count; i++)
+        {
+            llama::forEachLeafCoord<typename Mapping::RecordDim>([&](auto rc) { view (*it)(rc) = value++; });
+            ++it;
+        }
+    }
 }
 
 template<typename Mapping>
 auto prepareViewAndHash(Mapping mapping)
 {
     auto view = llama::allocViewUninitialized(mapping);
-
-    auto value = std::size_t{0};
-    for(auto ad : llama::ArrayIndexRange{mapping.extents()})
-        llama::forEachLeafCoord<typename Mapping::RecordDim>([&](auto rc) { view(ad)(rc) = value++; });
-
+    init(view);
     const auto checkSum = hash(view);
     return std::tuple{view, checkSum};
 }
