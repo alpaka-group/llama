@@ -8,6 +8,7 @@
 
 #include <boost/functional/hash.hpp>
 #include <fmt/core.h>
+#include <fmt/ostream.h>
 #include <fstream>
 #include <immintrin.h>
 #include <llama/llama.hpp>
@@ -19,6 +20,7 @@ constexpr auto repetitions = 20; // excluding 1 warmup run
 constexpr auto extents = llama::ArrayExtents{512, 512, 16};
 constexpr auto measureMemcpy = false;
 constexpr auto runParallelVersions = true;
+constexpr auto maxMismatchesPrintedPerFailedCopy = 10;
 
 // clang-format off
 namespace tag
@@ -126,6 +128,38 @@ auto prepareViewAndHash(Mapping mapping)
     return std::tuple{view, checkSum};
 }
 
+template<typename ExpectedView, typename ActualView>
+void compareViews(ExpectedView expected, ActualView actual)
+{
+    static_assert(std::is_same_v<typename ExpectedView::Mapping::RecordDim, typename ActualView::Mapping::RecordDim>);
+    assert(expected.mapping().extents() == actual.mapping().extents());
+
+    int mismatches = 0;
+    for(auto ai : llama::ArrayIndexRange{expected.mapping().extents()})
+        llama::forEachLeafCoord<RecordDim>(
+            [&](auto rc)
+            {
+                const auto exp = expected(ai)(rc);
+                const auto act = actual(ai)(rc);
+                if(exp != act)
+                {
+                    if(mismatches < maxMismatchesPrintedPerFailedCopy)
+                    {
+                        fmt::print(
+                            "\tMismatch at {} {}/{}. Expected {}, actual {}\n",
+                            fmt::streamed(ai),
+                            fmt::streamed(rc),
+                            llama::prettyRecordCoord<RecordDim>(rc),
+                            exp,
+                            act);
+                    }
+                    else if(mismatches < maxMismatchesPrintedPerFailedCopy + 1)
+                        fmt::print("...\n");
+                    mismatches++;
+                }
+            });
+}
+
 void benchmarkMemcopy(std::size_t dataSize, std::ostream& plotFile)
 {
     std::vector<std::byte, llama::bloballoc::AlignedAllocator<std::byte, 64>> src(dataSize);
@@ -228,7 +262,11 @@ $data << EOD
             }
             const auto dstHash = hash(dstView);
             fmt::print("{} {}GiB/s\t{}\n", name, stats.mean(), srcHash == dstHash ? "" : "\thash BAD ");
+            if(srcHash != dstHash)
+                compareViews(srcView, dstView);
             plotFile << stats.mean() << "\t" << stats.sem() << '\t';
+            if(srcHash != dstHash)
+                plotFile << "# last run failed verification\n";
         };
 
         benchmarkCopy(
