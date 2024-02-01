@@ -352,7 +352,7 @@ namespace llama
                             *it = '.';
                             it++;
                         }
-                        constexpr auto sn = structName(tag);
+                        constexpr auto sn = structName(Tag{});
                         constexprCopy(sn.begin(), sn.end(), it);
                         it += sn.size();
                     }
