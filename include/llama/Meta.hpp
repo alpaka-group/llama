@@ -16,7 +16,8 @@ namespace llama
     {
         // adapted from boost::mp11, but with LLAMA_FN_HOST_ACC_INLINE
         template<template<typename...> typename L, typename... T, typename F>
-        LLAMA_FN_HOST_ACC_INLINE constexpr void mpForEachInlined(L<T...>, F&& f)
+        // NOLINTNEXTLINE(readability-identifier-naming)
+        LLAMA_FN_HOST_ACC_INLINE constexpr void mp_for_each_inline_impl(L<T...>, F&& f)
         {
             using A = int[sizeof...(T)];
             (void) A{((void) f(T{}), 0)...};
@@ -51,6 +52,14 @@ namespace llama
             using type = E<typename ReplacePlaceholdersImpl<Ts, Args...>::type...>;
         };
     } // namespace internal
+
+    /// Like boost::mp11::mp_for_each, but marked with LLAMA_FN_HOST_ACC_INLINE
+    template<typename L, typename F>
+    // NOLINTNEXTLINE(readability-identifier-naming)
+    LLAMA_FN_HOST_ACC_INLINE constexpr void mp_for_each_inline(F&& f)
+    {
+        internal::mp_for_each_inline_impl(mp_rename<L, mp_list>{}, std::forward<F>(f));
+    }
 
     LLAMA_EXPORT
     template<typename Expression, typename... Args>

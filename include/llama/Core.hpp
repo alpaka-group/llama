@@ -436,8 +436,7 @@ namespace llama
     LLAMA_FN_HOST_ACC_INLINE constexpr void forEachLeafCoord(Functor&& functor, RecordCoord<Coords...> baseCoord)
     {
         LLAMA_BEGIN_SUPPRESS_HOST_DEVICE_WARNING
-        internal::mpForEachInlined(
-            LeafRecordCoords<GetType<RecordDim, RecordCoord<Coords...>>>{},
+        mp_for_each_inline<LeafRecordCoords<GetType<RecordDim, RecordCoord<Coords...>>>>(
             [&](auto innerCoord) LLAMA_LAMBDA_INLINE_WITH_SPECIFIERS(constexpr)
             { std::forward<Functor>(functor)(cat(baseCoord, innerCoord)); });
         LLAMA_END_SUPPRESS_HOST_DEVICE_WARNING
