@@ -302,7 +302,7 @@ namespace llama
             constexpr auto size = [&]() constexpr
             {
                 std::size_t s = 0;
-                mp_for_each<Tags>(
+                mp_for_each_inline<Tags>(
                     [&](auto tag)
                     {
                         using Tag = decltype(tag);
@@ -325,7 +325,7 @@ namespace llama
             llama::Array<char, size> a{};
             auto it = a.begin();
 
-            mp_for_each<Tags>(
+            mp_for_each_inline<Tags>(
                 [&](auto tag) constexpr
                 {
                     using Tag = decltype(tag);

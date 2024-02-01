@@ -79,7 +79,7 @@ namespace llama
     {
         using FRD = FlatRecordDim<RecordDim>;
         std::size_t lanes = simdLanes<MakeSimd<mp_first<FRD>>>;
-        mp_for_each<mp_transform<std::add_pointer_t, mp_drop_c<FRD, 1>>>(
+        mp_for_each_inline<mp_transform<std::add_pointer_t, mp_drop_c<FRD, 1>>>(
             [&](auto* t)
             {
                 using T = std::remove_reference_t<decltype(*t)>;

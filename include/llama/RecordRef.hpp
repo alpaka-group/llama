@@ -803,7 +803,7 @@ namespace llama
         os << "{";
         if constexpr(std::is_array_v<RecordDim>)
         {
-            mp_for_each<mp_iota_c<std::extent_v<RecordDim>>>(
+            mp_for_each_inline<mp_iota_c<std::extent_v<RecordDim>>>(
                 [&](auto ic)
                 {
                     constexpr std::size_t i = decltype(ic)::value;
@@ -814,7 +814,7 @@ namespace llama
         }
         else
         {
-            mp_for_each<mp_iota<mp_size<RecordDim>>>(
+            mp_for_each_inline<mp_iota<mp_size<RecordDim>>>(
                 [&](auto ic)
                 {
                     constexpr std::size_t i = decltype(ic)::value;
