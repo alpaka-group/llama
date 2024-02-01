@@ -268,27 +268,36 @@ namespace llama
                     std::memcpy(mapDst(dstIndex, rc), threadSrc, bytes);
                     threadSrc += bytes;
                 };
+
+                // if the AoSoA is packed we can move the src pointer along
                 if constexpr(srcIsAoSoA)
                 {
-                    auto* threadSrc = mapSrc(start, RecordCoord<>{});
-                    for(std::size_t i = start; i < stop; i += lanesSrc)
-                        forEachLeafCoord<RecordDim>(
-                            [&](auto rc) LLAMA_LAMBDA_INLINE
-                            {
-                                for(std::size_t j = 0; j < lanesSrc; j += l)
-                                    copyLBlock(threadSrc, i + j, rc);
-                            });
+                    if constexpr(SrcMapping::fieldAlignment == mapping::FieldAlignment::Pack)
+                    {
+                        auto* threadSrc = mapSrc(start, RecordCoord<>{});
+                        for(std::size_t i = start; i < stop; i += lanesSrc)
+                            forEachLeafCoord<RecordDim>(
+                                [&](auto rc) LLAMA_LAMBDA_INLINE
+                                {
+                                    for(std::size_t j = 0; j < lanesSrc; j += l)
+                                    {
+                                        assert(threadSrc == mapSrc(i + j, rc));
+                                        copyLBlock(threadSrc, i + j, rc);
+                                    }
+                                });
+                        return;
+                    }
                 }
-                else
-                {
-                    forEachLeafCoord<RecordDim>(
-                        [&](auto rc) LLAMA_LAMBDA_INLINE
+
+                forEachLeafCoord<RecordDim>(
+                    [&](auto rc) LLAMA_LAMBDA_INLINE
+                    {
+                        for(std::size_t i = start; i < stop; i += l)
                         {
-                            auto* threadSrc = mapSrc(start, rc);
-                            for(std::size_t i = start; i < stop; i += l)
-                                copyLBlock(threadSrc, i, rc);
-                        });
-                }
+                            auto* threadSrc = mapSrc(i, rc);
+                            copyLBlock(threadSrc, i, rc);
+                        }
+                    });
             }
         }
         else
@@ -306,27 +315,36 @@ namespace llama
                     std::memcpy(threadDst, mapSrc(srcIndex, rc), bytes);
                     threadDst += bytes;
                 };
+
+                // if the AoSoA is packed we can move the dst pointer along
                 if constexpr(dstIsAoSoA)
                 {
-                    auto* threadDst = mapDst(start, RecordCoord<>{});
-                    for(std::size_t i = start; i < stop; i += lanesDst)
-                        forEachLeafCoord<RecordDim>(
-                            [&](auto rc) LLAMA_LAMBDA_INLINE
-                            {
-                                for(std::size_t j = 0; j < lanesDst; j += l)
-                                    copyLBlock(threadDst, i + j, rc);
-                            });
+                    if constexpr(DstMapping::fieldAlignment == mapping::FieldAlignment::Pack)
+                    {
+                        auto* threadDst = mapDst(start, RecordCoord<>{});
+                        for(std::size_t i = start; i < stop; i += lanesDst)
+                            forEachLeafCoord<RecordDim>(
+                                [&](auto rc) LLAMA_LAMBDA_INLINE
+                                {
+                                    for(std::size_t j = 0; j < lanesDst; j += l)
+                                    {
+                                        assert(threadDst == mapDst(i + j, rc));
+                                        copyLBlock(threadDst, i + j, rc);
+                                    }
+                                });
+                        return;
+                    }
                 }
-                else
-                {
-                    forEachLeafCoord<RecordDim>(
-                        [&](auto rc) LLAMA_LAMBDA_INLINE
+
+                forEachLeafCoord<RecordDim>(
+                    [&](auto rc) LLAMA_LAMBDA_INLINE
+                    {
+                        for(std::size_t i = start; i < stop; i += l)
                         {
-                            auto* threadDst = mapDst(start, rc);
-                            for(std::size_t i = start; i < stop; i += l)
-                                copyLBlock(threadDst, i, rc);
-                        });
-                }
+                            auto* threadDst = mapDst(i, rc);
+                            copyLBlock(threadDst, i, rc);
+                        }
+                    });
             }
         }
     }
