@@ -397,11 +397,11 @@ $data << EOD
     using Mappings = mp_list<
         // llama::mapping::PackedAoS<ArrayExtents, RecordDim>,
         llama::mapping::AlignedAoS<ArrayExtents, RecordDim>,
-        llama::mapping::AlignedSingleBlobSoA<ArrayExtents, RecordDim>,
+        // llama::mapping::AlignedSingleBlobSoA<ArrayExtents, RecordDim>,
         llama::mapping::MultiBlobSoA<ArrayExtents, RecordDim>,
         llama::mapping::AoSoA<ArrayExtents, RecordDim, 8>,
         llama::mapping::AoSoA<ArrayExtents, RecordDim, 32>>;
-    std::string_view mappingNames[] = {/*"AoS P",*/ "AoS A", "SoA SB", "SoA MB", "AoSoA8", "AoSoA32"};
+    std::string_view mappingNames[] = {/*"AoS P",*/ "AoS A", /*"SoA SB",*/ "SoA MB", "AoSoA8", "AoSoA32"};
     mp_for_each<mp_iota<mp_size<Mappings>>>(
         [&]<typename I>(I)
         {
