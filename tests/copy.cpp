@@ -153,19 +153,10 @@ TEMPLATE_LIST_TEST_CASE("fieldWiseCopy", "", AllMappingsProduct)
 }
 
 // NOLINTNEXTLINE(cert-err58-cpp)
-TEMPLATE_LIST_TEST_CASE("aosoaCommonBlockCopy.readOpt", "", AoSoAMappingsProduct)
+TEMPLATE_LIST_TEST_CASE("aosoaCommonBlockCopy", "", AoSoAMappingsProduct)
 {
     using SrcMapping = mp_first<TestType>;
     using DstMapping = mp_second<TestType>;
     testCopy<SrcMapping, DstMapping>([](const auto& srcView, auto& dstView)
-                                     { llama::aosoaCommonBlockCopy(srcView, dstView, true); });
-}
-
-// NOLINTNEXTLINE(cert-err58-cpp)
-TEMPLATE_LIST_TEST_CASE("aosoaCommonBlockCopy.writeOpt", "", AoSoAMappingsProduct)
-{
-    using SrcMapping = mp_first<TestType>;
-    using DstMapping = mp_second<TestType>;
-    testCopy<SrcMapping, DstMapping>([](const auto& srcView, auto& dstView)
-                                     { llama::aosoaCommonBlockCopy(srcView, dstView, false); });
+                                     { llama::aosoaCommonBlockCopy(srcView, dstView); });
 }

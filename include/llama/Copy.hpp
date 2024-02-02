@@ -190,7 +190,6 @@ namespace llama
     void aosoaCommonBlockCopy(
         const View<SrcMapping, SrcBlob>& srcView,
         View<DstMapping, DstBlob>& dstView,
-        bool readOpt,
         std::size_t threadId = 0,
         std::size_t threadCount = 1)
     {
@@ -253,11 +252,12 @@ namespace llama
                 return std::gcd(lanesSrc, lanesDst);
             return std::min(lanesSrc, lanesDst);
         }();
-        if(readOpt)
+        if constexpr(lanesSrc < lanesDst)
         {
+            static_assert(srcIsAoSoA);
+
             // optimized for linear reading
-            constexpr auto srcL = srcIsAoSoA ? lanesSrc : l;
-            const auto elementsPerThread = flatSize / srcL / threadCount * srcL;
+            const auto elementsPerThread = flatSize / lanesSrc / threadCount * lanesSrc;
             const auto start = threadId * elementsPerThread;
             const auto stop = threadId == threadCount - 1 ? flatSize : (threadId + 1) * elementsPerThread;
 
@@ -269,56 +269,41 @@ namespace llama
             };
 
             // if the AoSoA is packed we can move the src pointer along
-            if constexpr(srcIsAoSoA)
+            if constexpr(SrcMapping::fieldAlignment == mapping::FieldAlignment::Pack)
             {
-                if constexpr(SrcMapping::fieldAlignment == mapping::FieldAlignment::Pack)
-                {
-                    auto* threadSrc = mapSrc(start, RecordCoord<>{});
-                    for(std::size_t i = start; i < stop; i += lanesSrc)
-                        forEachLeafCoord<RecordDim>(
-                            [&](auto rc) LLAMA_LAMBDA_INLINE
+                auto* threadSrc = mapSrc(start, RecordCoord<>{});
+                for(std::size_t i = start; i < stop; i += lanesSrc)
+                    forEachLeafCoord<RecordDim>(
+                        [&](auto rc) LLAMA_LAMBDA_INLINE
+                        {
+                            for(std::size_t j = 0; j < lanesSrc; j += l)
                             {
-                                for(std::size_t j = 0; j < lanesSrc; j += l)
-                                {
-                                    assert(threadSrc == mapSrc(i + j, rc));
-                                    copyLBlock(threadSrc, i + j, rc);
-                                }
-                            });
-                }
-                else
-                {
-                    for(std::size_t i = start; i < stop; i += lanesSrc)
-                        forEachLeafCoord<RecordDim>(
-                            [&](auto rc) LLAMA_LAMBDA_INLINE
-                            {
-                                auto* threadSrc = mapSrc(i, rc);
-                                for(std::size_t j = 0; j < lanesSrc; j += l)
-                                {
-                                    assert(threadSrc == mapSrc(i + j, rc));
-                                    copyLBlock(threadSrc, i + j, rc);
-                                }
-                            });
-                }
+                                assert(threadSrc == mapSrc(i + j, rc));
+                                copyLBlock(threadSrc, i + j, rc);
+                            }
+                        });
             }
             else
             {
-                forEachLeafCoord<RecordDim>(
-                    [&](auto rc) LLAMA_LAMBDA_INLINE
-                    {
-                        for(std::size_t i = start; i < stop; i += l)
+                for(std::size_t i = start; i < stop; i += lanesSrc)
+                    forEachLeafCoord<RecordDim>(
+                        [&](auto rc) LLAMA_LAMBDA_INLINE
                         {
                             auto* threadSrc = mapSrc(i, rc);
-                            copyLBlock(threadSrc, i, rc);
-                        }
-                    });
+                            for(std::size_t j = 0; j < lanesSrc; j += l)
+                            {
+                                assert(threadSrc == mapSrc(i + j, rc));
+                                copyLBlock(threadSrc, i + j, rc);
+                            }
+                        });
             }
         }
         else
         {
-            // optimized for linear writing
-            constexpr auto dstL = dstIsAoSoA ? lanesDst : l;
-            const auto elementsPerThread = flatSize / dstL / threadCount * dstL;
+            static_assert(dstIsAoSoA);
 
+            // optimized for linear writing
+            const auto elementsPerThread = flatSize / lanesDst / threadCount * lanesDst;
             const auto start = threadId * elementsPerThread;
             const auto stop = threadId == threadCount - 1 ? flatSize : (threadId + 1) * elementsPerThread;
 
@@ -330,48 +315,33 @@ namespace llama
             };
 
             // if the AoSoA is packed we can move the dst pointer along
-            if constexpr(dstIsAoSoA)
+            if constexpr(DstMapping::fieldAlignment == mapping::FieldAlignment::Pack)
             {
-                if constexpr(DstMapping::fieldAlignment == mapping::FieldAlignment::Pack)
-                {
-                    auto* threadDst = mapDst(start, RecordCoord<>{});
-                    for(std::size_t i = start; i < stop; i += lanesDst)
-                        forEachLeafCoord<RecordDim>(
-                            [&](auto rc) LLAMA_LAMBDA_INLINE
+                auto* threadDst = mapDst(start, RecordCoord<>{});
+                for(std::size_t i = start; i < stop; i += lanesDst)
+                    forEachLeafCoord<RecordDim>(
+                        [&](auto rc) LLAMA_LAMBDA_INLINE
+                        {
+                            for(std::size_t j = 0; j < lanesDst; j += l)
                             {
-                                for(std::size_t j = 0; j < lanesDst; j += l)
-                                {
-                                    assert(threadDst == mapDst(i + j, rc));
-                                    copyLBlock(threadDst, i + j, rc);
-                                }
-                            });
-                }
-                else
-                {
-                    for(std::size_t i = start; i < stop; i += lanesDst)
-                        forEachLeafCoord<RecordDim>(
-                            [&](auto rc) LLAMA_LAMBDA_INLINE
-                            {
-                                auto* threadDst = mapDst(i, rc);
-                                for(std::size_t j = 0; j < lanesDst; j += l)
-                                {
-                                    assert(threadDst == mapDst(i + j, rc));
-                                    copyLBlock(threadDst, i + j, rc);
-                                }
-                            });
-                }
+                                assert(threadDst == mapDst(i + j, rc));
+                                copyLBlock(threadDst, i + j, rc);
+                            }
+                        });
             }
             else
             {
-                forEachLeafCoord<RecordDim>(
-                    [&](auto rc) LLAMA_LAMBDA_INLINE
-                    {
-                        for(std::size_t i = start; i < stop; i += l)
+                for(std::size_t i = start; i < stop; i += lanesDst)
+                    forEachLeafCoord<RecordDim>(
+                        [&](auto rc) LLAMA_LAMBDA_INLINE
                         {
                             auto* threadDst = mapDst(i, rc);
-                            copyLBlock(threadDst, i, rc);
-                        }
-                    });
+                            for(std::size_t j = 0; j < lanesDst; j += l)
+                            {
+                                assert(threadDst == mapDst(i + j, rc));
+                                copyLBlock(threadDst, i + j, rc);
+                            }
+                        });
             }
         }
     }
@@ -430,8 +400,7 @@ namespace llama
             std::size_t threadId,
             std::size_t threadCount)
         {
-            constexpr auto readOpt = LanesSrc < LanesDst; // read contiguously on the AoSoA with the smaller lane count
-            aosoaCommonBlockCopy(srcView, dstView, readOpt, threadId, threadCount);
+            aosoaCommonBlockCopy(srcView, dstView, threadId, threadCount);
         }
     };
 
@@ -462,8 +431,7 @@ namespace llama
             std::size_t threadId,
             std::size_t threadCount)
         {
-            constexpr auto readOpt = true; // read contiguously on the AoSoA
-            aosoaCommonBlockCopy(srcView, dstView, readOpt, threadId, threadCount);
+            aosoaCommonBlockCopy(srcView, dstView, threadId, threadCount);
         }
     };
 
@@ -494,8 +462,7 @@ namespace llama
             std::size_t threadId,
             std::size_t threadCount)
         {
-            constexpr auto readOpt = false; // read contiguously on the AoSoA
-            aosoaCommonBlockCopy(srcView, dstView, readOpt, threadId, threadCount);
+            aosoaCommonBlockCopy(srcView, dstView, threadId, threadCount);
         }
     };
 
