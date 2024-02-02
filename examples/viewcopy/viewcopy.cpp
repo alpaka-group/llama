@@ -221,20 +221,35 @@ void benchmarkMemcopy(std::size_t dataSize, std::ostream& plotFile)
 #ifdef __AVX2__
     run("memcpy_avx2", memcpyAVX2);
 #endif
-    run("memcpy(p)",
-        [&](auto* dst, auto* src, auto size)
-        {
+    if constexpr(runParallelVersions)
+    {
+        run("memcpy(p)",
+            [&](auto* dst, auto* src, auto size)
+            {
 #pragma omp parallel
-            llama::internal::parallelMemcpy(dst, src, size, omp_get_thread_num(), omp_get_num_threads(), std::memcpy);
-        });
+                llama::internal::parallelMemcpy(
+                    dst,
+                    src,
+                    size,
+                    omp_get_thread_num(),
+                    omp_get_num_threads(),
+                    std::memcpy);
+            });
 #ifdef __AVX2__
-    run("memcpy_avx2(p)",
-        [&](auto* dst, auto* src, auto size)
-        {
+        run("memcpy_avx2(p)",
+            [&](auto* dst, auto* src, auto size)
+            {
 #    pragma omp parallel
-            llama::internal::parallelMemcpy(dst, src, size, omp_get_thread_num(), omp_get_num_threads(), memcpyAVX2);
-        });
+                llama::internal::parallelMemcpy(
+                    dst,
+                    src,
+                    size,
+                    omp_get_thread_num(),
+                    omp_get_num_threads(),
+                    memcpyAVX2);
+            });
 #endif
+    }
 }
 
 auto main() -> int
