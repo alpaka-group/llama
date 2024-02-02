@@ -259,349 +259,343 @@ $(document).ready(function(){initNavTree('Copy_8hpp_source.html',''); initResiza
 <div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160; </div>
 <div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;    <a class="code" href="macros_8hpp.html#a331ec86158a0a6dd5c81714f9766eae1">LLAMA_EXPORT</a></div>
 <div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> SrcMapping, <span class="keyword">typename</span> SrcBlob, <span class="keyword">typename</span> DstMapping, <span class="keyword">typename</span> DstBlob&gt;</div>
-<div class="line"><a name="l00190"></a><span class="lineno"><a class="line" href="namespacellama.html#abaefce711ff5d4566ea761ef08fab469">  190</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="namespacellama.html#abaefce711ff5d4566ea761ef08fab469">aosoaCommonBlockCopy</a>(</div>
+<div class="line"><a name="l00190"></a><span class="lineno"><a class="line" href="namespacellama.html#a5709142c6bdd979cd192f9bd6179efe9">  190</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="namespacellama.html#a5709142c6bdd979cd192f9bd6179efe9">aosoaCommonBlockCopy</a>(</div>
 <div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;        <span class="keyword">const</span> <a class="code" href="structllama_1_1View.html">View&lt;SrcMapping, SrcBlob&gt;</a>&amp; srcView,</div>
 <div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;        <a class="code" href="structllama_1_1View.html">View&lt;DstMapping, DstBlob&gt;</a>&amp; dstView,</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;        <span class="keywordtype">bool</span> readOpt,</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;        std::size_t threadId = 0,</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;        std::size_t threadCount = 1)</div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;    {</div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;        static_assert(</div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;            mapping::isAoSoA&lt;SrcMapping&gt; || mapping::isSoA&lt;SrcMapping&gt;,</div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;            <span class="stringliteral">&quot;Only AoSoA and SoA mappings allowed as source&quot;</span>);</div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;        static_assert(</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;            mapping::isAoSoA&lt;DstMapping&gt; || mapping::isSoA&lt;DstMapping&gt;,</div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;            <span class="stringliteral">&quot;Only AoSoA and SoA mappings allowed as destination&quot;</span>);</div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160; </div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;        <span class="comment">// TODO(bgruber): think if we can remove this restriction</span></div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;        static_assert(</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;            std::is_same_v&lt;typename SrcMapping::RecordDim, typename DstMapping::RecordDim&gt;,</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;            <span class="stringliteral">&quot;The source and destination record dimensions must be the same&quot;</span>);</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;        static_assert(</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;            std::is_same_v&lt;</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;                <span class="keyword">typename</span> SrcMapping::LinearizeArrayIndexFunctor,</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;                <span class="keyword">typename</span> DstMapping::LinearizeArrayIndexFunctor&gt;,</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;            <span class="stringliteral">&quot;Source and destination mapping need to use the same array dimensions linearizer&quot;</span>);</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;        <span class="keyword">using</span> RecordDim = <span class="keyword">typename</span> SrcMapping::RecordDim;</div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;        internal::assertTrivialCopyable&lt;RecordDim&gt;();</div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160; </div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;        <span class="keyword">static</span> constexpr <span class="keyword">auto</span> lanesSrc = internal::aosoaLanes&lt;SrcMapping&gt;;</div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;        <span class="keyword">static</span> constexpr <span class="keyword">auto</span> lanesDst = internal::aosoaLanes&lt;DstMapping&gt;;</div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160; </div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;        <span class="keywordflow">if</span>(srcView.<a class="code" href="structllama_1_1View.html#ad2cffd2465f0ff9217d8797b52757faa">extents</a>() != dstView.<a class="code" href="structllama_1_1View.html#ad2cffd2465f0ff9217d8797b52757faa">extents</a>())</div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;            <span class="keywordflow">throw</span> std::runtime_error{<span class="stringliteral">&quot;Array dimensions sizes are different&quot;</span>};</div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160; </div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;        <span class="keyword">static</span> constexpr <span class="keyword">auto</span> srcIsAoSoA = lanesSrc != std::numeric_limits&lt;std::size_t&gt;::max();</div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;        <span class="keyword">static</span> constexpr <span class="keyword">auto</span> dstIsAoSoA = lanesDst != std::numeric_limits&lt;std::size_t&gt;::max();</div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160; </div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;        static_assert(srcIsAoSoA || dstIsAoSoA, <span class="stringliteral">&quot;At least one of the mappings must be an AoSoA mapping&quot;</span>);</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;        static_assert(!srcIsAoSoA || SrcMapping::blobCount == 1, <span class="stringliteral">&quot;Implementation assumes AoSoA with single blob&quot;</span>);</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;        static_assert(!dstIsAoSoA || DstMapping::blobCount == 1, <span class="stringliteral">&quot;Implementation assumes AoSoA with single blob&quot;</span>);</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160; </div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;        <span class="keyword">const</span> <span class="keyword">auto</span> flatSize = <a class="code" href="namespacellama.html#abab7973f7686f93f02ad33e4d0636a25">product</a>(dstView.<a class="code" href="structllama_1_1View.html#ad2cffd2465f0ff9217d8797b52757faa">extents</a>());</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160; </div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;        <span class="comment">// TODO(bgruber): implement the following by adding additional copy loops for the remaining elements</span></div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;        <span class="keywordflow">if</span>(!srcIsAoSoA &amp;&amp; flatSize % lanesDst != 0)</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;            <span class="keywordflow">throw</span> std::runtime_error{<span class="stringliteral">&quot;Source SoA mapping&#39;s total array elements must be evenly divisible by the &quot;</span></div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;                                     <span class="stringliteral">&quot;destination AoSoA Lane count.&quot;</span>};</div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;        <span class="keywordflow">if</span>(!dstIsAoSoA &amp;&amp; flatSize % lanesSrc != 0)</div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;            <span class="keywordflow">throw</span> std::runtime_error{<span class="stringliteral">&quot;Destination SoA mapping&#39;s total array elements must be evenly divisible by the &quot;</span></div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;                                     <span class="stringliteral">&quot;source AoSoA Lane count.&quot;</span>};</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160; </div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;        <span class="keyword">auto</span> mapSrc = [&amp;](std::size_t flatArrayIndex, <span class="keyword">auto</span> rc) <a class="code" href="macros_8hpp.html#a5a40ca12db507af3cf9cbff655513aca">LLAMA_LAMBDA_INLINE</a></div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;        {</div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;            <span class="keyword">const</span> <span class="keyword">auto</span> [blob, off] = srcView.<a class="code" href="structllama_1_1View.html#a02995d9561c50196f5efae24031c0af6">mapping</a>().blobNrAndOffset(flatArrayIndex, rc);</div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;            <span class="keywordflow">return</span> &amp;srcView.<a class="code" href="structllama_1_1View.html#a3ee1bbe6eecc3323a2b821bdfcb99d64">blobs</a>()[blob][off];</div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;        };</div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;        <span class="keyword">auto</span> mapDst = [&amp;](std::size_t flatArrayIndex, <span class="keyword">auto</span> rc) <a class="code" href="macros_8hpp.html#a5a40ca12db507af3cf9cbff655513aca">LLAMA_LAMBDA_INLINE</a></div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;        {</div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;            <span class="keyword">const</span> <span class="keyword">auto</span> [blob, off] = dstView.<a class="code" href="structllama_1_1View.html#a02995d9561c50196f5efae24031c0af6">mapping</a>().blobNrAndOffset(flatArrayIndex, rc);</div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;            <span class="keywordflow">return</span> &amp;dstView.<a class="code" href="structllama_1_1View.html#a3ee1bbe6eecc3323a2b821bdfcb99d64">blobs</a>()[blob][off];</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;        };</div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160; </div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;        <span class="keyword">static</span> constexpr <span class="keyword">auto</span> l = []</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;        {</div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;            <span class="keywordflow">if</span> constexpr(srcIsAoSoA &amp;&amp; dstIsAoSoA)</div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;                <span class="keywordflow">return</span> std::gcd(lanesSrc, lanesDst);</div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;            <span class="keywordflow">return</span> std::min(lanesSrc, lanesDst);</div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;        }();</div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;        <span class="keywordflow">if</span>(readOpt)</div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;        {</div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;            <span class="comment">// optimized for linear reading</span></div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;            constexpr <span class="keyword">auto</span> srcL = srcIsAoSoA ? lanesSrc : l;</div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;            <span class="keyword">const</span> <span class="keyword">auto</span> elementsPerThread = flatSize / srcL / threadCount * srcL;</div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;            {</div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;                <span class="keyword">const</span> <span class="keyword">auto</span> start = threadId * elementsPerThread;</div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;                <span class="keyword">const</span> <span class="keyword">auto</span> stop = threadId == threadCount - 1 ? flatSize : (threadId + 1) * elementsPerThread;</div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160; </div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;                <span class="keyword">auto</span> copyLBlock = [&amp;](<span class="keyword">const</span> std::byte*&amp; threadSrc, std::size_t dstIndex, <span class="keyword">auto</span> rc) <a class="code" href="macros_8hpp.html#a5a40ca12db507af3cf9cbff655513aca">LLAMA_LAMBDA_INLINE</a></div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;                {</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;                    constexpr <span class="keyword">auto</span> bytes = l * <span class="keyword">sizeof</span>(<a class="code" href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">GetType</a>&lt;RecordDim, decltype(rc)&gt;);</div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;                    <a class="code" href="namespacellama_1_1internal.html#ae7d043343c1a60a7ceb75ba7c06e4c18">std::memcpy</a>(mapDst(dstIndex, rc), threadSrc, bytes);</div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;                    threadSrc += bytes;</div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;                };</div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160; </div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;                <span class="comment">// if the AoSoA is packed we can move the src pointer along</span></div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;                <span class="keywordflow">if</span> constexpr(srcIsAoSoA)</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;                {</div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;                    <span class="keywordflow">if</span> constexpr(SrcMapping::fieldAlignment == <a class="code" href="namespacellama_1_1mapping.html#aeead2d9c8929b8c0aff18aad054a0710a4492081ca02b059f9e8af4ddaf0f7292">mapping::FieldAlignment::Pack</a>)</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;                    {</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;                        <span class="keyword">auto</span>* threadSrc = mapSrc(start, <a class="code" href="structllama_1_1RecordCoord_3_4.html">RecordCoord&lt;&gt;</a>{});</div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;                        <span class="keywordflow">for</span>(std::size_t i = start; i &lt; stop; i += lanesSrc)</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;                            forEachLeafCoord&lt;RecordDim&gt;(</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;                                [&amp;](<span class="keyword">auto</span> rc) <a class="code" href="macros_8hpp.html#a5a40ca12db507af3cf9cbff655513aca">LLAMA_LAMBDA_INLINE</a></div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;                                {</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;                                    <span class="keywordflow">for</span>(std::size_t j = 0; j &lt; lanesSrc; j += l)</div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;                                    {</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;                                        assert(threadSrc == mapSrc(i + j, rc));</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;                                        copyLBlock(threadSrc, i + j, rc);</div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;                                    }</div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;                                });</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;                        <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;                    }</div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;                }</div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160; </div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;                forEachLeafCoord&lt;RecordDim&gt;(</div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;                    [&amp;](<span class="keyword">auto</span> rc) <a class="code" href="macros_8hpp.html#a5a40ca12db507af3cf9cbff655513aca">LLAMA_LAMBDA_INLINE</a></div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;                    {</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;                        <span class="keywordflow">for</span>(std::size_t i = start; i &lt; stop; i += l)</div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;                        {</div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;                            <span class="keyword">auto</span>* threadSrc = mapSrc(i, rc);</div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;                            copyLBlock(threadSrc, i, rc);</div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;                        }</div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;                    });</div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;            }</div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;        }</div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;        <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;        {</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;        std::size_t threadId = 0,</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;        std::size_t threadCount = 1)</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;    {</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;        static_assert(</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;            mapping::isAoSoA&lt;SrcMapping&gt; || mapping::isSoA&lt;SrcMapping&gt;,</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;            <span class="stringliteral">&quot;Only AoSoA and SoA mappings allowed as source&quot;</span>);</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;        static_assert(</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;            mapping::isAoSoA&lt;DstMapping&gt; || mapping::isSoA&lt;DstMapping&gt;,</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;            <span class="stringliteral">&quot;Only AoSoA and SoA mappings allowed as destination&quot;</span>);</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160; </div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;        <span class="comment">// TODO(bgruber): think if we can remove this restriction</span></div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;        static_assert(</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;            std::is_same_v&lt;typename SrcMapping::RecordDim, typename DstMapping::RecordDim&gt;,</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;            <span class="stringliteral">&quot;The source and destination record dimensions must be the same&quot;</span>);</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;        static_assert(</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;            std::is_same_v&lt;</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;                <span class="keyword">typename</span> SrcMapping::LinearizeArrayIndexFunctor,</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;                <span class="keyword">typename</span> DstMapping::LinearizeArrayIndexFunctor&gt;,</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;            <span class="stringliteral">&quot;Source and destination mapping need to use the same array dimensions linearizer&quot;</span>);</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;        <span class="keyword">using</span> RecordDim = <span class="keyword">typename</span> SrcMapping::RecordDim;</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;        internal::assertTrivialCopyable&lt;RecordDim&gt;();</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160; </div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;        <span class="keyword">static</span> constexpr <span class="keyword">auto</span> lanesSrc = internal::aosoaLanes&lt;SrcMapping&gt;;</div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;        <span class="keyword">static</span> constexpr <span class="keyword">auto</span> lanesDst = internal::aosoaLanes&lt;DstMapping&gt;;</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160; </div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;        <span class="keywordflow">if</span>(srcView.<a class="code" href="structllama_1_1View.html#ad2cffd2465f0ff9217d8797b52757faa">extents</a>() != dstView.<a class="code" href="structllama_1_1View.html#ad2cffd2465f0ff9217d8797b52757faa">extents</a>())</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;            <span class="keywordflow">throw</span> std::runtime_error{<span class="stringliteral">&quot;Array dimensions sizes are different&quot;</span>};</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160; </div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;        <span class="keyword">static</span> constexpr <span class="keyword">auto</span> srcIsAoSoA = lanesSrc != std::numeric_limits&lt;std::size_t&gt;::max();</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;        <span class="keyword">static</span> constexpr <span class="keyword">auto</span> dstIsAoSoA = lanesDst != std::numeric_limits&lt;std::size_t&gt;::max();</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160; </div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;        static_assert(srcIsAoSoA || dstIsAoSoA, <span class="stringliteral">&quot;At least one of the mappings must be an AoSoA mapping&quot;</span>);</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;        static_assert(!srcIsAoSoA || SrcMapping::blobCount == 1, <span class="stringliteral">&quot;Implementation assumes AoSoA with single blob&quot;</span>);</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;        static_assert(!dstIsAoSoA || DstMapping::blobCount == 1, <span class="stringliteral">&quot;Implementation assumes AoSoA with single blob&quot;</span>);</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160; </div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;        <span class="keyword">const</span> <span class="keyword">auto</span> flatSize = <a class="code" href="namespacellama.html#abab7973f7686f93f02ad33e4d0636a25">product</a>(dstView.<a class="code" href="structllama_1_1View.html#ad2cffd2465f0ff9217d8797b52757faa">extents</a>());</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160; </div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;        <span class="comment">// TODO(bgruber): implement the following by adding additional copy loops for the remaining elements</span></div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;        <span class="keywordflow">if</span>(!srcIsAoSoA &amp;&amp; flatSize % lanesDst != 0)</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;            <span class="keywordflow">throw</span> std::runtime_error{<span class="stringliteral">&quot;Source SoA mapping&#39;s total array elements must be evenly divisible by the &quot;</span></div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;                                     <span class="stringliteral">&quot;destination AoSoA Lane count.&quot;</span>};</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;        <span class="keywordflow">if</span>(!dstIsAoSoA &amp;&amp; flatSize % lanesSrc != 0)</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;            <span class="keywordflow">throw</span> std::runtime_error{<span class="stringliteral">&quot;Destination SoA mapping&#39;s total array elements must be evenly divisible by the &quot;</span></div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;                                     <span class="stringliteral">&quot;source AoSoA Lane count.&quot;</span>};</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160; </div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;        <span class="keyword">auto</span> mapSrc = [&amp;](std::size_t flatArrayIndex, <span class="keyword">auto</span> rc) <a class="code" href="macros_8hpp.html#a5a40ca12db507af3cf9cbff655513aca">LLAMA_LAMBDA_INLINE</a></div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;        {</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;            <span class="keyword">const</span> <span class="keyword">auto</span> [blob, off] = srcView.<a class="code" href="structllama_1_1View.html#a02995d9561c50196f5efae24031c0af6">mapping</a>().blobNrAndOffset(flatArrayIndex, rc);</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;            <span class="keywordflow">return</span> &amp;srcView.<a class="code" href="structllama_1_1View.html#a3ee1bbe6eecc3323a2b821bdfcb99d64">blobs</a>()[blob][off];</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;        };</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;        <span class="keyword">auto</span> mapDst = [&amp;](std::size_t flatArrayIndex, <span class="keyword">auto</span> rc) <a class="code" href="macros_8hpp.html#a5a40ca12db507af3cf9cbff655513aca">LLAMA_LAMBDA_INLINE</a></div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;        {</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;            <span class="keyword">const</span> <span class="keyword">auto</span> [blob, off] = dstView.<a class="code" href="structllama_1_1View.html#a02995d9561c50196f5efae24031c0af6">mapping</a>().blobNrAndOffset(flatArrayIndex, rc);</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;            <span class="keywordflow">return</span> &amp;dstView.<a class="code" href="structllama_1_1View.html#a3ee1bbe6eecc3323a2b821bdfcb99d64">blobs</a>()[blob][off];</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;        };</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160; </div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;        <span class="keyword">static</span> constexpr <span class="keyword">auto</span> l = []</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;        {</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;            <span class="keywordflow">if</span> constexpr(srcIsAoSoA &amp;&amp; dstIsAoSoA)</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;                <span class="keywordflow">return</span> std::gcd(lanesSrc, lanesDst);</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;            <span class="keywordflow">return</span> std::min(lanesSrc, lanesDst);</div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;        }();</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;        <span class="keywordflow">if</span> constexpr(lanesSrc &lt; lanesDst)</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;        {</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;            static_assert(srcIsAoSoA);</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160; </div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;            <span class="comment">// optimized for linear reading</span></div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;            <span class="keyword">const</span> <span class="keyword">auto</span> elementsPerThread = flatSize / lanesSrc / threadCount * lanesSrc;</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;            <span class="keyword">const</span> <span class="keyword">auto</span> start = threadId * elementsPerThread;</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;            <span class="keyword">const</span> <span class="keyword">auto</span> stop = threadId == threadCount - 1 ? flatSize : (threadId + 1) * elementsPerThread;</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160; </div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;            <span class="keyword">auto</span> copyLBlock = [&amp;](<span class="keyword">const</span> std::byte*&amp; threadSrc, std::size_t dstIndex, <span class="keyword">auto</span> rc) <a class="code" href="macros_8hpp.html#a5a40ca12db507af3cf9cbff655513aca">LLAMA_LAMBDA_INLINE</a></div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;            {</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;                constexpr <span class="keyword">auto</span> bytes = l * <span class="keyword">sizeof</span>(<a class="code" href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">GetType</a>&lt;RecordDim, decltype(rc)&gt;);</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;                <a class="code" href="namespacellama_1_1internal.html#ae7d043343c1a60a7ceb75ba7c06e4c18">std::memcpy</a>(mapDst(dstIndex, rc), threadSrc, bytes);</div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;                threadSrc += bytes;</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;            };</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160; </div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;            <span class="comment">// if the AoSoA is packed we can move the src pointer along</span></div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;            <span class="keywordflow">if</span> constexpr(SrcMapping::fieldAlignment == <a class="code" href="namespacellama_1_1mapping.html#aeead2d9c8929b8c0aff18aad054a0710a4492081ca02b059f9e8af4ddaf0f7292">mapping::FieldAlignment::Pack</a>)</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;            {</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;                <span class="keyword">auto</span>* threadSrc = mapSrc(start, <a class="code" href="structllama_1_1RecordCoord_3_4.html">RecordCoord&lt;&gt;</a>{});</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;                <span class="keywordflow">for</span>(std::size_t i = start; i &lt; stop; i += lanesSrc)</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;                    forEachLeafCoord&lt;RecordDim&gt;(</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;                        [&amp;](<span class="keyword">auto</span> rc) <a class="code" href="macros_8hpp.html#a5a40ca12db507af3cf9cbff655513aca">LLAMA_LAMBDA_INLINE</a></div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;                        {</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;                            <span class="keywordflow">for</span>(std::size_t j = 0; j &lt; lanesSrc; j += l)</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;                            {</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;                                assert(threadSrc == mapSrc(i + j, rc));</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;                                copyLBlock(threadSrc, i + j, rc);</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;                            }</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;                        });</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;            }</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;            {</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;                <span class="keywordflow">for</span>(std::size_t i = start; i &lt; stop; i += lanesSrc)</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;                    forEachLeafCoord&lt;RecordDim&gt;(</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;                        [&amp;](<span class="keyword">auto</span> rc) <a class="code" href="macros_8hpp.html#a5a40ca12db507af3cf9cbff655513aca">LLAMA_LAMBDA_INLINE</a></div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;                        {</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;                            <span class="keyword">auto</span>* threadSrc = mapSrc(i, rc);</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;                            <span class="keywordflow">for</span>(std::size_t j = 0; j &lt; lanesSrc; j += l)</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;                            {</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;                                assert(threadSrc == mapSrc(i + j, rc));</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;                                copyLBlock(threadSrc, i + j, rc);</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;                            }</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;                        });</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;            }</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;        }</div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;        <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;        {</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;            static_assert(dstIsAoSoA);</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160; </div>
 <div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;            <span class="comment">// optimized for linear writing</span></div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;            constexpr <span class="keyword">auto</span> dstL = dstIsAoSoA ? lanesDst : l;</div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;            <span class="keyword">const</span> <span class="keyword">auto</span> elementsPerThread = flatSize / dstL / threadCount * dstL;</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;            {</div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;                <span class="keyword">const</span> <span class="keyword">auto</span> start = threadId * elementsPerThread;</div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;                <span class="keyword">const</span> <span class="keyword">auto</span> stop = threadId == threadCount - 1 ? flatSize : (threadId + 1) * elementsPerThread;</div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160; </div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;                <span class="keyword">auto</span> copyLBlock = [&amp;](std::byte*&amp; threadDst, std::size_t srcIndex, <span class="keyword">auto</span> rc) <a class="code" href="macros_8hpp.html#a5a40ca12db507af3cf9cbff655513aca">LLAMA_LAMBDA_INLINE</a></div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;                {</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;                    constexpr <span class="keyword">auto</span> bytes = l * <span class="keyword">sizeof</span>(<a class="code" href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">GetType</a>&lt;RecordDim, decltype(rc)&gt;);</div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;                    <a class="code" href="namespacellama_1_1internal.html#ae7d043343c1a60a7ceb75ba7c06e4c18">std::memcpy</a>(threadDst, mapSrc(srcIndex, rc), bytes);</div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;                    threadDst += bytes;</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;                };</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160; </div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;                <span class="comment">// if the AoSoA is packed we can move the dst pointer along</span></div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;                <span class="keywordflow">if</span> constexpr(dstIsAoSoA)</div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;                {</div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;                    <span class="keywordflow">if</span> constexpr(DstMapping::fieldAlignment == <a class="code" href="namespacellama_1_1mapping.html#aeead2d9c8929b8c0aff18aad054a0710a4492081ca02b059f9e8af4ddaf0f7292">mapping::FieldAlignment::Pack</a>)</div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;                    {</div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;                        <span class="keyword">auto</span>* threadDst = mapDst(start, <a class="code" href="structllama_1_1RecordCoord_3_4.html">RecordCoord&lt;&gt;</a>{});</div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;                        <span class="keywordflow">for</span>(std::size_t i = start; i &lt; stop; i += lanesDst)</div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;                            forEachLeafCoord&lt;RecordDim&gt;(</div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;                                [&amp;](<span class="keyword">auto</span> rc) <a class="code" href="macros_8hpp.html#a5a40ca12db507af3cf9cbff655513aca">LLAMA_LAMBDA_INLINE</a></div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;                                {</div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;                                    <span class="keywordflow">for</span>(std::size_t j = 0; j &lt; lanesDst; j += l)</div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;                                    {</div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;                                        assert(threadDst == mapDst(i + j, rc));</div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;                                        copyLBlock(threadDst, i + j, rc);</div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;                                    }</div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;                                });</div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;                        <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;                    }</div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;                }</div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160; </div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;                forEachLeafCoord&lt;RecordDim&gt;(</div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;                    [&amp;](<span class="keyword">auto</span> rc) <a class="code" href="macros_8hpp.html#a5a40ca12db507af3cf9cbff655513aca">LLAMA_LAMBDA_INLINE</a></div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;                    {</div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;                        <span class="keywordflow">for</span>(std::size_t i = start; i &lt; stop; i += l)</div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;                        {</div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;                            <span class="keyword">auto</span>* threadDst = mapDst(i, rc);</div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;                            copyLBlock(threadDst, i, rc);</div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;                        }</div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;                    });</div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;            }</div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;        }</div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;    }</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160; </div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;    <a class="code" href="macros_8hpp.html#a331ec86158a0a6dd5c81714f9766eae1">LLAMA_EXPORT</a></div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> SrcMapping, <span class="keyword">typename</span> DstMapping, <span class="keyword">typename</span> SFINAE = <span class="keywordtype">void</span>&gt;</div>
-<div class="line"><a name="l00358"></a><span class="lineno"><a class="line" href="structllama_1_1Copy.html">  358</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structllama_1_1Copy.html">Copy</a></div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;    {</div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> SrcView, <span class="keyword">typename</span> DstView&gt;</div>
-<div class="line"><a name="l00361"></a><span class="lineno"><a class="line" href="structllama_1_1Copy.html#a5456c747d230db86a65cb67f67d1aa05">  361</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="structllama_1_1Copy.html#a5456c747d230db86a65cb67f67d1aa05">operator()</a>(<span class="keyword">const</span> SrcView&amp; srcView, DstView&amp; dstView, std::size_t threadId, std::size_t threadCount)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;            <a class="code" href="namespacellama.html#af977754d689a5f3cc10fd80d4b37ba1f">fieldWiseCopy</a>(srcView, dstView, threadId, threadCount);</div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;        }</div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;    };</div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160; </div>
-<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;    <a class="code" href="macros_8hpp.html#a331ec86158a0a6dd5c81714f9766eae1">LLAMA_EXPORT</a></div>
-<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> Mapping&gt;</div>
-<div class="line"><a name="l00369"></a><span class="lineno"><a class="line" href="structllama_1_1Copy_3_01Mapping_00_01Mapping_01_4.html">  369</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structllama_1_1Copy.html">Copy</a>&lt;Mapping, Mapping&gt;</div>
-<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;    {</div>
-<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> SrcView, <span class="keyword">typename</span> DstView&gt;</div>
-<div class="line"><a name="l00372"></a><span class="lineno"><a class="line" href="structllama_1_1Copy_3_01Mapping_00_01Mapping_01_4.html#a07d8bb1043f704c649aba7ec2090b4c0">  372</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="structllama_1_1Copy_3_01Mapping_00_01Mapping_01_4.html#a07d8bb1043f704c649aba7ec2090b4c0">operator()</a>(<span class="keyword">const</span> SrcView&amp; srcView, DstView&amp; dstView, std::size_t threadId, std::size_t threadCount)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;            <span class="comment">// FIXME(bgruber): need to fallback to fieldWiseCopy when elements are not trivially copyable</span></div>
-<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;            <a class="code" href="namespacellama.html#a4959ae52801ba64e6f6c3ba612de29b7">memcpyBlobs</a>(srcView, dstView, threadId, threadCount);</div>
-<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;        }</div>
-<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;    };</div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160; </div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;    <a class="code" href="macros_8hpp.html#a331ec86158a0a6dd5c81714f9766eae1">LLAMA_EXPORT</a></div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;    <span class="keyword">template</span>&lt;</div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;        <span class="keyword">typename</span> <a class="code" href="namespacellama.html#a3fccafcd85a44696a4d5e6659927b634">ArrayExtents</a>,</div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;        <span class="keyword">typename</span> RecordDim,</div>
-<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;        <span class="keyword">typename</span> LinearizeArrayIndex,</div>
-<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;        <span class="keyword">typename</span> <a class="code" href="structllama_1_1ArrayExtents.html#a26ddad4db80efe93143b86c766b9a69f">ArrayExtents::value_type</a> LanesSrc,</div>
-<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;        <span class="keyword">typename</span> <a class="code" href="structllama_1_1ArrayExtents.html#a26ddad4db80efe93143b86c766b9a69f">ArrayExtents::value_type</a> LanesDst,</div>
-<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;        <a class="code" href="namespacellama_1_1mapping.html#aeead2d9c8929b8c0aff18aad054a0710">mapping::FieldAlignment</a> AlignSrc,</div>
-<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;        <a class="code" href="namespacellama_1_1mapping.html#aeead2d9c8929b8c0aff18aad054a0710">mapping::FieldAlignment</a> AlignDst,</div>
-<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span>&gt;</div>
-<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;        <span class="keyword">typename</span> PermuteFields&gt;</div>
-<div class="line"><a name="l00390"></a><span class="lineno"><a class="line" href="structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayExtents_00_01RecordDim_00_01LanesSrc_00_01Alig1ead0624d41206bf19b261e50248c1b7.html">  390</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structllama_1_1Copy.html">Copy</a>&lt;</div>
-<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;        mapping::AoSoA&lt;ArrayExtents, RecordDim, LanesSrc, AlignSrc, LinearizeArrayIndex, PermuteFields&gt;,</div>
-<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;        <a class="code" href="structllama_1_1mapping_1_1AoSoA.html">mapping::AoSoA</a>&lt;ArrayExtents, RecordDim, LanesDst, AlignDst, LinearizeArrayIndex, PermuteFields&gt;,</div>
-<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;        std::enable_if_t&lt;LanesSrc != LanesDst&gt;&gt;</div>
-<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;    {</div>
-<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> SrcBlob, <span class="keyword">typename</span> DstBlob&gt;</div>
-<div class="line"><a name="l00396"></a><span class="lineno"><a class="line" href="structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayExtents_00_01RecordDim_00_01LanesSrc_00_01Alig1ead0624d41206bf19b261e50248c1b7.html#aca1d6b0804efcbb95548a07e5166cffb">  396</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayExtents_00_01RecordDim_00_01LanesSrc_00_01Alig1ead0624d41206bf19b261e50248c1b7.html#aca1d6b0804efcbb95548a07e5166cffb">operator()</a>(</div>
-<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;            <span class="keyword">const</span> <a class="code" href="structllama_1_1View.html">View</a>&lt;</div>
-<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;                <a class="code" href="structllama_1_1mapping_1_1AoSoA.html">mapping::AoSoA&lt;ArrayExtents, RecordDim, LanesSrc, AlignSrc, LinearizeArrayIndex, PermuteFields&gt;</a>,</div>
-<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;                SrcBlob&gt;&amp; srcView,</div>
-<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;            <a class="code" href="structllama_1_1View.html">View</a>&lt;</div>
-<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;                <a class="code" href="structllama_1_1mapping_1_1AoSoA.html">mapping::AoSoA&lt;ArrayExtents, RecordDim, LanesDst, AlignDst, LinearizeArrayIndex, PermuteFields&gt;</a>,</div>
-<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;                DstBlob&gt;&amp; dstView,</div>
-<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;            std::size_t threadId,</div>
-<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;            std::size_t threadCount)</div>
-<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;        {</div>
-<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;            constexpr <span class="keyword">auto</span> readOpt = LanesSrc &lt; LanesDst; <span class="comment">// read contiguously on the AoSoA with the smaller lane count</span></div>
-<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;            <a class="code" href="namespacellama.html#abaefce711ff5d4566ea761ef08fab469">aosoaCommonBlockCopy</a>(srcView, dstView, readOpt, threadId, threadCount);</div>
-<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;        }</div>
-<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;    };</div>
-<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160; </div>
-<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;    <a class="code" href="macros_8hpp.html#a331ec86158a0a6dd5c81714f9766eae1">LLAMA_EXPORT</a></div>
-<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;    <span class="keyword">template</span>&lt;</div>
-<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;        <span class="keyword">typename</span> <a class="code" href="namespacellama.html#a3fccafcd85a44696a4d5e6659927b634">ArrayExtents</a>,</div>
-<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;        <span class="keyword">typename</span> RecordDim,</div>
-<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;        <span class="keyword">typename</span> LinearizeArrayIndex,</div>
-<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span>&gt;</div>
-<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;        <span class="keyword">typename</span> PermuteFields,</div>
-<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;        <span class="keyword">typename</span> <a class="code" href="structllama_1_1ArrayExtents.html#a26ddad4db80efe93143b86c766b9a69f">ArrayExtents::value_type</a> LanesSrc,</div>
-<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;        <a class="code" href="namespacellama_1_1mapping.html#aeead2d9c8929b8c0aff18aad054a0710">mapping::FieldAlignment</a> AlignSrc,</div>
-<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;        <a class="code" href="namespacellama_1_1mapping.html#a79bb2d70c1866c3090d5810dd0c92cb3">mapping::Blobs</a> DstBlobs,</div>
-<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;        <a class="code" href="namespacellama_1_1mapping.html#abf047d4798871c30b501074a70374086">mapping::SubArrayAlignment</a> DstSubArrayAlignment&gt;</div>
-<div class="line"><a name="l00422"></a><span class="lineno"><a class="line" href="structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayExtents_00_01RecordDim_00_01LanesSrc_00_01Alig4bb4101c04ed9279847838623873bbbf.html">  422</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structllama_1_1Copy.html">Copy</a>&lt;</div>
-<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;        mapping::AoSoA&lt;ArrayExtents, RecordDim, LanesSrc, AlignSrc, LinearizeArrayIndex, PermuteFields&gt;,</div>
-<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;        <a class="code" href="structllama_1_1mapping_1_1SoA.html">mapping::SoA</a>&lt;ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex, PermuteFields&gt;&gt;</div>
-<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;    {</div>
-<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> SrcBlob, <span class="keyword">typename</span> DstBlob&gt;</div>
-<div class="line"><a name="l00427"></a><span class="lineno"><a class="line" href="structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayExtents_00_01RecordDim_00_01LanesSrc_00_01Alig4bb4101c04ed9279847838623873bbbf.html#a579b540da80db98cf6e878123ba3711e">  427</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayExtents_00_01RecordDim_00_01LanesSrc_00_01Alig4bb4101c04ed9279847838623873bbbf.html#a579b540da80db98cf6e878123ba3711e">operator()</a>(</div>
-<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;            <span class="keyword">const</span> <a class="code" href="structllama_1_1View.html">View</a>&lt;</div>
-<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;                <a class="code" href="structllama_1_1mapping_1_1AoSoA.html">mapping::AoSoA&lt;ArrayExtents, RecordDim, LanesSrc, AlignSrc, LinearizeArrayIndex, PermuteFields&gt;</a>,</div>
-<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;                SrcBlob&gt;&amp; srcView,</div>
-<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;            <a class="code" href="structllama_1_1View.html">View</a>&lt;</div>
-<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;                mapping::</div>
-<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;                    SoA&lt;ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex, PermuteFields&gt;,</div>
-<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;                DstBlob&gt;&amp; dstView,</div>
-<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;            std::size_t threadId,</div>
-<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;            std::size_t threadCount)</div>
-<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;        {</div>
-<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;            constexpr <span class="keyword">auto</span> readOpt = <span class="keyword">true</span>; <span class="comment">// read contiguously on the AoSoA</span></div>
-<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;            <a class="code" href="namespacellama.html#abaefce711ff5d4566ea761ef08fab469">aosoaCommonBlockCopy</a>(srcView, dstView, readOpt, threadId, threadCount);</div>
-<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;        }</div>
-<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;    };</div>
-<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160; </div>
-<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;    <a class="code" href="macros_8hpp.html#a331ec86158a0a6dd5c81714f9766eae1">LLAMA_EXPORT</a></div>
-<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;    <span class="keyword">template</span>&lt;</div>
-<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;        <span class="keyword">typename</span> <a class="code" href="namespacellama.html#a3fccafcd85a44696a4d5e6659927b634">ArrayExtents</a>,</div>
-<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;        <span class="keyword">typename</span> RecordDim,</div>
-<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;        <span class="keyword">typename</span> LinearizeArrayIndex,</div>
-<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span>&gt;</div>
-<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;        <span class="keyword">typename</span> PermuteFields,</div>
-<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;        <span class="keyword">typename</span> <a class="code" href="structllama_1_1ArrayExtents.html#a26ddad4db80efe93143b86c766b9a69f">ArrayExtents::value_type</a> LanesDst,</div>
-<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;        <a class="code" href="namespacellama_1_1mapping.html#aeead2d9c8929b8c0aff18aad054a0710">mapping::FieldAlignment</a> AlignDst,</div>
-<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;        <a class="code" href="namespacellama_1_1mapping.html#a79bb2d70c1866c3090d5810dd0c92cb3">mapping::Blobs</a> SrcBlobs,</div>
-<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;        <a class="code" href="namespacellama_1_1mapping.html#abf047d4798871c30b501074a70374086">mapping::SubArrayAlignment</a> SrcSubArrayAlignment&gt;</div>
-<div class="line"><a name="l00454"></a><span class="lineno"><a class="line" href="structllama_1_1Copy_3_01mapping_1_1SoA_3_01ArrayExtents_00_01RecordDim_00_01SrcBlobs_00_01SrcSub9770d34b14dc1e0da729ea63e513047d.html">  454</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structllama_1_1Copy.html">Copy</a>&lt;</div>
-<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;        mapping::<a class="code" href="namespacellama_1_1mapping.html#a736c25ae1b3ed1782a70989a8fc83a66">SoA</a>&lt;ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex, PermuteFields&gt;,</div>
-<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;        <a class="code" href="structllama_1_1mapping_1_1AoSoA.html">mapping::AoSoA</a>&lt;ArrayExtents, RecordDim, LanesDst, AlignDst, LinearizeArrayIndex, PermuteFields&gt;&gt;</div>
-<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;    {</div>
-<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> SrcBlob, <span class="keyword">typename</span> DstBlob&gt;</div>
-<div class="line"><a name="l00459"></a><span class="lineno"><a class="line" href="structllama_1_1Copy_3_01mapping_1_1SoA_3_01ArrayExtents_00_01RecordDim_00_01SrcBlobs_00_01SrcSub9770d34b14dc1e0da729ea63e513047d.html#ae24fdbc8861445cd29b71b00f3c9ad3d">  459</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="structllama_1_1Copy_3_01mapping_1_1SoA_3_01ArrayExtents_00_01RecordDim_00_01SrcBlobs_00_01SrcSub9770d34b14dc1e0da729ea63e513047d.html#ae24fdbc8861445cd29b71b00f3c9ad3d">operator()</a>(</div>
-<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;            <span class="keyword">const</span> <a class="code" href="structllama_1_1View.html">View</a>&lt;</div>
-<div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;                mapping::</div>
-<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;                    SoA&lt;ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex, PermuteFields&gt;,</div>
-<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;                SrcBlob&gt;&amp; srcView,</div>
-<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;            <a class="code" href="structllama_1_1View.html">View</a>&lt;</div>
-<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;                <a class="code" href="structllama_1_1mapping_1_1AoSoA.html">mapping::AoSoA&lt;ArrayExtents, RecordDim, LanesDst, AlignDst, LinearizeArrayIndex, PermuteFields&gt;</a>,</div>
-<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;                DstBlob&gt;&amp; dstView,</div>
-<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;            std::size_t threadId,</div>
-<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;            std::size_t threadCount)</div>
-<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;        {</div>
-<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;            constexpr <span class="keyword">auto</span> readOpt = <span class="keyword">false</span>; <span class="comment">// read contiguously on the AoSoA</span></div>
-<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;            <a class="code" href="namespacellama.html#abaefce711ff5d4566ea761ef08fab469">aosoaCommonBlockCopy</a>(srcView, dstView, readOpt, threadId, threadCount);</div>
-<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;        }</div>
-<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;    };</div>
-<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160; </div>
-<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;    <a class="code" href="macros_8hpp.html#a331ec86158a0a6dd5c81714f9766eae1">LLAMA_EXPORT</a></div>
-<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;    <span class="keyword">template</span>&lt;</div>
-<div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160;        <span class="keyword">typename</span> <a class="code" href="namespacellama.html#a3fccafcd85a44696a4d5e6659927b634">ArrayExtents</a>,</div>
-<div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160;        <span class="keyword">typename</span> RecordDim,</div>
-<div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160;        <a class="code" href="namespacellama_1_1mapping.html#a79bb2d70c1866c3090d5810dd0c92cb3">mapping::Blobs</a> SrcBlobs,</div>
-<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;        <a class="code" href="namespacellama_1_1mapping.html#a79bb2d70c1866c3090d5810dd0c92cb3">mapping::Blobs</a> DstBlobs,</div>
-<div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160;        <a class="code" href="namespacellama_1_1mapping.html#abf047d4798871c30b501074a70374086">mapping::SubArrayAlignment</a> SrcSubArrayAlignment,</div>
-<div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160;        <a class="code" href="namespacellama_1_1mapping.html#abf047d4798871c30b501074a70374086">mapping::SubArrayAlignment</a> DstSubArrayAlignment,</div>
-<div class="line"><a name="l00483"></a><span class="lineno">  483</span>&#160;        <span class="keyword">typename</span> LinearizeArrayIndex,</div>
-<div class="line"><a name="l00484"></a><span class="lineno">  484</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span>&gt;</div>
-<div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160;        <span class="keyword">typename</span> PermuteFields&gt;</div>
-<div class="line"><a name="l00486"></a><span class="lineno"><a class="line" href="structllama_1_1Copy_3_01mapping_1_1SoA_3_01ArrayExtents_00_01RecordDim_00_01SrcBlobs_00_01SrcSubb9263f80fc3284e42fedd51b14aadf82.html">  486</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structllama_1_1Copy.html">Copy</a>&lt;</div>
-<div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160;        mapping::<a class="code" href="namespacellama_1_1mapping.html#a736c25ae1b3ed1782a70989a8fc83a66">SoA</a>&lt;ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex, PermuteFields&gt;,</div>
-<div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160;        <a class="code" href="structllama_1_1mapping_1_1SoA.html">mapping::SoA</a>&lt;ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex, PermuteFields&gt;,</div>
-<div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160;        std::enable_if_t&lt;SrcBlobs != DstBlobs || SrcSubArrayAlignment != DstSubArrayAlignment&gt;&gt;</div>
-<div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160;    {</div>
-<div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> SrcBlob, <span class="keyword">typename</span> DstBlob&gt;</div>
-<div class="line"><a name="l00492"></a><span class="lineno"><a class="line" href="structllama_1_1Copy_3_01mapping_1_1SoA_3_01ArrayExtents_00_01RecordDim_00_01SrcBlobs_00_01SrcSubb9263f80fc3284e42fedd51b14aadf82.html#a7414e5fe066dfc3dec47688f1c3a4609">  492</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="structllama_1_1Copy_3_01mapping_1_1SoA_3_01ArrayExtents_00_01RecordDim_00_01SrcBlobs_00_01SrcSubb9263f80fc3284e42fedd51b14aadf82.html#a7414e5fe066dfc3dec47688f1c3a4609">operator()</a>(</div>
-<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160;            <span class="keyword">const</span> <a class="code" href="structllama_1_1View.html">View</a>&lt;</div>
-<div class="line"><a name="l00494"></a><span class="lineno">  494</span>&#160;                mapping::</div>
-<div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160;                    SoA&lt;ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex, PermuteFields&gt;,</div>
-<div class="line"><a name="l00496"></a><span class="lineno">  496</span>&#160;                SrcBlob&gt;&amp; srcView,</div>
-<div class="line"><a name="l00497"></a><span class="lineno">  497</span>&#160;            <a class="code" href="structllama_1_1View.html">View</a>&lt;</div>
-<div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160;                mapping::</div>
-<div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160;                    SoA&lt;ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex, PermuteFields&gt;,</div>
-<div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160;                DstBlob&gt;&amp; dstView,</div>
-<div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160;            std::size_t threadId,</div>
-<div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160;            std::size_t threadCount)</div>
-<div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160;        {</div>
-<div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160;            <span class="keywordflow">if</span>(srcView.extents() != dstView.extents())</div>
-<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160;                <span class="keywordflow">throw</span> std::runtime_error{<span class="stringliteral">&quot;Array dimensions sizes are different&quot;</span>};</div>
-<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160; </div>
-<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;            <span class="keyword">const</span> <span class="keyword">auto</span> subArrayLength = <a class="code" href="namespacellama.html#abab7973f7686f93f02ad33e4d0636a25">product</a>(srcView.extents());</div>
-<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;            forEachLeafCoord&lt;RecordDim&gt;(</div>
-<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;                [&amp;](<span class="keyword">auto</span> rc) <a class="code" href="macros_8hpp.html#a5a40ca12db507af3cf9cbff655513aca">LLAMA_LAMBDA_INLINE</a></div>
-<div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;                {</div>
-<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;                    <span class="keyword">auto</span> subArrayStart = [&amp;](<span class="keyword">auto</span>&amp; view, <span class="keyword">auto</span> rc) <a class="code" href="macros_8hpp.html#a5a40ca12db507af3cf9cbff655513aca">LLAMA_LAMBDA_INLINE</a></div>
-<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;                    {</div>
-<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;                        <span class="keyword">const</span> <span class="keyword">auto</span> [blob, off] = view.mapping().blobNrAndOffset(0, rc);</div>
-<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;                        <span class="keywordflow">return</span> &amp;view.blobs()[blob][off];</div>
-<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;                    };</div>
-<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;                    <a class="code" href="namespacellama_1_1internal.html#a40d6481f77184bd16b5efc5d4e927d00">internal::parallelMemcpy</a>(</div>
-<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;                        subArrayStart(dstView, rc),</div>
-<div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160;                        subArrayStart(srcView, rc),</div>
-<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160;                        subArrayLength * <span class="keyword">sizeof</span>(<a class="code" href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">GetType</a>&lt;RecordDim, decltype(rc)&gt;),</div>
-<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;                        threadId,</div>
-<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;                        threadCount);</div>
-<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;                });</div>
-<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;        }</div>
-<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;    };</div>
-<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160; </div>
-<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;    <a class="code" href="macros_8hpp.html#a331ec86158a0a6dd5c81714f9766eae1">LLAMA_EXPORT</a></div>
-<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> SrcMapping, <span class="keyword">typename</span> SrcBlob, <span class="keyword">typename</span> DstMapping, <span class="keyword">typename</span> DstBlob&gt;</div>
-<div class="line"><a name="l00533"></a><span class="lineno"><a class="line" href="namespacellama.html#ab67a5448cc031309dc1aa8580b7d4950">  533</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="namespacellama.html#ab67a5448cc031309dc1aa8580b7d4950">copy</a>(</div>
-<div class="line"><a name="l00534"></a><span class="lineno">  534</span>&#160;        <span class="keyword">const</span> <a class="code" href="structllama_1_1View.html">View&lt;SrcMapping, SrcBlob&gt;</a>&amp; srcView,</div>
-<div class="line"><a name="l00535"></a><span class="lineno">  535</span>&#160;        <a class="code" href="structllama_1_1View.html">View&lt;DstMapping, DstBlob&gt;</a>&amp; dstView,</div>
-<div class="line"><a name="l00536"></a><span class="lineno">  536</span>&#160;        std::size_t threadId = 0,</div>
-<div class="line"><a name="l00537"></a><span class="lineno">  537</span>&#160;        std::size_t threadCount = 1)</div>
-<div class="line"><a name="l00538"></a><span class="lineno">  538</span>&#160;    {</div>
-<div class="line"><a name="l00539"></a><span class="lineno">  539</span>&#160;        <a class="code" href="structllama_1_1Copy.html">Copy&lt;SrcMapping, DstMapping&gt;</a>{}(srcView, dstView, threadId, threadCount);</div>
-<div class="line"><a name="l00540"></a><span class="lineno">  540</span>&#160;    }</div>
-<div class="line"><a name="l00541"></a><span class="lineno">  541</span>&#160;} <span class="comment">// namespace llama</span></div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;            <span class="keyword">const</span> <span class="keyword">auto</span> elementsPerThread = flatSize / lanesDst / threadCount * lanesDst;</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;            <span class="keyword">const</span> <span class="keyword">auto</span> start = threadId * elementsPerThread;</div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;            <span class="keyword">const</span> <span class="keyword">auto</span> stop = threadId == threadCount - 1 ? flatSize : (threadId + 1) * elementsPerThread;</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160; </div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;            <span class="keyword">auto</span> copyLBlock = [&amp;](std::byte*&amp; threadDst, std::size_t srcIndex, <span class="keyword">auto</span> rc) <a class="code" href="macros_8hpp.html#a5a40ca12db507af3cf9cbff655513aca">LLAMA_LAMBDA_INLINE</a></div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;            {</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;                constexpr <span class="keyword">auto</span> bytes = l * <span class="keyword">sizeof</span>(<a class="code" href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">GetType</a>&lt;RecordDim, decltype(rc)&gt;);</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;                <a class="code" href="namespacellama_1_1internal.html#ae7d043343c1a60a7ceb75ba7c06e4c18">std::memcpy</a>(threadDst, mapSrc(srcIndex, rc), bytes);</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;                threadDst += bytes;</div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;            };</div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160; </div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;            <span class="comment">// if the AoSoA is packed we can move the dst pointer along</span></div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;            <span class="keywordflow">if</span> constexpr(DstMapping::fieldAlignment == <a class="code" href="namespacellama_1_1mapping.html#aeead2d9c8929b8c0aff18aad054a0710a4492081ca02b059f9e8af4ddaf0f7292">mapping::FieldAlignment::Pack</a>)</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;            {</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;                <span class="keyword">auto</span>* threadDst = mapDst(start, <a class="code" href="structllama_1_1RecordCoord_3_4.html">RecordCoord&lt;&gt;</a>{});</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;                <span class="keywordflow">for</span>(std::size_t i = start; i &lt; stop; i += lanesDst)</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;                    forEachLeafCoord&lt;RecordDim&gt;(</div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;                        [&amp;](<span class="keyword">auto</span> rc) <a class="code" href="macros_8hpp.html#a5a40ca12db507af3cf9cbff655513aca">LLAMA_LAMBDA_INLINE</a></div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;                        {</div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;                            <span class="keywordflow">for</span>(std::size_t j = 0; j &lt; lanesDst; j += l)</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;                            {</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;                                assert(threadDst == mapDst(i + j, rc));</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;                                copyLBlock(threadDst, i + j, rc);</div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;                            }</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;                        });</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;            }</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;            {</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;                <span class="keywordflow">for</span>(std::size_t i = start; i &lt; stop; i += lanesDst)</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;                    forEachLeafCoord&lt;RecordDim&gt;(</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;                        [&amp;](<span class="keyword">auto</span> rc) <a class="code" href="macros_8hpp.html#a5a40ca12db507af3cf9cbff655513aca">LLAMA_LAMBDA_INLINE</a></div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;                        {</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;                            <span class="keyword">auto</span>* threadDst = mapDst(i, rc);</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;                            <span class="keywordflow">for</span>(std::size_t j = 0; j &lt; lanesDst; j += l)</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;                            {</div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;                                assert(threadDst == mapDst(i + j, rc));</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;                                copyLBlock(threadDst, i + j, rc);</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;                            }</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;                        });</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;            }</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;        }</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;    }</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160; </div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;    <a class="code" href="macros_8hpp.html#a331ec86158a0a6dd5c81714f9766eae1">LLAMA_EXPORT</a></div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> SrcMapping, <span class="keyword">typename</span> DstMapping, <span class="keyword">typename</span> SFINAE = <span class="keywordtype">void</span>&gt;</div>
+<div class="line"><a name="l00355"></a><span class="lineno"><a class="line" href="structllama_1_1Copy.html">  355</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structllama_1_1Copy.html">Copy</a></div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;    {</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> SrcView, <span class="keyword">typename</span> DstView&gt;</div>
+<div class="line"><a name="l00358"></a><span class="lineno"><a class="line" href="structllama_1_1Copy.html#a5456c747d230db86a65cb67f67d1aa05">  358</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="structllama_1_1Copy.html#a5456c747d230db86a65cb67f67d1aa05">operator()</a>(<span class="keyword">const</span> SrcView&amp; srcView, DstView&amp; dstView, std::size_t threadId, std::size_t threadCount)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;            <a class="code" href="namespacellama.html#af977754d689a5f3cc10fd80d4b37ba1f">fieldWiseCopy</a>(srcView, dstView, threadId, threadCount);</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;        }</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;    };</div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160; </div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;    <a class="code" href="macros_8hpp.html#a331ec86158a0a6dd5c81714f9766eae1">LLAMA_EXPORT</a></div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> Mapping&gt;</div>
+<div class="line"><a name="l00366"></a><span class="lineno"><a class="line" href="structllama_1_1Copy_3_01Mapping_00_01Mapping_01_4.html">  366</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structllama_1_1Copy.html">Copy</a>&lt;Mapping, Mapping&gt;</div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;    {</div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> SrcView, <span class="keyword">typename</span> DstView&gt;</div>
+<div class="line"><a name="l00369"></a><span class="lineno"><a class="line" href="structllama_1_1Copy_3_01Mapping_00_01Mapping_01_4.html#a07d8bb1043f704c649aba7ec2090b4c0">  369</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="structllama_1_1Copy_3_01Mapping_00_01Mapping_01_4.html#a07d8bb1043f704c649aba7ec2090b4c0">operator()</a>(<span class="keyword">const</span> SrcView&amp; srcView, DstView&amp; dstView, std::size_t threadId, std::size_t threadCount)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;            <span class="comment">// FIXME(bgruber): need to fallback to fieldWiseCopy when elements are not trivially copyable</span></div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;            <a class="code" href="namespacellama.html#a4959ae52801ba64e6f6c3ba612de29b7">memcpyBlobs</a>(srcView, dstView, threadId, threadCount);</div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;        }</div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;    };</div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160; </div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;    <a class="code" href="macros_8hpp.html#a331ec86158a0a6dd5c81714f9766eae1">LLAMA_EXPORT</a></div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;    <span class="keyword">template</span>&lt;</div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;        <span class="keyword">typename</span> <a class="code" href="namespacellama.html#a3fccafcd85a44696a4d5e6659927b634">ArrayExtents</a>,</div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;        <span class="keyword">typename</span> RecordDim,</div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;        <span class="keyword">typename</span> LinearizeArrayIndex,</div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;        <span class="keyword">typename</span> <a class="code" href="structllama_1_1ArrayExtents.html#a26ddad4db80efe93143b86c766b9a69f">ArrayExtents::value_type</a> LanesSrc,</div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;        <span class="keyword">typename</span> <a class="code" href="structllama_1_1ArrayExtents.html#a26ddad4db80efe93143b86c766b9a69f">ArrayExtents::value_type</a> LanesDst,</div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;        <a class="code" href="namespacellama_1_1mapping.html#aeead2d9c8929b8c0aff18aad054a0710">mapping::FieldAlignment</a> AlignSrc,</div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;        <a class="code" href="namespacellama_1_1mapping.html#aeead2d9c8929b8c0aff18aad054a0710">mapping::FieldAlignment</a> AlignDst,</div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span>&gt;</div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;        <span class="keyword">typename</span> PermuteFields&gt;</div>
+<div class="line"><a name="l00387"></a><span class="lineno"><a class="line" href="structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayExtents_00_01RecordDim_00_01LanesSrc_00_01Alig1ead0624d41206bf19b261e50248c1b7.html">  387</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structllama_1_1Copy.html">Copy</a>&lt;</div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;        mapping::AoSoA&lt;ArrayExtents, RecordDim, LanesSrc, AlignSrc, LinearizeArrayIndex, PermuteFields&gt;,</div>
+<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;        <a class="code" href="structllama_1_1mapping_1_1AoSoA.html">mapping::AoSoA</a>&lt;ArrayExtents, RecordDim, LanesDst, AlignDst, LinearizeArrayIndex, PermuteFields&gt;,</div>
+<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;        std::enable_if_t&lt;LanesSrc != LanesDst&gt;&gt;</div>
+<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;    {</div>
+<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> SrcBlob, <span class="keyword">typename</span> DstBlob&gt;</div>
+<div class="line"><a name="l00393"></a><span class="lineno"><a class="line" href="structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayExtents_00_01RecordDim_00_01LanesSrc_00_01Alig1ead0624d41206bf19b261e50248c1b7.html#aca1d6b0804efcbb95548a07e5166cffb">  393</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayExtents_00_01RecordDim_00_01LanesSrc_00_01Alig1ead0624d41206bf19b261e50248c1b7.html#aca1d6b0804efcbb95548a07e5166cffb">operator()</a>(</div>
+<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;            <span class="keyword">const</span> <a class="code" href="structllama_1_1View.html">View</a>&lt;</div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;                <a class="code" href="structllama_1_1mapping_1_1AoSoA.html">mapping::AoSoA&lt;ArrayExtents, RecordDim, LanesSrc, AlignSrc, LinearizeArrayIndex, PermuteFields&gt;</a>,</div>
+<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;                SrcBlob&gt;&amp; srcView,</div>
+<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;            <a class="code" href="structllama_1_1View.html">View</a>&lt;</div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;                <a class="code" href="structllama_1_1mapping_1_1AoSoA.html">mapping::AoSoA&lt;ArrayExtents, RecordDim, LanesDst, AlignDst, LinearizeArrayIndex, PermuteFields&gt;</a>,</div>
+<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;                DstBlob&gt;&amp; dstView,</div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;            std::size_t threadId,</div>
+<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;            std::size_t threadCount)</div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;        {</div>
+<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;            <a class="code" href="namespacellama.html#a5709142c6bdd979cd192f9bd6179efe9">aosoaCommonBlockCopy</a>(srcView, dstView, threadId, threadCount);</div>
+<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;        }</div>
+<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;    };</div>
+<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160; </div>
+<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;    <a class="code" href="macros_8hpp.html#a331ec86158a0a6dd5c81714f9766eae1">LLAMA_EXPORT</a></div>
+<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;    <span class="keyword">template</span>&lt;</div>
+<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;        <span class="keyword">typename</span> <a class="code" href="namespacellama.html#a3fccafcd85a44696a4d5e6659927b634">ArrayExtents</a>,</div>
+<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;        <span class="keyword">typename</span> RecordDim,</div>
+<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;        <span class="keyword">typename</span> LinearizeArrayIndex,</div>
+<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span>&gt;</div>
+<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;        <span class="keyword">typename</span> PermuteFields,</div>
+<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;        <span class="keyword">typename</span> <a class="code" href="structllama_1_1ArrayExtents.html#a26ddad4db80efe93143b86c766b9a69f">ArrayExtents::value_type</a> LanesSrc,</div>
+<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;        <a class="code" href="namespacellama_1_1mapping.html#aeead2d9c8929b8c0aff18aad054a0710">mapping::FieldAlignment</a> AlignSrc,</div>
+<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;        <a class="code" href="namespacellama_1_1mapping.html#a79bb2d70c1866c3090d5810dd0c92cb3">mapping::Blobs</a> DstBlobs,</div>
+<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;        <a class="code" href="namespacellama_1_1mapping.html#abf047d4798871c30b501074a70374086">mapping::SubArrayAlignment</a> DstSubArrayAlignment&gt;</div>
+<div class="line"><a name="l00418"></a><span class="lineno"><a class="line" href="structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayExtents_00_01RecordDim_00_01LanesSrc_00_01Alig4bb4101c04ed9279847838623873bbbf.html">  418</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structllama_1_1Copy.html">Copy</a>&lt;</div>
+<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;        mapping::AoSoA&lt;ArrayExtents, RecordDim, LanesSrc, AlignSrc, LinearizeArrayIndex, PermuteFields&gt;,</div>
+<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;        <a class="code" href="structllama_1_1mapping_1_1SoA.html">mapping::SoA</a>&lt;ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex, PermuteFields&gt;&gt;</div>
+<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;    {</div>
+<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> SrcBlob, <span class="keyword">typename</span> DstBlob&gt;</div>
+<div class="line"><a name="l00423"></a><span class="lineno"><a class="line" href="structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayExtents_00_01RecordDim_00_01LanesSrc_00_01Alig4bb4101c04ed9279847838623873bbbf.html#a579b540da80db98cf6e878123ba3711e">  423</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayExtents_00_01RecordDim_00_01LanesSrc_00_01Alig4bb4101c04ed9279847838623873bbbf.html#a579b540da80db98cf6e878123ba3711e">operator()</a>(</div>
+<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;            <span class="keyword">const</span> <a class="code" href="structllama_1_1View.html">View</a>&lt;</div>
+<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;                <a class="code" href="structllama_1_1mapping_1_1AoSoA.html">mapping::AoSoA&lt;ArrayExtents, RecordDim, LanesSrc, AlignSrc, LinearizeArrayIndex, PermuteFields&gt;</a>,</div>
+<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;                SrcBlob&gt;&amp; srcView,</div>
+<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;            <a class="code" href="structllama_1_1View.html">View</a>&lt;</div>
+<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;                mapping::</div>
+<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;                    SoA&lt;ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex, PermuteFields&gt;,</div>
+<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;                DstBlob&gt;&amp; dstView,</div>
+<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;            std::size_t threadId,</div>
+<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;            std::size_t threadCount)</div>
+<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;        {</div>
+<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;            <a class="code" href="namespacellama.html#a5709142c6bdd979cd192f9bd6179efe9">aosoaCommonBlockCopy</a>(srcView, dstView, threadId, threadCount);</div>
+<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;        }</div>
+<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;    };</div>
+<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160; </div>
+<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;    <a class="code" href="macros_8hpp.html#a331ec86158a0a6dd5c81714f9766eae1">LLAMA_EXPORT</a></div>
+<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;    <span class="keyword">template</span>&lt;</div>
+<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;        <span class="keyword">typename</span> <a class="code" href="namespacellama.html#a3fccafcd85a44696a4d5e6659927b634">ArrayExtents</a>,</div>
+<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;        <span class="keyword">typename</span> RecordDim,</div>
+<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;        <span class="keyword">typename</span> LinearizeArrayIndex,</div>
+<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span>&gt;</div>
+<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;        <span class="keyword">typename</span> PermuteFields,</div>
+<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;        <span class="keyword">typename</span> <a class="code" href="structllama_1_1ArrayExtents.html#a26ddad4db80efe93143b86c766b9a69f">ArrayExtents::value_type</a> LanesDst,</div>
+<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;        <a class="code" href="namespacellama_1_1mapping.html#aeead2d9c8929b8c0aff18aad054a0710">mapping::FieldAlignment</a> AlignDst,</div>
+<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;        <a class="code" href="namespacellama_1_1mapping.html#a79bb2d70c1866c3090d5810dd0c92cb3">mapping::Blobs</a> SrcBlobs,</div>
+<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;        <a class="code" href="namespacellama_1_1mapping.html#abf047d4798871c30b501074a70374086">mapping::SubArrayAlignment</a> SrcSubArrayAlignment&gt;</div>
+<div class="line"><a name="l00449"></a><span class="lineno"><a class="line" href="structllama_1_1Copy_3_01mapping_1_1SoA_3_01ArrayExtents_00_01RecordDim_00_01SrcBlobs_00_01SrcSub9770d34b14dc1e0da729ea63e513047d.html">  449</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structllama_1_1Copy.html">Copy</a>&lt;</div>
+<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;        mapping::<a class="code" href="namespacellama_1_1mapping.html#a736c25ae1b3ed1782a70989a8fc83a66">SoA</a>&lt;ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex, PermuteFields&gt;,</div>
+<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;        <a class="code" href="structllama_1_1mapping_1_1AoSoA.html">mapping::AoSoA</a>&lt;ArrayExtents, RecordDim, LanesDst, AlignDst, LinearizeArrayIndex, PermuteFields&gt;&gt;</div>
+<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;    {</div>
+<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> SrcBlob, <span class="keyword">typename</span> DstBlob&gt;</div>
+<div class="line"><a name="l00454"></a><span class="lineno"><a class="line" href="structllama_1_1Copy_3_01mapping_1_1SoA_3_01ArrayExtents_00_01RecordDim_00_01SrcBlobs_00_01SrcSub9770d34b14dc1e0da729ea63e513047d.html#ae24fdbc8861445cd29b71b00f3c9ad3d">  454</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="structllama_1_1Copy_3_01mapping_1_1SoA_3_01ArrayExtents_00_01RecordDim_00_01SrcBlobs_00_01SrcSub9770d34b14dc1e0da729ea63e513047d.html#ae24fdbc8861445cd29b71b00f3c9ad3d">operator()</a>(</div>
+<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;            <span class="keyword">const</span> <a class="code" href="structllama_1_1View.html">View</a>&lt;</div>
+<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;                mapping::</div>
+<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;                    SoA&lt;ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex, PermuteFields&gt;,</div>
+<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;                SrcBlob&gt;&amp; srcView,</div>
+<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;            <a class="code" href="structllama_1_1View.html">View</a>&lt;</div>
+<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;                <a class="code" href="structllama_1_1mapping_1_1AoSoA.html">mapping::AoSoA&lt;ArrayExtents, RecordDim, LanesDst, AlignDst, LinearizeArrayIndex, PermuteFields&gt;</a>,</div>
+<div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;                DstBlob&gt;&amp; dstView,</div>
+<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;            std::size_t threadId,</div>
+<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;            std::size_t threadCount)</div>
+<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;        {</div>
+<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;            <a class="code" href="namespacellama.html#a5709142c6bdd979cd192f9bd6179efe9">aosoaCommonBlockCopy</a>(srcView, dstView, threadId, threadCount);</div>
+<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;        }</div>
+<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;    };</div>
+<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160; </div>
+<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;    <a class="code" href="macros_8hpp.html#a331ec86158a0a6dd5c81714f9766eae1">LLAMA_EXPORT</a></div>
+<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;    <span class="keyword">template</span>&lt;</div>
+<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;        <span class="keyword">typename</span> <a class="code" href="namespacellama.html#a3fccafcd85a44696a4d5e6659927b634">ArrayExtents</a>,</div>
+<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;        <span class="keyword">typename</span> RecordDim,</div>
+<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;        <a class="code" href="namespacellama_1_1mapping.html#a79bb2d70c1866c3090d5810dd0c92cb3">mapping::Blobs</a> SrcBlobs,</div>
+<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;        <a class="code" href="namespacellama_1_1mapping.html#a79bb2d70c1866c3090d5810dd0c92cb3">mapping::Blobs</a> DstBlobs,</div>
+<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;        <a class="code" href="namespacellama_1_1mapping.html#abf047d4798871c30b501074a70374086">mapping::SubArrayAlignment</a> SrcSubArrayAlignment,</div>
+<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;        <a class="code" href="namespacellama_1_1mapping.html#abf047d4798871c30b501074a70374086">mapping::SubArrayAlignment</a> DstSubArrayAlignment,</div>
+<div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160;        <span class="keyword">typename</span> LinearizeArrayIndex,</div>
+<div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span>&gt;</div>
+<div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160;        <span class="keyword">typename</span> PermuteFields&gt;</div>
+<div class="line"><a name="l00480"></a><span class="lineno"><a class="line" href="structllama_1_1Copy_3_01mapping_1_1SoA_3_01ArrayExtents_00_01RecordDim_00_01SrcBlobs_00_01SrcSubb9263f80fc3284e42fedd51b14aadf82.html">  480</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structllama_1_1Copy.html">Copy</a>&lt;</div>
+<div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160;        mapping::<a class="code" href="namespacellama_1_1mapping.html#a736c25ae1b3ed1782a70989a8fc83a66">SoA</a>&lt;ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex, PermuteFields&gt;,</div>
+<div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160;        <a class="code" href="structllama_1_1mapping_1_1SoA.html">mapping::SoA</a>&lt;ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex, PermuteFields&gt;,</div>
+<div class="line"><a name="l00483"></a><span class="lineno">  483</span>&#160;        std::enable_if_t&lt;SrcBlobs != DstBlobs || SrcSubArrayAlignment != DstSubArrayAlignment&gt;&gt;</div>
+<div class="line"><a name="l00484"></a><span class="lineno">  484</span>&#160;    {</div>
+<div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> SrcBlob, <span class="keyword">typename</span> DstBlob&gt;</div>
+<div class="line"><a name="l00486"></a><span class="lineno"><a class="line" href="structllama_1_1Copy_3_01mapping_1_1SoA_3_01ArrayExtents_00_01RecordDim_00_01SrcBlobs_00_01SrcSubb9263f80fc3284e42fedd51b14aadf82.html#a7414e5fe066dfc3dec47688f1c3a4609">  486</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="structllama_1_1Copy_3_01mapping_1_1SoA_3_01ArrayExtents_00_01RecordDim_00_01SrcBlobs_00_01SrcSubb9263f80fc3284e42fedd51b14aadf82.html#a7414e5fe066dfc3dec47688f1c3a4609">operator()</a>(</div>
+<div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160;            <span class="keyword">const</span> <a class="code" href="structllama_1_1View.html">View</a>&lt;</div>
+<div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160;                mapping::</div>
+<div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160;                    SoA&lt;ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex, PermuteFields&gt;,</div>
+<div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160;                SrcBlob&gt;&amp; srcView,</div>
+<div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160;            <a class="code" href="structllama_1_1View.html">View</a>&lt;</div>
+<div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160;                mapping::</div>
+<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160;                    SoA&lt;ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex, PermuteFields&gt;,</div>
+<div class="line"><a name="l00494"></a><span class="lineno">  494</span>&#160;                DstBlob&gt;&amp; dstView,</div>
+<div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160;            std::size_t threadId,</div>
+<div class="line"><a name="l00496"></a><span class="lineno">  496</span>&#160;            std::size_t threadCount)</div>
+<div class="line"><a name="l00497"></a><span class="lineno">  497</span>&#160;        {</div>
+<div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160;            <span class="keywordflow">if</span>(srcView.extents() != dstView.extents())</div>
+<div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160;                <span class="keywordflow">throw</span> std::runtime_error{<span class="stringliteral">&quot;Array dimensions sizes are different&quot;</span>};</div>
+<div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160; </div>
+<div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160;            <span class="keyword">const</span> <span class="keyword">auto</span> subArrayLength = <a class="code" href="namespacellama.html#abab7973f7686f93f02ad33e4d0636a25">product</a>(srcView.extents());</div>
+<div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160;            forEachLeafCoord&lt;RecordDim&gt;(</div>
+<div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160;                [&amp;](<span class="keyword">auto</span> rc) <a class="code" href="macros_8hpp.html#a5a40ca12db507af3cf9cbff655513aca">LLAMA_LAMBDA_INLINE</a></div>
+<div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160;                {</div>
+<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160;                    <span class="keyword">auto</span> subArrayStart = [&amp;](<span class="keyword">auto</span>&amp; view, <span class="keyword">auto</span> rc) <a class="code" href="macros_8hpp.html#a5a40ca12db507af3cf9cbff655513aca">LLAMA_LAMBDA_INLINE</a></div>
+<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;                    {</div>
+<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;                        <span class="keyword">const</span> <span class="keyword">auto</span> [blob, off] = view.mapping().blobNrAndOffset(0, rc);</div>
+<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;                        <span class="keywordflow">return</span> &amp;view.blobs()[blob][off];</div>
+<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;                    };</div>
+<div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;                    <a class="code" href="namespacellama_1_1internal.html#a40d6481f77184bd16b5efc5d4e927d00">internal::parallelMemcpy</a>(</div>
+<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;                        subArrayStart(dstView, rc),</div>
+<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;                        subArrayStart(srcView, rc),</div>
+<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;                        subArrayLength * <span class="keyword">sizeof</span>(<a class="code" href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">GetType</a>&lt;RecordDim, decltype(rc)&gt;),</div>
+<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;                        threadId,</div>
+<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;                        threadCount);</div>
+<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;                });</div>
+<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;        }</div>
+<div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160;    };</div>
+<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160; </div>
+<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;    <a class="code" href="macros_8hpp.html#a331ec86158a0a6dd5c81714f9766eae1">LLAMA_EXPORT</a></div>
+<div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> SrcMapping, <span class="keyword">typename</span> SrcBlob, <span class="keyword">typename</span> DstMapping, <span class="keyword">typename</span> DstBlob&gt;</div>
+<div class="line"><a name="l00527"></a><span class="lineno"><a class="line" href="namespacellama.html#ab67a5448cc031309dc1aa8580b7d4950">  527</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="namespacellama.html#ab67a5448cc031309dc1aa8580b7d4950">copy</a>(</div>
+<div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160;        <span class="keyword">const</span> <a class="code" href="structllama_1_1View.html">View&lt;SrcMapping, SrcBlob&gt;</a>&amp; srcView,</div>
+<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160;        <a class="code" href="structllama_1_1View.html">View&lt;DstMapping, DstBlob&gt;</a>&amp; dstView,</div>
+<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160;        std::size_t threadId = 0,</div>
+<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;        std::size_t threadCount = 1)</div>
+<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;    {</div>
+<div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160;        <a class="code" href="structllama_1_1Copy.html">Copy&lt;SrcMapping, DstMapping&gt;</a>{}(srcView, dstView, threadId, threadCount);</div>
+<div class="line"><a name="l00534"></a><span class="lineno">  534</span>&#160;    }</div>
+<div class="line"><a name="l00535"></a><span class="lineno">  535</span>&#160;} <span class="comment">// namespace llama</span></div>
 <div class="ttc" id="aAoSoA_8hpp_html"><div class="ttname"><a href="AoSoA_8hpp.html">AoSoA.hpp</a></div></div>
 <div class="ttc" id="aSoA_8hpp_html"><div class="ttname"><a href="SoA_8hpp.html">SoA.hpp</a></div></div>
 <div class="ttc" id="aView_8hpp_html"><div class="ttname"><a href="View_8hpp.html">View.hpp</a></div></div>
@@ -622,20 +616,20 @@ $(document).ready(function(){initNavTree('Copy_8hpp_source.html',''); initResiza
 <div class="ttc" id="anamespacellama_html_a2f41c329ce5acee2de376b6640afcbe8"><div class="ttname"><a href="namespacellama.html#a2f41c329ce5acee2de376b6640afcbe8">llama::copyBlobs</a></div><div class="ttdeci">void copyBlobs(const View&lt; Mapping, SrcBlob &gt; &amp;srcView, View&lt; Mapping, DstBlob &gt; &amp;dstView, BlobCopyFunc copyBlob=internal::copyBlobWithMemcpy)</div><div class="ttdef"><b>Definition:</b> <a href="Copy_8hpp_source.html#l00101">Copy.hpp:101</a></div></div>
 <div class="ttc" id="anamespacellama_html_a3fccafcd85a44696a4d5e6659927b634"><div class="ttname"><a href="namespacellama.html#a3fccafcd85a44696a4d5e6659927b634">llama::ArrayExtents</a></div><div class="ttdeci">ArrayExtents(Args...) -&gt; ArrayExtents&lt; typename internal::IndexTypeFromArgs&lt; std::size_t, Args... &gt;::type,(Args{}, dyn)... &gt;</div></div>
 <div class="ttc" id="anamespacellama_html_a4959ae52801ba64e6f6c3ba612de29b7"><div class="ttname"><a href="namespacellama.html#a4959ae52801ba64e6f6c3ba612de29b7">llama::memcpyBlobs</a></div><div class="ttdeci">void memcpyBlobs(const View&lt; Mapping, SrcBlob &gt; &amp;srcView, View&lt; Mapping, DstBlob &gt; &amp;dstView, std::size_t threadId=0, std::size_t threadCount=1, MemcpyFunc singleThreadMemcpy=internal::memcpy)</div><div class="ttdef"><b>Definition:</b> <a href="Copy_8hpp_source.html#l00057">Copy.hpp:57</a></div></div>
-<div class="ttc" id="anamespacellama_html_ab67a5448cc031309dc1aa8580b7d4950"><div class="ttname"><a href="namespacellama.html#ab67a5448cc031309dc1aa8580b7d4950">llama::copy</a></div><div class="ttdeci">void copy(const View&lt; SrcMapping, SrcBlob &gt; &amp;srcView, View&lt; DstMapping, DstBlob &gt; &amp;dstView, std::size_t threadId=0, std::size_t threadCount=1)</div><div class="ttdef"><b>Definition:</b> <a href="Copy_8hpp_source.html#l00533">Copy.hpp:533</a></div></div>
+<div class="ttc" id="anamespacellama_html_a5709142c6bdd979cd192f9bd6179efe9"><div class="ttname"><a href="namespacellama.html#a5709142c6bdd979cd192f9bd6179efe9">llama::aosoaCommonBlockCopy</a></div><div class="ttdeci">void aosoaCommonBlockCopy(const View&lt; SrcMapping, SrcBlob &gt; &amp;srcView, View&lt; DstMapping, DstBlob &gt; &amp;dstView, std::size_t threadId=0, std::size_t threadCount=1)</div><div class="ttdef"><b>Definition:</b> <a href="Copy_8hpp_source.html#l00190">Copy.hpp:190</a></div></div>
+<div class="ttc" id="anamespacellama_html_ab67a5448cc031309dc1aa8580b7d4950"><div class="ttname"><a href="namespacellama.html#ab67a5448cc031309dc1aa8580b7d4950">llama::copy</a></div><div class="ttdeci">void copy(const View&lt; SrcMapping, SrcBlob &gt; &amp;srcView, View&lt; DstMapping, DstBlob &gt; &amp;dstView, std::size_t threadId=0, std::size_t threadCount=1)</div><div class="ttdef"><b>Definition:</b> <a href="Copy_8hpp_source.html#l00527">Copy.hpp:527</a></div></div>
 <div class="ttc" id="anamespacellama_html_abab7973f7686f93f02ad33e4d0636a25"><div class="ttname"><a href="namespacellama.html#abab7973f7686f93f02ad33e4d0636a25">llama::product</a></div><div class="ttdeci">constexpr auto product(Array&lt; T, N &gt; a) -&gt; T</div><div class="ttdef"><b>Definition:</b> <a href="Array_8hpp_source.html#l00315">Array.hpp:315</a></div></div>
-<div class="ttc" id="anamespacellama_html_abaefce711ff5d4566ea761ef08fab469"><div class="ttname"><a href="namespacellama.html#abaefce711ff5d4566ea761ef08fab469">llama::aosoaCommonBlockCopy</a></div><div class="ttdeci">void aosoaCommonBlockCopy(const View&lt; SrcMapping, SrcBlob &gt; &amp;srcView, View&lt; DstMapping, DstBlob &gt; &amp;dstView, bool readOpt, std::size_t threadId=0, std::size_t threadCount=1)</div><div class="ttdef"><b>Definition:</b> <a href="Copy_8hpp_source.html#l00190">Copy.hpp:190</a></div></div>
 <div class="ttc" id="anamespacellama_html_acdfb627d325de5ab6c18cdc842cd7350"><div class="ttname"><a href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">llama::GetType</a></div><div class="ttdeci">typename internal::GetTypeImpl&lt; RecordDim, RecordCoordOrTags... &gt;::type GetType</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00387">Core.hpp:387</a></div></div>
 <div class="ttc" id="anamespacellama_html_af977754d689a5f3cc10fd80d4b37ba1f"><div class="ttname"><a href="namespacellama.html#af977754d689a5f3cc10fd80d4b37ba1f">llama::fieldWiseCopy</a></div><div class="ttdeci">void fieldWiseCopy(const View&lt; SrcMapping, SrcBlob &gt; &amp;srcView, View&lt; DstMapping, DstBlob &gt; &amp;dstView, std::size_t threadId=0, std::size_t threadCount=1)</div><div class="ttdef"><b>Definition:</b> <a href="Copy_8hpp_source.html#l00118">Copy.hpp:118</a></div></div>
 <div class="ttc" id="astructllama_1_1ArrayExtents_html_a26ddad4db80efe93143b86c766b9a69f"><div class="ttname"><a href="structllama_1_1ArrayExtents.html#a26ddad4db80efe93143b86c766b9a69f">llama::ArrayExtents::value_type</a></div><div class="ttdeci">T value_type</div><div class="ttdef"><b>Definition:</b> <a href="ArrayExtents_8hpp_source.html#l00141">ArrayExtents.hpp:141</a></div></div>
 <div class="ttc" id="astructllama_1_1ArrayIndex_html"><div class="ttname"><a href="structllama_1_1ArrayIndex.html">llama::ArrayIndex</a></div><div class="ttdef"><b>Definition:</b> <a href="ArrayExtents_8hpp_source.html#l00019">ArrayExtents.hpp:20</a></div></div>
-<div class="ttc" id="astructllama_1_1Copy_3_01Mapping_00_01Mapping_01_4_html_a07d8bb1043f704c649aba7ec2090b4c0"><div class="ttname"><a href="structllama_1_1Copy_3_01Mapping_00_01Mapping_01_4.html#a07d8bb1043f704c649aba7ec2090b4c0">llama::Copy&lt; Mapping, Mapping &gt;::operator()</a></div><div class="ttdeci">void operator()(const SrcView &amp;srcView, DstView &amp;dstView, std::size_t threadId, std::size_t threadCount) const</div><div class="ttdef"><b>Definition:</b> <a href="Copy_8hpp_source.html#l00372">Copy.hpp:372</a></div></div>
-<div class="ttc" id="astructllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayExtents_00_01RecordDim_00_01LanesSrc_00_01Alig1ead0624d41206bf19b261e50248c1b7_html_aca1d6b0804efcbb95548a07e5166cffb"><div class="ttname"><a href="structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayExtents_00_01RecordDim_00_01LanesSrc_00_01Alig1ead0624d41206bf19b261e50248c1b7.html#aca1d6b0804efcbb95548a07e5166cffb">llama::Copy&lt; mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesSrc, AlignSrc, LinearizeArrayIndex, PermuteFields &gt;, mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesDst, AlignDst, LinearizeArrayIndex, PermuteFields &gt;, std::enable_if_t&lt; LanesSrc !=LanesDst &gt; &gt;::operator()</a></div><div class="ttdeci">void operator()(const View&lt; mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesSrc, AlignSrc, LinearizeArrayIndex, PermuteFields &gt;, SrcBlob &gt; &amp;srcView, View&lt; mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesDst, AlignDst, LinearizeArrayIndex, PermuteFields &gt;, DstBlob &gt; &amp;dstView, std::size_t threadId, std::size_t threadCount)</div><div class="ttdef"><b>Definition:</b> <a href="Copy_8hpp_source.html#l00396">Copy.hpp:396</a></div></div>
-<div class="ttc" id="astructllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayExtents_00_01RecordDim_00_01LanesSrc_00_01Alig4bb4101c04ed9279847838623873bbbf_html_a579b540da80db98cf6e878123ba3711e"><div class="ttname"><a href="structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayExtents_00_01RecordDim_00_01LanesSrc_00_01Alig4bb4101c04ed9279847838623873bbbf.html#a579b540da80db98cf6e878123ba3711e">llama::Copy&lt; mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesSrc, AlignSrc, LinearizeArrayIndex, PermuteFields &gt;, mapping::SoA&lt; ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex, PermuteFields &gt; &gt;::operator()</a></div><div class="ttdeci">void operator()(const View&lt; mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesSrc, AlignSrc, LinearizeArrayIndex, PermuteFields &gt;, SrcBlob &gt; &amp;srcView, View&lt; mapping::SoA&lt; ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex, PermuteFields &gt;, DstBlob &gt; &amp;dstView, std::size_t threadId, std::size_t threadCount)</div><div class="ttdef"><b>Definition:</b> <a href="Copy_8hpp_source.html#l00427">Copy.hpp:427</a></div></div>
-<div class="ttc" id="astructllama_1_1Copy_3_01mapping_1_1SoA_3_01ArrayExtents_00_01RecordDim_00_01SrcBlobs_00_01SrcSub9770d34b14dc1e0da729ea63e513047d_html_ae24fdbc8861445cd29b71b00f3c9ad3d"><div class="ttname"><a href="structllama_1_1Copy_3_01mapping_1_1SoA_3_01ArrayExtents_00_01RecordDim_00_01SrcBlobs_00_01SrcSub9770d34b14dc1e0da729ea63e513047d.html#ae24fdbc8861445cd29b71b00f3c9ad3d">llama::Copy&lt; mapping::SoA&lt; ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex, PermuteFields &gt;, mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesDst, AlignDst, LinearizeArrayIndex, PermuteFields &gt; &gt;::operator()</a></div><div class="ttdeci">void operator()(const View&lt; mapping::SoA&lt; ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex, PermuteFields &gt;, SrcBlob &gt; &amp;srcView, View&lt; mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesDst, AlignDst, LinearizeArrayIndex, PermuteFields &gt;, DstBlob &gt; &amp;dstView, std::size_t threadId, std::size_t threadCount)</div><div class="ttdef"><b>Definition:</b> <a href="Copy_8hpp_source.html#l00459">Copy.hpp:459</a></div></div>
-<div class="ttc" id="astructllama_1_1Copy_3_01mapping_1_1SoA_3_01ArrayExtents_00_01RecordDim_00_01SrcBlobs_00_01SrcSubb9263f80fc3284e42fedd51b14aadf82_html_a7414e5fe066dfc3dec47688f1c3a4609"><div class="ttname"><a href="structllama_1_1Copy_3_01mapping_1_1SoA_3_01ArrayExtents_00_01RecordDim_00_01SrcBlobs_00_01SrcSubb9263f80fc3284e42fedd51b14aadf82.html#a7414e5fe066dfc3dec47688f1c3a4609">llama::Copy&lt; mapping::SoA&lt; ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex, PermuteFields &gt;, mapping::SoA&lt; ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex, PermuteFields &gt;, std::enable_if_t&lt; SrcBlobs !=DstBlobs||SrcSubArrayAlignment !=DstSubArrayAlignment &gt; &gt;::operator()</a></div><div class="ttdeci">void operator()(const View&lt; mapping::SoA&lt; ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex, PermuteFields &gt;, SrcBlob &gt; &amp;srcView, View&lt; mapping::SoA&lt; ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex, PermuteFields &gt;, DstBlob &gt; &amp;dstView, std::size_t threadId, std::size_t threadCount)</div><div class="ttdef"><b>Definition:</b> <a href="Copy_8hpp_source.html#l00492">Copy.hpp:492</a></div></div>
-<div class="ttc" id="astructllama_1_1Copy_html"><div class="ttname"><a href="structllama_1_1Copy.html">llama::Copy</a></div><div class="ttdoc">Generic implementation of copy defaulting to fieldWiseCopy. LLAMA provides several specializations of...</div><div class="ttdef"><b>Definition:</b> <a href="Copy_8hpp_source.html#l00358">Copy.hpp:359</a></div></div>
-<div class="ttc" id="astructllama_1_1Copy_html_a5456c747d230db86a65cb67f67d1aa05"><div class="ttname"><a href="structllama_1_1Copy.html#a5456c747d230db86a65cb67f67d1aa05">llama::Copy::operator()</a></div><div class="ttdeci">void operator()(const SrcView &amp;srcView, DstView &amp;dstView, std::size_t threadId, std::size_t threadCount) const</div><div class="ttdef"><b>Definition:</b> <a href="Copy_8hpp_source.html#l00361">Copy.hpp:361</a></div></div>
+<div class="ttc" id="astructllama_1_1Copy_3_01Mapping_00_01Mapping_01_4_html_a07d8bb1043f704c649aba7ec2090b4c0"><div class="ttname"><a href="structllama_1_1Copy_3_01Mapping_00_01Mapping_01_4.html#a07d8bb1043f704c649aba7ec2090b4c0">llama::Copy&lt; Mapping, Mapping &gt;::operator()</a></div><div class="ttdeci">void operator()(const SrcView &amp;srcView, DstView &amp;dstView, std::size_t threadId, std::size_t threadCount) const</div><div class="ttdef"><b>Definition:</b> <a href="Copy_8hpp_source.html#l00369">Copy.hpp:369</a></div></div>
+<div class="ttc" id="astructllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayExtents_00_01RecordDim_00_01LanesSrc_00_01Alig1ead0624d41206bf19b261e50248c1b7_html_aca1d6b0804efcbb95548a07e5166cffb"><div class="ttname"><a href="structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayExtents_00_01RecordDim_00_01LanesSrc_00_01Alig1ead0624d41206bf19b261e50248c1b7.html#aca1d6b0804efcbb95548a07e5166cffb">llama::Copy&lt; mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesSrc, AlignSrc, LinearizeArrayIndex, PermuteFields &gt;, mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesDst, AlignDst, LinearizeArrayIndex, PermuteFields &gt;, std::enable_if_t&lt; LanesSrc !=LanesDst &gt; &gt;::operator()</a></div><div class="ttdeci">void operator()(const View&lt; mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesSrc, AlignSrc, LinearizeArrayIndex, PermuteFields &gt;, SrcBlob &gt; &amp;srcView, View&lt; mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesDst, AlignDst, LinearizeArrayIndex, PermuteFields &gt;, DstBlob &gt; &amp;dstView, std::size_t threadId, std::size_t threadCount)</div><div class="ttdef"><b>Definition:</b> <a href="Copy_8hpp_source.html#l00393">Copy.hpp:393</a></div></div>
+<div class="ttc" id="astructllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayExtents_00_01RecordDim_00_01LanesSrc_00_01Alig4bb4101c04ed9279847838623873bbbf_html_a579b540da80db98cf6e878123ba3711e"><div class="ttname"><a href="structllama_1_1Copy_3_01mapping_1_1AoSoA_3_01ArrayExtents_00_01RecordDim_00_01LanesSrc_00_01Alig4bb4101c04ed9279847838623873bbbf.html#a579b540da80db98cf6e878123ba3711e">llama::Copy&lt; mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesSrc, AlignSrc, LinearizeArrayIndex, PermuteFields &gt;, mapping::SoA&lt; ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex, PermuteFields &gt; &gt;::operator()</a></div><div class="ttdeci">void operator()(const View&lt; mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesSrc, AlignSrc, LinearizeArrayIndex, PermuteFields &gt;, SrcBlob &gt; &amp;srcView, View&lt; mapping::SoA&lt; ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex, PermuteFields &gt;, DstBlob &gt; &amp;dstView, std::size_t threadId, std::size_t threadCount)</div><div class="ttdef"><b>Definition:</b> <a href="Copy_8hpp_source.html#l00423">Copy.hpp:423</a></div></div>
+<div class="ttc" id="astructllama_1_1Copy_3_01mapping_1_1SoA_3_01ArrayExtents_00_01RecordDim_00_01SrcBlobs_00_01SrcSub9770d34b14dc1e0da729ea63e513047d_html_ae24fdbc8861445cd29b71b00f3c9ad3d"><div class="ttname"><a href="structllama_1_1Copy_3_01mapping_1_1SoA_3_01ArrayExtents_00_01RecordDim_00_01SrcBlobs_00_01SrcSub9770d34b14dc1e0da729ea63e513047d.html#ae24fdbc8861445cd29b71b00f3c9ad3d">llama::Copy&lt; mapping::SoA&lt; ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex, PermuteFields &gt;, mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesDst, AlignDst, LinearizeArrayIndex, PermuteFields &gt; &gt;::operator()</a></div><div class="ttdeci">void operator()(const View&lt; mapping::SoA&lt; ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex, PermuteFields &gt;, SrcBlob &gt; &amp;srcView, View&lt; mapping::AoSoA&lt; ArrayExtents, RecordDim, LanesDst, AlignDst, LinearizeArrayIndex, PermuteFields &gt;, DstBlob &gt; &amp;dstView, std::size_t threadId, std::size_t threadCount)</div><div class="ttdef"><b>Definition:</b> <a href="Copy_8hpp_source.html#l00454">Copy.hpp:454</a></div></div>
+<div class="ttc" id="astructllama_1_1Copy_3_01mapping_1_1SoA_3_01ArrayExtents_00_01RecordDim_00_01SrcBlobs_00_01SrcSubb9263f80fc3284e42fedd51b14aadf82_html_a7414e5fe066dfc3dec47688f1c3a4609"><div class="ttname"><a href="structllama_1_1Copy_3_01mapping_1_1SoA_3_01ArrayExtents_00_01RecordDim_00_01SrcBlobs_00_01SrcSubb9263f80fc3284e42fedd51b14aadf82.html#a7414e5fe066dfc3dec47688f1c3a4609">llama::Copy&lt; mapping::SoA&lt; ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex, PermuteFields &gt;, mapping::SoA&lt; ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex, PermuteFields &gt;, std::enable_if_t&lt; SrcBlobs !=DstBlobs||SrcSubArrayAlignment !=DstSubArrayAlignment &gt; &gt;::operator()</a></div><div class="ttdeci">void operator()(const View&lt; mapping::SoA&lt; ArrayExtents, RecordDim, SrcBlobs, SrcSubArrayAlignment, LinearizeArrayIndex, PermuteFields &gt;, SrcBlob &gt; &amp;srcView, View&lt; mapping::SoA&lt; ArrayExtents, RecordDim, DstBlobs, DstSubArrayAlignment, LinearizeArrayIndex, PermuteFields &gt;, DstBlob &gt; &amp;dstView, std::size_t threadId, std::size_t threadCount)</div><div class="ttdef"><b>Definition:</b> <a href="Copy_8hpp_source.html#l00486">Copy.hpp:486</a></div></div>
+<div class="ttc" id="astructllama_1_1Copy_html"><div class="ttname"><a href="structllama_1_1Copy.html">llama::Copy</a></div><div class="ttdoc">Generic implementation of copy defaulting to fieldWiseCopy. LLAMA provides several specializations of...</div><div class="ttdef"><b>Definition:</b> <a href="Copy_8hpp_source.html#l00355">Copy.hpp:356</a></div></div>
+<div class="ttc" id="astructllama_1_1Copy_html_a5456c747d230db86a65cb67f67d1aa05"><div class="ttname"><a href="structllama_1_1Copy.html#a5456c747d230db86a65cb67f67d1aa05">llama::Copy::operator()</a></div><div class="ttdeci">void operator()(const SrcView &amp;srcView, DstView &amp;dstView, std::size_t threadId, std::size_t threadCount) const</div><div class="ttdef"><b>Definition:</b> <a href="Copy_8hpp_source.html#l00358">Copy.hpp:358</a></div></div>
 <div class="ttc" id="astructllama_1_1RecordCoord_3_4_html"><div class="ttname"><a href="structllama_1_1RecordCoord_3_4.html">llama::RecordCoord&lt;&gt;</a></div><div class="ttdef"><b>Definition:</b> <a href="RecordCoord_8hpp_source.html#l00031">RecordCoord.hpp:32</a></div></div>
 <div class="ttc" id="astructllama_1_1View_html"><div class="ttname"><a href="structllama_1_1View.html">llama::View</a></div><div class="ttdef"><b>Definition:</b> <a href="View_8hpp_source.html#l00388">View.hpp:394</a></div></div>
 <div class="ttc" id="astructllama_1_1View_html_a02995d9561c50196f5efae24031c0af6"><div class="ttname"><a href="structllama_1_1View.html#a02995d9561c50196f5efae24031c0af6">llama::View::mapping</a></div><div class="ttdeci">auto mapping() -&gt; Mapping &amp;</div><div class="ttdef"><b>Definition:</b> <a href="View_8hpp_source.html#l00436">View.hpp:436</a></div></div>
@@ -649,7 +643,7 @@ $(document).ready(function(){initNavTree('Copy_8hpp_source.html',''); initResiza
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="Copy_8hpp.html">Copy.hpp</a></li>
-    <li class="footer">Generated on Thu Feb 1 2024 20:17:00 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Fri Feb 2 2024 20:22:48 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

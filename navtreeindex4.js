@@ -1,5 +1,7 @@
 var NAVTREEINDEX4 =
 {
+"structllama_1_1RecordRef.html#ad52b41ada501955c1808b973dfc1d153":[2,0,0,25,43],
+"structllama_1_1RecordRef.html#ae19da406eef392c2cc923b2b1532458a":[2,0,0,25,42],
 "structllama_1_1RecordRef.html#ae2d91aa2202932f93e1bf2f014ca7437":[2,0,0,25,57],
 "structllama_1_1RecordRef.html#ae719daa136af26cb4684f377a1068b58":[2,0,0,25,46],
 "structllama_1_1RecordRef.html#aea6fff77548d86c90d3b2815ef72f6c5":[2,0,0,25,11],
@@ -247,7 +249,5 @@ var NAVTREEINDEX4 =
 "structllama_1_1internal_1_1FindFieldByTag.html#a964e29b3da33f2d920333980e08b7649":[2,0,0,2,11,1],
 "structllama_1_1internal_1_1FlattenRecordDimImpl.html":[2,0,0,2,27],
 "structllama_1_1internal_1_1FlattenRecordDimImpl.html#abf81f10f5d6076d1caedee436f9894ea":[2,0,0,2,27,0],
-"structllama_1_1internal_1_1FlattenRecordDimImpl_3_01Child_0fN_0e_4.html":[2,0,0,2,29],
-"structllama_1_1internal_1_1FlattenRecordDimImpl_3_01Child_0fN_0e_4.html#a9669063dc1b66a99126cf9dabad4068f":[2,0,0,2,29,0],
-"structllama_1_1internal_1_1FlattenRecordDimImpl_3_01Record_3_01Fields_8_8_8_01_4_01_4.html":[2,0,0,2,28]
+"structllama_1_1internal_1_1FlattenRecordDimImpl_3_01Child_0fN_0e_4.html":[2,0,0,2,29]
 };

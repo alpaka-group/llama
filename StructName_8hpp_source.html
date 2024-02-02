@@ -390,7 +390,7 @@ $(document).ready(function(){initNavTree('StructName_8hpp_source.html',''); init
 <div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;            constexpr <span class="keyword">auto</span> size = [&amp;]() constexpr</div>
 <div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;            {</div>
 <div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;                std::size_t s = 0;</div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;                mp_for_each&lt;Tags&gt;(</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;                mp_for_each_inline&lt;Tags&gt;(</div>
 <div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;                    [&amp;](<span class="keyword">auto</span> tag)</div>
 <div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;                    {</div>
 <div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;                        <span class="keyword">using</span> Tag = decltype(tag);</div>
@@ -413,7 +413,7 @@ $(document).ready(function(){initNavTree('StructName_8hpp_source.html',''); init
 <div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;            <a class="code" href="structllama_1_1Array.html">llama::Array&lt;char, size&gt;</a> a{};</div>
 <div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;            <span class="keyword">auto</span> it = a.<a class="code" href="structllama_1_1Array.html#a23daa97b399455f659f57512aaf59eb2">begin</a>();</div>
 <div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160; </div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;            mp_for_each&lt;Tags&gt;(</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;            mp_for_each_inline&lt;Tags&gt;(</div>
 <div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;                [&amp;](<span class="keyword">auto</span> tag) constexpr</div>
 <div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;                {</div>
 <div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;                    <span class="keyword">using</span> Tag = decltype(tag);</div>
@@ -498,7 +498,7 @@ $(document).ready(function(){initNavTree('StructName_8hpp_source.html',''); init
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_1edeeca147c2d4fb57fec1b01c02fb14.html">llama</a></li><li class="navelem"><a class="el" href="StructName_8hpp.html">StructName.hpp</a></li>
-    <li class="footer">Generated on Thu Feb 1 2024 20:17:00 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Fri Feb 2 2024 20:22:48 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

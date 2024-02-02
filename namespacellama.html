@@ -331,9 +331,9 @@ Functions</h2></td></tr>
 <tr class="memitem:af977754d689a5f3cc10fd80d4b37ba1f"><td class="memTemplParams" colspan="2">template&lt;typename SrcMapping , typename SrcBlob , typename DstMapping , typename DstBlob &gt; </td></tr>
 <tr class="memitem:af977754d689a5f3cc10fd80d4b37ba1f"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#af977754d689a5f3cc10fd80d4b37ba1f">fieldWiseCopy</a> (const <a class="el" href="structllama_1_1View.html">View</a>&lt; SrcMapping, SrcBlob &gt; &amp;srcView, <a class="el" href="structllama_1_1View.html">View</a>&lt; DstMapping, DstBlob &gt; &amp;dstView, std::size_t threadId=0, std::size_t threadCount=1)</td></tr>
 <tr class="separator:af977754d689a5f3cc10fd80d4b37ba1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abaefce711ff5d4566ea761ef08fab469"><td class="memTemplParams" colspan="2">template&lt;typename SrcMapping , typename SrcBlob , typename DstMapping , typename DstBlob &gt; </td></tr>
-<tr class="memitem:abaefce711ff5d4566ea761ef08fab469"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#abaefce711ff5d4566ea761ef08fab469">aosoaCommonBlockCopy</a> (const <a class="el" href="structllama_1_1View.html">View</a>&lt; SrcMapping, SrcBlob &gt; &amp;srcView, <a class="el" href="structllama_1_1View.html">View</a>&lt; DstMapping, DstBlob &gt; &amp;dstView, bool readOpt, std::size_t threadId=0, std::size_t threadCount=1)</td></tr>
-<tr class="separator:abaefce711ff5d4566ea761ef08fab469"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5709142c6bdd979cd192f9bd6179efe9"><td class="memTemplParams" colspan="2">template&lt;typename SrcMapping , typename SrcBlob , typename DstMapping , typename DstBlob &gt; </td></tr>
+<tr class="memitem:a5709142c6bdd979cd192f9bd6179efe9"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a5709142c6bdd979cd192f9bd6179efe9">aosoaCommonBlockCopy</a> (const <a class="el" href="structllama_1_1View.html">View</a>&lt; SrcMapping, SrcBlob &gt; &amp;srcView, <a class="el" href="structllama_1_1View.html">View</a>&lt; DstMapping, DstBlob &gt; &amp;dstView, std::size_t threadId=0, std::size_t threadCount=1)</td></tr>
+<tr class="separator:a5709142c6bdd979cd192f9bd6179efe9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab67a5448cc031309dc1aa8580b7d4950"><td class="memTemplParams" colspan="2">template&lt;typename SrcMapping , typename SrcBlob , typename DstMapping , typename DstBlob &gt; </td></tr>
 <tr class="memitem:ab67a5448cc031309dc1aa8580b7d4950"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#ab67a5448cc031309dc1aa8580b7d4950">copy</a> (const <a class="el" href="structllama_1_1View.html">View</a>&lt; SrcMapping, SrcBlob &gt; &amp;srcView, <a class="el" href="structllama_1_1View.html">View</a>&lt; DstMapping, DstBlob &gt; &amp;dstView, std::size_t threadId=0, std::size_t threadCount=1)</td></tr>
 <tr class="separator:ab67a5448cc031309dc1aa8580b7d4950"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -362,6 +362,10 @@ Functions</h2></td></tr>
 <tr class="separator:ab9c5c0a1ca0698a8871689b9924736ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af6efa2eebd35614750c0404652a0f7d2"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacellama.html#af6efa2eebd35614750c0404652a0f7d2">prettySize</a> (double size) -&gt; <a class="el" href="structllama_1_1PrettySize.html">PrettySize</a></td></tr>
 <tr class="separator:af6efa2eebd35614750c0404652a0f7d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74baa2439261b2a14765907357708080"><td class="memTemplParams" colspan="2">template&lt;typename L , typename F &gt; </td></tr>
+<tr class="memitem:a74baa2439261b2a14765907357708080"><td class="memTemplItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a74baa2439261b2a14765907357708080">mp_for_each_inline</a> (F &amp;&amp;f)</td></tr>
+<tr class="memdesc:a74baa2439261b2a14765907357708080"><td class="mdescLeft">&#160;</td><td class="mdescRight">Like boost::mp11::mp_for_each, but marked with LLAMA_FN_HOST_ACC_INLINE.  <a href="namespacellama.html#a74baa2439261b2a14765907357708080">More...</a><br /></td></tr>
+<tr class="separator:a74baa2439261b2a14765907357708080"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a32bf07b53ebc403eee401038fc95b591"><td class="memTemplParams" colspan="2">template&lt;std::size_t PieceLength, typename Mapping &gt; </td></tr>
 <tr class="memitem:a32bf07b53ebc403eee401038fc95b591"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacellama.html#a32bf07b53ebc403eee401038fc95b591">mapsPiecewiseContiguous</a> (const Mapping &amp;m) -&gt; bool</td></tr>
 <tr class="separator:a32bf07b53ebc403eee401038fc95b591"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -713,7 +717,7 @@ template&lt;auto V&gt; </div>
 
 <p>Used as template argument to specify a constant/compile-time value. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00829">829</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00828">828</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -733,7 +737,7 @@ template&lt;typename FromT , typename ToT &gt; </div>
 
 <p>Alias for ToT, adding <code>const</code> if FromT is const qualified. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00824">824</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00823">823</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -753,7 +757,7 @@ template&lt;typename RecordDim &gt; </div>
 
 <p>Returns a flat type list containing all leaf field types of the given record dimension. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00481">481</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00480">480</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -910,7 +914,7 @@ template&lt;typename RecordDimA , typename RecordDimB &gt; </div>
 
 <p>Creates a merged record dimension, where duplicated, nested fields are unified. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00818">818</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00817">817</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -988,7 +992,7 @@ template&lt;typename Expression , typename... Args&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Meta_8hpp_source.html#l00057">57</a> of file <a class="el" href="Meta_8hpp_source.html">Meta.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Meta_8hpp_source.html#l00066">66</a> of file <a class="el" href="Meta_8hpp_source.html">Meta.hpp</a>.</p>
 
 </div>
 </div>
@@ -1083,7 +1087,7 @@ template&lt;typename RecordDim , template&lt; typename &gt; typename FieldTypeFu
 </div><div class="memdoc">
 <p>Creates a new record dimension where each new leaf field's type is the result of applying FieldTypeFunctor to the original leaf field's type. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00757">757</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00756">756</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1102,7 +1106,7 @@ template&lt;typename RecordDim , template&lt; typename, typename &gt; typename F
 </div><div class="memdoc">
 <p>Creates a new record dimension where each new leaf field's type is the result of applying FieldTypeFunctor to the original leaf's <a class="el" href="structllama_1_1RecordCoord.html">RecordCoord</a> and field's type. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00750">750</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00749">749</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -1271,8 +1275,8 @@ template&lt;typename Mapping , typename Allocator  = bloballoc::Vector, typename
 
 </div>
 </div>
-<a id="abaefce711ff5d4566ea761ef08fab469"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abaefce711ff5d4566ea761ef08fab469">&#9670;&nbsp;</a></span>aosoaCommonBlockCopy()</h2>
+<a id="a5709142c6bdd979cd192f9bd6179efe9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5709142c6bdd979cd192f9bd6179efe9">&#9670;&nbsp;</a></span>aosoaCommonBlockCopy()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1290,12 +1294,6 @@ template&lt;typename SrcMapping , typename SrcBlob , typename DstMapping , typen
           <td></td>
           <td class="paramtype"><a class="el" href="structllama_1_1View.html">View</a>&lt; DstMapping, DstBlob &gt; &amp;&#160;</td>
           <td class="paramname"><em>dstView</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>readOpt</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -1597,7 +1595,7 @@ template&lt;typename SrcMapping , typename SrcBlob , typename DstMapping , typen
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Copy_8hpp_source.html#l00533">533</a> of file <a class="el" href="Copy_8hpp_source.html">Copy.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Copy_8hpp_source.html#l00527">527</a> of file <a class="el" href="Copy_8hpp_source.html">Copy.hpp</a>.</p>
 
 </div>
 </div>
@@ -1749,7 +1747,7 @@ template&lt;typename Integral &gt; </div>
 
 <p>Returns the ceiling of a / b. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00570">570</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00569">569</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -2061,7 +2059,7 @@ template&lt;typename RecordDim , typename Functor , typename... Tags&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00453">453</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00452">452</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -2309,6 +2307,38 @@ template&lt;typename Mapping , typename SrcBlob , typename DstBlob , typename Me
 </dl>
 
 <p class="definition">Definition at line <a class="el" href="Copy_8hpp_source.html#l00057">57</a> of file <a class="el" href="Copy_8hpp_source.html">Copy.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a74baa2439261b2a14765907357708080"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74baa2439261b2a14765907357708080">&#9670;&nbsp;</a></span>mp_for_each_inline()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename L , typename F &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr void llama::mp_for_each_inline </td>
+          <td>(</td>
+          <td class="paramtype">F &amp;&amp;&#160;</td>
+          <td class="paramname"><em>f</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Like boost::mp11::mp_for_each, but marked with LLAMA_FN_HOST_ACC_INLINE. </p>
+
+<p class="definition">Definition at line <a class="el" href="Meta_8hpp_source.html#l00059">59</a> of file <a class="el" href="Meta_8hpp_source.html">Meta.hpp</a>.</p>
 
 </div>
 </div>
@@ -3054,7 +3084,7 @@ template&lt;typename RecordDim &gt; </div>
 </div><div class="memdoc">
 <p>Repeatedly divides the given size (in bytes) until it fits below 1000. Returns the new size and a string literal with the corresponding unit. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00901">901</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00900">900</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -3241,7 +3271,7 @@ template&lt;typename Integral &gt; </div>
 
 <p>Returns the integral n rounded up to be a multiple of mult. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00578">578</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00577">577</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -3801,7 +3831,7 @@ template&lt;typename T &gt; </div>
 
 <p>The alignment of a type T. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00559">559</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00558">558</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -3828,7 +3858,7 @@ template&lt;typename... Fields&gt; </div>
 </div><div class="memdoc">
 <p>The alignment of a record dimension if its fields would be in a normal struct. Effectively returns the maximum alignment value in the type list. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00565">565</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00564">564</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -3881,7 +3911,7 @@ template&lt;typename TypeList &gt; </div>
 </div><div class="memdoc">
 <p>The alignment of a type list if its elements would be in a normal struct. Effectively returns the maximum alignment value in the type list. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00554">554</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00553">553</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -3909,7 +3939,7 @@ template&lt;typename RecordDim &gt; </div>
 
 <p>The total number of fields in the recursively expanded record dimension. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00486">486</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00485">485</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -3935,7 +3965,7 @@ template&lt;typename Child , std::size_t N&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00495">495</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00494">494</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -3961,7 +3991,7 @@ template&lt;typename... Children&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00490">490</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00489">489</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -3989,7 +4019,7 @@ template&lt;typename TypeList , std::size_t I, bool Align&gt; </div>
 
 <p>The byte offset of an element in a type list ifs elements would be in a normal struct. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00634">634</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00633">633</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -4016,7 +4046,7 @@ template&lt;typename RecordDim , typename RecordCoord &gt; </div>
 </div><div class="memdoc">
 <p>The equivalent zero based index into a flat record dimension (<a class="el" href="namespacellama.html#a1fddf1f638927edfb8da8e3c78da4e1c">FlatRecordDim</a>) of the given hierarchical record coordinate. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00517">517</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00516">516</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -4042,7 +4072,7 @@ template&lt;typename Child , std::size_t N, std::size_t I, std::size_t... Is&gt;
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00531">531</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00530">530</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -4069,11 +4099,11 @@ template&lt;typename... Children, std::size_t I, std::size_t... Is&gt; </div>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">= <a class="code" href="namespacellama_1_1internal.html#a1dc0436b8f0598e4fe3e707051be5b5f">internal::flatFieldCountBefore</a>&lt;I, Record&lt;Children...&gt;&gt;</div>
 <div class="line">        + <a class="code" href="namespacellama.html#a6c3056b43b48f32a66160a6dd273662d">flatRecordCoord</a>&lt;<a class="code" href="namespacellama.html#a75dfd56127d13358c2991a57340657dc">GetFieldType</a>&lt;mp_at_c&lt;Record&lt;Children...&gt;, I&gt;&gt;, RecordCoord&lt;Is...&gt;&gt;</div>
-<div class="ttc" id="anamespacellama_1_1internal_html_a1dc0436b8f0598e4fe3e707051be5b5f"><div class="ttname"><a href="namespacellama_1_1internal.html#a1dc0436b8f0598e4fe3e707051be5b5f">llama::internal::flatFieldCountBefore</a></div><div class="ttdeci">constexpr std::size_t flatFieldCountBefore</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00500">Core.hpp:500</a></div></div>
-<div class="ttc" id="anamespacellama_html_a6c3056b43b48f32a66160a6dd273662d"><div class="ttname"><a href="namespacellama.html#a6c3056b43b48f32a66160a6dd273662d">llama::flatRecordCoord</a></div><div class="ttdeci">constexpr std::size_t flatRecordCoord</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00517">Core.hpp:517</a></div></div>
+<div class="ttc" id="anamespacellama_1_1internal_html_a1dc0436b8f0598e4fe3e707051be5b5f"><div class="ttname"><a href="namespacellama_1_1internal.html#a1dc0436b8f0598e4fe3e707051be5b5f">llama::internal::flatFieldCountBefore</a></div><div class="ttdeci">constexpr std::size_t flatFieldCountBefore</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00499">Core.hpp:499</a></div></div>
+<div class="ttc" id="anamespacellama_html_a6c3056b43b48f32a66160a6dd273662d"><div class="ttname"><a href="namespacellama.html#a6c3056b43b48f32a66160a6dd273662d">llama::flatRecordCoord</a></div><div class="ttdeci">constexpr std::size_t flatRecordCoord</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00516">Core.hpp:516</a></div></div>
 <div class="ttc" id="anamespacellama_html_a75dfd56127d13358c2991a57340657dc"><div class="ttname"><a href="namespacellama.html#a75dfd56127d13358c2991a57340657dc">llama::GetFieldType</a></div><div class="ttdeci">mp_second&lt; Field &gt; GetFieldType</div><div class="ttdoc">Get the type from a Field.</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00191">Core.hpp:191</a></div></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00525">525</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00524">524</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -4099,7 +4129,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00521">521</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00520">520</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -4127,7 +4157,7 @@ template&lt;typename TypeList , bool Align, bool IncludeTailPadding = true&gt; <
 
 <p>The size of a type list if its elements would be in a normal struct. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00618">618</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00617">617</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -4285,7 +4315,7 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00846">846</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00845">845</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -4549,7 +4579,7 @@ template&lt;typename T &gt; </div>
 
 <p>True if the T is a record dimension. That is, T is either a <a class="el" href="structllama_1_1Record.html" title="A type list of Fields which may be used to define a record dimension.">llama::Record</a> or a bounded array. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00698">698</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00697">697</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -4686,7 +4716,7 @@ template&lt;typename RecordDim , typename RecordCoord , bool Align = false&gt; <
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00661">661</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00660">660</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -4894,7 +4924,7 @@ template&lt;typename T , bool Align = false, bool IncludeTailPadding = true&gt; 
 
 <p>The size of a type T. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00623">623</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00622">622</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -4922,7 +4952,7 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 
 <p>The size of a record dimension if its fields would be in a normal struct. </p>
 
-<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00628">628</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Core_8hpp_source.html#l00627">627</a> of file <a class="el" href="Core_8hpp_source.html">Core.hpp</a>.</p>
 
 </div>
 </div>
@@ -4932,7 +4962,7 @@ template&lt;typename... Fields, bool Align, bool IncludeTailPadding&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li>
-    <li class="footer">Generated on Thu Feb 1 2024 20:17:00 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Fri Feb 2 2024 20:22:48 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
