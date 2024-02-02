@@ -18,7 +18,7 @@
 
 constexpr auto repetitions = 20; // excluding 1 warmup run
 constexpr auto extents = llama::ArrayExtentsDynamic<std::size_t, 3>{512, 512, 16};
-constexpr auto measureMemcpy = false;
+constexpr auto measureMemcpy = true;
 constexpr auto runParallelVersions = true;
 constexpr auto maxMismatchesPrintedPerFailedCopy = 10;
 
