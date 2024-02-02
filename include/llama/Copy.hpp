@@ -258,37 +258,50 @@ namespace llama
             // optimized for linear reading
             constexpr auto srcL = srcIsAoSoA ? lanesSrc : l;
             const auto elementsPerThread = flatSize / srcL / threadCount * srcL;
+            const auto start = threadId * elementsPerThread;
+            const auto stop = threadId == threadCount - 1 ? flatSize : (threadId + 1) * elementsPerThread;
+
+            auto copyLBlock = [&](const std::byte*& threadSrc, std::size_t dstIndex, auto rc) LLAMA_LAMBDA_INLINE
             {
-                const auto start = threadId * elementsPerThread;
-                const auto stop = threadId == threadCount - 1 ? flatSize : (threadId + 1) * elementsPerThread;
+                constexpr auto bytes = l * sizeof(GetType<RecordDim, decltype(rc)>);
+                std::memcpy(mapDst(dstIndex, rc), threadSrc, bytes);
+                threadSrc += bytes;
+            };
 
-                auto copyLBlock = [&](const std::byte*& threadSrc, std::size_t dstIndex, auto rc) LLAMA_LAMBDA_INLINE
+            // if the AoSoA is packed we can move the src pointer along
+            if constexpr(srcIsAoSoA)
+            {
+                if constexpr(SrcMapping::fieldAlignment == mapping::FieldAlignment::Pack)
                 {
-                    constexpr auto bytes = l * sizeof(GetType<RecordDim, decltype(rc)>);
-                    std::memcpy(mapDst(dstIndex, rc), threadSrc, bytes);
-                    threadSrc += bytes;
-                };
-
-                // if the AoSoA is packed we can move the src pointer along
-                if constexpr(srcIsAoSoA)
-                {
-                    if constexpr(SrcMapping::fieldAlignment == mapping::FieldAlignment::Pack)
-                    {
-                        auto* threadSrc = mapSrc(start, RecordCoord<>{});
-                        for(std::size_t i = start; i < stop; i += lanesSrc)
-                            forEachLeafCoord<RecordDim>(
-                                [&](auto rc) LLAMA_LAMBDA_INLINE
+                    auto* threadSrc = mapSrc(start, RecordCoord<>{});
+                    for(std::size_t i = start; i < stop; i += lanesSrc)
+                        forEachLeafCoord<RecordDim>(
+                            [&](auto rc) LLAMA_LAMBDA_INLINE
+                            {
+                                for(std::size_t j = 0; j < lanesSrc; j += l)
                                 {
-                                    for(std::size_t j = 0; j < lanesSrc; j += l)
-                                    {
-                                        assert(threadSrc == mapSrc(i + j, rc));
-                                        copyLBlock(threadSrc, i + j, rc);
-                                    }
-                                });
-                        return;
-                    }
+                                    assert(threadSrc == mapSrc(i + j, rc));
+                                    copyLBlock(threadSrc, i + j, rc);
+                                }
+                            });
                 }
-
+                else
+                {
+                    for(std::size_t i = start; i < stop; i += lanesSrc)
+                        forEachLeafCoord<RecordDim>(
+                            [&](auto rc) LLAMA_LAMBDA_INLINE
+                            {
+                                auto* threadSrc = mapSrc(i, rc);
+                                for(std::size_t j = 0; j < lanesSrc; j += l)
+                                {
+                                    assert(threadSrc == mapSrc(i + j, rc));
+                                    copyLBlock(threadSrc, i + j, rc);
+                                }
+                            });
+                }
+            }
+            else
+            {
                 forEachLeafCoord<RecordDim>(
                     [&](auto rc) LLAMA_LAMBDA_INLINE
                     {
@@ -305,37 +318,51 @@ namespace llama
             // optimized for linear writing
             constexpr auto dstL = dstIsAoSoA ? lanesDst : l;
             const auto elementsPerThread = flatSize / dstL / threadCount * dstL;
+
+            const auto start = threadId * elementsPerThread;
+            const auto stop = threadId == threadCount - 1 ? flatSize : (threadId + 1) * elementsPerThread;
+
+            auto copyLBlock = [&](std::byte*& threadDst, std::size_t srcIndex, auto rc) LLAMA_LAMBDA_INLINE
             {
-                const auto start = threadId * elementsPerThread;
-                const auto stop = threadId == threadCount - 1 ? flatSize : (threadId + 1) * elementsPerThread;
+                constexpr auto bytes = l * sizeof(GetType<RecordDim, decltype(rc)>);
+                std::memcpy(threadDst, mapSrc(srcIndex, rc), bytes);
+                threadDst += bytes;
+            };
 
-                auto copyLBlock = [&](std::byte*& threadDst, std::size_t srcIndex, auto rc) LLAMA_LAMBDA_INLINE
+            // if the AoSoA is packed we can move the dst pointer along
+            if constexpr(dstIsAoSoA)
+            {
+                if constexpr(DstMapping::fieldAlignment == mapping::FieldAlignment::Pack)
                 {
-                    constexpr auto bytes = l * sizeof(GetType<RecordDim, decltype(rc)>);
-                    std::memcpy(threadDst, mapSrc(srcIndex, rc), bytes);
-                    threadDst += bytes;
-                };
-
-                // if the AoSoA is packed we can move the dst pointer along
-                if constexpr(dstIsAoSoA)
-                {
-                    if constexpr(DstMapping::fieldAlignment == mapping::FieldAlignment::Pack)
-                    {
-                        auto* threadDst = mapDst(start, RecordCoord<>{});
-                        for(std::size_t i = start; i < stop; i += lanesDst)
-                            forEachLeafCoord<RecordDim>(
-                                [&](auto rc) LLAMA_LAMBDA_INLINE
+                    auto* threadDst = mapDst(start, RecordCoord<>{});
+                    for(std::size_t i = start; i < stop; i += lanesDst)
+                        forEachLeafCoord<RecordDim>(
+                            [&](auto rc) LLAMA_LAMBDA_INLINE
+                            {
+                                for(std::size_t j = 0; j < lanesDst; j += l)
                                 {
-                                    for(std::size_t j = 0; j < lanesDst; j += l)
-                                    {
-                                        assert(threadDst == mapDst(i + j, rc));
-                                        copyLBlock(threadDst, i + j, rc);
-                                    }
-                                });
-                        return;
-                    }
+                                    assert(threadDst == mapDst(i + j, rc));
+                                    copyLBlock(threadDst, i + j, rc);
+                                }
+                            });
                 }
-
+                else
+                {
+                    for(std::size_t i = start; i < stop; i += lanesDst)
+                        forEachLeafCoord<RecordDim>(
+                            [&](auto rc) LLAMA_LAMBDA_INLINE
+                            {
+                                auto* threadDst = mapDst(i, rc);
+                                for(std::size_t j = 0; j < lanesDst; j += l)
+                                {
+                                    assert(threadDst == mapDst(i + j, rc));
+                                    copyLBlock(threadDst, i + j, rc);
+                                }
+                            });
+                }
+            }
+            else
+            {
                 forEachLeafCoord<RecordDim>(
                     [&](auto rc) LLAMA_LAMBDA_INLINE
                     {
