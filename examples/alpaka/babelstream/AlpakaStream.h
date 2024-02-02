@@ -20,7 +20,7 @@
 inline constexpr auto IMPLEMENTATION_STRING = "alpaka/LLAMA";
 
 using Dim = alpaka::DimInt<1>;
-using Idx = int;
+using Idx = int; // use size_t for large problem sizes
 using Vec = alpaka::Vec<Dim, Idx>;
 using Acc = alpaka::ExampleDefaultAcc<Dim, Idx>;
 
