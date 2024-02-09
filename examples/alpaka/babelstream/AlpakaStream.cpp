@@ -13,8 +13,8 @@
 
 namespace
 {
-    constexpr auto blockSize = 1024;
-    constexpr auto dotBlockSize = 256;
+    constexpr auto blockSize = Idx{1024};
+    constexpr auto dotBlockSize = Idx{256};
 
     struct StreamingAccessor
     {
@@ -87,7 +87,7 @@ struct InitKernel
 template<typename T>
 void AlpakaStream<T>::init_arrays(T initA, T initB, T initC)
 {
-    auto const workdiv = WorkDiv{arraySize / blockSize, blockSize, 1};
+    auto const workdiv = WorkDiv{arraySize / blockSize, blockSize, Idx{1}};
     // auto const workdiv = alpaka::getValidWorkDiv(devAcc, arraySize);
     alpaka::exec<Acc>(
         queue,
@@ -123,7 +123,7 @@ struct CopyKernel
 template<typename T>
 void AlpakaStream<T>::copy()
 {
-    auto const workdiv = WorkDiv{arraySize / blockSize, blockSize, 1};
+    auto const workdiv = WorkDiv{arraySize / blockSize, blockSize, Idx{1}};
     // auto const workdiv = alpaka::getValidWorkDiv(devAcc, arraySize);
     auto viewA
         = llama::View{mapping, llama::Array{reinterpret_cast<std::byte*>(alpaka::getPtrNative(d_a))}, Accessor{}};
@@ -147,7 +147,7 @@ struct MulKernel
 template<typename T>
 void AlpakaStream<T>::mul()
 {
-    auto const workdiv = WorkDiv{arraySize / blockSize, blockSize, 1};
+    auto const workdiv = WorkDiv{arraySize / blockSize, blockSize, Idx{1}};
     // auto const workdiv = alpaka::getValidWorkDiv(devAcc, arraySize);
     auto viewB
         = llama::View{mapping, llama::Array{reinterpret_cast<std::byte*>(alpaka::getPtrNative(d_b))}, Accessor{}};
@@ -170,7 +170,7 @@ struct AddKernel
 template<typename T>
 void AlpakaStream<T>::add()
 {
-    auto const workdiv = WorkDiv{arraySize / blockSize, blockSize, 1};
+    auto const workdiv = WorkDiv{arraySize / blockSize, blockSize, Idx{1}};
     // auto const workdiv = alpaka::getValidWorkDiv(devAcc, arraySize);
     auto viewA
         = llama::View{mapping, llama::Array{reinterpret_cast<std::byte*>(alpaka::getPtrNative(d_a))}, Accessor{}};
@@ -196,7 +196,7 @@ struct TriadKernel
 template<typename T>
 void AlpakaStream<T>::triad()
 {
-    auto const workdiv = WorkDiv{arraySize / blockSize, blockSize, 1};
+    auto const workdiv = WorkDiv{arraySize / blockSize, blockSize, Idx{1}};
     // auto const workdiv = alpaka::getValidWorkDiv(devAcc, arraySize);
     auto viewA
         = llama::View{mapping, llama::Array{reinterpret_cast<std::byte*>(alpaka::getPtrNative(d_a))}, Accessor{}};
@@ -222,7 +222,7 @@ struct NstreamKernel
 template<typename T>
 void AlpakaStream<T>::nstream()
 {
-    auto const workdiv = WorkDiv{arraySize / blockSize, blockSize, 1};
+    auto const workdiv = WorkDiv{arraySize / blockSize, blockSize, Idx{1}};
     // auto const workdiv = alpaka::getValidWorkDiv(devAcc, arraySize);
     auto viewA
         = llama::View{mapping, llama::Array{reinterpret_cast<std::byte*>(alpaka::getPtrNative(d_a))}, Accessor{}};
@@ -270,7 +270,7 @@ struct DotKernel
 template<typename T>
 auto AlpakaStream<T>::dot() -> T
 {
-    auto const workdiv = WorkDiv{dotBlockSize, blockSize, 1};
+    auto const workdiv = WorkDiv{dotBlockSize, blockSize, Idx{1}};
     // auto const workdiv = alpaka::getValidWorkDiv(devAcc, dotBlockSize * blockSize);
     auto viewA
         = llama::View{mapping, llama::Array{reinterpret_cast<std::byte*>(alpaka::getPtrNative(d_a))}, Accessor{}};
