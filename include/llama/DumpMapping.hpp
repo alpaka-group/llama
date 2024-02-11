@@ -13,6 +13,7 @@
 #    include <functional>
 #    include <optional>
 #    include <string>
+#    include <string_view>
 #    include <vector>
 
 namespace llama
@@ -250,7 +251,8 @@ namespace llama
         const Mapping& mapping,
         std::size_t wrapByteCount = 64,
         bool breakBoxes = true,
-        const std::vector<std::uint32_t>& palette = {}) -> std::string
+        const std::vector<std::uint32_t>& palette = {},
+        std::string_view textColor = "black") -> std::string
     {
         constexpr auto byteSizeInPixel = 30;
         constexpr auto blobBlockWidth = 60;
@@ -276,13 +278,14 @@ namespace llama
             const auto height = blobRows * byteSizeInPixel;
             svg += fmt::format(
                 R"a(<rect x="0" y="{}" width="{}" height="{}" fill="#AAA" stroke="#000"/>
-<text x="{}" y="{}" fill="#000" text-anchor="middle">{}</text>
+<text x="{}" y="{}" fill="{}" text-anchor="middle">{}</text>
 )a",
                 blobYOffset[i],
                 blobBlockWidth,
                 height,
                 blobBlockWidth / 2,
                 blobYOffset[i] + height / 2,
+                textColor,
                 name);
         };
         for(std::size_t i = 0; i < Mapping::blobCount; i++)
@@ -377,10 +380,11 @@ namespace llama
                     y + byteSizeInPixel);
             }
             svg += fmt::format(
-                R"(<text x="{}" y="{}" fill="#000" text-anchor="middle" class="label">{} {}</text>
+                R"(<text x="{}" y="{}" fill="{}" text-anchor="middle" class="label">{} {}</text>
 )",
                 x + width / 2,
                 y + byteSizeInPixel * 3 / 4,
+                textColor,
                 internal::formatArrayIndex(info.arrayIndex),
                 internal::xmlEscape(std::string{info.recordCoordTags}));
             if(cropBoxes)
@@ -411,9 +415,10 @@ namespace llama
 
     LLAMA_EXPORT
     template<typename Mapping>
-    auto toSvg(const Mapping& mapping, const std::vector<std::uint32_t>& palette) -> std::string
+    auto toSvg(const Mapping& mapping, const std::vector<std::uint32_t>& palette, std::string_view textColor = "#000")
+        -> std::string
     {
-        return toSvg(mapping, 64, true, palette);
+        return toSvg(mapping, 64, true, palette, textColor);
     }
 
     /// Returns an HTML document visualizing the memory layout created by the given mapping. The visualization is

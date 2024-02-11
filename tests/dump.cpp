@@ -15,13 +15,13 @@ namespace
     using ArrayExtents = decltype(extents);
 
     template<typename Mapping>
-    void dump(const Mapping& mapping, const std::vector<std::uint32_t>& palette = {})
+    void dump(const Mapping& mapping, const std::vector<std::uint32_t>& palette = {}, std::string_view font = "black")
     {
         const auto outputDir = std::string{"dump"};
         std::filesystem::create_directory(outputDir);
         // undocumented Catch feature, see: https://github.com/catchorg/Catch2/issues/510
         const auto filename = outputDir + "/" + Catch::getResultCapture().getCurrentTestName();
-        std::ofstream{filename + ".svg"} << llama::toSvg(mapping, palette);
+        std::ofstream{filename + ".svg"} << llama::toSvg(mapping, palette, font);
         std::ofstream{filename + ".html"} << llama::toHtml(mapping);
     }
 } // namespace
@@ -410,7 +410,8 @@ TEST_CASE("dump.AdePT.track.palette")
 {
     dump(
         llama::mapping::AoS<llama::ArrayExtents<int, 8>, Track>{{}},
-        {0xFF0000, 0x00FF00, 0x0000FF, 0xFFFF00, 0xFF00FF, 0x00FFFF, 0xFFFFFF});
+        {0xFF0000, 0x00FF00, 0x0000FF, 0xFFFF00, 0xFF00FF, 0x00FFFF, 0xFFFFFF},
+        "white");
 }
 
 TEST_CASE("dump.LHCb.Custom4")
