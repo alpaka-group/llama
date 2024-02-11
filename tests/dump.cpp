@@ -217,6 +217,11 @@ TEST_CASE("dump.ParticleUnaligned.AoSoA4")
     dump(llama::mapping::AoSoA<ArrayExtents, ParticleUnaligned, 4>{extents});
 }
 
+TEST_CASE("dump.ParticleUnaligned.AoSoA4.packed")
+{
+    dump(llama::mapping::AoSoA<ArrayExtents, ParticleUnaligned, 4, llama::mapping::FieldAlignment::Pack>{extents});
+}
+
 TEST_CASE("dump.ParticleUnaligned.AoSoA8")
 {
     dump(llama::mapping::AoSoA<ArrayExtents, ParticleUnaligned, 8>{extents});
