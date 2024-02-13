@@ -5755,16 +5755,17 @@
 	#    include <functional>
 	#    include <optional>
 	// #    include <string>    // amalgamate: file already included
+	// #    include <string_view>    // amalgamate: file already included
 	// #    include <vector>    // amalgamate: file already included
 
 	namespace llama
 	{
 	    namespace internal
 	    {
-	        inline auto color(std::string_view recordCoordTags) -> std::size_t
+	        inline auto color(std::string_view recordCoordTags) -> std::uint32_t
 	        {
-	            auto c = std::hash<std::string_view>{}(recordCoordTags) &std::size_t{0xFFFFFF};
-	            c |= std::size_t{0x404040}; // ensure color per channel is at least 0x40.
+	            auto c = static_cast<uint32_t>(std::hash<std::string_view>{}(recordCoordTags) &std::size_t{0xFFFFFF});
+	            c |= 0x404040u; // ensure color per channel is at least 0x40.
 	            return c;
 	        }
 
@@ -5824,6 +5825,7 @@
 	        struct FieldBox
 	        {
 	            ArrayIndex arrayIndex;
+	            std::size_t flatRecordCoord;
 	            std::string_view recordCoordTags;
 	            NrAndOffset<std::size_t> nrAndOffset;
 	            std::size_t size;
@@ -5847,8 +5849,14 @@
 	            using Mapping = typename View::Mapping;
 	            using RecordDim = typename Mapping::RecordDim;
 
-	            auto emitInfo = [&](auto nrAndOffset, std::size_t size) {
-	                infos.push_back({ai, prettyRecordCoord<RecordDim>(rc), nrAndOffset, size});
+	            auto emitInfo = [&](auto nrAndOffset, std::size_t size)
+	            {
+	                infos.push_back(
+	                    {ai,
+	                     flatRecordCoord<RecordDim, RecordCoord>,
+	                     prettyRecordCoord<RecordDim>(rc),
+	                     nrAndOffset,
+	                     size});
 	            };
 
 	            using Type = GetType<RecordDim, decltype(rc)>;
@@ -5936,6 +5944,7 @@
 	                            const auto [nr, off] = mapping.blobNrAndOffset(ai, rc);
 	                            infos.push_back(
 	                                {ai,
+	                                 flatRecordCoord<RecordDim, decltype(rc)>,
 	                                 prettyRecordCoord<RecordDim>(rc),
 	                                 {static_cast<std::size_t>(nr), static_cast<std::size_t>(off)},
 	                                 sizeof(Type)});
@@ -5976,9 +5985,16 @@
 
 	    /// Returns an SVG image visualizing the memory layout created by the given mapping. The created memory blocks are
 	    /// wrapped after wrapByteCount bytes.
+	    /// @param palette RGB colors as 0x00RRGGBB assigned cyclically. When empty, colors are assigned by hashing the
+	    /// record coordinate.
 	    LLAMA_EXPORT
 	    template<typename Mapping>
-	    auto toSvg(const Mapping& mapping, std::size_t wrapByteCount = 64, bool breakBoxes = true) -> std::string
+	    auto toSvg(
+	        const Mapping& mapping,
+	        std::size_t wrapByteCount = 64,
+	        bool breakBoxes = true,
+	        const std::vector<std::uint32_t>& palette = {},
+	        std::string_view textColor = "black") -> std::string
 	    {
 	        constexpr auto byteSizeInPixel = 30;
 	        constexpr auto blobBlockWidth = 60;
@@ -6004,13 +6020,14 @@
 	            const auto height = blobRows * byteSizeInPixel;
 	            svg += fmt::format(
 	                R"a(<rect x="0" y="{}" width="{}" height="{}" fill="#AAA" stroke="#000"/>
-	<text x="{}" y="{}" fill="#000" text-anchor="middle">{}</text>
+	<text x="{}" y="{}" fill="{}" text-anchor="middle">{}</text>
 	)a",
 	                blobYOffset[i],
 	                blobBlockWidth,
 	                height,
 	                blobBlockWidth / 2,
 	                blobYOffset[i] + height / 2,
+	                textColor,
 	                name);
 	        };
 	        for(std::size_t i = 0; i < Mapping::blobCount; i++)
@@ -6051,7 +6068,12 @@
 	            }();
 	            auto x = (offset % wrapByteCount) * byteSizeInPixel + blobBlockWidth;
 	            auto y = (offset / wrapByteCount) * byteSizeInPixel + blobY;
-	            const auto fill = internal::color(info.recordCoordTags);
+	            const auto fillColor = [&]
+	            {
+	                if(palette.empty())
+	                    return internal::color(info.recordCoordTags);
+	                return palette[info.flatRecordCoord % palette.size()];
+	            }();
 	            const auto width = byteSizeInPixel * info.size;
 
 	            const auto nextOffset = [&]
@@ -6081,13 +6103,13 @@
 	                y = 0;
 	            }
 	            svg += fmt::format(
-	                R"(<rect x="{}" y="{}" width="{}" height="{}" fill="#{:X}" stroke="#000" fill-opacity="{}"/>
+	                R"(<rect x="{}" y="{}" width="{}" height="{}" fill="#{:06X}" stroke="#000" fill-opacity="{}"/>
 	)",
 	                x,
 	                y,
 	                width,
 	                byteSizeInPixel,
-	                fill,
+	                fillColor,
 	                isOverlapped ? 0.3 : 1.0);
 	            for(std::size_t i = 1; i < info.size; i++)
 	            {
@@ -6100,10 +6122,11 @@
 	                    y + byteSizeInPixel);
 	            }
 	            svg += fmt::format(
-	                R"(<text x="{}" y="{}" fill="#000" text-anchor="middle" class="label">{} {}</text>
+	                R"(<text x="{}" y="{}" fill="{}" text-anchor="middle" class="label">{} {}</text>
 	)",
 	                x + width / 2,
 	                y + byteSizeInPixel * 3 / 4,
+	                textColor,
 	                internal::formatArrayIndex(info.arrayIndex),
 	                internal::xmlEscape(std::string{info.recordCoordTags}));
 	            if(cropBoxes)
@@ -6130,6 +6153,14 @@
 
 	        svg += "</svg>";
 	        return svg;
+	    }
+
+	    LLAMA_EXPORT
+	    template<typename Mapping>
+	    auto toSvg(const Mapping& mapping, const std::vector<std::uint32_t>& palette, std::string_view textColor = "#000")
+	        -> std::string
+	    {
+	        return toSvg(mapping, 64, true, palette, textColor);
 	    }
 
 	    /// Returns an HTML document visualizing the memory layout created by the given mapping. The visualization is
