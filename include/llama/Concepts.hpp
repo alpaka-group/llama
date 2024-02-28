@@ -205,6 +205,13 @@ namespace llama
         {
             cv.blobs()
         } -> std::same_as<const Array<typename V::BlobType, V::Mapping::blobCount>&>;
+
+        v(std::declval<typename V::ArrayIndex>());
+        cv(std::declval<typename V::ArrayIndex>());
+        v[std::declval<typename V::ArrayIndex>()];
+        cv[std::declval<typename V::ArrayIndex>()];
+        // operator(i0, i1, ...)
+        // operator[i0, i1, ...]
     };
 #endif
 
