@@ -20,6 +20,7 @@ TEST_CASE("view.concept")
     using ArrayExtents = llama::ArrayExtentsDynamic<std::size_t, 2>;
     using View = llama::View<llama::mapping::AlignedAoS<ArrayExtents, RecordDimJustInt>, std::byte*>;
     STATIC_REQUIRE(llama::AnyView<View>);
+    STATIC_REQUIRE(std::semiregular<View>);
     // TODO(bgruber): finish SubView iterators and reenable this check
     // using SubView = llama::SubView<View>;
     // STATIC_REQUIRE(llama::AnyView<SubView>);
