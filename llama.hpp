@@ -1666,6 +1666,7 @@ namespace llama
 		    /// \tparam RecordCoordA \ref RecordCoord based on RecordDimA along which the tags are compared.
 		    /// \tparam RecordDimB second record dimension.
 		    /// \tparam RecordCoordB \ref RecordCoord based on RecordDimB along which the tags are compared.
+		    /// \hideinitializer
 		    LLAMA_EXPORT
 		    template<typename RecordDimA, typename RecordCoordA, typename RecordDimB, typename RecordCoordB>
 		    inline constexpr auto hasSameTags = []() constexpr
@@ -4374,11 +4375,11 @@ namespace llama
 	            { forEachLeafCoord<RecordDim>([&](auto rc) LLAMA_LAMBDA_INLINE { constructField(view, ai, rc); }); });
 	    }
 
-	    /// Creates a view based on the given mapping, e.g. \ref AoS or \ref :SoA. For allocating the view's underlying
-	    /// memory, the specified allocator callable is used (or the default one, which is \ref bloballoc::Vector). The
-	    /// allocator callable is called with the alignment and size of bytes to allocate for each blob of the mapping.
-	    /// Value-initialization is performed for all fields by calling \ref constructFields. This function is the
-	    /// preferred way to create a \ref View. See also \ref allocViewUninitialized.
+	    /// Creates a view based on the given mapping, e.g. \ref mapping::AoS or \ref mapping::SoA. For allocating the
+	    /// view's underlying memory, the specified allocator callable is used (or the default one, which is
+	    /// \ref bloballoc::Vector). The allocator callable is called with the alignment and size of bytes to allocate for
+	    /// each blob of the mapping. Value-initialization is performed for all fields by calling \ref constructFields.
+	    /// This function is the preferred way to create a \ref View. See also \ref allocViewUninitialized.
 	    LLAMA_EXPORT
 	#ifdef __cpp_lib_concepts
 	    template<typename Mapping, BlobAllocator Allocator = bloballoc::Vector, typename Accessor = accessor::Default>
@@ -5634,6 +5635,7 @@ namespace llama
 	{
 	    /// The maximum number of vector lanes that can be used to fetch each leaf type in the record dimension into a
 	    /// vector register of the given size in bits.
+	    /// \hideinitializer
 	    LLAMA_EXPORT
 	    template<typename RecordDim, std::size_t VectorRegisterBits>
 	    inline constexpr std::size_t maxLanes = []() constexpr
@@ -8523,6 +8525,7 @@ namespace llama::mapping
         }
 
         /// An example script for plotting the ASCII heatmap data using gnuplot.
+        /// \hideinitializer
         static constexpr std::string_view gnuplotScriptAscii = R"(#!/bin/bash
 gnuplot -p <<EOF
 file = '${1:-plot.bin}'
@@ -8537,6 +8540,7 @@ EOF
 )";
 
         /// An example script for plotting the binary heatmap data using gnuplot.
+        /// \hideinitializer
         static constexpr std::string_view gnuplotScriptBinary = R"(#!/bin/bash
 gnuplot -p <<EOF
 file = '${1:-plot.bin}'
@@ -10954,6 +10958,7 @@ namespace llama::mapping
 	    /// multiple SIMD vectors for some field types.
 	    /// @tparam RecordDim The record dimension to simdize
 	    /// @tparam MakeSimd Type function creating a SIMD type given a field type from the record dimension.
+	    /// @hideinitializer
 	    LLAMA_EXPORT
 	    template<typename RecordDim, template<typename> typename MakeSimd>
 	    inline constexpr std::size_t simdLanesWithFullVectorsFor
@@ -10964,6 +10969,7 @@ namespace llama::mapping
 	    /// registers for some data types.
 	    /// @tparam RecordDim The record dimension to simdize
 	    /// @tparam MakeSimd Type function creating a SIMD type given a field type from the record dimension.
+	    /// @hideinitializer
 	    LLAMA_EXPORT
 	    template<typename RecordDim, template<typename> typename MakeSimd>
 	    inline constexpr std::size_t simdLanesWithLeastRegistersFor
