@@ -27,7 +27,7 @@ Array
    :members:
 .. doxygenfunction:: llama::pushFront
 .. doxygenfunction:: llama::pushBack
-.. doxygenfunction:: llama::popFront([[maybe_unused]] Array<T, N> a)
+.. doxygenfunction:: llama::popFront(Array<T, N> a)
 .. doxygenfunction:: llama::popBack
 .. doxygenfunction:: llama::product(Array<T, N> a)
 
@@ -83,7 +83,7 @@ Record dimension
 .. doxygenfunction:: llama::forEachLeafCoord(Functor &&functor, Tags... baseTags)
 .. doxygenfunction:: llama::forEachLeafCoord(Functor &&functor, RecordCoord<Coords...> baseCoord)
 
-.. doxygenfunction:: llama::prettyRecordCoord
+.. doxygenfunction:: llama::prettyRecordCoord(RecordCoord<Coords...>)
 
 Record coordinates
 ------------------
@@ -135,7 +135,8 @@ Mappings
 .. doxygentypedef:: llama::mapping::AlignedAoS
 .. doxygentypedef:: llama::mapping::MinAlignedAoS
 .. doxygentypedef:: llama::mapping::PackedAoS
-.. doxygentypedef:: llama::mapping::SingleBlobSoA
+.. doxygentypedef:: llama::mapping::AlignedSingleBlobSoA
+.. doxygentypedef:: llama::mapping::PackedSingleBlobSoA
 .. doxygentypedef:: llama::mapping::MultiBlobSoA
 .. doxygenstruct:: llama::mapping::AoSoA
    :members:
@@ -230,7 +231,8 @@ SIMD
 .. doxygenvariable:: llama::simdLanes
 .. doxygentypedef:: llama::SimdizeN
 .. doxygentypedef:: llama::Simdize
-.. doxygenvariable:: llama::simdLanesFor
+.. doxygenvariable:: llama::simdLanesWithFullVectorsFor
+.. doxygenvariable:: llama::simdLanesWithLeastRegistersFor
 .. doxygentypedef:: llama::SimdN
 .. doxygentypedef:: llama::Simd
 .. doxygenfunction:: llama::loadSimd

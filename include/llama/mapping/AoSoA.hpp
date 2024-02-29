@@ -11,6 +11,7 @@ namespace llama::mapping
 {
     /// The maximum number of vector lanes that can be used to fetch each leaf type in the record dimension into a
     /// vector register of the given size in bits.
+    /// \hideinitializer
     LLAMA_EXPORT
     template<typename RecordDim, std::size_t VectorRegisterBits>
     inline constexpr std::size_t maxLanes = []() constexpr
