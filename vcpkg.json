@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg/master/scripts/vcpkg.schema.json",
   "name": "llama",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "dependencies": [
     "alpaka",
     "boost-atomic",

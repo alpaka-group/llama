@@ -29,9 +29,9 @@ copyright = u'2018, Alexander Matthes, 2024, Bernhard Manfred Gruber'
 author = u'Alexander Matthes, Bernhard Manfred Gruber'
 
 # The short X.Y version
-version = u'0.5'
+version = u'0.6'
 # The full version, including alpha/beta/rc tags
-release = u'0.5'
+release = u'0.6'
 
 
 # -- General configuration ---------------------------------------------------
