@@ -258,6 +258,7 @@ namespace llama
     /// \tparam RecordCoordA \ref RecordCoord based on RecordDimA along which the tags are compared.
     /// \tparam RecordDimB second record dimension.
     /// \tparam RecordCoordB \ref RecordCoord based on RecordDimB along which the tags are compared.
+    /// \hideinitializer
     LLAMA_EXPORT
     template<typename RecordDimA, typename RecordCoordA, typename RecordDimB, typename RecordCoordB>
     inline constexpr auto hasSameTags = []() constexpr

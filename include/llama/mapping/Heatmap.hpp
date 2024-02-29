@@ -188,6 +188,7 @@ namespace llama::mapping
         }
 
         /// An example script for plotting the ASCII heatmap data using gnuplot.
+        /// \hideinitializer
         static constexpr std::string_view gnuplotScriptAscii = R"(#!/bin/bash
 gnuplot -p <<EOF
 file = '${1:-plot.bin}'
@@ -202,6 +203,7 @@ EOF
 )";
 
         /// An example script for plotting the binary heatmap data using gnuplot.
+        /// \hideinitializer
         static constexpr std::string_view gnuplotScriptBinary = R"(#!/bin/bash
 gnuplot -p <<EOF
 file = '${1:-plot.bin}'

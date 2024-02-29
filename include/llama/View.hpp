@@ -139,11 +139,11 @@ namespace llama
             { forEachLeafCoord<RecordDim>([&](auto rc) LLAMA_LAMBDA_INLINE { constructField(view, ai, rc); }); });
     }
 
-    /// Creates a view based on the given mapping, e.g. \ref AoS or \ref :SoA. For allocating the view's underlying
-    /// memory, the specified allocator callable is used (or the default one, which is \ref bloballoc::Vector). The
-    /// allocator callable is called with the alignment and size of bytes to allocate for each blob of the mapping.
-    /// Value-initialization is performed for all fields by calling \ref constructFields. This function is the
-    /// preferred way to create a \ref View. See also \ref allocViewUninitialized.
+    /// Creates a view based on the given mapping, e.g. \ref mapping::AoS or \ref mapping::SoA. For allocating the
+    /// view's underlying memory, the specified allocator callable is used (or the default one, which is
+    /// \ref bloballoc::Vector). The allocator callable is called with the alignment and size of bytes to allocate for
+    /// each blob of the mapping. Value-initialization is performed for all fields by calling \ref constructFields.
+    /// This function is the preferred way to create a \ref View. See also \ref allocViewUninitialized.
     LLAMA_EXPORT
 #ifdef __cpp_lib_concepts
     template<typename Mapping, BlobAllocator Allocator = bloballoc::Vector, typename Accessor = accessor::Default>

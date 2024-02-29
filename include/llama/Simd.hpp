@@ -94,6 +94,7 @@ namespace llama
     /// multiple SIMD vectors for some field types.
     /// @tparam RecordDim The record dimension to simdize
     /// @tparam MakeSimd Type function creating a SIMD type given a field type from the record dimension.
+    /// @hideinitializer
     LLAMA_EXPORT
     template<typename RecordDim, template<typename> typename MakeSimd>
     inline constexpr std::size_t simdLanesWithFullVectorsFor
@@ -104,6 +105,7 @@ namespace llama
     /// registers for some data types.
     /// @tparam RecordDim The record dimension to simdize
     /// @tparam MakeSimd Type function creating a SIMD type given a field type from the record dimension.
+    /// @hideinitializer
     LLAMA_EXPORT
     template<typename RecordDim, template<typename> typename MakeSimd>
     inline constexpr std::size_t simdLanesWithLeastRegistersFor
