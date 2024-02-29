@@ -3,6 +3,75 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.6] - 2024-02-29
+
+### Added features
+- add vcpkg manifest #700
+- add missing license identifier in all source files #707
+- add `View::extents()` #718
+- add `View::blobs()` accessor #719
+- add a CUDA viewcopy benchmark #721, #834
+- allow string literals and reflection in/of record dimension #737
+- add `Stacked` accessor #755
+- support `RecordRef::at<"str">()` #757
+- specialize `std::hash` for `RecordRef` #758
+- add a concept for `View` #759
+- demonstrate mapping detecting false sharing #772
+- add `Locked` accessor #773
+- add a compile time benchmark #796, #805, #806
+- add oneAPI SYCL n-body #799
+- allow `SubView` to default construct inner view #801
+- add gather/scatter to SIMD traits #815
+- support a color palette and custom text color for `toSvg()` #846
+
+### Breaking changes
+- require Boost 1.74 #710
+- rename `forEachADCoord` to `forEachArrayIndex` #763
+- upgrade to alpaka 1.0 #771
+- rename linearizers towards mdspan jargon #784
+- align AoSoA sub arrays #786
+- relicense all LGPL-3.0+ content to MPL-2.0 #808
+
+### Bug fixes and improvements
+- extend output of `FieldAccessCount` #703
+- small improvements to `Heatmap` #704
+- improve LHCb HEP analysis example #706, #711, #731, #741, #746, #824, #825, #826, #827, #828
+- CI fixes and improvements: #708, #720, #723, #725, #732, #745, #747, #748, #750, #752, #756, #762, #764, #778, #781, #783, #785, #789, #791, #807, #812, #820, #775, #749
+- documentation fixes: #709, #714, #727, #731
+- unit test improvements: #712, #765, #770, #779
+- add diagnostic when CUDA is not found #726
+- remove nvcc flattener workaround for nvcc > 11.6 #734
+- small refactoring #740, #701, #761, #769, #774, #802, #810
+- small internal fixes #716, #735, #736, #742, #743, #776, #804, #836, #837, #840
+- improve color hashing for dumping images #744
+- drop nested `ArrayIndex` requirement for mappings #751
+- make view transformations forward views #753
+- make `RecordRef` weakly-equality-comparable #760
+- allow STREAM with larger problem sizes #767
+- add SSE4a implementation of NT-store accessor in STREAM #768
+- separate record dim flattening from field permutations #782
+- annotate all public APIs with `LLAMA_EXPORT` #787
+- improve n-body #798, #813, #814, #816, #818, #822, #823, #829, #832, #833, #794, 
+- fix `structName` for single letter structs #800
+- improve benchmark plots and reported statistics #803
+- generalize blob copying functions #809
+- extend viewcopy benchmark and improve `llama::copy` #811, #842, #843, #844
+- improve SIMD loading/storing #817
+- implement SIMD load/store between different record dimensions #819
+- align BabelStream with alpaka version #831
+- add missing host/acc macro to decayCopy #835
+- fix initialization of device memory from host in async blur example #838
+- add a dump test for packed AoSoA4 #845
+- refine `AnyView` concept and test semiregularity #847
+- update readthedocs config to version 2 #849
+- fix most documentation issues #850
+
+### Removed features
+- drop support for nvcc < 11.6 #766, #797
+- remove support for clang < 12 #792, #802
+- disable alpaka PIC example for recent MSVC #793
+- drop support for g++-9 #830
+- remove deprecated tree mapping #839
 
 ## [0.5] - 2023-01-31
 
@@ -52,7 +121,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - improved array handling of `recordCoordTags` #693
 
 ### Breaking changes
-
 - the template parameter list for `llama::ArrayExtents` changed to support specifying the index type: #488
 - the CI now uses alpaka 0.9 and not the development version #492
 - LLAMA's cmake project now builds in Release mode by default with tests/examples off #509
@@ -99,7 +167,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - fix `llama::structName<T>()` for `T`s in unnamed namespaces
 
 ### Removed features
-
 - support for Visual Studio 2019 has been dropped #539
 - support for MacOS 11.15 has been dropped #561
 - support for AppleClang has been dropped, use brew's clang on MacOS #593
@@ -210,7 +277,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - support templates in `llama::structName` #449
 
 ### Removed features
-
 - dropped support for the Intel C++ Compiler Classic (icp) #351
 - removed `llama::Array::rank`, replaced by `llama::Array::size` #391
 
