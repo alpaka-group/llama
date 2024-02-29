@@ -169,10 +169,8 @@ Static Public Attributes</h2></td></tr>
 <tr class="memitem:aa37d9b62224479d411cab7dc3a862133"><td class="memItemLeft" align="right" valign="top">static constexpr std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Heatmap.html#aa37d9b62224479d411cab7dc3a862133">blobCount</a> = Mapping::blobCount * 2</td></tr>
 <tr class="separator:aa37d9b62224479d411cab7dc3a862133"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a732b6e767007550c1acf855fdb7f958b"><td class="memItemLeft" align="right" valign="top">static constexpr std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Heatmap.html#a732b6e767007550c1acf855fdb7f958b">gnuplotScriptAscii</a></td></tr>
-<tr class="memdesc:a732b6e767007550c1acf855fdb7f958b"><td class="mdescLeft">&#160;</td><td class="mdescRight">An example script for plotting the ASCII heatmap data using gnuplot.  <a href="structllama_1_1mapping_1_1Heatmap.html#a732b6e767007550c1acf855fdb7f958b">More...</a><br /></td></tr>
 <tr class="separator:a732b6e767007550c1acf855fdb7f958b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af46157df5d2bec1171ee6990943796df"><td class="memItemLeft" align="right" valign="top">static constexpr std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structllama_1_1mapping_1_1Heatmap.html#af46157df5d2bec1171ee6990943796df">gnuplotScriptBinary</a></td></tr>
-<tr class="memdesc:af46157df5d2bec1171ee6990943796df"><td class="mdescLeft">&#160;</td><td class="mdescRight">An example script for plotting the binary heatmap data using gnuplot.  <a href="structllama_1_1mapping_1_1Heatmap.html#af46157df5d2bec1171ee6990943796df">More...</a><br /></td></tr>
 <tr class="separator:af46157df5d2bec1171ee6990943796df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -702,22 +700,9 @@ template&lt;typename Mapping , typename Mapping::ArrayExtents::value_type Granul
   </tr>
 </table>
 </div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">= R<span class="stringliteral">&quot;(#!/bin/bash</span></div>
-<div class="line"><span class="stringliteral">gnuplot -p &lt;&lt;EOF</span></div>
-<div class="line"><span class="stringliteral">file = &#39;${1:-plot.bin}&#39;</span></div>
-<div class="line"><span class="stringliteral"></span> </div>
-<div class="line"><span class="stringliteral">set xtics format &quot;&quot;</span></div>
-<div class="line"><span class="stringliteral">set x2tics autofreq 32</span></div>
-<div class="line"><span class="stringliteral">set yrange [] reverse</span></div>
-<div class="line"><span class="stringliteral">set link x2; set link y2</span></div>
-<div class="line"><span class="stringliteral">set x2label &quot;Byte&quot;</span></div>
-<div class="line"><span class="stringliteral">plot file matrix with image pixels axes x2y1</span></div>
-<div class="line"><span class="stringliteral">EOF</span></div>
-<div class="line"><span class="stringliteral">)&quot;</span></div>
-</div><!-- fragment -->
 <p>An example script for plotting the ASCII heatmap data using gnuplot. </p>
 
-<p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00191">191</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00192">192</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
 
 </div>
 </div>
@@ -742,29 +727,9 @@ template&lt;typename Mapping , typename Mapping::ArrayExtents::value_type Granul
   </tr>
 </table>
 </div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">= R<span class="stringliteral">&quot;(#!/bin/bash</span></div>
-<div class="line"><span class="stringliteral">gnuplot -p &lt;&lt;EOF</span></div>
-<div class="line"><span class="stringliteral">file = &#39;${1:-plot.bin}&#39;</span></div>
-<div class="line"><span class="stringliteral">rowlength = &#39;${2:-64}&#39;</span></div>
-<div class="line"><span class="stringliteral">maxrows = &#39;${3:-all}&#39;</span></div>
-<div class="line"><span class="stringliteral">format = &#39;${4:-%uint64}&#39;</span></div>
-<div class="line"><span class="stringliteral"></span> </div>
-<div class="line"><span class="stringliteral">counts = system(&#39;stat -c &quot;%s&quot; ${1:-plot.bin}&#39;)/8</span></div>
-<div class="line"><span class="stringliteral">rows = counts/rowlength</span></div>
-<div class="line"><span class="stringliteral">rows = maxrows eq &#39;all&#39; ? rows : (rows &lt; maxrows ? rows : maxrows)</span></div>
-<div class="line"><span class="stringliteral"></span> </div>
-<div class="line"><span class="stringliteral">set xtics format &quot;&quot;</span></div>
-<div class="line"><span class="stringliteral">set x2tics autofreq 32</span></div>
-<div class="line"><span class="stringliteral">set yrange [] reverse</span></div>
-<div class="line"><span class="stringliteral">set link x2; set link y2</span></div>
-<div class="line"><span class="stringliteral">set x2label &quot;Byte&quot;</span></div>
-<div class="line"><span class="stringliteral">plot file binary array=(rowlength,rows) format=format with image pixels axes x2y1</span></div>
-<div class="line"><span class="stringliteral">EOF</span></div>
-<div class="line"><span class="stringliteral">)&quot;</span></div>
-</div><!-- fragment -->
 <p>An example script for plotting the binary heatmap data using gnuplot. </p>
 
-<p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00205">205</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00207">207</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
 
 </div>
 </div>
@@ -803,7 +768,7 @@ template&lt;typename Mapping , typename Mapping::ArrayExtents::value_type Granul
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li><li class="navelem"><a class="el" href="structllama_1_1mapping_1_1Heatmap.html">Heatmap</a></li>
-    <li class="footer">Generated on Thu Feb 29 2024 14:06:45 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Thu Feb 29 2024 15:18:59 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>

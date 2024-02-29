@@ -7,6 +7,7 @@ var dir_1edeeca147c2d4fb57fec1b01c02fb14 =
       [ "Const", "structllama_1_1accessor_1_1Const.html", "structllama_1_1accessor_1_1Const" ],
       [ "Reference", "structllama_1_1accessor_1_1Const_1_1Reference.html", "structllama_1_1accessor_1_1Const_1_1Reference" ],
       [ "Restrict", "structllama_1_1accessor_1_1Restrict.html", "structllama_1_1accessor_1_1Restrict" ],
+      [ "Atomic", "structllama_1_1accessor_1_1Atomic.html", "structllama_1_1accessor_1_1Atomic" ],
       [ "Locked", "structllama_1_1accessor_1_1Locked.html", "structllama_1_1accessor_1_1Locked" ],
       [ "Reference", "structllama_1_1accessor_1_1Locked_1_1Reference.html", "structllama_1_1accessor_1_1Locked_1_1Reference" ],
       [ "StackedLeave", "structllama_1_1accessor_1_1internal_1_1StackedLeave.html", null ],

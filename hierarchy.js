@@ -29,6 +29,7 @@ var hierarchy =
     [ "llama::ArrayIndexIterator< ArrayExtents >", "structllama_1_1ArrayIndexIterator.html", null ],
     [ "llama::ArrayIndexIterator< typename View::ArrayExtents >", "structllama_1_1ArrayIndexIterator.html", null ],
     [ "llama::internal::Assign", "structllama_1_1internal_1_1Assign.html", null ],
+    [ "llama::accessor::Atomic", "structllama_1_1accessor_1_1Atomic.html", null ],
     [ "llama::mapping::BindAoS< Alignment, LinearizeArrayIndexFunctor >", "structllama_1_1mapping_1_1BindAoS.html", null ],
     [ "llama::mapping::BindAoSoA< Lanes, Alignment, LinearizeArrayIndexFunctor, PermuteFields >", "structllama_1_1mapping_1_1BindAoSoA.html", null ],
     [ "llama::mapping::BindBitPackedFloatAoS< ExponentBits, MantissaBits, LinearizeArrayIndexFunctor, PermuteFields, StoredIntegral >", "structllama_1_1mapping_1_1BindBitPackedFloatAoS.html", null ],

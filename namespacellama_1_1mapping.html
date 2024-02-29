@@ -909,7 +909,7 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="AoSoA_8hpp_source.html#l00124">124</a> of file <a class="el" href="AoSoA_8hpp_source.html">AoSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AoSoA_8hpp_source.html#l00125">125</a> of file <a class="el" href="AoSoA_8hpp_source.html">AoSoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -935,7 +935,7 @@ template&lt;typename AD , typename RD , typename AD::value_type L, FieldAlignmen
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="AoSoA_8hpp_source.html#l00135">135</a> of file <a class="el" href="AoSoA_8hpp_source.html">AoSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AoSoA_8hpp_source.html#l00136">136</a> of file <a class="el" href="AoSoA_8hpp_source.html">AoSoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -1377,7 +1377,7 @@ template&lt;typename Mapping &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00228">228</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00230">230</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
 
 </div>
 </div>
@@ -1403,7 +1403,7 @@ template&lt;typename Mapping , typename Mapping::ArrayExtents::value_type Granul
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00232">232</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Heatmap_8hpp_source.html#l00234">234</a> of file <a class="el" href="Heatmap_8hpp_source.html">Heatmap.hpp</a>.</p>
 
 </div>
 </div>
@@ -1740,21 +1740,9 @@ template&lt;typename RecordDim , std::size_t VectorRegisterBits&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">= []() constexpr</div>
-<div class="line">    {</div>
-<div class="line">        <span class="keyword">auto</span> max = std::numeric_limits&lt;std::size_t&gt;::max();</div>
-<div class="line">        forEachLeafCoord&lt;RecordDim&gt;(</div>
-<div class="line">            [&amp;](<span class="keyword">auto</span> rc)</div>
-<div class="line">            {</div>
-<div class="line">                <span class="keyword">using</span> AttributeType = <a class="code" href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">GetType</a>&lt;RecordDim, decltype(rc)&gt;;</div>
-<div class="line">                max = std::min(max, VectorRegisterBits / (<span class="keyword">sizeof</span>(AttributeType) * CHAR_BIT));</div>
-<div class="line">            });</div>
-<div class="line">        <span class="keywordflow">return</span> max;</div>
-<div class="line">    }()</div>
-<div class="ttc" id="anamespacellama_html_acdfb627d325de5ab6c18cdc842cd7350"><div class="ttname"><a href="namespacellama.html#acdfb627d325de5ab6c18cdc842cd7350">llama::GetType</a></div><div class="ttdeci">typename internal::GetTypeImpl&lt; RecordDim, RecordCoordOrTags... &gt;::type GetType</div><div class="ttdef"><b>Definition:</b> <a href="Core_8hpp_source.html#l00387">Core.hpp:387</a></div></div>
-</div><!-- fragment --><p>The maximum number of vector lanes that can be used to fetch each leaf type in the record dimension into a vector register of the given size in bits. </p>
+<p>The maximum number of vector lanes that can be used to fetch each leaf type in the record dimension into a vector register of the given size in bits. </p>
 
-<p class="definition">Definition at line <a class="el" href="AoSoA_8hpp_source.html#l00016">16</a> of file <a class="el" href="AoSoA_8hpp_source.html">AoSoA.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="AoSoA_8hpp_source.html#l00017">17</a> of file <a class="el" href="AoSoA_8hpp_source.html">AoSoA.hpp</a>.</p>
 
 </div>
 </div>
@@ -1764,7 +1752,7 @@ template&lt;typename RecordDim , std::size_t VectorRegisterBits&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacellama.html">llama</a></li><li class="navelem"><a class="el" href="namespacellama_1_1mapping.html">mapping</a></li>
-    <li class="footer">Generated on Thu Feb 29 2024 14:06:45 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+    <li class="footer">Generated on Thu Feb 29 2024 15:18:59 for Low-Level Abstraction of Memory Access by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
   </ul>
 </div>
 </body>
