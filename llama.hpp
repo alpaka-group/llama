@@ -10833,7 +10833,7 @@ namespace llama::mapping
 // NOLINTNEXTLINE(modernize-macro-to-enum)
 #define LLAMA_VERSION_MAJOR 0
 // NOLINTNEXTLINE(modernize-macro-to-enum)
-#define LLAMA_VERSION_MINOR 5
+#define LLAMA_VERSION_MINOR 6
 // NOLINTNEXTLINE(modernize-macro-to-enum)
 #define LLAMA_VERSION_PATCH 0
 
